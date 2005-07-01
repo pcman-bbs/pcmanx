@@ -34,6 +34,7 @@ using namespace std;
 */
 class CTermData;
 class CHyperLink;
+class CFont;
 
 class CTermView : public CView
 {
@@ -61,6 +62,7 @@ public:
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void CopyToClipboard(bool primary, bool with_color);
+    void SetFontFamily(string name);
 protected:
     void OnPaint(GdkEventExpose* evt);
     void OnSetFocus(GdkEventFocus* evt);
@@ -70,17 +72,15 @@ protected:
     void OnSize(GdkEventConfigure* evt);
     void RedrawSel(int oldx, int oldy, int newx, int newy);
     void OnKillFocus(GdkEventFocus *evt);
-    void SetFont(const char* name, int size);
+    void SetFont(CFont* font);
+    CFont* GetFont(){	return m_Font;	}
     void OnDestroy();
 protected:
 	CTermData* m_pTermData;
-//#ifdef NO_XFT
-    PangoLayout* m_PangoLayout;
-    PangoFontDescription* m_Font;
-//#else
+
     XftDraw* m_XftDraw;
-    XftFont* m_XftFont;
-//#endif
+    CFont* m_Font;
+
 	int m_CharW;
 	int m_CharH;
 	CCaret m_Caret;

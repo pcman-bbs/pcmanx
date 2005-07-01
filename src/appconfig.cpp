@@ -93,12 +93,9 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Display)
-//		CFG_STR ( ChiFontDesc)
-//		CFG_STR ( EngFontDesc)
-//		CFG_STR ( FontDesc)
-//		CFG_BOOL( TwoDiffFonts)
 		CFG_STR ( FontFamily )
 		CFG_INT ( FontSize )
+		CFG_BOOL( AntiAliasingFont )
 
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
@@ -300,7 +297,8 @@ void CAppConfig::SetToDefault()
 
 	FontSize = 14;
 	FontFamily = "Sans";
-	
+	AntiAliasingFont = true;
+
 	WebBrowser = "mozilla";
 }
 

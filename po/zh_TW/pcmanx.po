@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PCManX\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2005-06-30 11:44+0800\n"
+"PO-Revision-Date: 2005-07-01 21:11+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,112 +15,123 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ../../src\n"
 
-#: ../../src/mainframe.cpp:172
-msgid "_Connect"
-msgstr "連線 (_C)"
-
-#: ../../src/mainframe.cpp:179
-msgid "_Site List"
-msgstr "BBS 站台列表"
-
-#: ../../src/mainframe.cpp:190
-msgid "_New Connection"
-msgstr "開啟新連線 (_N)"
-
-#: ../../src/mainframe.cpp:201
-msgid "_Close Connection"
-msgstr "關閉連線分頁 (_C)"
-
-#: ../../src/mainframe.cpp:217
-msgid "Next Page"
-msgstr "切換到下一個分頁"
-
-#: ../../src/mainframe.cpp:228
-msgid "Previous Page"
-msgstr "切換到上一個分頁"
-
-#: ../../src/mainframe.cpp:239
-msgid "_Jump to"
-msgstr "切換到 (_J)"
-
-#: ../../src/mainframe.cpp:256
-msgid "_Edit"
-msgstr "編輯(_E)"
-
-#: ../../src/mainframe.cpp:263
-msgid "_Copy"
-msgstr "複製 (_C)"
-
-#: ../../src/mainframe.cpp:274
-msgid "Copy with A_NSI Color"
-msgstr "複製(包含ANSI彩色) (_N)"
-
-#: ../../src/mainframe.cpp:282
-msgid "_Paste"
-msgstr "貼上 (_P)"
-
-#: ../../src/mainframe.cpp:298
-msgid "_Preference"
-msgstr "個人偏好設定 (_P)"
-
-#: ../../src/mainframe.cpp:307
-msgid "F_avorites"
-msgstr "我的最愛(_A)"
-
-#: ../../src/mainframe.cpp:336
-msgid "_View"
-msgstr "檢視 (_V)"
-
-#: ../../src/mainframe.cpp:347
-msgid "_Help"
-msgstr "說明(_H)"
-
-#: ../../src/mainframe.cpp:406
-msgid "Page"
-msgstr "分頁"
-
-#: ../../src/mainframe.cpp:455
+#: ../../src/sitelistdlg.cpp:25
+#: ../../src/mainframe.cpp:466
 msgid "Site List"
 msgstr "BBS 站台列表"
 
-#: ../../src/mainframe.cpp:460
+#: ../../src/sitelistdlg.cpp:100
+#: ../../src/mainframe.cpp:174
+msgid "_Connect"
+msgstr "連線 (_C)"
+
+#: ../../src/sitelistdlg.cpp:208
+#, c-format
+msgid "Keyword \"%s\" not found!"
+msgstr "找不到關鍵字 \"%s\"！"
+
+#: ../../src/mainframe.cpp:181
+msgid "_Site List"
+msgstr "BBS 站台列表"
+
+#: ../../src/mainframe.cpp:192
+msgid "_New Connection"
+msgstr "開啟新連線 (_N)"
+
+#: ../../src/mainframe.cpp:203
+msgid "_Close Connection"
+msgstr "關閉連線分頁 (_C)"
+
+#: ../../src/mainframe.cpp:219
+msgid "Next Page"
+msgstr "切換到下一個分頁"
+
+#: ../../src/mainframe.cpp:230
+msgid "Previous Page"
+msgstr "切換到上一個分頁"
+
+#: ../../src/mainframe.cpp:241
+msgid "_Jump to"
+msgstr "切換到 (_J)"
+
+#: ../../src/mainframe.cpp:258
+msgid "_Edit"
+msgstr "編輯(_E)"
+
+#: ../../src/mainframe.cpp:265
+msgid "_Copy"
+msgstr "複製 (_C)"
+
+#: ../../src/mainframe.cpp:276
+msgid "Copy with A_NSI Color"
+msgstr "複製(包含ANSI彩色) (_N)"
+
+#: ../../src/mainframe.cpp:284
+msgid "_Paste"
+msgstr "貼上 (_P)"
+
+#: ../../src/mainframe.cpp:296
+msgid "Select A_ll"
+msgstr "全部選取 (_L)"
+
+#: ../../src/mainframe.cpp:306
+msgid "_Preference"
+msgstr "個人偏好設定 (_P)"
+
+#: ../../src/mainframe.cpp:315
+msgid "F_avorites"
+msgstr "我的最愛(_A)"
+
+#: ../../src/mainframe.cpp:344
+msgid "_View"
+msgstr "檢視 (_V)"
+
+#: ../../src/mainframe.cpp:355
+msgid "_Help"
+msgstr "說明(_H)"
+
+#: ../../src/mainframe.cpp:417
+msgid "Page"
+msgstr "分頁"
+
+#: ../../src/mainframe.cpp:471
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../../src/mainframe.cpp:465
+#: ../../src/mainframe.cpp:476
 msgid "Close Connection"
 msgstr "關閉連線分頁"
 
-#: ../../src/mainframe.cpp:474
+#: ../../src/mainframe.cpp:485
 msgid "Copy"
 msgstr "複製"
 
-#: ../../src/mainframe.cpp:479
+#: ../../src/mainframe.cpp:490
 msgid "Copy with ANSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../../src/mainframe.cpp:484
+#: ../../src/mainframe.cpp:495
 msgid "Paste"
 msgstr "貼上"
 
-#: ../../src/mainframe.cpp:493
+#: ../../src/mainframe.cpp:504
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../../src/mainframe.cpp:498
+#: ../../src/mainframe.cpp:509
 #: ../../src/prefdlg.cpp:27
 msgid "Preference"
 msgstr "個人偏好設定"
 
-#: ../../src/mainframe.cpp:503
+#: ../../src/mainframe.cpp:514
 msgid "About"
 msgstr "關於"
 
-#: ../../src/mainframe.cpp:536
+#: ../../src/mainframe.cpp:547
 msgid "Connect"
 msgstr "連線"
 
-#: ../../src/mainframe.cpp:536
+#: ../../src/mainframe.cpp:547
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -128,38 +139,41 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../../src/mainframe.cpp:569
+#: ../../src/mainframe.cpp:580
 msgid "Font"
 msgstr "字型"
 
-#: ../../src/mainframe.cpp:603
+#: ../../src/mainframe.cpp:614
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
 "\n"
 "A free BBS client developed with GTK+</big>\n"
 msgstr ""
+"<big>PCMan X  %s\n"
+"\n"
+"用 GTK+ 開發的自由 BBS 連線軟體</big>\n"
 
-#: ../../src/mainframe.cpp:764
+#: ../../src/mainframe.cpp:803
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../../src/mainframe.cpp:776
+#: ../../src/mainframe.cpp:815
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../../src/mainframe.cpp:788
+#: ../../src/mainframe.cpp:827
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../../src/mainframe.cpp:853
+#: ../../src/mainframe.cpp:892
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../../src/mainframe.cpp:862
+#: ../../src/mainframe.cpp:901
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 

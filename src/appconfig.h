@@ -119,10 +119,7 @@ public:
 	bool BeepOnBell;
 
 //	Display Settings
-//	string ChiFontDesc;
-//	string EngFontDesc;
-//	string FontDesc;
-
+	bool AntiAliasingFont;
 	int CharPaddingX;
 	int CharPaddingY;
 //	bool TwoDiffFonts;

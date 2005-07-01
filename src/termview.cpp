@@ -25,9 +25,12 @@
 
 #include <gdk/gdkx.h>
 #include <pango/pangoxft.h>
+#include "font.h"
 
 #include "appconfig.h"	//	FIXME: This should be removed in the future.
 
+
+#if 0
 XftFont* xft_font_from_pango_font_desc( GdkDrawable* drawable, PangoFontDescription* pangofd )
 {
 	if(pango_font_description_get_size(pangofd) != 0)
@@ -80,6 +83,7 @@ XftFont* xft_font_from_pango_font_desc_string( GdkDrawable* drawable, const char
 	pango_font_description_free( pangofd );
 	return xft_font;
 }
+#endif
 
 using namespace std;
 
@@ -147,7 +151,7 @@ CTermView::CTermView()
 	m_Font = NULL;
 	m_XftDraw = NULL;
 
-	m_PangoLayout = gtk_widget_create_pango_layout(m_Widget, NULL);
+//	m_PangoLayout = gtk_widget_create_pango_layout(m_Widget, NULL);
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -277,7 +281,8 @@ void CTermView::OnCreate()
 		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(m_Widget->window)));
 	XftDrawSetSubwindowMode(m_XftDraw, IncludeInferiors);
 
-	SetFont(/*"AR PL Mingti2L Big5 22"*/"AR PL Mingti2L Big5", 18);
+	if( !m_Font )
+		m_Font = new CFont("Sans", 18);
 
 	m_GC = gdk_gc_new(m_Widget->window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
@@ -367,7 +372,8 @@ int CTermView::DrawChar(int line, int col, int top)
 //					gdk_draw_layout( dc, m_GC, left, top, m_PangoLayout );
 
 //				pango_xft_render_layout(m_XftDraw, &xftclr, m_PangoLayout, left, top);
-				XftDrawStringUtf8(m_XftDraw, &xftclr, m_XftFont, left, top + m_XftFont->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
+				XftFont* font = m_Font->GetXftFont();
+				XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
 					g_free(utf8_ch);
 				}
 			}
@@ -467,8 +473,8 @@ void CTermView::PrepareDC()
 //	XGlyphInfo inf;
 //	XftTextExtentsUtf8(GDK_WINDOW_XDISPLAY(m_Widget->window), m_XftFont, (FcChar8*)" ", 1, &inf);
 //	w = inf.xOff;
-	w = m_XftFont->max_advance_width;
-	h = m_XftFont->ascent + m_XftFont->descent;
+	w = m_Font->GetMaxWidth();
+	h = m_Font->GetHeight();
 
 	m_CharW = w/2 + m_CharPaddingX + (w % 2 ? 0 : 1);
 //	m_CharW = h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
@@ -508,9 +514,10 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	int desire_w = (evt->width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
 	int desire_h = (evt->height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
 
+	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h);
 //    PangoFontDescription* font = pango_font_description_copy(m_Font);
 
-		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
+/*		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
 		int screen = DefaultScreen (display);
 
 		if( m_XftFont )
@@ -521,6 +528,7 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 						XFT_CORE, XftTypeBool, False,
 						XFT_PIXEL_SIZE, XftTypeDouble, (double)desire_h,
 						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+						XFT_ANTIALIAS, XftTypeBool, True,
 						NULL);
 
 		int w = m_XftFont->max_advance_width/2;
@@ -538,11 +546,12 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 							XFT_CORE, XftTypeBool, False,
 							XFT_PIXEL_SIZE, XftTypeDouble, (double)h,
 							XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+							XFT_ANTIALIAS, XftTypeBool, True,
 							NULL);
 
 			w = m_XftFont->max_advance_width;
 			h = m_XftFont->ascent + m_XftFont->descent;
-		}
+		}*/
 /*	int max = 40, min = 6, w = 0, h = 0;
 	int point = 6 + (40-6)/2;
 	while( max > point && point > min )
@@ -563,8 +572,8 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	pango_layout_set_font_description(m_PangoLayout, m_Font);
 */
 
-	m_CharW = w;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
-	m_CharH = h + m_CharPaddingY;
+	m_CharW = m_Font->GetMaxWidth()/2;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
+	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
 
 	m_Caret.SetSize(m_CharW, 2);
 	m_Caret.Show();
@@ -841,20 +850,24 @@ void CTermView::CopyToClipboard(bool primary, bool with_color)
 	}
 }
 
-void CTermView::SetFont(const char* name, int size)
+void CTermView::SetFont(CFont* font)
 {
-/*	PangoFontDescription* newf = pango_font_description_from_string(name);
-	if( newf )
+	if( font )
 	{
-		if(m_Font)
-			pango_font_description_free(m_Font);
-		m_Font = newf;
-		m_XftFont = xft_font_from_pango_font_desc(m_Widget->window, newf);
+		if( m_Font )
+			delete m_Font;
+		m_Font = font;
 	}
+}
 
-//	xft_font_from_pango_font_desc_string(m_Widget->window, name);
-*/
 
+<<<<<<< termview.cpp
+void CTermView::OnDestroy()
+{
+	if( m_Font )
+		delete m_Font;
+	XftDrawDestroy(m_XftDraw);
+=======
 		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
 		int screen = DefaultScreen (display);
 
@@ -863,17 +876,16 @@ void CTermView::SetFont(const char* name, int size)
 						XFT_CORE, XftTypeBool, False,
 						XFT_SIZE, XftTypeDouble, (double)size,
 						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+						XFT_ANTIALIAS, XftTypeBool, True,
 						NULL);
 
 		m_FontSize = size;
 		m_FontFamily = name;
+>>>>>>> 1.6
 }
 
 
-void CTermView::OnDestroy()
+void CTermView::SetFontFamily(string name)
 {
-//	if( m_XftFont )
-//		XftFontClose(GDK_WINDOW_XDISPLAY(m_Widget->window), m_XftFont);
-
-	XftDrawDestroy(m_XftDraw);
+	m_Font->SetFontFamily(name);
 }

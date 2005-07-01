@@ -93,6 +93,7 @@ protected:
     void CloseCon(int idx, bool confirm = false);
     static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
     void CreateFavoritesMenu();
+    static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
 
     GdkPixbuf* m_ConnIcon;
     GdkPixbuf* m_MainIcon;

@@ -216,10 +216,12 @@ CSitePage::CSitePage(CSite& site)
 
 	if( m_Site.m_Name.empty() )
 	{
-		gtk_widget_set_sensitive(m_Name, false);
-		gtk_widget_set_sensitive(m_Address, false);
+		gtk_widget_hide(hbox1);
+		gtk_widget_hide(hbox2);
+//		gtk_widget_set_sensitive(m_Name, false);
+//		gtk_widget_set_sensitive(m_Address, false);
 	}
-	
+
 	char num[20];
 	sprintf( num, "%d", m_Site.m_AntiIdle );
 	gtk_entry_set_text(GTK_ENTRY(m_Idle), num);

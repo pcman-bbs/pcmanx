@@ -33,6 +33,7 @@
 #include "prefdlg.h"
 #include "appconfig.h"
 #include "sitelistdlg.h"
+#include "font.h"
 
 CMainFrame::CMainFrame()
 {
@@ -102,10 +103,12 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 //		pCon = new CSSHCon( m_pView, site );
 //	else
 #endif
-		pCon = new CTelnetCon( m_pView, *site );
+	pCon = new CTelnetCon( m_pView, *site );
 
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
+	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize);
+	m_pView->SetFont(font);
 
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;
@@ -148,6 +151,7 @@ void CMainFrame::CreateMenu()
 	GtkWidget *image344;
 	GtkWidget *paste_menu;
 	GtkWidget *image345;
+	GtkWidget *select_all_menu;
 	GtkWidget *separator1;
 	GtkWidget *preference_menu;
 	GtkWidget *image346;
@@ -291,6 +295,12 @@ void CMainFrame::CreateMenu()
 	gtk_widget_show (image345);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (paste_menu), image345);
 	
+	
+	select_all_menu = gtk_menu_item_new_with_mnemonic (_("Select A_ll"));
+	gtk_widget_show (select_all_menu);
+	gtk_container_add (GTK_CONTAINER (edit_menu), select_all_menu);
+
+	
 	separator1 = gtk_separator_menu_item_new ();
 	gtk_widget_show (separator1);
 	gtk_container_add (GTK_CONTAINER (edit_menu), separator1);
@@ -387,6 +397,9 @@ void CMainFrame::CreateMenu()
 	g_signal_connect ((gpointer) paste_menu, "activate",
 					G_CALLBACK (CMainFrame::OnPaste),
 					this);
+	g_signal_connect ((gpointer) select_all_menu, "activate",
+					G_CALLBACK (CMainFrame::OnSelectAll),
+					this);	
 	g_signal_connect ((gpointer) preference_menu, "activate",
 					G_CALLBACK (CMainFrame::OnPreference),
 					this);
@@ -527,6 +540,9 @@ void CMainFrame::CreateToolbar()
 	g_signal_connect ((gpointer) pref_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnPreference),
 					this);
+	g_signal_connect ((gpointer) add_to_fav_btn, "clicked",
+					G_CALLBACK (CMainFrame::OnAddToFavorites),
+					this);
 	g_signal_connect ((gpointer) about_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnAbout),
 					this);
@@ -570,14 +586,32 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
 	gtk_window_set_modal( (GtkWindow*)dlg, true);
 	gtk_window_set_transient_for( (GtkWindow*)dlg, (GtkWindow*)_this->m_Widget);
-//	gtk_font_selection_dialog_set_font_name();
+
+	char pango_font_name[32];
+	sprintf( pango_font_name, "%s %d", AppConfig.FontFamily.c_str(), (AppConfig.FontSize > 6 && AppConfig.FontSize <= 72) ? AppConfig.FontSize : 12 );
+	gtk_font_selection_dialog_set_font_name((GtkFontSelectionDialog*)dlg, pango_font_name);
+
 	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
 	{
 		gchar* name = gtk_font_selection_dialog_get_font_name(
 							(GtkFontSelectionDialog*)dlg );
 		gtk_widget_destroy(dlg);
-		_this->NotImpl(name);
-		g_free(name);
+//		_this->NotImpl(name);
+		PangoFontDescription* desc = pango_font_description_from_string( name );
+		g_free( name );
+		const char* family = pango_font_description_get_family(desc);
+		AppConfig.FontFamily = family;
+		AppConfig.FontSize = pango_font_description_get_size(desc);
+		pango_font_description_free(desc);
+
+		vector<CTelnetView*>::iterator it;
+		for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
+			(*it)->SetFontFamily(AppConfig.FontFamily);
+
+		/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
+
+		if( _this->GetCurView() )
+			_this->GetCurView()->Refresh();
 	}
 	else
 		gtk_widget_destroy(dlg);
@@ -617,6 +651,17 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)
 {
+	if( !_this->GetCurCon() )
+		return;
+/*	if( AppConfig.QueryOnCloseCon )
+	{
+		GtkWidget* dlg = gtk_message_dialog_new(GTK_WINDOW(_this->m_Widget), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, _("Close Connection?"));
+		bool can_close = ( gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK );
+		gtk_widget_destroy(dlg);
+		if( !can_close )
+			return;
+	}
+*/
 	GtkNotebook* nb = GTK_NOTEBOOK(_this->m_pNotebook->m_Widget);
 	_this->CloseCon(gtk_notebook_get_current_page(nb), true);
 }
@@ -627,8 +672,11 @@ void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
 	if( _this->GetCurView() )
 	{
 		_this->GetCurView()->CopyToClipboard(false, false);
-		_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
-		_this->GetCurView()->Refresh();
+		if( AppConfig.CancelSelAfterCopy )
+		{
+			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
+			_this->GetCurView()->Refresh();
+		}
 	}
 }
 
@@ -636,7 +684,14 @@ void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
 void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	if( _this->GetCurView() )
+	{
 		_this->GetCurView()->CopyToClipboard(false, true);
+		if( AppConfig.CancelSelAfterCopy )
+		{
+			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
+			_this->GetCurView()->Refresh();
+		}
+	}
 }
 
 
@@ -912,3 +967,15 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	m_pNotebook->SetPageTitle( m_pView, title.c_str() );
 }
 
+void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	CTelnetCon* con = _this->GetCurCon();
+	if( con )
+	{
+		con->m_SelStart.x = 0;
+		con->m_SelStart.y = 0;
+		con->m_SelEnd.x = con->m_ColsPerPage;
+		con->m_SelEnd.y = con->m_RowsPerPage-1;
+		_this->GetCurView()->Refresh();
+	}
+}
