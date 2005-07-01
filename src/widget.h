@@ -23,11 +23,16 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#include <queue>
+
 /**
 GTK+ GtkWidget wrapper.
 
 @author PCMan
 */
+	
+using namespace std;
+
 class CWidget{
 public:
     CWidget();
@@ -48,12 +53,15 @@ public:
 
     virtual void OnCreate();
     void Refresh();
-
 public:
     GtkWidget* m_Widget;
     virtual ~CWidget();
     virtual void OnDestroy();
+    static gboolean OnIdleCleanup(gpointer data);
 
+    static void Init(){	g_idle_add( (GSourceFunc)&OnIdleCleanup, NULL);	}
+protected:
+	static queue<CWidget*> m_WidgetsToBeDeleted;
 };
 
 #endif

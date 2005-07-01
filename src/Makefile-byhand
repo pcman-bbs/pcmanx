@@ -1,2 +1,2 @@
 all:
-	g++ `pkg-config gtk+-2.0 --cflags --libs` `pkg-config gnet-2.0 --cflags --libs` `pkg-config xft --cflags --libs` *.cpp -o pcmanx -I ./ -DVERSION=0.1 -g
+	g++ `pkg-config gtk+-2.0 --cflags --libs` `pkg-config --libs gthread-2.0` `pkg-config xft --cflags --libs` *.cpp -o pcmanx -I ./ -DVERSION=0.1 -g

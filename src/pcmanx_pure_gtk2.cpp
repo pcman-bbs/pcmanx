@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 
+	CWidget::Init();
+
 	AppConfig.SetToDefault();
 	AppConfig.Load();
 	AppConfig.LoadFavorites();
