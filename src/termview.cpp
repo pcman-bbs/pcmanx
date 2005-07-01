@@ -861,27 +861,11 @@ void CTermView::SetFont(CFont* font)
 }
 
 
-<<<<<<< termview.cpp
 void CTermView::OnDestroy()
 {
 	if( m_Font )
 		delete m_Font;
 	XftDrawDestroy(m_XftDraw);
-=======
-		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
-		int screen = DefaultScreen (display);
-
-		m_XftFont = XftFontOpen (display, screen,
-						XFT_FAMILY, XftTypeString, name,
-						XFT_CORE, XftTypeBool, False,
-						XFT_SIZE, XftTypeDouble, (double)size,
-						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-						XFT_ANTIALIAS, XftTypeBool, True,
-						NULL);
-
-		m_FontSize = size;
-		m_FontFamily = name;
->>>>>>> 1.6
 }
 
 
