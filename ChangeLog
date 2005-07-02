@@ -1,0 +1,20 @@
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* autogen.sh,
+	configure.ac,
+	Doxygen.in,
+	Makefile.am,
+	src/Makefile.am:
+	New files. Autotools support.
+
+	* po/zh_TW.po:
+	Adjust translated messages path.
+
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+
+	* src/Makefile-byhand:
+	Cleanup pkgconfig rules.
+
+2005-07-01  PCMan  <hzysoft@sina.com.tw>
+
+	* Initial import of pcmanx_pure_gtk2.
