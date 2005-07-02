@@ -702,8 +702,10 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 //	Although it works, by no means can this be a good solution.
 //	Leaving it temporarily because I don't have much time to do optimization.
 //	Maybe someday there'll be someone who can fix it .
-#define _max(x,y,z)	( x>y ? (x>z?x:(y>z?y:z)) : y>z?y:z )
-#define _min(x,y,z)	( x<y ? (x<z?x:(y<z?y:z)) : y<z?y:z )
+#define iMAX(x,y) ((x)>(y)?(x):(y))
+#define iMIN(x,y) ((x)>(y)?(y):(x))
+#define MAX3(x,y,z) iMAX(iMAX(x,y),z)
+#define MIN3(x,y,z) iMIN(iMIN(x,y),z)
 void CTermView::RedrawSel(int oldx, int oldy, int newx, int newy)
 {
 	//	Always remember to hide the caret before drawing.
@@ -715,8 +717,8 @@ void CTermView::RedrawSel(int oldx, int oldy, int newx, int newy)
 	int starty;	int	endy;
 	if( m_pTermData->m_SelBlock )
 	{
-		starty = _min( m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
-		endy = _max(m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
+		starty = MIN3( m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
+		endy = MAX3(m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
 	}
 	else
 	{
@@ -738,7 +740,10 @@ void CTermView::RedrawSel(int oldx, int oldy, int newx, int newy)
 	//	Show the caret again but only set its visibility without display it immediatly.
 	m_Caret.Show( false );
 }
-
+#undef MAX3
+#undef MIN3
+#undef iMIN
+#undef iMAX
 
 void CTermView::OnKillFocus(GdkEventFocus *evt)
 {

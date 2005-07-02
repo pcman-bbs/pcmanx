@@ -1,5 +1,10 @@
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
+	* src/termview.cpp (CTermView::RedrawSel):
+	Minor tweaking for MAX3 and MIN3 macro for better readability.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
 	* src/mainframe.cpp 
 	(CMainFrame::CreateMenu): Remove puzzling comments which confuse
 	intltool.
