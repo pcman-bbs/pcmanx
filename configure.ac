@@ -22,9 +22,9 @@ AM_GLIB_GNU_GETTEXT
 dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
-AH_VERBATIM([USE_SHM],[#undef USE_SHM])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
+AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -52,12 +52,16 @@ dnl ** configure switches ***********************************************
 dnl *********************************************************************
 
 AC_ARG_ENABLE(debug,
-[  --enable-debug          enable Debug (default: no)],
+[  --enable-debug          enable Debug [default: no]],
         debug=$enableval, debug=no)
 
 AC_ARG_ENABLE(mmx,
-[  --disable-mmx           disable MMX assembly routines],
+[  --disable-mmx           disable MMX optimizations [default: yes]],
         mmx=$enableval, mmx=yes)
+
+AC_ARG_ENABLE(docklet,
+[  --disable-docklet       disable docklet / system tray support [default: yes]],
+	docklet=$enableval, docklet=yes)
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -148,6 +152,18 @@ fi
 
 AM_CONDITIONAL(USE_MMX, test "$mmx" = "yes")
 
+
+dnl *********************************************************************
+dnl ** Docklet **********************************************************
+dnl *********************************************************************
+
+if test "$docklet" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_DOCKLET, [1], [Enable docklet / system tray support])
+fi
+
+AM_CONDITIONAL(USE_DOCKLET, test "$docklet" = "yes")
+AC_SUBST(USE_DOCKLET)
+
 dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
@@ -236,10 +252,11 @@ Doxygen
 ])
 
 echo
-echo pcmanx_pure_gtk2 .... : Version $VERSION
+echo pcmanx_pure_gtk2 ................ : Version $VERSION
 echo
-echo Debug support ....... : $debug
-echo mmx tinting ......... : $mmx
+echo Debug support ................... : $debug
+echo MMX optimization ................ : $mmx
+echo Docklet / system tray support ... : $docklet
 echo
 echo The binary will be installed in $prefix/bin
 echo

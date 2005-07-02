@@ -1,3 +1,35 @@
+2005-07-03  Jim Huang  <jserv@kaffe.org>
+
+	* src/docklet/clipboard.c:
+	New file. X clipboard hack to detect if daemon is running.
+
+	* src/docklet/eggtrayicon.c,
+	src/docklet/eggtrayicon.h:
+	New files. Famous EggTrayIcon written by Anders Carlsson
+	<andersca@gnu.org>.
+
+	* configure.ac,
+	src/Makefile.am:
+	Add docklet / system tray support option. Default: enabled.
+
+	* src/mainframe.h
+	(CMainFrame::OnTrayButton_Toggled) (CMainFrame::OnTrayButton_Changed):
+	New protected methods act as the callback functions for Tray button
+	toggled and size-changing.
+	(EggTrayIcon *m_Tray_icon):
+	New public member data for holding tray icon.
+
+	* src/mainframe.cpp
+	(CMainFrame::OnTrayButton_Toggled) (CMainFrame::OnTrayButton_Changed):
+	Likewise.
+	(CMainFrame::CMainFrame):
+	Add primitive tray icon and event handling for docklet / system tray.
+	NOTE: we might need a customized tray icon due to size limitation.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Make sure that there is only single instance, and show docklet.
+	NOTE: we might create higher level method for this task.
+
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
 	* src/pcmanx_pure_gtk2.cpp:
@@ -19,13 +51,12 @@
 	Adjust the sequence of gtk_init and g_thread_init, and use fake
 	argc/agrv to avoid redundant parsing.
 
-	* po/zh_TW.po:
-	Regenerated.
+	* po/zh_TW.po: Regenerated.
 
 2005-07-02  Kanru Chen  <koster@debian.org.tw>
 	
 	* configure.ac:
-	Change AC_DEFINED(VERSION,...) to AC_DEFINED_UNQUOTED ensure really
+	Change AC_DEFINE(VERSION,...) to AC_DEFINE_UNQUOTED ensure really
 	defined this variable.
 	
 	* ABOUT-NLS:

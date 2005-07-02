@@ -35,6 +35,30 @@
 #include "sitelistdlg.h"
 #include "font.h"
 
+#ifdef USE_DOCKLET
+#include "docklet/eggtrayicon.h"
+
+void CMainFrame::OnTrayButton_Toggled(
+	GtkToggleButton *button G_GNUC_UNUSED,
+	CMainFrame *_this)
+{
+	static bool hide_next_time = TRUE;
+	if (hide_next_time) {
+		_this->Hide();
+		hide_next_time = FALSE;
+	}
+	else {
+		_this->Show();
+		hide_next_time = TRUE;
+	}
+}
+
+void CMainFrame::OnTrayButton_Changed(CMainFrame *_this)
+{
+	/* Unimplemented */
+}
+#endif
+
 CMainFrame::CMainFrame()
 {
 	m_pView = NULL;
@@ -44,6 +68,54 @@ CMainFrame::CMainFrame()
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
 	LoadIcons();
+	
+#ifdef USE_DOCKLET
+	m_Tray_icon = egg_tray_icon_new ("applet");
+
+	GtkWidget *tray_button = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (tray_button), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_Tray_icon), tray_button);
+	gtk_widget_show (tray_button);
+
+	g_signal_connect (G_OBJECT (tray_button), "toggled",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+	g_signal_connect (G_OBJECT (tray_button), "size-allocate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+
+	GtkWidget *tray_icon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (tray_button), tray_icon);
+	gtk_widget_show (tray_icon);
+	
+	int panel_w;
+	int panel_h;
+	gtk_window_get_size (GTK_WINDOW(gtk_widget_get_toplevel(tray_button)),
+			&panel_w, &panel_h);
+	
+	int icon_size = (panel_h < 30) ? 16 : 24;
+
+	GdkPixbuf *tray_icon_pixbuf = gdk_pixbuf_copy (m_MainIcon);
+
+	/*
+	 * Scale the icon rather than clip it if our allocation just isn't
+	 * what we want it to be.
+	 */
+        if (GTK_WIDGET_REALIZED (tray_icon) &&
+                        tray_icon->allocation.height < icon_size) 
+	{
+		int new_size = tray_icon->allocation.height;
+		GdkPixbuf *new_pixbuf;
+
+		new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
+				new_size, new_size,
+				GDK_INTERP_BILINEAR);
+
+		g_object_unref (tray_icon_pixbuf);
+		tray_icon_pixbuf = new_pixbuf;
+	}
+
+	gtk_image_set_from_pixbuf(GTK_IMAGE (tray_icon), tray_icon_pixbuf);
+	g_object_unref (tray_icon_pixbuf);
+#endif
 
 	PostCreate();
 

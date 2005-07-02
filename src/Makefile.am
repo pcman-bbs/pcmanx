@@ -11,7 +11,14 @@ EXTRA_DIST = \
 	conn_xpm.xpm \
 	pcmanx_xpm.xpm
 
+if USE_DOCKLET
+DOCKLET_SOURCES = \
+	docklet/clipboard.c \
+	docklet/eggtrayicon.c
+endif
+
 pcmanx_SOURCES = \
+	$(DOCKLET_SOURCES) \
 	appconfig.cpp \
 	font.cpp \
 	notebook.cpp \

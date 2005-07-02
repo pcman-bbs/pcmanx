@@ -33,6 +33,13 @@
 #include "mainframe.h"
 #include "appconfig.h"
 
+#ifdef USE_DOCKLET
+extern "C" {
+/* clipboard gives the hint if PCManX already runs. */
+extern gboolean _get_clipboard();
+}
+#endif
+
 int main(int argc, char *argv[])
 {
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
@@ -55,7 +62,15 @@ int main(int argc, char *argv[])
 
 	g_free (fake_argv[0]);
 	g_free (fake_argv);
-  
+
+#ifdef USE_DOCKLET
+	/* if we are already running, silently exit */
+	if (! _get_clipboard())
+	{
+		return 1;
+	}
+#endif
+
 	CWidget::Init();
 
 	AppConfig.SetToDefault();
@@ -70,6 +85,9 @@ int main(int argc, char *argv[])
 	gtk_window_move(GTK_WINDOW(main_frm->m_Widget), 40, 40);
 	gtk_window_resize(GTK_WINDOW(main_frm->m_Widget), 640, 480);
 	main_frm->Show();
+#ifdef USE_DOCKLET
+	gtk_widget_show (GTK_WIDGET (main_frm->m_Tray_icon));
+#endif
 
 	gtk_main ();
 
