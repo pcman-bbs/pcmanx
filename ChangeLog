@@ -1,3 +1,14 @@
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+
+	* src/font.cpp 
+	(CFont::CreateXftFont(string, int, int, bool)):
+	Adjust font size policy to prevent infinite loop.
+
+	* src/widget.cpp,
+	src/telnetcon.cpp:
+	Add usleep(100) between each idle call to prevent cpu load
+	too high.
+
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
 	* autogen.sh,
