@@ -110,7 +110,7 @@ public:
     void Connect(const struct sockaddr *serv_addr, socklen_t addrlen);
     void ResolveHostName(string name, int port);
     void Close();
-    static void SetupIdleHandler(){	g_idle_add(OnMainIdle, NULL);	}
+    static void SetupIdleHandler(){	g_idle_add((GSourceFunc)OnMainIdle, NULL);	}
     static gboolean OnMainIdle(gpointer data);
 
 protected:

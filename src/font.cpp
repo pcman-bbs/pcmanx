@@ -106,15 +106,16 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 					XFT_ANTIALIAS, XftTypeBool, anti_alias,
 					NULL);
 
-	int w = font->max_advance_width/2;
+	int w = font->max_advance_width;
 	int h = font->ascent + font->descent;
 
-	while( (w > 2 && h > 2) && ( w > width*2 || h > height) )
+	// TODO: must use new method to determine font size
+	while( (w > 2 && h > 2) && ( w > width*2 || h > height*2) )
 	{
 		if( font )
 			XftFontClose(display, font);
 
-		h-=2;
+		h--;
 
 		font = XftFontOpen (display, screen,
 						XFT_FAMILY, XftTypeString, name.c_str(),
@@ -125,7 +126,6 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 						NULL);
 
 		w = font->max_advance_width;
-		h = font->ascent + font->descent;
 	}
 
 	return font;

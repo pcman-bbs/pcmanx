@@ -59,7 +59,7 @@ public:
     virtual void OnDestroy();
     static gboolean OnIdleCleanup(gpointer data);
 
-    static void Init(){	g_idle_add( (GSourceFunc)&OnIdleCleanup, NULL);	}
+    static void Init(){	g_idle_add((GSourceFunc)&OnIdleCleanup, NULL);	}
 protected:
 	static queue<CWidget*> m_WidgetsToBeDeleted;
 };

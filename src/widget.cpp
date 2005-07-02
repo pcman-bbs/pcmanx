@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "widget.h"
+#include <unistd.h>
 
 CWidget::CWidget()
 {
@@ -83,6 +84,8 @@ void CWidget::OnDestroy()
 
 gboolean CWidget::OnIdleCleanup(gpointer data)
 {
+	//TODO: seems not good, need new method to deal with these damn obj
+	usleep(100);
 	while(!m_WidgetsToBeDeleted.empty())
 	{
 		CWidget* obj = m_WidgetsToBeDeleted.front();

@@ -24,6 +24,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h> 
 #include <netdb.h>
+#include <unistd.h>
 
        
 #include "stringutil.h"
@@ -445,5 +446,6 @@ gboolean CTelnetCon::OnMainIdle(gpointer data)
 		else
 			++it;
 	}
+	usleep(100);
 	return true;
 }
