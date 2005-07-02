@@ -204,10 +204,10 @@ void CAppConfig::LoadFavorites()
 			else if( 0 == strcmp( pname, "ESCConv" ) )
 				pSite->m_ESCConv = pval;
 			else if( 0 == strcmp( pname, "Startup" ) )
-				pSite->m_Startup = (bool)!!atoi(pval);
+				pSite->m_Startup = (bool)atoi(pval);
 #ifdef	USE_SSH
 			else if( 0 == strcmp( pname, "UseSSH" ) )
-				pSite->m_UseSSH = (bool)!!atoi(pval);
+				pSite->m_UseSSH = (bool)atoi(pval);
 #endif
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );

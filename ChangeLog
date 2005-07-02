@@ -1,3 +1,11 @@
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/termview.cpp (CTermView::OnLButtonDown),
+	src/configfile.cpp (CConfigFile::DoLoad) (CConfigFile::DoSave),
+	src/appconfig.cpp (CAppConfig::LoadFavorites),
+	src/sitelistdlg.cpp (CSiteListDlg::OnSearch):
+	Remove misleading \!\! expression.
+
 2005-07-02  Kanru Chen  <koster@debian.org.tw>
 
 	* src/font.cpp 

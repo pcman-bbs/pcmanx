@@ -186,7 +186,7 @@ get_next_iter:
 	}
 
 	gtk_tree_model_get(model, &it, COL_TEXT, &text, -1);
-	found = !!strstr(text, keyword);
+	found = strstr(text, keyword);
 	g_free(text);
 	if( found )
 	{

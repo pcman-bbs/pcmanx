@@ -603,7 +603,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 	m_pTermData->m_SelStart.y = m_pTermData->m_SelEnd.y = y;
 	if( need_refresh )
 		Refresh();
-	m_pTermData->m_SelBlock = !!(evt->state &
+	m_pTermData->m_SelBlock = (evt->state &
 		(GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK) );
 }
 

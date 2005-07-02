@@ -123,7 +123,7 @@ bool CConfigFile::DoLoad()
 				switch( pent->m_DataType )
 				{
 				case CConfigEntry::VT_BOOL:
-					*((bool*)pent->m_pData) = !!atoi(pstrval);
+					*((bool*)pent->m_pData) = atoi(pstrval);
 					break;
 				case CConfigEntry::VT_INT:
 					*((int*)pent->m_pData) = atoi(pstrval);
@@ -158,7 +158,7 @@ bool CConfigFile::DoLoad()
 		fclose(fp);
 		delete []line;
 	}
-	return !!fp;
+	return fp;
 }
 
 bool CConfigFile::Save()
@@ -215,7 +215,7 @@ bool CConfigFile::DoSave()
 		}
 		fclose(fp);
 	}
-	return !!fp;
+	return fp;
 }
 
 bool CConfigFile::DoDataExchange( bool bLoad )
