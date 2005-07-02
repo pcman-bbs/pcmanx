@@ -1,5 +1,10 @@
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
+	* src/pcmanx_pure_gtk2.cpp:
+	Use GETTEXT_PACKAGE instead of hard-coded names.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
 	* src/termview.cpp (CTermView::RedrawSel):
 	Minor tweaking for MAX3 and MIN3 macro for better readability.
 
