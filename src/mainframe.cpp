@@ -319,31 +319,6 @@ void CMainFrame::CreateMenu()
 	gtk_widget_show (favorites);
 	gtk_container_add (GTK_CONTAINER (m_Menubar), favorites);
 	
-/*	favorites_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (favorites), favorites_menu);
-	
-	separator3 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator3);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), separator3);
-	gtk_widget_set_sensitive (separator3, FALSE);
-	
-	add_to_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Add to Favorites"));
-	gtk_widget_show (add_to_fav_menu);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
-	
-	image347 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image347);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image347);
-	
-	edit_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Edit Favorites"));
-	gtk_widget_show (edit_fav_menu);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
-	
-	image348 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image348);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image348);
-*/
-
 	view = gtk_menu_item_new_with_mnemonic (_("_View"));
 	gtk_widget_show (view);
 	gtk_container_add (GTK_CONTAINER (m_Menubar), view);
@@ -635,13 +610,13 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<big>PCMan X  %s\n\nA free BBS client developed with GTK+</big>\n"), VERSION);
+						_("<big>PCMan X  %s\n\nA free BBS client developed with GTK+ 2.x</big>\n"), VERSION);
 	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
 						"Copyright (C) 2005\n\n"
 						"License: GNU Genral Public License\n\n"
 						"Author: Hong Jen Yee (PCMan), a medical student from Taiwan\n\n"
 						"E-mail: hzysoft@sina.com.tw\n\n"
-						"http://pcmanx.sourceforge.net/"	);
+						"http://pcmanx.csie.net/"	);
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
 	gtk_widget_destroy(dlg);

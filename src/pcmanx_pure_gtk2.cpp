@@ -31,14 +31,27 @@
 
 int main(int argc, char *argv[])
 {
-	gtk_init (&argc, &argv);
-	
 	bind_textdomain_codeset("pcmanx", "UTF-8");
 	textdomain("pcmanx");
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 
+	int fake_argc = 1;
+	char **fake_argv;
+
+	/* GTK requires a program's argc and argv variables, and 
+	 * requires that they be valid. Set it up. */
+	fake_argv = (char **) g_malloc (sizeof (char *) * 2);
+	fake_argv[0] = (char *) g_malloc(1);
+	strcpy(argv[0], "");
+	argv[1] = NULL;
+		  
+	gtk_init (&fake_argc, &fake_argv);
+
+	g_free (fake_argv[0]);
+	g_free (fake_argv);
+  
 	CWidget::Init();
 
 	AppConfig.SetToDefault();
