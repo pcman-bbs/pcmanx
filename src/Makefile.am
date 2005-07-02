@@ -6,7 +6,10 @@ INCLUDES = $(GUI_CFLAGS) -DLOCALEDIR=\"$(localedir)\"
 
 pcmanx_LDADD = $(GUI_LIBS)
 
-EXTRA_DIST = Makefile-byhand
+EXTRA_DIST = \
+	Makefile-byhand \
+	conn_xpm.xpm \
+	pcmanx_xpm.xpm
 
 pcmanx_SOURCES = \
 	appconfig.cpp \

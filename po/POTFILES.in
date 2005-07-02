@@ -1,0 +1,7 @@
+src/sitelistdlg.cpp
+src/mainframe.cpp
+src/sitedlg.cpp
+src/editfavdlg.cpp
+src/sitepage.cpp
+src/prefdlg.cpp
+src/generalprefpage.cpp

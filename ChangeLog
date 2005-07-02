@@ -11,6 +11,20 @@
 
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
+	* po/POTFILES.in:
+	New file. Put the source filenames to be translated here.
+
+	* configure.ac:
+	Enhance GNU Gettext support.
+
+	* src/Makefile.am:
+	Include *.xpm in EXTRA_DIST.
+
+	* po/zh_TW.po:
+	Updated according to new layout.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
 	* autogen.sh,
 	configure.ac,
 	Doxygen.in,

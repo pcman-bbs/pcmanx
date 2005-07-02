@@ -14,3 +14,5 @@ AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake
 AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} intltoolize -c --automake
 ${AUTOMAKE:-automake$AM_VERSION} --add-missing --copy --include-deps
 ${AUTOCONF:-autoconf$AC_VERSION}
+
+rm -rf autom4te.cache
