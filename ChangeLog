@@ -1,3 +1,12 @@
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+	
+	* configure.ac:
+	Change AC_DEFINED(VERSION,...) to AC_DEFINED_UNQUOTED ensure really
+	defined this variable.
+	
+	* ABOUT-NLS:
+	New file. need by automake-1.9.
+
 2005-07-02  Jim Huang  <jserv@kaffe.org>
 
 	* src/termview.cpp (CTermView::OnLButtonDown),

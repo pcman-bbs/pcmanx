@@ -45,7 +45,7 @@ else
 	fi
 fi
 
-AC_DEFINE(VERSION, "$VERSION", [The version of pcmanx_pure_gtk2])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_pure_gtk2])
 
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
