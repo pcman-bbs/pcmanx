@@ -1,3 +1,10 @@
+2005-07-04  PCMan (Hong Jen Yee) <hzysoft@sina.com.tw>
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	* src/widget.cpp
+	* src/widget.h
+	Fix the most serious bug which cause extremely high system load.
+
 2005-07-04  Jim Huang  <jserv@kaffe.org>
 
 	* src/mainframe.h:
