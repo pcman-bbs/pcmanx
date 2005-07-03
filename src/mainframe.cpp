@@ -39,7 +39,7 @@
 #include "docklet/eggtrayicon.h"
 
 void CMainFrame::OnTrayButton_Toggled(
-	GtkToggleButton *button G_GNUC_UNUSED,
+	GtkToggleButton *button,
 	CMainFrame *_this)
 {
 	static bool hide_next_time = TRUE;
