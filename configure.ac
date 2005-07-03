@@ -52,15 +52,15 @@ dnl ** configure switches ***********************************************
 dnl *********************************************************************
 
 AC_ARG_ENABLE(debug,
-[  --enable-debug          enable Debug [default: no]],
+[  --enable-debug          enable Debug (default: no)],
         debug=$enableval, debug=no)
 
 AC_ARG_ENABLE(mmx,
-[  --disable-mmx           disable MMX optimizations [default: yes]],
+[  --disable-mmx           disable MMX optimizations (default: yes)],
         mmx=$enableval, mmx=yes)
 
 AC_ARG_ENABLE(docklet,
-[  --disable-docklet       disable docklet / system tray support [default: yes]],
+[  --disable-docklet       disable docklet / system tray support (default: yes)],
 	docklet=$enableval, docklet=yes)
 
 dnl *********************************************************************

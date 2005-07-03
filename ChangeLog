@@ -1,3 +1,19 @@
+2005-07-04  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.h:
+	Rename m_Tray_icon to m_TrayIcon_Instance.
+	(set_tray_icon): New helper function splitted from constructor to handle
+	tray icon routines.
+	(m_TrayButton) (m_TrayIcon): New member data. Likewise.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Adjust m_Tray_icon naming change.
+
+	* src/mainframe.cpp
+	(CMainFrame::CMainFrame): Use new helper function, set_tray_icon, and make
+	sure m_MainIcon is null at startup.
+	(CMainFrame::OnTrayButton_Changed): Implemented via invoking set_tray_icon.
+
 2005-07-03  Kanru Chen  <koster@debian.org.tw>
 	
 	* src/mainframe.cpp
@@ -6,8 +22,8 @@
 
 	* src/termview.cpp
 	(CTermView::OnDestroy) (CTermView::~CTermView):
-	Move XftDrawDestroy(m_XftDraw) to destructer to avoid X error,
-	however, actually this destructer never be called because strange CWidget
+	Move XftDrawDestroy(m_XftDraw) to destructor to avoid X error,
+	however, actually this destructor never be called because strange CWidget
 	behavior. Need to FIX. Warn: memory leak.
 
 	* src/caret.cpp,

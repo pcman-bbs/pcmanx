@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 	gtk_window_resize(GTK_WINDOW(main_frm->m_Widget), 640, 480);
 	main_frm->Show();
 #ifdef USE_DOCKLET
-	gtk_widget_show (GTK_WIDGET (main_frm->m_Tray_icon));
+	gtk_widget_show (GTK_WIDGET (main_frm->m_TrayIcon_Instance));
 #endif
 
 	gtk_main ();

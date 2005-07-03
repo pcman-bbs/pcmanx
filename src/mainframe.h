@@ -86,7 +86,7 @@ public:
 //    queue<>;
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
-    EggTrayIcon *m_Tray_icon;
+    EggTrayIcon *m_TrayIcon_Instance;
 #endif
 
 protected:
@@ -104,6 +104,9 @@ protected:
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
     static void OnTrayButton_Changed(CMainFrame* _this);
+    void set_tray_icon();
+    GtkWidget *m_TrayButton;
+    GtkWidget *m_TrayIcon;
 #endif
 
     GdkPixbuf* m_ConnIcon;

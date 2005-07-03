@@ -55,7 +55,42 @@ void CMainFrame::OnTrayButton_Toggled(
 
 void CMainFrame::OnTrayButton_Changed(CMainFrame *_this)
 {
-	/* Unimplemented */
+	if (! _this->m_MainIcon)
+		return;
+	_this->set_tray_icon();
+}
+
+void CMainFrame::set_tray_icon()
+{
+        int panel_w;
+        int panel_h;
+        gtk_window_get_size (GTK_WINDOW(gtk_widget_get_toplevel(m_TrayButton)),
+                        &panel_w, &panel_h);
+
+        int icon_size = (panel_h < 30) ? 16 : 24;
+
+        GdkPixbuf *tray_icon_pixbuf = gdk_pixbuf_copy (m_MainIcon);
+
+        /*
+         * Scale the icon rather than clip it if our allocation just isn't
+         * what we want it to be.
+         */
+        if (GTK_WIDGET_REALIZED (m_TrayIcon) &&
+                        m_TrayIcon->allocation.height < icon_size)
+        {
+                int new_size = m_TrayIcon->allocation.height;
+                GdkPixbuf *new_pixbuf;
+
+                new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
+                                new_size, new_size,
+                                GDK_INTERP_BILINEAR);
+
+                g_object_unref (tray_icon_pixbuf);
+                tray_icon_pixbuf = new_pixbuf;
+        }
+
+        gtk_image_set_from_pixbuf(GTK_IMAGE (m_TrayIcon), tray_icon_pixbuf);
+        g_object_unref (tray_icon_pixbuf);
 }
 #endif
 
@@ -67,54 +102,31 @@ CMainFrame::CMainFrame()
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-	LoadIcons();
-	
 #ifdef USE_DOCKLET
-	m_Tray_icon = egg_tray_icon_new ("applet");
+	/* We need to make sure m_MainIcon is null at startup. */
+	m_MainIcon = (GdkPixbuf *) NULL;
+#endif
 
-	GtkWidget *tray_button = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (tray_button), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_Tray_icon), tray_button);
-	gtk_widget_show (tray_button);
+	LoadIcons();
 
-	g_signal_connect (G_OBJECT (tray_button), "toggled",
+#ifdef USE_DOCKLET
+	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
+
+	m_TrayButton = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
+	gtk_widget_show (m_TrayButton);
+
+	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
 			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-	g_signal_connect (G_OBJECT (tray_button), "size-allocate",
+	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
 			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
 
-	GtkWidget *tray_icon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (tray_button), tray_icon);
-	gtk_widget_show (tray_icon);
-	
-	int panel_w;
-	int panel_h;
-	gtk_window_get_size (GTK_WINDOW(gtk_widget_get_toplevel(tray_button)),
-			&panel_w, &panel_h);
-	
-	int icon_size = (panel_h < 30) ? 16 : 24;
+	m_TrayIcon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
+	gtk_widget_show (m_TrayIcon);
 
-	GdkPixbuf *tray_icon_pixbuf = gdk_pixbuf_copy (m_MainIcon);
-
-	/*
-	 * Scale the icon rather than clip it if our allocation just isn't
-	 * what we want it to be.
-	 */
-        if (GTK_WIDGET_REALIZED (tray_icon) &&
-                        tray_icon->allocation.height < icon_size) 
-	{
-		int new_size = tray_icon->allocation.height;
-		GdkPixbuf *new_pixbuf;
-
-		new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
-				new_size, new_size,
-				GDK_INTERP_BILINEAR);
-
-		g_object_unref (tray_icon_pixbuf);
-		tray_icon_pixbuf = new_pixbuf;
-	}
-
-	gtk_image_set_from_pixbuf(GTK_IMAGE (tray_icon), tray_icon_pixbuf);
-	g_object_unref (tray_icon_pixbuf);
+	set_tray_icon();
 #endif
 
 	PostCreate();
