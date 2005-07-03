@@ -71,8 +71,6 @@ int main(int argc, char *argv[])
 	}
 #endif
 
-	CWidget::Init();
-
 	AppConfig.SetToDefault();
 	AppConfig.Load();
 	AppConfig.LoadFavorites();

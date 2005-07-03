@@ -74,26 +74,13 @@ void CWidget::Destroy()
 	}
 }
 
-queue<CWidget*> CWidget::m_WidgetsToBeDeleted;
-void CWidget::OnDestroy()
+static gboolean delete_CWidget(CWidget* obj)
 {
-	//	g_print("Destroy %s\n", gtk_widget_get_name(m_Widget));
-	m_WidgetsToBeDeleted.push(this);		//	delete this;
-	// Delayed object destruction to prevent weird problems.
+	delete obj;
+	return false;
 }
 
-gboolean CWidget::OnIdleCleanup(gpointer data)
+void CWidget::OnDestroy()
 {
-	//TODO: seems not good, need new method to deal with these damn obj
-	//FIXME: Very strange, did not delete all obj/subobj.
-	//		 What will happend if it delete it's self?
-	usleep(100);
-	while(!m_WidgetsToBeDeleted.empty())
-	{
-		CWidget* obj = m_WidgetsToBeDeleted.front();
-		m_WidgetsToBeDeleted.pop();
-		delete obj;
-		g_print("delete CWidget object\n");
-	}
-	return true;
+	g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, (GSourceFunc)&delete_CWidget, this, NULL );
 }

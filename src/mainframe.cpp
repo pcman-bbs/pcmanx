@@ -82,7 +82,7 @@ void CMainFrame::set_tray_icon()
                 GdkPixbuf *new_pixbuf;
 
                 new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
-                                new_size, new_size,
+                                new_size, m_TrayIcon->allocation.width,
                                 GDK_INTERP_BILINEAR);
 
                 g_object_unref (tray_icon_pixbuf);
