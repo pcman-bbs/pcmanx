@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-02 20:13+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/sitelistdlg.cpp:25 ../src/mainframe.cpp:444
+msgid "Site List"
+msgstr ""
+
+#: ../src/sitelistdlg.cpp:100 ../src/mainframe.cpp:177
+msgid "_Connect"
+msgstr ""
+
+#: ../src/sitelistdlg.cpp:208
+#, c-format
+msgid "Keyword \"%s\" not found!"
+msgstr ""
+
+#: ../src/mainframe.cpp:184
+msgid "_Site List"
+msgstr ""
+
+#: ../src/mainframe.cpp:195
+msgid "_New Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:206
+msgid "_Close Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:222
+msgid "Next Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:233
+msgid "Previous Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:244
+msgid "_Jump to"
+msgstr ""
+
+#: ../src/mainframe.cpp:261
+msgid "_Edit"
+msgstr ""
+
+#: ../src/mainframe.cpp:268
+msgid "_Copy"
+msgstr ""
+
+#: ../src/mainframe.cpp:279
+msgid "Copy with A_NSI Color"
+msgstr ""
+
+#: ../src/mainframe.cpp:287
+msgid "_Paste"
+msgstr ""
+
+#: ../src/mainframe.cpp:299
+msgid "Select A_ll"
+msgstr ""
+
+#: ../src/mainframe.cpp:309
+msgid "_Preference"
+msgstr ""
+
+#: ../src/mainframe.cpp:318
+msgid "F_avorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:322
+msgid "_View"
+msgstr ""
+
+#: ../src/mainframe.cpp:333
+msgid "_Help"
+msgstr ""
+
+#: ../src/mainframe.cpp:395
+msgid "Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:449
+msgid "New Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:454
+msgid "Close Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:463
+msgid "Copy"
+msgstr ""
+
+#: ../src/mainframe.cpp:468
+msgid "Copy with ANSI Color"
+msgstr ""
+
+#: ../src/mainframe.cpp:473
+msgid "Paste"
+msgstr ""
+
+#: ../src/mainframe.cpp:482
+msgid "Add to Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:487 ../src/prefdlg.cpp:27
+msgid "Preference"
+msgstr ""
+
+#: ../src/mainframe.cpp:492
+msgid "About"
+msgstr ""
+
+#: ../src/mainframe.cpp:528
+msgid "Connect"
+msgstr ""
+
+#: ../src/mainframe.cpp:528
+msgid ""
+"Host IP Address:\n"
+"Append port number to IP with a separating colon if it's not 23."
+msgstr ""
+
+#: ../src/mainframe.cpp:561
+msgid "Font"
+msgstr ""
+
+#: ../src/mainframe.cpp:613
+#, c-format
+msgid ""
+"<big>PCMan X  %s\n"
+"\n"
+"A free BBS client developed with GTK+ 2.x</big>\n"
+msgstr ""
+
+#: ../src/mainframe.cpp:802
+msgid "Quit PCMan X ?"
+msgstr ""
+
+#: ../src/mainframe.cpp:814
+#, c-format
+msgid ""
+"Function not implemented yet!\n"
+"Debug: %s"
+msgstr ""
+
+#: ../src/mainframe.cpp:826
+msgid "Add To Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:891
+msgid "_Add to Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:900
+msgid "_Edit Favorites"
+msgstr ""
+
+#: ../src/sitedlg.cpp:33 ../src/prefdlg.cpp:37
+msgid "Site Settings"
+msgstr ""
+
+#: ../src/editfavdlg.cpp:28
+msgid "Edit Favorites"
+msgstr ""
+
+#: ../src/editfavdlg.cpp:133
+msgid "New Site"
+msgstr ""
+
+#: ../src/editfavdlg.cpp:134
+msgid "Add New Site Settings"
+msgstr ""
+
+#: ../src/editfavdlg.cpp:151
+msgid "Edit Site Settings"
+msgstr ""
+
+#: ../src/sitepage.cpp:64
+msgid "Name: "
+msgstr ""
+
+#: ../src/sitepage.cpp:76
+msgid "Address: "
+msgstr ""
+
+#: ../src/sitepage.cpp:87
+msgid "Reconnect when disconnected in specified duration : "
+msgstr ""
+
+#: ../src/sitepage.cpp:96 ../src/sitepage.cpp:113
+msgid "Sec"
+msgstr ""
+
+#: ../src/sitepage.cpp:104
+msgid "Anti-Idle: Send specified string to server when idling for  "
+msgstr ""
+
+#: ../src/sitepage.cpp:121
+msgid "Anti-Idle string to be sent :"
+msgstr ""
+
+#: ../src/sitepage.cpp:141
+msgid "Terminal Screen Size"
+msgstr ""
+
+#: ../src/sitepage.cpp:149
+msgid "Line: "
+msgstr ""
+
+#: ../src/sitepage.cpp:158
+msgid "Col: "
+msgstr ""
+
+#: ../src/sitepage.cpp:175
+msgid "Terminal Type: "
+msgstr ""
+
+#: ../src/sitepage.cpp:188
+msgid "Convert ESC in ANSI color code to  "
+msgstr ""
+
+#: ../src/sitepage.cpp:201
+msgid "Wrap pasted text when there's too many characters per line :"
+msgstr ""
+
+#: ../src/sitepage.cpp:210
+msgid "0 = disabled"
+msgstr ""
+
+#: ../src/prefdlg.cpp:36
+msgid "General"
+msgstr ""
+
+#: ../src/generalprefpage.cpp:32 ../src/generalprefpage.cpp:36
+msgid "Confirm before closing connected connections."
+msgstr ""
+
+#: ../src/generalprefpage.cpp:40
+msgid "Cancel selection after copying text"
+msgstr ""

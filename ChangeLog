@@ -1,5 +1,19 @@
 2005-07-03  Jim Huang  <jserv@kaffe.org>
 
+	* sitelistdlg.cpp (CSiteListDlg::LoadSiteList):
+	Workaround of new GTK_STOCK_DIRECTORY macro introduced in GTK+ 2.6 .
+	Reported by Chung-Yen Chang  <candyz@cle.linux.org.tw>.
+	NOTE: Still some incompatibility to be fixed later.
+	
+	* po/pcmanx.pot:
+	New file. Missing translation template.
+
+	* autogen.sh:
+	Add workaround of some cases that mkinstalldirs was not correctly
+	installed.
+
+2005-07-03  Jim Huang  <jserv@kaffe.org>
+
 	* src/mainframe.cpp
 	(CMainFrame::OnTrayButton_Toggled):
 	Temporal workaround of G_GNUC_UNUSED attribute.

@@ -242,6 +242,10 @@ void CSiteListDlg::LoadSiteList()
 	GtkIconSet* icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_NETWORK);
 	m_SiteIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 
+	/* Workaround of new GTK_STOCK_DIRECTORY macro introduced in GTK+ 2.6 */
+	#if !GTK_CHECK_VERSION(2,6,0)
+	#define GTK_STOCK_DIRECTORY "gtk-directory"
+	#endif
 	icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_DIRECTORY);
 	m_FolderIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 //	g_object_unref(icon_set);	??
