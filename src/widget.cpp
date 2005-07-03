@@ -85,13 +85,15 @@ void CWidget::OnDestroy()
 gboolean CWidget::OnIdleCleanup(gpointer data)
 {
 	//TODO: seems not good, need new method to deal with these damn obj
+	//FIXME: Very strange, did not delete all obj/subobj.
+	//		 What will happend if it delete it's self?
 	usleep(100);
 	while(!m_WidgetsToBeDeleted.empty())
 	{
 		CWidget* obj = m_WidgetsToBeDeleted.front();
 		m_WidgetsToBeDeleted.pop();
 		delete obj;
-//		g_print("delete CWidget object\n");
+		g_print("delete CWidget object\n");
 	}
 	return true;
 }

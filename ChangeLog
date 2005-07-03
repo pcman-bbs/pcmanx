@@ -1,3 +1,20 @@
+2005-07-03  Kanru Chen  <koster@debian.org.tw>
+	
+	* src/mainframe.cpp
+	(CMainFrame::CloseCon):
+	Remove correct note page and move to next page.
+
+	* src/termview.cpp
+	(CTermView::OnDestroy) (CTermView::~CTermView):
+	Move XftDrawDestroy(m_XftDraw) to destructer to avoid X error,
+	however, actually this destructer never be called because strange CWidget
+	behavior. Need to FIX. Warn: memory leak.
+
+	* src/caret.cpp,
+	src/termview.cpp,
+	src/widget.cpp:
+	Some debug message.
+
 2005-07-03  Jim Huang  <jserv@kaffe.org>
 
 	* sitelistdlg.cpp (CSiteListDlg::LoadSiteList):

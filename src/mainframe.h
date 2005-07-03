@@ -70,7 +70,7 @@ public:
     static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this);
 	void SetCurView(CTelnetView* view);
-	CTelnetView* GetCurView(){	return m_pView;	}
+	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
     static gboolean OnBlinkTimer(CMainFrame* _this);

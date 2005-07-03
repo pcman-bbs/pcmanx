@@ -194,6 +194,11 @@ CTermView::~CTermView()
 //		g_object_unref( G_OBJECT(m_IMContext) );
 //	if( m_Font )
 //		pango_font_description_free(m_Font);
+	if( m_Font )
+		delete m_Font;
+	XftDrawDestroy(m_XftDraw);
+	m_XftDraw = NULL;
+	g_print("XftDrawDestroy\n");
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
@@ -204,6 +209,11 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	PrepareDC();
 
 	GdkDrawable* dc = m_Widget->window;
+	if(!GDK_IS_DRAWABLE(dc))
+	{
+		g_print("WARNNING! Draw on DELETED widget!\n");
+		return;
+	}
 
 	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
 
@@ -271,6 +281,11 @@ void CTermView::OnTextInput(gchar* string)
 
 void CTermView::OnCreate()
 {
+	if(!GDK_IS_DRAWABLE(m_Widget->window))
+	{
+		g_print("Draw on DELETED widget!\n");
+		return;
+	}
 	CWidget::OnCreate();
 	gtk_im_context_set_client_window(m_IMContext, m_Widget->window);
 
@@ -280,6 +295,7 @@ void CTermView::OnCreate()
 		GDK_VISUAL_XVISUAL(gdk_drawable_get_visual(m_Widget->window)),
 		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(m_Widget->window)));
 	XftDrawSetSubwindowMode(m_XftDraw, IncludeInferiors);
+	g_print("Create\n");
 
 	if( !m_Font )
 		m_Font = new CFont("Sans", 18);
@@ -295,6 +311,11 @@ void CTermView::OnCreate()
 int CTermView::DrawChar(int line, int col, int top)
 {
 	GdkDrawable* dc = m_Widget->window;
+	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
+	{
+		g_print("Draw on DELETED widget!\n");
+		return 1;
+	}
 
 	const char* pLine = m_pTermData->m_Screen[line];
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
@@ -868,9 +889,6 @@ void CTermView::SetFont(CFont* font)
 
 void CTermView::OnDestroy()
 {
-	if( m_Font )
-		delete m_Font;
-	XftDrawDestroy(m_XftDraw);
 }
 
 

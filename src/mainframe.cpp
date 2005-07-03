@@ -818,18 +818,9 @@ void CMainFrame::CloseCon(int idx, bool confirm)
 	gtk_notebook_remove_page(nb, idx);
 	m_Views.erase( m_Views.begin() + idx );
 
-	int n = gtk_notebook_get_n_pages(nb);
-	if( n == 0 )
-		return;
-
-	n--;
-
-	if( idx >= n )
-		idx = n-1;
-
-	m_pView = idx >= 0 ? m_Views[idx] : NULL;
+	int n = gtk_notebook_get_current_page(nb);
+	m_pView = n >= 0 ? m_Views[n] : NULL;
 }
-
 
 gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 {

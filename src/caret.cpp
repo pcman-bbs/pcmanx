@@ -85,6 +85,11 @@ void CCaret::SetSize( int Width, int Height )
 
 void CCaret::DrawInverse()
 {
+	if(!GDK_IS_DRAWABLE(m_pParent->window))
+	{
+		g_print("Warring! Draw on DELETED widget!\n");
+		return;
+	}
 	gdk_gc_set_function(m_GC, GDK_INVERT);
 	gdk_draw_drawable(m_pParent->window, m_GC, m_pParent->window,
 					m_Pos.x, m_Pos.y, m_Pos.x, m_Pos.y, m_Width, m_Height);
