@@ -21,10 +21,9 @@
 #include <unistd.h>
 
 CWidget::CWidget()
+	: m_Widget(NULL)
 {
-	m_Widget = NULL;
 }
-
 
 CWidget::~CWidget()
 {
@@ -48,21 +47,18 @@ bool CWidget::PostCreate()
 	return true;
 }
 
-
-
 void CWidget::OnCreate()
 {
 //	g_print("realize %s\n", gtk_widget_get_name(m_Widget));
 }
 
-
 void CWidget::Refresh()
 {
-	GdkRectangle rect;
-	rect.x = rect.y = 0;
-	rect.width = m_Widget->allocation.width;
-	rect.height = m_Widget->allocation.height;
-	gdk_window_invalidate_rect(m_Widget->window, &rect, true);
+	GdkRectangle t_Rect;
+	t_Rect.x = t_Rect.y = 0;
+	t_Rect.width = m_Widget->allocation.width;
+	t_Rect.height = m_Widget->allocation.height;
+	gdk_window_invalidate_t_Rect(m_Widget->window, &t_Rect, true);
 }
 
 void CWidget::Destroy()
@@ -76,7 +72,8 @@ void CWidget::Destroy()
 
 static gboolean delete_CWidget(CWidget* obj)
 {
-	delete obj;
+	if (obj != NULL)
+		delete obj;
 	return false;
 }
 

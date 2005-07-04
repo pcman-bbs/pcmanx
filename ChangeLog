@@ -1,3 +1,11 @@
+2005-07-04	FourDollars <fourdollars@gmail.com>
+
+	* src/widget.cppa:
+	Some bugs fixed, and using naming rules.
+
+	* Doxygen.in:
+	Add more information.
+
 2005-07-04  Jim Huang  <jserv@kaffe.org>
 
 	* src/mainframe.cpp (CMainFrame::set_tray_icon):
