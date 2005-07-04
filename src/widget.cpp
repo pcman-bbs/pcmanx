@@ -58,7 +58,7 @@ void CWidget::Refresh()
 	t_Rect.x = t_Rect.y = 0;
 	t_Rect.width = m_Widget->allocation.width;
 	t_Rect.height = m_Widget->allocation.height;
-	gdk_window_invalidate_t_Rect(m_Widget->window, &t_Rect, true);
+	gdk_window_invalidate_rect(m_Widget->window, &t_Rect, true);
 }
 
 void CWidget::Destroy()

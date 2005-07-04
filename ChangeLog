@@ -1,6 +1,11 @@
 2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/font.cpp (CFont::::CreateXftFont)
+	* src/widget.cpp (CWidget::Refresh)
+	Fix a typo.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/font.cpp (CFont::CreateXftFont)
 	Fix some problems in font size calculation.
 
 	* src/font.h (CFont::GetMaxWidth())
@@ -8,7 +13,7 @@
 
 2005-07-04	FourDollars <fourdollars@gmail.com>
 
-	* src/widget.cppa:
+	* src/widget.cpp:
 	Some bugs fixed, and using naming rules.
 
 	* Doxygen.in:
