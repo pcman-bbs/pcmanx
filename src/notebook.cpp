@@ -45,7 +45,7 @@ int CNotebook::AddPage( CWidget* page, const char* title, GdkPixbuf* icon)
 	GtkWidget* text_label = gtk_label_new(NULL);
 	gtk_widget_show(text_label);
 	gtk_label_set_markup (GTK_LABEL(text_label), title);
-	g_print("label = %X\n", text_label);
+//	g_print("label = %X\n", text_label);
 	GtkWidget* label = text_label;
 	if(icon)
 	{

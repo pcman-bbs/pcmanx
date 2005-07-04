@@ -894,5 +894,7 @@ void CTermView::OnDestroy()
 
 void CTermView::SetFontFamily(string name)
 {
-	m_Font->SetFontFamily(name);
+	int desire_w = (m_Widget->allocation.width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
+	int desire_h = (m_Widget->allocation.height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
+	m_Font->SetFont(name, desire_w, desire_h, m_Font->GetAntiAlias());
 }

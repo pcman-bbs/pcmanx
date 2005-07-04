@@ -1,5 +1,10 @@
 2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/termview.cpp (CTermView::SetFontFamily)
+	Recalculate font size when font family is changed.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/widget.cpp (CWidget::Refresh)
 	Fix a typo.
 
