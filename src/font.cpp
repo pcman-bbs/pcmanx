@@ -98,6 +98,39 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 	Display *display = gdk_x11_get_default_xdisplay();
 	int screen = DefaultScreen (display);
 
+	int pt_size = height;
+	XftFont* font = XftFontOpen (display, screen,
+					XFT_FAMILY, XftTypeString, name.c_str(),
+					XFT_CORE, XftTypeBool, False,
+					XFT_SIZE, XftTypeDouble, (double)pt_size,
+					XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+					XFT_ANTIALIAS, XftTypeBool, anti_alias,
+					NULL);
+
+	int w = font->max_advance_width;
+	int h = font->ascent + font->descent;
+
+	int max_width = width * 2;
+	while( pt_size > 4 && ( w > max_width || h > height) )
+	{
+		pt_size --;
+
+		if( font )
+			XftFontClose(display, font);
+
+		font = XftFontOpen (display, screen,
+						XFT_FAMILY, XftTypeString, name.c_str(),
+						XFT_CORE, XftTypeBool, False,
+						XFT_SIZE, XftTypeDouble, (double)pt_size,
+						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
+						XFT_ANTIALIAS, XftTypeBool, anti_alias,
+						NULL);
+
+		w = font->max_advance_width;
+		h = font->ascent + font->descent;
+	}
+	
+#if 0	// Deprecated: Create XftFont by pixel size
 	XftFont* font = XftFontOpen (display, screen,
 					XFT_FAMILY, XftTypeString, name.c_str(),
 					XFT_CORE, XftTypeBool, False,
@@ -109,12 +142,14 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 	int w = font->max_advance_width;
 	int h = font->ascent + font->descent;
 
+	int max_width = width * 2;
 	// TODO: must use new method to determine font size
-	while( (w > 2 && h > 2) && ( w > width*2 || h > height*2) )
+	while( (w > 4 && h > 4) && ( w > max_width || h > height) )
 	{
 		if( font )
 			XftFontClose(display, font);
 
+		int old_h = h;
 		h--;
 
 		font = XftFontOpen (display, screen,
@@ -126,8 +161,11 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 						NULL);
 
 		w = font->max_advance_width;
+		h = font->ascent + font->descent;
+		if( h >= old_h )
+			h--;
 	}
-
+#endif
 	return font;
 }
 

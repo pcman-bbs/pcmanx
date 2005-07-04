@@ -1,3 +1,11 @@
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/font.cpp (CFont::::CreateXftFont)
+	Fix some problems in font size calculation.
+
+	* src/font.h (CFont::GetMaxWidth())
+	Ensure that max width can be devided by 2.
+
 2005-07-04	FourDollars <fourdollars@gmail.com>
 
 	* src/widget.cppa:

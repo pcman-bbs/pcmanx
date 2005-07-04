@@ -37,7 +37,7 @@ public:
     void SetFont( string name, int pt_size, bool anti_alias = true );
     void SetFont( string name, int width, int height, bool anti_alias = true );
 	int GetHeight(){	return m_XftFont->ascent + m_XftFont->descent;	}
-	int GetMaxWidth(){	return m_XftFont->max_advance_width;	}
+	int GetMaxWidth(){	int w = m_XftFont->max_advance_width;	return w %2 ? w : (w + 1);	}
 	XftFont* GetXftFont(){	return m_XftFont;	}
 	string GetName(){	return m_Name;	}
 	bool GetAntiAlias(){	return m_AntiAlias;	}
