@@ -365,8 +365,6 @@ int CTermView::DrawChar(int line, int col, int top)
 
 		gdk_gc_set_rgb_fg_color( m_GC, Bg );
 
-
-		
 		XftColor xftclr;
 		xftclr.pixel = 0;
 		xftclr.color.red = Fg->red;
@@ -421,13 +419,20 @@ int CTermView::DrawChar(int line, int col, int top)
 
 		if( w == 1 || i>=1 || (pAttr[i].IsSameAttr(pAttr[i+1].AsShort()) && bSel[0] == bSel[1]) )
 			break;
-	
-		gdk_gc_set_clip_rectangle( m_GC, NULL);
+
+		gdk_gc_set_clip_rectangle( m_GC, NULL );
 		GdkRectangle rect;	rect.x=(left + m_CharW); rect.y=top; rect.width=m_CharW; rect.height=m_CharH;
 		gdk_gc_set_clip_origin( m_GC, rect.x, rect.y );
-		gdk_gc_set_clip_rectangle( m_GC, &rect);
+		gdk_gc_set_clip_rectangle( m_GC, &rect );
+
+		Region xregion = XCreateRegion();
+		XRectangle xrect;	xrect.x=rect.x;	xrect.y=rect.y;	xrect.width=rect.width;	xrect.height=rect.height;
+		XUnionRectWithRegion (&xrect, xregion, xregion);
+		XftDrawSetClip(m_XftDraw, xregion );
+		XDestroyRegion(xregion);
 	}
-	gdk_gc_set_clip_rectangle( m_GC, NULL);
+	gdk_gc_set_clip_rectangle( m_GC, NULL );
+	XftDrawSetClip(m_XftDraw, NULL);
 	return w;
 }
 
