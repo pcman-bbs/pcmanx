@@ -383,8 +383,7 @@ int CTermView::DrawChar(int line, int col, int top)
 			{
 				gsize wl;
 //				gchar* utf8_ch = g_locale_to_utf8(pChar, w, NULL, &wl, NULL);
-				//TODO Encoding should be set from config somewhere, not from locale, nor default to Big5.
-				gchar *utf8_ch = g_convert(pChar, w, "UTF-8", "Big5", NULL, &wl, NULL);
+				gchar *utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
 				if( w > 0 && utf8_ch )
 				{
 //					pango_layout_set_text(m_PangoLayout, utf8_ch, -1 );

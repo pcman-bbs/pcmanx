@@ -196,6 +196,7 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;
+	pCon->m_Encoding = pCon->m_Site.m_Encoding;
 
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
 

@@ -52,6 +52,9 @@ CSitePage::CSitePage(CSite& site)
 	GtkWidget *hbox15;
 	GtkWidget *label24;
 	GtkWidget *label25;
+	GtkWidget *hbox16;
+	GtkWidget *label126;
+
 
 	m_Widget = gtk_vbox_new(FALSE, 2);
 
@@ -213,6 +216,21 @@ CSitePage::CSitePage(CSite& site)
 
 	gtk_entry_set_text(GTK_ENTRY(m_Name), m_Site.m_Name.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_Address), m_Site.m_URL.c_str());
+	
+	hbox16 = gtk_hbox_new (FALSE, 4);
+	gtk_widget_show (hbox16);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox16, FALSE, TRUE, 2);
+
+	label126 = gtk_label_new (_("Site Encoding :"));
+	gtk_widget_show (label126);
+	gtk_box_pack_start (GTK_BOX(hbox16), label126, FALSE, FALSE, 2);
+
+	m_Encoding = gtk_entry_new ();
+	gtk_widget_show (m_Encoding);
+	gtk_box_pack_start (GTK_BOX (hbox16), m_Encoding, FALSE, TRUE, 2);
+	gtk_widget_set_size_request (m_Encoding, 40, -1);
+
+	gtk_entry_set_text(GTK_ENTRY(m_Encoding), m_Site.m_Encoding.c_str());
 
 	if( m_Site.m_Name.empty() )
 	{
@@ -254,6 +272,8 @@ bool CSitePage::OnOK()
 
 	m_Site.m_AntiIdle = atoi( gtk_entry_get_text(GTK_ENTRY(m_Idle)) );
 	m_Site.m_AntiIdleStr = gtk_entry_get_text(GTK_ENTRY(m_IdleStr));
+
+	m_Site.m_Encoding = gtk_entry_get_text(GTK_ENTRY(m_Encoding));
 
 	m_Site.m_AutoReconnect = atoi( gtk_entry_get_text(GTK_ENTRY(m_Reconnect)));
 

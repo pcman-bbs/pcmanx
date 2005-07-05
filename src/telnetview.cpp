@@ -33,7 +33,6 @@ CTelnetView::CTelnetView()
         : CTermView()
 {}
 
-
 CTelnetView::~CTelnetView()
 {}
 
@@ -41,7 +40,7 @@ CTelnetView::~CTelnetView()
 void CTelnetView::OnTextInput(gchar* text)
 {
 	gsize l;
-	gchar* _text = g_convert(text, strlen(text), "Big5", "UTF-8", NULL, &l, NULL);
+	gchar* _text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
 	((CTelnetCon*)m_pTermData)->Send(_text, l);
 	g_free(_text);
 }

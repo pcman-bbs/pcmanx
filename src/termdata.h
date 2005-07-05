@@ -290,6 +290,9 @@ class CTermData
 		unsigned short m_RowsPerPage;
 		// Cols per page
 		unsigned short m_ColsPerPage;
+		
+		// Encoding
+		string m_Encoding;
 	private:
 
 };

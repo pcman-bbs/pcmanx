@@ -34,6 +34,9 @@ CSite::CSite(const char* Name) : m_Name(Name)
 	m_AntiIdleStr = "^[OB";	// empty string means '\0'
 	m_AntiIdle = 180;	// 0 means disabled
 
+	// Site Encoding
+	m_Encoding = "Big5";
+
 	// Terminal settings
 	// Rows per page
 	m_RowsPerPage = 24;
@@ -75,6 +78,7 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "AutoReconnect=%d\n", m_AutoReconnect );
 	fprintf( fo, "AntiIdle=%d\n", m_AntiIdle );
 	fprintf( fo, "AntiIdleStr=%s\n", m_AntiIdleStr.c_str() );
+	fprintf( fo, "Encoding=%s\n", m_Encoding.c_str() );
 	fprintf( fo, "Rows=%d\n", m_RowsPerPage );
 	fprintf( fo, "Cols=%d\n", m_ColsPerPage );
 	fprintf( fo, "TermType=%s\n", m_TermType.c_str() );

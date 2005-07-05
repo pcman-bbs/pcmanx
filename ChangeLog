@@ -1,3 +1,16 @@
+2005-07-03  Kanru Chen  <koster@debian.org.tw>
+
+	* src/sitepage.cpp,
+	src/sitepage.h,
+	src/termview.cpp,
+	src/site.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/termdata.h,
+	src/site.h,
+	src/telnetview.cpp:
+	Add encoding preference.
+
 2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp (CTermView::DrawChar):

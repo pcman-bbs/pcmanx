@@ -193,8 +193,10 @@ void CAppConfig::LoadFavorites()
 				pSite->m_AutoReconnect = atoi(pval);
 			else if( 0 == strcmp( pname, "AntiIdle" ) )
 				pSite->m_AntiIdle = atoi(pval);
-			else if( 0 == strcmp( pname, "AntiIdleStr" ) )
+			else if( 0 == strcmp( pname, "Antiidlestr" ) )
 				pSite->m_AntiIdleStr = pval;
+			else if( 0 == strcmp( pname, "Encoding" ) )
+				pSite->m_Encoding = pval;
 			else if( 0 == strcmp( pname, "Rows" ) )
 				pSite->m_RowsPerPage = atoi(pval);
 			else if( 0 == strcmp( pname, "Cols" ) )

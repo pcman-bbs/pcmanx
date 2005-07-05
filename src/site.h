@@ -49,6 +49,9 @@ public:
 	string m_AntiIdleStr;	// empty string means '\0'
 	unsigned int m_AntiIdle;	// 0 means disabled
 
+	// Site Encoding
+	string m_Encoding;
+
 	// Terminal settings
 	// Rows per page
 	unsigned int m_RowsPerPage;
