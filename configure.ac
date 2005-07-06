@@ -249,6 +249,7 @@ Makefile
 src/Makefile
 po/Makefile.in
 data/Makefile
+pcmanx.desktop
 Doxygen
 ])
 

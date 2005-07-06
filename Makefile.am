@@ -16,7 +16,7 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in \
 	ChangeLog \
-	pcmanx.desktop
+	pcmanx.desktop.in
 	
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
