@@ -1,30 +1,17 @@
-# PCMan <hzysoft@sina.com.tw>, 2004.
+# PCMan <hzysoft@sina.com.tw>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: PCManX\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-02 20:13+0800\n"
+"POT-Creation-Date: 2005-07-06 23:10+0800\n"
 "PO-Revision-Date: 2005-07-06 21:31+0800\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: PCMan <hzysoft@sina.com.tw>\n"
+"Language-Team: zh_TW <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: TAIWAN\n"
-"X-Poedit-Keywords: _\n"
-"X-Poedit-Basepath: .\n"
 
-#: ../src/docklet/eggtrayicon.c:120
-msgid "Orientation"
-msgstr "方位"
-
-#: ../src/docklet/eggtrayicon.c:121
-msgid "The orientation of the tray."
-msgstr ""
-
-#: ../src/sitelistdlg.cpp:25
-#: ../src/mainframe.cpp:528
+#: ../src/sitelistdlg.cpp:25 ../src/mainframe.cpp:528
 msgid "Site List"
 msgstr "BBS 站台列表"
 
@@ -32,7 +19,7 @@ msgstr "BBS 站台列表"
 msgid "C_onnect"
 msgstr "連線 (_O)"
 
-#: ../src/sitelistdlg.cpp:208
+#: ../src/sitelistdlg.cpp:211
 #, c-format
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到關鍵字 \"%s\"！"
@@ -129,8 +116,7 @@ msgstr "貼上"
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:571
-#: ../src/prefdlg.cpp:27
+#: ../src/mainframe.cpp:571 ../src/prefdlg.cpp:27
 msgid "Preference"
 msgstr "個人偏好設定"
 
@@ -154,6 +140,17 @@ msgstr ""
 msgid "Font"
 msgstr "字型"
 
+#. GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
+#. gtk_about_dialog_set_name(dlg, "PCMan X");
+#. gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
+#. gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
+#. gtk_about_dialog_set_license(dlg, "GPL");
+#. gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
+#. const char *authors[]={"Hong Jen Yee"};
+#. gtk_about_dialog_set_authors(dlg, authors );
+#. gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
+#.
+#. gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
 #: ../src/mainframe.cpp:693
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
@@ -217,8 +214,7 @@ msgstr "加入到我的最愛 (_A)"
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
-#: ../src/sitedlg.cpp:33
-#: ../src/prefdlg.cpp:37
+#: ../src/sitedlg.cpp:33 ../src/prefdlg.cpp:37
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -250,8 +246,7 @@ msgstr "站台位址："
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:99
-#: ../src/sitepage.cpp:116
+#: ../src/sitepage.cpp:99 ../src/sitepage.cpp:116
 msgid "Sec"
 msgstr "秒"
 
@@ -303,8 +298,7 @@ msgstr "站台編碼："
 msgid "General"
 msgstr "一般"
 
-#: ../src/generalprefpage.cpp:35
-#: ../src/generalprefpage.cpp:39
+#: ../src/generalprefpage.cpp:35 ../src/generalprefpage.cpp:39
 msgid "Confirm before closing connected connections."
 msgstr "關閉連線中的連線前先詢問"
 
@@ -319,4 +313,3 @@ msgstr "顯示系統列圖示 (Docklet) (重新啟動程式後才有效)"
 #: ../src/generalprefpage.cpp:56
 msgid "Web Browser: "
 msgstr "網頁瀏覽器："
-

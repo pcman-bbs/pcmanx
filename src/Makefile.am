@@ -11,6 +11,7 @@ pcmanx_LDADD = $(GUI_LIBS)
 
 OPTIONAL_DOCKLET = \
 	docklet/clipboard.c \
+	docklet/eggtrayicon.h \
 	docklet/eggtrayicon.c
 
 EXTRA_DIST = \

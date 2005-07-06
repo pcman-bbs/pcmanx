@@ -1,3 +1,8 @@
+2005-07-06  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am:
+	Fixlet to previous changes.
+
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termdata.cpp (CTermData::UpdateDisplay),
