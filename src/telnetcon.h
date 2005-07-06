@@ -90,8 +90,8 @@ public:
     static vector<CConnectThread*> m_ConnectThreads;
 
 	virtual void OnClose();
-	virtual void OnConnect();
-	void OnRecv();
+	virtual void OnConnect(int code);
+	bool OnRecv();
 	/**
 		* Parse received data, process telnet command
 		* and ANSI escape sequence.
@@ -106,8 +106,10 @@ public:
 		m_IdleTime = 0;	// Since data has been sent, we are not idle.
 	}
 
+	bool IsValid(){	return m_SockFD >= 0;	}
+
 	void SendString(string str);
-    void Connect(const struct sockaddr *serv_addr, socklen_t addrlen);
+    int Connect(const struct sockaddr *serv_addr, socklen_t addrlen);
     void ResolveHostName(string name, int port);
     void Close();
     static gboolean OnMainIdle(CConnectThread* data);
@@ -133,7 +135,7 @@ class CConnectThread
 {
 public:
 	CConnectThread(CTelnetCon* con, string address, int port) 
-		: m_pCon(con), m_Address(address), m_Port(port)
+		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1)
 	{
 		m_pThread = NULL;
 	}
@@ -142,6 +144,7 @@ public:
 	CTelnetCon* m_pCon;
 	string m_Address;
 	int m_Port;
+	int m_Code;
 };
 
 

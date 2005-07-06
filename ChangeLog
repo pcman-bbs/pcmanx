@@ -1,5 +1,11 @@
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/telnetcon.cpp:
+	(CTelnetCon::OnClose): Add "auto reconnect" support.
+	Fix lots of thread-related bugs.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/mainframe.cpp:
 	(CMainFrame::OnFont): Disable "style" in font selection dialog.
 

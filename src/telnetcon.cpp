@@ -58,23 +58,21 @@ gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon
 	switch(type)
 	{
 	case G_IO_IN:
-		_this->OnRecv();
-		break;
-	case G_IO_HUP:
-		_this->OnClose();
-		break;
+		return _this->OnRecv();
 	case G_IO_NVAL:
-		_this->OnClose();
-		return false;
+		g_print("fd not opened.\n");
+		break;
 	default:
-		g_print("socket io error.\n");
+		g_print("socket io error or unknown condition.\n");
 	}
-	return true;
+	return false;
 }
 
 // No description
 bool CTelnetCon::Connect()
 {
+	m_State = TS_CONNECTING;
+
 	string address;
 	unsigned short port = 23;
 
@@ -97,7 +95,7 @@ bool CTelnetCon::Connect()
 }
 
 // No description
-void CTelnetCon::OnRecv()
+bool CTelnetCon::OnRecv()
 {
 	unsigned char buffer[4097];
 	m_pRecvBuf = buffer;
@@ -108,7 +106,7 @@ void CTelnetCon::OnRecv()
 	if(rlen == 0)
 	{
 		OnClose();
-		return;
+		return false;
 	}
 
     m_pRecvBuf[rlen] = '\0';
@@ -121,24 +119,39 @@ void CTelnetCon::OnRecv()
 		CheckAutoLogin();
 
 	UpdateDisplay();
+
+	return true;
 }
 
-void CTelnetCon::OnConnect()
+void CTelnetCon::OnConnect(int code)
 {
-	m_State = TS_CONNECTED;
-	m_IOChannel = g_io_channel_unix_new(m_SockFD);
-	g_io_add_watch( m_IOChannel, 
-		GIOCondition(G_IO_ERR|G_IO_NVAL|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
-	g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
-	g_io_channel_set_buffered(m_IOChannel, false);
+	if( 0 == code )
+	{
+		m_State = TS_CONNECTED;
+		m_IOChannel = g_io_channel_unix_new(m_SockFD);
+		g_io_add_watch( m_IOChannel, 
+			GIOCondition(G_IO_ERR|G_IO_NVAL|G_IO_IN), (GIOFunc)OnSocket, this );
+		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
+		g_io_channel_set_buffered(m_IOChannel, false);
+	}
+	else
+	{
+		g_print("connection failed.\n");
+//		OnClose();
+	}
 }
 
 void CTelnetCon::OnClose()
 {
+	m_State = TS_CLOSED;
 	Close();
 	//	if disconnected by the server too soon, reconnect automatically.
-//	if( m_Duration < m_Site.m_AutoReconnect )
-//		Connect();
+	if( m_Duration < m_Site.m_AutoReconnect )
+	{
+		ClearScreen(2);
+		m_CaretPos.x = m_CaretPos.y = 0;
+		Connect();
+	}
 }
 
 /*
@@ -365,12 +378,20 @@ int CTelnetCon::Send(void *buf, int len)
 }
 
 
-void CTelnetCon::Connect(const struct sockaddr *serv_addr, socklen_t addrlen)
+int CTelnetCon::Connect(const struct sockaddr *serv_addr, socklen_t addrlen)
 {
-	m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+	int ret;
+	for( int i =0; i < 3 ; ++i )
+	{
+//		g_print("Try: %d\n", i);
+		m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+//		bind( m_SockFD, serv_addr, addrlen );
 
-//	bind( m_SockFD, serv_addr, addrlen );
-	connect( m_SockFD, serv_addr, addrlen );
+		if( 0 == (ret = connect( m_SockFD, serv_addr, addrlen )) )
+			break;
+		close(m_SockFD);
+	}
+	return ret;
 }
 
 vector<CConnectThread*> CTelnetCon::m_ConnectThreads;
@@ -387,21 +408,24 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 	sock_addr.sin_port = htons(data->m_Port);
 
 	in_addr addr;
+	addr.s_addr = INADDR_NONE;
+
 	if( ! inet_aton(data->m_Address.c_str(), &addr) )
 	{
 		hostent* host = gethostbyname(data->m_Address.c_str());
-		if( !host )
-			return NULL;
-		addr = *(in_addr*)host->h_addr_list[0];
+		if( host )
+			addr = *(in_addr*)host->h_addr_list[0];
 	}
-	if( addr.s_addr == INADDR_NONE )
-		return NULL;
-
-	sock_addr.sin_addr = addr;
-
-	data->m_pCon->Connect((sockaddr*)&sock_addr, sizeof(sock_addr));
+	if( addr.s_addr != INADDR_NONE )
+	{
+		sock_addr.sin_addr = addr;
+		data->m_Code = data->m_pCon->Connect((sockaddr*)&sock_addr, sizeof(sock_addr));
+	}
+	else
+		data->m_Code = -1;
 
 	g_idle_add((GSourceFunc)OnMainIdle, data);
+
 	return data;
 }
 
@@ -414,6 +438,7 @@ void CTelnetCon::Close()
 	{
 		shutdown( m_SockFD, 0 );
 		close( m_SockFD );
+		m_SockFD = -1;
 	}
 
 	if( m_IOChannel )
@@ -422,7 +447,6 @@ void CTelnetCon::Close()
 		g_io_channel_unref(m_IOChannel);
 		m_IOChannel = NULL;
 	}
-
 }
 
 gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
@@ -440,9 +464,9 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 
 	CTelnetCon* pCon = data->m_pCon;
 	if( pCon )
-		pCon->OnConnect();
+		pCon->OnConnect(data->m_Code);
 	delete data;
-//	g_print("delete thread obj\n");
+	g_print("delete thread obj\n");
 	return false;
 }
 
