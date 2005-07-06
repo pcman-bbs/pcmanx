@@ -160,7 +160,7 @@ msgid ""
 msgstr ""
 "洪任諭 Hong Jen Yee (主要開發者) <hzysoft@sina.com.tw>\n"
 "黃敬群 Jim Huang (開發者) <jserv@kaffe.org>n\n"
-"陳愷如 Kanru Chen (開發者) <koster@debian.org.tw>\n"
+"陳侃如 Kanru Chen (開發者) <koster@debian.org.tw>\n"
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>"
 
 #: ../src/mainframe.cpp:703
