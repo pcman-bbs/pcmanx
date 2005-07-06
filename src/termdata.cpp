@@ -120,6 +120,8 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 	m_CurAttr.SetToDefault();
 	m_SelBlock = false;
 	m_CmdLine[0] = '\0';
+	m_WaitUpdateDisplay = false;
+	m_NeedDelayedUpdate = false;
 }
 
 // class destructor
@@ -232,6 +234,8 @@ void CTermData::LineFeed()
 		SetWholeLineUpdate(m_Screen[i]);
 	}
 	m_Screen[bottom] = tmp;
+
+	m_NeedDelayedUpdate = true;
 }
 
 // BS handler
@@ -563,6 +567,8 @@ void CTermData::GoToXY(int x, int y)
 
 void CTermData::ClearScreen(int p)
 {
+	m_NeedDelayedUpdate = true;
+
 	// Scroll down a page
 	int bottom = m_RowCount-m_RowsPerPage;
 	int i;
@@ -699,46 +705,65 @@ void CTermData::memset16(void *dest, short val, size_t n)
 }
 
 
+static gboolean update_view(CTermData* _this)
+{
+	_this->DoUpdateDisplay();
+//	g_print("do update\n");
+	return false;
+}
+
 void CTermData::UpdateDisplay()
 {
 	DetectCharSets();
 	DetectHyperLinks();
 
-	if( GTK_WIDGET_VISIBLE(m_pView->m_Widget) )
+	if( GTK_WIDGET_VISIBLE(m_pView->m_Widget) && !m_WaitUpdateDisplay )
 	{
-		int line = m_FirstLine;
-		int last_line = line + m_RowsPerPage;
-		int top = line * m_pView->m_CharH;
+//		g_print("waiting update\n");
+		m_WaitUpdateDisplay = true;
 
-		m_pView->PrepareDC();
-		m_pView->m_Caret.Hide();
-		for( ; line < last_line; line++, top += m_pView->m_CharH )
+		if( m_NeedDelayedUpdate )
+			g_timeout_add( 80, (GSourceFunc)&update_view, this);
+		else
+			DoUpdateDisplay();
+	}
+	m_NeedDelayedUpdate = false;
+}
+
+void CTermData::DoUpdateDisplay()
+{
+	m_WaitUpdateDisplay = false;
+
+	int line = m_FirstLine;
+	int last_line = line + m_RowsPerPage;
+	int top = line * m_pView->m_CharH;
+
+	m_pView->PrepareDC();
+	m_pView->m_Caret.Hide();
+	for( ; line < last_line; line++, top += m_pView->m_CharH )
+	{
+		int col = 0;
+		CTermCharAttr* attr = GetLineAttr( m_Screen[line] );
+		for( ; col < m_ColsPerPage; col++  )
 		{
-			int col = 0;
-			CTermCharAttr* attr = GetLineAttr( m_Screen[line] );
-			for( ; col < m_ColsPerPage; col++  )
+			if( attr[col].IsNeedUpdate() )
 			{
-				if( attr[col].IsNeedUpdate() )
+				if( col>0 && attr[col].GetCharSet()==CTermCharAttr::CS_MBCS2 )
+					col--;
+				m_pView->DrawChar( line, col, top );
+				attr[col].SetNeedUpdate(false);
+				// Check if this is a MBCS char.
+				if( attr[col].GetCharSet()==CTermCharAttr::CS_MBCS1 )
 				{
-					if( col>0 && attr[col].GetCharSet()==CTermCharAttr::CS_MBCS2 )
-						col--;
-					m_pView->DrawChar( line, col, top );
-					attr[col].SetNeedUpdate(false);
-					// Check if this is a MBCS char.
-					if( attr[col].GetCharSet()==CTermCharAttr::CS_MBCS1 )
-					{
-						attr[col+1].SetNeedUpdate(false);
-						col ++;
-					}
+					attr[col+1].SetNeedUpdate(false);
+					col ++;
 				}
 			}
 		}
-		UpdateCaret();
-		m_pView->m_Caret.Show();
 	}
-
+	UpdateCaret();
+	m_pView->m_Caret.Show();
 }
-
 
 // Detect character sets here.  This is for MBCS support.
 void CTermData::DetectCharSets()

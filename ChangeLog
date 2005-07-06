@@ -1,3 +1,10 @@
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermView::UpdateDisplay):
+	* src/termdata.h
+	Delay some sceen update when needed. Enhance drawing performance 
+	and avoid some unnecessary flicker.
+
 2005-07-03  Kanru Chen  <koster@debian.org.tw>
 
 	* src/sitepage.cpp,

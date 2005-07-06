@@ -197,6 +197,7 @@ class CTermData
 		void DetectCharSets();
 		void DetectHyperLinks();
 		void UpdateDisplay();
+		void DoUpdateDisplay();
 		static void memset16( void* dest, short val, size_t n );
 		inline void ParseAnsiColor( const char* pParam );
 		inline void EraseLine(int p);
@@ -293,6 +294,9 @@ class CTermData
 		
 		// Encoding
 		string m_Encoding;
+		
+		bool m_WaitUpdateDisplay;
+		bool m_NeedDelayedUpdate;
 	private:
 
 };
