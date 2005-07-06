@@ -707,7 +707,8 @@ void CTermData::memset16(void *dest, short val, size_t n)
 
 static gboolean update_view(CTermData* _this)
 {
-	_this->DoUpdateDisplay();
+	if(_this->m_pView)
+		_this->DoUpdateDisplay();
 //	g_print("do update\n");
 	return false;
 }
@@ -717,14 +718,16 @@ void CTermData::UpdateDisplay()
 	DetectCharSets();
 	DetectHyperLinks();
 
- 	if( m_pView->IsVisible() && !m_WaitUpdateDisplay )
+ 	if( m_pView && m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
 //		g_print("waiting update\n");
 		m_WaitUpdateDisplay = true;
 
-		if( m_NeedDelayedUpdate )
-			g_timeout_add( 80, (GSourceFunc)&update_view, this);
-		else
+//	FIXME: This will cause problem since CTermData object may have been deleted 
+//	       when update_view is called after a connection is closed.
+//		if( m_NeedDelayedUpdate )
+//			g_timeout_add( 80, (GSourceFunc)&update_view, this);
+//		else
 			DoUpdateDisplay();
 	}
 	m_NeedDelayedUpdate = false;

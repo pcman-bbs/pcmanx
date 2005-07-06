@@ -1,3 +1,16 @@
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::UpdateDisplay),
+	src/termview.cpp,
+	src/widget.h,
+	src/telnetview.cpp (CTelnetView::~CTelnetView),
+	src/telnetcon.cpp:
+	Minor bug fix.
+	Temporarily disable dalayed screen update to prevent some problems.
+	
+	* src/mainframe.cpp (CMainFrame::SetCurView):
+	Include the name of current connection in window title.
+
 2005-07-07  Jim Huang  <jserv@kaffe.org>
 
 	* src/Makefile.am,

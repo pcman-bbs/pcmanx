@@ -62,6 +62,7 @@ CTelnetCon::~CTelnetCon()
 			break;
 		}
 	}
+
 }
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
@@ -389,28 +390,7 @@ int CTelnetCon::Send(void *buf, int len)
 }
 
 
-int CTelnetCon::Connect(const struct sockaddr *serv_addr, socklen_t addrlen)
-{
-	int ret;
-	for( int i =0; i < 3 ; ++i )
-	{
-//		g_print("Try: %d\n", i);
-		m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
-//		bind( m_SockFD, serv_addr, addrlen );
-
-		if( 0 == (ret = connect( m_SockFD, serv_addr, addrlen )) )
-			break;
-		close(m_SockFD);
-	}
-	return ret;
-}
-
 vector<CConnectThread*> CTelnetCon::m_ConnectThreads;
-
-void CTelnetCon::ResolveHostName(string name, int port)
-{
-
-}
 
 gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 {
@@ -430,7 +410,18 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 	if( addr.s_addr != INADDR_NONE )
 	{
 		sock_addr.sin_addr = addr;
-		data->m_Code = data->m_pCon->Connect((sockaddr*)&sock_addr, sizeof(sock_addr));
+
+		int sock_fd;
+		for( int i =0; i < 3 ; ++i )
+		{
+			sock_fd = socket(PF_INET, SOCK_STREAM, 0);
+	//		bind( sock_fd, serv_addr, addrlen );
+			if( 0 == (data->m_Code = connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) )) )
+				break;
+			close(sock_fd);
+		}
+		if( data->m_pCon )
+			data->m_pCon->m_SockFD = sock_fd;
 	}
 	else
 		data->m_Code = -1;

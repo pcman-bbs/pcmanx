@@ -34,7 +34,10 @@ CTelnetView::CTelnetView()
 {}
 
 CTelnetView::~CTelnetView()
-{}
+{
+	if( m_pTermData )
+		delete m_pTermData;
+}
 
 
 void CTelnetView::OnTextInput(gchar* text)

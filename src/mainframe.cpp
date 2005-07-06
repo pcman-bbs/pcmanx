@@ -844,7 +844,7 @@ void CMainFrame::CloseCon(int idx, bool confirm)
 	m_Views.erase( m_Views.begin() + idx );
 
 	int n = m_pNotebook->GetCurPage();
-	m_pView = n >= 0 ? m_Views[n] : NULL;
+	SetCurView( n >= 0 ? m_Views[n] : NULL );
 }
 
 gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
@@ -1028,9 +1028,14 @@ void CMainFrame::SetCurView(CTelnetView* view)
 {
 	m_pView = view;
 	if( !m_pView || !m_pView->GetCon() )
+	{
+		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
 		return;
+	}
 	string title = m_pView->GetCon()->m_Site.m_Name;
 	m_pNotebook->SetPageTitle( m_pView, title.c_str() );
+	title += " - PCMan X "VERSION;
+	gtk_window_set_title (GTK_WINDOW (m_Widget), title.c_str() );
 }
 
 void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)

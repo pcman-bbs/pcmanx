@@ -193,6 +193,8 @@ CTermView::~CTermView()
 {
 	if( m_Font )
 		delete m_Font;
+	if( m_pTermData )
+		m_pTermData->m_pView = NULL;
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
