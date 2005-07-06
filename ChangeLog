@@ -1,5 +1,10 @@
 2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/pcmanx_pure_gtk2.cpp:
+	Add "bindtextdomain" to correctly locate message catalog file.
+
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/telnetcon.cpp (CTelnetCon::SendString):
 	Replace all "\n" in string with correct CRLF before sent.
 	
