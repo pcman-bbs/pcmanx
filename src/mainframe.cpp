@@ -166,7 +166,6 @@ CMainFrame::CMainFrame()
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 
 	CTelnetView::SetParentFrame(this);
-	CTelnetCon::SetupIdleHandler();
 }
 
 CMainFrame::~CMainFrame()
@@ -635,12 +634,6 @@ void CMainFrame::LoadIcons()
 }
 
 
-void CMainFrame::SwitchToTab(int i)
-{
-    /// @todo implement me
-}
-
-
 void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
@@ -835,11 +828,10 @@ void CMainFrame::CloseCon(int idx, bool confirm)
 
 gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 {
-	if(_this->GetCurView())
+	if(_this->GetCurView() && _this->GetCurView()->IsVisible() )
 		_this->GetCurView()->OnBlinkTimer();
 	return true;
 }
-
 
 
 gboolean CMainFrame::OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this )
@@ -851,8 +843,11 @@ gboolean CMainFrame::OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _thi
 void CMainFrame::OnDestroy()
 {
 	g_source_remove( m_BlinkTimer );
+//	g_idle_remove_by_data(this);
 
-	g_idle_remove_by_data(this);
+	Hide();
+
+	CTelnetCon::Cleanup();
 
 	CWidget::OnDestroy();
 
@@ -863,6 +858,7 @@ void CMainFrame::OnDestroy()
 void CMainFrame::OnCreate()
 {
 	CWidget::OnCreate();
+	LoadStartupSites();
 }
 
 bool CMainFrame::CanClose()
@@ -1028,3 +1024,16 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)
 		_this->GetCurView()->Refresh();
 	}
 }
+
+void CMainFrame::LoadStartupSites()
+{
+	vector<CSite>::iterator it;
+	for( it = AppConfig.Favorites.begin(); it != AppConfig.Favorites.end(); ++it )
+	{
+		CSite& site = *it;
+		if( site.m_Startup )
+			NewCon( site.m_Name.c_str(), site.m_URL.c_str(), &site);
+	}
+	m_pNotebook->SetCurPage(0);
+}
+

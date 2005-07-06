@@ -205,7 +205,7 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc))
 	{
-		g_print("WARNNING! Draw on DELETED widget!\n");
+//		g_print("WARNNING! Draw on DELETED widget!\n");
 		return;
 	}
 
@@ -275,11 +275,6 @@ void CTermView::OnTextInput(gchar* string)
 
 void CTermView::OnCreate()
 {
-	if(!GDK_IS_DRAWABLE(m_Widget->window))
-	{
-		g_warning("Draw on DELETED widget!\n");
-		return;
-	}
 	CWidget::OnCreate();
 	gtk_im_context_set_client_window(m_IMContext, m_Widget->window);
 
@@ -289,10 +284,9 @@ void CTermView::OnCreate()
 		GDK_VISUAL_XVISUAL(gdk_drawable_get_visual(m_Widget->window)),
 		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(m_Widget->window)));
 	XftDrawSetSubwindowMode(m_XftDraw, IncludeInferiors);
-	g_print("Create\n");
 
 	if( !m_Font )
-		m_Font = new CFont("Sans", 18);
+		m_Font = new CFont("Sans", 16);
 
 	m_GC = gdk_gc_new(m_Widget->window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
@@ -307,7 +301,7 @@ int CTermView::DrawChar(int line, int col, int top)
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
 	{
-		g_warning("Draw on DELETED widget!\n");
+//		g_warning("Draw on DELETED widget!\n");
 		return 1;
 	}
 
@@ -376,16 +370,11 @@ int CTermView::DrawChar(int line, int col, int top)
 			if( ' ' != *pChar && '\0' != *pChar )
 			{
 				gsize wl;
-//				gchar* utf8_ch = g_locale_to_utf8(pChar, w, NULL, &wl, NULL);
-				gchar *utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
-				if( w > 0 && utf8_ch )
+				gchar *utf8_ch;
+				if( w > 0 && (utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL)))
 				{
-//					pango_layout_set_text(m_PangoLayout, utf8_ch, -1 );
-//					gdk_draw_layout( dc, m_GC, left, top, m_PangoLayout );
-
-//				pango_xft_render_layout(m_XftDraw, &xftclr, m_PangoLayout, left, top);
-				XftFont* font = m_Font->GetXftFont();
-				XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
+					XftFont* font = m_Font->GetXftFont();
+					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
 					g_free(utf8_ch);
 				}
 			}
@@ -499,8 +488,11 @@ void CTermView::PrepareDC()
 //	m_CharW = h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
 	m_CharH = h + m_CharPaddingY;
 
-	gdk_gc_set_clip_origin( m_GC, 0, 0 );
-	gdk_gc_set_clip_rectangle( m_GC, NULL);
+	if( GDK_IS_GC(m_GC) )
+	{
+		gdk_gc_set_clip_origin( m_GC, 0, 0 );
+		gdk_gc_set_clip_rectangle( m_GC, NULL);
+	}
 }
 
 

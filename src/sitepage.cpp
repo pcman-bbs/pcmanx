@@ -221,6 +221,10 @@ CSitePage::CSitePage(CSite& site)
 	gtk_widget_show (hbox16);
 	gtk_box_pack_start (GTK_BOX (m_Widget), hbox16, FALSE, TRUE, 2);
 
+	m_Startup = gtk_check_button_new_with_mnemonic (_("Connect automatically on program startup"));
+	gtk_widget_show (m_Startup);
+	gtk_box_pack_start (GTK_BOX (hbox16), m_Startup, FALSE, TRUE, 2);
+
 	label126 = gtk_label_new (_("Site Encoding :"));
 	gtk_widget_show (label126);
 	gtk_box_pack_start (GTK_BOX(hbox16), label126, FALSE, FALSE, 2);
@@ -230,12 +234,12 @@ CSitePage::CSitePage(CSite& site)
 	gtk_box_pack_start (GTK_BOX (hbox16), m_Encoding, FALSE, TRUE, 2);
 	gtk_widget_set_size_request (m_Encoding, 40, -1);
 
-	gtk_entry_set_text(GTK_ENTRY(m_Encoding), m_Site.m_Encoding.c_str());
 
 	if( m_Site.m_Name.empty() )
 	{
 		gtk_widget_hide(hbox1);
 		gtk_widget_hide(hbox2);
+		gtk_widget_hide(m_Startup);
 //		gtk_widget_set_sensitive(m_Name, false);
 //		gtk_widget_set_sensitive(m_Address, false);
 	}
@@ -258,6 +262,11 @@ CSitePage::CSitePage(CSite& site)
 	
 	sprintf( num, "%d", m_Site.m_AutoWrapOnPaste );
 	gtk_entry_set_text(GTK_ENTRY(m_PasteWrap), num);
+
+	gtk_entry_set_text(GTK_ENTRY(m_Encoding), m_Site.m_Encoding.c_str());
+
+	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_Startup), 
+	 								m_Site.m_Startup);
 }
 
 
@@ -285,5 +294,6 @@ bool CSitePage::OnOK()
 
 	m_Site.m_AutoWrapOnPaste = atoi( gtk_entry_get_text(GTK_ENTRY(m_PasteWrap)) );
 
+	m_Site.m_Startup = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_Startup));
 	return true;
 }

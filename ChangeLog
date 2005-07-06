@@ -1,4 +1,22 @@
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp:
+	Some bug fix.
+	
+	* src/caret.cpp:
+	Some minor bug fix.
+	
+	* src/mainframe.cpp:
+	(CMainFrame::LoadStartupSites) :
+	Automatically connect to some sites on startup.
+	
+	* src/telnetcon.cpp:
+	Fix some problems related to multi-threading.
+	
+	* src/sitepage.cpp:
+	Add "Connect on startup" check box.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp
 	(CTermView::OnDestroy) : Removed
@@ -8,7 +26,7 @@
 	* src/mainframe.cpp (CMainFrame::CloseCon):
 	Use wrapper function provided by CNotebook instead of raw gtk+ API.
 
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termdata.cpp (CTermView::UpdateDisplay):
 	* src/termdata.h

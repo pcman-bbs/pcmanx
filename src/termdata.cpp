@@ -717,7 +717,7 @@ void CTermData::UpdateDisplay()
 	DetectCharSets();
 	DetectHyperLinks();
 
-	if( GTK_WIDGET_VISIBLE(m_pView->m_Widget) && !m_WaitUpdateDisplay )
+ 	if( m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
 //		g_print("waiting update\n");
 		m_WaitUpdateDisplay = true;

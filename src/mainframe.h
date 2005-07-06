@@ -56,7 +56,6 @@ public:
 
     CTelnetCon* NewCon(const char* title, const char* url, CSite* site);
 	CNotebook* GetNotebook(){	return m_pNotebook;	}
-    void SwitchToTab(int i);
     void OnConBell(CTelnetView* con);
     static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
@@ -95,6 +94,7 @@ protected:
     static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
     void LoadIcons();
+	void LoadStartupSites();
     static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
     void CloseCon(int idx, bool confirm = false);
     static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);

@@ -110,9 +110,9 @@ public:
     void Connect(const struct sockaddr *serv_addr, socklen_t addrlen);
     void ResolveHostName(string name, int port);
     void Close();
-    static void SetupIdleHandler(){	g_idle_add((GSourceFunc)OnMainIdle, NULL);	}
-    static gboolean OnMainIdle(gpointer data);
+    static gboolean OnMainIdle(CConnectThread* data);
 
+	static void Cleanup();
 protected:
 	// Client socket
 	GIOChannel* m_IOChannel;
@@ -136,14 +136,12 @@ public:
 		: m_pCon(con), m_Address(address), m_Port(port)
 	{
 		m_pThread = NULL;
-		m_IsFinished = false;
 	}
 
 	GThread* m_pThread;
 	CTelnetCon* m_pCon;
 	string m_Address;
 	int m_Port;
-	bool m_IsFinished;
 };
 
 

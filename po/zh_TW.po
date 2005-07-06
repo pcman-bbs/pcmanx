@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: PCManX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-02 20:13+0800\n"
-"PO-Revision-Date: 2005-07-02 21:11+0800\n"
-"Last-Translator: Jim Huang <jserv@kaffe.org>\n"
+"PO-Revision-Date: 2005-07-06 16:15+0800\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,120 +15,134 @@ msgstr ""
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: .\n"
 
-#: ../src/sitelistdlg.cpp:25 ../src/mainframe.cpp:444
+#: ../src/docklet/eggtrayicon.c:120
+msgid "Orientation"
+msgstr ""
+
+#: ../src/docklet/eggtrayicon.c:121
+msgid "The orientation of the tray."
+msgstr ""
+
+#: ../src/sitelistdlg.cpp:25
+#: ../src/mainframe.cpp:529
 msgid "Site List"
 msgstr "BBS 站台列表"
 
-#: ../src/sitelistdlg.cpp:100 ../src/mainframe.cpp:177
-msgid "_Connect"
-msgstr "連線 (_C)"
+#: ../src/sitelistdlg.cpp:100
+msgid "C_onnect"
+msgstr "連線 (_O)"
 
 #: ../src/sitelistdlg.cpp:208
 #, c-format
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到關鍵字 \"%s\"！"
 
-#: ../src/mainframe.cpp:184
+#: ../src/mainframe.cpp:262
+msgid "_Connect"
+msgstr "連線 (_C)"
+
+#: ../src/mainframe.cpp:269
 msgid "_Site List"
 msgstr "BBS 站台列表"
 
-#: ../src/mainframe.cpp:195
+#: ../src/mainframe.cpp:280
 msgid "_New Connection"
 msgstr "開啟新連線 (_N)"
 
-#: ../src/mainframe.cpp:206
+#: ../src/mainframe.cpp:291
 msgid "_Close Connection"
 msgstr "關閉連線分頁 (_C)"
 
-#: ../src/mainframe.cpp:222
+#: ../src/mainframe.cpp:307
 msgid "Next Page"
 msgstr "切換到下一個分頁"
 
-#: ../src/mainframe.cpp:233
+#: ../src/mainframe.cpp:318
 msgid "Previous Page"
 msgstr "切換到上一個分頁"
 
-#: ../src/mainframe.cpp:244
+#: ../src/mainframe.cpp:329
 msgid "_Jump to"
 msgstr "切換到 (_J)"
 
-#: ../src/mainframe.cpp:261
+#: ../src/mainframe.cpp:346
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../src/mainframe.cpp:268
+#: ../src/mainframe.cpp:353
 msgid "_Copy"
 msgstr "複製 (_C)"
 
-#: ../src/mainframe.cpp:279
+#: ../src/mainframe.cpp:364
 msgid "Copy with A_NSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../src/mainframe.cpp:287
+#: ../src/mainframe.cpp:372
 msgid "_Paste"
 msgstr "貼上 (_P)"
 
-#: ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:384
 msgid "Select A_ll"
 msgstr "全部選取 (_L)"
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:394
 msgid "_Preference"
 msgstr "個人偏好設定 (_P)"
 
-#: ../src/mainframe.cpp:318
+#: ../src/mainframe.cpp:403
 msgid "F_avorites"
 msgstr "我的最愛(_A)"
 
-#: ../src/mainframe.cpp:322
+#: ../src/mainframe.cpp:407
 msgid "_View"
 msgstr "檢視 (_V)"
 
-#: ../src/mainframe.cpp:333
+#: ../src/mainframe.cpp:418
 msgid "_Help"
 msgstr "說明(_H)"
 
-#: ../src/mainframe.cpp:395
+#: ../src/mainframe.cpp:480
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:449
+#: ../src/mainframe.cpp:534
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../src/mainframe.cpp:454
+#: ../src/mainframe.cpp:539
 msgid "Close Connection"
 msgstr "關閉連線分頁"
 
-#: ../src/mainframe.cpp:463
+#: ../src/mainframe.cpp:548
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/mainframe.cpp:468
+#: ../src/mainframe.cpp:553
 msgid "Copy with ANSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../src/mainframe.cpp:473
+#: ../src/mainframe.cpp:558
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/mainframe.cpp:482
+#: ../src/mainframe.cpp:567
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:487 ../src/prefdlg.cpp:27
+#: ../src/mainframe.cpp:572
+#: ../src/prefdlg.cpp:27
 msgid "Preference"
 msgstr "個人偏好設定"
 
-#: ../src/mainframe.cpp:492
+#: ../src/mainframe.cpp:577
 msgid "About"
 msgstr "關於"
 
-#: ../src/mainframe.cpp:528
+#: ../src/mainframe.cpp:613
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:528
+#: ../src/mainframe.cpp:613
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -136,11 +150,11 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:561
+#: ../src/mainframe.cpp:646
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:613
+#: ../src/mainframe.cpp:698
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -151,11 +165,11 @@ msgstr ""
 "\n"
 "用 GTK+ 2.x 開發的自由 BBS 連線軟體</big>\n"
 
-#: ../src/mainframe.cpp:802
+#: ../src/mainframe.cpp:876
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:814
+#: ../src/mainframe.cpp:888
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -164,19 +178,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:826
+#: ../src/mainframe.cpp:900
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:891
+#: ../src/mainframe.cpp:965
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:900
+#: ../src/mainframe.cpp:974
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
-#: ../src/sitedlg.cpp:33 ../src/prefdlg.cpp:37
+#: ../src/sitedlg.cpp:33
+#: ../src/prefdlg.cpp:37
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -196,66 +211,77 @@ msgstr "新增站台設定"
 msgid "Edit Site Settings"
 msgstr "編輯站台設定"
 
-#: ../src/sitepage.cpp:64
+#: ../src/sitepage.cpp:67
 msgid "Name: "
 msgstr "站台名稱："
 
-#: ../src/sitepage.cpp:76
+#: ../src/sitepage.cpp:79
 msgid "Address: "
 msgstr "站台位址："
 
-#: ../src/sitepage.cpp:87
+#: ../src/sitepage.cpp:90
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:96 ../src/sitepage.cpp:113
+#: ../src/sitepage.cpp:99
+#: ../src/sitepage.cpp:116
 msgid "Sec"
 msgstr "秒"
 
-#: ../src/sitepage.cpp:104
+#: ../src/sitepage.cpp:107
 msgid "Anti-Idle: Send specified string to server when idling for  "
 msgstr "防閒置: 每隔指定秒數對主機送出防閒置字串"
 
-#: ../src/sitepage.cpp:121
+#: ../src/sitepage.cpp:124
 msgid "Anti-Idle string to be sent :"
 msgstr "要送出的防閒置字串"
 
-#: ../src/sitepage.cpp:141
+#: ../src/sitepage.cpp:144
 msgid "Terminal Screen Size"
 msgstr "終端機螢幕大小"
 
-#: ../src/sitepage.cpp:149
+#: ../src/sitepage.cpp:152
 msgid "Line: "
 msgstr "列："
 
-#: ../src/sitepage.cpp:158
+#: ../src/sitepage.cpp:161
 msgid "Col: "
 msgstr "行："
 
-#: ../src/sitepage.cpp:175
+#: ../src/sitepage.cpp:178
 msgid "Terminal Type: "
 msgstr "終端機"
 
-#: ../src/sitepage.cpp:188
+#: ../src/sitepage.cpp:191
 msgid "Convert ESC in ANSI color code to  "
 msgstr "將色彩控制碼的ESC轉換成"
 
-#: ../src/sitepage.cpp:201
+#: ../src/sitepage.cpp:204
 msgid "Wrap pasted text when there's too many characters per line :"
 msgstr "貼上文字每行超過指定字數則自動換行"
 
-#: ../src/sitepage.cpp:210
+#: ../src/sitepage.cpp:213
 msgid "0 = disabled"
 msgstr "0 = 關閉不用"
+
+#: ../src/sitepage.cpp:224
+msgid "Connect automatically on program startup"
+msgstr "程式啟動時自動連線"
+
+#: ../src/sitepage.cpp:228
+msgid "Site Encoding :"
+msgstr "站台編碼："
 
 #: ../src/prefdlg.cpp:36
 msgid "General"
 msgstr "一般"
 
-#: ../src/generalprefpage.cpp:32 ../src/generalprefpage.cpp:36
+#: ../src/generalprefpage.cpp:32
+#: ../src/generalprefpage.cpp:36
 msgid "Confirm before closing connected connections."
 msgstr "關閉連線中的連線前先詢問"
 
 #: ../src/generalprefpage.cpp:40
 msgid "Cancel selection after copying text"
 msgstr "複製完畢自動取消選取"
+

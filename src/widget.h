@@ -44,8 +44,10 @@ public:
 	void SetCapture(){	if(!HasCapture())	gtk_grab_add(m_Widget);	}
 	void ReleaseCapture(){	gtk_grab_remove(m_Widget);	}
 	bool HasCapture()	{	return (gtk_grab_get_current() == m_Widget);	}
+    bool IsVisible(){	return GTK_WIDGET_VISIBLE(m_Widget);	}
 
     bool PostCreate();
+
 
     virtual void OnCreate();
     void Refresh();

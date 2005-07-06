@@ -97,7 +97,7 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	gtk_widget_show (image349);
 	gtk_box_pack_start (GTK_BOX (hbox18), image349, FALSE, FALSE, 0);
 	
-	label26 = gtk_label_new_with_mnemonic (_("_Connect"));
+	label26 = gtk_label_new_with_mnemonic (_("C_onnect"));
 	gtk_widget_show (label26);
 	gtk_box_pack_start (GTK_BOX (hbox18), label26, FALSE, FALSE, 0);
 	

@@ -50,13 +50,7 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 // class destructor
 CTelnetCon::~CTelnetCon()
 {
-//	if(m_Conn)
-//		g_object_unref(m_Conn);
-	if(m_SockFD != -1)
-	{
-		shutdown(m_SockFD, 0);
-		close(m_SockFD);
-	}
+	Close();
 }
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
@@ -99,8 +93,6 @@ bool CTelnetCon::Connect()
 	connect_thread->m_pThread = g_thread_create(
 					(GThreadFunc)&CTelnetCon::ConnectThread, 
 					connect_thread, true, NULL);
-
-//	ConnectThread(connect_thread);
     return true;
 }
 
@@ -408,8 +400,8 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 	sock_addr.sin_addr = addr;
 
 	data->m_pCon->Connect((sockaddr*)&sock_addr, sizeof(sock_addr));
-	data->m_IsFinished = true;
 
+	g_idle_add((GSourceFunc)OnMainIdle, data);
 	return data;
 }
 
@@ -422,6 +414,10 @@ void CTelnetCon::Close()
 	{
 		shutdown( m_SockFD, 0 );
 		close( m_SockFD );
+	}
+
+	if( m_IOChannel )
+	{
 		g_io_channel_shutdown(m_IOChannel, true, NULL);
 		g_io_channel_unref(m_IOChannel);
 		m_IOChannel = NULL;
@@ -429,23 +425,38 @@ void CTelnetCon::Close()
 
 }
 
-gboolean CTelnetCon::OnMainIdle(gpointer data)
+gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 {
 	vector<CConnectThread*>::iterator it;
-	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); )
+	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
 	{
-		CConnectThread* thread = *it;
-		if( thread->m_IsFinished )
+		if( *it == data )
 		{
-			CTelnetCon* pCon = thread->m_pCon;
-			pCon->OnConnect();
-			delete thread;
-			it = m_ConnectThreads.erase(it);
-//			g_print("delete thread\n");
+			m_ConnectThreads.erase(it);
+//			g_print("delete thread from vector\n");
+			break;
 		}
-		else
-			++it;
 	}
-	usleep(100);
-	return true;
+
+	CTelnetCon* pCon = data->m_pCon;
+	if( pCon )
+		pCon->OnConnect();
+	delete data;
+//	g_print("delete thread obj\n");
+	return false;
+}
+
+void CTelnetCon::Cleanup()
+{
+	vector<CConnectThread*>::iterator it;
+	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
+	{
+		g_idle_remove_by_data(*it);
+		CConnectThread* thread = *it;
+		g_thread_join(thread->m_pThread);
+		m_ConnectThreads.erase(it);
+		delete *it;
+//		g_print("delete thread\n");
+		break;
+	}
 }

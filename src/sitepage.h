@@ -46,6 +46,7 @@ public:
 	GtkWidget *m_Col;
 	GtkWidget *m_PasteWrap;
 	GtkWidget *m_Encoding;
+	GtkWidget *m_Startup;
     CSite&  m_Site;
 };
 
