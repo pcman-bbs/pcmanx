@@ -167,11 +167,12 @@ get_next_iter:
 		if( gtk_tree_model_iter_has_child( model, &it ) ) // Has children?
 		{
 			GtkTreeIter child_it;
-			gtk_tree_model_iter_children(model, &child_it, &it);
-			it = child_it;
+			while( gtk_tree_model_iter_children(model, &child_it, &it) )
+				it = child_it;
 		}
 		else if( !gtk_tree_model_iter_next( model, &it) ) // Has sibling?
 		{
+		get_parent_iter:
 			// No sibling. Has Parent?
 			GtkTreeIter parent_it;
 			if( !gtk_tree_model_iter_parent( model, &parent_it, &it ) )
@@ -179,10 +180,12 @@ get_next_iter:
 
 			// Does parent has next sibling?
 			if( !gtk_tree_model_iter_next( model, &parent_it)  )
-				goto keyword_not_found;
+			{
+				it = parent_it;
+				goto get_parent_iter;
+			}
 			it = parent_it;
 		}
-	
 	}
 
 	gtk_tree_model_get(model, &it, COL_TEXT, &text, -1);

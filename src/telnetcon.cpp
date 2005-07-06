@@ -51,6 +51,17 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 CTelnetCon::~CTelnetCon()
 {
 	Close();
+
+	vector<CConnectThread*>::iterator it;
+	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
+	{
+		CConnectThread* thread = *it;
+		if( thread->m_pCon == this )
+		{
+			thread->m_pCon = NULL;
+			break;
+		}
+	}
 }
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
@@ -137,7 +148,7 @@ void CTelnetCon::OnConnect(int code)
 	else
 	{
 		g_print("connection failed.\n");
-//		OnClose();
+		OnClose();
 	}
 }
 
@@ -466,7 +477,7 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 	if( pCon )
 		pCon->OnConnect(data->m_Code);
 	delete data;
-	g_print("delete thread obj\n");
+//	g_print("delete thread obj\n");
 	return false;
 }
 
