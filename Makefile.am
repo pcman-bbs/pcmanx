@@ -16,7 +16,7 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in \
 	ChangeLog
-
+	
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
 SUBDIRS = src po data
@@ -26,4 +26,3 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
 CLEANFILES = *.bak src/*.bak 
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
-

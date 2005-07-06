@@ -620,7 +620,10 @@ void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
 void CMainFrame::OnQuit(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	if( _this->CanClose() )
+	{
+		_this->Hide();
 		_this->Destroy();
+	}
 }
 
 
