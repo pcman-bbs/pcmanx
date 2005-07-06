@@ -26,30 +26,30 @@ endif
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
-	appconfig.cpp \
-	font.cpp \
-	notebook.cpp \
-	sitelistdlg.cpp \
-	termdata.cpp \
-	caret.cpp \
-	generalprefpage.cpp \
+	appconfig.cpp appconfig.h \
+	font.cpp font.h \
+	notebook.cpp notebook.h \
+	sitelistdlg.cpp sitelistdlg.h \
+	termdata.cpp termdata.h \
+	caret.cpp caret.h \
+	generalprefpage.cpp generalprefpage.h \
 	pcmanx_pure_gtk2.cpp \
-	sitepage.cpp \
-	termview.cpp \
-	configfile.cpp \
-	inputdialog.cpp \
-	prefdlg.cpp \
-	stringutil.cpp \
-	view.cpp \
-	dialog.cpp \
-	listbox.cpp \
-	site.cpp \
-	telnetcon.cpp \
-	widget.cpp \
-	editfavdlg.cpp \
-	mainframe.cpp \
-	sitedlg.cpp \
-	telnetview.cpp
+	sitepage.cpp sitepage.h \
+	termview.cpp termview.h \
+	configfile.cpp configfile.h \
+	inputdialog.cpp inputdialog.h \
+	prefdlg.cpp prefdlg.h \
+	stringutil.cpp stringutil.h \
+	view.cpp view.h \
+	dialog.cpp dialog.h \
+	listbox.cpp listbox.h \
+	site.cpp site.h \
+	telnetcon.cpp telnetcon.h \
+	widget.cpp widget.h \
+	editfavdlg.cpp editfavdlg.h \
+	mainframe.cpp mainframe.h \
+	sitedlg.cpp sitedlg.h \
+	telnetview.cpp telnetview.h
 
 all-local:
 	strip pcmanx

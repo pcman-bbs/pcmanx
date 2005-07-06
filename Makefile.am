@@ -26,3 +26,4 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
 CLEANFILES = *.bak src/*.bak 
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
+

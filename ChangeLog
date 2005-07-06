@@ -1,3 +1,13 @@
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* data/Makefile.am:
+	Add install-hook.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/Makefile.am:
+	Add all necessary headers to Makefile.am.
+
 2005-07-06  Jim Huang  <jserv@kaffe.org>
 
 	* src/Makefile.am:

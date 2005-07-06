@@ -109,8 +109,6 @@ public:
 	bool IsValid(){	return m_SockFD >= 0;	}
 
 	void SendString(string str);
-    int Connect(const struct sockaddr *serv_addr, socklen_t addrlen);
-    void ResolveHostName(string name, int port);
     void Close();
     static gboolean OnMainIdle(CConnectThread* data);
 
