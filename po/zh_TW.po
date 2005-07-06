@@ -17,7 +17,7 @@ msgstr ""
 
 #: ../src/docklet/eggtrayicon.c:120
 msgid "Orientation"
-msgstr ""
+msgstr "方位"
 
 #: ../src/docklet/eggtrayicon.c:121
 msgid "The orientation of the tray."
@@ -67,7 +67,7 @@ msgstr "切換到 (_J)"
 
 #: ../src/mainframe.cpp:345
 msgid "_Edit"
-msgstr "編輯(_E)"
+msgstr "編輯 (_E)"
 
 #: ../src/mainframe.cpp:352
 msgid "_Copy"
@@ -91,7 +91,7 @@ msgstr "個人偏好設定 (_P)"
 
 #: ../src/mainframe.cpp:402
 msgid "F_avorites"
-msgstr "我的最愛(_A)"
+msgstr "我的最愛 (_A)"
 
 #: ../src/mainframe.cpp:406
 msgid "_View"
@@ -99,7 +99,7 @@ msgstr "檢視 (_V)"
 
 #: ../src/mainframe.cpp:417
 msgid "_Help"
-msgstr "說明(_H)"
+msgstr "說明 (_H)"
 
 #: ../src/mainframe.cpp:479
 msgid "Page"

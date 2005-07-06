@@ -61,7 +61,7 @@ CConfigFile::CConfigFile( string AppName, int LineBufSize )
 
 	m_ConfigDirPath += "/";
 
-	m_DataDirPath = "/etc/" + AppName;
+	m_DataDirPath = DATADIR "/" + AppName;
 
 	if( g_file_test(m_DataDirPath.c_str(),
 		GFileTest(G_FILE_TEST_IS_DIR|G_FILE_TEST_EXISTS)) )

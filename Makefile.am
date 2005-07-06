@@ -20,7 +20,7 @@ EXTRA_DIST = \
 
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
-SUBDIRS = src po
+SUBDIRS = src po data
 ## @start 1
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
 

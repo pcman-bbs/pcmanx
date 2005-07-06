@@ -1,12 +1,26 @@
+2005-07-06  Jim Huang  <jserv@kaffe.org>
+
+	* src/configfile.cpp (CConfigFile::CConfigFile):
+	Use DATADIR (%prefix%/share) as data dir instead of /etc.
+	
+	* src/Makefile.am: Likewise.
+
+	* data/Makefile.am,
+	Makefile.am,
+	configure.ac:
+	Add rules for site list file.
+
+	* AUTHORS: Updated.
+
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/telnetcon.cpp:
+	* src/telnetcon.cpp
 	(CTelnetCon::OnClose): Add "auto reconnect" support.
 	Fix lots of thread-related bugs.
 
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/mainframe.cpp:
+	* src/mainframe.cpp
 	(CMainFrame::OnFont): Disable "style" in font selection dialog.
 
 	* src/appconfig.cpp, src/pcmanx_pure_gtk2.cpp:
@@ -26,8 +40,8 @@
 	* src/caret.cpp:
 	Some minor bug fix.
 	
-	* src/mainframe.cpp:
-	(CMainFrame::LoadStartupSites) :
+	* src/mainframe.cpp
+	(CMainFrame::LoadStartupSites):
 	Automatically connect to some sites on startup.
 	
 	* src/telnetcon.cpp:
@@ -39,8 +53,8 @@
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp
-	(CTermView::OnDestroy) : Removed
-	(CTermView::OnBeforeDestroy) : Destroy XftDraw correctly.
+	(CTermView::OnDestroy): Removed.
+	(CTermView::OnBeforeDestroy): Destroy XftDraw correctly.
 	Destructor of CTermView can be called properly now.
 
 	* src/mainframe.cpp (CMainFrame::CloseCon):
@@ -48,8 +62,8 @@
 
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/termdata.cpp (CTermView::UpdateDisplay):
-	* src/termdata.h
+	* src/termdata.cpp (CTermView::UpdateDisplay)
+	src/termdata.h:
 	Delay some sceen update when needed. Enhance drawing performance 
 	and avoid some unnecessary flicker.
 
@@ -86,13 +100,15 @@
 	* src/font.cpp (CFont::CreateXftFont):
 	Fix some problems in font size calculation.
 
-	* src/font.h (CFont::GetMaxWidth()):
+	* src/font.h (CFont::GetMaxWidth):
 	Ensure that max width can be devided by 2.
 
-2005-07-04	Shih-yuan Lee	<fourdollars@gmail.com>
+2005-07-04  Shih-yuan Lee  <fourdollars@gmail.com>
 
-	* src/widget.cpp:
-	Some bugs fixed, and using naming rules.
+	* src/widget.cpp
+	(delete_CWidget): Check object existence before releasing.
+	(CWidget::Refresh): Rename rect to t_Rect.
+	(CWidget::CWidget): Use naming rules.
 
 	* Doxygen.in:
 	Add more information.

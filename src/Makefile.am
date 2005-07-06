@@ -2,7 +2,10 @@ localedir = $(datadir)/locale
 
 bin_PROGRAMS = pcmanx
 
-INCLUDES = $(GUI_CFLAGS) -DLOCALEDIR=\"$(localedir)\"
+INCLUDES = \
+	$(GUI_CFLAGS) \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DDATADIR=\"$(datadir)\"
 
 pcmanx_LDADD = $(GUI_LIBS)
 
