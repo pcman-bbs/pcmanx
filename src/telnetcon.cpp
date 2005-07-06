@@ -358,7 +358,14 @@ void CTelnetCon::CheckAutoLogin()
 void CTelnetCon::SendString(string str)
 {
 //	str.Replace( "\n", m_Site.GetCRLF(), true);
-	SendString(str.c_str(), str.length());
+	string str2;
+	const char* crlf = m_Site.GetCRLF();
+	for( const char* pstr = str.c_str(); *pstr; ++pstr )
+		if( *pstr == '\n' )
+			str2 += crlf;
+		else
+			str2 += *pstr;
+	SendString(str2.c_str(), str2.length());
 }
 
 

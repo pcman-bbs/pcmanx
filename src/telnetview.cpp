@@ -148,7 +148,7 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			while(*p)
 			{
 				if(*p == '\x1b')
-					text2 += GetCon()->m_Site.GetCRLF();
+					text2 += GetCon()->m_Site.m_ESCConv;
 				else
 					text2 += *p;
 				p++;

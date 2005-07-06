@@ -1,3 +1,11 @@
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp (CTelnetCon::SendString):
+	Replace all "\n" in string with correct CRLF before sent.
+	
+	* src/telnetview.cpp (CTelnetView::DoPasteFromClipboard):
+	Bug fix.
+
 2005-07-07  Jim Huang  <jserv@kaffe.org>
 
 	* pcmanx.desktop.in:
