@@ -3,4 +3,4 @@ pcmanx_DATA = \
 
 pcmanxdir = $(datadir)/pcmanx
 
-EXTRA_DIST = $(pcmanx_DATA)
+EXTRA_DIST = $(pcmanx_DATA) pcmanx.png

@@ -15,7 +15,8 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
-	ChangeLog
+	ChangeLog \
+	pcmanx.desktop
 	
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
@@ -26,3 +27,9 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
 CLEANFILES = *.bak src/*.bak 
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
+
+desktopdir = $(datadir)/applications
+desktop_DATA = pcmanx.desktop
+
+icondir = $(datadir)/pixmaps
+icon_DATA = data/pcmanx.png
