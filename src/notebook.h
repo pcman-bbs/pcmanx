@@ -33,16 +33,17 @@ public:
     ~CNotebook();
     void InsertPage(int pos, CWidget* page, const char* title);
     int AddPage( CWidget* page, const char* title, GdkPixbuf* icon = NULL);
+    void RemovePage( int pos ){	gtk_notebook_remove_page(GTK_NOTEBOOK(m_Widget), pos);	}
 
     void SetCurPage(int i)
     { gtk_notebook_set_current_page((GtkNotebook*)m_Widget, i); }
 
     int GetCurPage(){ return gtk_notebook_get_current_page((GtkNotebook*)m_Widget); }
 
-	int GetPageCount()	{	return gtk_notebook_get_n_pages((GtkNotebook*)m_Widget);	}
+    int GetPageCount()	{	return gtk_notebook_get_n_pages((GtkNotebook*)m_Widget);	}
 
-	void NextPage()	{	gtk_notebook_next_page((GtkNotebook*)m_Widget);	}
-	void PrevPage()	{	gtk_notebook_prev_page((GtkNotebook*)m_Widget);	}
+    void NextPage()	{	gtk_notebook_next_page((GtkNotebook*)m_Widget);	}
+    void PrevPage()	{	gtk_notebook_prev_page((GtkNotebook*)m_Widget);	}
     void SetPageTitle(CWidget* page, const char* title);
 };
 

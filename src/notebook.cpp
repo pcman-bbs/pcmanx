@@ -58,7 +58,8 @@ int CNotebook::AddPage( CWidget* page, const char* title, GdkPixbuf* icon)
 		gtk_box_pack_start(GTK_BOX(hbox), text_label, false, false, 4);
 		label = hbox;
 	}
-	return gtk_notebook_append_page( GTK_NOTEBOOK(m_Widget), page->m_Widget, label );
+	int ret = gtk_notebook_append_page( GTK_NOTEBOOK(m_Widget), page->m_Widget, label );
+	return ret;
 }
 
 

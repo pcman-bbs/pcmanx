@@ -826,12 +826,10 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* p
 
 void CMainFrame::CloseCon(int idx, bool confirm)
 {
-	GtkNotebook* nb = (GtkNotebook*)m_pNotebook->m_Widget;
-
-	gtk_notebook_remove_page(nb, idx);
+	m_pNotebook->RemovePage(idx);
 	m_Views.erase( m_Views.begin() + idx );
 
-	int n = gtk_notebook_get_current_page(nb);
+	int n = m_pNotebook->GetCurPage();
 	m_pView = n >= 0 ? m_Views[n] : NULL;
 }
 

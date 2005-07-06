@@ -1,5 +1,15 @@
 2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/termview.cpp
+	(CTermView::OnDestroy) : Removed
+	(CTermView::OnBeforeDestroy) : Destroy XftDraw correctly.
+	Destructor of CTermView can be called properly now.
+
+	* src/mainframe.cpp (CMainFrame::CloseCon):
+	Use wrapper function provided by CNotebook instead of raw gtk+ API.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termdata.cpp (CTermView::UpdateDisplay):
 	* src/termdata.h
 	Delay some sceen update when needed. Enhance drawing performance 

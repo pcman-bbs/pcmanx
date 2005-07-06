@@ -142,6 +142,13 @@ static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView*
 	return true;
 }
 
+void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
+{
+	XftDrawDestroy( _this->m_XftDraw);
+	_this->m_XftDraw = NULL;
+//	g_print("unrealize, destroy XftDraw\n");
+}
+
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
 {
@@ -150,8 +157,6 @@ CTermView::CTermView()
 	m_ShowBlink = false;
 	m_Font = NULL;
 	m_XftDraw = NULL;
-
-//	m_PangoLayout = gtk_widget_create_pango_layout(m_Widget, NULL);
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -162,9 +167,10 @@ CTermView::CTermView()
 		 | GDK_POINTER_MOTION_HINT_MASK
 		 | GDK_ALL_EVENTS_MASK);
 
-
 	GTK_WIDGET_SET_FLAGS(m_Widget, GTK_CAN_FOCUS);
 	gtk_widget_set_double_buffered(m_Widget, false);
+
+	g_signal_connect(G_OBJECT(m_Widget), "unrealize", G_CALLBACK(CTermView::OnBeforeDestroy), this);
 
 	g_signal_connect(G_OBJECT(m_Widget), "key_press_event", G_CALLBACK(on_key_pressed), this);
 
@@ -180,25 +186,13 @@ CTermView::CTermView()
 	m_IMContext = gtk_im_multicontext_new();
 	gtk_im_context_set_use_preedit( m_IMContext, FALSE );
 	g_signal_connect( G_OBJECT(m_IMContext), "commit", G_CALLBACK(on_im_commit), this );
-
 }
 
 
 CTermView::~CTermView()
 {
-//	if( m_PangoLayout )
-//		g_object_unref( G_OBJECT(m_PangoLayout) );
-//	if( m_GC )
-//		g_object_unref( G_OBJECT(m_GC) );
-//	if( m_IMContext )
-//		g_object_unref( G_OBJECT(m_IMContext) );
-//	if( m_Font )
-//		pango_font_description_free(m_Font);
 	if( m_Font )
 		delete m_Font;
-	XftDrawDestroy(m_XftDraw);
-	m_XftDraw = NULL;
-	g_print("XftDrawDestroy\n");
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
@@ -283,7 +277,7 @@ void CTermView::OnCreate()
 {
 	if(!GDK_IS_DRAWABLE(m_Widget->window))
 	{
-		g_print("Draw on DELETED widget!\n");
+		g_warning("Draw on DELETED widget!\n");
 		return;
 	}
 	CWidget::OnCreate();
@@ -313,7 +307,7 @@ int CTermView::DrawChar(int line, int col, int top)
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
 	{
-		g_print("Draw on DELETED widget!\n");
+		g_warning("Draw on DELETED widget!\n");
 		return 1;
 	}
 
@@ -889,12 +883,6 @@ void CTermView::SetFont(CFont* font)
 		m_Font = font;
 	}
 }
-
-
-void CTermView::OnDestroy()
-{
-}
-
 
 void CTermView::SetFontFamily(string name)
 {

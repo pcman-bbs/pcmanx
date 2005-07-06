@@ -74,7 +74,7 @@ protected:
     void OnKillFocus(GdkEventFocus *evt);
     void SetFont(CFont* font);
     CFont* GetFont(){	return m_Font;	}
-    void OnDestroy();
+	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
 protected:
 	CTermData* m_pTermData;
 

@@ -46,11 +46,6 @@ static gboolean on_focus_out(GtkWidget *widget, GdkEventFocus *evt, CView* _this
 	return true;
 }
 
-static void on_destroy (GtkWidget* widget, CView* _this)
-{
-	g_print("destroy view\n");
-}
-
 CView::CView(): CWidget()
 {
 	m_Widget = gtk_drawing_area_new();
