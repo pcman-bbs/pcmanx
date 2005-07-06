@@ -1,0 +1,15 @@
+[Desktop Entry]
+Categories=Application;Network;
+Encoding=UTF-8
+Name=PCManX
+Exec=pcmanx
+Icon=pcmanx
+Type=Application
+Terminal=false
+Icon=/usr/share/icons/pcmanx.png
+GenericName=PCMan X BBS Client
+GenericName[zh_TW]=PCMan X BBS 連線軟體
+GenericName[zh_CN]=PCMan X BBS 连线软件
+Comment=PCMan X BBS Client
+Comment[zh_TW]=PCMan X BBS 連線軟體
+Comment[zh_CN]=PCMan X BBS 连线软件
