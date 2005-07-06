@@ -90,6 +90,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CancelSelAfterCopy)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
+		CFG_BOOL( ShowTrayIcon )
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Display)
@@ -302,6 +303,7 @@ void CAppConfig::SetToDefault()
 	AntiAliasingFont = true;
 
 	WebBrowser = "mozilla";
+	ShowTrayIcon = true;
 }
 
 

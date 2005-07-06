@@ -1,5 +1,19 @@
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/mainframe.cpp:
+	(CMainFrame::OnFont): Disable "style" in font selection dialog.
+
+	* src/appconfig.cpp, src/pcmanx_pure_gtk2.cpp:
+	Add "Show tray icon" preference.
+
+	* src/generalprefpage.cpp:
+	Add "Show tray icon" and "Web browser" preference.
+
+	* src/Makefile.am:
+	Add all-local to strip the compiled executable file.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termview.cpp:
 	Some bug fix.
 	

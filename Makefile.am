@@ -14,7 +14,9 @@ EXTRA_DIST = \
 	autogen.sh \
 	intltool-extract.in \
 	intltool-merge.in \
-	intltool-update.in
+	intltool-update.in \
+	ChangeLog \
+	data
 
 ## @end 1
 AUTOMAKE_OPTIONS = gnu

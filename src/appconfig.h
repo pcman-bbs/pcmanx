@@ -112,6 +112,7 @@ public:
 	bool QueryOnCloseCon;
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
+	bool ShowTrayIcon;
 	
 //	Terminal Settings
 	int RowsPerPage;

@@ -640,16 +640,21 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 	gtk_window_set_modal( (GtkWindow*)dlg, true);
 	gtk_window_set_transient_for( (GtkWindow*)dlg, (GtkWindow*)_this->m_Widget);
 
+	GtkFontSelectionDialog* fsdlg = (GtkFontSelectionDialog*)dlg;
+
+	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
+	// But we need this functionality.
+	GtkFontSelection* fontsel = GTK_FONT_SELECTION(fsdlg->fontsel);
+	gtk_widget_set_sensitive(fontsel->face_list, false);
+
 	char pango_font_name[32];
 	sprintf( pango_font_name, "%s %d", AppConfig.FontFamily.c_str(), (AppConfig.FontSize > 6 && AppConfig.FontSize <= 72) ? AppConfig.FontSize : 12 );
-	gtk_font_selection_dialog_set_font_name((GtkFontSelectionDialog*)dlg, pango_font_name);
+	gtk_font_selection_dialog_set_font_name(fsdlg, pango_font_name);
 
 	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
 	{
-		gchar* name = gtk_font_selection_dialog_get_font_name(
-							(GtkFontSelectionDialog*)dlg );
+		gchar* name = gtk_font_selection_dialog_get_font_name( fsdlg );
 		gtk_widget_destroy(dlg);
-//		_this->NotImpl(name);
 		PangoFontDescription* desc = pango_font_description_from_string( name );
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
@@ -685,16 +690,23 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 */
 //	gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
 
+	char* authors=_("Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
+					 "Jim Huang (Developer) <jserv@kaffe.org>n\n"
+					 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
+					 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
+					);
+//	FILE* fp = fopen( AppConfig.GetDataPath("AUTHORS") );
+
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<big>PCMan X  %s\n\nA free BBS client developed with GTK+ 2.x</big>\n"), VERSION);
+						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>"), VERSION);
 	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
-						"Copyright (C) 2005\n\n"
-						"License: GNU Genral Public License\n\n"
-						"Author: Hong Jen Yee (PCMan), a medical student from Taiwan\n\n"
-						"E-mail: hzysoft@sina.com.tw\n\n"
-						"http://pcmanx.csie.net/"	);
+						_("Copyright (C) 2005\n"
+						"License: GNU Genral Public License\n"
+						"Project Homepage: http://pcmanx.csie.net/\n\n"
+						"Authors:\n%s\n")
+						, authors	);
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
 	gtk_widget_destroy(dlg);
@@ -765,9 +777,18 @@ void CMainFrame::OnPaste(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 {
+//	bool show_tray_icon = AppConfig.ShowTrayIcon;
 	CPrefDlg* dlg = new CPrefDlg(_this);
 	dlg->ShowModal();
 	dlg->Destroy();
+
+//	FIXME: Currently we cannot freely hide or show tray icon.
+/*	if( AppConfig.ShowTrayIcon != show_tray_icon )
+		if(AppConfig.ShowTrayIcon)
+			_this->ShowTrayIcon();
+		else
+			_this->HideTrayIcon();
+*/
 }
 
 

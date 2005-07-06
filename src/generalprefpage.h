@@ -36,7 +36,8 @@ public:
 	GtkWidget *m_QueryOnCloseCon;
 	GtkWidget *m_QueryOnExit;
 	GtkWidget *m_CancelSelAfterCopy;
-
+	GtkWidget *m_ShowTrayIcon;
+	GtkWidget *m_WebBrowser;
 };
 
 #endif
