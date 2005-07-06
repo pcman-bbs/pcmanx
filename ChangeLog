@@ -1,3 +1,10 @@
+2005-07-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am,
+	Makefile.am:
+	Fixlet to missing EXTRA_DIST.
+	Reported by PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+
 2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/telnetcon.cpp: Minor bug Fix.
@@ -6,7 +13,7 @@
 	(CSiteListDlg::OnSearch): Minor bug fix.
 
 	* data/sitelist:
-	Replace the site list with a latest one.
+	Replace the site list with the latest one.
 
 2005-07-06  Jim Huang  <jserv@kaffe.org>
 

@@ -15,8 +15,7 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
-	ChangeLog \
-	data
+	ChangeLog
 
 ## @end 1
 AUTOMAKE_OPTIONS = gnu

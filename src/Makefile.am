@@ -9,15 +9,18 @@ INCLUDES = \
 
 pcmanx_LDADD = $(GUI_LIBS)
 
+OPTIONAL_DOCKLET = \
+	docklet/clipboard.c \
+	docklet/eggtrayicon.c
+
 EXTRA_DIST = \
 	Makefile-byhand \
 	conn_xpm.xpm \
-	pcmanx_xpm.xpm
+	pcmanx_xpm.xpm \
+	$(OPTIONAL_DOCKLET)
 
 if USE_DOCKLET
-DOCKLET_SOURCES = \
-	docklet/clipboard.c \
-	docklet/eggtrayicon.c
+DOCKLET_SOURCES = $(OPTIONAL_DOCKLET)
 endif
 
 pcmanx_SOURCES = \
