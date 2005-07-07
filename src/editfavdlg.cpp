@@ -163,7 +163,7 @@ void CEditFavDlg::OnEdit(GtkWidget* btn, CEditFavDlg* _this)
 void CEditFavDlg::OnRemove(GtkWidget* btn, CEditFavDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
-	if( sel != -1 )
+	if( sel >= 0 )
 	{
 		_this->m_List->Delete(sel);
 		_this->m_Sites.erase(_this->m_Sites.begin()+sel);

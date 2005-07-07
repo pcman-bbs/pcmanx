@@ -1,4 +1,9 @@
-2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/listbox.cpp (CListBox::GetCurSel):
+	Minor bug fix.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp	(CTermView::PasteFromClipboard):
 	Some cleanup.

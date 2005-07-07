@@ -107,12 +107,16 @@ int CListBox::GetCurSel()
 	GtkTreeSelection* sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(m_Widget));
 	GtkTreeModel* model;
 	GList* list = gtk_tree_selection_get_selected_rows( sel, &model);
-	GtkTreePath* path = (GtkTreePath*)list->data;
-	int* pidx = gtk_tree_path_get_indices( path );
-	int idx = pidx ? *pidx : -1;
-	g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free(list);
-	return idx;
+	if( list )
+	{
+		GtkTreePath* path = (GtkTreePath*)list->data;
+		int* pidx = gtk_tree_path_get_indices( path );
+		int idx = pidx ? *pidx : -1;
+		g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+		g_list_free(list);
+		return idx;
+	}
+	return -1;
 }
 
 
