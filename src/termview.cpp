@@ -29,62 +29,6 @@
 
 #include "appconfig.h"	//	FIXME: This should be removed in the future.
 
-
-#if 0
-XftFont* xft_font_from_pango_font_desc( GdkDrawable* drawable, PangoFontDescription* pangofd )
-{
-	if(pango_font_description_get_size(pangofd) != 0)
-	{
-		XftFont* xft_font = NULL;
-
-		Display *xdisplay = GDK_WINDOW_XDISPLAY(drawable);
-		int weight, slant, screen = DefaultScreen (xdisplay);
-
-		weight = pango_font_description_get_weight (pangofd);
-		/* from pangoft2-fontmap.c */
-		if (weight < (PANGO_WEIGHT_NORMAL + PANGO_WEIGHT_LIGHT) / 2)
-			weight = XFT_WEIGHT_LIGHT;
-		else if (weight < (PANGO_WEIGHT_NORMAL + 600) / 2)
-			weight = XFT_WEIGHT_MEDIUM;
-		else if (weight < (600 + PANGO_WEIGHT_BOLD) / 2)
-			weight = XFT_WEIGHT_DEMIBOLD;
-		else if (weight < (PANGO_WEIGHT_BOLD + PANGO_WEIGHT_ULTRABOLD) / 2)
-			weight = XFT_WEIGHT_BOLD;
-		else
-			weight = XFT_WEIGHT_BLACK;
-
-		slant = pango_font_description_get_style (pangofd);
-		if (slant == PANGO_STYLE_ITALIC)
-			slant = XFT_SLANT_ITALIC;
-		else if (slant == PANGO_STYLE_OBLIQUE)
-			slant = XFT_SLANT_OBLIQUE;
-		else
-			slant = XFT_SLANT_ROMAN;
-
-		xft_font = XftFontOpen (xdisplay, screen,
-						XFT_FAMILY, XftTypeString, pango_font_description_get_family(pangofd),
-						/*XFT_ENCODING, XftTypeString, "glyphs-fontspecific",*/
-						XFT_CORE, XftTypeBool, False,
-						XFT_SIZE, XftTypeDouble, (double)pango_font_description_get_size (pangofd)/PANGO_SCALE,
-						XFT_WEIGHT, XftTypeInteger, weight,
-						XFT_SLANT, XftTypeInteger, slant,
-						NULL);
-		if( xft_font )
-			return xft_font;
-	}
-	return NULL;
-}
-
-
-XftFont* xft_font_from_pango_font_desc_string( GdkDrawable* drawable, const char* name )
-{
-	PangoFontDescription* pangofd = pango_font_description_from_string( name );
-	XftFont* xft_font = xft_font_from_pango_font_desc( drawable, pangofd );
-	pango_font_description_free( pangofd );
-	return xft_font;
-}
-#endif
-
 using namespace std;
 
 static gboolean on_key_pressed(GtkWidget* wnd, GdkEventKey *evt, CTermView* _this)
@@ -149,6 +93,8 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 //	g_print("unrealize, destroy XftDraw\n");
 }
 
+GdkCursor* CTermView::m_HandCursor = NULL;
+
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
 {
@@ -186,6 +132,11 @@ CTermView::CTermView()
 	m_IMContext = gtk_im_multicontext_new();
 	gtk_im_context_set_use_preedit( m_IMContext, FALSE );
 	g_signal_connect( G_OBJECT(m_IMContext), "commit", G_CALLBACK(on_im_commit), this );
+
+	if( m_HandCursor )
+		gdk_cursor_ref(m_HandCursor);
+	else
+		m_HandCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
 }
 
 
@@ -195,6 +146,8 @@ CTermView::~CTermView()
 		delete m_Font;
 	if( m_pTermData )
 		m_pTermData->m_pView = NULL;
+
+	gdk_cursor_unref(m_HandCursor);
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
@@ -702,10 +655,10 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 	{
 		/* Todo: hyperlink detection. */
 		CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
-//		if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
-//			SetCursor(m_HandCursor);
-//		else
-//			SetCursor(*wxSTANDARD_CURSOR);
+		if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
+			gdk_window_set_cursor(m_Widget->window, m_HandCursor);
+		else
+			gdk_window_set_cursor(m_Widget->window, NULL);
 	}
 }
 

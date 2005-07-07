@@ -1,3 +1,18 @@
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::OnMouseMove):
+	Display hand cursor when hyperlinks are hovered.
+
+	* src/mainframe.cpp (CMainFrame::set_tray_icon):
+	Fix abnormal size of tray icon.
+
+	* src/appconfig.cpp:
+	AppConfig.WebBrowser can be stored now.
+
+	* src/telnetview.cpp:
+	Add <ctype.h> include to avoid potential compilation errors.
+	Reported by Anton  <anton.tw@gmail.com>.
+
 2005-07-07  Jim Huang  <jserv@kaffe.org>
 
 	* src/pcmanx_pure_gtk2.cpp:

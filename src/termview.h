@@ -96,6 +96,8 @@ protected:
     static string m_s_ANSIColorStr;
     int m_FontSize;
     string m_FontFamily;
+
+	static GdkCursor* m_HandCursor;
 };
 
 #endif

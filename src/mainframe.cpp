@@ -53,12 +53,14 @@ void CMainFrame::OnTrayButton_Toggled(
 	}
 }
 
-void CMainFrame::OnTrayButton_Changed(CMainFrame *_this)
+/*
+void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
 {
 	if (! _this->m_MainIcon)
 		return;
 	_this->set_tray_icon();
 }
+*/
 
 void CMainFrame::set_tray_icon()
 {
@@ -68,21 +70,20 @@ void CMainFrame::set_tray_icon()
                         &panel_w, &panel_h);
 
         int icon_size = (panel_h < 30) ? 16 : 24;
-
         GdkPixbuf *tray_icon_pixbuf = gdk_pixbuf_copy (m_MainIcon);
 
         /*
          * Scale the icon rather than clip it if our allocation just isn't
          * what we want it to be.
          */
-        if (GTK_WIDGET_REALIZED (m_TrayIcon) &&
-                        m_TrayIcon->allocation.height < icon_size)
+        int ori_icon_size = gdk_pixbuf_get_height(tray_icon_pixbuf);
+		if( ori_icon_size > icon_size )
         {
-                int new_size = m_TrayIcon->allocation.height;
+                int new_size = icon_size;
                 GdkPixbuf *new_pixbuf;
 
                 new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
-                                new_size, m_TrayIcon->allocation.width,
+                                new_size, new_size,
                                 GDK_INTERP_BILINEAR);
 
                 g_object_unref (tray_icon_pixbuf);
@@ -119,8 +120,11 @@ CMainFrame::CMainFrame()
 
 	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
 			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+
+/*
 	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
 			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+*/
 
 	m_TrayIcon = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);

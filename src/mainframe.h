@@ -105,7 +105,7 @@ protected:
 
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
-    static void OnTrayButton_Changed(CMainFrame* _this);
+//    static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
     void set_tray_icon();
     GtkWidget *m_TrayButton;
     GtkWidget *m_TrayIcon;

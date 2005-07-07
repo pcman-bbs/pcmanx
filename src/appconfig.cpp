@@ -91,6 +91,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
 		CFG_BOOL( ShowTrayIcon )
+		CFG_STR (WebBrowser)
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Display)
@@ -137,7 +138,6 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 //		_CFG_STR( "Type1", this->HyperLink[0] )
 //		_CFG_STR( "Type2", this->HyperLink[1] )
 //		_CFG_STR( "Type3", this->HyperLink[2] )
-		CFG_STR (WebBrowser)
 	END_CONFIG_SECT()
 
 
