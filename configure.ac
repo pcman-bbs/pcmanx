@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(pcmanx_pure_gtk2, 0.1.0, hzysoft@sina.com.tw)
+AM_INIT_AUTOMAKE(pcmanx_pure_gtk2, 0.1.1, hzysoft@sina.com.tw)
 AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
@@ -70,6 +70,7 @@ dnl *********************************************************************
 if test "$debug" = yes; then
 	AC_DEFINE(USE_DEBUG)
 fi
+AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
 
 dnl *********************************************************************
 dnl ** GTK **************************************************************

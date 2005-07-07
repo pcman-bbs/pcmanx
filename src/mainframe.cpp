@@ -698,7 +698,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 //	gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
 
 	char* authors=_("Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
-					 "Jim Huang (Developer) <jserv@kaffe.org>n\n"
+					 "Jim Huang (Developer) <jserv@kaffe.org>\n"
 					 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
 					 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
 					);

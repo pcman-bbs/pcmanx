@@ -1,3 +1,9 @@
+2005-07-08  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Bump version to 0.1.1 .
+	Add AM_CONDITIONAL of ENABLE_DEBUG.
+
 2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/listbox.cpp (CListBox::GetCurSel):
@@ -5,7 +11,7 @@
 
 2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/termview.cpp	(CTermView::PasteFromClipboard):
+	* src/termview.cpp (CTermView::PasteFromClipboard):
 	Some cleanup.
 
 2005-07-07  Kanru Chen  <koster@debian.org.tw>
@@ -38,7 +44,7 @@
 	Add <ctype.h> include to avoid potential compilation errors.
 	Reported by Anton  <anton.tw@gmail.com>.
 
-	* src/site.h: Performan some cleanup for naming.
+	* src/site.h: Perform some cleanup for naming.
 
 	* autogen.sh:
 	Quick fix against the strange intltool behavior.
