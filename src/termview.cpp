@@ -770,17 +770,12 @@ void CTermView::PasteFromClipboard(bool primary)
 //		g_print("%s\n", utext);
 		gsize wl;
 
-		const gchar* locale;
 		const gchar* ltext = utext;
-		if( !g_get_charset(&locale) )
-		{
-			ltext = g_convert_with_fallback( utext, strlen(utext),
-					locale, "utf-8", "?", NULL, &wl, NULL);
-			if(!ltext)
-				return;
-		//	text = g_locale_from_utf8(utext, strlen(utext), NULL, &wl, NULL);
-			g_free(utext);
-		}
+		ltext = g_convert_with_fallback( utext, strlen(utext),
+				m_pTermData->m_Encoding.c_str(), "utf-8", "?", NULL, &wl, NULL);
+		if(!ltext)
+			return;
+		g_free(utext);
 		DoPasteFromClipboard( string(ltext), false);
 		g_free((void*)ltext);
 	}
@@ -807,16 +802,13 @@ void CTermView::CopyToClipboard(bool primary, bool with_color)
 		gsize wl = 0;
 		const gchar* locale;
 		const gchar* utext = text.c_str();
-		if( !g_get_charset(&locale) )
-		{
-			utext = g_convert_with_fallback( text.c_str(), text.length(),
-					"utf-8", locale, "?", NULL, &wl, NULL);
-			if(!utext)
-				return;
-		}
-	//			utext = g_locale_to_utf8( text.c_str(), text.length(), NULL, &wl, NULL);
+		utext = g_convert_with_fallback( text.c_str(), text.length(),
+				"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
+		if(!utext)
+			return;
 		GtkClipboard* clipboard = gtk_clipboard_get(  primary ? GDK_SELECTION_PRIMARY : GDK_NONE );
 		gtk_clipboard_set_text(clipboard, utext, wl );
+		g_print("select: %s\n", utext);
 		g_free((void*)utext);
 	}
 }

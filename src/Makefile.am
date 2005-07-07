@@ -50,6 +50,3 @@ pcmanx_SOURCES = \
 	mainframe.cpp mainframe.h \
 	sitedlg.cpp sitedlg.h \
 	telnetview.cpp telnetview.h
-
-all-local:
-	strip pcmanx
