@@ -23,8 +23,19 @@
 #include <config.h>
 #endif
 
+/* It's a quick hack when not using autotools */
 #ifndef GETTEXT_PACKAGE
 #define GETTEXT_PACKAGE "pcmanx"
+#endif
+
+#if defined(HAVE_GETTEXT)
+#include <libintl.h>
+#define _(T) gettext(T)
+#else
+#define _(T) (T)
+#endif
+#if defined(HAVE_LC_MESSAGES)
+#include <locale.h>
 #endif
 
 #include <gtk/gtk.h>

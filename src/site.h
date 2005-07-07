@@ -11,16 +11,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(AFX_SITE_H__F305F1AE_B980_4FF3_A11B_F18CFAEC5F2B__INCLUDED_)
-#define AFX_SITE_H__F305F1AE_B980_4FF3_A11B_F18CFAEC5F2B__INCLUDED_
+#if !defined(PCMANX_SITE_H)
+#define PCMANX_SITE_H
 
 #ifdef __GNUG__
   #pragma interface "site.h"
 #endif
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
 
 #include <gtk/gtk.h>
 
@@ -118,4 +114,4 @@ protected:
 	string m_PostLogin;
 };
 
-#endif // !defined(AFX_SITE_H__F305F1AE_B980_4FF3_A11B_F18CFAEC5F2B__INCLUDED_)
+#endif // !defined(PCMANX_SITE_H)

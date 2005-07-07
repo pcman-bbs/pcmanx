@@ -1,3 +1,20 @@
+2005-07-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/pcmanx_pure_gtk2.cpp:
+	Add missing libintl / locale includes.
+
+	* src/stringutil.cpp:
+	Add <ctype.h> include to avoid potential compilation errors.
+	Reported by Anton  <anton.tw@gmail.com>.
+
+	* src/site.h: Performan some cleanup for naming.
+
+	* autogen.sh:
+	Quick fix against the strange intltool behavior.
+
+	* TODO:
+	For developers, please file your todo list here.
+
 2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/pcmanx_pure_gtk2.cpp:
