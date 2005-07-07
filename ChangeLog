@@ -1,3 +1,8 @@
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp	(CTermView::PasteFromClipboard):
+	Some cleanup.
+
 2005-07-07  Kanru Chen  <koster@debian.org.tw>
 
 	* src/termview.cpp

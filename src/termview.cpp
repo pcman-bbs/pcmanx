@@ -800,9 +800,7 @@ void CTermView::CopyToClipboard(bool primary, bool with_color)
 		m_s_ANSIColorStr.clear();
 
 		gsize wl = 0;
-		const gchar* locale;
-		const gchar* utext = text.c_str();
-		utext = g_convert_with_fallback( text.c_str(), text.length(),
+		const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
 				"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
 		if(!utext)
 			return;
