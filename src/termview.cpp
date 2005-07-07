@@ -808,7 +808,7 @@ void CTermView::CopyToClipboard(bool primary, bool with_color)
 			return;
 		GtkClipboard* clipboard = gtk_clipboard_get(  primary ? GDK_SELECTION_PRIMARY : GDK_NONE );
 		gtk_clipboard_set_text(clipboard, utext, wl );
-		g_print("select: %s\n", utext);
+//		g_print("select: %s\n", utext);
 		g_free((void*)utext);
 	}
 }
