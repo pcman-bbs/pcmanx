@@ -5,6 +5,11 @@
 
 2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/mainframe.cpp (CMainFrame::OnAbout):
+	Use a GTK+ 2.4x compatible About Dialog.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termdata.cpp,
 	src/site.cpp,
 	src/mainframe.cpp,
