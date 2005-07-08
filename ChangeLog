@@ -1,5 +1,11 @@
 2005-07-08  Jim Huang  <jserv@kaffe.org>
 
+	* COPYING,
+	src/*:
+	Update the address of the FSF in the GPL, and all over the place.
+
+2005-07-08  Jim Huang  <jserv@kaffe.org>
+
 	* src/mainframe.h:
 	Fixlet when --disable-docklet.
 

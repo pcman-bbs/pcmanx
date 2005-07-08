@@ -13,12 +13,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(AFX_CARET_H__B2060160_D083_4F4C_980E_508AA660F2AF__INCLUDED_)
-#define AFX_CARET_H__B2060160_D083_4F4C_980E_508AA660F2AF__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#if !defined(PCMANX_CARET_H)
+#define PCMANX_CARET_H
 
 #ifdef __GNUG__
   #pragma interface "caret.h"
@@ -81,4 +77,4 @@ private:
 	GdkGC* m_GC;
 };
 
-#endif // !defined(AFX_CARET_H__B2060160_D083_4F4C_980E_508AA660F2AF__INCLUDED_)
+#endif // !defined(PCMANX_CARET_H)
