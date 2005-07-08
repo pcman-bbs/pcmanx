@@ -81,12 +81,12 @@ public:
     void NotImpl(const char* str);
     static void OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this);
     static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
-	void ShowTrayIcon(){	gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) );	};
-	void HideTrayIcon(){	gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) );	};
 
 //    queue<>;
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
+    void ShowTrayIcon(){    gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) );    };
+    void HideTrayIcon(){    gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) );    };
     EggTrayIcon *m_TrayIcon_Instance;
 #endif
 
