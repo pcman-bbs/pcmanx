@@ -21,6 +21,7 @@
 #define SITELISTDLG_H
 
 #include "dialog.h"
+#include <stdio.h>
 
 /**
 @author PCMan
