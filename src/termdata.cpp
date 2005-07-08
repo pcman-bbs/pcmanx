@@ -16,7 +16,7 @@
 
 #include "termdata.h" // class's header file
 #include "termview.h" // class's header file
-
+#include <string.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.

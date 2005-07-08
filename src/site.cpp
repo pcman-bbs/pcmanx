@@ -15,6 +15,9 @@
 #endif
 
 #include "site.h"
+#include <stdio.h>
+#include <string.h>
+
 //	#include "appconfig.h"
 
 //	#include "blowfish/blowfish.h"

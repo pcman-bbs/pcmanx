@@ -22,6 +22,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "telnetview.h"
 #include "telnetcon.h"

@@ -26,7 +26,8 @@
 #include <netdb.h>
 #include <unistd.h>
 
-       
+#include <string.h>
+
 #include "stringutil.h"
 #include "appconfig.h"
 

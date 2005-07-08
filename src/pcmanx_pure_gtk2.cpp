@@ -40,6 +40,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <string.h>
 
 #include "mainframe.h"
 #include "appconfig.h"

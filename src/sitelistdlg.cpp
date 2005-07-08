@@ -20,6 +20,11 @@
 #include "sitelistdlg.h"
 #include "appconfig.h"
 #include "mainframe.h"
+#include <stdio.h>
+#include <string.h>
+#include <string>
+
+using namespace std;
 
 CSiteListDlg::CSiteListDlg(CWidget* parent)
  : CDialog(parent, _("Site List"), false), m_Store(NULL), m_pParent((CMainFrame*)parent)

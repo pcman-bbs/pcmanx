@@ -19,6 +19,7 @@
 #include "termdata.h"
 #include "mainframe.h"
 #include "stringutil.h"
+#include <stdio.h>
 
 CAppConfig AppConfig;
 //////////////////////////////////////////////////////////////////////
