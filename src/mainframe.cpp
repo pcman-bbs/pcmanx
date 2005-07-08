@@ -708,13 +708,20 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>"), VERSION);
-	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
+						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>\n\n"
+						"Copyright (C) 2005\n"
+						"License: GNU Genral Public License\n"
+						"Project Homepage: http://pcmanx.csie.net/\n\n"
+						"Authors:\n%s\n"), VERSION, authors );
+
+// GTK+ supports this API since ver 2.6.
+/*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
 						_("Copyright (C) 2005\n"
 						"License: GNU Genral Public License\n"
 						"Project Homepage: http://pcmanx.csie.net/\n\n"
 						"Authors:\n%s\n")
 						, authors	);
+*/
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
 	gtk_widget_destroy(dlg);

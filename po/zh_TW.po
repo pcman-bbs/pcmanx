@@ -4,131 +4,133 @@ msgstr ""
 "Project-Id-Version: PCManX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-06 23:10+0800\n"
-"PO-Revision-Date: 2005-07-06 21:31+0800\n"
-"Last-Translator: PCMan <hzysoft@sina.com.tw>\n"
+"PO-Revision-Date: 2005-07-08 21:16+0800\n"
+"Last-Translator: \n"
 "Language-Team: zh_TW <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:25 ../src/mainframe.cpp:528
+#: ../src/sitelistdlg.cpp:30
+#: ../src/mainframe.cpp:533
 msgid "Site List"
 msgstr "BBS 站台列表"
 
-#: ../src/sitelistdlg.cpp:100
+#: ../src/sitelistdlg.cpp:105
 msgid "C_onnect"
 msgstr "連線 (_O)"
 
-#: ../src/sitelistdlg.cpp:211
+#: ../src/sitelistdlg.cpp:216
 #, c-format
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到關鍵字 \"%s\"！"
 
-#: ../src/mainframe.cpp:261
+#: ../src/mainframe.cpp:266
 msgid "_Connect"
 msgstr "連線 (_C)"
 
-#: ../src/mainframe.cpp:268
+#: ../src/mainframe.cpp:273
 msgid "_Site List"
 msgstr "BBS 站台列表"
 
-#: ../src/mainframe.cpp:279
+#: ../src/mainframe.cpp:284
 msgid "_New Connection"
 msgstr "開啟新連線 (_N)"
 
-#: ../src/mainframe.cpp:290
+#: ../src/mainframe.cpp:295
 msgid "_Close Connection"
 msgstr "關閉連線分頁 (_C)"
 
-#: ../src/mainframe.cpp:306
+#: ../src/mainframe.cpp:311
 msgid "Next Page"
 msgstr "切換到下一個分頁"
 
-#: ../src/mainframe.cpp:317
+#: ../src/mainframe.cpp:322
 msgid "Previous Page"
 msgstr "切換到上一個分頁"
 
-#: ../src/mainframe.cpp:328
+#: ../src/mainframe.cpp:333
 msgid "_Jump to"
 msgstr "切換到 (_J)"
 
-#: ../src/mainframe.cpp:345
+#: ../src/mainframe.cpp:350
 msgid "_Edit"
 msgstr "編輯 (_E)"
 
-#: ../src/mainframe.cpp:352
+#: ../src/mainframe.cpp:357
 msgid "_Copy"
 msgstr "複製 (_C)"
 
-#: ../src/mainframe.cpp:363
+#: ../src/mainframe.cpp:368
 msgid "Copy with A_NSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../src/mainframe.cpp:371
+#: ../src/mainframe.cpp:376
 msgid "_Paste"
 msgstr "貼上 (_P)"
 
-#: ../src/mainframe.cpp:383
+#: ../src/mainframe.cpp:388
 msgid "Select A_ll"
 msgstr "全部選取 (_L)"
 
-#: ../src/mainframe.cpp:393
+#: ../src/mainframe.cpp:398
 msgid "_Preference"
 msgstr "個人偏好設定 (_P)"
 
-#: ../src/mainframe.cpp:402
+#: ../src/mainframe.cpp:407
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:406
+#: ../src/mainframe.cpp:411
 msgid "_View"
 msgstr "檢視 (_V)"
 
-#: ../src/mainframe.cpp:417
+#: ../src/mainframe.cpp:422
 msgid "_Help"
 msgstr "說明 (_H)"
 
-#: ../src/mainframe.cpp:479
+#: ../src/mainframe.cpp:484
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:533
+#: ../src/mainframe.cpp:538
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../src/mainframe.cpp:538
+#: ../src/mainframe.cpp:543
 msgid "Close Connection"
 msgstr "關閉連線分頁"
 
-#: ../src/mainframe.cpp:547
+#: ../src/mainframe.cpp:552
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/mainframe.cpp:552
+#: ../src/mainframe.cpp:557
 msgid "Copy with ANSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../src/mainframe.cpp:557
+#: ../src/mainframe.cpp:562
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/mainframe.cpp:566
+#: ../src/mainframe.cpp:571
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:571 ../src/prefdlg.cpp:27
+#: ../src/mainframe.cpp:576
+#: ../src/prefdlg.cpp:27
 msgid "Preference"
 msgstr "個人偏好設定"
 
-#: ../src/mainframe.cpp:576
+#: ../src/mainframe.cpp:581
 msgid "About"
 msgstr "關於"
 
-#: ../src/mainframe.cpp:612
+#: ../src/mainframe.cpp:617
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:612
+#: ../src/mainframe.cpp:617
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -136,22 +138,11 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:639
+#: ../src/mainframe.cpp:647
 msgid "Font"
 msgstr "字型"
 
-#. GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
-#. gtk_about_dialog_set_name(dlg, "PCMan X");
-#. gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
-#. gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
-#. gtk_about_dialog_set_license(dlg, "GPL");
-#. gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
-#. const char *authors[]={"Hong Jen Yee"};
-#. gtk_about_dialog_set_authors(dlg, authors );
-#. gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
-#.
-#. gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
-#: ../src/mainframe.cpp:693
+#: ../src/mainframe.cpp:701
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -163,18 +154,12 @@ msgstr ""
 "陳侃如 Kanru Chen (開發者) <koster@debian.org.tw>\n"
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>"
 
-#: ../src/mainframe.cpp:703
+#: ../src/mainframe.cpp:711
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
-"A free BBS client developed with GTK+ 2.x</big>"
-msgstr ""
-"<big>PCMan X  %s\n"
-"用 GTK+ 2.x 開發的自由 BBS 連線軟體</big>"
-
-#: ../src/mainframe.cpp:705
-#, c-format
-msgid ""
+"A free BBS client developed with GTK+ 2.x</big>\n"
+"\n"
 "Copyright (C) 2005\n"
 "License: GNU Genral Public License\n"
 "Project Homepage: http://pcmanx.csie.net/\n"
@@ -182,6 +167,9 @@ msgid ""
 "Authors:\n"
 "%s\n"
 msgstr ""
+"<big>PCMan X  %s\n"
+"用 GTK+ 2.x 開發的自由 BBS 連線軟體</big>\n"
+"\n"
 "Copyright (C) 2005\n"
 "授權方式： GNU Genral Public License\n"
 "專案首頁： http://pcmanx.csie.net/\n"
@@ -189,11 +177,11 @@ msgstr ""
 "軟體作者：\n"
 "%s\n"
 
-#: ../src/mainframe.cpp:893
+#: ../src/mainframe.cpp:908
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:905
+#: ../src/mainframe.cpp:920
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -202,19 +190,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:917
+#: ../src/mainframe.cpp:932
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:982
+#: ../src/mainframe.cpp:997
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:991
+#: ../src/mainframe.cpp:1006
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
-#: ../src/sitedlg.cpp:33 ../src/prefdlg.cpp:37
+#: ../src/sitedlg.cpp:33
+#: ../src/prefdlg.cpp:37
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -246,7 +235,8 @@ msgstr "站台位址："
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:99 ../src/sitepage.cpp:116
+#: ../src/sitepage.cpp:99
+#: ../src/sitepage.cpp:116
 msgid "Sec"
 msgstr "秒"
 
@@ -298,7 +288,8 @@ msgstr "站台編碼："
 msgid "General"
 msgstr "一般"
 
-#: ../src/generalprefpage.cpp:35 ../src/generalprefpage.cpp:39
+#: ../src/generalprefpage.cpp:35
+#: ../src/generalprefpage.cpp:39
 msgid "Confirm before closing connected connections."
 msgstr "關閉連線中的連線前先詢問"
 
@@ -313,3 +304,4 @@ msgstr "顯示系統列圖示 (Docklet) (重新啟動程式後才有效)"
 #: ../src/generalprefpage.cpp:56
 msgid "Web Browser: "
 msgstr "網頁瀏覽器："
+
