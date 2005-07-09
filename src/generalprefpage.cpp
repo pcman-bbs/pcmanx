@@ -31,11 +31,11 @@ CGeneralPrefPage::CGeneralPrefPage()
 	GtkWidget *hbox19;
 	GtkWidget* label27;
 	
-	m_QueryOnCloseCon = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections."));
+	m_QueryOnCloseCon = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections"));
 	gtk_widget_show (m_QueryOnCloseCon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_QueryOnCloseCon, FALSE, FALSE, 0);
 	
-	m_QueryOnExit = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections."));
+	m_QueryOnExit = gtk_check_button_new_with_mnemonic (_("Confirm before exiting the program if there are still connections"));
 	gtk_widget_show (m_QueryOnExit);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_QueryOnExit, FALSE, FALSE, 0);
 	

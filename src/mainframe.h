@@ -71,8 +71,10 @@ public:
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
-    static gboolean OnBlinkTimer(CMainFrame* _this);
+	static gboolean OnBlinkTimer(CMainFrame* _this);
+	static gboolean OnEverySecondTimer(CMainFrame* _this);
     static gboolean OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this );
+    static gboolean OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this );
     GtkWidget* m_JumpMenuItems[10];
     void OnDestroy();
     virtual void OnCreate();
@@ -123,7 +125,8 @@ protected:
 
     GtkAccelGroup* m_AccelGroup;
 
-    gint m_BlinkTimer;
+    guint m_BlinkTimer;
+	guint m_EverySecondTimer;
     GtkWidget* m_FavoritesMenuItem;
     GtkWidget* m_FavoritesMenu;
 };

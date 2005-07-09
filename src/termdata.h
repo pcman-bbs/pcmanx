@@ -297,6 +297,7 @@ class CTermData
 		
 		bool m_WaitUpdateDisplay;
 		bool m_NeedDelayedUpdate;
+		guint m_DelayedUpdateTimeout;
 	private:
 
 };

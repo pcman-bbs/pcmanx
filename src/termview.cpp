@@ -102,6 +102,9 @@ CTermView::CTermView()
 	m_ShowBlink = false;
 	m_Font = NULL;
 	m_XftDraw = NULL;
+	m_CharW = 18;
+	m_CharH = 18;
+	m_LeftMargin = m_TopMargin = 0;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK

@@ -122,11 +122,15 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 	m_CmdLine[0] = '\0';
 	m_WaitUpdateDisplay = false;
 	m_NeedDelayedUpdate = false;
+	m_DelayedUpdateTimeout = 0;
 }
 
 // class destructor
 CTermData::~CTermData()
 {
+	if( m_DelayedUpdateTimeout )
+		g_source_remove(m_DelayedUpdateTimeout);
+
 	if( m_Screen )
 	{
 		for(int i=0; i<m_RowCount; i++)
@@ -710,7 +714,8 @@ static gboolean update_view(CTermData* _this)
 	if(_this->m_pView)
 		_this->DoUpdateDisplay();
 //	g_print("do update\n");
-	return false;
+	_this->m_DelayedUpdateTimeout = 0;	// Simply returning false will remove the source.
+	return false;	// remove timeout source
 }
 
 void CTermData::UpdateDisplay()
@@ -723,11 +728,13 @@ void CTermData::UpdateDisplay()
 //		g_print("waiting update\n");
 		m_WaitUpdateDisplay = true;
 
-//	FIXME: This will cause problem since CTermData object may have been deleted 
-//	       when update_view is called after a connection is closed.
-//		if( m_NeedDelayedUpdate )
-//			g_timeout_add( 80, (GSourceFunc)&update_view, this);
-//		else
+		if( m_NeedDelayedUpdate )
+		{
+			if( m_DelayedUpdateTimeout )
+				g_source_remove(m_DelayedUpdateTimeout);
+			m_DelayedUpdateTimeout = g_timeout_add( 80, (GSourceFunc)&update_view, this);
+		}
+		else
 			DoUpdateDisplay();
 	}
 	m_NeedDelayedUpdate = false;

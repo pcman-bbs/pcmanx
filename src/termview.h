@@ -82,6 +82,8 @@ protected:
 
 	int m_CharW;
 	int m_CharH;
+	int m_LeftMargin;
+	int m_TopMargin;
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;
 

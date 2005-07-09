@@ -100,15 +100,11 @@ public:
 	// Parse telnet command.
 	inline void ParseTelnetCommand();
 
-	inline void SendString(const char* pdata, int len)
-	{
-		Send( (void*)pdata, len);
-		m_IdleTime = 0;	// Since data has been sent, we are not idle.
-	}
-
+	void SendString(const char* pdata, int len)	{	Send( (void*)pdata, len);	}
+	void SendString(string str);
+ 	
 	bool IsValid(){	return m_SockFD >= 0;	}
 
-	void SendString(string str);
     void Close();
     static gboolean OnMainIdle(CConnectThread* data);
 

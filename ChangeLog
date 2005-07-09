@@ -1,3 +1,22 @@
+2005-07-10  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp (CMainFrame::OnEverySecondTimer) (CMainFrame::OnSize), 
+	src/pcmanx_pure_gtk2.cpp (main) :
+	Add a timer to calculate idle time for all connections.
+	Anti-Idle can function properly now.
+	Save window size and position and restore it on startup.
+
+	* src/termdata.cpp (CTermView::UpdateDisplay):
+	Re-enable delayed sceen update to enhance drawing performance 
+	and avoid some unnecessary flicker.
+
+	* src/generalprefpage.cpp:
+	Fix duplicated prefernce option.
+
+	* src/telnetcon.cpp:
+	Add idle time calculation.
+	Yield another connection thread when retrying to connect. (In vain?)
+
 2005-07-08  Jim Huang  <jserv@kaffe.org>
 
 	* COPYING,

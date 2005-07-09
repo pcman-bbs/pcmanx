@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
 		AppConfig.ColsPerPage=80;
 
 	CMainFrame* main_frm = new CMainFrame;
-	gtk_window_move(GTK_WINDOW(main_frm->m_Widget), 40, 40);
-	gtk_window_resize(GTK_WINDOW(main_frm->m_Widget), 640, 480);
+	gtk_window_move(GTK_WINDOW(main_frm->m_Widget), AppConfig.MainWndX, AppConfig.MainWndY);
+	gtk_window_resize(GTK_WINDOW(main_frm->m_Widget), AppConfig.MainWndW, AppConfig.MainWndH);
 	main_frm->Show();
 #ifdef USE_DOCKLET
 	if( AppConfig.ShowTrayIcon )

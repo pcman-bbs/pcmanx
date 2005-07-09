@@ -294,8 +294,9 @@ void CTelnetCon::OnTimer()
 	if( m_Site.m_AntiIdle == m_IdleTime )
 	{
 		//	2004.8.5 Added by PCMan.	Convert non-printable control characters.
-//		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
-//		SendString( aistr.c_str(), aistr.length() );
+//		g_print("AntiIdle: %s\n", m_Site.m_AntiIdleStr.c_str() );
+		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
+		SendString( aistr.c_str(), aistr.length() );
 	}
 	//	When SendString() is called, m_IdleTime is set to 0 automatically.
 }
@@ -392,6 +393,10 @@ int CTelnetCon::Send(void *buf, int len)
 	{
 		gsize wlen = 0;
 		g_io_channel_write(m_IOChannel, (char*)buf, len, &wlen);
+
+		if( wlen > 0 )
+			m_IdleTime = 0;	// Since data has been sent, we are not idle.
+
 		return wlen;
 	}
 	return 0;
@@ -427,6 +432,7 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 			if( 0 == (data->m_Code = connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) )) )
 				break;
 			close(sock_fd);
+			g_thread_yield();
 		}
 		if( data->m_pCon )
 			data->m_pCon->m_SockFD = sock_fd;
@@ -494,3 +500,4 @@ void CTelnetCon::Cleanup()
 		break;
 	}
 }
+

@@ -94,6 +94,16 @@ void CMainFrame::set_tray_icon()
 }
 #endif
 
+gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this )
+{
+	gtk_window_get_position( GTK_WINDOW(widget), &AppConfig.MainWndX, & AppConfig.MainWndY );
+	AppConfig.MainWndW = evt->width;
+	AppConfig.MainWndH = evt->height;
+//	g_print("x=%d, y=%d, w=%d, h=%d\n", evt->x, evt->y, evt->width, evt->height );
+//	g_print("get_pos: x=%d, y=%d\n",AppConfig.MainWndX, AppConfig.MainWndY );
+	return false;
+}
+
 CMainFrame::CMainFrame()
 {
 	m_pView = NULL;
@@ -166,7 +176,10 @@ CMainFrame::CMainFrame()
 
 	g_signal_connect(m_pNotebook->m_Widget, "switch-page", G_CALLBACK(CMainFrame::OnNotebookChangeCurPage), this);
 
+	g_signal_connect(m_Widget, "configure-event", G_CALLBACK(CMainFrame::OnSize), this);
+	
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
+	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
 	CTelnetView::SetParentFrame(this);
 }
@@ -877,6 +890,7 @@ gboolean CMainFrame::OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _thi
 void CMainFrame::OnDestroy()
 {
 	g_source_remove( m_BlinkTimer );
+	g_source_remove( m_EverySecondTimer );
 //	g_idle_remove_by_data(this);
 
 	Hide();
@@ -1075,4 +1089,17 @@ void CMainFrame::LoadStartupSites()
 	}
 	m_pNotebook->SetCurPage(0);
 }
+
+gboolean CMainFrame::OnEverySecondTimer(CMainFrame* _this)
+{
+	vector<CTelnetView*>::iterator it;
+	for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
+	{
+		CTelnetView* view = *it;
+		if( view->GetCon() )
+			view->GetCon()->OnTimer();
+	}
+	return true;
+}
+
 
