@@ -15,7 +15,7 @@
 
 #include "telnetcon.h"
 #include "telnetview.h"
-#include "mainframe.h"
+//#include "mainframe.h"
 
 #include <sys/select.h>
 

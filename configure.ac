@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.1.3, hzysoft@sina.com.tw)
+AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.1.4, hzysoft@sina.com.tw)
 AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
