@@ -133,6 +133,8 @@ bool CTelnetCon::OnRecv()
 
 	UpdateDisplay();
 
+//	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
+
 	return true;
 }
 
@@ -141,6 +143,7 @@ void CTelnetCon::OnConnect(int code)
 	if( 0 == code )
 	{
 		m_State = TS_CONNECTED;
+		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConConnect((CTelnetView*)m_pView);
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
 		g_io_add_watch( m_IOChannel, 
 			GIOCondition(G_IO_ERR|G_IO_NVAL|G_IO_IN), (GIOFunc)OnSocket, this );
@@ -158,15 +161,11 @@ void CTelnetCon::OnClose()
 {
 	m_State = TS_CLOSED;
 	Close();
-	((CTelnetView*)m_pView)->GetParentFrame()->OnConBell((CTelnetView*)m_pView);
+	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConClose((CTelnetView*)m_pView);
 
 	//	if disconnected by the server too soon, reconnect automatically.
 	if( m_Duration < m_Site.m_AutoReconnect )
-	{
-		ClearScreen(2);
-		m_CaretPos.x = m_CaretPos.y = 0;
-		Connect();
-	}
+		Reconnect();
 }
 
 /*
@@ -308,7 +307,7 @@ void CTelnetCon::OnTimer()
 //	whether to beep or show a visual indication instead.
 void CTelnetCon::Bell()
 {
-	((CTelnetView*)m_pView)->GetParentFrame()->OnConBell((CTelnetView*)m_pView);
+	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConBell((CTelnetView*)m_pView);
 }
 
 
@@ -503,3 +502,9 @@ void CTelnetCon::Cleanup()
 	}
 }
 
+void CTelnetCon::Reconnect()
+{
+	ClearScreen(2);
+	m_CaretPos.x = m_CaretPos.y = 0;
+	Connect();
+}

@@ -55,7 +55,10 @@ public:
 
     CTelnetCon* NewCon(const char* title, const char* url, CSite* site);
 	CNotebook* GetNotebook(){	return m_pNotebook;	}
-    void OnConBell(CTelnetView* con);
+    void OnTelnetConBell(CTelnetView* con);
+    void OnTelnetConClose(CTelnetView* con);
+    void OnTelnetConConnect(CTelnetView* con);
+    void OnTelnetConRecv(CTelnetView* con);
     static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
@@ -103,6 +106,7 @@ protected:
     static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
     void CreateFavoritesMenu();
     static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
+    static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);

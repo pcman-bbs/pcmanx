@@ -1,5 +1,21 @@
 2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/termview.cpp (CTermView::OnPaint), (CTermView::DrawChar):
+	Greatly improve drawing performance by update invalid area only.
+	No more flicker will be seen when popup menus showed.
+
+	* src/mainframe.cpp:
+	Add "Reconnect" menu item and its handler.
+	Make text colors of tabs indicate the state of connections.
+	Fix the bug of "Confirm before closing connected connections".
+
+	* src/telnetcon.cpp (CTelnetCon::Reconnect), 
+	(CTelnetCon::OnConnect), (CTelnetCon::OnClose):
+	Update tab title of connection when state chages.
+	Minor bug fix.
+
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/emoticondlg.cpp (CEmoticonDlg::SaveEmoticons):
 	Minor bug fix.
 

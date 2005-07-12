@@ -170,28 +170,22 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 
 	if( m_pTermData )
 	{
-		int top = 0, left = 0;
-
-		int iline = m_pTermData->m_FirstLine;
-		int ilast = m_pTermData->m_FirstLine+m_pTermData->m_RowsPerPage-1;
-
-/*		int top = evt->area.y;		int bottom = top + evt->area.height;
+		// Only redraw the invalid area to greatly enhance performance.
+		int top = evt->area.y;		int bottom = top + evt->area.height;
 		int left = evt->area.x;		int right = left + evt->area.width;
 		this->PointToLineCol( &left, &top );
 		this->PointToLineCol( &right, &bottom );
 
 		if(right < m_pTermData->m_ColsPerPage)	right++;
-		if(left > 0)	left-=left>1?2:1;
 		if(bottom < m_pTermData->m_RowsPerPage-1)	bottom++;
 		if(top > 0)	top-=top>1?2:1;
 		int iline = m_pTermData->m_FirstLine + top;
 		int ilast = m_pTermData->m_FirstLine + bottom;
 		top *= m_CharH;
-*/
+
 		for( ; iline <= ilast; iline++ , top += m_CharH )
 		{
-			for( int col = 0; col < m_pTermData->m_ColsPerPage; )
-//			for( int col = left; col < right; )
+			for( int col = left; col < right; )
 				col += DrawChar( iline, col, top );
 		}
 
@@ -265,12 +259,14 @@ int CTermView::DrawChar(int line, int col, int top)
 	const char* pLine = m_pTermData->m_Screen[line];
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
 	int w = 2;
+	bool is_mbcs2 = false;
 	switch( pAttr[col].GetCharSet() )
 	{
 	case CTermCharAttr::CS_MBCS1:
 		break;
 	case CTermCharAttr::CS_MBCS2:
 		col--;
+		is_mbcs2 = true;
 //		This will not cause any problem at any time because 'col' always > 0.
 //		In CTermData_this->DetectCharSets() I've done some checks to ensure that the first
 //		character of every lines cannot be marked as second bytes of MBCS characters.
@@ -372,7 +368,8 @@ int CTermView::DrawChar(int line, int col, int top)
 	}
 	gdk_gc_set_clip_rectangle( m_GC, NULL );
 	XftDrawSetClip(m_XftDraw, NULL);
-	return w;
+
+	return is_mbcs2 ? 1 : w;
 }
 
 

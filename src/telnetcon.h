@@ -81,6 +81,7 @@ public:
 	~CTelnetCon();
 	// No description
 	virtual bool Connect();
+    void Reconnect();
 	// Connecting duration
 	unsigned int m_Duration;
 	// Idle time, during which the user doesn't have any key input
@@ -104,6 +105,7 @@ public:
 	void SendString(string str);
  	
 	bool IsValid(){	return m_SockFD >= 0;	}
+	bool IsClosed(){	return (m_State & TS_CLOSED);	}
 
     void Close();
     static gboolean OnMainIdle(CConnectThread* data);
