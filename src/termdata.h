@@ -158,150 +158,169 @@ private:
 class CTermView;
 class CTermData
 {
-	public:
-		//Detect if the specified line is empty.
-		bool IsLineEmpty( int iLine );
-		// Set attributes of all text in specified range.
-		void SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkPoint end, bool block );
-		// Insert n space characters at specified position (line, col).
-		void InsertChar( int line, int col, int n );
-		// Delete n characters at specified position (line, col).
-		void DeleteChar( int line, int col , int n = 1 );
-		int HyperLinkHitTest(const char* line, int col, int* len = NULL);
-		
-		string GetSelectedText(bool trim = true);
-		string GetSelectedTextWithColor(bool trim = true);
-		
-		string GetText(GdkPoint start, GdkPoint end, bool trim = true, bool block = false);
-		string GetTextWithColor(GdkPoint start, GdkPoint end, bool trim = true, bool block = false);
-		
-		// Get text attributes of the line.
-		inline CTermCharAttr* GetLineAttr(const char* pLine, const int ColsPerPage){   return (CTermCharAttr*)(pLine+ColsPerPage+1);}
-		inline CTermCharAttr* GetLineAttr(const char* pLine){   return (CTermCharAttr*)(pLine+m_ColsPerPage+1);}
-		
-		//Get all text from (0,0) to (maxX, maxY), if trim is true, it return text
-		//without tail black spaces.
-		inline string GetAllText(bool trim = true){
-			GdkPoint start;	start.x = start.y = 0;
-			GdkPoint end;	end.x = m_ColsPerPage;	end.y = m_RowCount-1;
-			return GetText(start, end, trim );
-		}
-		//The same as GetAllText but get color too.
-		inline string GetAllTextWithColor(bool trim = true){
-			GdkPoint start;	start.x = start.y = 0;
-			GdkPoint end;	end.x = m_ColsPerPage;	end.y = m_RowCount-1;
-			return GetTextWithColor(start, end, trim );
-		}
-		
-		string GetLineWithColor( char* pLine, int start, int end );
-		void DetectCharSets();
-		void DetectHyperLinks();
-		void UpdateDisplay();
-		void DoUpdateDisplay();
-		static void memset16( void* dest, short val, size_t n );
-		inline void ParseAnsiColor( const char* pParam );
-		inline void EraseLine(int p);
-		void ClearScreen(int p);
-		inline void GoToXY(int x, int y);
-		inline void ScrollUp( int n = 1 );
-		inline void ScrollDown( int n = 1 );
-		void InsertNewLine(int y, int count = 1);
-		void UpdateCaret();
-		inline void SetLineUpdate(char* pLine, short start, short end){
-			CTermCharAttr* pAttr = GetLineAttr(pLine);
-			for(; start < end; start++)
-				pAttr[start].SetNeedUpdate(true);
-		}
+public:
+	//Detect if the specified line is empty.
+	bool IsLineEmpty( int iLine );
+	// Set attributes of all text in specified range.
+	void SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkPoint end, bool block );
+	// Insert n space characters at specified position (line, col).
+	void InsertChar( int line, int col, int n );
+	// Delete n characters at specified position (line, col).
+	void DeleteChar( int line, int col , int n = 1 );
+	int HyperLinkHitTest( const char* line, int col, int* len = NULL );
 
-		// Set update region of lines.  Whole line will be marked as invalid.
-		inline void SetWholeLineUpdate(char* pLine){	SetLineUpdate(pLine, 0, m_ColsPerPage);	}
+	string GetSelectedText( bool trim = true );
+	string GetSelectedTextWithColor( bool trim = true );
 
-		// Put characters on the terminal screen.
-		void PutChar(unsigned char ch);
-		inline void Tab();
-		inline void CarriageReturn();
+	string GetText( GdkPoint start, GdkPoint end, bool trim = true, bool block = false );
+	string GetTextWithColor( GdkPoint start, GdkPoint end, bool trim = true, bool block = false );
 
-		//Call virtual function in dirived class to determine
-		//whether to beep or show a visual indication instead.
-		virtual void Bell();
+	// Get text attributes of the line.
+	inline CTermCharAttr* GetLineAttr( const char* pLine, const int ColsPerPage )
+	{
+		return ( CTermCharAttr* ) ( pLine + ColsPerPage + 1 );
+	}
+	inline CTermCharAttr* GetLineAttr( const char* pLine )
+	{
+		return ( CTermCharAttr* ) ( pLine + m_ColsPerPage + 1 );
+	}
 
-		void Back();
-		void LineFeed();
-		// Parse ANSI escape sequence
-		inline void ParseAnsiEscapeSequence(const char* CmdLine, char type);
-		// class constructor
-		CTermData(CTermView* pView);
-		// class destructor
-		virtual ~CTermData();
+	//Get all text from (0,0) to (maxX, maxY), if trim is true, it return text
+	//without tail black spaces.
+	inline string GetAllText( bool trim = true )
+	{
+		GdkPoint start;
+		start.x = start.y = 0;
+		GdkPoint end;
+		end.x = m_ColsPerPage;
+		end.y = m_RowCount - 1;
+		return GetText( start, end, trim );
+	}
+	//The same as GetAllText but get color too.
+	inline string GetAllTextWithColor( bool trim = true )
+	{
+		GdkPoint start;
+		start.x = start.y = 0;
+		GdkPoint end;
+		end.x = m_ColsPerPage;
+		end.y = m_RowCount - 1;
+		return GetTextWithColor( start, end, trim );
+	}
 
-		// Set sizes of screen buffer, reallocate buffer automatically when needed.
-		void SetScreenSize(int RowCount, unsigned short RowsPerPage, unsigned short ColsPerPage);
-		// Change row count of screen buffer
-		void SetRowCount(int RowCount);
+	string GetLineWithColor( char* pLine, int start, int end );
+	void DetectCharSets();
+	void DetectHyperLinks();
+	void UpdateDisplay();
+	void DoUpdateDisplay();
+	static void memset16( void* dest, short val, size_t n );
+	inline void ParseAnsiColor( const char* pParam );
+	inline void EraseLine( int p );
+	void ClearScreen( int p );
+	inline void GoToXY( int x, int y );
+	inline void ScrollUp( int n = 1 );
+	inline void ScrollDown( int n = 1 );
+	void InsertNewLine( int y, int count = 1 );
+	void UpdateCaret();
+	inline void SetLineUpdate( char* pLine, short start, short end )
+	{
+		CTermCharAttr * pAttr = GetLineAttr( pLine );
+		for ( ; start < end; start++ )
+			pAttr[ start ].SetNeedUpdate( true );
+	}
 
-		// Initialize new lines
-		void InitNewLine(char* NewLine, const int ColsPerPage);
-		
-		// Allocate new lines
-		inline char* AllocNewLine(const int ColsPerPage){
-			// struct{ char[ColsPerPage], char='\0', CTermCharAttr[ColsPerPage]}
-			// Neversay:The structure is show below:
-			// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr ]
-			// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr)
-			char *NewLine = new char[ 1+ColsPerPage*(1+sizeof(short)) ];
+	// Set update region of lines.  Whole line will be marked as invalid.
+	inline void SetWholeLineUpdate( char* pLine )
+	{
+		SetLineUpdate( pLine, 0, m_ColsPerPage );
+	}
 
-			InitNewLine(NewLine, ColsPerPage);
-			return NewLine;
-        }
-		
+	// Put characters on the terminal screen.
+	void PutChar( unsigned char ch );
+	inline void Tab();
+	inline void CarriageReturn();
 
-		// Allocate screen buffer.
-		void AllocScreenBuf(int RowCount, unsigned short RowsPerPage,unsigned short ColsPerPage);
+	//Call virtual function in dirived class to determine
+	//whether to beep or show a visual indication instead.
+	virtual void Bell();
+
+	void Back();
+	void LineFeed();
+	// Parse ANSI escape sequence
+	inline void ParseAnsiEscapeSequence( const char* CmdLine, char type );
+	// class constructor
+	CTermData( CTermView* pView );
+	// class destructor
+	virtual ~CTermData();
+
+	// Set sizes of screen buffer, reallocate buffer automatically when needed.
+	void SetScreenSize( int RowCount, unsigned short RowsPerPage, unsigned short ColsPerPage );
+	// Change row count of screen buffer
+	void SetRowCount( int RowCount );
+
+	// Initialize new lines
+	void InitNewLine( char* NewLine, const int ColsPerPage );
+
+	// Allocate new lines
+	inline char* AllocNewLine( const int ColsPerPage )
+	{
+		// struct{ char[ColsPerPage], char='\0', CTermCharAttr[ColsPerPage]}
+		// Neversay:The structure is show below:
+		// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr ]
+		// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr)
+		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( short ) ) ];
+
+		InitNewLine( NewLine, ColsPerPage );
+		return NewLine;
+	}
 
 
-		///////////////////////////////////////////////////////////////////
-		//Data Field Section
-		///////////////////////////////////////////////////////////////////
+	// Allocate screen buffer.
+	void AllocScreenBuf( int RowCount, unsigned short RowsPerPage, unsigned short ColsPerPage );
+	virtual void OnLineModified( int row );
 
-		int m_FirstLine;
-		bool m_SelBlock;
-		CTermCharAttr m_CurAttr;
-		unsigned short m_ScrollRegionBottom;
-		unsigned short m_ScrollRegionTop;
 
-		// Pointor to CTermView window, which is responsible for display.
-		CTermView* m_pView;
-		// Caret Position
-		GdkPoint m_CaretPos;
-		// End position of selection
-		GdkPoint m_SelEnd;
-		// Start position of selection
-		GdkPoint m_SelStart;
+	///////////////////////////////////////////////////////////////////
+	//Data Field Section
+	///////////////////////////////////////////////////////////////////
 
-		// command line buffer, used to store telnet commands and ANSI escape sequence
-		unsigned char m_CmdLine[33];
-		unsigned char* m_pCmdLine;
+	int m_FirstLine;
+	bool m_SelBlock;
+	CTermCharAttr m_CurAttr;
+	unsigned short m_ScrollRegionBottom;
+	unsigned short m_ScrollRegionTop;
 
-		// Point to screen buffer of terminal
-		char** m_Screen;
-		// m_Screen = new (char*)[m_RowCount];
-		// The total number of rows in buffer.
-		int m_RowCount;
-		// Rows per page
-		unsigned short m_RowsPerPage;
-		// Cols per page
-		unsigned short m_ColsPerPage;
-		
-		// Encoding
-		string m_Encoding;
-		
-		bool m_WaitUpdateDisplay;
-		bool m_NeedDelayedUpdate;
-		guint m_DelayedUpdateTimeout;
-	private:
+	// Pointor to CTermView window, which is responsible for display.
+	CTermView* m_pView;
+	// Caret Position
+	GdkPoint m_CaretPos;
+	// End position of selection
+	GdkPoint m_SelEnd;
+	// Start position of selection
+	GdkPoint m_SelStart;
+
+	// command line buffer, used to store telnet commands and ANSI escape sequence
+	unsigned char m_CmdLine[ 33 ];
+	unsigned char* m_pCmdLine;
+
+	// Point to screen buffer of terminal
+	char** m_Screen;
+	// m_Screen = new (char*)[m_RowCount];
+	// The total number of rows in buffer.
+	int m_RowCount;
+	// Rows per page
+	unsigned short m_RowsPerPage;
+	// Cols per page
+	unsigned short m_ColsPerPage;
+
+	// Encoding
+	string m_Encoding;
+
+	bool m_WaitUpdateDisplay;
+	bool m_NeedDelayedUpdate;
+	guint m_DelayedUpdateTimeout;
+private:
 
 };
-
 inline bool operator == (GdkPoint& pt1, GdkPoint& pt2)
 {	return (pt1.x == pt2.x && pt1.y == pt2.y);	}
 

@@ -1,3 +1,13 @@
+2005-07-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::OnLineModified),
+	src/telnetcon.cpp (CTelnetCon::OnLineModified), (CTelnetCon::OnBellTimer)
+	(CTelnetCon::OnNewIncomingMessage):
+	Add support to new incoming message detection.
+	This interface can be used for adding automation in the future.
+	All automation can be done in CTelnetCon::OnLineModified and
+	CTelnetCon::OnNewIncomingMessage.
+
 2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp (CTermView::OnPaint), (CTermView::DrawChar):

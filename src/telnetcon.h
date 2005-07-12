@@ -107,10 +107,13 @@ public:
 	bool IsValid(){	return m_SockFD >= 0;	}
 	bool IsClosed(){	return (m_State & TS_CLOSED);	}
 
+	bool IsBellReceived(){	return (m_BellTimeout != 0);	}
     void Close();
     static gboolean OnMainIdle(CConnectThread* data);
 
 	static void Cleanup();
+    static bool OnBellTimeout( CTelnetCon* _this );
+    void OnNewIncomingMessage(char* line);
 protected:
 	// Client socket
 	GIOChannel* m_IOChannel;
@@ -121,10 +124,13 @@ protected:
     unsigned int m_AutoLoginStage;	// 0 means turn off auto-login.
     int m_SockFD;
 protected:
+	guint m_BellTimeout;
+	bool m_IsLastLineModified;
 	void PreConnect(string& address, unsigned short& port);
     void CheckAutoLogin();
     void SendStringAsync(string str);
     static gpointer ConnectThread(CConnectThread* data);
+    void OnLineModified(int row);
 };
 
 class CConnectThread

@@ -46,6 +46,9 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 
 	m_SockFD = -1;
 	m_IOChannel = 0;
+
+	m_BellTimeout = 0;
+	m_IsLastLineModified = false;
 }
 
 // class destructor
@@ -63,6 +66,9 @@ CTelnetCon::~CTelnetCon()
 			break;
 		}
 	}
+
+	if( m_BellTimeout )
+		g_source_remove( m_BellTimeout );
 
 }
 
@@ -308,6 +314,24 @@ void CTelnetCon::OnTimer()
 void CTelnetCon::Bell()
 {
 	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConBell((CTelnetView*)m_pView);
+	if( m_BellTimeout )
+		g_source_remove( m_BellTimeout );
+
+	m_BellTimeout = g_timeout_add( 500, (GSourceFunc)CTelnetCon::OnBellTimeout, this );
+}
+
+
+bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
+{
+	g_print("on bell timer\n");
+	if( _this->m_IsLastLineModified )
+	{
+		char* line = _this->m_Screen[ _this->m_RowsPerPage-1 ];
+		_this->OnNewIncomingMessage( line );
+		_this->m_IsLastLineModified = false;
+	}
+	_this->m_BellTimeout = 0;
+	return false;
 }
 
 
@@ -507,4 +531,19 @@ void CTelnetCon::Reconnect()
 	ClearScreen(2);
 	m_CaretPos.x = m_CaretPos.y = 0;
 	Connect();
+}
+
+void CTelnetCon::OnLineModified(int row)
+{
+    /// @todo implement me
+//	g_print("line %d is modified\n", row);
+	if( row == (m_RowsPerPage-1) )	// If last line is modified
+		m_IsLastLineModified = true;
+}
+
+// When new incoming message is detected, this function gets called.
+void CTelnetCon::OnNewIncomingMessage(char* line)
+{
+    /// @todo implement me
+//	g_print("New Message: %s\n", line);
 }

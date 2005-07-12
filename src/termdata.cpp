@@ -754,10 +754,17 @@ void CTermData::DoUpdateDisplay()
 	{
 		int col = 0;
 		CTermCharAttr* attr = GetLineAttr( m_Screen[line] );
+		bool callback_has_been_called = false;
 		for( ; col < m_ColsPerPage; col++  )
 		{
 			if( attr[col].IsNeedUpdate() )
 			{
+				if( ! callback_has_been_called )
+				{
+					OnLineModified( line );
+					callback_has_been_called = true;
+				}
+
 				if( col>0 && attr[col].GetCharSet()==CTermCharAttr::CS_MBCS2 )
 					col--;
 				m_pView->DrawChar( line, col, top );
@@ -1286,3 +1293,12 @@ bool CTermData::IsLineEmpty(int iLine)
 			return false;
 	return true;
 }
+
+// This is a callback function called from CTermData::DoUpdateDisplay().
+// When new characters are written to a line in the screen buffer, 
+// this function will be called with the line number passed in 'row'.
+void CTermData::OnLineModified(int row)
+{
+    // This function can be overriden in derived class.
+}
+
