@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-12 13:19+0800\n"
-"PO-Revision-Date: 2005-07-12 13:42+0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2005-07-12 13:46+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:29
-#: ../src/mainframe.cpp:559
+#: ../src/sitelistdlg.cpp:29 ../src/mainframe.cpp:559
 msgid "Site List"
 msgstr ""
 
@@ -125,8 +125,7 @@ msgstr ""
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:602
-#: ../src/prefdlg.cpp:26
+#: ../src/mainframe.cpp:602 ../src/prefdlg.cpp:26
 msgid "Preference"
 msgstr ""
 
@@ -148,6 +147,17 @@ msgstr ""
 msgid "Font"
 msgstr ""
 
+#. GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
+#. gtk_about_dialog_set_name(dlg, "PCMan X");
+#. gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
+#. gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
+#. gtk_about_dialog_set_license(dlg, "GPL");
+#. gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
+#. const char *authors[]={"Hong Jen Yee"};
+#. gtk_about_dialog_set_authors(dlg, authors );
+#. gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
+#.
+#. gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
 #: ../src/mainframe.cpp:727
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
@@ -193,8 +203,7 @@ msgstr ""
 msgid "_Edit Favorites"
 msgstr ""
 
-#: ../src/sitedlg.cpp:32
-#: ../src/prefdlg.cpp:36
+#: ../src/sitedlg.cpp:32 ../src/prefdlg.cpp:36
 msgid "Site Settings"
 msgstr ""
 
@@ -226,8 +235,7 @@ msgstr ""
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:97
-#: ../src/sitepage.cpp:114
+#: ../src/sitepage.cpp:97 ../src/sitepage.cpp:114
 msgid "Sec"
 msgstr ""
 
@@ -298,25 +306,3 @@ msgstr ""
 #: ../src/generalprefpage.cpp:55
 msgid "Web Browser: "
 msgstr ""
-
-#: ../src/emoticondlg.cpp:21
-msgid "Emoticons"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:23
-msgid "Send"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:137
-msgid "New Emoticon"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:137
-#: ../src/emoticondlg.cpp:154
-msgid "Input New Emoticon"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:154
-msgid "Edit Emoticon"
-msgstr ""
-
