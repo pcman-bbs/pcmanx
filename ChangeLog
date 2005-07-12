@@ -1,5 +1,10 @@
 2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/emoticondlg.cpp (CEmoticonDlg::SaveEmoticons):
+	Minor bug fix.
+
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/dialog.cpp (CDialog::OnResponse):
 	Manually connect "response" signal to this handler can enable default 
 	processing by CDialog.

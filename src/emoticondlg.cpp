@@ -225,7 +225,7 @@ void CEmoticonDlg::SaveEmoticons()
 	if( fo )
 	{
 		GtkTreeModel* model = m_List->GetTreeModel();
-		gtk_tree_model_foreach( model, (GtkTreeModelForeachFunc)CEmoticonDlg::SaveEmoticon, this );
+		gtk_tree_model_foreach( model, (GtkTreeModelForeachFunc)CEmoticonDlg::SaveEmoticon, fo );
 		fclose(fo);
 	}
 }
