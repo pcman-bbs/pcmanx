@@ -34,7 +34,7 @@ public:
     CTelnetView();
 
     ~CTelnetView();
-    void OnTextInput(gchar* text);
+    void OnTextInput(const gchar* text);
 
     CTelnetCon* GetCon(){  return (CTelnetCon*)m_pTermData;  }
 

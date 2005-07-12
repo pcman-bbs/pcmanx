@@ -44,7 +44,7 @@ public:
     ~CTermView();
     virtual bool PreKeyDown(GdkEventKey *evt);
     virtual bool OnKeyDown(GdkEventKey* evt);
-    virtual void OnTextInput(gchar* string);
+    virtual void OnTextInput(const gchar* string);
     int DrawChar(int line, int col, int top);
     void PrepareDC();
     void PointToLineCol(int *x, int *y);

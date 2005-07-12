@@ -27,12 +27,13 @@
 class CInputDialog : public CDialog
 {
 public:
-    CInputDialog(CWidget* parent, const char* title, const char* prompt, bool can_be_empty=false);
+    CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text=NULL, bool can_be_empty=false);
 
     ~CInputDialog();
     bool OnOK();
 
-	const gchar* GetText(){	return m_Text;	}
+	const char* GetText(){	return m_Text;	}
+	void SetText(const char* text){	if(m_Entry)gtk_entry_set_text(m_Entry, text);	}
 
     gulong m_KeyPressHandlerId;
 

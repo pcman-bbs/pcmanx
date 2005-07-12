@@ -82,8 +82,8 @@ public:
     void NotImpl(const char* str);
     static void OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this);
     static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
+    static void OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this);
 
-//    queue<>;
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
     void ShowTrayIcon(){    gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) );    };

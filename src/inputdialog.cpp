@@ -37,7 +37,7 @@ static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _th
 }
 
 
-CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* prompt, bool can_be_empty)
+CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text, bool can_be_empty)
         : CDialog(parent, title, true), m_CanBeEmpty(can_be_empty)
 {
 	m_Text = NULL;
@@ -45,6 +45,12 @@ CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* promp
 	gtk_widget_show(label);
 
 	m_Entry = (GtkEntry*)gtk_entry_new();
+	if( text )
+	{
+		gtk_entry_set_text( m_Entry, text );
+		gtk_editable_select_region( GTK_EDITABLE(m_Entry), 0, -1 );
+	}
+
 	gtk_entry_set_activates_default(m_Entry, true);
 	gtk_widget_show((GtkWidget*)m_Entry);
 

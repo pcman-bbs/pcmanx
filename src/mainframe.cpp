@@ -33,9 +33,12 @@
 #include "appconfig.h"
 #include "sitelistdlg.h"
 #include "font.h"
+#include "emoticondlg.h"
+
 
 #ifdef USE_DOCKLET
 #include "docklet/eggtrayicon.h"
+
 
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button,
@@ -251,6 +254,7 @@ void CMainFrame::CreateMenu()
 	GtkWidget *image344;
 	GtkWidget *paste_menu;
 	GtkWidget *image345;
+	GtkWidget *emoticon_menu;
 	GtkWidget *select_all_menu;
 	GtkWidget *separator1;
 	GtkWidget *preference_menu;
@@ -400,7 +404,15 @@ void CMainFrame::CreateMenu()
 	gtk_widget_show (select_all_menu);
 	gtk_container_add (GTK_CONTAINER (edit_menu), select_all_menu);
 
-	
+
+	emoticon_menu = gtk_menu_item_new_with_mnemonic (_("_Emoticons"));
+	gtk_widget_show (emoticon_menu);
+	gtk_container_add (GTK_CONTAINER (edit_menu), emoticon_menu);
+	gtk_widget_add_accelerator (emoticon_menu, "activate", accel_group,
+								GDK_Return, GDK_CONTROL_MASK,
+								GTK_ACCEL_VISIBLE);
+
+
 	separator1 = gtk_separator_menu_item_new ();
 	gtk_widget_show (separator1);
 	gtk_container_add (GTK_CONTAINER (edit_menu), separator1);
@@ -474,6 +486,9 @@ void CMainFrame::CreateMenu()
 					this);
 	g_signal_connect ((gpointer) select_all_menu, "activate",
 					G_CALLBACK (CMainFrame::OnSelectAll),
+					this);	
+	g_signal_connect ((gpointer) emoticon_menu, "activate",
+					G_CALLBACK (CMainFrame::OnEmoticons),
 					this);	
 	g_signal_connect ((gpointer) preference_menu, "activate",
 					G_CALLBACK (CMainFrame::OnPreference),
@@ -625,7 +640,7 @@ void CMainFrame::CreateToolbar()
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
 {
-	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), true );
+	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), NULL, true );
 	if( dlg->ShowModal() == GTK_RESPONSE_OK && *dlg->GetText() )
 	{
 		_this->NewCon( dlg->GetText(), dlg->GetText(), &AppConfig.m_DefaultSite );
@@ -1100,6 +1115,18 @@ gboolean CMainFrame::OnEverySecondTimer(CMainFrame* _this)
 			view->GetCon()->OnTimer();
 	}
 	return true;
+}
+
+void CMainFrame::OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	CEmoticonDlg* dlg = new CEmoticonDlg(_this);
+	if( dlg->ShowModal() == GTK_RESPONSE_OK )
+	{
+		CTelnetView* view = _this->GetCurView();
+		if( view )
+			view->OnTextInput( dlg->GetSelectedStr().c_str() );
+	}
+	dlg->Destroy();
 }
 
 

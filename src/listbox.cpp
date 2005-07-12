@@ -18,7 +18,6 @@
 
 #include "listbox.h"
 
-#include <string.h>
 
 CListBox::CListBox()
         : CWidget()
@@ -124,6 +123,18 @@ void CListBox::SetItemText(int idx, const char* text)
 	GtkTreeIter iter;
 	gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_Store), &iter, NULL, idx);
 	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text, -1);
+}
+
+string CListBox::GetItemText(int idx)
+{
+	gchar* ptext = NULL;
+	GtkTreeIter iter;
+	gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_Store), &iter, NULL, idx);
+	gtk_tree_model_get( GTK_TREE_MODEL(m_Store), &iter, 0, &ptext, -1);
+	string text(ptext);
+	if(ptext)
+		g_free(ptext);
+	return text;
 }
 
 void CListBox::SetCurSel(int idx)

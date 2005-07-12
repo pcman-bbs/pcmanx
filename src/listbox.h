@@ -21,6 +21,9 @@
 
 #include <gtk/gtk.h>
 #include <widget.h>
+#include <string>
+
+using namespace std;
 
 /**
 @author PCMan
@@ -45,8 +48,11 @@ public:
 
     int GetCurSel();
     void SetItemText(int idx, const char* text);
-    void SetCurSel(int idx);
+    string GetItemText(int idx);
+	void SetCurSel(int idx);
 
+	GtkTreeModel* GetTreeModel(){	return GTK_TREE_MODEL(m_Store);	}
+	GtkTreeView* GetTreeView(){	return GTK_TREE_VIEW(m_Widget);	}
 protected:
     GtkListStore* m_Store;
 };

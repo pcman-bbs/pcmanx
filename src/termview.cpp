@@ -225,9 +225,9 @@ bool CTermView::OnKeyDown(GdkEventKey* evt)
 }
 
 
-void CTermView::OnTextInput(gchar* string)
+void CTermView::OnTextInput(const gchar* string)
 {
-    /// @todo implement me
+    // Override this function to process text input.
 }
 
 void CTermView::OnCreate()

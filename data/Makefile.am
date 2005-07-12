@@ -1,5 +1,6 @@
 pcmanx_DATA = \
-	sitelist
+	sitelist \
+	emoticons
 
 pcmanxdir = $(datadir)/pcmanx
 

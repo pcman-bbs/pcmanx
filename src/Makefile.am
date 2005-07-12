@@ -49,4 +49,5 @@ pcmanx_SOURCES = \
 	editfavdlg.cpp editfavdlg.h \
 	mainframe.cpp mainframe.h \
 	sitedlg.cpp sitedlg.h \
-	telnetview.cpp telnetview.h
+	telnetview.cpp telnetview.h \
+	emoticondlg.cpp emoticondlg.h

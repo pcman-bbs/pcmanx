@@ -20,7 +20,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
-static void on_response(GtkDialog* dlg, gint arg, CDialog* _this)
+void CDialog::OnResponse(GtkDialog* dlg, gint arg, CDialog* _this)
 {
 	switch(arg)
 	{
@@ -55,7 +55,7 @@ CDialog::CDialog(CWidget* parent, const char* title, bool show_okcancel)
 
 	PostCreate();
 
-	g_signal_connect(G_OBJECT(m_Widget), "response", G_CALLBACK(on_response), this);
+	g_signal_connect(G_OBJECT(m_Widget), "response", G_CALLBACK(CDialog::OnResponse), this);
 }
 
 

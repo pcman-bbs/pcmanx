@@ -1,3 +1,29 @@
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/dialog.cpp (CDialog::OnResponse):
+	Manually connect "response" signal to this handler can enable default 
+	processing by CDialog.
+
+	* src/emoticondlg.cpp, 
+	src/emoticondlg.h, 
+	data/emoticons:
+	New File. Add some built-in emoticons frequently used on BBS sites.
+
+	* src/inputdialog.cpp:
+	Add a parameter to constructor to initialize the text in GtkEntry.
+
+	* src/listboc.cpp (CListBox::GetItemText):
+	Add this function to obtain text of specified row from the list box.
+
+	* src/mainframe.cpp (CMainFrame::CreateMenu), (CMainFrame::OnEmoticons):
+	Add emoticon menu item and its signal handler.
+
+	* src/telnetview.cpp (CTelnetView::OnTextInput):
+	Add support GDK_KP_* keysyms to enable input from keypad.
+
+	* src/termview.cpp (CTermView::OnTextInput):
+	Change the parameter to const.
+
 2005-07-10  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/mainframe.cpp (CMainFrame::OnEverySecondTimer) (CMainFrame::OnSize), 
