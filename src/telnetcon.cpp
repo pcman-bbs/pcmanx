@@ -15,7 +15,7 @@
 
 #include "telnetcon.h"
 #include "telnetview.h"
-//#include "mainframe.h"
+#include "mainframe.h"
 
 #include <sys/select.h>
 
@@ -158,6 +158,8 @@ void CTelnetCon::OnClose()
 {
 	m_State = TS_CLOSED;
 	Close();
+	((CTelnetView*)m_pView)->GetParentFrame()->OnConBell((CTelnetView*)m_pView);
+
 	//	if disconnected by the server too soon, reconnect automatically.
 	if( m_Duration < m_Site.m_AutoReconnect )
 	{
