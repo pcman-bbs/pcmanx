@@ -16,7 +16,9 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in \
 	ChangeLog \
-	pcmanx.desktop.in
+	Doxygen.in \
+	pcmanx.desktop.in \
+	pcmanx-pure-gtk2.spec.in
 	
 ## @end 1
 AUTOMAKE_OPTIONS = gnu

@@ -251,6 +251,7 @@ src/Makefile
 po/Makefile.in
 data/Makefile
 pcmanx.desktop
+pcmanx-pure-gtk2.spec
 Doxygen
 ])
 

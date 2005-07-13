@@ -1,3 +1,10 @@
+2005-07-13  Jim Huang  <jserv@kaffe.org>
+
+	* pcmanx-pure-gtk2.spec.in,
+	configure.ac,
+	Makefile.am:
+	Generate package information with autotools.
+
 2005-07-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termdata.cpp (CTermData::OnLineModified),
