@@ -1,5 +1,11 @@
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/telnetcon.cpp:
+	Apply patch file provided by chinsan.
+	Make some modification to enable compilation on FreeBSD.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termdata.cpp, 
 	src/termview.cpp:
 	(CTermView::UpdateCaretPos) : Added
