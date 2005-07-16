@@ -62,6 +62,9 @@ public:
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void CopyToClipboard(bool primary, bool with_color);
     void SetFontFamily(string name);
+    void SetFont(CFont* font);
+	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
+    CFont* GetFont(){	return m_Font;	}
 protected:
     void OnPaint(GdkEventExpose* evt);
     void OnSetFocus(GdkEventFocus* evt);
@@ -71,8 +74,6 @@ protected:
     void OnSize(GdkEventConfigure* evt);
     void RedrawSel(int oldx, int oldy, int newx, int newy);
     void OnKillFocus(GdkEventFocus *evt);
-    void SetFont(CFont* font);
-    CFont* GetFont(){	return m_Font;	}
 	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
 protected:
 	CTermData* m_pTermData;
@@ -91,6 +92,7 @@ protected:
 	int m_CharPaddingX;
 	int m_CharPaddingY;
     GdkColor* m_pColorTable;
+	GdkColor* m_pHyperLinkColor;
     GdkGC* m_GC;
     bool m_AutoFontSize;
 

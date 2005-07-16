@@ -17,6 +17,12 @@
 #include "telnetview.h"
 #include "mainframe.h"
 
+#include <string.h>
+
+#include "stringutil.h"
+#include "appconfig.h"
+
+// socket related headers
 #include <sys/select.h>
 
 #include <sys/types.h>
@@ -26,10 +32,14 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include <string.h>
+// pseudo tty headers
+#include <pty.h>
+#include <utmp.h>
 
-#include "stringutil.h"
-#include "appconfig.h"
+#include <signal.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+
 
 // class constructor
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
@@ -46,6 +56,7 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 
 	m_SockFD = -1;
 	m_IOChannel = 0;
+	m_Pid = 0;
 
 	m_BellTimeout = 0;
 	m_IsLastLineModified = false;
@@ -74,18 +85,21 @@ CTelnetCon::~CTelnetCon()
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
 {
-	switch(type)
+	bool ret = false;
+	if( type & G_IO_IN )
 	{
-	case G_IO_IN:
-		return _this->OnRecv();
-	case G_IO_NVAL:
-		g_print("fd not opened.\n");
-		break;
-	default:
-		g_print("socket io error or unknown condition.\n");
+		_this->OnRecv();
+		ret = true;
 	}
-	return false;
+	if( type & G_IO_HUP )
+	{
+		_this->OnClose();
+		ret = false;
+	}
+	return ret;
 }
+
+
 
 // No description
 bool CTelnetCon::Connect()
@@ -105,16 +119,44 @@ bool CTelnetCon::Connect()
 //	else
 		m_AutoLoginStage = 0;
 
-	CConnectThread* connect_thread = new CConnectThread(this, address, port);
-	m_ConnectThreads.push_back( connect_thread );
-	connect_thread->m_pThread = g_thread_create(
-					(GThreadFunc)&CTelnetCon::ConnectThread, 
-					connect_thread, true, NULL);
+	// Run external program to handle connection.
+	if( m_Site.m_UseExternalTelnet || m_Site.m_UseExternalSSH )
+	{
+		// Suggestion from kyl <kylinx@gmail.com>
+		// Call forkpty() to use pseudo terminal and run an external program.
+		const char* prog = m_Site.m_UseExternalSSH ? "ssh" : "telnet";
+		setenv("TERM", m_Site.m_TermType.c_str() , 1);
+		// Current terminal emulation is buggy and only suitable for BBS browsing.
+		// Both xterm or vt??? terminal emulation has not been fully implemented.
+		m_Pid = forkpty (& m_SockFD, NULL, NULL, NULL );
+		if ( m_Pid == 0 )
+		{
+			// Child Process;
+			if( m_Site.m_UseExternalSSH )
+				execlp ( prog, prog, address.c_str(), NULL ) ;
+			else
+				execlp ( prog, prog, "-8", address.c_str(), NULL ) ;
+		}
+		else
+		{
+			// Parent process
+		}
+		OnConnect(0);
+	}
+	else	// Use built-in telnet command handler
+	{
+		CConnectThread* connect_thread = new CConnectThread(this, address, port);
+		m_ConnectThreads.push_back( connect_thread );
+		connect_thread->m_pThread = g_thread_create(
+						(GThreadFunc)&CTelnetCon::ConnectThread, 
+						connect_thread, true, NULL);
+	}
+
     return true;
 }
 
 // No description
-bool CTelnetCon::OnRecv()
+void CTelnetCon::OnRecv()
 {
 	unsigned char buffer[4097];
 	m_pRecvBuf = buffer;
@@ -122,16 +164,16 @@ bool CTelnetCon::OnRecv()
 	gsize rlen = 0;
 	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, sizeof(buffer)-1, &rlen);
 
-	if(rlen == 0)
+	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
-		return false;
+		return;
 	}
 
     m_pRecvBuf[rlen] = '\0';
     m_pBuf = m_pRecvBuf;
     m_pLastByte = m_pRecvBuf + rlen;
-
+//printf("recv: %s", m_pRecvBuf);
     ParseReceivedData();
 
 	if( m_AutoLoginStage > 0 )
@@ -140,8 +182,6 @@ bool CTelnetCon::OnRecv()
 	UpdateDisplay();
 
 //	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
-
-	return true;
 }
 
 void CTelnetCon::OnConnect(int code)
@@ -152,7 +192,7 @@ void CTelnetCon::OnConnect(int code)
 		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConConnect((CTelnetView*)m_pView);
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
 		g_io_add_watch( m_IOChannel, 
-			GIOCondition(G_IO_ERR|G_IO_NVAL|G_IO_IN), (GIOFunc)OnSocket, this );
+			GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
 		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
 		g_io_channel_set_buffered(m_IOChannel, false);
 	}
@@ -182,17 +222,20 @@ void CTelnetCon::ParseReceivedData()
 {
     for( m_pBuf = m_pRecvBuf; m_pBuf < m_pLastByte; m_pBuf++ )
     {
-		if( m_CmdLine[0] == TC_IAC )	// IAC, in telnet command mode.
+		if( 0 == m_Pid ) // No external program.  Handle telnet commands ourselves.
 		{
-			ParseTelnetCommand();
-			continue;
-		}
-
-        if( *m_pBuf == TC_IAC )    // IAC, in telnet command mode.
-        {
-            m_CmdLine[0] = TC_IAC;
-            m_pCmdLine = &m_CmdLine[1];
-            continue;
+			if( m_CmdLine[0] == TC_IAC )	// IAC, in telnet command mode.
+			{
+				ParseTelnetCommand();
+				continue;
+			}
+	
+			if( *m_pBuf == TC_IAC )    // IAC, in telnet command mode.
+			{
+				m_CmdLine[0] = TC_IAC;
+				m_pCmdLine = &m_CmdLine[1];
+				continue;
+			}
 		}
 		// *m_pBuf is not a telnet command, let genic terminal process it.
 		CTermData::PutChar( *m_pBuf );
@@ -323,7 +366,7 @@ void CTelnetCon::Bell()
 
 bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 {
-	g_print("on bell timer\n");
+//	g_print("on bell timer\n");
 	if( _this->m_IsLastLineModified )
 	{
 		char* line = _this->m_Screen[ _this->m_RowsPerPage-1 ];
@@ -475,18 +518,25 @@ void CTelnetCon::Close()
 {
 	m_State = TS_CLOSED;
 
-	if( m_SockFD != -1 )
-	{
-		shutdown( m_SockFD, 0 );
-		close( m_SockFD );
-		m_SockFD = -1;
-	}
-
 	if( m_IOChannel )
 	{
 		g_io_channel_shutdown(m_IOChannel, true, NULL);
 		g_io_channel_unref(m_IOChannel);
 		m_IOChannel = NULL;
+	}
+
+	if( m_SockFD != -1 )
+	{
+		if( m_Pid )
+		{
+			int kill_ret = kill( m_Pid, 9 );
+			int status = 0;
+			pid_t wait_ret = waitpid(m_Pid, &status, 0);
+			g_print("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+			m_Pid = 0;
+		}
+		close( m_SockFD );
+		m_SockFD = -1;
 	}
 }
 

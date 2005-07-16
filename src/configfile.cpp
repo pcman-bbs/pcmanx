@@ -246,3 +246,27 @@ string CConfigFile::GetDataPath( string FileName )
 	path += FileName;
 	return path;
 }
+
+/*
+string CConfigFile::GetExecPath(const char* exec_name)
+{
+	const char* ppaths = getenv("PATH");
+	if( !ppaths || !*ppaths )
+		ppaths = "/usr/local/bin:/usr/bin:/bin";
+	char *dirs = strdup(ppaths);
+	for( char* dir = strtok(dirs, ":"); dir && *dir; dir=strtok(NULL, ":") )
+	{
+		string path(dir);
+		if( '/' != path[path.length()-1] )
+			path += '/';
+		path += exec_name;
+		if( g_file_test( path.c_str(), G_FILE_TEST_EXISTS ) 
+			&& g_file_test( path.c_str(), G_FILE_TEST_IS_EXECUTABLE ) )
+		{
+			free(dirs);
+			return path;
+		}
+	}
+	free(dirs);
+}
+*/

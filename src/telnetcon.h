@@ -92,12 +92,11 @@ public:
 
 	virtual void OnClose();
 	virtual void OnConnect(int code);
-	bool OnRecv();
-	/**
-		* Parse received data, process telnet command
-		* and ANSI escape sequence.
-		*/
+	void OnRecv();
+
+	// Parse received data, process telnet command, and ANSI escape sequence.
 	void ParseReceivedData();
+
 	// Parse telnet command.
 	inline void ParseTelnetCommand();
 
@@ -115,14 +114,17 @@ public:
     static bool OnBellTimeout( CTelnetCon* _this );
     void OnNewIncomingMessage(char* line);
 protected:
-	// Client socket
 	GIOChannel* m_IOChannel;
+
 	// Buffer to receive socket incoming data
 	unsigned char* m_pRecvBuf;
 	unsigned char* m_pBuf;
 	unsigned char* m_pLastByte;
     unsigned int m_AutoLoginStage;	// 0 means turn off auto-login.
+
+	// Client socket
     int m_SockFD;
+	int m_Pid;
 protected:
 	guint m_BellTimeout;
 	bool m_IsLastLineModified;

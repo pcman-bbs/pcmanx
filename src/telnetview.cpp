@@ -119,6 +119,10 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 		GetCon()->SendString("\x1b[6~",4);
 		break;
 	case GDK_Tab:
+		GetCon()->SendString("\t");
+		break;
+	case GDK_Escape:
+		GetCon()->SendString("\x1b");
 		break;
 	}
 	return true;

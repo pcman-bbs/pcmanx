@@ -121,7 +121,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_CLR( "Magenta", CTermCharAttr::m_DefaultColorTable[13] )
 		_CFG_CLR( "Cyan", CTermCharAttr::m_DefaultColorTable[14] )
 		_CFG_CLR( "White", CTermCharAttr::m_DefaultColorTable[15] )
-//		CFG_CLR( HyperLinkColor )
+		CFG_CLR( HyperLinkColor )
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Site)
@@ -209,10 +209,10 @@ void CAppConfig::LoadFavorites()
 				pSite->m_ESCConv = pval;
 			else if( 0 == strcmp( pname, "Startup" ) )
 				pSite->m_Startup = (bool)atoi(pval);
-#ifdef	USE_SSH
-			else if( 0 == strcmp( pname, "UseSSH" ) )
-				pSite->m_UseSSH = (bool)atoi(pval);
-#endif
+			else if( 0 == strcmp( pname, "UseExternalSSH" ) )
+				pSite->m_UseExternalSSH = (bool)atoi(pval);
+			else if( 0 == strcmp( pname, "UseExternalTelnet" ) )
+				pSite->m_UseExternalTelnet = (bool)atoi(pval);
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );
 			else if( 0 == strcmp( pname, "PreLogin" ) )
@@ -305,6 +305,10 @@ void CAppConfig::SetToDefault()
 
 	WebBrowser = "mozilla";
 	ShowTrayIcon = true;
+
+	HyperLinkColor.red = 65535;
+	HyperLinkColor.green = 65536*102/256;
+	HyperLinkColor.blue = 0;
 }
 
 
@@ -408,3 +412,23 @@ bool CAppConfig::LoadIcons()
 
 }
 */
+
+/*
+string CAppConfig::GetTelnetPath()
+{
+    static string path;
+	if( path.empty() )
+		path = GetExecPath("telnet");
+	return path;
+}
+
+
+string CAppConfig::GetSSHPath()
+{
+    static string path;
+	if( path.empty() )
+		path = GetExecPath("ssh");
+	return path;
+}
+*/
+

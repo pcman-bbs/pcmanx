@@ -211,6 +211,7 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 	m_pView->SetContextMenu(m_EditMenu);
 	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize);
 	m_pView->SetFont(font);
+	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;

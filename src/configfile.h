@@ -64,6 +64,7 @@ public:
 protected:
 	bool DoSave();
 	bool DoLoad();
+//    static string GetExecPath(const char* exec_name);
 
 	CConfigEntry* m_pCurSect;
 	CConfigEntry* m_pRootMap;

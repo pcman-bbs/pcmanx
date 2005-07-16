@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include <gdk/gdk.h>
+
 using namespace std;
 
 //	#include "hyperlink.h"
@@ -58,6 +60,8 @@ public:
 	CAppConfig();
 	virtual ~CAppConfig();
 	virtual bool DoDataExchange(bool bLoad);
+//    static string GetTelnetPath();
+//    static string GetSSHPath();
 
 /*
     void SetUserPasswd( string passwd );
@@ -128,7 +132,7 @@ public:
     string FontFamily;
 
 	
-//	wxColour HyperLinkColor;
+	GdkColor HyperLinkColor;
 
 //	Favorite sites
 	vector<CSite> Favorites;
@@ -163,6 +167,7 @@ protected:
 
 protected:
     void AfterLoad();
+
 };
 
 extern CAppConfig AppConfig;

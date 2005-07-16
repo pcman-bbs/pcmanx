@@ -37,7 +37,7 @@ CTermCharAttr::m_DefaultColorTable[SIZE_OF_COLOR_TABLE] = {
 	{0,0,65536/2,65536/2},	//0;36m		Dark cyan
 	{0,65536*192/256,65536*192/256,65536*192/256},	//0;37m		Light gray
 	//Bright color
-	{0,128,128,128},	//1;30m		Gray
+	{0,65536/2,65536/2,65536/2},	//1;30m		Gray
 	{0,65535,0,0},		//1;31m		Red
 	{0,0,65535,0},		//1;32m		Green
 	{0,65535,65535,0},	//1;33m		Yellow

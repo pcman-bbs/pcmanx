@@ -73,12 +73,8 @@ public:
 		return (m_CRLF > 3 ? "\r" : crlf[m_CRLF]);
 	}
 
-#ifdef	USE_SSH
-	//	If SSH is supported
-	bool m_UseSSH;
-	string m_PublicKeyFile;
-	string m_PrivateKeyFile;
-#endif
+	bool m_UseExternalSSH;
+	bool m_UseExternalTelnet;
 
 	CSite(const char* Name = "");
 	~CSite();

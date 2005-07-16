@@ -237,13 +237,16 @@ if test $ac_cv_type_socklen_t = no; then
 	AC_DEFINE(socklen_t, int)
 fi
 
+dnl We need tty utility functions from libtil
+LIBS="$LIBS -lutil"
+
 dnl freebsd needs this
 LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
-
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
+
 
 AC_OUTPUT([
 Makefile

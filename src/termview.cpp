@@ -130,6 +130,7 @@ CTermView::CTermView()
 
 	m_CharPaddingX = m_CharPaddingY = 0;
 	m_AutoFontSize = true;
+	m_pHyperLinkColor = NULL;
 
 	m_IMContext = gtk_im_multicontext_new();
 	gtk_im_context_set_use_preedit( m_IMContext, FALSE );
@@ -333,9 +334,6 @@ int CTermView::DrawChar(int line, int col, int top)
 			}
 			if( pAttr[i].IsUnderLine() )
 			{
-//				dc.SetPen(wxPen(Fg, 1, wxSOLID));
-//				int bottom = top + m_CharH - 1;
-//				dc.DrawLine(left, bottom, left+bgw, bottom);
 				int bottom = top + m_CharH - 1;
 				gdk_draw_line(dc, m_GC, left, bottom, left+bgw, bottom);
 			}
@@ -347,7 +345,8 @@ int CTermView::DrawChar(int line, int col, int top)
 //			int bottom = top + m_CharH - 1;
 //			dc.DrawLine(left, bottom, left+bgw, bottom);
 
-// 			gdk_gc_set_rgb_fg_color( m_GC, m_HyperLinkColor );
+			if(m_pHyperLinkColor)
+	 			gdk_gc_set_rgb_fg_color( m_GC, m_pHyperLinkColor );
 			int bottom = top + m_CharH - 1;
 			gdk_draw_line(dc, m_GC, left, bottom, left+bgw, bottom);
 		}
@@ -537,7 +536,7 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	pango_layout_set_font_description(m_PangoLayout, m_Font);
 */
 
-	m_CharW = m_Font->GetMaxWidth()/2;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
+	m_CharW = m_Font->GetMaxWidth()/2 + m_CharPaddingX;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
 	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
 
 	m_Caret.SetSize(m_CharW, 2);

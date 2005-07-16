@@ -1,3 +1,32 @@
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp:
+	Fix wrong color settings in default color table.
+
+	* src/termview.cpp:
+	Re-enable usage of m_CharPaddingX in character width calculation.
+	Draw underlines of hyperlnks in different color.
+
+	* src/site.cpp:
+	* src/site.h:
+	Add m_UseExternalTelnet and m_UseExternalSSH.
+
+	* src/mainframe.cpp:
+	Set proper hyperlink color on CTelnetView creation.
+
+	* src/appconfig.cpp:
+	Add hyperlink color settings.
+
+	* src/telnetview.cpp (CTelnetView::OnKeyDown):
+	Fix malfunction of keyboard input.
+
+	* src/telnetcon.cpp (CTelnetCon::Connect), 
+	(CTelnetCon::Close), (CTelnetCon::OnSocket):
+	Add forkpty support and some bug fix.
+
+	* configure.ac:
+	Add -lutil to $LIBS.
+
 2005-07-13  Jim Huang  <jserv@kaffe.org>
 
 	* pcmanx-pure-gtk2.spec.in,

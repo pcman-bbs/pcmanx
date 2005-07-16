@@ -62,9 +62,8 @@ CSite::CSite(const char* Name) : m_Name(Name)
 	// Connect automatically when startup.
 	m_Startup = false;
 
-#ifdef	USE_SSH
-	m_UseSSH = false;
-#endif
+	m_UseExternalSSH = false;
+	m_UseExternalTelnet = false;
 
 	m_MenuItem = NULL;
 }
@@ -89,9 +88,8 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "CRLF=%d\n", m_CRLF );
 	fprintf( fo, "Startup=%d\n", m_Startup );
 
-#ifdef	USE_SSH
-	fprintf( fo, "UseSSH=%d\n", m_UseSSH );
-#endif
+	fprintf( fo, "UseExternalSSH=%d\n", m_UseExternalSSH );
+	fprintf( fo, "ExternalTelnet=%d\n", m_UseExternalTelnet );
 
 	fprintf( fo, "PreLoginPrompt=%s\n", m_PreLoginPrompt.c_str() );
 	fprintf( fo, "PreLogin=%s\n", m_PreLogin.c_str() );
