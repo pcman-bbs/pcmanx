@@ -19,6 +19,10 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#ifdef __GNUG__
+  #pragma interface "widget.h"
+#endif
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 

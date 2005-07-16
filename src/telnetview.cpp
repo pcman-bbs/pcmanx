@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "telnetview.h"
+#endif
+
+
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -158,11 +163,12 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 		string text2;
 		if( contain_ansi_color )
 		{
+			string esc = GetCon()->m_Site.GetEscapeChar();
 			const char* p = text.c_str();
 			while(*p)
 			{
 				if(*p == '\x1b')
-					text2 += GetCon()->m_Site.m_ESCConv;
+					text2 += esc;
 				else
 					text2 += *p;
 				p++;

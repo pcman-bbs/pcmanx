@@ -98,7 +98,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 	BEGIN_CONFIG_SECT(Display)
 		CFG_STR ( FontFamily )
 		CFG_INT ( FontSize )
-		CFG_BOOL( AntiAliasingFont )
+		CFG_BOOL( AntiAliasFont )
 
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
@@ -301,7 +301,7 @@ void CAppConfig::SetToDefault()
 
 	FontSize = 14;
 	FontFamily = "Sans";
-	AntiAliasingFont = true;
+	AntiAliasFont = true;
 
 	WebBrowser = "mozilla";
 	ShowTrayIcon = true;

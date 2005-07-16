@@ -16,6 +16,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "sitedlg.h"
+#endif
+
 #include "sitedlg.h"
 #include "sitepage.h"
 #include "notebook.h"

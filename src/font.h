@@ -19,6 +19,10 @@
 #ifndef FONT_H
 #define FONT_H
 
+#ifdef __GNUG__
+  #pragma interface "font.h"
+#endif
+
 #include <string>
 #include <X11/Xft/Xft.h>
 

@@ -124,7 +124,7 @@ public:
 	bool BeepOnBell;
 
 //	Display Settings
-	bool AntiAliasingFont;
+	bool AntiAliasFont;
 	int CharPaddingX;
 	int CharPaddingY;
 //	bool TwoDiffFonts;

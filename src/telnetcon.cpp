@@ -529,10 +529,10 @@ void CTelnetCon::Close()
 	{
 		if( m_Pid )
 		{
-			int kill_ret = kill( m_Pid, 9 );
+			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
-			g_print("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+//			g_print("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
 		close( m_SockFD );

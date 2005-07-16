@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string>
 
+#include "stringutil.h"
+
 using namespace std;
 
 class CSite
@@ -67,11 +69,13 @@ public:
 	int m_CRLF;
     GtkWidget*  m_MenuItem;
 	// Send CR, LF, or CRLF when Enter is pressed
-	inline const char* GetCRLF()
+	const char* GetCRLF()
 	{
 		const char* crlf[3] = { "\r", "\n", "\r\n" };
 		return (m_CRLF > 3 ? "\r" : crlf[m_CRLF]);
 	}
+
+	string GetEscapeChar()	{	return UnEscapeStr(m_ESCConv.c_str());	}
 
 	bool m_UseExternalSSH;
 	bool m_UseExternalTelnet;

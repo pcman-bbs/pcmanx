@@ -1,8 +1,54 @@
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/sitedlg.h,
+	src/sitepage.cpp,
+	src/termview.cpp,
+	src/dialog.h,
+	src/mainframe.h,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/view.cpp,
+	src/appconfig.h,
+	src/font.h,
+	src/prefdlg.cpp,
+	src/inputdialog.h,
+	src/notebook.h,
+	src/widget.h,
+	src/listbox.h,
+	src/telnetview.h,
+	src/sitedlg.cpp,
+	src/generalprefpage.h,
+	src/sitelistdlg.h,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/appconfig.cpp,
+	src/sitepage.h,
+	src/font.cpp,
+	src/termview.h,
+	src/site.h,
+	src/emoticondlg.h,
+	src/editfavdlg.h,
+	src/inputdialog.cpp,
+	src/view.h,
+	src/notebook.cpp,
+	src/widget.cpp,
+	src/listbox.cpp,
+	src/telnetview.cpp,
+	src/sitelistdlg.cpp,
+	src/generalprefpage.cpp,
+	src/prefdlg.h,
+	src/telnetcon.cpp:
+	Add gcc specific #pragma to accelerate compilation.
+
+	* src/mainframe.cpp (CMainFrame::NewCon), (CMainFrame::OnFont), 
+	src/termview.cpp (CTermView::OnSize):
+	Anti-alias font can be turned off now.
+
 2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
+
 	* src/termdata.cpp:
 	* src/termview.cpp:
 	Add horizontal align center.
-
 
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 

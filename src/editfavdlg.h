@@ -19,6 +19,10 @@
 #ifndef EDITFAVDLG_H
 #define EDITFAVDLG_H
 
+#ifdef __GNUG__
+  #pragma interface "editfavdlg.h"
+#endif
+
 #include "dialog.h"
 
 #include <vector>

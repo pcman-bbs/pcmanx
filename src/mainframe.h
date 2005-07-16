@@ -19,6 +19,9 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
+#ifdef __GNUG__
+  #pragma interface "mainframe.h"
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

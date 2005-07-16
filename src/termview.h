@@ -19,6 +19,10 @@
 #ifndef TERMVIEW_H
 #define TERMVIEW_H
 
+#ifdef __GNUG__
+  #pragma interface "termview.h"
+#endif
+
 #include "view.h"
 #include "caret.h"
 
@@ -60,7 +64,7 @@ public:
     virtual void OnMButtonDown(GdkEventButton* evt);
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
-    void CopyToClipboard(bool primary, bool with_color);
+    void CopyToClipboard(bool primary, bool with_color, bool trim);
     void SetFontFamily(string name);
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}

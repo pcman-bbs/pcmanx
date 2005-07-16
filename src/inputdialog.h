@@ -19,6 +19,10 @@
 #ifndef INPUTDIALOG_H
 #define INPUTDIALOG_H
 
+#ifdef __GNUG__
+  #pragma interface "inputdialog.h"
+#endif
+
 #include <dialog.h>
 
 /**

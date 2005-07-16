@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "view.h"
+#endif
+
+
 #include "view.h"
 
 static gboolean on_expose( GtkWidget* widget, GdkEventExpose *evt, CView* _this )

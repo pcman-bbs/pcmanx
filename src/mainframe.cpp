@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "mainframe.h"
+#endif
+
+
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdio.h>
@@ -147,7 +152,7 @@ CMainFrame::CMainFrame()
 
 	PostCreate();
 
-	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X");
+	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
 	
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), true);
@@ -209,7 +214,7 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
-	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize);
+	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.AntiAliasFont);
 	m_pView->SetFont(font);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 
@@ -233,42 +238,43 @@ void CMainFrame::CreateMenu()
 	GtkWidget *connect;
 	GtkWidget *connect_menu;
 	GtkWidget *site_list_menu;
-	GtkWidget *image475;
+	GtkWidget *image487;
 	GtkWidget *new_con_menu;
-	GtkWidget *image476;
+	GtkWidget *image488;
 	GtkWidget *reconnect_menu;
-	GtkWidget *image477;
+	GtkWidget *image489;
 	GtkWidget *close_menu;
-	GtkWidget *image478;
+	GtkWidget *image490;
 	GtkWidget *separatormenuitem1;
 	GtkWidget *next_con_menu;
-	GtkWidget *image479;
+	GtkWidget *image491;
 	GtkWidget *previous_con_menu;
-	GtkWidget *image480;
+	GtkWidget *image492;
 	GtkWidget *jump;
-	GtkWidget *image481;
+	GtkWidget *image493;
 	GtkWidget *separator2;
 	GtkWidget *quit_menu;
+	GtkWidget *image494;
 	GtkWidget *edit;
 	GtkWidget *edit_menu;
 	GtkWidget *copy_menu;
-	GtkWidget *image482;
+	GtkWidget *image495;
 	GtkWidget *copy_with_ansi_menu;
-	GtkWidget *image483;
+	GtkWidget *image496;
 	GtkWidget *paste_menu;
-	GtkWidget *image484;
+	GtkWidget *image497;
 	GtkWidget *select_all_menu;
 	GtkWidget *separator1;
 	GtkWidget *emoticon_menu;
 	GtkWidget *preference_menu;
-	GtkWidget *image485;
+	GtkWidget *image498;
 	GtkWidget *favorites;
 	GtkWidget *favorites_menu;
 	GtkWidget *separator3;
 	GtkWidget *add_to_fav_menu;
-	GtkWidget *image486;
+	GtkWidget *image499;
 	GtkWidget *edit_fav_menu;
-	GtkWidget *image487;
+	GtkWidget *image500;
 	GtkWidget *view;
 	GtkWidget *view_menu;
 	GtkWidget *font_menu;
@@ -295,9 +301,9 @@ void CMainFrame::CreateMenu()
 								GDK_S, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image475 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image475);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (site_list_menu), image475);
+	image487 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image487);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (site_list_menu), image487);
 	
 	new_con_menu = gtk_image_menu_item_new_with_mnemonic (_("_New Connection"));
 	gtk_widget_show (new_con_menu);
@@ -306,9 +312,9 @@ void CMainFrame::CreateMenu()
 								GDK_Q, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image476 = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image476);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new_con_menu), image476);
+	image488 = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image488);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new_con_menu), image488);
 	
 	reconnect_menu = gtk_image_menu_item_new_with_mnemonic (_("_Reconnect"));
 	gtk_widget_show (reconnect_menu);
@@ -317,9 +323,9 @@ void CMainFrame::CreateMenu()
 								GDK_R, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image477 = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image477);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (reconnect_menu), image477);
+	image489 = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image489);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (reconnect_menu), image489);
 	
 	close_menu = gtk_image_menu_item_new_with_mnemonic (_("_Close Connection"));
 	gtk_widget_show (close_menu);
@@ -328,9 +334,9 @@ void CMainFrame::CreateMenu()
 								GDK_W, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image478 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image478);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (close_menu), image478);
+	image490 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image490);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (close_menu), image490);
 	
 	separatormenuitem1 = gtk_separator_menu_item_new ();
 	gtk_widget_show (separatormenuitem1);
@@ -344,9 +350,9 @@ void CMainFrame::CreateMenu()
 								GDK_X, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image479 = gtk_image_new_from_stock ("gtk-go-down", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image479);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (next_con_menu), image479);
+	image491 = gtk_image_new_from_stock ("gtk-go-down", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image491);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (next_con_menu), image491);
 	
 	previous_con_menu = gtk_image_menu_item_new_with_mnemonic (_("Previous Page"));
 	gtk_widget_show (previous_con_menu);
@@ -355,26 +361,30 @@ void CMainFrame::CreateMenu()
 								GDK_Z, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image480 = gtk_image_new_from_stock ("gtk-go-up", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image480);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (previous_con_menu), image480);
+	image492 = gtk_image_new_from_stock ("gtk-go-up", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image492);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (previous_con_menu), image492);
 	
 	jump = gtk_image_menu_item_new_with_mnemonic (_("_Jump to"));
 	gtk_widget_show (jump);
 	gtk_container_add (GTK_CONTAINER (connect_menu), jump);
 	
-	image481 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image481);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (jump), image481);
+	image493 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image493);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (jump), image493);
 	
 	separator2 = gtk_separator_menu_item_new ();
 	gtk_widget_show (separator2);
 	gtk_container_add (GTK_CONTAINER (connect_menu), separator2);
 	gtk_widget_set_sensitive (separator2, FALSE);
 	
-	quit_menu = gtk_image_menu_item_new_from_stock ("gtk-quit", accel_group);
+	quit_menu = gtk_image_menu_item_new_with_mnemonic (_("_Quit"));
 	gtk_widget_show (quit_menu);
 	gtk_container_add (GTK_CONTAINER (connect_menu), quit_menu);
+	
+	image494 = gtk_image_new_from_stock ("gtk-quit", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image494);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (quit_menu), image494);
 	
 	edit = gtk_menu_item_new_with_mnemonic (_("_Edit"));
 	gtk_widget_show (edit);
@@ -390,17 +400,17 @@ void CMainFrame::CreateMenu()
 								GDK_O, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image482 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image482);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_menu), image482);
+	image495 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image495);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_menu), image495);
 	
 	copy_with_ansi_menu = gtk_image_menu_item_new_with_mnemonic (_("Copy with A_NSI Color"));
 	gtk_widget_show (copy_with_ansi_menu);
 	gtk_container_add (GTK_CONTAINER (edit_menu), copy_with_ansi_menu);
 	
-	image483 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image483);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_with_ansi_menu), image483);
+	image496 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image496);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_with_ansi_menu), image496);
 	
 	paste_menu = gtk_image_menu_item_new_with_mnemonic (_("_Paste"));
 	gtk_widget_show (paste_menu);
@@ -409,9 +419,9 @@ void CMainFrame::CreateMenu()
 								GDK_P, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
 	
-	image484 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image484);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (paste_menu), image484);
+	image497 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image497);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (paste_menu), image497);
 	
 	select_all_menu = gtk_menu_item_new_with_mnemonic (_("Select A_ll"));
 	gtk_widget_show (select_all_menu);
@@ -433,9 +443,9 @@ void CMainFrame::CreateMenu()
 	gtk_widget_show (preference_menu);
 	gtk_container_add (GTK_CONTAINER (edit_menu), preference_menu);
 	
-	image485 = gtk_image_new_from_stock ("gtk-preferences", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image485);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (preference_menu), image485);
+	image498 = gtk_image_new_from_stock ("gtk-preferences", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image498);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (preference_menu), image498);
 	
 	favorites = gtk_menu_item_new_with_mnemonic (_("F_avorites"));
 	gtk_widget_show (favorites);
@@ -453,17 +463,17 @@ void CMainFrame::CreateMenu()
 	gtk_widget_show (add_to_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
 	
-	image486 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image486);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image486);
+	image499 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image499);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image499);
 	
 	edit_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Edit Favorites"));
 	gtk_widget_show (edit_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
 	
-	image487 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image487);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image487);
+	image500 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image500);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image500);
 	
 	view = gtk_menu_item_new_with_mnemonic (_("_View"));
 	gtk_widget_show (view);
@@ -486,7 +496,6 @@ void CMainFrame::CreateMenu()
 	about_menu = gtk_image_menu_item_new_from_stock ("gtk-about", accel_group);
 	gtk_widget_show (about_menu);
 	gtk_container_add (GTK_CONTAINER (help_menu), about_menu);
-
 
 	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
 
@@ -814,7 +823,7 @@ void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	if( _this->GetCurView() )
 	{
-		_this->GetCurView()->CopyToClipboard(false, false);
+		_this->GetCurView()->CopyToClipboard(false, false, AppConfig.CopyTrimTail);
 		if( AppConfig.CancelSelAfterCopy )
 		{
 			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
@@ -828,7 +837,7 @@ void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	if( _this->GetCurView() )
 	{
-		_this->GetCurView()->CopyToClipboard(false, true);
+		_this->GetCurView()->CopyToClipboard(false, true, AppConfig.CopyTrimTail);
 		if( AppConfig.CancelSelAfterCopy )
 		{
 			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;

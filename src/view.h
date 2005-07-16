@@ -19,6 +19,10 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#ifdef __GNUG__
+  #pragma interface "view.h"
+#endif
+
 #include <widget.h>
 
 /**

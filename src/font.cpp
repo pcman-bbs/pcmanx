@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "font.h"
+#endif
+
+
 #include "font.h"
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>

@@ -19,6 +19,10 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
+#ifdef __GNUG__
+  #pragma interface "dialog.h"
+#endif
+
 #include <widget.h>
 #include <glib/gi18n.h>
 

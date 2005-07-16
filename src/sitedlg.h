@@ -19,6 +19,10 @@
 #ifndef SITEDLG_H
 #define SITEDLG_H
 
+#ifdef __GNUG__
+  #pragma interface "sitedlg.h"
+#endif
+
 #include "dialog.h"
 #include "site.h"
 

@@ -19,6 +19,10 @@
 #ifndef GENERALPREFPAGE_H
 #define GENERALPREFPAGE_H
 
+#ifdef __GNUG__
+  #pragma interface "generalprefpage.h"
+#endif
+
 #include <widget.h>
 
 /**

@@ -19,6 +19,10 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
+#ifdef __GNUG__
+  #pragma interface "notebook.h"
+#endif
+
 #include <widget.h>
 
 /**

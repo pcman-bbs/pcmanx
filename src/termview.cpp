@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "termview.h"
+#endif
+
+
 #include "termview.h"
 #include "termdata.h"
 
@@ -486,7 +491,8 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	int desire_w = (evt->width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
 	int desire_h = (evt->height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
 
-	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h);
+	bool aa_font = m_Font->GetAntiAlias();
+	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h, aa_font);
 //    PangoFontDescription* font = pango_font_description_copy(m_Font);
 
 /*		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
@@ -625,7 +631,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 	}
 	else	// if there is a selected area
 	{
-		CopyToClipboard(true, false);
+		CopyToClipboard(true, false, false);
 	}
 
 }
@@ -794,16 +800,16 @@ void CTermView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 
 }
 
-void CTermView::CopyToClipboard(bool primary, bool with_color)
+void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 {
 	if(!m_pTermData)
 		return;
-	string text = m_pTermData->GetSelectedText(with_color);
 	if( with_color )
-		m_s_ANSIColorStr = text;
+		m_s_ANSIColorStr = m_pTermData->GetSelectedTextWithColor(trim);
 	else
 	{
 		m_s_ANSIColorStr.clear();
+		string text = m_pTermData->GetSelectedText(trim);
 
 		gsize wl = 0;
 		const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),

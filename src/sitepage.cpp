@@ -16,6 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef __GNUG__
+  #pragma implementation "sitepage.h"
+#endif
+
+
 #include "sitepage.h"
 #include <glib/gi18n.h>
 #include "site.h"

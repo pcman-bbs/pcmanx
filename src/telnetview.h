@@ -19,6 +19,10 @@
 #ifndef TELNETVIEW_H
 #define TELNETVIEW_H
 
+#ifdef __GNUG__
+  #pragma interface "telnetview.h"
+#endif
+
 #include <termview.h>
 
 /**

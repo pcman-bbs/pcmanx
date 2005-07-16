@@ -9,6 +9,11 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+
+#ifdef __GNUG__
+  #pragma implementation "emoticondlg.h"
+#endif
+
 #include "emoticondlg.h"
 #include "inputdialog.h"
 #include "appconfig.h"

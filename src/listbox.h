@@ -19,6 +19,10 @@
 #ifndef LISTBOX_H
 #define LISTBOX_H
 
+#ifdef __GNUG__
+  #pragma interface "listbox.h"
+#endif
+
 #include <gtk/gtk.h>
 #include <widget.h>
 #include <string>

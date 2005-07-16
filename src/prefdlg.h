@@ -19,6 +19,10 @@
 #ifndef PREFDLG_H
 #define PREFDLG_H
 
+#ifdef __GNUG__
+  #pragma interface "prefdlg.h"
+#endif
+
 #include "dialog.h"
 
 /**

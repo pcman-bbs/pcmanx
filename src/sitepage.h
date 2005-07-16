@@ -19,6 +19,10 @@
 #ifndef SITEPAGE_H
 #define SITEPAGE_H
 
+#ifdef __GNUG__
+  #pragma interface "sitepage.h"
+#endif
+
 #include <widget.h>
 
 /**

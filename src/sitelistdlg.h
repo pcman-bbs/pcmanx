@@ -19,6 +19,10 @@
 #ifndef SITELISTDLG_H
 #define SITELISTDLG_H
 
+#ifdef __GNUG__
+  #pragma interface "sitelistdlg.h"
+#endif
+
 #include "dialog.h"
 #include <stdio.h>
 

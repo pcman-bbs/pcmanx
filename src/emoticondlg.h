@@ -12,6 +12,10 @@
 #ifndef EMOTICONDLG_H
 #define EMOTICONDLG_H
 
+#ifdef __GNUG__
+  #pragma interface "emoticondlg.h"
+#endif
+
 #include "dialog.h"
 #include "listbox.h"
 #include <string>
