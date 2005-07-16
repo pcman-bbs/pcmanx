@@ -33,13 +33,20 @@
 #include <unistd.h>
 
 // pseudo tty headers
+#ifndef __FreeBSD__
 #include <pty.h>
+#endif
 #include <utmp.h>
 
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 
+#ifdef __FreeBSD__
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <libutil.h>
+#endif
 
 // class constructor
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
