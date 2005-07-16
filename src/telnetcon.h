@@ -92,7 +92,7 @@ public:
 
 	virtual void OnClose();
 	virtual void OnConnect(int code);
-	void OnRecv();
+	bool OnRecv();
 
 	// Parse received data, process telnet command, and ANSI escape sequence.
 	void ParseReceivedData();

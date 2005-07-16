@@ -87,10 +87,7 @@ gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon
 {
 	bool ret = false;
 	if( type & G_IO_IN )
-	{
-		_this->OnRecv();
-		ret = true;
-	}
+		ret = _this->OnRecv();
 	if( type & G_IO_HUP )
 	{
 		_this->OnClose();
@@ -156,8 +153,11 @@ bool CTelnetCon::Connect()
 }
 
 // No description
-void CTelnetCon::OnRecv()
+bool CTelnetCon::OnRecv()
 {
+	if( !m_IOChannel || m_SockFD == -1 )
+		return false;
+
 	unsigned char buffer[4097];
 	m_pRecvBuf = buffer;
 
@@ -167,7 +167,7 @@ void CTelnetCon::OnRecv()
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
-		return;
+		return false;
 	}
 
     m_pRecvBuf[rlen] = '\0';
@@ -182,6 +182,7 @@ void CTelnetCon::OnRecv()
 	UpdateDisplay();
 
 //	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
+	return true;
 }
 
 void CTelnetCon::OnConnect(int code)

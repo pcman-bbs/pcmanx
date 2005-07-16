@@ -1,5 +1,13 @@
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/site.cpp (CSite::SaveToFile):
+	Minor bug fix for UseExternalTelnet.
+
+	* src/telnetcon.cpp (CTelnetCon::OnSocket), (CTelnetCon::OnRecv):
+	Fix a serious bug and prevent invalid io channel operation.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termdata.cpp (CTermData::UpdateCaret):
 	Calculate caret position corectly.
 

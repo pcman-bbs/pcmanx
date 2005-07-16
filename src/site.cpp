@@ -89,7 +89,7 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "Startup=%d\n", m_Startup );
 
 	fprintf( fo, "UseExternalSSH=%d\n", m_UseExternalSSH );
-	fprintf( fo, "ExternalTelnet=%d\n", m_UseExternalTelnet );
+	fprintf( fo, "UseExternalTelnet=%d\n", m_UseExternalTelnet );
 
 	fprintf( fo, "PreLoginPrompt=%s\n", m_PreLoginPrompt.c_str() );
 	fprintf( fo, "PreLogin=%s\n", m_PreLogin.c_str() );
