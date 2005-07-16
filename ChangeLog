@@ -1,3 +1,9 @@
+2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
+	* src/termdata.cpp:
+	* src/termview.cpp:
+	Add horizontal align center.
+
+
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termdata.cpp:

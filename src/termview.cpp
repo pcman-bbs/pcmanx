@@ -104,7 +104,8 @@ CTermView::CTermView()
 	m_XftDraw = NULL;
 	m_CharW = 18;
 	m_CharH = 18;
-	m_LeftMargin = m_TopMargin = 0;
+	m_LeftMargin = 0;
+	m_TopMargin = 0;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -168,6 +169,7 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	}
 
 	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
+	m_LeftMargin = (w - m_CharW * 80) >> 1;
 
 	if( m_pTermData )
 	{
@@ -193,7 +195,9 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 		gdk_gc_set_rgb_fg_color(m_GC, CTermCharAttr::GetDefaultColorTable(0));
 		left = m_pTermData->m_ColsPerPage*m_CharW-2;
 
-		gdk_draw_rectangle(dc, m_GC, true, left, 0, w-left, h );
+		/* repaint some region that should be repainted */
+		gdk_draw_rectangle(dc, m_GC, true, 0, 0, m_LeftMargin, h );
+		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, 0, w-left, h );
 
 		top = m_pTermData->m_RowsPerPage*m_CharH;
 		gdk_draw_rectangle(dc, m_GC, true, 0, top, w, h-top );
@@ -203,7 +207,7 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	else
 	{
 		gdk_gc_set_rgb_bg_color(m_GC, CTermCharAttr::GetDefaultColorTable(0));
-		gdk_draw_rectangle(dc, m_GC, true,0, 0, w, h );
+		gdk_draw_rectangle(dc, m_GC, true, 0, 0, w, h );
 	}
 
 }
@@ -286,6 +290,8 @@ int CTermView::DrawChar(int line, int col, int top)
 
 	GdkColor iFg, iBg;
 
+	m_LeftMargin = (m_Widget->allocation.width - m_CharW * 80) >> 1;
+
 	for( int i=0; i < w; i++ )	//	do the drawing
 	{
 		GdkColor* Fg = pAttr[i].GetFgColor( m_pColorTable );
@@ -315,7 +321,8 @@ int CTermView::DrawChar(int line, int col, int top)
 		xftclr.color.alpha = 0xffff;
 
 		int bgw = m_CharW*w;
-		gdk_draw_rectangle(dc, m_GC, true, left, top, bgw, m_CharH );
+
+		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, top, bgw, m_CharH );
 
 		gdk_gc_set_rgb_fg_color( m_GC, Fg );
 
@@ -328,14 +335,14 @@ int CTermView::DrawChar(int line, int col, int top)
 				if( w > 0 && (utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL)))
 				{
 					XftFont* font = m_Font->GetXftFont();
-					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
+					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left + m_LeftMargin, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
 					g_free(utf8_ch);
 				}
 			}
 			if( pAttr[i].IsUnderLine() )
 			{
 				int bottom = top + m_CharH - 1;
-				gdk_draw_line(dc, m_GC, left, bottom, left+bgw, bottom);
+				gdk_draw_line(dc, m_GC, left + m_LeftMargin, bottom, left + bgw + m_LeftMargin, bottom);
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
@@ -348,7 +355,7 @@ int CTermView::DrawChar(int line, int col, int top)
 			if(m_pHyperLinkColor)
 	 			gdk_gc_set_rgb_fg_color( m_GC, m_pHyperLinkColor );
 			int bottom = top + m_CharH - 1;
-			gdk_draw_line(dc, m_GC, left, bottom, left+bgw, bottom);
+			gdk_draw_line(dc, m_GC, left + m_LeftMargin, bottom, left + bgw + m_LeftMargin, bottom);
 		}
 
 		if( w == 1 || i>=1 || (pAttr[i].IsSameAttr(pAttr[i+1].AsShort()) && bSel[0] == bSel[1]) )
@@ -451,6 +458,7 @@ void CTermView::PrepareDC()
 
 void CTermView::PointToLineCol(int *x, int *y)
 {
+	*x -= m_LeftMargin;
 	*x /= m_CharW;
 	if (*x < 0)
 		*x = 0;
@@ -556,7 +564,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 		return;
 	SetCapture();
 
-	int x = (int)evt->x;
+	int x = (int)evt->x - m_LeftMargin;
 	int y = (int)evt->y;
 
 //	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
@@ -593,7 +601,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 	//	If no text is selected, consider hyperlink.
 	if( m_pTermData->m_SelStart == m_pTermData->m_SelEnd )
 	{
-		int x = (int)evt->x;
+		int x = (int)evt->x - m_LeftMargin;
 		int y = (int)evt->y;
 		this->PointToLineCol( &x, &y );
 		char* pline = m_pTermData->m_Screen[y];
@@ -633,7 +641,7 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 	if( !m_pTermData )
 		return;
 
-	int x = (int)evt->x;
+	int x = (int)evt->x - m_LeftMargin;
 	int y = (int)evt->y;
 
 //	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
