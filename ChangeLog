@@ -1,3 +1,8 @@
+2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
+
+	* src/termview.cpp:
+	Fix bug of selected region.
+
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/sitedlg.h,

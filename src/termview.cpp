@@ -570,7 +570,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 		return;
 	SetCapture();
 
-	int x = (int)evt->x - m_LeftMargin;
+	int x = (int)evt->x;
 	int y = (int)evt->y;
 
 //	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
@@ -607,7 +607,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 	//	If no text is selected, consider hyperlink.
 	if( m_pTermData->m_SelStart == m_pTermData->m_SelEnd )
 	{
-		int x = (int)evt->x - m_LeftMargin;
+		int x = (int)evt->x;
 		int y = (int)evt->y;
 		this->PointToLineCol( &x, &y );
 		char* pline = m_pTermData->m_Screen[y];
@@ -647,7 +647,7 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 	if( !m_pTermData )
 		return;
 
-	int x = (int)evt->x - m_LeftMargin;
+	int x = (int)evt->x;
 	int y = (int)evt->y;
 
 //	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
