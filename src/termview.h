@@ -80,6 +80,7 @@ protected:
     void RedrawSel(int oldx, int oldy, int newx, int newy);
     void OnKillFocus(GdkEventFocus *evt);
 	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
+    void UpdateCaretPos();
 protected:
 	CTermData* m_pTermData;
 

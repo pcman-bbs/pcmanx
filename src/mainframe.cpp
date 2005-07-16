@@ -117,8 +117,11 @@ CMainFrame::CMainFrame()
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
+	m_IsFlashing = false;
+	m_IsActivated = false;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	PostCreate();
 
 #ifdef USE_DOCKLET
 	/* We need to make sure m_MainIcon is null at startup. */
@@ -150,7 +153,6 @@ CMainFrame::CMainFrame()
 	set_tray_icon();
 #endif
 
-	PostCreate();
 
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
 	
@@ -185,7 +187,11 @@ CMainFrame::CMainFrame()
 	g_signal_connect(m_pNotebook->m_Widget, "switch-page", G_CALLBACK(CMainFrame::OnNotebookChangeCurPage), this);
 
 	g_signal_connect(m_Widget, "configure-event", G_CALLBACK(CMainFrame::OnSize), this);
-	
+
+	g_signal_connect(G_OBJECT(m_Widget), "focus-in-event", G_CALLBACK(CMainFrame::OnActivated), this);
+
+	g_signal_connect(G_OBJECT(m_Widget), "focus-out-event", G_CALLBACK(CMainFrame::OnDeactivated), this);
+
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
@@ -701,11 +707,13 @@ void CMainFrame::OnQuit(GtkMenuItem* mitem, CMainFrame* _this)
 
 
 #include "pcmanx_xpm.xpm"
+#include "pcmanx_inverse_xpm.xpm"
 #include "conn_xpm.xpm"
 
 void CMainFrame::LoadIcons()
 {
 	m_MainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_xpm);
+	m_InverseMainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_inverse_xpm);
 	m_ConnIcon = gdk_pixbuf_new_from_xpm_data((const char**)conn_xpm);
 }
 
@@ -906,6 +914,9 @@ void CMainFrame::OnJumpToPage(GtkWidget* widget, CMainFrame* _this)
 
 void CMainFrame::OnTelnetConBell(CTelnetView* con)
 {
+	if( !IsActivated() )
+		FlashWindow(true);
+
 	if( AppConfig.BeepOnBell )
 		gdk_display_beep(gdk_display_get_default());
 	if( GetCurView() == con )
@@ -966,6 +977,14 @@ void CMainFrame::CloseCon(int idx, bool confirm)
 
 gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 {
+	if( _this->m_IsFlashing )
+	{
+		if( gtk_window_get_icon( GTK_WINDOW(_this->m_Widget) ) == _this->m_MainIcon )
+			gtk_window_set_icon( GTK_WINDOW(_this->m_Widget), _this->m_InverseMainIcon );
+		else
+			gtk_window_set_icon( GTK_WINDOW(_this->m_Widget), _this->m_MainIcon );
+	}
+
 	if(_this->GetCurView() && _this->GetCurView()->IsVisible() )
 		_this->GetCurView()->OnBlinkTimer();
 	return true;
@@ -1220,3 +1239,23 @@ void CMainFrame::OnReconnect(GtkMenuItem* mitem, CMainFrame* _this)
 		_this->NewCon( con->m_Site.m_Name.c_str(), con->m_Site.m_URL.c_str(), &con->m_Site);
 }
 
+void CMainFrame::FlashWindow( bool flash )
+{
+	GdkPixbuf* icon = (m_IsFlashing = flash) ? m_InverseMainIcon : m_MainIcon;
+	gtk_window_set_icon((GtkWindow*)m_Widget, icon);
+}
+
+
+gboolean CMainFrame::OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this )
+{
+	_this->m_IsActivated = true;
+	if( _this->m_IsFlashing )
+		_this->FlashWindow(false);
+	return false;
+}
+
+gboolean CMainFrame::OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this )
+{
+	_this->m_IsActivated = false;
+	return false;
+}

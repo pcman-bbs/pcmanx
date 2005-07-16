@@ -44,9 +44,12 @@ public:
     static void OnRemove(GtkWidget* btn, CEditFavDlg* _this);
     static void OnUp(GtkWidget* btn, CEditFavDlg* _this);
     static void OnDown(GtkWidget* btn, CEditFavDlg* _this);
+    static void OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,  
+	GtkTreeViewColumn* col, CEditFavDlg* _this);
 
 	vector<CSite>& m_Sites;
     CListBox* m_List;
+	GtkWidget* m_EditBtn;
 protected:
 };
 

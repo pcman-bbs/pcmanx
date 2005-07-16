@@ -220,7 +220,6 @@ public:
 	inline void ScrollUp( int n = 1 );
 	inline void ScrollDown( int n = 1 );
 	void InsertNewLine( int y, int count = 1 );
-	void UpdateCaret();
 	inline void SetLineUpdate( char* pLine, short start, short end )
 	{
 		CTermCharAttr * pAttr = GetLineAttr( pLine );

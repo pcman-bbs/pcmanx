@@ -1,5 +1,28 @@
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/termdata.cpp, 
+	src/termview.cpp:
+	(CTermView::UpdateCaretPos) : Added
+	(CTermData::UpdateCaret) : Removed
+	Update position of IM cursor correctly.
+
+	* src/editfavdlg.cpp:
+	Enable editing of site settings by double clicking on the list.
+
+	* src/pcmanx_inverse_xpm.xpm, 
+	src/Makefile.am, 
+	src/mainframe.cpp,
+	src/mainframe.h:
+	(CMainFrame::FlashWindow): Flash window icon to notify the user there's 
+	new incomming message.
+	(CMainFrame::IsActivated): Function to determine whether the main window
+	is activated or not.
+
+	* src/sitelistdlg.cpp:
+	Enable searching by hitting 'Enter' key.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/site.cpp (CSite::SaveToFile):
 	Minor bug fix for UseExternalTelnet.
 

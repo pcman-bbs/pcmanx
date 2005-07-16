@@ -36,7 +36,6 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	GtkWidget *hbox16;
 	GtkWidget *vbox4;
 	GtkWidget *hbox17;
-	GtkWidget *search_btn;
 	GtkWidget *scrolledwindow1;
 	GtkWidget *vbuttonbox1;
 	GtkWidget *connect_btn;
@@ -67,9 +66,9 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	gtk_widget_show (m_Keyword);
 	gtk_box_pack_start (GTK_BOX (hbox17), m_Keyword, TRUE, TRUE, 2);
 	
-	search_btn = gtk_button_new_from_stock ("gtk-find");
-	gtk_widget_show (search_btn);
-	gtk_box_pack_start (GTK_BOX (hbox17), search_btn, FALSE, FALSE, 2);
+	m_SearchBtn = gtk_button_new_from_stock ("gtk-find");
+	gtk_widget_show (m_SearchBtn);
+	gtk_box_pack_start (GTK_BOX (hbox17), m_SearchBtn, FALSE, FALSE, 2);
 	
 	scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
 	gtk_widget_show (scrolledwindow1);
@@ -114,7 +113,7 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	gtk_container_add (GTK_CONTAINER (vbuttonbox1), close_btn);
 	GTK_WIDGET_SET_FLAGS (close_btn, GTK_CAN_DEFAULT);
 
-	g_signal_connect ((gpointer) search_btn, "clicked",
+	g_signal_connect ((gpointer) m_SearchBtn, "clicked",
 					G_CALLBACK (&CSiteListDlg::OnSearch),
 					this);
 	g_signal_connect ((gpointer) connect_btn, "clicked",
@@ -127,6 +126,11 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	g_signal_connect ((gpointer) m_Tree, "row-activated",
 					G_CALLBACK (&CSiteListDlg::OnRowActivated),
 					this);
+
+	g_signal_connect ((gpointer) m_Keyword, "activate",
+					G_CALLBACK (&CSiteListDlg::OnKeywordActivate),
+					this);
+
 
 	gtk_window_set_default_size((GtkWindow*)m_Widget, 512, 384);
 
@@ -340,4 +344,9 @@ void CSiteListDlg::OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,
 	GtkTreeViewColumn* col, CSiteListDlg* _this)
 {
 	gtk_button_clicked( GTK_BUTTON(_this->m_ConnectBtn) );
+}
+
+void CSiteListDlg::OnKeywordActivate(GtkEntry* entry, CSiteListDlg* _this)
+{
+	gtk_button_clicked( GTK_BUTTON(_this->m_SearchBtn) );
 }

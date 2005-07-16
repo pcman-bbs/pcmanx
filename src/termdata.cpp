@@ -360,13 +360,6 @@ void CTermData::PutChar(unsigned char ch)
 	}
 }
 
-void CTermData::UpdateCaret()
-{
-	int x = m_CaretPos.x * m_pView->m_CharW + m_pView->m_LeftMargin;
-	int y = (m_CaretPos.y + 1) * m_pView->m_CharH - 2;
-	m_pView->m_Caret.Move( x, y );
-}
-
 void CTermData::InsertNewLine(int y, int count)
 {
 	short tmp = m_ScrollRegionTop;
@@ -558,12 +551,12 @@ void CTermData::GoToXY(int x, int y)
 	if( x < 0)
 		x = 0;
 	else if( x >= m_ColsPerPage )
-		x= m_RowsPerPage-1;
+		x= m_ColsPerPage-1;
 
 	if( y < 0 )
 		y = 0;
 	else if( y >= m_RowsPerPage )
-		y= m_ColsPerPage-1;
+		y= m_RowsPerPage-1;
 
 	m_CaretPos.x = x;
 	m_CaretPos.y = m_FirstLine + y;
@@ -778,7 +771,7 @@ void CTermData::DoUpdateDisplay()
 			}
 		}
 	}
-	UpdateCaret();
+	m_pView->UpdateCaretPos();
 	m_pView->m_Caret.Show();
 }
 

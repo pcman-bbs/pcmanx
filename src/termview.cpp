@@ -157,7 +157,8 @@ CTermView::~CTermView()
 	if( m_pTermData )
 		m_pTermData->m_pView = NULL;
 
-	gdk_cursor_unref(m_HandCursor);
+	if( m_HandCursor )
+		gdk_cursor_unref(m_HandCursor);
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
@@ -477,10 +478,6 @@ void CTermView::PointToLineCol(int *x, int *y)
 
 void CTermView::OnSize(GdkEventConfigure* evt)
 {
-	GdkRectangle rc;
-	rc.x = evt->x;	rc.y = evt->y; 	rc.width = 	evt->width;	rc.height = evt->height;
-	gtk_im_context_set_cursor_location(m_IMContext, &rc);
-
 	if( !m_AutoFontSize || !m_pTermData )
 		return;
 
@@ -499,9 +496,8 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 		m_LeftMargin = 0;
 
 	m_Caret.SetSize(m_CharW, 2);
+	UpdateCaretPos();
 	m_Caret.Show();
-
-	m_pTermData->UpdateCaret();
 }
 
 
@@ -794,9 +790,20 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 		m_LeftMargin = 0;
 
 	if( IsVisible() )
-	{
 		Refresh();
-		m_pTermData->UpdateCaret();
-	}
+	UpdateCaretPos();
 }
 
+void CTermView::UpdateCaretPos()
+{
+	if( !m_pTermData )
+		return;
+
+	int x = m_pTermData->m_CaretPos.x * m_CharW + m_LeftMargin;
+	int y = (m_pTermData->m_CaretPos.y + 1) * m_CharH - 2;
+	m_Caret.Move( x, y );
+
+	GdkRectangle rc;
+	rc.x = x;	rc.y = y; 	rc.width = 0;	rc.height = 0;
+	gtk_im_context_set_cursor_location(m_IMContext, &rc);
+}

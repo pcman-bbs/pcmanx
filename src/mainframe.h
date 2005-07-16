@@ -89,6 +89,10 @@ public:
     static void OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this);
     static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
     static void OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this);
+    static gboolean OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
+    static gboolean OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
+
+    bool IsActivated(){	return m_IsActivated;	}
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
@@ -110,6 +114,7 @@ protected:
     void CreateFavoritesMenu();
     static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
+    void FlashWindow( bool flash );
 
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
@@ -121,7 +126,7 @@ protected:
 
     GdkPixbuf* m_ConnIcon;
     GdkPixbuf* m_MainIcon;
-protected:
+    GdkPixbuf* m_InverseMainIcon;
 
 protected:
     CTelnetView* m_pView;
@@ -136,6 +141,9 @@ protected:
 	guint m_EverySecondTimer;
     GtkWidget* m_FavoritesMenuItem;
     GtkWidget* m_FavoritesMenu;
+
+	bool m_IsFlashing;
+	bool m_IsActivated;
 };
 
 #endif

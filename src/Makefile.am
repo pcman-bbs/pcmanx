@@ -18,6 +18,7 @@ EXTRA_DIST = \
 	Makefile-byhand \
 	conn_xpm.xpm \
 	pcmanx_xpm.xpm \
+	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET)
 
 if USE_DOCKLET

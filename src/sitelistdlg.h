@@ -43,10 +43,12 @@ public:
     void LoadSiteList();
 	void LoadSiteList(GtkTreeIter *parent, FILE *file, char *line);
     static void OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path, GtkTreeViewColumn* col, CSiteListDlg* _this);
+    static void OnKeywordActivate(GtkEntry* entry, CSiteListDlg* _this);
 public:
 	GtkWidget *m_Keyword;
 	GtkWidget *m_Tree;
 	GtkWidget *m_ConnectBtn;
+	GtkWidget *m_SearchBtn;
 	GtkTreeStore* m_Store;
 protected:
     GdkPixbuf* m_FolderIcon;

@@ -194,7 +194,6 @@ void CEmoticonDlg::OnUp(GtkWidget* btn, CEmoticonDlg* _this)
 
 bool CEmoticonDlg::OnOK()
 {
-	g_print("OnOK\n");
 	int sel = m_List->GetCurSel();
 	if( sel >= 0 )
 		m_SelStr = m_List->GetItemText( sel );

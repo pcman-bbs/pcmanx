@@ -109,10 +109,16 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 
 	gtk_window_set_default_size((GtkWindow*)m_Widget, 400, 300);
 
+	m_EditBtn = edit_btn;
+
 	m_List = new CListBox;
 	fav_list = m_List->m_Widget;
 	gtk_widget_show (fav_list);
 	gtk_container_add (GTK_CONTAINER (fav_list_scrl), fav_list);
+	
+	g_signal_connect ((gpointer) m_List->m_Widget, "row-activated",
+					G_CALLBACK (&CEditFavDlg::OnRowActivated),
+					this);
 
 	vector<CSite>::iterator it;
 	int i = 0;
@@ -203,3 +209,9 @@ void CEditFavDlg::OnDown(GtkWidget* btn, CEditFavDlg* _this)
 	}
 }
 
+
+void CEditFavDlg::OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,  
+	GtkTreeViewColumn* col, CEditFavDlg* _this)
+{
+	gtk_button_clicked( GTK_BUTTON(_this->m_EditBtn) );
+}
