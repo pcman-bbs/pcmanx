@@ -1,3 +1,19 @@
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::UpdateCaret):
+	Calculate caret position corectly.
+
+	* src/termview.cpp:
+	Add CTelnetCon::SetHorizontalCenterAlign().
+	Terminal screen can be centered horizontally.
+	Fix some problems with position calculation.
+
+	* src/appconfig.h, src/appconfig.cpp:
+	Add HCenterAlign data member.
+
+	* src/mainframe.cpp (CMainFrame::NewCon):
+	Call CTermView::SetHorizontalCenterAlign with proper parameter.
+
 2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
 
 	* src/termview.cpp:

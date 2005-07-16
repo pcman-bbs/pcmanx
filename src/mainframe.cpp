@@ -205,11 +205,7 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
 
 	CTelnetCon* pCon;
-#ifdef	USE_SSH
-//	if(site.m_UseSSH)
-//		pCon = new CSSHCon( m_pView, site );
-//	else
-#endif
+
 	pCon = new CTelnetCon( m_pView, *site );
 
 	m_pView->m_pTermData = pCon;
@@ -217,6 +213,7 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.AntiAliasFont);
 	m_pView->SetFont(font);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
+	m_pView->SetHorizontalCenterAlign( AppConfig.HCenterAlign );
 
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;
@@ -744,6 +741,7 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		vector<CTelnetView*>::iterator it;
 		for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
 			(*it)->SetFontFamily(AppConfig.FontFamily);
+
 
 		/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
 

@@ -362,10 +362,9 @@ void CTermData::PutChar(unsigned char ch)
 
 void CTermData::UpdateCaret()
 {
-	int x = m_CaretPos.x * m_pView->m_CharW;
+	int x = m_CaretPos.x * m_pView->m_CharW + m_pView->m_LeftMargin;
 	int y = (m_CaretPos.y + 1) * m_pView->m_CharH - 2;
-	int shift = (m_pView->m_Widget->allocation.width - m_pView->m_CharW * 80) >> 1;
-	m_pView->m_Caret.Move( x + shift, y );
+	m_pView->m_Caret.Move( x, y );
 }
 
 void CTermData::InsertNewLine(int y, int count)

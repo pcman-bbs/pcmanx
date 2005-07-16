@@ -127,6 +127,8 @@ public:
 	bool AntiAliasFont;
 	int CharPaddingX;
 	int CharPaddingY;
+	bool HCenterAlign;
+
 //	bool TwoDiffFonts;
     int FontSize;
     string FontFamily;

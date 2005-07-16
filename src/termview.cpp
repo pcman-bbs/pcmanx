@@ -111,6 +111,7 @@ CTermView::CTermView()
 	m_CharH = 18;
 	m_LeftMargin = 0;
 	m_TopMargin = 0;
+	m_IsHCenterAlign = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -174,7 +175,6 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	}
 
 	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
-	m_LeftMargin = (w - m_CharW * 80) >> 1;
 
 	if( m_pTermData )
 	{
@@ -288,14 +288,12 @@ int CTermView::DrawChar(int line, int col, int top)
 
 	const char* pChar = pLine + col;
 	pAttr += col;
-	int left = m_CharW*col;
+	int left = m_CharW*col + m_LeftMargin;
 
 	bool bSel[2];	bSel[0]= IsPosInSel( col, line );
 	if( w > 1 )		bSel[1] = IsPosInSel( col+1, line );
 
 	GdkColor iFg, iBg;
-
-	m_LeftMargin = (m_Widget->allocation.width - m_CharW * 80) >> 1;
 
 	for( int i=0; i < w; i++ )	//	do the drawing
 	{
@@ -327,7 +325,7 @@ int CTermView::DrawChar(int line, int col, int top)
 
 		int bgw = m_CharW*w;
 
-		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, top, bgw, m_CharH );
+		gdk_draw_rectangle(dc, m_GC, true, left , top, bgw, m_CharH );
 
 		gdk_gc_set_rgb_fg_color( m_GC, Fg );
 
@@ -340,14 +338,14 @@ int CTermView::DrawChar(int line, int col, int top)
 				if( w > 0 && (utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL)))
 				{
 					XftFont* font = m_Font->GetXftFont();
-					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left + m_LeftMargin, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
+					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
 					g_free(utf8_ch);
 				}
 			}
 			if( pAttr[i].IsUnderLine() )
 			{
 				int bottom = top + m_CharH - 1;
-				gdk_draw_line(dc, m_GC, left + m_LeftMargin, bottom, left + bgw + m_LeftMargin, bottom);
+				gdk_draw_line(dc, m_GC, left, bottom, left + bgw, bottom);
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
@@ -360,7 +358,7 @@ int CTermView::DrawChar(int line, int col, int top)
 			if(m_pHyperLinkColor)
 	 			gdk_gc_set_rgb_fg_color( m_GC, m_pHyperLinkColor );
 			int bottom = top + m_CharH - 1;
-			gdk_draw_line(dc, m_GC, left + m_LeftMargin, bottom, left + bgw + m_LeftMargin, bottom);
+			gdk_draw_line(dc, m_GC, left, bottom, left + bgw, bottom);
 		}
 
 		if( w == 1 || i>=1 || (pAttr[i].IsSameAttr(pAttr[i+1].AsShort()) && bSel[0] == bSel[1]) )
@@ -486,79 +484,24 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	if( !m_AutoFontSize || !m_pTermData )
 		return;
 
-//	pango_layout_set_text(m_PangoLayout, " ", 1);
-
 	int desire_w = (evt->width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
 	int desire_h = (evt->height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
 
 	bool aa_font = m_Font->GetAntiAlias();
 	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h, aa_font);
-//    PangoFontDescription* font = pango_font_description_copy(m_Font);
-
-/*		Display *display = GDK_WINDOW_XDISPLAY(m_Widget->window);
-		int screen = DefaultScreen (display);
-
-		if( m_XftFont )
-			XftFontClose(display, m_XftFont);
-
-		m_XftFont = XftFontOpen (display, screen,
-						XFT_FAMILY, XftTypeString, m_FontFamily.c_str(),
-						XFT_CORE, XftTypeBool, False,
-						XFT_PIXEL_SIZE, XftTypeDouble, (double)desire_h,
-						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-						XFT_ANTIALIAS, XftTypeBool, True,
-						NULL);
-
-		int w = m_XftFont->max_advance_width/2;
-		int h = m_XftFont->ascent + m_XftFont->descent;
-
-		while( (w > 2 && h > 2) && ( w > desire_w*2 || h > desire_h) )
-		{
-			if( m_XftFont )
-				XftFontClose(display, m_XftFont);
-
-			h-=2;
-
-			m_XftFont = XftFontOpen (display, screen,
-							XFT_FAMILY, XftTypeString, m_FontFamily.c_str(),
-							XFT_CORE, XftTypeBool, False,
-							XFT_PIXEL_SIZE, XftTypeDouble, (double)h,
-							XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-							XFT_ANTIALIAS, XftTypeBool, True,
-							NULL);
-
-			w = m_XftFont->max_advance_width;
-			h = m_XftFont->ascent + m_XftFont->descent;
-		}*/
-/*	int max = 40, min = 6, w = 0, h = 0;
-	int point = 6 + (40-6)/2;
-	while( max > point && point > min )
-	{
-		pango_font_description_set_size(m_Font, point*PANGO_SCALE);
-		pango_layout_set_font_description(m_PangoLayout, m_Font);
-		pango_layout_get_pixel_size(m_PangoLayout, &w, &h);
-		w = h/2 + (h % 2 ? 0 : 1);
-		if( w < desire_w || h < desire_h )	// too narrow or too low
-			min	= point;
-		else if( w > desire_w || h > desire_h )	// too wide or too high
-			max = point;
-		else
-			break;
-		point = min + (max-min)/2;
-	}
-	pango_font_description_set_size(m_Font, min*PANGO_SCALE);
-	pango_layout_set_font_description(m_PangoLayout, m_Font);
-*/
 
 	m_CharW = m_Font->GetMaxWidth()/2 + m_CharPaddingX;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
 	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
+
+	if( m_IsHCenterAlign )
+		m_LeftMargin = (evt->width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
+	else
+		m_LeftMargin = 0;
 
 	m_Caret.SetSize(m_CharW, 2);
 	m_Caret.Show();
 
 	m_pTermData->UpdateCaret();
-//	pango_font_description_free(m_Font);
-//	m_Font = font;
 }
 
 
@@ -839,3 +782,21 @@ void CTermView::SetFontFamily(string name)
 	int desire_h = (m_Widget->allocation.height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
 	m_Font->SetFont(name, desire_w, desire_h, m_Font->GetAntiAlias());
 }
+
+void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
+{
+	if( m_IsHCenterAlign == is_hcenter || !m_pTermData )
+		return;
+
+	if( (m_IsHCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
+	else
+		m_LeftMargin = 0;
+
+	if( IsVisible() )
+	{
+		Refresh();
+		m_pTermData->UpdateCaret();
+	}
+}
+

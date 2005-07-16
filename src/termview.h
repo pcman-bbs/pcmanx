@@ -69,6 +69,7 @@ public:
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
     CFont* GetFont(){	return m_Font;	}
+    void SetHorizontalCenterAlign( bool is_hcenter );
 protected:
     void OnPaint(GdkEventExpose* evt);
     void OnSetFocus(GdkEventFocus* evt);
@@ -89,6 +90,9 @@ protected:
 	int m_CharH;
 	int m_LeftMargin;
 	int m_TopMargin;
+	bool m_IsHCenterAlign;
+//	bool m_IsVCenterAlign;
+
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;
 
