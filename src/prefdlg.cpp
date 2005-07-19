@@ -51,6 +51,7 @@ bool CPrefDlg::OnOK()
 	{
 		AppConfig.m_DefaultSite = m_pSitePage->m_Site;
 		m_pGeneralPrefPage->OnOK();
+		AppConfig.Save();
 	}
 	return true;
 }

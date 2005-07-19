@@ -1,7 +1,12 @@
 2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/telnetcon.cpp (CTelnetCon::OnMainIdle):
+	Little bug fix.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/mainframe.cpp (CMainFrame::OnURLEntryKillFocus):
-	Little bug fix: reutrn TRUE in this handler.
+	Little bug fix. We should reutrn FALSE in this handler.
 
 2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 

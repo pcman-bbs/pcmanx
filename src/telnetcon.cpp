@@ -614,7 +614,7 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 //		g_print("on connect, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
 		if( 0 == g_thread_pool_unprocessed(m_ThreadPool) )
 		{
-			g_thread_pool_free(m_ThreadPool, TRUE, TRUE);
+			g_thread_pool_free(m_ThreadPool, TRUE, FALSE);
 			m_ThreadPool = NULL;
 //			g_print("pool freed\n");
 		}

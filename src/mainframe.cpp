@@ -1121,6 +1121,7 @@ void CMainFrame::OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this)
 	CEditFavDlg* dlg = new CEditFavDlg(_this, AppConfig.Favorites);
 	dlg->ShowModal();
 	AppConfig.Favorites.swap(dlg->m_Sites);
+	AppConfig.SaveFavorites();
 	dlg->Destroy();
 
 	_this->CreateFavoritesMenu();
