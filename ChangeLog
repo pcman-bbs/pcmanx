@@ -1,5 +1,10 @@
 2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/mainframe.cpp (CMainFrame::OnURLEntryKillFocus):
+	Little bug fix: reutrn TRUE in this handler.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termview.cpp,
 	src/emoticondlg.cpp,
 	src/editfavdlg.cpp,

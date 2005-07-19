@@ -1335,5 +1335,5 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 		gtk_entry_set_text( GTK_ENTRY(entry), _this->GetCurCon()->m_Site.m_URL.c_str());
 		gtk_editable_select_region(GTK_EDITABLE(entry), 0, 0);
 	}
-	return TRUE;
+	return FALSE;
 }
