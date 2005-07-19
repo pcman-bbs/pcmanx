@@ -209,8 +209,6 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView = new CTelnetView;
 	m_Views.push_back(m_pView);
 
-	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
-
 	CTelnetCon* pCon;
 
 	pCon = new CTelnetCon( m_pView, *site );
@@ -230,11 +228,11 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
 	
-	pCon->Connect();
-
+	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
 	m_pNotebook->SetCurPage(idx);
-
 	m_pView->SetFocus();
+
+	pCon->Connect();
 
 	return pCon;
 }
@@ -1326,6 +1324,8 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	case GDK_Escape:
 		if( _this->GetCurView() )
 			_this->GetCurView()->SetFocus();
+		else
+			gtk_entry_set_text( GTK_ENTRY(widget), "" );
 		return true;
 	}
 	return false;
@@ -1338,5 +1338,5 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 		gtk_entry_set_text( GTK_ENTRY(entry), _this->GetCurCon()->m_Site.m_URL.c_str());
 		gtk_editable_select_region(GTK_EDITABLE(entry), 0, 0);
 	}
-	return FALSE;
+	return TRUE;
 }

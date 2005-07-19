@@ -1,5 +1,15 @@
 2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/termview.cpp (CTermView::~CTermView):
+	Fix the bug in destructor.
+	GdkCursor can be ref and unref correctly now.
+
+	* src/mainframe.cpp (CMainFrame::NewCon):
+	Rearrange the order of some operations to fix a serious bug which 
+	causes frequent segmentation fault.
+
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/termdata.cpp:
 	Exclude characters '(' and ')' from URL detection.
 

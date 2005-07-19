@@ -159,6 +159,8 @@ CTermView::~CTermView()
 
 	if( m_HandCursor )
 		gdk_cursor_unref(m_HandCursor);
+	if( m_HandCursor->ref_count <= 0 )
+		m_HandCursor = NULL;
 }
 
 void CTermView::OnPaint(GdkEventExpose* evt)
