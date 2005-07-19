@@ -143,7 +143,7 @@ class CConnectThread
 {
 public:
 	CConnectThread(CTelnetCon* con, string address, int port) 
-		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1), m_DNSTry(3)
+		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1)/*, m_DNSTry(3)*/
 	{
 	}
 
@@ -151,7 +151,7 @@ public:
 	string m_Address;
 	int m_Port;
 	int m_Code;
-	int m_DNSTry;
+//	int m_DNSTry;
 };
 
 

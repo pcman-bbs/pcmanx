@@ -63,11 +63,6 @@ CDialog::CDialog(CWidget* parent, const char* title, bool show_okcancel)
 }
 
 
-CDialog::~CDialog()
-{
-}
-
-
 int CDialog::ShowModal()
 {
 	int response = gtk_dialog_run(GTK_DIALOG(m_Widget));

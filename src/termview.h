@@ -45,7 +45,6 @@ friend class CTermData;
 public:
     CTermView();
 
-    ~CTermView();
     virtual bool PreKeyDown(GdkEventKey *evt);
     virtual bool OnKeyDown(GdkEventKey* evt);
     virtual void OnTextInput(const gchar* string);
@@ -83,6 +82,7 @@ protected:
 	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
     void UpdateCaretPos();
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
+    void OnDestroy();
 protected:
 	CTermData* m_pTermData;
 

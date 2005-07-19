@@ -89,11 +89,6 @@ CGeneralPrefPage::CGeneralPrefPage()
 }
 
 
-CGeneralPrefPage::~CGeneralPrefPage()
-{
-}
-
-
 void CGeneralPrefPage::OnOK()
 {
 	AppConfig.QueryOnCloseCon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon));

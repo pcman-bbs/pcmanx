@@ -70,11 +70,6 @@ CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* promp
 }
 
 
-CInputDialog::~CInputDialog()
-{
-}
-
-
 bool CInputDialog::OnOK()
 {
 	m_Text = gtk_entry_get_text(m_Entry);

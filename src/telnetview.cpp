@@ -38,15 +38,6 @@ CTelnetView::CTelnetView()
         : CTermView()
 {}
 
-CTelnetView::~CTelnetView()
-{
-	if( m_pTermData )
-	{
-		delete m_pTermData;
-		m_pTermData = NULL;
-	}
-}
-
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -238,5 +229,15 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 		}
 		else
 			GetCon()->SendString(text);
+	}
+}
+
+
+void CTelnetView::OnDestroy()
+{
+	if( m_pTermData )
+	{
+		delete m_pTermData;
+		m_pTermData = NULL;
 	}
 }

@@ -38,7 +38,6 @@ class CEditFavDlg : public CDialog
 public:
     CEditFavDlg(CWidget* parent, vector<CSite>& sites);
 
-    ~CEditFavDlg();
     static void OnAdd(GtkWidget* btn, CEditFavDlg* _this);
     static void OnEdit(GtkWidget* btn, CEditFavDlg* _this);
     static void OnRemove(GtkWidget* btn, CEditFavDlg* _this);

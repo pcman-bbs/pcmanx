@@ -36,7 +36,6 @@ public:
 	CDialog(){}
     CDialog(CWidget* parent, const char* title, bool show_okcancel);
     void SetResizable(bool can_resize){ gtk_window_set_resizable(GTK_WINDOW(m_Widget), can_resize); }
-    ~CDialog();
     int ShowModal();
 	static void OnResponse(GtkDialog* dlg, gint arg, CDialog* _this);
     virtual bool OnOK();

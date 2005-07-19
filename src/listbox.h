@@ -37,9 +37,6 @@ class CListBox : public CWidget
 public:
     CListBox();
 
-    ~CListBox();
-
-
 	int Count() {	return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_Store), NULL);	}
     void Append(string text);
     void Insert(int pos, string text);

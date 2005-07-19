@@ -56,8 +56,11 @@ public:
     void Refresh();
 public:
     GtkWidget* m_Widget;
-    virtual ~CWidget();
     virtual void OnDestroy();
+protected:
+    virtual ~CWidget();
+private:
+	static gboolean delete_CWidget(CWidget* obj);
 };
 
 #endif

@@ -36,7 +36,6 @@ class CSiteDlg : public CDialog
 {
 public:
     CSiteDlg(CWidget* parent, const char* title, CSite& site);
-    ~CSiteDlg();
     bool OnOK();
 
 public:

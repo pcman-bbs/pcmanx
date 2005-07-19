@@ -46,9 +46,6 @@ CListBox::CListBox()
 }
 
 
-CListBox::~CListBox()
-{}
-
 void CListBox::Append(string text)
 {
 	GtkTreeIter iter;

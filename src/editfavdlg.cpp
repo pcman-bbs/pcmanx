@@ -132,10 +132,6 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 }
 
 
-CEditFavDlg::~CEditFavDlg()
-{}
-
-
 void CEditFavDlg::OnAdd(GtkWidget* btn, CEditFavDlg* _this)
 {
 	int i = _this->m_List->GetCurSel() + 1;

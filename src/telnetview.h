@@ -36,7 +36,6 @@ friend class CMainFrame;
 public:
     CTelnetView();
 
-    ~CTelnetView();
     void OnTextInput(const gchar* text);
 
     CTelnetCon* GetCon(){  return (CTelnetCon*)m_pTermData;  }
@@ -50,6 +49,7 @@ protected:
     void OnRButtonDown(GdkEventButton* evt);
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
+    void OnDestroy();
 protected:
     static CMainFrame* m_pParentFrame;
 };

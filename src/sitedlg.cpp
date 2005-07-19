@@ -41,11 +41,6 @@ CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
 }
 
 
-CSiteDlg::~CSiteDlg()
-{
-}
-
-
 bool CSiteDlg::OnOK()
 {
 	return m_pSitePage->OnOK();

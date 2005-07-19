@@ -31,6 +31,18 @@ CWidget::CWidget()
 
 CWidget::~CWidget()
 {
+	// All CWidget derived class should do its destruction in 
+	// OnDestroy(), not in C++ destructor.
+	// Because GTK+ calls CWidget::Destroy() on GtkObject destruction, 
+	// all resources should be release at that time or some obscure bug
+	// will be generated.
+	// CWidget derived objects used as wrapper of GtkObjects are destructed
+	// on idle handler, which is called later then GtkObject destruction.
+
+	// Don't use destructor in CWidget derived classes.
+	// Override CWidget::OnDestroy() instead.
+	// Don't forget to call OnDestroy() of parent class.
+	// Otherwise, parent class won't be destructed.
 }
 
 static void on_create(GtkWidget* widget, CWidget* _this)
@@ -78,7 +90,7 @@ void CWidget::Destroy()
 	}
 }
 
-static gboolean delete_CWidget(CWidget* obj)
+gboolean CWidget::delete_CWidget(CWidget* obj)
 {
 	if (obj != NULL)
 	{

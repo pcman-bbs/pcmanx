@@ -140,11 +140,6 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 }
 
 
-CSiteListDlg::~CSiteListDlg()
-{
-}
-
-
 static const char ITEM_SEP[]="        ";
 
 enum

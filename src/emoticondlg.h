@@ -30,7 +30,6 @@ class CEmoticonDlg : public CDialog
 {
 public:
     CEmoticonDlg(CWidget* parent);
-    ~CEmoticonDlg();
     string GetSelectedStr(){	return m_SelStr;	}
     static void OnDown(GtkWidget* btn, CEmoticonDlg* _this);
     static void OnAdd(GtkWidget* btn, CEmoticonDlg* _this);

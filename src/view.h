@@ -33,8 +33,6 @@ class CView : public CWidget
 public:
     CView();
 
-    ~CView();
-
     virtual void OnPaint(GdkEventExpose *evt) = 0;
     virtual void OnSize(GdkEventConfigure* evt);
     virtual void OnSetFocus(GdkEventFocus *evt);

@@ -36,8 +36,6 @@ class CPrefDlg : public CDialog
 {
 public:
     CPrefDlg(CWidget* parent);
-
-    ~CPrefDlg();
     bool OnOK();
 
 public:

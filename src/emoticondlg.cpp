@@ -119,10 +119,6 @@ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
 }
 
 
-CEmoticonDlg::~CEmoticonDlg()
-{
-}
-
 
 void CEmoticonDlg::OnDown(GtkWidget* btn, CEmoticonDlg* _this)
 {

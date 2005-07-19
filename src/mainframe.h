@@ -53,7 +53,6 @@ class CMainFrame : public CWidget
 {
 public:
     CMainFrame();
-    ~CMainFrame();
 
     CTelnetCon* NewCon( string title, string url, CSite* site);
 	CNotebook* GetNotebook(){	return m_pNotebook;	}

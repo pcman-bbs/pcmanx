@@ -36,7 +36,6 @@ class CSiteListDlg : public CDialog
 public:
     CSiteListDlg(CWidget* parent);
 
-    ~CSiteListDlg();
     static void OnSearch(GtkButton* btn, CSiteListDlg* _this);
     static void OnConnect(GtkButton* btn, CSiteListDlg* _this);
     static void OnClose(GtkButton* btn, CSiteListDlg* _this);

@@ -45,11 +45,6 @@ CPrefDlg::CPrefDlg(CWidget* parent)
 }
 
 
-CPrefDlg::~CPrefDlg()
-{
-}
-
-
 bool CPrefDlg::OnOK()
 {
 	if( m_pSitePage->OnOK() )

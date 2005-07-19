@@ -150,19 +150,6 @@ CTermView::CTermView()
 }
 
 
-CTermView::~CTermView()
-{
-	if( m_Font )
-		delete m_Font;
-	if( m_pTermData )
-		m_pTermData->m_pView = NULL;
-
-	if( m_HandCursor )
-		gdk_cursor_unref(m_HandCursor);
-	if( m_HandCursor->ref_count <= 0 )
-		m_HandCursor = NULL;
-}
-
 void CTermView::OnPaint(GdkEventExpose* evt)
 {
 	// Hide the caret to prevent drawing problems.
@@ -820,4 +807,20 @@ bool CTermView::HyperLinkHitTest(int x, int y, int* start, int* end)
 		return true;
 	}
 	return false;
+}
+
+
+void CTermView::OnDestroy()
+{
+	if( m_Font )
+		delete m_Font;
+	if( m_pTermData )
+		m_pTermData->m_pView = NULL;
+
+	if( m_HandCursor )
+		gdk_cursor_unref(m_HandCursor);
+	if( m_HandCursor->ref_count <= 0 )
+		m_HandCursor = NULL;
+
+	CView::OnDestroy();	// Remember to destruct parent
 }

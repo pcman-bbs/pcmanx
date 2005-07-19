@@ -32,8 +32,6 @@ class CGeneralPrefPage : public CWidget
 {
 public:
     CGeneralPrefPage();
-
-    ~CGeneralPrefPage();
     void OnOK();
 public:
 	GtkWidget *m_QueryOnCloseCon;

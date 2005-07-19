@@ -70,10 +70,6 @@ CView::CView(): CWidget()
 }
 
 
-CView::~CView()
-{}
-
-
 void CView::OnSize(GdkEventConfigure* evt)
 {
     /// @todo implement me

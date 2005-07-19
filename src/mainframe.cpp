@@ -199,10 +199,6 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 }
 
-CMainFrame::~CMainFrame()
-{
-}
-
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
@@ -1045,6 +1041,7 @@ void CMainFrame::OnDestroy()
 	gtk_object_destroy((GtkObject*)m_Tooltips);
 
 	Hide();
+	gtk_widget_destroy( GTK_WIDGET(m_TrayIcon_Instance) );
 
 	while( g_main_context_iteration(NULL, FALSE) );
 

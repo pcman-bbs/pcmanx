@@ -1,3 +1,25 @@
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/view.cpp,
+	src/prefdlg.cpp,
+	src/sitedlg.cpp,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/inputdialog.cpp,
+	src/widget.cpp,
+	src/listbox.cpp,
+	src/telnetview.cpp,
+	src/sitelistdlg.cpp,
+	src/generalprefpage.cpp:
+	Remove all C++ destructors in CWidget derived classes.
+	All destruction of these classes should be done in OnDestroy() instead.
+
+	* src/telnetcon.cpp:
+	Improve multi-threading handling.
+
 2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp (CTermView::~CTermView):

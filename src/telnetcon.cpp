@@ -207,18 +207,6 @@ bool CTelnetCon::OnRecv()
 
 void CTelnetCon::OnConnect(int code)
 {
-	if( m_ThreadPool  )
-	{
-		g_thread_pool_stop_unused_threads();
-//		g_print("on connect, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
-		if( 0 == g_thread_pool_unprocessed(m_ThreadPool) )
-		{
-			g_thread_pool_free(m_ThreadPool, TRUE, FALSE);
-			m_ThreadPool = NULL;
-//			g_print("pool freed\n");
-		}
-	}
-
 	if( 0 == code )
 	{
 		m_State = TS_CONNECTED;
@@ -517,7 +505,7 @@ vector<CConnectThread*> CTelnetCon::m_ConnectThreads;
 
 void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 {
-	// g_print("thread entered\n");
+//	g_print("thread entered: %x\n", data);
 	sockaddr_in sock_addr;
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(data->m_Port);
@@ -529,37 +517,41 @@ void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 	if( ! inet_aton(data->m_Address.c_str(), &addr) )
 	{
 		G_LOCK( gethostbyname_mutex );
+//		g_print("thread locked: %x\n", data);
 		hostent* host = gethostbyname(data->m_Address.c_str());
 
 		if( host )
 			addr = *(in_addr*)host->h_addr_list[0];
-		
-		G_UNLOCK( gethostbyname_mutex );
 
-		if( (addr.s_addr == INADDR_NONE) && data->m_DNSTry > 0 )
+		G_UNLOCK( gethostbyname_mutex );
+//		g_print("thread unlocked: %x\n", data);
+
+/*		if( (addr.s_addr == INADDR_NONE) && data->m_DNSTry > 0 )
 		{
-//				g_print("Retry DNS lookup\n");
 			--data->m_DNSTry;	// retry
 			if( m_ThreadPool )	// Theoraticallly, this mustn't be NULL, but...
 			{
 				g_thread_pool_push(m_ThreadPool, data, NULL);
 				return;
 			}
+
 		}
+*/
 	}
 
-	if( addr.s_addr != INADDR_NONE )
+	if( data->m_pCon && addr.s_addr != INADDR_NONE )
 	{
+//		g_print("thread connect: %x\n", data);
 		sock_addr.sin_addr = addr;
 
 		int sock_fd;
 		for( int i =0; i < 3 ; ++i )
 		{
 			sock_fd = socket(PF_INET, SOCK_STREAM, 0);
-	//		bind( sock_fd, serv_addr, addrlen );
 			if( 0 == (data->m_Code = connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) )) )
 				break;
 			close(sock_fd);
+			g_thread_yield();
 		}
 		if( data->m_pCon )
 			data->m_pCon->m_SockFD = sock_fd;
@@ -569,7 +561,9 @@ void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 		// Since 0 means success and all known error codes are > 0, 
 		// I use error code that < 0 to mean host not found.
 
+//	g_print("thread connected: %x, code=%d\n", data, data->m_Code);
 	g_idle_add((GSourceFunc)OnMainIdle, data);
+//	g_print("thread exit: %x\n", data);
 }
 
 
@@ -614,6 +608,18 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 		}
 	}
 
+	if( m_ThreadPool  )
+	{
+		g_thread_pool_stop_unused_threads();
+//		g_print("on connect, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
+		if( 0 == g_thread_pool_unprocessed(m_ThreadPool) )
+		{
+			g_thread_pool_free(m_ThreadPool, TRUE, TRUE);
+			m_ThreadPool = NULL;
+//			g_print("pool freed\n");
+		}
+	}
+
 	CTelnetCon* pCon = data->m_pCon;
 	if( pCon )
 		pCon->OnConnect(data->m_Code);
@@ -625,7 +631,12 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 void CTelnetCon::Cleanup()
 {
 	if(m_ThreadPool)
-		g_thread_pool_free(m_ThreadPool, TRUE, TRUE);
+		g_thread_pool_free(m_ThreadPool, FALSE, TRUE);
+	// If g_thread_pool_free is called with immediate=TRUE, 
+	// the funtion will hang and never return even there is
+	// no pending task.  After lots tests, unfortunately, I 
+	// believe this is a bug of glib.
+
 	m_ThreadPool = NULL;
 	vector<CConnectThread*>::iterator it;
 	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)

@@ -35,7 +35,6 @@ class CInputDialog : public CDialog
 public:
     CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text=NULL, bool can_be_empty=false);
 
-    ~CInputDialog();
     bool OnOK();
 
 	string GetText(){	return m_Text;	}
