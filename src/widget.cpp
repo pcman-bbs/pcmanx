@@ -67,17 +67,24 @@ void CWidget::Refresh()
 
 void CWidget::Destroy()
 {
-	if(m_Widget)
+	if(m_Widget != NULL)
 	{
 		gtk_widget_destroy(m_Widget);
 		m_Widget = NULL;
+	}
+	else
+	{
+		g_print("destroy at NULL\n");
 	}
 }
 
 static gboolean delete_CWidget(CWidget* obj)
 {
 	if (obj != NULL)
+	{
 		delete obj;
+		obj = NULL;
+	}
 	return false;
 }
 

@@ -1,3 +1,19 @@
+2005-07-19  Kanru Chen  <koster@debian.org.tw>
+	
+	* src/telnetcon.cpp:
+	Remove io_channel correctly.
+
+	* src/mainframe.cpp
+	(OnURLEntryKeyDown):
+	Use strdup on gtk_entry_get_text according to API reference to prevent
+	reentrance issue.
+	Note: must be freed after notetab being killed.
+	(OnURLEntryKillFocus):
+	Should return gboolean
+
+	* src/telnetcon.cpp:
+	Should not assign local variable to member object.
+
 2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/telnetcon.cpp:

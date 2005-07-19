@@ -6,3 +6,10 @@ jserv
 1. Fix docklet to prevent icons from being extra-wide.
 2. Merge message notification hack into mainline with the detection
    routines.
+
+kanru
+-----
+1. Check each gtk_entry_get_text ()
+API reference says 'Returns :	 a pointer to the contents of the widget
+as a string. This string points to internally allocated storage in the
+widget and must not be freed, modified or stored.'

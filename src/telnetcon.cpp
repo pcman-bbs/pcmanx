@@ -49,12 +49,15 @@
 #include <libutil.h>
 #endif
 
+#define RECV_BUF_SIZE (4097)
+
 
 // class constructor
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
 {
     m_pBuf = m_pLastByte = m_pRecvBuf = NULL;
+	m_pRecvBuf = new unsigned char[RECV_BUF_SIZE];
     m_pCmdLine = m_CmdLine;
 	m_pCmdLine[0] = '\0';
 
@@ -65,12 +68,11 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 
 	m_SockFD = -1;
 	m_IOChannel = 0;
+	m_IOChannelID = 0;
 	m_Pid = 0;
 
 	m_BellTimeout = 0;
 	m_IsLastLineModified = false;
-
-
 }
 GThreadPool* CTelnetCon::m_ThreadPool = NULL;
 
@@ -92,6 +94,7 @@ CTelnetCon::~CTelnetCon()
 
 	if( m_BellTimeout )
 		g_source_remove( m_BellTimeout );
+	delete m_pRecvBuf;
 
 }
 
@@ -178,11 +181,8 @@ bool CTelnetCon::OnRecv()
 	if( !m_IOChannel || m_SockFD == -1 )
 		return false;
 
-	unsigned char buffer[4097];
-	m_pRecvBuf = buffer;
-
 	gsize rlen = 0;
-	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, sizeof(buffer)-1, &rlen);
+	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, RECV_BUF_SIZE, &rlen);
 
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
@@ -224,8 +224,8 @@ void CTelnetCon::OnConnect(int code)
 		m_State = TS_CONNECTED;
 		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConConnect((CTelnetView*)m_pView);
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
-		g_io_add_watch( m_IOChannel, 
-			GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
+		m_IOChannelID = g_io_add_watch( m_IOChannel, 
+				GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
 		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
 		g_io_channel_set_buffered(m_IOChannel, false);
 	}
@@ -578,6 +578,7 @@ void CTelnetCon::Close()
 
 	if( m_IOChannel )
 	{
+		g_source_remove(m_IOChannelID);
 		g_io_channel_shutdown(m_IOChannel, true, NULL);
 		g_io_channel_unref(m_IOChannel);
 		m_IOChannel = NULL;

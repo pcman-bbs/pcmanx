@@ -117,6 +117,7 @@ public:
     void OnNewIncomingMessage(char* line);
 protected:
 	GIOChannel* m_IOChannel;
+	guint m_IOChannelID;
 
 	// Buffer to receive socket incoming data
 	unsigned char* m_pRecvBuf;

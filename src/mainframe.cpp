@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "mainframe.h"
 
@@ -1314,7 +1315,8 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	{
 	case GDK_Return:
 	{
-		const gchar* url = gtk_entry_get_text( GTK_ENTRY(widget) );
+		// FIXME: I think this should be freed after disconnect.
+		const gchar* url = strdup(gtk_entry_get_text( GTK_ENTRY(widget) ));
 		if( url && *url )
 		{
 			_this->NewCon( url, url, &AppConfig.m_DefaultSite );
@@ -1330,11 +1332,12 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	return false;
 }
 
-void CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this)
+gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this)
 {
-	if( _this->GetCurView() )
+	if( _this && _this->GetCurView() )
 	{
 		gtk_entry_set_text( GTK_ENTRY(entry), _this->GetCurCon()->m_Site.m_URL.c_str());
 		gtk_editable_select_region(GTK_EDITABLE(entry), 0, 0);
 	}
+	return FALSE;
 }

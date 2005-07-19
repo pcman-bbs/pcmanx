@@ -115,7 +115,7 @@ protected:
     static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
     void FlashWindow( bool flash );
-    static void OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
+	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
