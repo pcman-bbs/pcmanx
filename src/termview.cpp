@@ -527,7 +527,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 
 void CTermView::OnRButtonDown(GdkEventButton* evt)
 {
-    /// @todo implement me
+
 }
 
 void CTermView::OnLButtonUp(GdkEventButton* evt)
@@ -548,24 +548,17 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 	{
 		int x = (int)evt->x;
 		int y = (int)evt->y;
-		this->PointToLineCol( &x, &y );
-		char* pline = m_pTermData->m_Screen[y];
-		CTermCharAttr* pattr = m_pTermData->GetLineAttr(pline);
-		if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink()
-		/* && m_pHyperLink */)
+		PointToLineCol( &x, &y );
+		int start, end;
+		if( HyperLinkHitTest( x, y, &start, &end ) )
 		{
-			int start, end;
-			for( start = x-1; start > 0 && pattr[start].IsHyperLink(); start-- );
-			if( !pattr[start].IsHyperLink() )
-				start++;
-			for( end = x+1; end < m_pTermData->m_ColsPerPage && pattr[end].IsHyperLink(); end++ );
+			char* pline = m_pTermData->m_Screen[y];
 			string URL( (pline+start), (int)(end-start) );
 
 	//	FIXME: Temporary hack. This must be rewritten in the future.
 	//		system(("mozilla " + URL).c_str());
 			const char* argv[] = {AppConfig.WebBrowser.c_str(), URL.c_str(), NULL};
 			g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
-//			m_pHyperLink->Open(URL);
 		}
 	}
 	else	// if there is a selected area
@@ -577,7 +570,6 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 
 void CTermView::OnRButtonUp(GdkEventButton* evt)
 {
-    /// @todo implement me
 }
 
 
@@ -806,4 +798,24 @@ void CTermView::UpdateCaretPos()
 	GdkRectangle rc;
 	rc.x = x;	rc.y = y; 	rc.width = 0;	rc.height = 0;
 	gtk_im_context_set_cursor_location(m_IMContext, &rc);
+}
+
+
+bool CTermView::HyperLinkHitTest(int x, int y, int* start, int* end)
+{
+	char* pline = m_pTermData->m_Screen[y];
+	CTermCharAttr* pattr = m_pTermData->GetLineAttr(pline);
+	if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
+	{
+		int _start, _end;
+		for( _start = x-1; _start > 0 && pattr[_start].IsHyperLink(); _start-- );
+		if( !pattr[_start].IsHyperLink() )
+			_start++;
+		for( _end = x+1; _end < m_pTermData->m_ColsPerPage && pattr[_end].IsHyperLink(); _end++ );
+		*start = _start;
+		*end = _end;
+//		g_print("%d, %d : %d, %d\n", x, y, _start, _end);
+		return true;
+	}
+	return false;
 }

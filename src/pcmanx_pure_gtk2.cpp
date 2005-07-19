@@ -63,21 +63,23 @@ int main(int argc, char *argv[])
 
 	/* GTK requires a program's argc and argv variables, and 
 	 * requires that they be valid. Set it up. */
-	fake_argv = (char **) g_malloc (sizeof (char *) * 2);
-	fake_argv[0] = (char *) g_malloc(1);
-	strcpy(argv[0], "");
-	argv[1] = NULL;
-		  
+//	fake_argv = (char **) g_malloc (sizeof (char *) * 2);
+//	fake_argv[0] = (char *) g_malloc(1);
+//	strcpy(argv[0], "");
+//	argv[1] = NULL;
+
+	char *_fake_argv[] = {"", NULL};
+	fake_argv = _fake_argv;
 	gtk_init (&fake_argc, &fake_argv);
 
-	g_free (fake_argv[0]);
-	g_free (fake_argv);
+//	g_free (fake_argv[0]);
+//	g_free (fake_argv);
 
 #ifdef USE_DOCKLET
 	/* if we are already running, silently exit */
 	if (! _get_clipboard())
 	{
-		return 1;
+//		return 1;
 	}
 #endif
 

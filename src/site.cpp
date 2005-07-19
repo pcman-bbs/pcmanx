@@ -26,8 +26,9 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CSite::CSite(const char* Name) : m_Name(Name)
+CSite::CSite(const char* Name)
 {
+	m_Name = Name;
 	// Time duration in seconds during which should we reconnect 
 	// automatically when disconnected from server, and 0 means disabled.
 	m_AutoReconnect = 20;

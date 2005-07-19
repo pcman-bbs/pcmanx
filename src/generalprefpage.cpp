@@ -49,9 +49,12 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_CancelSelAfterCopy, FALSE, FALSE, 0);
 
 	m_ShowTrayIcon = gtk_check_button_new_with_mnemonic (_("Show System Tray Icon (Docklet) (Take effect after restart)"));
-
 	gtk_widget_show (m_ShowTrayIcon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowTrayIcon, FALSE, FALSE, 0);
+
+	m_AAFont = gtk_check_button_new_with_mnemonic (_("Use Anti-Aliasing Fonts (Take effect after restart)"));
+	gtk_widget_show (m_AAFont);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
 
 	hbox19 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox19);
@@ -78,6 +81,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), 
 								AppConfig.ShowTrayIcon);
 								
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), 
+								AppConfig.AntiAliasFont);
+
 	gtk_entry_set_text(GTK_ENTRY(m_WebBrowser), AppConfig.WebBrowser.c_str());
 
 }
@@ -94,5 +100,7 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
+	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
+
 	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
 }

@@ -34,7 +34,6 @@
 #endif
 
 #include <string>
-#include <queue>
 #include <vector>
 
 using namespace std;
@@ -93,6 +92,7 @@ public:
     static gboolean OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
 
     bool IsActivated(){	return m_IsActivated;	}
+    static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
@@ -115,6 +115,7 @@ protected:
     static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
     static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
     void FlashWindow( bool flash );
+    static void OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
@@ -144,6 +145,8 @@ protected:
 
 	bool m_IsFlashing;
 	bool m_IsActivated;
+    GtkWidget* m_URLEntry;
+    GtkTooltips* m_Tooltips;
 };
 
 #endif

@@ -62,7 +62,7 @@ using namespace std;
  */
 
 class CConnectThread;
-
+class CTelnetView;
 class CTelnetCon : public CTermData
 {
 public:
@@ -70,9 +70,11 @@ public:
 	virtual void Bell();	// called from CTermData to process beep.
 	void OnTimer();
 	static gboolean OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this);
+	CTelnetView* GetView(){	return (CTelnetView*)m_pView;	}
 
 	// A flag used to indicate connecting state;
 	enum{TS_CONNECTING, TS_CONNECTED, TS_CLOSED} m_State;
+	enum{ MAX_CONCURRENT_CONS=2 };
 
 	void Disconnect();
 	// class constructor
@@ -128,10 +130,11 @@ protected:
 protected:
 	guint m_BellTimeout;
 	bool m_IsLastLineModified;
+    static GThreadPool* m_ThreadPool;
 	void PreConnect(string& address, unsigned short& port);
     void CheckAutoLogin();
     void SendStringAsync(string str);
-    static gpointer ConnectThread(CConnectThread* data);
+    static void ConnectThread( CConnectThread* data, gpointer _data );
     void OnLineModified(int row);
 };
 
@@ -139,16 +142,15 @@ class CConnectThread
 {
 public:
 	CConnectThread(CTelnetCon* con, string address, int port) 
-		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1)
+		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1), m_DNSTry(3)
 	{
-		m_pThread = NULL;
 	}
 
-	GThread* m_pThread;
 	CTelnetCon* m_pCon;
 	string m_Address;
 	int m_Port;
 	int m_Code;
+	int m_DNSTry;
 };
 
 

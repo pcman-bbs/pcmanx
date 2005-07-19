@@ -70,6 +70,7 @@ public:
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
     CFont* GetFont(){	return m_Font;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
+
 protected:
     void OnPaint(GdkEventExpose* evt);
     void OnSetFocus(GdkEventFocus* evt);
@@ -81,6 +82,7 @@ protected:
     void OnKillFocus(GdkEventFocus *evt);
 	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
     void UpdateCaretPos();
+    bool HyperLinkHitTest(int x, int y, int* start, int* end);
 protected:
 	CTermData* m_pTermData;
 

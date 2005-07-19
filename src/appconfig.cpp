@@ -167,7 +167,6 @@ void CAppConfig::LoadFavorites()
 	FILE* fi = fopen( GetConfigPath("favorites").c_str() ,"r" );
 	if( fi )
 	{
-//		Favorites.Alloc(10);
 		char line[1024];
 		CSite* pSite = NULL;
 //		BLOWFISH_CTX* bfc = NULL;
@@ -179,7 +178,6 @@ void CAppConfig::LoadFavorites()
 			if( pname[0]=='[' )
 			{
 				pname = strtok(pname, "[]");
-//				pSite = new CSite(pname);
 				Favorites.push_back(CSite(pname));
 				pSite = &Favorites.back();
 				

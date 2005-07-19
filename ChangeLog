@@ -1,3 +1,29 @@
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp:
+	Add (CTermView::HyperLinkHitTest)
+
+	* src/mainframe.cpp:
+	Add a "Reconnect" toolbar button and a "URL bar".
+	Fix the ineffective CharPaddingX & CharPaddingY.
+
+	* src/pcmanx_pure_gtk2.cpp
+	* src/telnetview.cpp (CTelnetView::OnRButtonDown):
+	Add "Copy URL" popup menu.
+	
+	* src/generalprefpage.cpp:
+	Add "AntiAlias" option.
+
+	* src/telnetcon.cpp 
+	(CTelnetCon::Connect), 
+	(CTelnetCon::ConnectThread), 
+	(CTelnetCon::OnConnect), 
+	(CTelnetCon::Cleanup):
+	Better handling of multi-threading that prevent some crashes caused by 
+	thread-unsafe libraries on some platforms.
+	Limit the number of concurrent running threads to prevent explosive 
+	increase on socket operation which often leads to connection failure.
+
 2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/telnetcon.cpp:

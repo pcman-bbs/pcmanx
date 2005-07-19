@@ -25,6 +25,12 @@ if USE_DOCKLET
 DOCKLET_SOURCES = $(OPTIONAL_DOCKLET)
 endif
 
+GNET_SOURCES = \
+	gnet/inetaddr.c \
+	gnet/inetaddr.h \
+	gnet/gnet-private.h \
+	gnet/gnet-private.c
+
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
 	appconfig.cpp appconfig.h \

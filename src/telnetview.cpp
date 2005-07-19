@@ -20,6 +20,7 @@
   #pragma implementation "telnetview.h"
 #endif
 
+#include <glib/gi18n.h>
 
 #include <string.h>
 
@@ -40,7 +41,10 @@ CTelnetView::CTelnetView()
 CTelnetView::~CTelnetView()
 {
 	if( m_pTermData )
+	{
 		delete m_pTermData;
+		m_pTermData = NULL;
+	}
 }
 
 
@@ -48,8 +52,11 @@ void CTelnetView::OnTextInput(const gchar* text)
 {
 	gsize l;
 	gchar* _text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
-	((CTelnetCon*)m_pTermData)->Send(_text, l);
-	g_free(_text);
+	if( _text )
+	{
+		((CTelnetCon*)m_pTermData)->Send(_text, l);
+		g_free(_text);
+	}
 }
 
 #define	GDK_MODIFIER_DOWN(key, mod)	(key & (mod|(~GDK_SHIFT_MASK&~GDK_CONTROL_MASK&~GDK_MOD1_MASK)))
@@ -133,11 +140,65 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	return true;
 }
 
+static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
+{
+	*do_copy = true;
+}
 
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {
 	if( !m_ContextMenu )
 		return;
+
+	if( m_pTermData )	// Copy URL popup menu.
+	{
+		int x = (int)evt->x;
+		int y = (int)evt->y;
+		PointToLineCol( &x, &y );
+		int start, end;
+		if( HyperLinkHitTest( x, y, &start, &end ) )
+		{
+			char* pline = m_pTermData->m_Screen[y];
+			bool do_copy = false;
+			// Show the "Copy Hyperlink" menu.
+			GtkWidget* popup = gtk_menu_new();
+			GtkWidget* item = gtk_image_menu_item_new_with_mnemonic( _("_Copy URL to Clipboard") );
+			GtkWidget* icon = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
+			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
+			g_signal_connect( G_OBJECT(item), "activate", 
+							G_CALLBACK(on_hyperlink_copy), &do_copy);
+
+			gtk_menu_shell_append  ((GtkMenuShell *)popup, item );
+			gtk_widget_show_all(popup);
+			g_signal_connect( G_OBJECT(popup), "deactivate", 
+							G_CALLBACK(gtk_main_quit), this);
+			gtk_menu_popup( (GtkMenu*)popup, NULL, NULL, NULL, NULL, evt->button, evt->time );
+			gtk_main();		// Don't return until the menu is closed.
+
+			if( do_copy )
+			{
+				// Note by Hong Jen Yee (PCMan):
+				// Theoratically, there is no non-ASCII characters in standard URL, 
+				// so we don't need to do UTF-8 conversion at all.
+				// However, users are always right.
+				string url( (pline+start), (int)(end-start) );
+				gsize wl = 0;
+				const gchar* purl = g_convert_with_fallback( url.c_str(), url.length(),
+						"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
+				if(purl)
+				{
+					m_s_ANSIColorStr.clear();
+					GtkClipboard* clipboard = gtk_clipboard_get( GDK_NONE );
+					gtk_clipboard_set_text(clipboard, purl, wl );
+					clipboard = gtk_clipboard_get(  GDK_SELECTION_PRIMARY);
+					gtk_clipboard_set_text(clipboard, purl, wl );
+					g_free((void*)purl);
+				}
+			}
+			gtk_widget_destroy(popup);
+			return;
+		}
+	}
 	gtk_menu_popup( m_ContextMenu, NULL, NULL, NULL, NULL, evt->button, evt->time );
 }
 

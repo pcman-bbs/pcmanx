@@ -51,6 +51,11 @@ public:
 		m_pParent = pParent->m_Widget;
 		m_GC = gc;
 	}
+	void Create(GtkWidget* pParent, GdkGC* gc)
+	{
+		m_pParent = pParent;
+		m_GC = gc;
+	}
 
 	//Draw a the same shape caret with invsersed color at the same position.
 	void DrawInverse();

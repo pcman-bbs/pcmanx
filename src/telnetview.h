@@ -23,14 +23,13 @@
   #pragma interface "telnetview.h"
 #endif
 
-#include <termview.h>
+#include "termview.h"
 
 /**
 @author PCMan
 */
 class CTelnetCon;
 class CMainFrame;
-
 class CTelnetView : public CTermView
 {
 friend class CMainFrame;

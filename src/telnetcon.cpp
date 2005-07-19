@@ -18,6 +18,7 @@
 #include "mainframe.h"
 
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include "stringutil.h"
 #include "appconfig.h"
@@ -48,6 +49,7 @@
 #include <libutil.h>
 #endif
 
+
 // class constructor
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
@@ -67,7 +69,10 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 
 	m_BellTimeout = 0;
 	m_IsLastLineModified = false;
+
+
 }
+GThreadPool* CTelnetCon::m_ThreadPool = NULL;
 
 // class destructor
 CTelnetCon::~CTelnetCon()
@@ -151,9 +156,17 @@ bool CTelnetCon::Connect()
 	{
 		CConnectThread* connect_thread = new CConnectThread(this, address, port);
 		m_ConnectThreads.push_back( connect_thread );
-		connect_thread->m_pThread = g_thread_create(
-						(GThreadFunc)&CTelnetCon::ConnectThread, 
-						connect_thread, true, NULL);
+		if( !m_ThreadPool )
+		{
+			m_ThreadPool = g_thread_pool_new((GFunc)&CTelnetCon::ConnectThread, 
+											NULL, 
+											MAX_CONCURRENT_CONS, 
+											FALSE, 
+											NULL);
+//			g_print("pool created, %x\n", m_ThreadPool);
+		}
+		g_thread_pool_push(m_ThreadPool, connect_thread, NULL);
+//		g_print("thread pushed, %x\n", connect_thread);
 	}
 
     return true;
@@ -194,6 +207,18 @@ bool CTelnetCon::OnRecv()
 
 void CTelnetCon::OnConnect(int code)
 {
+	if( m_ThreadPool  )
+	{
+		g_thread_pool_stop_unused_threads();
+//		g_print("on connect, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
+		if( 0 == g_thread_pool_unprocessed(m_ThreadPool) )
+		{
+			g_thread_pool_free(m_ThreadPool, TRUE, FALSE);
+			m_ThreadPool = NULL;
+//			g_print("pool freed\n");
+		}
+	}
+
 	if( 0 == code )
 	{
 		m_State = TS_CONNECTED;
@@ -206,8 +231,17 @@ void CTelnetCon::OnConnect(int code)
 	}
 	else
 	{
-		g_print("connection failed.\n");
-		OnClose();
+//		g_print("connection failed.\n");
+		m_State = TS_CLOSED;
+		Close();
+		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConClose((CTelnetView*)m_pView);
+		const char failed_msg[] = "Unable to connect.";
+		memcpy( m_Screen[0], failed_msg, sizeof(failed_msg) );
+		if( GetView()->GetParentFrame()->GetCurView() == m_pView )
+		{
+			for( int col = 0; col < sizeof(failed_msg); )
+				col += m_pView->DrawChar( 0, col, 0 );
+		}
 	}
 }
 
@@ -481,8 +515,9 @@ int CTelnetCon::Send(void *buf, int len)
 
 vector<CConnectThread*> CTelnetCon::m_ConnectThreads;
 
-gpointer CTelnetCon::ConnectThread(CConnectThread* data)
+void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 {
+	// g_print("thread entered\n");
 	sockaddr_in sock_addr;
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(data->m_Port);
@@ -490,12 +525,27 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 	in_addr addr;
 	addr.s_addr = INADDR_NONE;
 
+	G_LOCK_DEFINE (gethostbyname_mutex);
 	if( ! inet_aton(data->m_Address.c_str(), &addr) )
 	{
+		G_LOCK( gethostbyname_mutex );
 		hostent* host = gethostbyname(data->m_Address.c_str());
+		G_UNLOCK( gethostbyname_mutex );
+
 		if( host )
 			addr = *(in_addr*)host->h_addr_list[0];
+		else if( data->m_DNSTry > 0 )
+		{
+//				g_print("Retry DNS lookup\n");
+			--data->m_DNSTry;	// retry
+			if( m_ThreadPool )	// Theoraticallly, this mustn't be NULL, but...
+			{
+				g_thread_pool_push(m_ThreadPool, data, NULL);
+				return;
+			}
+		}
 	}
+
 	if( addr.s_addr != INADDR_NONE )
 	{
 		sock_addr.sin_addr = addr;
@@ -508,17 +558,16 @@ gpointer CTelnetCon::ConnectThread(CConnectThread* data)
 			if( 0 == (data->m_Code = connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) )) )
 				break;
 			close(sock_fd);
-			g_thread_yield();
 		}
 		if( data->m_pCon )
 			data->m_pCon->m_SockFD = sock_fd;
 	}
 	else
 		data->m_Code = -1;
+		// Since 0 means success and all known error codes are > 0, 
+		// I use error code that < 0 to mean host not found.
 
 	g_idle_add((GSourceFunc)OnMainIdle, data);
-
-	return data;
 }
 
 
@@ -571,15 +620,15 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 
 void CTelnetCon::Cleanup()
 {
+	if(m_ThreadPool)
+		g_thread_pool_free(m_ThreadPool, TRUE, TRUE);
+	m_ThreadPool = NULL;
 	vector<CConnectThread*>::iterator it;
 	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
 	{
 		g_idle_remove_by_data(*it);
 		CConnectThread* thread = *it;
-		g_thread_join(thread->m_pThread);
-		m_ConnectThreads.erase(it);
 		delete *it;
-//		g_print("delete thread\n");
 		break;
 	}
 }

@@ -41,6 +41,7 @@ public:
 	GtkWidget *m_CancelSelAfterCopy;
 	GtkWidget *m_ShowTrayIcon;
 	GtkWidget *m_WebBrowser;
+	GtkWidget *m_AAFont;
 };
 
 #endif

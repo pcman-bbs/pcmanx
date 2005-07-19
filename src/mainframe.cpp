@@ -220,13 +220,15 @@ CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
 	m_pView->SetFont(font);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 	m_pView->SetHorizontalCenterAlign( AppConfig.HCenterAlign );
+	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
+	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;
 	pCon->m_Encoding = pCon->m_Site.m_Encoding;
 
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
-
+	
 	pCon->Connect();
 
 	m_pNotebook->SetCurPage(idx);
@@ -582,6 +584,7 @@ void CMainFrame::CreateToolbar()
 	GtkIconSize tmp_toolbar_icon_size;
 	GtkWidget *site_list_btn;
 	GtkWidget *new_con_btn;
+	GtkWidget *recon_btn;
 	GtkWidget *close_btn;
 	GtkWidget *separatortoolitem2;
 	GtkWidget *copy_btn;
@@ -610,7 +613,12 @@ void CMainFrame::CreateToolbar()
 	gtk_widget_show (new_con_btn);
 	gtk_container_add (GTK_CONTAINER (toolbar), new_con_btn);
 	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (new_con_btn), tooltips, _("New Connection"), NULL);
-	
+
+	recon_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-undo");
+	gtk_widget_show (recon_btn);
+	gtk_container_add (GTK_CONTAINER (toolbar), recon_btn);
+	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (recon_btn), tooltips, _("Reconnect"), NULL);
+
 	close_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-close");
 	gtk_widget_show (close_btn);
 	gtk_container_add (GTK_CONTAINER (toolbar), close_btn);
@@ -663,6 +671,9 @@ void CMainFrame::CreateToolbar()
 	g_signal_connect ((gpointer) new_con_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnNewCon),
 					this);
+	g_signal_connect ((gpointer) recon_btn, "clicked",
+					G_CALLBACK (CMainFrame::OnReconnect),
+					this);
 	g_signal_connect ((gpointer) close_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnCloseCon),
 					this);
@@ -684,6 +695,36 @@ void CMainFrame::CreateToolbar()
 	g_signal_connect ((gpointer) about_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnAbout),
 					this);
+					
+
+	GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
+	gtk_widget_show(sep);
+	gtk_container_add (GTK_CONTAINER (toolbar), sep);
+
+	// Create the URL address bar
+	GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
+	GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
+	m_URLEntry = (GtkWidget*) gtk_entry_new();
+	gtk_widget_set_size_request(m_URLEntry, 0, -1);
+	gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
+	gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
+	gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
+
+	GtkToolItem* url_bar_item = gtk_tool_item_new();
+	gtk_tool_item_set_expand(url_bar_item, true);
+	gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
+	gtk_widget_show_all ( (GtkWidget*)url_bar_item);
+	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), url_bar_item, -1);
+
+	g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
+					G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
+					this);
+	g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
+					G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
+					this);
+
+	m_Tooltips = tooltips;
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
@@ -1001,9 +1042,12 @@ void CMainFrame::OnDestroy()
 {
 	g_source_remove( m_BlinkTimer );
 	g_source_remove( m_EverySecondTimer );
-//	g_idle_remove_by_data(this);
+
+	gtk_object_destroy((GtkObject*)m_Tooltips);
 
 	Hide();
+
+	while( g_main_context_iteration(NULL, FALSE) );
 
 	CTelnetCon::Cleanup();
 
@@ -1021,7 +1065,7 @@ void CMainFrame::OnCreate()
 
 bool CMainFrame::CanClose()
 {
-	if( GetNotebook()->GetPageCount() == 0 )
+	if( GetNotebook()->GetPageCount() == 0 || !AppConfig.QueryOnExit )
 		return true;
 
 	GtkWidget* dlg = gtk_message_dialog_new( (GtkWindow*)m_Widget,
@@ -1121,7 +1165,6 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
 
 	GtkWidget* image347 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	g_object_ref(G_OBJECT(image347));
 	gtk_widget_show (image347);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image347);
 
@@ -1167,12 +1210,16 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	if( !m_pView || !m_pView->GetCon() )
 	{
 		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
+		gtk_entry_set_text( GTK_ENTRY(m_URLEntry), "");
 		return;
 	}
 
-	string title = m_pView->GetCon()->m_Site.m_Name;
+	CTelnetCon* con = GetCurCon();
+	gtk_entry_set_text( GTK_ENTRY(m_URLEntry), con->m_Site.m_URL.c_str());
 
-	if( ! m_pView->GetCon()->IsClosed() )
+	string title = con->m_Site.m_Name;
+
+	if( ! con->IsClosed() )
 		m_pNotebook->SetPageTitle( m_pView, title.c_str() );
 
 	title += " - PCMan X "VERSION;
@@ -1258,4 +1305,36 @@ gboolean CMainFrame::OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMain
 {
 	_this->m_IsActivated = false;
 	return false;
+}
+
+
+gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMainFrame* _this)
+{
+	switch(evt->keyval)
+	{
+	case GDK_Return:
+	{
+		const gchar* url = gtk_entry_get_text( GTK_ENTRY(widget) );
+		if( url && *url )
+		{
+			_this->NewCon( url, url, &AppConfig.m_DefaultSite );
+			return true;
+		}
+		//	else goto case GDK_Escape
+	}
+	case GDK_Escape:
+		if( _this->GetCurView() )
+			_this->GetCurView()->SetFocus();
+		return true;
+	}
+	return false;
+}
+
+void CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this)
+{
+	if( _this->GetCurView() )
+	{
+		gtk_entry_set_text( GTK_ENTRY(entry), _this->GetCurCon()->m_Site.m_URL.c_str());
+		gtk_editable_select_region(GTK_EDITABLE(entry), 0, 0);
+	}
 }
