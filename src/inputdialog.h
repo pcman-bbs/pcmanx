@@ -24,6 +24,8 @@
 #endif
 
 #include <dialog.h>
+#include <string>
+using namespace std;
 
 /**
 @author PCMan
@@ -36,14 +38,14 @@ public:
     ~CInputDialog();
     bool OnOK();
 
-	const char* GetText(){	return m_Text;	}
-	void SetText(const char* text){	if(m_Entry)gtk_entry_set_text(m_Entry, text);	}
+	string GetText(){	return m_Text;	}
+	void SetText(string text){	if(m_Entry)gtk_entry_set_text(m_Entry, text.c_str());	}
 
     gulong m_KeyPressHandlerId;
 
 protected:
     GtkEntry* m_Entry;
-    const gchar* m_Text;
+    string m_Text;
     bool m_CanBeEmpty;
 };
 

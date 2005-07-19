@@ -55,7 +55,7 @@ public:
     CMainFrame();
     ~CMainFrame();
 
-    CTelnetCon* NewCon(const char* title, const char* url, CSite* site);
+    CTelnetCon* NewCon( string title, string url, CSite* site);
 	CNotebook* GetNotebook(){	return m_pNotebook;	}
     void OnTelnetConBell(CTelnetView* con);
     void OnTelnetConClose(CTelnetView* con);

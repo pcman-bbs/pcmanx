@@ -807,7 +807,9 @@ void CTermData::DetectCharSets()
 // 2004/08/03 modified by PCMan
 // Check if 'ch' is an valid character in URL.
 inline bool isurl(int ch)
-{	return isalnum(ch) || strchr("!$&'()*+,-./:;=?@_|~%#", ch);	}
+{	return isalnum(ch) || strchr("!$&'*+,-./:;=?@_|~%#", ch);	}
+// Though '(' ,')', '<', and '>' are legal characters in URLs, I ignore them because
+// they are frequently used to enclose URLs. ex: (http://pcmanx.csie.net/)
 inline bool isurlscheme(int ch)
 {	return isalnum(ch) || strchr("+-.", ch);	}
 

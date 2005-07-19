@@ -1,3 +1,20 @@
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp:
+	Exclude characters '(' and ')' from URL detection.
+
+	* src/site.cpp,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/mainframe.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/listbox.cpp:
+	Replace some char* pointers with std::string to increase reliability.
+
+	* src/telnetcon.cpp:
+	Replace the dynamic-allocated buffer with a shared static one.
+
 2005-07-19  Kanru Chen  <koster@debian.org.tw>
 	
 	* src/telnetcon.cpp:

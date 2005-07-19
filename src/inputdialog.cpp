@@ -45,7 +45,6 @@ static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _th
 CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text, bool can_be_empty)
         : CDialog(parent, title, true), m_CanBeEmpty(can_be_empty)
 {
-	m_Text = NULL;
 	GtkWidget* label = gtk_label_new(prompt);
 	gtk_widget_show(label);
 
@@ -79,5 +78,5 @@ CInputDialog::~CInputDialog()
 bool CInputDialog::OnOK()
 {
 	m_Text = gtk_entry_get_text(m_Entry);
-	return ( m_CanBeEmpty || (m_Text && *m_Text) );
+	return ( m_CanBeEmpty || !m_Text.empty() );
 }

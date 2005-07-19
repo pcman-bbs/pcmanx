@@ -204,7 +204,7 @@ CMainFrame::~CMainFrame()
 }
 
 
-CTelnetCon* CMainFrame::NewCon(const char* title, const char* url, CSite* site )
+CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
 	m_pView = new CTelnetView;
 	m_Views.push_back(m_pView);
@@ -731,7 +731,7 @@ void CMainFrame::CreateToolbar()
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), NULL, true );
-	if( dlg->ShowModal() == GTK_RESPONSE_OK && *dlg->GetText() )
+	if( dlg->ShowModal() == GTK_RESPONSE_OK && !dlg->GetText().empty() )
 	{
 		_this->NewCon( dlg->GetText(), dlg->GetText(), &AppConfig.m_DefaultSite );
 	}
@@ -966,7 +966,7 @@ void CMainFrame::OnTelnetConBell(CTelnetView* con)
 	string markup = "<span foreground=\"red\">";
 	markup += con->GetCon()->m_Site.m_Name;
 	markup += "</span>";
-	m_pNotebook->SetPageTitle( con, markup.c_str());
+	m_pNotebook->SetPageTitle( con, markup);
 }
 
 void CMainFrame::OnTelnetConClose(CTelnetView* con)
@@ -976,14 +976,14 @@ void CMainFrame::OnTelnetConClose(CTelnetView* con)
 	string markup = "<span foreground=\"#808080\">";
 	markup += con->GetCon()->m_Site.m_Name;
 	markup += "</span>";
-	m_pNotebook->SetPageTitle( con, markup.c_str());
+	m_pNotebook->SetPageTitle( con, markup);
 }
 
 void CMainFrame::OnTelnetConConnect(CTelnetView* con)
 {
 	if( !con )
 		return;
-	m_pNotebook->SetPageTitle( con, con->GetCon()->m_Site.m_Name.c_str() );
+	m_pNotebook->SetPageTitle( con, con->GetCon()->m_Site.m_Name );
 }
 
 
@@ -999,7 +999,7 @@ void CMainFrame::OnTelnetConRecv(CTelnetView* con)
 	string markup = "<span foreground=\"green\">";
 	markup += con->GetCon()->m_Site.m_Name;
 	markup += "</span>";
-	m_pNotebook->SetPageTitle( con, markup.c_str());
+	m_pNotebook->SetPageTitle( con, markup);
 }
 
 
@@ -1199,7 +1199,7 @@ void CMainFrame::OnFavorite(GtkMenuItem* item, CMainFrame* _this)
 		CSite& site = *it;
 		if( site.m_MenuItem == (GtkWidget*)item )
 		{
-			_this->NewCon( site.m_Name.c_str(), site.m_URL.c_str(), &site);
+			_this->NewCon( site.m_Name, site.m_URL, &site);
 			break;
 		}
 	}
@@ -1221,7 +1221,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	string title = con->m_Site.m_Name;
 
 	if( ! con->IsClosed() )
-		m_pNotebook->SetPageTitle( m_pView, title.c_str() );
+		m_pNotebook->SetPageTitle( m_pView, title );
 
 	title += " - PCMan X "VERSION;
 	gtk_window_set_title (GTK_WINDOW (m_Widget), title.c_str() );
@@ -1247,7 +1247,7 @@ void CMainFrame::LoadStartupSites()
 	{
 		CSite& site = *it;
 		if( site.m_Startup )
-			NewCon( site.m_Name.c_str(), site.m_URL.c_str(), &site);
+			NewCon( site.m_Name, site.m_URL, &site);
 	}
 	m_pNotebook->SetCurPage(0);
 }
@@ -1284,7 +1284,7 @@ void CMainFrame::OnReconnect(GtkMenuItem* mitem, CMainFrame* _this)
 	if( con->IsClosed() )
 		con->Reconnect();
 	else
-		_this->NewCon( con->m_Site.m_Name.c_str(), con->m_Site.m_URL.c_str(), &con->m_Site);
+		_this->NewCon( con->m_Site.m_Name, con->m_Site.m_URL, &con->m_Site);
 }
 
 void CMainFrame::FlashWindow( bool flash )
@@ -1315,9 +1315,8 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	{
 	case GDK_Return:
 	{
-		// FIXME: I think this should be freed after disconnect.
-		const gchar* url = strdup(gtk_entry_get_text( GTK_ENTRY(widget) ));
-		if( url && *url )
+		string url = gtk_entry_get_text( GTK_ENTRY(widget) );
+		if( !url.empty() )
 		{
 			_this->NewCon( url, url, &AppConfig.m_DefaultSite );
 			return true;

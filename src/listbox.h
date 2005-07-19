@@ -41,8 +41,8 @@ public:
 
 
 	int Count() {	return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_Store), NULL);	}
-    void Append(const char* text);
-    void Insert(int pos, const char*text);
+    void Append(string text);
+    void Insert(int pos, string text);
 
     void Delete(GtkTreeIter* iter){	gtk_list_store_remove(m_Store, iter);	}
     void Delete(int idx);
@@ -51,7 +51,7 @@ public:
     void MoveDown(int idx);
 
     int GetCurSel();
-    void SetItemText(int idx, const char* text);
+    void SetItemText(int idx, string text);
     string GetItemText(int idx);
 	void SetCurSel(int idx);
 

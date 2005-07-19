@@ -36,18 +36,18 @@ CNotebook::CNotebook()
 CNotebook::~CNotebook()
 {}
 
-
-void CNotebook::InsertPage(int pos, CWidget* page, const char* title)
+/*
+void CNotebook::InsertPage(int pos, CWidget* page, string title)
 {
 
 }
+*/
 
-
-int CNotebook::AddPage( CWidget* page, const char* title, GdkPixbuf* icon)
+int CNotebook::AddPage( CWidget* page, string title, GdkPixbuf* icon)
 {
 	GtkWidget* text_label = gtk_label_new(NULL);
 	gtk_widget_show(text_label);
-	gtk_label_set_markup (GTK_LABEL(text_label), title);
+	gtk_label_set_markup (GTK_LABEL(text_label), title.c_str());
 //	g_print("label = %X\n", text_label);
 	GtkWidget* label = text_label;
 	if(icon)
@@ -66,7 +66,7 @@ int CNotebook::AddPage( CWidget* page, const char* title, GdkPixbuf* icon)
 }
 
 
-void CNotebook::SetPageTitle(CWidget* page, const char* title)
+void CNotebook::SetPageTitle(CWidget* page, string title)
 {
 	GtkWidget* label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(m_Widget), page->m_Widget);
 
@@ -76,5 +76,5 @@ void CNotebook::SetPageTitle(CWidget* page, const char* title)
 		label = GTK_WIDGET(g_list_last(list)->data);
 		g_list_free(list);
 	}
-	gtk_label_set_markup( GTK_LABEL(label), title );
+	gtk_label_set_markup( GTK_LABEL(label), title.c_str() );
 }

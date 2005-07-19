@@ -80,7 +80,7 @@ public:
 	bool m_UseExternalSSH;
 	bool m_UseExternalTelnet;
 
-	CSite(const char* Name = "");
+	CSite(string Name = "");
 	~CSite();
 
     string& GetPasswd(){	return m_Passwd;	}

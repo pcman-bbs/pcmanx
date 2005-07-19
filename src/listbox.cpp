@@ -49,19 +49,19 @@ CListBox::CListBox()
 CListBox::~CListBox()
 {}
 
-void CListBox::Append(const char* text)
+void CListBox::Append(string text)
 {
 	GtkTreeIter iter;
 	gtk_list_store_append(m_Store, &iter);
-	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text, -1);
+	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text.c_str(), -1);
 }
 
 
-void CListBox::Insert(int pos, const char*text)
+void CListBox::Insert(int pos, string text)
 {
 	GtkTreeIter iter;
 	gtk_list_store_insert(m_Store, &iter, pos);
-	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text, -1);
+	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text.c_str(), -1);
 }
 
 
@@ -122,11 +122,11 @@ int CListBox::GetCurSel()
 }
 
 
-void CListBox::SetItemText(int idx, const char* text)
+void CListBox::SetItemText(int idx, string text)
 {
 	GtkTreeIter iter;
 	gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_Store), &iter, NULL, idx);
-	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text, -1);
+	gtk_list_store_set(m_Store, &iter, 0, (GValue*)text.c_str(), -1);
 }
 
 string CListBox::GetItemText(int idx)

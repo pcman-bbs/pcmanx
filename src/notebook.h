@@ -24,6 +24,9 @@
 #endif
 
 #include <widget.h>
+#include <string>
+
+using namespace std;
 
 /**
 @author PCMan
@@ -34,8 +37,8 @@ public:
     CNotebook();
 
     ~CNotebook();
-    void InsertPage(int pos, CWidget* page, const char* title);
-    int AddPage( CWidget* page, const char* title, GdkPixbuf* icon = NULL);
+//    void InsertPage(int pos, CWidget* page, string title);
+    int AddPage( CWidget* page, string title, GdkPixbuf* icon = NULL);
     void RemovePage( int pos ){	gtk_notebook_remove_page(GTK_NOTEBOOK(m_Widget), pos);	}
 
     void SetCurPage(int i)
@@ -47,7 +50,7 @@ public:
 
     void NextPage()	{	gtk_notebook_next_page((GtkNotebook*)m_Widget);	}
     void PrevPage()	{	gtk_notebook_prev_page((GtkNotebook*)m_Widget);	}
-    void SetPageTitle(CWidget* page, const char* title);
+    void SetPageTitle(CWidget* page, string title);
 };
 
 #endif

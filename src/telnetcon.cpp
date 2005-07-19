@@ -57,7 +57,6 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
 {
     m_pBuf = m_pLastByte = m_pRecvBuf = NULL;
-	m_pRecvBuf = new unsigned char[RECV_BUF_SIZE];
     m_pCmdLine = m_CmdLine;
 	m_pCmdLine[0] = '\0';
 
@@ -94,8 +93,6 @@ CTelnetCon::~CTelnetCon()
 
 	if( m_BellTimeout )
 		g_source_remove( m_BellTimeout );
-	delete m_pRecvBuf;
-
 }
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
@@ -178,11 +175,14 @@ bool CTelnetCon::Connect()
 // No description
 bool CTelnetCon::OnRecv()
 {
+	static unsigned char recv_buf[RECV_BUF_SIZE];
+	m_pRecvBuf = recv_buf;
+
 	if( !m_IOChannel || m_SockFD == -1 )
 		return false;
 
 	gsize rlen = 0;
-	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, RECV_BUF_SIZE, &rlen);
+	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen);
 
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
@@ -533,9 +533,10 @@ void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 
 		if( host )
 			addr = *(in_addr*)host->h_addr_list[0];
-		G_UNLOCK( gethostbyname_mutex );
 		
-		if( !host && data->m_DNSTry > 0 )
+		G_UNLOCK( gethostbyname_mutex );
+
+		if( (addr.s_addr == INADDR_NONE) && data->m_DNSTry > 0 )
 		{
 //				g_print("Retry DNS lookup\n");
 			--data->m_DNSTry;	// retry
@@ -579,6 +580,7 @@ void CTelnetCon::Close()
 	if( m_IOChannel )
 	{
 		g_source_remove(m_IOChannelID);
+		m_IOChannelID = 0;
 		g_io_channel_shutdown(m_IOChannel, true, NULL);
 		g_io_channel_unref(m_IOChannel);
 		m_IOChannel = NULL;

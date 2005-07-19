@@ -142,7 +142,7 @@ void CEmoticonDlg::OnAdd(GtkWidget* btn, CEmoticonDlg* _this)
 	CInputDialog* dlg = new CInputDialog(_this, _("New Emoticon"), _("Input New Emoticon"));
 	if( dlg->ShowModal() == GTK_RESPONSE_OK )
 	{
-		_this->m_List->Insert( i, dlg->GetText() );
+		_this->m_List->Insert( i, dlg->GetText().c_str() );
 		_this->m_List->SetCurSel( i );
 		_this->m_IsModified = true;
 	}

@@ -26,7 +26,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CSite::CSite(const char* Name)
+CSite::CSite(string Name)
 {
 	m_Name = Name;
 	// Time duration in seconds during which should we reconnect 

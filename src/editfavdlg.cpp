@@ -126,7 +126,7 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 	{
 		CSite& site = *it;
 		++i;
-		m_List->Append(site.m_Name.c_str());
+		m_List->Append(site.m_Name);
 	}
 
 }
@@ -146,7 +146,7 @@ void CEditFavDlg::OnAdd(GtkWidget* btn, CEditFavDlg* _this)
 	if( dlg->ShowModal() == GTK_RESPONSE_OK )
 	{
 		_this->m_Sites.insert( _this->m_Sites.begin()+i, dlg->m_Site );
-		_this->m_List->Insert( i, dlg->m_Site.m_Name.c_str() );
+		_this->m_List->Insert( i, dlg->m_Site.m_Name );
 		_this->m_List->SetCurSel( i );
 	}
 	dlg->Destroy();
@@ -163,7 +163,7 @@ void CEditFavDlg::OnEdit(GtkWidget* btn, CEditFavDlg* _this)
 		if( dlg->ShowModal() == GTK_RESPONSE_OK )
 		{
 			_this->m_Sites[sel] = dlg->m_Site;
-			_this->m_List->SetItemText( sel, dlg->m_Site.m_Name.c_str() );
+			_this->m_List->SetItemText( sel, dlg->m_Site.m_Name );
 		}
 		dlg->Destroy();
 	}
