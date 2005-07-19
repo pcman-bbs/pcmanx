@@ -530,11 +530,12 @@ void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 	{
 		G_LOCK( gethostbyname_mutex );
 		hostent* host = gethostbyname(data->m_Address.c_str());
-		G_UNLOCK( gethostbyname_mutex );
 
 		if( host )
 			addr = *(in_addr*)host->h_addr_list[0];
-		else if( data->m_DNSTry > 0 )
+		G_UNLOCK( gethostbyname_mutex );
+		
+		if( !host && data->m_DNSTry > 0 )
 		{
 //				g_print("Retry DNS lookup\n");
 			--data->m_DNSTry;	// retry
