@@ -23,7 +23,7 @@
   #pragma interface "view.h"
 #endif
 
-#include <widget.h>
+#include "widget.h"
 
 /**
 @author PCMan
