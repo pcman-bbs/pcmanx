@@ -1,5 +1,11 @@
 2005-07-21  Jim Huang  <jserv@kaffe.org>
 
+	* src/telnetcon.cpp:
+	Adapt conditional compilation with USING_LINUX/USING_FREEBSD macro
+	detected in autotools.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
 	* src/notifier/api.h,
 	src/notifier/impl.c:
 	New files. Primitive lightweight popup notifier implementation.

@@ -38,7 +38,7 @@
 #include <unistd.h>
 
 // pseudo tty headers
-#ifndef __FreeBSD__
+#ifdef USING_LINUX
 #include <pty.h>
 #endif
 #include <utmp.h>
@@ -47,7 +47,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-#ifdef __FreeBSD__
+#ifdef USING_FREEBSD
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <libutil.h>
