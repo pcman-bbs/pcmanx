@@ -1,5 +1,13 @@
 2005-07-21  Jim Huang  <jserv@kaffe.org>
 
+	* src/notifier/impl.c,
+	src/notifier/notifier-impl.c:
+	Rename impl.c to notifier-impl.c for better maintenance.
+
+	* src/Makefile.am: Likewise.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
 	* configure.ac:
 	Add new option, --disable-external, to disable external SSH/Telnet
 	support. Default: yes

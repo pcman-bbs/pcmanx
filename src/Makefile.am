@@ -16,7 +16,7 @@ OPTIONAL_DOCKLET = \
 
 OPTIONAL_NOTIFIER = \
 	notifier/api.h \
-	notifier/impl.c
+	notifier/notifier-impl.c
 
 EXTRA_DIST = \
 	Makefile-byhand \

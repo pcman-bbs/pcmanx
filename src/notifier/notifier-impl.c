@@ -1,4 +1,5 @@
 /**
+ * notifier-impl.c
  * Lightweight Notifier implementation
  *
  * Copyright (c) 2005
