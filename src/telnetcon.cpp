@@ -631,10 +631,13 @@ gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
 void CTelnetCon::Cleanup()
 {
 	if(m_ThreadPool)
+	{
+//		g_print("on cleanup, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
 		g_thread_pool_free(m_ThreadPool, FALSE, TRUE);
+	}
 	// If g_thread_pool_free is called with immediate=TRUE, 
 	// the funtion will hang and never return even there is
-	// no pending task.  After lots tests, unfortunately, I 
+	// no pending task.  After lots of tests, unfortunately, I 
 	// believe this is a bug of glib.
 
 	m_ThreadPool = NULL;
