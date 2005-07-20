@@ -207,10 +207,12 @@ void CAppConfig::LoadFavorites()
 				pSite->m_ESCConv = pval;
 			else if( 0 == strcmp( pname, "Startup" ) )
 				pSite->m_Startup = (bool)atoi(pval);
+#ifdef USE_EXTERNAL
 			else if( 0 == strcmp( pname, "UseExternalSSH" ) )
 				pSite->m_UseExternalSSH = (bool)atoi(pval);
 			else if( 0 == strcmp( pname, "UseExternalTelnet" ) )
 				pSite->m_UseExternalTelnet = (bool)atoi(pval);
+#endif
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );
 			else if( 0 == strcmp( pname, "PreLogin" ) )

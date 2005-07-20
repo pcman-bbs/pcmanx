@@ -26,6 +26,7 @@ AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
+AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -66,7 +67,11 @@ AC_ARG_ENABLE(docklet,
 
 AC_ARG_ENABLE(notifier,
 [  --disable-notifier      disable popup notifier support (default: yes)],
-	notifier $enableval, notifier=yes)
+	notifier=$enableval, notifier=yes)
+
+AC_ARG_ENABLE(external,
+[  --disable-external      disable external SSH/Telnet support (default: yes)],
+	external=$enableval, external=yes)
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -182,6 +187,21 @@ fi
 AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
 AC_SUBST(USE_NOTIFIER)
 
+
+dnl *********************************************************************
+dnl ** External SSH/Telnet **********************************************
+dnl *********************************************************************
+
+if test "$external" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_EXTERNAL, [1], [Enable external SSH/Telnet support])
+    dnl We need tty utility functions from libutil
+    LIBS="$LIBS -lutil"
+fi
+
+AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
+AC_SUBST(USE_EXTERNAL)
+
+
 dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
@@ -254,10 +274,7 @@ if test $ac_cv_type_socklen_t = no; then
 	AC_DEFINE(socklen_t, int)
 fi
 
-dnl We need tty utility functions from libtil
-LIBS="$LIBS -lutil"
-
-dnl freebsd needs this
+dnl FreeBSD needs this
 LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
 dnl make these visible to all Makefiles
@@ -282,6 +299,7 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
+echo External SSH/Telnet support...... : $external
 echo
 echo The binary will be installed in $prefix/bin
 echo

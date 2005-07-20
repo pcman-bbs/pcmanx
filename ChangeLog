@@ -1,5 +1,17 @@
 2005-07-21  Jim Huang  <jserv@kaffe.org>
 
+	* configure.ac:
+	Add new option, --disable-external, to disable external SSH/Telnet
+	support. Default: yes
+
+	* src/site.cpp (CSite::CSite) (CSite::SaveToFile),
+	src/appconfig.cpp (CAppConfig::LoadFavorites),
+	src/site.h (class CSite),
+	src/telnetcon.cpp (CTelnetCon::Connect):
+	Add conditional compilation for --disable-external option.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
 	* src/telnetcon.cpp:
 	Adapt conditional compilation with USING_LINUX/USING_FREEBSD macro
 	detected in autotools.

@@ -18,6 +18,10 @@
   #pragma interface "site.h"
 #endif
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <gtk/gtk.h>
 
 #include <stdio.h>
@@ -77,8 +81,10 @@ public:
 
 	string GetEscapeChar()	{	return UnEscapeStr(m_ESCConv.c_str());	}
 
+#ifdef USE_EXTERNAL
 	bool m_UseExternalSSH;
 	bool m_UseExternalTelnet;
+#endif
 
 	CSite(string Name = "");
 	~CSite();

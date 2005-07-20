@@ -132,6 +132,7 @@ bool CTelnetCon::Connect()
 //	else
 		m_AutoLoginStage = 0;
 
+#ifdef USE_EXTERNAL
 	// Run external program to handle connection.
 	if( m_Site.m_UseExternalTelnet || m_Site.m_UseExternalSSH )
 	{
@@ -157,6 +158,7 @@ bool CTelnetCon::Connect()
 		OnConnect(0);
 	}
 	else	// Use built-in telnet command handler
+#endif
 	{
 		CConnectThread* connect_thread = new CConnectThread(this, address, port);
 		m_ConnectThreads.push_back( connect_thread );
