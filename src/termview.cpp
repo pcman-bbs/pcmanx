@@ -728,7 +728,7 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 		m_s_ANSIColorStr = m_pTermData->GetSelectedTextWithColor(trim);
 	else
 	{
-		m_s_ANSIColorStr.clear();
+		m_s_ANSIColorStr = "";
 		string text = m_pTermData->GetSelectedText(trim);
 
 		gsize wl = 0;

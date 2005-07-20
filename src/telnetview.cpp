@@ -178,7 +178,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 						"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
 				if(purl)
 				{
-					m_s_ANSIColorStr.clear();
+					m_s_ANSIColorStr = "";
 					GtkClipboard* clipboard = gtk_clipboard_get( GDK_NONE );
 					gtk_clipboard_set_text(clipboard, purl, wl );
 					clipboard = gtk_clipboard_get(  GDK_SELECTION_PRIMARY);

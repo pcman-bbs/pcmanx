@@ -11,6 +11,7 @@
 
 #include "stringutil.h"
 #include <ctype.h>
+#include <stdio.h>
 
 int strncmpi(const char* str1, const char* str2, size_t len)
 {
