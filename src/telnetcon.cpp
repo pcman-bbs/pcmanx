@@ -17,6 +17,10 @@
 #include "telnetview.h"
 #include "mainframe.h"
 
+#ifdef USE_NOTIFIER
+#include "notifier/api.h"
+#endif
+
 #include <string.h>
 #include <glib/gi18n.h>
 
@@ -669,6 +673,24 @@ void CTelnetCon::OnLineModified(int row)
 // When new incoming message is detected, this function gets called.
 void CTelnetCon::OnNewIncomingMessage(char* line)
 {
-    /// @todo implement me
-//	g_print("New Message: %s\n", line);
+#ifdef USE_NOTIFIER
+	if (strlen(line) <= 0)
+		return;
+
+	/* We need to convert the incoming message into UTF-8 encoding from
+	 * the original one.
+	 */
+	gsize l;
+	gchar* utf8_text = g_convert(
+		line, strlen(line), 
+		"UTF-8", m_Site.m_Encoding.c_str(), 
+		NULL, &l, NULL);
+
+	gchar **column = g_strsplit(utf8_text, " ", 2);
+	popup_notifier_notify(
+		g_strdup_printf("In %s, %s said:", m_Site.m_Name.c_str(), column[0]),
+		g_strchomp(column[1]));
+	g_strfreev(column);
+	g_free(utf8_text);
+#endif
 }

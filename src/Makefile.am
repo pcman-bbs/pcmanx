@@ -14,15 +14,24 @@ OPTIONAL_DOCKLET = \
 	docklet/eggtrayicon.h \
 	docklet/eggtrayicon.c
 
+OPTIONAL_NOTIFIER = \
+	notifier/api.h \
+	notifier/impl.c
+
 EXTRA_DIST = \
 	Makefile-byhand \
 	conn_xpm.xpm \
 	pcmanx_xpm.xpm \
 	pcmanx_inverse_xpm.xpm \
-	$(OPTIONAL_DOCKLET)
+	$(OPTIONAL_DOCKLET) \
+	$(OPTIONAL_NOTIFIER)
 
 if USE_DOCKLET
 DOCKLET_SOURCES = $(OPTIONAL_DOCKLET)
+endif
+
+if USE_NOTIFIER
+NOTIFIER_SOURCES = $(OPTIONAL_NOTIFIER)
 endif
 
 GNET_SOURCES = \
@@ -33,6 +42,7 @@ GNET_SOURCES = \
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
+	$(NOTIFIER_SOURCES) \
 	appconfig.cpp appconfig.h \
 	font.cpp font.h \
 	notebook.cpp notebook.h \

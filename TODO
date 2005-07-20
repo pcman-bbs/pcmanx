@@ -3,7 +3,6 @@ TOD List
 
 jserv
 -----
-1. Fix docklet to prevent icons from being extra-wide.
 2. Merge message notification hack into mainline with the detection
    routines.
 

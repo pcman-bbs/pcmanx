@@ -1,3 +1,18 @@
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/api.h,
+	src/notifier/impl.c:
+	New files. Primitive lightweight popup notifier implementation.
+	NOTE: The length of message body and window size have to be adjusted.
+
+	* src/pcmanx_pure_gtk2.cpp,
+	src/telnetcon.cpp,
+	src/Makefile.am,
+	configure.ac:
+	Add popup notification support.
+
+	* TODO: Updated.
+	
 2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/termview.cpp,
@@ -170,7 +185,7 @@
 	* src/mainframe.cpp (CMainFrame::NewCon):
 	Call CTermView::SetHorizontalCenterAlign with proper parameter.
 
-2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
+2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/termview.cpp:
 	Fix bug of selected region.
@@ -221,7 +236,7 @@
 	src/termview.cpp (CTermView::OnSize):
 	Anti-alias font can be turned off now.
 
-2005-07-16	FourDollars (Shih-yuan Lee)	<fourdollars@gmail.com>
+2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/termdata.cpp:
 	* src/termview.cpp:

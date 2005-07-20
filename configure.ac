@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.1.8, hzysoft@sina.com.tw)
-AM_MAINTAINER_MODE
+#AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
 AM_PROG_AS
@@ -25,6 +25,7 @@ AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
+AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -62,6 +63,10 @@ AC_ARG_ENABLE(mmx,
 AC_ARG_ENABLE(docklet,
 [  --disable-docklet       disable docklet / system tray support (default: yes)],
 	docklet=$enableval, docklet=yes)
+
+AC_ARG_ENABLE(notifier,
+[  --disable-notifier      disable popup notifier support (default: yes)],
+	notifier $enableval, notifier=yes)
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -165,6 +170,18 @@ fi
 AM_CONDITIONAL(USE_DOCKLET, test "$docklet" = "yes")
 AC_SUBST(USE_DOCKLET)
 
+
+dnl *********************************************************************
+dnl ** Notifier *********************************************************
+dnl *********************************************************************
+
+if test "$notifier" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_NOTIFIER, [1], [Enable popup notifier support])
+fi
+
+AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
+AC_SUBST(USE_NOTIFIER)
+
 dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
@@ -264,6 +281,7 @@ echo
 echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
+echo Popup notifier support........... : $notifier
 echo
 echo The binary will be installed in $prefix/bin
 echo

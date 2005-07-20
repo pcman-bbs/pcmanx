@@ -49,6 +49,10 @@ extern gboolean _get_clipboard();
 }
 #endif
 
+#ifdef USE_NOTIFIER
+#include "notifier/api.h"
+#endif
+
 int main(int argc, char *argv[])
 {
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -100,6 +104,10 @@ int main(int argc, char *argv[])
 #ifdef USE_DOCKLET
 	if( AppConfig.ShowTrayIcon )
 		main_frm->ShowTrayIcon();
+#endif
+
+#ifdef USE_NOTIFIER
+	popup_notifier_init();
 #endif
 
 	gtk_main ();
