@@ -232,10 +232,10 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			// Only when no control character is in this string can 
 			// autowrap be enabled
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
-			if( pCGetCon()->m_Site.m_AutoWrapOnPaste > 0 )
+			if( GetCon()->m_Site.m_AutoWrapOnPaste > 0 )
 			{
 				string str2;
-				const char* pstr = str.c_str();
+				const char* pstr = text.c_str();
 				for( ; *pstr; pstr++ )
 				{
 					size_t word_len = 1;
@@ -262,7 +262,6 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 						len = 0;
 						str2 += '\n';
 					}
-		
 					len += word_len;
 					while( pword <= pstr )
 					{
@@ -272,7 +271,7 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 					if( *pstr == '\n' || *pstr == '\r' )
 						len = 0;
 				}
-				str = str2;
+				text = str2;
 			}
 
 			GetCon()->SendString(text);

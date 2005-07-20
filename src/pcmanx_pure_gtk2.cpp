@@ -79,7 +79,9 @@ int main(int argc, char *argv[])
 	/* if we are already running, silently exit */
 	if (! _get_clipboard())
 	{
-//		return 1;
+#ifndef USE_DEBUG
+		return 1;
+#endif
 	}
 #endif
 

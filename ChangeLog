@@ -1,5 +1,10 @@
 2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/telnetview.cpp (CTelnetView::DoPasteFromClipboard):
+	Add "Auto Wrap" on paste.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/telnetcon.cpp (CTelnetCon::OnMainIdle):
 	Little bug fix.
 
