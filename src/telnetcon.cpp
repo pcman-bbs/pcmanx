@@ -638,7 +638,7 @@ void CTelnetCon::Cleanup()
 	// If g_thread_pool_free is called with immediate=TRUE, 
 	// the funtion will hang and never return even there is
 	// no pending task.  After lots of tests, unfortunately, I 
-	// believe this is a bug of glib.
+	// found this is a bug of glib.
 
 	m_ThreadPool = NULL;
 	vector<CConnectThread*>::iterator it;

@@ -228,7 +228,55 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			GetCon()->SendString(text2);
 		}
 		else
+		{
+			// Only when no control character is in this string can 
+			// autowrap be enabled
+			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
+			if( pCGetCon()->m_Site.m_AutoWrapOnPaste > 0 )
+			{
+				string str2;
+				const char* pstr = str.c_str();
+				for( ; *pstr; pstr++ )
+				{
+					size_t word_len = 1;
+					const char* pword = pstr;
+					if( ((unsigned char)*pstr) < 128 )		// This is a ASCII character
+					{
+						if( *pstr == '\n' || *pstr == '\r' )
+							len = 0;
+						else
+						{
+							while( *pstr && ((unsigned char)*(pstr+1)) && ((unsigned char)*(pstr+1)) < 128  && !strchr(" \t\n\r", *pstr) )
+								pstr++;
+							word_len = (pstr - pword) + (*pstr != '\t' ? 1 : 4);	// assume tab width = 4, may be changed in the future
+						}
+					}
+					else
+					{
+						pstr++;
+						word_len = ( *pstr ? 2 : 1 );
+					}
+		
+					if( (len + word_len) > max_len )
+					{
+						len = 0;
+						str2 += '\n';
+					}
+		
+					len += word_len;
+					while( pword <= pstr )
+					{
+						str2 += *pword;
+						pword ++;
+					}
+					if( *pstr == '\n' || *pstr == '\r' )
+						len = 0;
+				}
+				str = str2;
+			}
+
 			GetCon()->SendString(text);
+		}
 	}
 }
 
