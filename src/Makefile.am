@@ -1,13 +1,18 @@
+SUBDIRS = core
+
 localedir = $(datadir)/locale
+LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
 
 bin_PROGRAMS = pcmanx
 
 INCLUDES = \
+	-I$(top_srcdir)/src/core \
+	-I$(top_srcdir)/src/view \
 	$(GUI_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE)
 
 OPTIONAL_DOCKLET = \
 	docklet/clipboard.c \
@@ -40,31 +45,27 @@ GNET_SOURCES = \
 	gnet/gnet-private.h \
 	gnet/gnet-private.c
 
+VIEW_IMPLEMENTATION_SOURCES = \
+	view/telnetcon.cpp view/telnetcon.h \
+	view/telnetview.cpp view/telnetview.h \
+	view/termview.cpp view/termview.h
+
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
 	$(NOTIFIER_SOURCES) \
+	$(VIEW_IMPLEMENTATION_SOURCES) \	
 	appconfig.cpp appconfig.h \
-	font.cpp font.h \
 	notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h \
-	termdata.cpp termdata.h \
-	caret.cpp caret.h \
 	generalprefpage.cpp generalprefpage.h \
 	pcmanx_pure_gtk2.cpp \
 	sitepage.cpp sitepage.h \
-	termview.cpp termview.h \
 	configfile.cpp configfile.h \
 	inputdialog.cpp inputdialog.h \
 	prefdlg.cpp prefdlg.h \
-	stringutil.cpp stringutil.h \
-	view.cpp view.h \
 	dialog.cpp dialog.h \
 	listbox.cpp listbox.h \
-	site.cpp site.h \
-	telnetcon.cpp telnetcon.h \
-	widget.cpp widget.h \
 	editfavdlg.cpp editfavdlg.h \
 	mainframe.cpp mainframe.h \
 	sitedlg.cpp sitedlg.h \
-	telnetview.cpp telnetview.h \
 	emoticondlg.cpp emoticondlg.h

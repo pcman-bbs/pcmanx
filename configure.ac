@@ -285,6 +285,7 @@ AC_SUBST(GUI_CFLAGS)
 AC_OUTPUT([
 Makefile
 src/Makefile
+src/core/Makefile
 po/Makefile.in
 data/Makefile
 pcmanx.desktop

@@ -1,3 +1,38 @@
+2005-07-22  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/Makefile.am,
+	src/core/widget.cpp,
+	src/core/font.cpp,
+	src/core/site.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termdata.h,
+	src/core/font.h,
+	src/core/widget.h,
+	src/core/stringutil.cpp,
+	src/core/site.h,
+	src/core/view.h,
+	src/core/caret.h,
+	src/core/stringutil.h,
+	src/core/view.cpp:
+	Move core implementation from $(top_srcdir)/src to 
+	$(top_srcdir)/src/core, so that both standalone program and plugin
+	could use the share library.
+
+	* src/view/termview.cpp,
+	src/view/telnetview.cpp,
+	src/view/termview.h,
+	src/view/telnetcon.h,
+	src/view/telnetview.h,
+	src/view/telnetcon.cpp:
+	Move term/telnet view part from $(top_srcdir)/src to
+	$(top_srcdir)/src/view. The consideration why we don't put them to
+	$(top_srcdir)/src/core is because we might enforce different
+	conditional compilation on these implementations.
+
+	* src/Makefile.am,
+	configure.ac: Likewise.
+
 2005-07-21  Jim Huang  <jserv@kaffe.org>
 
 	* src/notifier/api.h (popup_notifier_init):
