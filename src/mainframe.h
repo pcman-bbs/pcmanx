@@ -92,6 +92,8 @@ public:
 
     bool IsActivated(){	return m_IsActivated;	}
     static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
+    int GetViewIndex(CTermView* view);
+    void SwitchToCon(CTelnetCon* con);
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET

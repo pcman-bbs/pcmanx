@@ -39,12 +39,6 @@ if USE_NOTIFIER
 NOTIFIER_SOURCES = $(OPTIONAL_NOTIFIER)
 endif
 
-GNET_SOURCES = \
-	gnet/inetaddr.c \
-	gnet/inetaddr.h \
-	gnet/gnet-private.h \
-	gnet/gnet-private.c
-
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
 	view/telnetview.cpp view/telnetview.h \

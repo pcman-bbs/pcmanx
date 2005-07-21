@@ -761,6 +761,12 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 	gtk_window_set_transient_for( (GtkWindow*)dlg, (GtkWindow*)_this->m_Widget);
 
 	GtkFontSelectionDialog* fsdlg = (GtkFontSelectionDialog*)dlg;
+	GtkWidget* apply_to_all = gtk_check_button_new_with_label( _("Apply to all opened pages") );
+	gtk_widget_show(apply_to_all);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(apply_to_all), true);
+	gtk_box_pack_start( GTK_BOX(fsdlg->action_area), apply_to_all, true, true, 4);
+	gtk_box_reorder_child( GTK_BOX(fsdlg->action_area), apply_to_all, 0 );
+	gtk_box_set_homogeneous(GTK_BOX(fsdlg->action_area), false);
 
 	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
 	// But we need this functionality.
@@ -774,7 +780,6 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
 	{
 		gchar* name = gtk_font_selection_dialog_get_font_name( fsdlg );
-		gtk_widget_destroy(dlg);
 		PangoFontDescription* desc = pango_font_description_from_string( name );
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
@@ -782,12 +787,17 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		AppConfig.FontSize = pango_font_description_get_size(desc);
 		pango_font_description_free(desc);
 
-		vector<CTelnetView*>::iterator it;
-		for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
-			(*it)->SetFontFamily(AppConfig.FontFamily);
+		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
+		{
+			vector<CTelnetView*>::iterator it;
+			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
+				(*it)->SetFontFamily(AppConfig.FontFamily);
+			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
+		}
+		else if( _this->GetCurView() )
+			_this->GetCurView()->SetFontFamily(AppConfig.FontFamily);
 
-
-		/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
+		gtk_widget_destroy(dlg);
 
 		if( _this->GetCurView() )
 			_this->GetCurView()->Refresh();
@@ -1337,4 +1347,23 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 		gtk_editable_select_region(GTK_EDITABLE(entry), 0, 0);
 	}
 	return FALSE;
+}
+
+
+int CMainFrame::GetViewIndex(CTermView* view)
+{
+	g_print( "get view index, view = %x\n", view );
+	if( !view )
+		return -1;
+	g_print( "view->m_Widget = %x\n", view->m_Widget );
+	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
+}
+
+
+void CMainFrame::SwitchToCon(CTelnetCon* con)
+{
+	int idx = GetViewIndex( con->GetView() );
+	g_print( "switch to con %d\n", idx );
+	if( idx >= 0 )
+		m_pNotebook->SetCurPage(idx);
 }

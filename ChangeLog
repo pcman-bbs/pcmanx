@@ -1,4 +1,19 @@
-2005-07-02  Jim Huang  <jserv@kaffe.org>
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/notifier/notifier-impl.c, 
+	src/view/telnetcon.cpp:
+	+ Automatically hide msg popup disappear on timeout.
+	+ Click on the popup window can raise the main frame window and switch 
+	  to the connection which received this message.
+	  Timeout can be disabled on mouse over.
+
+	* src/view/termview.cpp (CTermView::ReclacCharDemension):
+	Recelculate m_CharW & m_CharH after fonts changed.
+
+	* src/mainframe.cpp:
+	Add "Apply to opened pages" option in font selection dialog..
+
+2005-07-22  Jim Huang  <jserv@kaffe.org>
 
 	* src/core/Makefile.am: Add missing file.
 

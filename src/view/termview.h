@@ -83,6 +83,7 @@ protected:
     void UpdateCaretPos();
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
     void OnDestroy();
+    void RecalcCharDemension();
 protected:
 	CTermData* m_pTermData;
 

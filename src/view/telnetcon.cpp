@@ -672,11 +672,29 @@ void CTelnetCon::OnLineModified(int row)
 		m_IsLastLineModified = true;
 }
 
+#ifdef USE_NOTIFIER
+
+void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
+{
+	g_print("popup clicked\n");
+	CMainFrame* mainfrm = con->GetView()->GetParentFrame();
+	mainfrm->SwitchToCon(con);
+	gtk_widget_destroy( gtk_widget_get_parent(widget) );
+	gtk_window_present(GTK_WINDOW(mainfrm->m_Widget));
+	return;
+}
+
+#endif
+
 // When new incoming message is detected, this function gets called.
 void CTelnetCon::OnNewIncomingMessage(char* line)
 {
 #ifdef USE_NOTIFIER
 	if (strlen(line) <= 0)
+		return;
+
+	CMainFrame* mainfrm = ((CTelnetView*)m_pView)->GetParentFrame();
+	if( mainfrm->IsActivated() && mainfrm->GetCurCon() == this )
 		return;
 
 	/* We need to convert the incoming message into UTF-8 encoding from
@@ -689,11 +707,14 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 		NULL, &l, NULL);
 
 	gchar **column = g_strsplit(utf8_text, " ", 2);
-	popup_notifier_notify(
+	GtkWidget* popup_win = popup_notifier_notify(
 		g_strdup_printf("%s - %s",
 			m_Site.m_Name.c_str(),
 			g_strchomp(column[0])),
-		g_strchomp(column[1]));
+		g_strchomp(column[1]),
+		m_pView->m_Widget, 
+		G_CALLBACK(popup_win_clicked), 
+		this);
 	g_strfreev(column);
 	g_free(utf8_text);
 #endif

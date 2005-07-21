@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-20 13:21+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-07-22 03:02+0800\n"
+"Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:605
+#: ../src/sitelistdlg.cpp:33
+#: ../src/mainframe.cpp:605
 msgid "Site List"
 msgstr ""
 
@@ -97,11 +97,13 @@ msgstr ""
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:462 ../src/mainframe.cpp:1160
+#: ../src/mainframe.cpp:462
+#: ../src/mainframe.cpp:1170
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:470 ../src/mainframe.cpp:1168
+#: ../src/mainframe.cpp:470
+#: ../src/mainframe.cpp:1178
 msgid "_Edit Favorites"
 msgstr ""
 
@@ -145,7 +147,8 @@ msgstr ""
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:653 ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:653
+#: ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr ""
 
@@ -175,18 +178,11 @@ msgstr ""
 msgid "Font"
 msgstr ""
 
-#. GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
-#. gtk_about_dialog_set_name(dlg, "PCMan X");
-#. gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
-#. gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
-#. gtk_about_dialog_set_license(dlg, "GPL");
-#. gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
-#. const char *authors[]={"Hong Jen Yee"};
-#. gtk_about_dialog_set_authors(dlg, authors );
-#. gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
-#.
-#. gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
-#: ../src/mainframe.cpp:814
+#: ../src/mainframe.cpp:764
+msgid "Apply to all opened pages"
+msgstr ""
+
+#: ../src/mainframe.cpp:824
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -194,7 +190,7 @@ msgid ""
 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:824
+#: ../src/mainframe.cpp:834
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -208,26 +204,27 @@ msgid ""
 "%s\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:852
+#: ../src/mainframe.cpp:862
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1070
+#: ../src/mainframe.cpp:1080
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1082
+#: ../src/mainframe.cpp:1092
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1094
+#: ../src/mainframe.cpp:1104
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/sitedlg.cpp:36 ../src/prefdlg.cpp:40
+#: ../src/sitedlg.cpp:36
+#: ../src/prefdlg.cpp:40
 msgid "Site Settings"
 msgstr ""
 
@@ -259,7 +256,8 @@ msgstr ""
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:102 ../src/sitepage.cpp:119
+#: ../src/sitepage.cpp:102
+#: ../src/sitepage.cpp:119
 msgid "Sec"
 msgstr ""
 
@@ -335,10 +333,6 @@ msgstr ""
 msgid "Web Browser: "
 msgstr ""
 
-#: ../src/telnetview.cpp:156
-msgid "_Copy URL to Clipboard"
-msgstr ""
-
 #: ../src/emoticondlg.cpp:26
 msgid "Emoticons"
 msgstr ""
@@ -351,10 +345,16 @@ msgstr ""
 msgid "New Emoticon"
 msgstr ""
 
-#: ../src/emoticondlg.cpp:138 ../src/emoticondlg.cpp:155
+#: ../src/emoticondlg.cpp:138
+#: ../src/emoticondlg.cpp:155
 msgid "Input New Emoticon"
 msgstr ""
 
 #: ../src/emoticondlg.cpp:155
 msgid "Edit Emoticon"
 msgstr ""
+
+#: ../src/view/telnetview.cpp:156
+msgid "_Copy URL to Clipboard"
+msgstr ""
+
