@@ -94,8 +94,6 @@ public:
 
     bool IsLoggedIn(){  return m_IsLoggedIn;  }
 
-//    bool LoadIcons();
-
 //    wxSize GetToolbarIconSize(){  return m_ToolbarIconSize;  }
 
 //	Window
@@ -143,22 +141,6 @@ public:
 //	HyperLinks
 //	CTermHyperLink HyperLink;
 
-// Icons
-/*	wxIcon m_MainIconInvert;
-	wxIcon m_MainIcon;
-	wxBitmap m_SiteListIcon;
-	wxBitmap m_QuickConnectIcon;
-	wxBitmap m_DisconnectIcon;
-	wxBitmap m_ReconnectIcon;
-	wxBitmap m_CloseIcon;
-	wxBitmap m_FavoriteIcon;
-	wxBitmap m_CopyIcon;
-	wxBitmap m_AnsiCopyIcon;
-	wxBitmap m_PasteIcon;
-	wxBitmap m_FontIcon;
-	wxBitmap m_OptionsIcon;
-	wxBitmap m_AboutIcon;
-*/
 protected:
     string m_UserPasswd;
 //    BLOWFISH_CTX* m_Blowfish;

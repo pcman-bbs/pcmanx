@@ -100,6 +100,10 @@ public:
     EggTrayIcon *m_TrayIcon_Instance;
 #endif
 
+#ifdef USE_NOTIFIER
+    GdkPixbuf *GetMainIcon() { return m_MainIcon; };
+#endif
+
 protected:
     void CreateMenu();
     void CreateToolbar();

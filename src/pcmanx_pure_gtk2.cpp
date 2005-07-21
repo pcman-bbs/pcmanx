@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef USE_NOTIFIER
-	popup_notifier_init();
+	popup_notifier_init(main_frm->GetMainIcon());
 #endif
 
 	gtk_main ();

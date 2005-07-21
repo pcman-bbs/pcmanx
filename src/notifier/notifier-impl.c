@@ -31,6 +31,7 @@
 static int width, height, max_slots;
 static int slots[MAX_SLOTS] = {[0 ... (MAX_SLOTS - 1)] = -1 };
 static int notifier_initialized = 0;
+static GdkPixbuf *icon_pixbuf;
 
 struct sWin {
 	GtkWidget *win, *context;
@@ -144,9 +145,6 @@ static void begin_animation(GtkWidget * win, GtkWidget * context)
 	gtk_timeout_add(SPEED, slow_show_win, w);
 }
 
-/* Import PCManX icon */
-#include "pcmanx_xpm.xpm"
-
 static void notify_new(const gchar *_caption_text, const gchar *body_text)
 {
 	GtkWidget *win = gtk_window_new(GTK_WINDOW_POPUP);
@@ -158,7 +156,6 @@ static void notify_new(const gchar *_caption_text, const gchar *body_text)
 	GtkWidget *labelCaption;
 	/* XXX:
 	 * We should provide a better way to change pixmap */
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_xpm);
 	
 	context = gtk_table_new(2, 2, TRUE);
 	
@@ -169,12 +166,16 @@ static void notify_new(const gchar *_caption_text, const gchar *body_text)
 	labelCaption = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(labelNotify), context_text);
 	gtk_label_set_markup(GTK_LABEL(labelCaption), caption_text);
-	imageNotify = gtk_image_new_from_pixbuf(pixbuf);
 
-	gtk_table_attach(GTK_TABLE(context), imageNotify, 
-		0,1,0,1,
-		GTK_FILL, GTK_FILL,
-		0, 0);
+	if (icon_pixbuf) {
+		imageNotify = gtk_image_new_from_pixbuf(icon_pixbuf);
+
+		gtk_table_attach(GTK_TABLE(context), imageNotify, 
+			0,1,0,1,
+			GTK_FILL, GTK_FILL,
+			0, 0);
+	}
+
 	gtk_table_attach(GTK_TABLE(context), labelCaption,
 		1,2,0,1,
 		GTK_FILL, GTK_FILL,
@@ -205,12 +206,14 @@ void popup_notifier_notify(const gchar *caption, const gchar *text)
 		notify_new(caption, text);
 }
 
-void popup_notifier_init()
+void popup_notifier_init(GdkPixbuf *pixbuf)
 {
 	/* Initialization has been done or not. */
 	if (notifier_initialized)
 		return;
-	
+
+	icon_pixbuf = pixbuf;
+
 	height = gdk_screen_height();
 	width = gdk_screen_width();
 	max_slots = MAX((height - NHEIGHT) / NHEIGHT, MAX_SLOTS);

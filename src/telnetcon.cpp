@@ -683,14 +683,16 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 	 * the original one.
 	 */
 	gsize l;
-	gchar* utf8_text = g_convert(
+	gchar *utf8_text = g_convert(
 		line, strlen(line), 
 		"UTF-8", m_Site.m_Encoding.c_str(), 
 		NULL, &l, NULL);
 
 	gchar **column = g_strsplit(utf8_text, " ", 2);
 	popup_notifier_notify(
-		g_strdup_printf("In %s, %s said:", m_Site.m_Name.c_str(), column[0]),
+		g_strdup_printf("%s - %s",
+			m_Site.m_Name.c_str(),
+			g_strchomp(column[0])),
 		g_strchomp(column[1]));
 	g_strfreev(column);
 	g_free(utf8_text);

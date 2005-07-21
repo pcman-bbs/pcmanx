@@ -124,7 +124,7 @@ CMainFrame::CMainFrame()
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	PostCreate();
 
-#ifdef USE_DOCKLET
+#if defined(USE_DOCKLET) || defined(USE_NOTIFIER)
 	/* We need to make sure m_MainIcon is null at startup. */
 	m_MainIcon = (GdkPixbuf *) NULL;
 #endif

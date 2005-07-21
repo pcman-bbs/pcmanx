@@ -1,5 +1,25 @@
 2005-07-21  Jim Huang  <jserv@kaffe.org>
 
+	* src/notifier/api.h (popup_notifier_init):
+	Add parameter (GdkPixbuf *icon) to indicate popup icon.
+
+	* src/notifier/notifier-impl.c (notify_new) (popup_notifier_init):
+	No longer to duplicate icon pixmap.
+
+	* src/mainframe.h (GetMainIcon):
+	New public method to obtain main icon pixbuf.
+
+	* src/appconfig.h,
+	src/appconfig.cpp: Remove redundant comments.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Assign icon to notifier.
+
+	* src/telnetcon.cpp (CTelnetCon::OnNewIncomingMessage):
+	Simplify popup caption.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
 	* src/notifier/impl.c,
 	src/notifier/notifier-impl.c:
 	Rename impl.c to notifier-impl.c for better maintenance.
@@ -31,8 +51,8 @@
 	New files. Primitive lightweight popup notifier implementation.
 	NOTE: The length of message body and window size have to be adjusted.
 
-	* src/pcmanx_pure_gtk2.cpp,
-	src/telnetcon.cpp,
+	* src/pcmanx_pure_gtk2.cpp (main),
+	src/telnetcon.cpp (CTelnetCon::OnNewIncomingMessage),
 	src/Makefile.am,
 	configure.ac:
 	Add popup notification support.
