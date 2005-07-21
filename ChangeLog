@@ -1,7 +1,10 @@
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/Makefile.am: Add missing file.
+
 2005-07-22  Jim Huang  <jserv@kaffe.org>
 
-	* src/core/Makefile.am,
-	src/core/widget.cpp,
+	* src/core/widget.cpp,
 	src/core/font.cpp,
 	src/core/site.cpp,
 	src/core/caret.cpp,
@@ -17,7 +20,7 @@
 	src/core/view.cpp:
 	Move core implementation from $(top_srcdir)/src to 
 	$(top_srcdir)/src/core, so that both standalone program and plugin
-	could use the share library.
+	could use the shared library.
 
 	* src/view/termview.cpp,
 	src/view/telnetview.cpp,
