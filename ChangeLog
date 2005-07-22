@@ -1,5 +1,10 @@
 2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* po/POTFILES.in:
+	Correct wrong file paths.
+
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/notifier/notifier-impl.c:
 	Take height of taskbar into consideration and prevent taskbar from being
 	covered by the popup notifier.

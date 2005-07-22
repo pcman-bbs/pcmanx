@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-20 13:21+0800\n"
-"PO-Revision-Date: 2005-07-22 03:02+0800\n"
+"PO-Revision-Date: 2005-07-23 00:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/sitelistdlg.cpp:33
-#: ../src/mainframe.cpp:605
+#: ../src/mainframe.cpp:606
 msgid "Site List"
 msgstr ""
 
@@ -29,160 +29,160 @@ msgstr ""
 msgid "Keyword \"%s\" not found!"
 msgstr ""
 
-#: ../src/mainframe.cpp:290
+#: ../src/mainframe.cpp:291
 msgid "_Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:298
 msgid "_Site List"
 msgstr ""
 
-#: ../src/mainframe.cpp:308
+#: ../src/mainframe.cpp:309
 msgid "_New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:319
+#: ../src/mainframe.cpp:320
 msgid "_Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:330
+#: ../src/mainframe.cpp:331
 msgid "_Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:346
+#: ../src/mainframe.cpp:347
 msgid "Next Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:357
+#: ../src/mainframe.cpp:358
 msgid "Previous Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:368
+#: ../src/mainframe.cpp:369
 msgid "_Jump to"
 msgstr ""
 
-#: ../src/mainframe.cpp:381
+#: ../src/mainframe.cpp:382
 msgid "_Quit"
 msgstr ""
 
-#: ../src/mainframe.cpp:389
+#: ../src/mainframe.cpp:390
 msgid "_Edit"
 msgstr ""
 
-#: ../src/mainframe.cpp:396
+#: ../src/mainframe.cpp:397
 msgid "_Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:407
+#: ../src/mainframe.cpp:408
 msgid "Copy with A_NSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:415
+#: ../src/mainframe.cpp:416
 msgid "_Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:426
+#: ../src/mainframe.cpp:427
 msgid "Select A_ll"
 msgstr ""
 
-#: ../src/mainframe.cpp:435
+#: ../src/mainframe.cpp:436
 msgid "_Emoticons"
 msgstr ""
 
-#: ../src/mainframe.cpp:442
+#: ../src/mainframe.cpp:443
 msgid "_Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:450
+#: ../src/mainframe.cpp:451
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:462
-#: ../src/mainframe.cpp:1170
+#: ../src/mainframe.cpp:463
+#: ../src/mainframe.cpp:1172
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:470
-#: ../src/mainframe.cpp:1178
+#: ../src/mainframe.cpp:471
+#: ../src/mainframe.cpp:1180
 msgid "_Edit Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:478
+#: ../src/mainframe.cpp:479
 msgid "_View"
 msgstr ""
 
-#: ../src/mainframe.cpp:489
+#: ../src/mainframe.cpp:490
 msgid "_Help"
 msgstr ""
 
-#: ../src/mainframe.cpp:555
+#: ../src/mainframe.cpp:556
 msgid "Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:610
+#: ../src/mainframe.cpp:611
 msgid "New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:615
+#: ../src/mainframe.cpp:616
 msgid "Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:620
+#: ../src/mainframe.cpp:621
 msgid "Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:629
+#: ../src/mainframe.cpp:630
 msgid "Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:634
+#: ../src/mainframe.cpp:635
 msgid "Copy with ANSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:639
+#: ../src/mainframe.cpp:640
 msgid "Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:648
+#: ../src/mainframe.cpp:649
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:653
+#: ../src/mainframe.cpp:654
 #: ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:658
+#: ../src/mainframe.cpp:659
 msgid "About"
 msgstr ""
 
-#: ../src/mainframe.cpp:701
+#: ../src/mainframe.cpp:702
 msgid "A_ddress:"
 msgstr ""
 
-#: ../src/mainframe.cpp:704
+#: ../src/mainframe.cpp:705
 msgid "Type URL here, then hit \"Enter\""
 msgstr ""
 
-#: ../src/mainframe.cpp:727
+#: ../src/mainframe.cpp:728
 msgid "Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:727
+#: ../src/mainframe.cpp:728
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
 msgstr ""
 
-#: ../src/mainframe.cpp:759
+#: ../src/mainframe.cpp:760
 msgid "Font"
 msgstr ""
 
-#: ../src/mainframe.cpp:764
+#: ../src/mainframe.cpp:765
 msgid "Apply to all opened pages"
 msgstr ""
 
-#: ../src/mainframe.cpp:824
+#: ../src/mainframe.cpp:825
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -190,7 +190,7 @@ msgid ""
 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:834
+#: ../src/mainframe.cpp:835
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -204,22 +204,22 @@ msgid ""
 "%s\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:862
+#: ../src/mainframe.cpp:863
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1080
+#: ../src/mainframe.cpp:1082
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1092
+#: ../src/mainframe.cpp:1094
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1104
+#: ../src/mainframe.cpp:1106
 msgid "Add To Favorites"
 msgstr ""
 
@@ -309,27 +309,35 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:39
+#: ../src/generalprefpage.cpp:43
 msgid "Confirm before closing connected connections"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:43
+#: ../src/generalprefpage.cpp:47
 msgid "Confirm before exiting the program if there are still connections"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:47
+#: ../src/generalprefpage.cpp:51
 msgid "Cancel selection after copying text"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:51
+#: ../src/generalprefpage.cpp:55
 msgid "Show System Tray Icon (Docklet) (Take effect after restart)"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:55
+#: ../src/generalprefpage.cpp:59
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:63
+#: ../src/generalprefpage.cpp:67
+msgid "Display popup notifier for "
+msgstr ""
+
+#: ../src/generalprefpage.cpp:76
+msgid "seconds"
+msgstr ""
+
+#: ../src/generalprefpage.cpp:84
 msgid "Web Browser: "
 msgstr ""
 

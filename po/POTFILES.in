@@ -5,5 +5,5 @@ src/editfavdlg.cpp
 src/sitepage.cpp
 src/prefdlg.cpp
 src/generalprefpage.cpp
-src/telnetview.cpp
+src/view/telnetview.cpp
 src/emoticondlg.cpp
