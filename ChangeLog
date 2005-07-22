@@ -1,5 +1,29 @@
 2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/notifier/notifier-impl.c:
+	Take height of taskbar into consideration and prevent taskbar from being
+	covered by the popup notifier.
+
+	* src/notifier/working_area.c:
+	This piece of code is got from Guification, a plug-in for Gaim.
+
+	* src/view/termview.cpp:
+	Rewrite the code used to launch web browser.
+	Remove unnecessary dependency on class CAppConfig.
+
+	* src/view/telnetcon.cpp:
+	Disable popup notifier if the user don't want to use it.
+
+	* src/mainframe.cpp:
+	Set web browser for CTermView according to user settings.
+
+	* src/generalprefpage.cpp,
+	src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp:
+	Add some preference options for popup notifier.
+
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/notifier/notifier-impl.c, 
 	src/view/telnetcon.cpp:
 	+ Automatically hide msg popup disappear on timeout.

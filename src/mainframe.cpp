@@ -158,8 +158,8 @@ CMainFrame::CMainFrame()
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
 	
 	m_pNotebook = new CNotebook();
-	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), true);
-	
+	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
+
 	CreateMenu();
 	CreateToolbar();
 
@@ -181,7 +181,7 @@ CMainFrame::CMainFrame()
 
 	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
-	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
+//	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
 
 	g_signal_connect(G_OBJECT(m_Widget), "delete-event", G_CALLBACK(CMainFrame::OnClose), this);
 
@@ -197,6 +197,7 @@ CMainFrame::CMainFrame()
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
 	CTelnetView::SetParentFrame(this);
+	CTermView::SetWebBrowser( AppConfig.WebBrowser );
 }
 
 
@@ -921,6 +922,7 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->ShowModal();
 	dlg->Destroy();
 
+	CTermView::SetWebBrowser( AppConfig.WebBrowser );
 //	FIXME: Currently we cannot freely hide or show tray icon.
 /*	if( AppConfig.ShowTrayIcon != show_tray_icon )
 		if(AppConfig.ShowTrayIcon)

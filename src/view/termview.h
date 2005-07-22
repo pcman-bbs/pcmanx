@@ -67,6 +67,7 @@ public:
     void SetFontFamily(string name);
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
+	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
     CFont* GetFont(){	return m_Font;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
 
@@ -113,6 +114,7 @@ protected:
     string m_FontFamily;
 
 	static GdkCursor* m_HandCursor;
+    static string m_WebBrowser;
 };
 
 #endif

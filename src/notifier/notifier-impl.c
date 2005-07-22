@@ -17,6 +17,7 @@
 #include <fcntl.h>
 
 #include "notifier/api.h"
+#include "working_area.h"
 
 /* Customizable settings */
 #define NHEIGHT 80
@@ -32,6 +33,7 @@
 static int width, height, max_slots;
 static int slots[MAX_SLOTS] = {[0 ... (MAX_SLOTS - 1)] = -1 };
 static int notifier_initialized = 0;
+static int popup_timeout = TIMEOUT;
 static GdkPixbuf *icon_pixbuf;
 
 struct sWin {
@@ -130,7 +132,7 @@ static int slow_show_win(gpointer data)
 
 		/* Added by Hong Jen Yee (PCMan)  */
 		win->ani_timer_id = 0;
-		win->timeout_id = gtk_timeout_add(TIMEOUT, wait_win, data);
+		win->timeout_id = gtk_timeout_add(popup_timeout, wait_win, data);
 		return FALSE;
 	}
 
@@ -265,6 +267,11 @@ GtkWidget* popup_notifier_notify(const gchar *caption, const gchar *text,
 		return notify_new(caption, text, parent, click_cb, click_cb_data);
 }
 
+void popup_notifier_set_timeout( int popup_timeout_sec )
+{
+	popup_timeout = 1000 * popup_timeout_sec;
+}
+
 void popup_notifier_init(GdkPixbuf *pixbuf)
 {
 	/* Initialization has been done or not. */
@@ -273,10 +280,14 @@ void popup_notifier_init(GdkPixbuf *pixbuf)
 
 	icon_pixbuf = pixbuf;
 
-	height = gdk_screen_height();
-	width = gdk_screen_width();
+	GdkRectangle area;
+	get_desktop_working_area(&area);
+	height = area.height;
+	width = area.width;
 	max_slots = MAX((height - NHEIGHT) / NHEIGHT, MAX_SLOTS);
 
 	notifier_initialized = 1;
 }
+
+
 

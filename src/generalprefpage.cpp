@@ -34,8 +34,12 @@ CGeneralPrefPage::CGeneralPrefPage()
 	PostCreate();
   
 	GtkWidget *hbox19;
-	GtkWidget* label27;
-	
+	GtkWidget *label27;
+	GtkWidget *hbox20;
+	GtkWidget *label28;
+	GtkObject *m_PopupTimeout_adj;
+	GtkWidget *label29;
+
 	m_QueryOnCloseCon = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections"));
 	gtk_widget_show (m_QueryOnCloseCon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_QueryOnCloseCon, FALSE, FALSE, 0);
@@ -56,6 +60,23 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_AAFont);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
 
+	hbox20 = gtk_hbox_new (FALSE, 0);
+	gtk_widget_show (hbox20);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox20, FALSE, FALSE, 0);
+
+	m_PopupNotifier = gtk_check_button_new_with_mnemonic (_("Display popup notifier for "));
+	gtk_widget_show (m_PopupNotifier);
+	gtk_box_pack_start (GTK_BOX (hbox20), m_PopupNotifier, FALSE, FALSE, 0);
+
+	m_PopupTimeout_adj = gtk_adjustment_new (0, 0, 100, 1, 10, 10);
+	m_PopupTimeout = gtk_spin_button_new (GTK_ADJUSTMENT (m_PopupTimeout_adj), 1, 0);
+	gtk_widget_show (m_PopupTimeout);
+	gtk_box_pack_start (GTK_BOX (hbox20), m_PopupTimeout, FALSE, TRUE, 0);
+	
+	label29 = gtk_label_new (_("seconds"));
+	gtk_widget_show (label29);
+	gtk_box_pack_start (GTK_BOX (hbox20), label29, FALSE, FALSE, 2);
+
 	hbox19 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox19);
 	gtk_box_pack_start (GTK_BOX (m_Widget), hbox19, FALSE, FALSE, 0);
@@ -67,7 +88,6 @@ CGeneralPrefPage::CGeneralPrefPage()
 	m_WebBrowser = gtk_entry_new ();
 	gtk_widget_show (m_WebBrowser);
 	gtk_box_pack_start (GTK_BOX (hbox19), m_WebBrowser, TRUE, TRUE, 0);
-
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon), 
 								AppConfig.QueryOnCloseCon);
@@ -84,8 +104,12 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), 
 								AppConfig.AntiAliasFont);
 
-	gtk_entry_set_text(GTK_ENTRY(m_WebBrowser), AppConfig.WebBrowser.c_str());
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), 
+								AppConfig.PopupNotifier);
 
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_PopupTimeout), AppConfig.PopupTimeout);
+
+	gtk_entry_set_text(GTK_ENTRY(m_WebBrowser), AppConfig.WebBrowser.c_str());
 }
 
 
@@ -96,6 +120,13 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
+
+	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( 
+									GTK_TOGGLE_BUTTON(m_PopupNotifier));
+
+	AppConfig.PopupTimeout = gtk_spin_button_get_value( 
+									GTK_SPIN_BUTTON(m_PopupTimeout));
+
 
 	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
 }

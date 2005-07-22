@@ -31,8 +31,6 @@
 #include <pango/pangoxft.h>
 #include "font.h"
 
-#include "appconfig.h"	//	FIXME: This should be removed in the future.
-
 using namespace std;
 
 static gboolean on_key_pressed(GtkWidget* wnd, GdkEventKey *evt, CTermView* _this)
@@ -98,6 +96,7 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 }
 
 GdkCursor* CTermView::m_HandCursor = NULL;
+string CTermView::m_WebBrowser;
 
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
@@ -523,7 +522,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 
 	//	2004.08.07 Added by PCMan.  Hyperlink detection.
 	//	If no text is selected, consider hyperlink.
-	if( m_pTermData->m_SelStart == m_pTermData->m_SelEnd )
+	if( m_pTermData->m_SelStart == m_pTermData->m_SelEnd && !m_WebBrowser.empty() )
 	{
 		int x = (int)evt->x;
 		int y = (int)evt->y;
@@ -534,10 +533,18 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 			char* pline = m_pTermData->m_Screen[y];
 			string URL( (pline+start), (int)(end-start) );
 
-	//	FIXME: Temporary hack. This must be rewritten in the future.
-	//		system(("mozilla " + URL).c_str());
-			const char* argv[] = {AppConfig.WebBrowser.c_str(), URL.c_str(), NULL};
-			g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+			char *cmdline = new char[ m_WebBrowser.length() + URL.length() + 10 ];
+			if( strstr(m_WebBrowser.c_str(), "%s") )
+				sprintf( cmdline, m_WebBrowser.c_str(), URL.c_str() );
+			else
+			{
+				memcpy(cmdline, m_WebBrowser.c_str(), m_WebBrowser.length());
+				cmdline[m_WebBrowser.length()] = ' ';
+				memcpy( &cmdline[m_WebBrowser.length() + 1], URL.c_str(), URL.length() + 1);
+			}
+			strcat(cmdline, " &");	// launch the browser in background.
+			system(cmdline);	// Is this portable?
+			delete []cmdline;
 		}
 	}
 	else	// if there is a selected area

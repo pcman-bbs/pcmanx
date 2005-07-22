@@ -8,6 +8,7 @@
 G_BEGIN_DECLS
 
 void popup_notifier_init(GdkPixbuf *icon);
+void popup_notifier_set_timeout( int popup_timeout_sec );
 
 GtkWidget* popup_notifier_notify(const gchar *caption, const gchar *text, GtkWidget* parent, GCallback click_cb, gpointer click_cb_data);
 

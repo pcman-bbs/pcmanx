@@ -92,7 +92,9 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
 		CFG_BOOL( ShowTrayIcon )
-		CFG_STR (WebBrowser)
+		CFG_STR ( WebBrowser )
+		CFG_BOOL( PopupNotifier )
+		CFG_INT ( PopupTimeout )
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Display)
@@ -292,6 +294,8 @@ void CAppConfig::SetToDefault()
 	QueryOnCloseCon = 1;
 	CancelSelAfterCopy =1;
 	CopyTrimTail = 1;
+	PopupNotifier = true;
+	PopupTimeout = 6;
 
 	CharPaddingX = 0;
 	CharPaddingY = 0;
@@ -304,7 +308,7 @@ void CAppConfig::SetToDefault()
 	AntiAliasFont = true;
 	HCenterAlign = false;
 
-	WebBrowser = "mozilla";
+	WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;
 
 	HyperLinkColor.red = 65535;
@@ -315,6 +319,8 @@ void CAppConfig::SetToDefault()
 
 void CAppConfig::AfterLoad()
 {
+	if(	!WebBrowser.empty() && !strstr( WebBrowser.c_str(), " %s") )
+		WebBrowser += " %s";
 /*
 	if( 0 == Shadow.length() )
 		return;

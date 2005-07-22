@@ -690,7 +690,7 @@ void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 void CTelnetCon::OnNewIncomingMessage(char* line)
 {
 #ifdef USE_NOTIFIER
-	if (strlen(line) <= 0)
+	if ( !AppConfig.PopupNotifier || !*line )
 		return;
 
 	CMainFrame* mainfrm = ((CTelnetView*)m_pView)->GetParentFrame();

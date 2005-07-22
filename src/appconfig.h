@@ -115,6 +115,8 @@ public:
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
 	bool ShowTrayIcon;
+	bool PopupNotifier;
+	int PopupTimeout;
 	
 //	Terminal Settings
 	int RowsPerPage;

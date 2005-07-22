@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_NOTIFIER
 	popup_notifier_init(main_frm->GetMainIcon());
+	popup_notifier_set_timeout( AppConfig.PopupTimeout );
 #endif
 
 	gtk_main ();
