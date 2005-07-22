@@ -475,7 +475,7 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	bool aa_font = m_Font->GetAntiAlias();
 	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h, aa_font);
 
-	RecalcCharDemension();
+	RecalcCharDimension();
 }
 
 
@@ -755,7 +755,7 @@ void CTermView::SetFontFamily(string name)
 	int desire_w = (m_Widget->allocation.width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
 	int desire_h = (m_Widget->allocation.height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
 	m_Font->SetFont(name, desire_w, desire_h, m_Font->GetAntiAlias());
-	RecalcCharDemension();
+	RecalcCharDimension();
 }
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
@@ -823,7 +823,7 @@ void CTermView::OnDestroy()
 	CView::OnDestroy();	// Remember to destruct parent
 }
 
-void CTermView::RecalcCharDemension()
+void CTermView::RecalcCharDimension()
 {
 	m_CharW = m_Font->GetMaxWidth()/2 + m_CharPaddingX;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
 	m_CharH = m_Font->GetHeight() + m_CharPaddingY;

@@ -41,6 +41,9 @@
 #include "font.h"
 #include "emoticondlg.h"
 
+#ifdef USE_NOTIFIER
+#include "notifier/api.h"
+#endif
 
 #ifdef USE_DOCKLET
 #include "docklet/eggtrayicon.h"
@@ -119,7 +122,6 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
-	m_IsActivated = false;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	PostCreate();
@@ -191,7 +193,7 @@ CMainFrame::CMainFrame()
 
 	g_signal_connect(G_OBJECT(m_Widget), "focus-in-event", G_CALLBACK(CMainFrame::OnActivated), this);
 
-	g_signal_connect(G_OBJECT(m_Widget), "focus-out-event", G_CALLBACK(CMainFrame::OnDeactivated), this);
+//	g_signal_connect(G_OBJECT(m_Widget), "focus-out-event", G_CALLBACK(CMainFrame::OnDeactivated), this);
 
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
@@ -923,6 +925,10 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->Destroy();
 
 	CTermView::SetWebBrowser( AppConfig.WebBrowser );
+
+#ifdef USE_NOTIFIER
+	popup_notifier_set_timeout( AppConfig.PopupTimeout );
+#endif
 //	FIXME: Currently we cannot freely hide or show tray icon.
 /*	if( AppConfig.ShowTrayIcon != show_tray_icon )
 		if(AppConfig.ShowTrayIcon)
@@ -1304,18 +1310,10 @@ void CMainFrame::FlashWindow( bool flash )
 
 gboolean CMainFrame::OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this )
 {
-	_this->m_IsActivated = true;
 	if( _this->m_IsFlashing )
 		_this->FlashWindow(false);
 	return false;
 }
-
-gboolean CMainFrame::OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this )
-{
-	_this->m_IsActivated = false;
-	return false;
-}
-
 
 gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMainFrame* _this)
 {

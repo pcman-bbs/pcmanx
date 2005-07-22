@@ -1,3 +1,14 @@
+2005-07-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp:
+	(CMainFrame::OnDeactivated): Removed
+
+	* src/termview.cpp:
+	Fix a typo.
+
+	* src/notifier/notifier-impl.c:
+	Little bug fix.
+
 2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* po/POTFILES.in:

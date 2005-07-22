@@ -88,9 +88,8 @@ public:
     static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
     static void OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this);
     static gboolean OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
-    static gboolean OnDeactivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
 
-    bool IsActivated(){	return m_IsActivated;	}
+    bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
     static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
     int GetViewIndex(CTermView* view);
     void SwitchToCon(CTelnetCon* con);
@@ -149,7 +148,6 @@ protected:
     GtkWidget* m_FavoritesMenu;
 
 	bool m_IsFlashing;
-	bool m_IsActivated;
     GtkWidget* m_URLEntry;
     GtkTooltips* m_Tooltips;
 };

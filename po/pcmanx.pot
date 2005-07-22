@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-20 13:21+0800\n"
-"PO-Revision-Date: 2005-07-23 00:00+0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2005-07-23 05:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:33
-#: ../src/mainframe.cpp:606
+#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:608
 msgid "Site List"
 msgstr ""
 
@@ -29,160 +29,168 @@ msgstr ""
 msgid "Keyword \"%s\" not found!"
 msgstr ""
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:293
 msgid "_Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:298
+#: ../src/mainframe.cpp:300
 msgid "_Site List"
 msgstr ""
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:311
 msgid "_New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:320
+#: ../src/mainframe.cpp:322
 msgid "_Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:331
+#: ../src/mainframe.cpp:333
 msgid "_Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:347
+#: ../src/mainframe.cpp:349
 msgid "Next Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:358
+#: ../src/mainframe.cpp:360
 msgid "Previous Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:369
+#: ../src/mainframe.cpp:371
 msgid "_Jump to"
 msgstr ""
 
-#: ../src/mainframe.cpp:382
+#: ../src/mainframe.cpp:384
 msgid "_Quit"
 msgstr ""
 
-#: ../src/mainframe.cpp:390
+#: ../src/mainframe.cpp:392
 msgid "_Edit"
 msgstr ""
 
-#: ../src/mainframe.cpp:397
+#: ../src/mainframe.cpp:399
 msgid "_Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:408
+#: ../src/mainframe.cpp:410
 msgid "Copy with A_NSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:416
+#: ../src/mainframe.cpp:418
 msgid "_Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:427
+#: ../src/mainframe.cpp:429
 msgid "Select A_ll"
 msgstr ""
 
-#: ../src/mainframe.cpp:436
+#: ../src/mainframe.cpp:438
 msgid "_Emoticons"
 msgstr ""
 
-#: ../src/mainframe.cpp:443
+#: ../src/mainframe.cpp:445
 msgid "_Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:451
+#: ../src/mainframe.cpp:453
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:463
-#: ../src/mainframe.cpp:1172
+#: ../src/mainframe.cpp:465 ../src/mainframe.cpp:1178
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:471
-#: ../src/mainframe.cpp:1180
+#: ../src/mainframe.cpp:473 ../src/mainframe.cpp:1186
 msgid "_Edit Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:479
+#: ../src/mainframe.cpp:481
 msgid "_View"
 msgstr ""
 
-#: ../src/mainframe.cpp:490
+#: ../src/mainframe.cpp:492
 msgid "_Help"
 msgstr ""
 
-#: ../src/mainframe.cpp:556
+#: ../src/mainframe.cpp:558
 msgid "Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:611
+#: ../src/mainframe.cpp:613
 msgid "New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:616
+#: ../src/mainframe.cpp:618
 msgid "Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:621
+#: ../src/mainframe.cpp:623
 msgid "Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:630
+#: ../src/mainframe.cpp:632
 msgid "Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:635
+#: ../src/mainframe.cpp:637
 msgid "Copy with ANSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:640
+#: ../src/mainframe.cpp:642
 msgid "Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:649
+#: ../src/mainframe.cpp:651
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:654
-#: ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:656 ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:659
+#: ../src/mainframe.cpp:661
 msgid "About"
 msgstr ""
 
-#: ../src/mainframe.cpp:702
+#: ../src/mainframe.cpp:704
 msgid "A_ddress:"
 msgstr ""
 
-#: ../src/mainframe.cpp:705
+#: ../src/mainframe.cpp:707
 msgid "Type URL here, then hit \"Enter\""
 msgstr ""
 
-#: ../src/mainframe.cpp:728
+#: ../src/mainframe.cpp:730
 msgid "Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:728
+#: ../src/mainframe.cpp:730
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
 msgstr ""
 
-#: ../src/mainframe.cpp:760
+#: ../src/mainframe.cpp:762
 msgid "Font"
 msgstr ""
 
-#: ../src/mainframe.cpp:765
+#: ../src/mainframe.cpp:767
 msgid "Apply to all opened pages"
 msgstr ""
 
-#: ../src/mainframe.cpp:825
+#. GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
+#. gtk_about_dialog_set_name(dlg, "PCMan X");
+#. gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
+#. gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
+#. gtk_about_dialog_set_license(dlg, "GPL");
+#. gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
+#. const char *authors[]={"Hong Jen Yee"};
+#. gtk_about_dialog_set_authors(dlg, authors );
+#. gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
+#.
+#. gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
+#: ../src/mainframe.cpp:827
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -190,7 +198,7 @@ msgid ""
 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:835
+#: ../src/mainframe.cpp:837
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -204,27 +212,26 @@ msgid ""
 "%s\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:863
+#: ../src/mainframe.cpp:865
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1082
+#: ../src/mainframe.cpp:1088
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1094
+#: ../src/mainframe.cpp:1100
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1106
+#: ../src/mainframe.cpp:1112
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/sitedlg.cpp:36
-#: ../src/prefdlg.cpp:40
+#: ../src/sitedlg.cpp:36 ../src/prefdlg.cpp:40
 msgid "Site Settings"
 msgstr ""
 
@@ -256,8 +263,7 @@ msgstr ""
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:102
-#: ../src/sitepage.cpp:119
+#: ../src/sitepage.cpp:102 ../src/sitepage.cpp:119
 msgid "Sec"
 msgstr ""
 
@@ -341,6 +347,10 @@ msgstr ""
 msgid "Web Browser: "
 msgstr ""
 
+#: ../src/view/telnetview.cpp:156
+msgid "_Copy URL to Clipboard"
+msgstr ""
+
 #: ../src/emoticondlg.cpp:26
 msgid "Emoticons"
 msgstr ""
@@ -353,16 +363,10 @@ msgstr ""
 msgid "New Emoticon"
 msgstr ""
 
-#: ../src/emoticondlg.cpp:138
-#: ../src/emoticondlg.cpp:155
+#: ../src/emoticondlg.cpp:138 ../src/emoticondlg.cpp:155
 msgid "Input New Emoticon"
 msgstr ""
 
 #: ../src/emoticondlg.cpp:155
 msgid "Edit Emoticon"
 msgstr ""
-
-#: ../src/view/telnetview.cpp:156
-msgid "_Copy URL to Clipboard"
-msgstr ""
-

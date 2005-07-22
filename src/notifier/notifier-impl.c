@@ -35,6 +35,7 @@ static int slots[MAX_SLOTS] = {[0 ... (MAX_SLOTS - 1)] = -1 };
 static int notifier_initialized = 0;
 static int popup_timeout = TIMEOUT;
 static GdkPixbuf *icon_pixbuf;
+static GdkRectangle working_area;
 
 struct sWin {
 	GtkWidget *win, *context;
@@ -48,6 +49,14 @@ struct sWin {
 };
 
 typedef struct sWin Win;
+
+static void update_working_area()
+{
+	get_desktop_working_area(&working_area);
+	height = working_area.height;
+	width = working_area.width;
+	max_slots = MAX((height - NHEIGHT) / NHEIGHT, MAX_SLOTS);
+}
 
 static int get_slot(GtkWidget * win)
 {
@@ -148,8 +157,10 @@ static int slow_show_win(gpointer data)
 
 static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 {
+	update_working_area();
+
 	int slot = get_slot(win);
-	int begin = height - slot * NHEIGHT;
+	int begin = working_area.y + height - slot * NHEIGHT;
 	Win *w = g_new0(Win, 1);
 
 	w->win = win;
@@ -157,7 +168,8 @@ static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 	w->slot = slot;
 	w->size = 0;
 
-	gtk_window_move(GTK_WINDOW(win), width - win->allocation.width, begin);
+	gtk_widget_realize(win);
+	gtk_window_move(GTK_WINDOW(win), working_area.x + width - win->allocation.width, begin);
 	gtk_widget_show_all(win);
 
 	w->ani_timer_id = gtk_timeout_add(SPEED, slow_show_win, w);
@@ -279,13 +291,6 @@ void popup_notifier_init(GdkPixbuf *pixbuf)
 		return;
 
 	icon_pixbuf = pixbuf;
-
-	GdkRectangle area;
-	get_desktop_working_area(&area);
-	height = area.height;
-	width = area.width;
-	max_slots = MAX((height - NHEIGHT) / NHEIGHT, MAX_SLOTS);
-
 	notifier_initialized = 1;
 }
 
