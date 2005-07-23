@@ -1,0 +1,41 @@
+How to Build
+============
+
+PCManX-pure-gtk2 uses autotools (Automake / Autoconf / libtool) to construct
+its building process, and provides various options for different profiles.
+
+You can launch configure script with --help to dump the supported options, 
+and here are the latest options:
+
+  --enable-static	Enable static build.
+  --disable-shared	Disabled dynamic build. [Default: Dynamic]
+			If dynamic build enabled (default), the build results
+			in libpcmanx_core.so as the shared library for the 
+			standalone program and the plugin (if enabled). You
+			can avoid this via the combination of the two options.
+  --enable-debug	Enable debugging support or not [Default: Disabled]
+			It will cause PCManX to dump more detail informations.
+
+  --prefix=DIR		Specify the prefix directory to DIR. Usually, we woild
+			like to use /usr as the manner defined in LSB (Linux
+			Standard Base).
+  --disable-mmx		Disable Intel MMX optimizations. [Default: Enabled]
+  --disable-docklet	Disable the docklet / system tray support.
+			[Default: Enabled]
+  --disable-notifier	Disable the popup notification support for incoming
+			messages. [Default: Enabled]
+  --disable-external	Disable the using of external SSH and Telnet program.
+			[Default: Enabled]
+  --enable-plugin	Enable the build of Mozilla/Firefox plugin for PCManX.
+			You should install the development packages of Mozilla /
+			Firefox. [Default: Disabled]
+
+For example, if you are willing to create a special build dedicated to full-
+functional PCManX as standalone program and an independent plugin (no shared
+libraries), you can invoke the script as following:
+
+  # ./configure \
+	--prefix=/usr \
+	--enable-static \
+	--disable-shared \
+	--enable-plugin

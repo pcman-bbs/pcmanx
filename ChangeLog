@@ -1,5 +1,11 @@
 2005-07-23  Jim Huang  <jserv@kaffe.org>
 
+	* README: Add "How to Build" section.
+
+	* TODO: Updated.
+
+2005-07-23  Jim Huang  <jserv@kaffe.org>
+
 	* src/core/termview.h
 	(SetTermData): New public method to set terminal data information,
 	which is useful to the plugin implementation.
