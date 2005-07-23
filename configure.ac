@@ -7,6 +7,7 @@ AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.2.0pre1, hzysoft@sina.com.tw)
 AC_PROG_CC
 AC_PROG_CPP
 AM_PROG_AS
+AC_PROG_CXX
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
 
@@ -22,6 +23,7 @@ AM_GLIB_GNU_GETTEXT
 dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
+AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
@@ -72,6 +74,10 @@ AC_ARG_ENABLE(notifier,
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
 	external=$enableval, external=yes)
+
+AC_ARG_ENABLE(plugin,
+[  --enable-plugin         enable Mozilla/Firefox plugin support (default: no)],
+	plugin=$enableval, plugin=no)
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -203,6 +209,64 @@ AC_SUBST(USE_EXTERNAL)
 
 
 dnl *********************************************************************
+dnl ** Mozilla/Firefox Plugin support ***********************************
+dnl *********************************************************************
+
+if test "$plugin" = "yes"; then
+  gecko_provider=mozilla
+  PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
+
+  # Check Firefox
+  if test "x$enable_mozilla" = "xno"; then
+    gecko_provider=firefox
+    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
+  fi
+
+  MOZILLA_LIB_DIR_SEARCH=
+  if test "x$enable_mozilla" = "xyes" ; then
+    AC_MSG_CHECKING([for Mozilla support])
+    AC_MSG_RESULT([$gecko_provider found!])
+    dnl Note: with the infos from mozilla-plugin.pc
+    dnl we got all includes and libraries for the C interface
+    dnl to Mozilla, but not the XPCOM headers we also need.
+    MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin | awk '{print $1}' | sed "s/^-I//"`
+    MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
+    MOZILLA_LIB_ROOT=`$PKG_CONFIG --libs-only-L $gecko_provider-plugin | awk '{print $1}' |  cut -c 3-`
+    MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+
+    dnl See if xpidl is found.
+    XPIDL="$MOZILLA_LIB_ROOT/xpidl"
+    if test ! -x "$XPIDL"; then
+      echo "ERROR:"
+      echo "The utility $XPIDL was not found. Please check your development packages."
+      AC_MSG_ERROR([Fatal Error: no xpidl detected.])
+    fi
+
+    dnl Maybe we don't need all of this...
+    MOZILLA_CFLAGS="$MOZILLA_CFLAGS \
+-I$MOZILLA_INCLUDE_ROOT \
+-I$MOZILLA_INCLUDE_ROOT/xpcom \
+-I$MOZILLA_INCLUDE_ROOT/xpconnect"
+
+    PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
+
+    AC_SUBST(PATH_OF_PCMANX_HTML)
+    AC_SUBST(XPIDL)
+    AC_SUBST(MOZILLA_CFLAGS)
+    AC_SUBST(MOZILLA_LIBS)
+    AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
+  fi
+fi
+
+if test "x$enable_mozilla" = "xno"; then
+  plugin="no"
+fi
+
+AM_CONDITIONAL(USE_PLUGIN, test "$plugin" = "yes")
+
+dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
 
@@ -281,17 +345,26 @@ dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
 
-
-AC_OUTPUT([
-Makefile
-src/Makefile
-src/core/Makefile
-po/Makefile.in
-data/Makefile
-pcmanx.desktop
-pcmanx-pure-gtk2.spec
-Doxygen
+AC_CONFIG_FILES([
+	Makefile
+	src/Makefile
+	src/core/Makefile
+	po/Makefile.in
+	data/Makefile
+	pcmanx.desktop
+	pcmanx-pure-gtk2.spec
+	Doxygen
 ])
+
+dnl Extra files needed by plugin
+AC_CONFIG_FILES([
+	plugin/Makefile
+	plugin/src/Makefile
+	plugin/data/Makefile
+	plugin/data/TelnetProtocol.js
+])
+
+AC_OUTPUT
 
 echo
 echo pcmanx_pure_gtk2 ................ : Version $VERSION
@@ -301,6 +374,11 @@ echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo External SSH/Telnet support...... : $external
+if test "x$enable_mozilla" = "xyes"; then
+     echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
+else
+     echo "Mozilla/Firefox plugin support... : $plugin"
+fi
 echo
 echo The binary will be installed in $prefix/bin
 echo

@@ -17,7 +17,7 @@
 #include <fcntl.h>
 
 #include "notifier/api.h"
-#include "working_area.h"
+#include "notifier/working_area.h"
 
 /* Customizable settings */
 #define NHEIGHT 80

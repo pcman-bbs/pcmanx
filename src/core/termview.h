@@ -70,6 +70,7 @@ public:
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
     CFont* GetFont(){	return m_Font;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
+    void SetTermData(CTermData* data){	m_pTermData = data;	}
 
 protected:
     void OnPaint(GdkEventExpose* evt);

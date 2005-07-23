@@ -1,3 +1,51 @@
+2005-07-23  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/termview.h
+	(SetTermData): New public method to set terminal data information,
+	which is useful to the plugin implementation.
+
+	* src/Makefile.am,
+	src/core/Makefile.am,
+	src/view/termview.cpp,
+	src/view/termview.h:
+	Move CTermView from $(top_srcdir)/src/view to (top_srcdir)/src/core,
+	so that we could use the same codebase for both the standalone program
+	and the Mozilla/Firefox plugin.
+
+	* src/view/telnetview.cpp,
+	src/view/telnetview.h,
+	src/view/telnetcon.cpp (CTelnetCon::OnConnect) (CTelnetCon::OnClose)
+	(CTelnetCon::OnTimer) (CTelnetCon::OnNewIncomingMessage):
+	Indicate the conditional compilations with MOZ_PLUGIN macro.
+
+	* plugin/src/pluginbase.h,
+	plugin/src/npplat.h,
+	plugin/src/plugin.cpp,
+	plugin/src/Makefile.am,
+	plugin/src/npp_gate.cpp,
+	plugin/src/np_entry.cpp,
+	plugin/src/pcmanx_interface.idl,
+	plugin/src/nsScriptablePeer.cpp,
+	plugin/src/nsScriptablePeer.h,
+	plugin/src/npn_gate.cpp,
+	plugin/src/plugin.h,
+	plugin/data/TelnetProtocol.js.in,
+	plugin/data/pcmanx.html,
+	plugin/data/Makefile.am,
+	plugin/data/pcmanx.png,
+	plugin/Makefile.am:
+	Introduce Mozilla/Firefox plugin implementation based on the excellent
+	work of PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+	NOTE: The IDL detection is not done yet. And pure-static build for
+	plugin is disabled at the moment.
+
+	* configure.ac:
+	Major enhancements for Mozilla/Firefox plugin/XPCOM detection, and add
+	new option --enable-plugin to build plugin, which means that we can
+	use the shared codebase between the standalone program and the plugin.
+
+	* Makefile.am: Add plugin in SUBDIRS.
+	
 2005-07-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/mainframe.cpp:

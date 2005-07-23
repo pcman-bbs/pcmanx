@@ -40,8 +40,10 @@ public:
 
     CTelnetCon* GetCon(){  return (CTelnetCon*)m_pTermData;  }
 
+#if !defined(MOZ_PLUGIN)
 	static void SetParentFrame(CMainFrame* frame){	m_pParentFrame = frame;	}
 	static CMainFrame* GetParentFrame(){	return m_pParentFrame;	}
+#endif /* !defined(MOZ_PLUGIN) */
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -50,8 +52,11 @@ protected:
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void OnDestroy();
+
+#if !defined(MOZ_PLUGIN)
 protected:
     static CMainFrame* m_pParentFrame;
+#endif /* !defined(MOZ_PLUGIN) */
 };
 
 #endif

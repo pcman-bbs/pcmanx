@@ -15,17 +15,24 @@
 
 #include "telnetcon.h"
 #include "telnetview.h"
+
+#if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
 
 #ifdef USE_NOTIFIER
 #include "notifier/api.h"
 #endif
 
+#endif /* !defined(MOZ_PLUGIN) */
+
 #include <string.h>
 #include <glib/gi18n.h>
 
 #include "stringutil.h"
+
+#if !defined(MOZ_PLUGIN)
 #include "appconfig.h"
+#endif /* !defined(MOZ_PLUGIN) */
 
 // socket related headers
 #include <sys/select.h>
@@ -216,7 +223,9 @@ void CTelnetCon::OnConnect(int code)
 	if( 0 == code )
 	{
 		m_State = TS_CONNECTED;
+#if !defined(MOZ_PLUGIN)
 		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConConnect((CTelnetView*)m_pView);
+#endif
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
 		m_IOChannelID = g_io_add_watch( m_IOChannel, 
 				GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
@@ -228,14 +237,18 @@ void CTelnetCon::OnConnect(int code)
 //		g_print("connection failed.\n");
 		m_State = TS_CLOSED;
 		Close();
+#if !defined(MOZ_PLUGIN)
 		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConClose((CTelnetView*)m_pView);
+#endif
 		const char failed_msg[] = "Unable to connect.";
 		memcpy( m_Screen[0], failed_msg, sizeof(failed_msg) );
+#if !defined(MOZ_PLUGIN)
 		if( GetView()->GetParentFrame()->GetCurView() == m_pView )
 		{
 			for( int col = 0; col < sizeof(failed_msg); )
 				col += m_pView->DrawChar( 0, col, 0 );
 		}
+#endif
 	}
 }
 
@@ -243,8 +256,9 @@ void CTelnetCon::OnClose()
 {
 	m_State = TS_CLOSED;
 	Close();
+#if !defined(MOZ_PLUGIN)
 	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConClose((CTelnetView*)m_pView);
-
+#endif
 	//	if disconnected by the server too soon, reconnect automatically.
 	if( m_Duration < m_Site.m_AutoReconnect )
 		Reconnect();
@@ -392,7 +406,9 @@ void CTelnetCon::OnTimer()
 //	whether to beep or show a visual indication instead.
 void CTelnetCon::Bell()
 {
+#if !defined(MOZ_PLUGIN)
 	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConBell((CTelnetView*)m_pView);
+#endif
 	if( m_BellTimeout )
 		g_source_remove( m_BellTimeout );
 
@@ -672,6 +688,8 @@ void CTelnetCon::OnLineModified(int row)
 		m_IsLastLineModified = true;
 }
 
+#if !defined(MOZ_PLUGIN)
+
 #ifdef USE_NOTIFIER
 
 void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
@@ -686,9 +704,13 @@ void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 
 #endif
 
+#endif /* !defined(MOZ_PLUGIN) */
+
 // When new incoming message is detected, this function gets called.
 void CTelnetCon::OnNewIncomingMessage(char* line)
 {
+#if !defined(MOZ_PLUGIN)
+
 #ifdef USE_NOTIFIER
 	if ( !AppConfig.PopupNotifier || !*line )
 		return;
@@ -718,4 +740,6 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 	g_strfreev(column);
 	g_free(utf8_text);
 #endif
+
+#endif /* !defined(MOZ_PLUGIN) */
 }

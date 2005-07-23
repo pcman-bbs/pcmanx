@@ -30,9 +30,12 @@
 
 #include "telnetview.h"
 #include "telnetcon.h"
+
+#if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
 
 CMainFrame* CTelnetView::m_pParentFrame = NULL;
+#endif /* !defined(MOZ_PLUGIN) */
 
 CTelnetView::CTelnetView()
         : CTermView()

@@ -21,4 +21,5 @@ libpcmanx_core_la_SOURCES = \
 	view.cpp view.h \
 	font.cpp font.h \
 	stringutil.cpp stringutil.h \
-	widget.cpp widget.h
+	widget.cpp widget.h \
+	termview.cpp termview.h

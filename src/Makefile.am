@@ -43,13 +43,12 @@ endif
 
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h \
-	view/termview.cpp view/termview.h
+	view/telnetview.cpp view/telnetview.h
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
 	$(NOTIFIER_SOURCES) \
-	$(VIEW_IMPLEMENTATION_SOURCES) \	
+	$(VIEW_IMPLEMENTATION_SOURCES) \
 	appconfig.cpp appconfig.h \
 	notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h \
