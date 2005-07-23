@@ -13,11 +13,11 @@ function autoConnect(){
 	++i;
 	while( BBSURL.charAt(i) == '/' )
 		   ++i;
-	BBSURL = BBSURL.substring(i);
+	BBSURL = BBSURL.substring(i).split("/")[0];
 
 	if(BBSURL!=null && BBSURL!=""){
 		B=document.getElementById("browser");
-		B.innerHTML='<embed id="BBS" type="application/pcman" width="100%" height="100%" URL="'+BBSURL+'" FontFace="Sans">';
+		B.innerHTML='<embed id="BBS" type="application/pcmanx" width="100%" height="100%" URL="'+BBSURL+'" FontFace="Sans">';
 		B.style.display="block";
 		document.title=BBSURL;
 	}

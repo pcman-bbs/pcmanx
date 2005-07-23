@@ -1,3 +1,9 @@
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/plugin.cpp: Rename "pcman" to "pcmanx" in registry.
+
+	* plugin/data/pcmanx.html: Eliminate suffix "/" in url.
+
 2005-07-23  Jim Huang  <jserv@kaffe.org>
 
 	* README: Add "How to Build" section.

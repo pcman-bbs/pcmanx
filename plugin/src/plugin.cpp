@@ -49,9 +49,9 @@
 #include <gdk/gdkx.h>
 #include <ctype.h>
 
-#define MIME_TYPES_HANDLED  "application/pcman"
-#define PLUGIN_NAME         "PCMan Plug-in for Mozilla/Firefox"
-#define MIME_TYPES_DESCRIPTION  MIME_TYPES_HANDLED":pcman:"PLUGIN_NAME
+#define MIME_TYPES_HANDLED  "application/pcmanx"
+#define PLUGIN_NAME         "PCManX Plug-in for Mozilla/Firefox"
+#define MIME_TYPES_DESCRIPTION  MIME_TYPES_HANDLED":pcmanx:"PLUGIN_NAME
 #define PLUGIN_DESCRIPTION  PLUGIN_NAME " (Telnet Plug-in)"
 
 #include "site.h"
