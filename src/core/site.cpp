@@ -103,9 +103,9 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "Login=%s\n", m_Login.c_str() );
 	fprintf( fo, "PasswdPrompt=%s\n", m_PasswdPrompt.c_str() );
 
-/*	if( m_Passwd.length() && AppConfig.IsLoggedIn() )
+	if( m_Passwd.length() /*&& AppConfig.IsLoggedIn()*/ )
 	{
-		BLOWFISH_CTX *bfc = AppConfig.GetBlowfish();
+/*		BLOWFISH_CTX *bfc = AppConfig.GetBlowfish();
 		if( bfc )
 		{
 			char buf[16];
@@ -125,5 +125,9 @@ void CSite::SaveToFile(FILE *fo)
 
 	}
 	else
+*/
 		fprintf( fo, "Passwd=%s\n", m_Passwd.c_str() );
-*/}
+	}
+}
+
+

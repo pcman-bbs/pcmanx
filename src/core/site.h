@@ -91,10 +91,10 @@ public:
 
     string& GetPasswd(){	return m_Passwd;	}
     void SetPasswd( string passwd ){	m_Passwd = passwd;	}
-    
+
     string& GetPasswdPrompt(){	return m_PasswdPrompt;	}
     void SetPasswdPrompt( string passwd_prompt ){	m_PasswdPrompt = passwd_prompt;	}
-    
+
 	string& GetLogin(){	return m_Login;	}
     void SetLogin( string login ){	m_Login = login;	}
 
@@ -103,7 +103,7 @@ public:
 
     string& GetPreLogin(){	return m_PreLogin;	}
     void SetPreLogin(string prelogin){	m_PreLogin = prelogin;	}
-    
+
 	string& GetPreLoginPrompt(){	return m_PreLoginPrompt;	}
     void SetPreLoginPrompt( string prelogin_prompt ){	m_PreLoginPrompt = prelogin_prompt;	}
 

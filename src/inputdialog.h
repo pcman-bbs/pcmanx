@@ -23,7 +23,7 @@
   #pragma interface "inputdialog.h"
 #endif
 
-#include <dialog.h>
+#include "dialog.h"
 #include <string>
 using namespace std;
 
@@ -39,7 +39,7 @@ public:
 
 	string GetText(){	return m_Text;	}
 	void SetText(string text){	if(m_Entry)gtk_entry_set_text(m_Entry, text.c_str());	}
-
+	GtkEntry* GetEntry(){	return GTK_ENTRY(m_Entry);	}
     gulong m_KeyPressHandlerId;
 
 protected:

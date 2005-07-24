@@ -19,6 +19,7 @@
 #include "termdata.h"
 #include "mainframe.h"
 #include "stringutil.h"
+#include "inputdialog.h"
 #include <stdio.h>
 
 CAppConfig AppConfig;
@@ -45,7 +46,6 @@ CAppConfig::CAppConfig() : CConfigFile("pcmanx") /*, HyperLinkColor(255,102,0)*/
 
 CAppConfig::~CAppConfig()
 {
-//	WX_CLEAR_ARRAY(Favorites);
 //	ReleaseBlowfish();
 }
 
@@ -59,33 +59,20 @@ CAppConfig::~CAppConfig()
 //	easy-maintaining is much more important.
 bool CAppConfig::DoDataExchange(bool bLoad)
 {
-/*	if( bLoad )
-	{
-
-		HyperLink.Alloc(3);
-
-		HyperLink.Add( "http:mozilla" );
-		HyperLink.Add( "ftp:mozilla" );
-		HyperLink.Add( "mailto:mozilla" );
-
-	}
-*/
-
 	BEGIN_CONFIG_SECT(Window)
 		CFG_INT( MainWndX )
 		CFG_INT( MainWndY )
 		CFG_INT( MainWndW )
 		CFG_INT( MainWndH )
-		CFG_INT( MainWndState )
-		CFG_INT( EditorX )
+/*		CFG_INT( EditorX )
 		CFG_INT( EditorY )
 		CFG_INT( EditorW )
 		CFG_INT( EditorH )
-		CFG_INT( EditorState )
+*/
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(General)
-//		CFG_STR ( Shadow )
+		CFG_STR ( Shadow )
 		CFG_BOOL( QueryOnExit)
 		CFG_BOOL( QueryOnCloseCon)
 		CFG_BOOL( CancelSelAfterCopy)
@@ -135,14 +122,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_STR ( "TermType", m_DefaultSite.m_TermType )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+		CFG_INT  ( SocketTimeout )
 	END_CONFIG_SECT()
-
-	BEGIN_CONFIG_SECT(HyperLink)
-//		_CFG_STR( "Type1", this->HyperLink[0] )
-//		_CFG_STR( "Type2", this->HyperLink[1] )
-//		_CFG_STR( "Type3", this->HyperLink[2] )
-	END_CONFIG_SECT()
-
 
 	BEGIN_CONFIG_FILE( ConfigFile )
 		CFG_SECT( Window )
@@ -150,7 +131,6 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_SECT( Display )
 		CFG_SECT( Color )
 		CFG_SECT( Site )
-//		CFG_SECT( HyperLink )
 	END_CONFIG_FILE()
 
 	SetRoot(ConfigFile);
@@ -229,9 +209,10 @@ void CAppConfig::LoadFavorites()
 				pSite->SetPasswdPrompt( pval );
 			else if( 0 == strcmp( pname, "Passwd" ) )
 			{
-/*				if( !*pval )
+				if( !*pval )
 					continue;
-				if( m_IsLoggedIn )
+				pSite->SetPasswd( pval );
+/*				if( m_IsLoggedIn )
 				{
 					bfc = GetBlowfish();
 					char passwd_buf[17];
@@ -289,7 +270,6 @@ void CAppConfig::SetToDefault()
 	ColsPerPage=80;
 	MainWndX = MainWndY = EditorX = EditorY = 40;
 	MainWndW = EditorW = 640;	MainWndH = EditorH = 480;
-	MainWndState = AppConfig.EditorState = WS_NORMAL;
 	QueryOnExit = 1;
 	QueryOnCloseCon = 1;
 	CancelSelAfterCopy =1;
@@ -314,6 +294,8 @@ void CAppConfig::SetToDefault()
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536*102/256;
 	HyperLinkColor.blue = 0;
+
+	SocketTimeout = 30;
 }
 
 
@@ -321,9 +303,12 @@ void CAppConfig::AfterLoad()
 {
 	if(	!WebBrowser.empty() && !strstr( WebBrowser.c_str(), " %s") )
 		WebBrowser += " %s";
-/*
-	if( 0 == Shadow.length() )
+
+/*	if( 0 == Shadow.length() )
 		return;
+
+	m_UserPasswd = GetUserPasswd();
+
 	unsigned long l = 0, r = 0;
 	sscanf( Shadow.c_str(), "%X,%X", &l, &r );
 	BLOWFISH_CTX* bfc = GetBlowfish();
@@ -335,8 +320,18 @@ void CAppConfig::AfterLoad()
 	}
 */
 }
-
 /*
+string CAppConfig::GetUserPasswd()
+{
+	string passwd;
+	CInputDialog* dlg = new CInputDialog( NULL, _("Login"), _("Input Password"), false );
+	gtk_entry_set_visibility(dlg->GetEntry(), false);
+	if( dlg->ShowModal() == GTK_RESPONSE_OK )
+		passwd = dlg->GetText();
+	dlg->Destroy();
+	return passwd;
+}
+
 void CAppConfig::SetUserPasswd( string passwd )
 {
 	m_UserPasswd = passwd;

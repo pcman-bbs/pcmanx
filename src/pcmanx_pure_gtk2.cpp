@@ -41,6 +41,7 @@
 
 #include "mainframe.h"
 #include "appconfig.h"
+#include "telnetcon.h"
 
 #ifdef USE_DOCKLET
 extern "C" {
@@ -96,6 +97,8 @@ int main(int argc, char *argv[])
 		AppConfig.RowsPerPage=24;
 	if(AppConfig.ColsPerPage<80)
 		AppConfig.ColsPerPage=80;
+
+	CTelnetCon::SetSocketTimeout( AppConfig.SocketTimeout );
 
 	CMainFrame* main_frm = new CMainFrame;
 	gtk_window_move(GTK_WINDOW(main_frm->m_Widget), AppConfig.MainWndX, AppConfig.MainWndY);

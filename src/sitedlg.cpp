@@ -22,6 +22,7 @@
 
 #include "sitedlg.h"
 #include "sitepage.h"
+#include "autologinpage.h"
 #include "notebook.h"
 
 CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
@@ -32,8 +33,10 @@ CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
 	
 	m_pNotebook = new CNotebook();
 	m_pSitePage = new CSitePage(m_Site);
+	m_pAutoLoginPage = new CAutoLoginPage(m_Site);
 
 	m_pNotebook->AddPage( m_pSitePage, _("Site Settings"), NULL);
+	m_pNotebook->AddPage( m_pAutoLoginPage, _("Auto Login"), NULL);
 
 	gtk_box_pack_start( GTK_BOX (dlg->vbox), m_pNotebook->m_Widget, FALSE, FALSE, 4);
 
@@ -43,5 +46,5 @@ CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
 
 bool CSiteDlg::OnOK()
 {
-	return m_pSitePage->OnOK();
+	return (m_pSitePage->OnOK() && m_pAutoLoginPage->OnOK());
 }

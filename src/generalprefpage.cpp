@@ -124,7 +124,7 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( 
 									GTK_TOGGLE_BUTTON(m_PopupNotifier));
 
-	AppConfig.PopupTimeout = gtk_spin_button_get_value( 
+	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( 
 									GTK_SPIN_BUTTON(m_PopupTimeout));
 
 

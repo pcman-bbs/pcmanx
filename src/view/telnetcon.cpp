@@ -26,6 +26,7 @@
 #endif /* !defined(MOZ_PLUGIN) */
 
 #include <string.h>
+#include <stdio.h>
 #include <glib/gi18n.h>
 
 #include "stringutil.h"
@@ -43,6 +44,9 @@
 #include <arpa/inet.h> 
 #include <netdb.h>
 #include <unistd.h>
+#include <fcntl.h>
+
+#include <sys/time.h>
 
 // pseudo tty headers
 #ifdef USING_LINUX
@@ -74,7 +78,7 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	m_State = TS_CONNECTING;
 	m_Duration = 0;
 	m_IdleTime = 0;
-	m_AutoLoginStage = 0;
+	m_AutoLoginStage = ALS_OFF;
 
 	m_SockFD = -1;
 	m_IOChannel = 0;
@@ -83,8 +87,46 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 
 	m_BellTimeout = 0;
 	m_IsLastLineModified = false;
+
+	gchar* locale_str;
+	gsize l;
+	if( !m_Site.GetPreLoginPrompt().empty() )
+	{
+		if( (locale_str = g_convert(m_Site.GetPreLoginPrompt().c_str(), 
+									m_Site.GetPreLoginPrompt().length(), 
+									m_Site.m_Encoding.c_str(), 
+									"UTF-8", NULL, &l, NULL)) )
+		{
+			m_PreLoginPrompt = locale_str;
+			g_free(locale_str);
+		}
+	}
+	if( !m_Site.GetLoginPrompt().empty() )
+	{
+		if( (locale_str = g_convert(m_Site.GetLoginPrompt().c_str(), 
+									m_Site.GetLoginPrompt().length(), 
+									m_Site.m_Encoding.c_str(), 
+									"UTF-8", NULL, &l, NULL)) )
+		{
+			m_LoginPrompt = locale_str;
+			g_free(locale_str);
+		}
+	}
+	if( !m_Site.GetPasswdPrompt().empty() )
+	{
+		if( (locale_str = g_convert(m_Site.GetPasswdPrompt().c_str(), 
+									m_Site.GetPasswdPrompt().length(), 
+									m_Site.m_Encoding.c_str(), 
+									"UTF-8", NULL, &l, NULL)) )
+		{
+			m_PasswdPrompt = locale_str;
+			g_free(locale_str);
+		}
+	}
 }
+
 GThreadPool* CTelnetCon::m_ThreadPool = NULL;
+int CTelnetCon::m_SocketTimeout = 30;
 
 // class destructor
 CTelnetCon::~CTelnetCon()
@@ -134,10 +176,11 @@ bool CTelnetCon::Connect()
 	// If this site has auto-login settings, activate auto-login
 	// and set it to stage 1, waiting for prelogin prompt or stage 2,
 	// waiting for login prompt.
-//	if( !m_Site.GetLogin().empty() && AppConfig.IsLoggedIn() )
-//		m_AutoLoginStage = m_Site.GetPreLogin().empty() ? 2 : 1 ;
-//	else
-		m_AutoLoginStage = 0;
+//	g_print("login = %s\n", m_Site.GetLogin().c_str());
+	if( !m_Site.GetLogin().empty() /*&& AppConfig.IsLoggedIn()*/ )
+		m_AutoLoginStage = m_Site.GetPreLogin().empty() ? ALS_LOGIN : ALS_PRELOGIN ;
+	else
+		m_AutoLoginStage = ALS_OFF;
 
 #ifdef USE_EXTERNAL
 	// Run external program to handle connection.
@@ -208,9 +251,6 @@ bool CTelnetCon::OnRecv()
     m_pLastByte = m_pRecvBuf + rlen;
 //printf("recv: %s", m_pRecvBuf);
     ParseReceivedData();
-
-	if( m_AutoLoginStage > 0 )
-		CheckAutoLogin();
 
 	UpdateDisplay();
 
@@ -311,7 +351,7 @@ void CTelnetCon::ParseTelnetCommand()
 				ret[1] = TC_DO;
 				break;
 			}
-			SendString(ret, 3);
+			SendRawString(ret, 3);
 			break;
 		}
 	case TC_DO:
@@ -327,7 +367,7 @@ void CTelnetCon::ParseTelnetCommand()
 			default:
 				ret[1] = TC_WONT;
 			}
-			SendString(ret,3);
+			SendRawString(ret,3);
 			if( TO_NAWS == *m_pBuf )	// Send NAWS
 			{
 				unsigned char naws[]={TC_IAC,TC_SB,TO_NAWS,0,80,0,24,TC_IAC,TC_SE};
@@ -335,7 +375,7 @@ void CTelnetCon::ParseTelnetCommand()
 				naws[4] = m_ColsPerPage & 0xff; // lower byte
 				naws[5] = m_RowsPerPage >> 8;	// higher byte
 				naws[6] = m_RowsPerPage & 0xff; // lower byte
-				SendString( (const char*)naws,sizeof(naws));
+				SendRawString( (const char*)naws,sizeof(naws));
 			}
 			break;
 		}
@@ -359,7 +399,7 @@ void CTelnetCon::ParseTelnetCommand()
 					memcpy( ret, ret_head, 4);
 					memcpy( ret + 4, m_Site.m_TermType.c_str(), m_Site.m_TermType.length() );
 					memcpy( ret + 4 + m_Site.m_TermType.length() , ret_tail, 2);
-					SendString( (const char*)ret, ret_len);
+					SendRawString( (const char*)ret, ret_len);
 					delete []ret;
 				}
 			}
@@ -396,7 +436,7 @@ void CTelnetCon::OnTimer()
 		//	2004.8.5 Added by PCMan.	Convert non-printable control characters.
 //		g_print("AntiIdle: %s\n", m_Site.m_AntiIdleStr.c_str() );
 		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
-		SendString( aistr.c_str(), aistr.length() );
+		SendRawString( aistr.c_str(), aistr.length() );
 	}
 	//	When SendString() is called, m_IdleTime is set to 0 automatically.
 }
@@ -430,26 +470,19 @@ bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 }
 
 
-void CTelnetCon::CheckAutoLogin()
+void CTelnetCon::CheckAutoLogin(int row)
 {
-	int last_line = m_FirstLine + m_RowsPerPage;
+	if( m_AutoLoginStage > ALS_PASSWD )	// This shouldn't happen, but just in case.
+		return;
+	//	g_print("check auto login: %d\n", row);
+
 	const char* prompts[] = {
 		NULL,	//	Just used to increase array indices by one.
-		m_Site.GetPreLoginPrompt().c_str(),	//	m_AutoLoginStage = 1
-		m_Site.GetLoginPrompt().c_str(),	//	m_AutoLoginStage = 2
-		m_Site.GetPasswdPrompt().c_str() };	//	m_AutoLoginStage = 3
+		m_PreLoginPrompt.c_str(),	//	m_AutoLoginStage = 1 = ALS_PROMPT
+		m_LoginPrompt.c_str(),	//	m_AutoLoginStage = 2 = ALS_LOGIN
+		m_PasswdPrompt.c_str() };	//	m_AutoLoginStage = 3 = ALS_PASSWD
 
-	bool prompt_found = false;
-	for( int line = m_FirstLine; line < last_line; line++ )
-	{
-		if( strstr(m_Screen[line], prompts[m_AutoLoginStage] ) )
-		{
-			prompt_found = true;
-			break;
-		}
-	}
-
-	if( prompt_found )
+	if( strstr(m_Screen[row], prompts[m_AutoLoginStage] ) )
 	{
 		const char* responds[] = {
 			NULL,	//	Just used to increase array indices by one.
@@ -460,17 +493,18 @@ void CTelnetCon::CheckAutoLogin()
 			};
 
 		string respond = responds[m_AutoLoginStage];
-		respond += m_Site.GetCRLF();
-		SendString(respond);
+		UnEscapeStr(respond);
+		respond += '\n';
+		SendString(respond);	// '\n' will be converted to m_Site.GetCRLF() here.
 
-		if( !responds[ ++m_AutoLoginStage ][0] )	// Go to next stage.
+		if( (++m_AutoLoginStage) >= ALS_END )	// Go to next stage.
 		{
-			m_AutoLoginStage = 0;	// turn off auto-login after all stages end.
+			m_AutoLoginStage = ALS_OFF;	// turn off auto-login after all stages end.
 			respond = m_Site.GetPostLogin();	// Send post-login string
 			if( respond.length() > 0 )
 			{
 				// Unescape all control characters.
-//				UnEscapeStr(respond);
+				UnEscapeStr(respond);
 				SendString(respond);
 			}
 		}
@@ -487,7 +521,7 @@ void CTelnetCon::SendString(string str)
 			str2 += crlf;
 		else
 			str2 += *pstr;
-	SendString(str2.c_str(), str2.length());
+	SendRawString(str2.c_str(), str2.length());
 }
 
 
@@ -565,25 +599,32 @@ void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
 	{
 //		g_print("thread connect: %x\n", data);
 		sock_addr.sin_addr = addr;
-
 		int sock_fd;
-		for( int i =0; i < 3 ; ++i )
+
+		sock_fd = socket(PF_INET, SOCK_STREAM, 0);
+		int sock_flags = fcntl(sock_fd, F_GETFL, 0);
+		fcntl(sock_fd, F_SETFL, sock_flags | O_NONBLOCK);
+		connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) );
+		fcntl(sock_fd, F_SETFL, sock_flags );
+		fd_set set;	FD_ZERO(&set);	FD_SET(sock_fd, &set);
+		timeval timeout;	timeout.tv_sec = m_SocketTimeout;	timeout.tv_usec=0;
+		select(sock_fd+1, NULL, &set, NULL, &timeout);
+		if( FD_ISSET(sock_fd, &set) )
 		{
-			sock_fd = socket(PF_INET, SOCK_STREAM, 0);
-			if( 0 == (data->m_Code = connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) )) )
-				break;
-			close(sock_fd);
-			g_thread_yield();
+			data->m_Code = 0;
+			if( data->m_pCon )
+				data->m_pCon->m_SockFD = sock_fd;
+			else
+				close(sock_fd);
 		}
-		if( data->m_pCon )
-			data->m_pCon->m_SockFD = sock_fd;
+		else
+			close(sock_fd);
 	}
 	else
 		data->m_Code = -1;
 		// Since 0 means success and all known error codes are > 0, 
 		// I use error code that < 0 to mean host not found.
 
-//	g_print("thread connected: %x, code=%d\n", data, data->m_Code);
 	g_idle_add((GSourceFunc)OnMainIdle, data);
 //	g_print("thread exit: %x\n", data);
 }
@@ -683,6 +724,8 @@ void CTelnetCon::Reconnect()
 void CTelnetCon::OnLineModified(int row)
 {
     /// @todo implement me
+	if( m_AutoLoginStage > ALS_OFF )
+		CheckAutoLogin(row);
 //	g_print("line %d is modified\n", row);
 	if( row == (m_RowsPerPage-1) )	// If last line is modified
 		m_IsLastLineModified = true;
@@ -694,7 +737,7 @@ void CTelnetCon::OnLineModified(int row)
 
 void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 {
-	g_print("popup clicked\n");
+//	g_print("popup clicked\n");
 	CMainFrame* mainfrm = con->GetView()->GetParentFrame();
 	mainfrm->SwitchToCon(con);
 	gtk_widget_destroy( gtk_widget_get_parent(widget) );
@@ -743,3 +786,4 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 
 #endif /* !defined(MOZ_PLUGIN) */
 }
+

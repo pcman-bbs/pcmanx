@@ -23,7 +23,7 @@
   #pragma interface "dialog.h"
 #endif
 
-#include <widget.h>
+#include "widget.h"
 #include <glib/gi18n.h>
 
 /**

@@ -1,3 +1,22 @@
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/autologinpage.cpp,
+	src/core/site.cpp,
+	src/view/telnetcon.cpp,
+	src/sitedlg.cpp:
+	Add auto-login functionality.
+	(CTelnetCon::ConnectThread) : Use select() in place of other blocking
+	socket API without timeout.  This cause problems sometimes.
+
+	* src/generalprefpage.cpp,
+	src/view/telnetview.cpp,
+	src/dialog.cpp:
+	Little fix to accept NULL parent window.
+
+	* src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp:
+	Add socket timeout settings.
+
 2005-07-24  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac:

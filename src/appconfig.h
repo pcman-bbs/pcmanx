@@ -28,26 +28,9 @@
 
 #include <gdk/gdk.h>
 
+#include "blowfish/blowfish.h"
+
 using namespace std;
-
-//	#include "hyperlink.h"
-
-//	#include "blowfish/blowfish.h"
-
-/*
-class CMainFrame;
-class CTermHyperLink : public CHyperLink
-{
-public:
-	CMainFrame* m_pMainFrm;
-	CTermHyperLink() : m_pMainFrm(NULL){}
-	~CTermHyperLink(){}
-	void Open( const char* URL );
-};
-*/
-
-enum { WS_NORMAL = 0, WS_MAXIMIZED = 1, WS_FULLSCR = 2 };
-// These Window-State flags can be combined with OR.
 
 class CAppConfig : public CConfigFile
 {
@@ -65,21 +48,16 @@ public:
 
 /*
     void SetUserPasswd( string passwd );
-    string GetUserPasswd()
-	{
-		if( m_UserPasswd.empty() )
-			m_UserPasswd = ::wxGetPasswordFromUser(_("Enter Your Password :"),
-				 _("Password") );
-		return m_UserPasswd;
-	}
 
-   BLOWFISH_CTX* GetBlowfish()
-    {
+    string GetUserPasswd();
+
+	BLOWFISH_CTX* GetBlowfish()
+	{
 		if( ! m_Blowfish && ! GetUserPasswd().empty() )
 		{
 			m_Blowfish = new BLOWFISH_CTX;
-			Blowfish_Init( m_Blowfish, (unsigned char*)GetUserPasswd().c_str(),
-				 GetUserPasswd().length() );
+			Blowfish_Init( m_Blowfish, (unsigned char*)m_UserPasswd.c_str(),
+				 m_UserPasswd.length() );
 		}
 		return m_Blowfish;
     }
@@ -90,11 +68,9 @@ public:
 			delete m_Blowfish;
 		m_Blowfish = NULL;
 	}
-*/
 
     bool IsLoggedIn(){  return m_IsLoggedIn;  }
-
-//    wxSize GetToolbarIconSize(){  return m_ToolbarIconSize;  }
+*/
 
 //	Window
 	int MainWndX;
@@ -133,23 +109,18 @@ public:
     int FontSize;
     string FontFamily;
 
-	
 	GdkColor HyperLinkColor;
 
 //	Favorite sites
 	vector<CSite> Favorites;
     string WebBrowser;
-
-//	HyperLinks
-//	CTermHyperLink HyperLink;
+    int SocketTimeout;
 
 protected:
     string m_UserPasswd;
-//    BLOWFISH_CTX* m_Blowfish;
+    BLOWFISH_CTX* m_Blowfish;
     string Shadow;
     bool m_IsLoggedIn;
-//    wxSize m_ToolbarIconSize;
-
 
 protected:
     void AfterLoad();

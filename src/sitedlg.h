@@ -31,6 +31,7 @@
 */
 class CSitePage;
 class CNotebook;
+class CAutoLoginPage;
 
 class CSiteDlg : public CDialog
 {
@@ -41,6 +42,7 @@ public:
 public:
     CSite m_Site;
 	CSitePage* m_pSitePage;
+	CAutoLoginPage* m_pAutoLoginPage;
 	CNotebook* m_pNotebook;
 };
 

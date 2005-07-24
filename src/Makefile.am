@@ -63,4 +63,5 @@ pcmanx_SOURCES = \
 	editfavdlg.cpp editfavdlg.h \
 	mainframe.cpp mainframe.h \
 	sitedlg.cpp sitedlg.h \
-	emoticondlg.cpp emoticondlg.h
+	emoticondlg.cpp emoticondlg.h \
+	autologinpage.cpp autologinpage.h

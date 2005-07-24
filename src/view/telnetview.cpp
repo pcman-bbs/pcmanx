@@ -68,7 +68,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 		if( ch >= '@' && ch <= '_'	&& !isdigit(ch) )
 		{
 			ch -= '@';
-			GetCon()->SendString(&ch,1);
+			GetCon()->SendRawString(&ch,1);
 			return true;
 		}
 	}
@@ -77,58 +77,58 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	{
 	case GDK_Left:
 	case GDK_KP_Left:
-		GetCon()->SendString("\x1bOD\x1bOD",( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
+		GetCon()->SendRawString("\x1bOD\x1bOD",( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
 		break;
 	case GDK_Right:
 	case GDK_KP_Right:
-		GetCon()->SendString("\x1bOC\x1bOC",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
+		GetCon()->SendRawString("\x1bOC\x1bOC",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
 		break;
 	case GDK_Up:
 	case GDK_KP_Up:
-		GetCon()->SendString("\x1bOA",3);
+		GetCon()->SendRawString("\x1bOA",3);
 		break;
 	case GDK_Down:
 	case GDK_KP_Down:
- 		GetCon()->SendString("\x1bOB",3);
+ 		GetCon()->SendRawString("\x1bOB",3);
 		break;
 	case GDK_BackSpace:
-		GetCon()->SendString("\b\b", ( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
+		GetCon()->SendRawString("\b\b", ( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
-		GetCon()->SendString("\r",1);
+		GetCon()->SendRawString("\r",1);
 		break;
 	case GDK_Delete:
 	case GDK_KP_Delete:
-		GetCon()->SendString("\x1b[3~\x1b[3~",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
+		GetCon()->SendRawString("\x1b[3~\x1b[3~",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
 		break;
 	case GDK_Insert:
 	case GDK_KP_Insert:
-		GetCon()->SendString("\x1b[2~",4);
+		GetCon()->SendRawString("\x1b[2~",4);
 		break;
 	case GDK_Home:
 	case GDK_KP_Home:
-		GetCon()->SendString("\x1b[1~",4);
+		GetCon()->SendRawString("\x1b[1~",4);
 		break;
 	case GDK_End:
 	case GDK_KP_End:
-		GetCon()->SendString("\x1b[4~",4);
+		GetCon()->SendRawString("\x1b[4~",4);
 		break;
 //	case GDK_Prior:
 	case GDK_Page_Up:
 	case GDK_KP_Page_Up:
-		GetCon()->SendString("\x1b[5~",4);
+		GetCon()->SendRawString("\x1b[5~",4);
 		break;
 //	case GDK_Next:
 	case GDK_Page_Down:
 	case GDK_KP_Page_Down:
-		GetCon()->SendString("\x1b[6~",4);
+		GetCon()->SendRawString("\x1b[6~",4);
 		break;
 	case GDK_Tab:
-		GetCon()->SendString("\t");
+		GetCon()->SendRawString("\t", 1);
 		break;
 	case GDK_Escape:
-		GetCon()->SendString("\x1b");
+		GetCon()->SendRawString("\x1b", 1);
 		break;
 	}
 	return true;

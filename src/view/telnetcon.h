@@ -103,7 +103,7 @@ public:
 	// Parse telnet command.
 	inline void ParseTelnetCommand();
 
-	void SendString(const char* pdata, int len)	{	Send( (void*)pdata, len);	}
+	void SendRawString(const char* pdata, int len)	{	Send( (void*)pdata, len);	}
 	void SendString(string str);
  	
 	bool IsValid(){	return m_SockFD >= 0;	}
@@ -116,6 +116,8 @@ public:
 	static void Cleanup();
     static bool OnBellTimeout( CTelnetCon* _this );
     void OnNewIncomingMessage(char* line);
+
+	static void SetSocketTimeout(int timeout){	m_SocketTimeout=timeout;	}
 protected:
 	GIOChannel* m_IOChannel;
 	guint m_IOChannelID;
@@ -124,7 +126,15 @@ protected:
 	unsigned char* m_pRecvBuf;
 	unsigned char* m_pBuf;
 	unsigned char* m_pLastByte;
-    unsigned int m_AutoLoginStage;	// 0 means turn off auto-login.
+	enum AUTO_LOGIN_STATE
+	{
+		ALS_OFF=0, 
+		ALS_PRELOGIN=1, 
+		ALS_LOGIN=2, 
+		ALS_PASSWD=3,
+		ALS_END=4
+	};
+	unsigned int m_AutoLoginStage;	// 0 means turn off auto-login.
 
 	// Client socket
     int m_SockFD;
@@ -133,8 +143,12 @@ protected:
 	guint m_BellTimeout;
 	bool m_IsLastLineModified;
     static GThreadPool* m_ThreadPool;
+    string m_PreLoginPrompt;
+    string m_LoginPrompt;
+    string m_PasswdPrompt;
+    static int m_SocketTimeout;
 	void PreConnect(string& address, unsigned short& port);
-    void CheckAutoLogin();
+    void CheckAutoLogin(int row);
     void SendStringAsync(string str);
     static void ConnectThread( CConnectThread* data, gpointer _data );
     void OnLineModified(int row);
