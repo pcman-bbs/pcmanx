@@ -59,7 +59,7 @@ CAutoLoginPage::CAutoLoginPage(CSite& site) : m_Site(site)
 	gtk_widget_show (hbox22);
 	gtk_box_pack_start (GTK_BOX (m_Widget), hbox22, FALSE, TRUE, 0);
 	
-	label31 = gtk_label_new (_("Login Promp: "));
+	label31 = gtk_label_new (_("Login Prompt: "));
 	gtk_widget_show (label31);
 	gtk_box_pack_start (GTK_BOX (hbox22), label31, FALSE, FALSE, 0);
 	

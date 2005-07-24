@@ -7,3 +7,4 @@ src/prefdlg.cpp
 src/generalprefpage.cpp
 src/view/telnetview.cpp
 src/emoticondlg.cpp
+src/autologinpage.cpp

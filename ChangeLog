@@ -1,3 +1,11 @@
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* src/autologinpage.cpp (CAutoLoginPage::CAutoLoginPage): Fix typo.
+
+	* po/pcmanx.pot,
+	po/POTFILES.in,
+	po/zh_TW.po: Updated.
+
 2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/appconfig.h,
@@ -7,10 +15,13 @@
 2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/autologinpage.cpp,
-	src/core/site.cpp,
+	src/autologinpage.h:
+	New files. Add auto-login functionality.
+
+	* src/core/site.cpp,
 	src/view/telnetcon.cpp,
-	src/sitedlg.cpp:
-	Add auto-login functionality.
+	src/sitedlg.cpp: 
+	Likewise.
 	(CTelnetCon::ConnectThread) : Use select() in place of other blocking
 	socket API without timeout.  This cause problems sometimes.
 

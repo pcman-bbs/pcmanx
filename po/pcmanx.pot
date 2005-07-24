@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-23 05:20+0800\n"
+"POT-Creation-Date: 2005-07-24 23:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,8 +231,12 @@ msgstr ""
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/sitedlg.cpp:36 ../src/prefdlg.cpp:40
+#: ../src/sitedlg.cpp:38 ../src/prefdlg.cpp:40
 msgid "Site Settings"
+msgstr ""
+
+#: ../src/sitedlg.cpp:39
+msgid "Auto Login"
 msgstr ""
 
 #: ../src/editfavdlg.cpp:32
@@ -347,7 +351,7 @@ msgstr ""
 msgid "Web Browser: "
 msgstr ""
 
-#: ../src/view/telnetview.cpp:156
+#: ../src/view/telnetview.cpp:159
 msgid "_Copy URL to Clipboard"
 msgstr ""
 
@@ -369,4 +373,40 @@ msgstr ""
 
 #: ../src/emoticondlg.cpp:155
 msgid "Edit Emoticon"
+msgstr ""
+
+#: ../src/autologinpage.cpp:40
+msgid "Prelogin Prompt: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:49
+msgid "Prelogin String: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:62
+msgid "Login Prompt: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:71
+msgid "User Name:"
+msgstr ""
+
+#: ../src/autologinpage.cpp:84
+msgid "Password Prompt: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:93
+msgid "Password: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:106
+msgid "Post Login String: "
+msgstr ""
+
+#: ../src/autologinpage.cpp:114
+msgid ""
+"<big>WARNING:</big> Your password will be stored in <u>plain text</u> "
+"without any encryption.  Use this at your own risk.  Although UNIX-like "
+"systems all have file permissions, there is no guarantee that others won't "
+"get your password."
 msgstr ""
