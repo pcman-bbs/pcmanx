@@ -5,3 +5,4 @@
 void get_desktop_working_area(GdkRectangle* area);
 
 #endif
+

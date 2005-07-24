@@ -1,8 +1,14 @@
 2005-07-24  Jim Huang  <jserv@kaffe.org>
 
+	* src/notifier/notifier-impl.c (destroy_win):
+	Adjust window object release sequence and perform code indent with
+	more comments.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
 	* plugin/src/plugin.cpp: Rename "pcman" to "pcmanx" in registry.
 
-	* plugin/data/pcmanx.html: Eliminate suffix "/" in url.
+	* plugin/data/pcmanx.html: Eliminate suffix "/" in url parsing.
 
 2005-07-23  Jim Huang  <jserv@kaffe.org>
 
@@ -46,8 +52,8 @@
 	plugin/data/Makefile.am,
 	plugin/data/pcmanx.png,
 	plugin/Makefile.am:
-	Introduce Mozilla/Firefox plugin implementation based on the excellent
-	work of PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+	New files. Merge Mozilla/Firefox plugin implementation based on the 
+	excellent work of PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
 	NOTE: The IDL detection is not done yet. And pure-static build for
 	plugin is disabled at the moment.
 
@@ -60,7 +66,7 @@
 	
 2005-07-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/mainframe.cpp:
+	* src/mainframe.cpp
 	(CMainFrame::OnDeactivated): Removed
 
 	* src/termview.cpp:
@@ -81,7 +87,7 @@
 	covered by the popup notifier.
 
 	* src/notifier/working_area.c:
-	This piece of code is got from Guification, a plug-in for Gaim.
+	New file. This piece of code is taken from Guification, a plug-in for Gaim.
 
 	* src/view/termview.cpp:
 	Rewrite the code used to launch web browser.
@@ -651,7 +657,7 @@
 2005-07-07  Jim Huang  <jserv@kaffe.org>
 
 	* pcmanx.desktop.in:
-	New file. Rename from pcmanx.desktop.
+	New file. Taken from pcmanx.desktop .
 
 	* Makefile.am,
 	configure.ac:

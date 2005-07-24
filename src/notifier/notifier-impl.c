@@ -4,6 +4,7 @@
  *
  * Copyright (c) 2005
  *	Jim Huang <jserv@kaffe.org>
+ *	PCMan (Hong Jen Yee) <hzysoft@sina.com.tw>
  *
  * Licensed under the GNU GPL v2.  See COPYING.
  */
@@ -53,6 +54,8 @@ typedef struct sWin Win;
 static void update_working_area()
 {
 	get_desktop_working_area(&working_area);
+
+	/* Adjust again according to the dimension of working area */
 	height = working_area.height;
 	width = working_area.width;
 	max_slots = MAX((height - NHEIGHT) / NHEIGHT, MAX_SLOTS);
@@ -101,10 +104,10 @@ static int wait_win(gpointer data)
 static int mouseout_win(GtkWidget *widget,
 			GdkEventButton *event, gpointer data)
 {
-	Win *win = (Win *)data;
+	Win *win = (Win *) data;
 	g_signal_handler_disconnect(G_OBJECT(win->win), win->handlerid);
 	gtk_container_set_border_width(GTK_CONTAINER(win->win), 5);
-	if( win->timeout_id )
+	if (win->timeout_id)
 		g_source_remove(win->timeout_id);
 	win->timeout_id = gtk_timeout_add(WAIT_PERIOD, wait_win, data);
 	return TRUE;
@@ -119,8 +122,7 @@ static int mouseover_win(GtkWidget * widget,
 		g_signal_connect(G_OBJECT(win->win),
 				 "leave-notify-event",
 				 G_CALLBACK(mouseout_win), data);
-	if( win->timeout_id )
-	{
+	if (win->timeout_id) {
 		g_source_remove(win->timeout_id);
 		win->timeout_id = 0;
 	}
@@ -139,9 +141,10 @@ static int slow_show_win(gpointer data)
 				     "enter-notify-event",
 				     G_CALLBACK(mouseover_win), data);
 
-		/* Added by Hong Jen Yee (PCMan)  */
+		/* Trace animation timeout */
 		win->ani_timer_id = 0;
-		win->timeout_id = gtk_timeout_add(popup_timeout, wait_win, data);
+		win->timeout_id = gtk_timeout_add(
+			popup_timeout, wait_win, data);
 		return FALSE;
 	}
 
@@ -169,7 +172,9 @@ static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 	w->size = 0;
 
 	gtk_widget_realize(win);
-	gtk_window_move(GTK_WINDOW(win), working_area.x + width - win->allocation.width, begin);
+	gtk_window_move(
+		GTK_WINDOW(win), 
+		working_area.x + width - win->allocation.width, begin);
 	gtk_widget_show_all(win);
 
 	w->ani_timer_id = gtk_timeout_add(SPEED, slow_show_win, w);
@@ -178,28 +183,31 @@ static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 	return w;
 }
 
-/*   2005.07.22 Added by Hong Jen Yee (PCMan)
-  Popup widgets should be removed when their parents are already destroyed.
-*/
+/*
+ * Popup widgets should be removed when their parents are already destroyed.
+ */
 static void destroy_win(GtkWidget* win, Win* w)
 {
 	slots[w->slot] = -1;
-	g_free(w);
 
 	g_signal_handler_disconnect(w->parent, w->parent_handler_id);
-	if(w->timeout_id)
+	if (w->timeout_id)
 		g_source_remove(w->timeout_id);
-	if(w->ani_timer_id)
+	if (w->ani_timer_id)
 		g_source_remove(w->ani_timer_id);
+
+	g_free(w);
 }
 
-/*   2005.07.22 Modified by Hong Jen Yee (PCMan)
-  Return GtkWidget of the popup that the caller can get more control such as, 
-  connecting some signal handlers to this widget.
-*/
-static GtkWidget* notify_new(const gchar *_caption_text, const gchar *body_text, 
-							GtkWidget* parent, GCallback click_cb, 
-							gpointer click_cb_data)
+/*
+ * Return GtkWidget of the popup that the caller can get more control such as, 
+ * connecting some signal handlers to this widget.
+ */
+static GtkWidget* notify_new(
+		const gchar *_caption_text,
+		const gchar *body_text, 
+		GtkWidget* parent, GCallback click_cb, 
+		gpointer click_cb_data)
 {
 	GtkWidget *win = gtk_window_new(GTK_WINDOW_POPUP);
 	GtkWidget *context, *frame;
@@ -208,8 +216,6 @@ static GtkWidget* notify_new(const gchar *_caption_text, const gchar *body_text,
 	GtkWidget *imageNotify;
 	GtkWidget *labelNotify;
 	GtkWidget *labelCaption;
-	/* XXX:
-	 * We should provide a better way to change pixmap */
 	
 	context = gtk_table_new(2, 2, TRUE);
 	
@@ -250,33 +256,40 @@ static GtkWidget* notify_new(const gchar *_caption_text, const gchar *body_text,
 	gtk_window_set_default_size(GTK_WINDOW(win), win->allocation.width, NHEIGHT);
 	gtk_container_add(GTK_CONTAINER(frame), context);
 
-	if( click_cb )
-		g_signal_connect(G_OBJECT(button), "clicked", 
-								click_cb, click_cb_data);
+	if (click_cb)
+		g_signal_connect(
+			G_OBJECT(button), "clicked", 
+			click_cb, click_cb_data);
 
 	Win* w = begin_animation(win, context);
 	g_free(context_text);
 
 	w->parent = parent;
-	w->parent_handler_id = !parent ? 0 : g_signal_connect_swapped(G_OBJECT(parent), 
-												"destroy", 
-												 G_CALLBACK(gtk_widget_destroy),
-												 win);
+	w->parent_handler_id = !parent ? 
+		0 : 
+		g_signal_connect_swapped(
+			G_OBJECT(parent), "destroy", 
+			G_CALLBACK(gtk_widget_destroy),
+			win);
 	g_signal_connect(G_OBJECT(win), "destroy", G_CALLBACK(destroy_win), w);
-
 
 	return win;
 }
 
-GtkWidget* popup_notifier_notify(const gchar *caption, const gchar *text, 
-									GtkWidget* parent, GCallback click_cb, 
-									gpointer click_cb_data)
+GtkWidget* popup_notifier_notify(
+		const gchar *caption,
+		const gchar *text, 
+		GtkWidget* parent, GCallback click_cb, 
+		gpointer click_cb_data)
 {
 	if (! notifier_initialized)
 		return NULL;
 
 	if (text && *text)
-		return notify_new(caption, text, parent, click_cb, click_cb_data);
+		return notify_new(
+			caption, text, 
+			parent, 
+			click_cb, click_cb_data);
 }
 
 void popup_notifier_set_timeout( int popup_timeout_sec )
@@ -293,6 +306,4 @@ void popup_notifier_init(GdkPixbuf *pixbuf)
 	icon_pixbuf = pixbuf;
 	notifier_initialized = 1;
 }
-
-
 
