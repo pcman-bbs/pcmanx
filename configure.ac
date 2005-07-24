@@ -2,6 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
+AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.2.0pre1, hzysoft@sina.com.tw)
 #AM_MAINTAINER_MODE
 AC_PROG_CC
@@ -244,16 +245,37 @@ if test "$plugin" = "yes"; then
       AC_MSG_ERROR([Fatal Error: no xpidl detected.])
     fi
 
-    dnl Maybe we don't need all of this...
+   dnl Maybe we don't need all of this...
     MOZILLA_CFLAGS="$MOZILLA_CFLAGS \
 -I$MOZILLA_INCLUDE_ROOT \
 -I$MOZILLA_INCLUDE_ROOT/xpcom \
 -I$MOZILLA_INCLUDE_ROOT/xpconnect"
 
+    dnl Search for the idl include directory
+    dnl This only works on Gecko 1.8
+    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+    dnl Fallback for older versions
+    if test "x$MOZILLA_IDLDIR" = "x"; then
+      MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
+    fi
+    dnl Gentoo has it in unusual places
+    if test "x$MOZILLA_IDLDIR" = "x"; then
+      MOZILLA_IDLDIR="$MOZILLA_INCLUDE_ROOT/idl"
+    fi
+    dnl Debian/Ubuntu have it in unusual places, too.
+    ADDITIONAL_IDLDIR=/usr/share/idl
+    if test "x$gecko_provider" = "xfirefox"; then
+      ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla-firefox
+    else
+      ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
+    fi
+    XPIDL_INCL="-I$MOZILLA_IDLDIR -I$ADDITIONAL_IDLDIR"
+
     PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
 
     AC_SUBST(PATH_OF_PCMANX_HTML)
     AC_SUBST(XPIDL)
+    AC_SUBST([XPIDL_INCL])
     AC_SUBST(MOZILLA_CFLAGS)
     AC_SUBST(MOZILLA_LIBS)
     AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
@@ -369,6 +391,7 @@ AC_OUTPUT
 echo
 echo pcmanx_pure_gtk2 ................ : Version $VERSION
 echo
+echo Prefix........................... : $prefix
 echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet

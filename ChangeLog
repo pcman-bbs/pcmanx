@@ -1,5 +1,13 @@
 2005-07-24  Jim Huang  <jserv@kaffe.org>
 
+	* configure.ac:
+	Improve the IDL path detection for xpidl, and set default prefix
+	to /usr.
+
+	* plugin/src/Makefile.am: Likewise.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
 	* src/notifier/notifier-impl.c (destroy_win):
 	Adjust window object release sequence and perform code indent with
 	more comments.

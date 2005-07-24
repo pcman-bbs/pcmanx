@@ -12,13 +12,6 @@ INCLUDES = \
 	$(MOZILLA_CFLAGS) \
 	-DMOZ_PLUGIN
 
-# It's really dirty. We should detect via autotools.
-XPIDL_INCL = \
-	-I/usr/share/idl/mozilla-firefox \
-	-I/usr/share/idl/mozilla \
-	-I/usr/include/mozilla/xpcom/base \
-	-I/usr/include/mozilla-firefox/xpcom/base
-
 noinst_LIBRARIES = $(noinst_LIBRARIES_mozilla)
 	                                     
 MOSTLYCLEANFILES = \
