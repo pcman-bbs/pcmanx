@@ -72,7 +72,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(General)
-		CFG_STR ( Shadow )
+//		CFG_STR ( Shadow )
 		CFG_BOOL( QueryOnExit)
 		CFG_BOOL( QueryOnCloseCon)
 		CFG_BOOL( CancelSelAfterCopy)
@@ -279,7 +279,7 @@ void CAppConfig::SetToDefault()
 
 	CharPaddingX = 0;
 	CharPaddingY = 0;
-	m_IsLoggedIn = false;
+//	m_IsLoggedIn = false;
 
 	BeepOnBell = true;
 

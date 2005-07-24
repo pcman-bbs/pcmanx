@@ -1,5 +1,11 @@
 2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/appconfig.h,
+	src/appconfig.cpp:
+	Comment out some unnecessary code.
+
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/autologinpage.cpp,
 	src/core/site.cpp,
 	src/view/telnetcon.cpp,

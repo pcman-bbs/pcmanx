@@ -28,7 +28,7 @@
 
 #include <gdk/gdk.h>
 
-#include "blowfish/blowfish.h"
+//	#include "blowfish/blowfish.h"
 
 using namespace std;
 
@@ -116,11 +116,11 @@ public:
     string WebBrowser;
     int SocketTimeout;
 
-protected:
-    string m_UserPasswd;
-    BLOWFISH_CTX* m_Blowfish;
-    string Shadow;
-    bool m_IsLoggedIn;
+// protected:
+//    string m_UserPasswd;
+//    BLOWFISH_CTX* m_Blowfish;
+//    string Shadow;
+//    bool m_IsLoggedIn;
 
 protected:
     void AfterLoad();
