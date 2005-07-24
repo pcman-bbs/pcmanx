@@ -77,11 +77,11 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	{
 	case GDK_Left:
 	case GDK_KP_Left:
-		GetCon()->SendRawString("\x1bOD\x1bOD",( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
+		GetCon()->SendRawString("\x1bOD\x1bOD",( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
 		break;
 	case GDK_Right:
 	case GDK_KP_Right:
-		GetCon()->SendRawString("\x1bOC\x1bOC",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
+		GetCon()->SendRawString("\x1bOC\x1bOC",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
 		break;
 	case GDK_Up:
 	case GDK_KP_Up:
@@ -92,7 +92,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
  		GetCon()->SendRawString("\x1bOB",3);
 		break;
 	case GDK_BackSpace:
-		GetCon()->SendRawString("\b\b", ( x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
+		GetCon()->SendRawString("\b\b", ( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
@@ -100,7 +100,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 		break;
 	case GDK_Delete:
 	case GDK_KP_Delete:
-		GetCon()->SendRawString("\x1b[3~\x1b[3~",( pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
+		GetCon()->SendRawString("\x1b[3~\x1b[3~",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
 		break;
 	case GDK_Insert:
 	case GDK_KP_Insert:

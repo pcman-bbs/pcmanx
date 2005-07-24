@@ -35,7 +35,7 @@ using namespace std;
 class CAppConfig : public CConfigFile
 {
 public:
-	enum	{ SHADOWER_L = 0xf30a439c, SHADOWER_R = 0x204be7a1 };
+//	enum	{ SHADOWER_L = 0xf30a439c, SHADOWER_R = 0x204be7a1 };
 	void SetToDefault();
 	CSite m_DefaultSite;
 	void SaveFavorites();

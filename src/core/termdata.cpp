@@ -459,22 +459,22 @@ void CTermData::ParseAnsiEscapeSequence(const char* CmdLine, char type)
 			case 'A':
 				if(p1 <= 0)
 					p1=1;
-//				ansi_A(p1);
+				GoToXY( m_CaretPos.x, m_CaretPos.y - p1 );
 				break;
 			case 'B':
 				if( p1<=0 )
 					p1=1;
-//				ansi_B(p1);
+				GoToXY( m_CaretPos.x, m_CaretPos.y + p1 );
 				break;
 			case 'C':
 				if( p1<=0 )
 					p1=1;
-//				ansi_C(p1);
+				GoToXY( m_CaretPos.x + p1, m_CaretPos.y );
 				break;
 			case 'D':
 				if( p1<=0 )
 					p1=1;
-//				ansi_D(p1);
+				GoToXY( m_CaretPos.x - p1, m_CaretPos.y );
 				break;
 			case 'r':	// Set Scroll Region
 				switch(n)

@@ -239,7 +239,7 @@ bool CTelnetCon::OnRecv()
 
 	gsize rlen = 0;
 	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen);
-
+printf("recv, len=%d: %s", rlen, m_pRecvBuf);
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
@@ -429,7 +429,7 @@ void CTelnetCon::OnTimer()
 //	Since we have increased m_IdleTime by 1, it's impossible for 
 //	m_IdleTime to equal zero.
 //	When 'Anti Idle' is disabled, m_Site.m_AntiIdle must = 0.
-//	So m_Site.m_AntiIdle != m_IdleTimeand, and the following SendString() won't be called.
+//	So m_Site.m_AntiIdle != m_IdleTimeand, and the following SendRawString() won't be called.
 //	Hence we don't need to check if 'Anti Idle' is enabled or not.
 	if( m_Site.m_AntiIdle == m_IdleTime )
 	{
@@ -438,7 +438,7 @@ void CTelnetCon::OnTimer()
 		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
 		SendRawString( aistr.c_str(), aistr.length() );
 	}
-	//	When SendString() is called, m_IdleTime is set to 0 automatically.
+	//	When SendSRawtring() is called, m_IdleTime is set to 0 automatically.
 }
 
 

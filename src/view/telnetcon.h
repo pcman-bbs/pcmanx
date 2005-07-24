@@ -118,6 +118,8 @@ public:
     void OnNewIncomingMessage(char* line);
 
 	static void SetSocketTimeout(int timeout){	m_SocketTimeout=timeout;	}
+    bool DetectDBChar(){	return m_Site.m_DetectDBChar;   }
+
 protected:
 	GIOChannel* m_IOChannel;
 	guint m_IOChannelID;

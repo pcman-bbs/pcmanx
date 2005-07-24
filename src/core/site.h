@@ -54,6 +54,9 @@ public:
 	// Site Encoding
 	string m_Encoding;
 
+	// Detect Double-byte characters?
+	bool m_DetectDBChar;
+	
 	// Terminal settings
 	// Rows per page
 	unsigned int m_RowsPerPage;

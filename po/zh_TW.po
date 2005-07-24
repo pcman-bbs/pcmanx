@@ -1,15 +1,17 @@
+# translation of zh_TW.po to 
 # PCMan <hzysoft@sina.com.tw>, 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: PCManX\n"
+"Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-24 23:39+0800\n"
-"PO-Revision-Date: 2005-07-24 23:45+0800\n"
+"PO-Revision-Date: 2005-07-25 02:32+0800\n"
 "Last-Translator: \n"
-"Language-Team: zh_TW <zh@li.org>\n"
+"Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:608
 msgid "Site List"
@@ -402,7 +404,7 @@ msgstr "密碼："
 
 #: ../src/autologinpage.cpp:106
 msgid "Post Login String: "
-msgstr "登入後的字串："
+msgstr "登入後送出的字串："
 
 #: ../src/autologinpage.cpp:114
 msgid ""
@@ -411,6 +413,7 @@ msgid ""
 "systems all have file permissions, there is no guarantee that others won't "
 "get your password."
 msgstr ""
-"<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 存在，並不會有任何加密處理，"
+"<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，"
 "請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔"
 "保。"
+

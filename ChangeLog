@@ -1,3 +1,22 @@
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termdata.cpp:
+	Correctly process Esc[A, Esc[B, Esc[C, Esc[D ANSI escape sequence.
+
+	* src/view/telnetview.cpp,
+	src/core/site.cpp,
+	src/view/telnetcon.cpp:
+	Add m_DetectDBChar to let users turn off double-byte detection.
+
+	* src/appconfig.cpp:
+	Set file permission of ~/.pcmanx/favorites to 0666 to prevent
+	other users from access it.
+
+	* plugin/src/plugin.cpp,
+	plugin/src/plugin.h,
+	plugin/src/pcmanx_interface.idl:
+	Add some experimental code to test xpcom, but the test was failed.
+
 2005-07-24  Jim Huang  <jserv@kaffe.org>
 
 	* src/autologinpage.cpp (CAutoLoginPage::CAutoLoginPage): Fix typo.

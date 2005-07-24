@@ -69,6 +69,9 @@ CSite::CSite(string Name)
 #endif
 
 	m_MenuItem = NULL;
+
+	// Detect double-byte characters by default
+	m_DetectDBChar = true;
 }
 
 CSite::~CSite()
@@ -84,6 +87,7 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "AntiIdle=%d\n", m_AntiIdle );
 	fprintf( fo, "AntiIdleStr=%s\n", m_AntiIdleStr.c_str() );
 	fprintf( fo, "Encoding=%s\n", m_Encoding.c_str() );
+	fprintf( fo, "DetectDBChar=%d\n", m_DetectDBChar );
 	fprintf( fo, "Rows=%d\n", m_RowsPerPage );
 	fprintf( fo, "Cols=%d\n", m_ColsPerPage );
 	fprintf( fo, "TermType=%s\n", m_TermType.c_str() );

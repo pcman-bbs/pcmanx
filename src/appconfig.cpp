@@ -22,6 +22,9 @@
 #include "inputdialog.h"
 #include <stdio.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 CAppConfig AppConfig;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -179,6 +182,8 @@ void CAppConfig::LoadFavorites()
 				pSite->m_AntiIdleStr = pval;
 			else if( 0 == strcmp( pname, "Encoding" ) )
 				pSite->m_Encoding = pval;
+			else if( 0 == strcmp( pname, "DetectDBChar" ) )
+				pSite->m_DetectDBChar = atoi(pval);
 			else if( 0 == strcmp( pname, "Rows" ) )
 				pSite->m_RowsPerPage = atoi(pval);
 			else if( 0 == strcmp( pname, "Cols" ) )
@@ -243,7 +248,8 @@ void CAppConfig::LoadFavorites()
 
 void CAppConfig::SaveFavorites()
 {
-	FILE* fo = fopen( GetConfigPath("favorites").c_str() , "w" );
+	string fpath = GetConfigPath("favorites");
+	FILE* fo = fopen( fpath.c_str() , "w" );
 	if( fo )
 	{
 		bool has_sensitive_data = false;
@@ -261,6 +267,8 @@ void CAppConfig::SaveFavorites()
 
 //		if( ! has_sensitive_data )	// No data needs to be encrypted, cancel password.
 //			SetUserPasswd( wxEmptyString );
+
+		chmod(fpath.c_str(), 0600);	// Only the owner can access this file.
 	}
 }
 

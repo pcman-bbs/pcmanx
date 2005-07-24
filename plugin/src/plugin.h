@@ -71,6 +71,7 @@ public:
   void showVersion();
   void clear();
   void draw();
+  bool queryOnExit();
 
   nsScriptablePeer* getScriptablePeer();
 

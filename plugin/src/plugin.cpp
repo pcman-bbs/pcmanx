@@ -246,7 +246,11 @@ void nsPluginInstance::NewCon()
 //	m_pView->SetContextMenu(m_EditMenu);
 	CFont* font = new CFont(m_FontFace, 12, true);
 	m_pView->SetFont(font);
-//	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
+	static GdkColor HyperLinkColor;
+	HyperLinkColor.red = 65535;
+	HyperLinkColor.green = 65536*102/256;
+	HyperLinkColor.blue = 0;
+	m_pView->SetHyperLinkColor( &HyperLinkColor );
 //	m_pView->SetHorizontalCenterAlign( AppConfig.HCenterAlign );
 //	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 //	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
@@ -288,6 +292,11 @@ void nsPluginInstance::clear()
 {
   strcpy(mString, "");
   draw();
+}
+
+bool nsPluginInstance::queryOnExit()
+{
+	return true;
 }
 
 // ==============================
