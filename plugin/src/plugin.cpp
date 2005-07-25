@@ -134,6 +134,8 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData * aCreateDataStruct) : nsP
   mInstance(aCreateDataStruct->instance),
   mInitialized(FALSE),
   mWindow(0),
+  m_pView(NULL),
+  m_pCon(NULL),
   m_GtkWidget(NULL),
   mScriptablePeer(NULL)
 {
@@ -172,9 +174,11 @@ NPBool nsPluginInstance::init(NPWindow* aWindow)
   if(aWindow == NULL)
     return FALSE;
 
+  CTelnetCon::Init();
+
   if (SetWindow(aWindow))
     mInitialized = TRUE;
-         
+
   return mInitialized;
 }
 
@@ -232,17 +236,33 @@ NPError nsPluginInstance::SetWindow(NPWindow* aWindow)
 }
 
 
+gboolean nsPluginInstance::OnBlinkTimer(nsPluginInstance* _this)
+{
+	if(_this->m_pView && _this->m_pView->IsVisible() )
+		_this->m_pView->OnBlinkTimer();
+	return true;
+}
+
+gboolean nsPluginInstance::OnEverySecondTimer(nsPluginInstance* _this)
+{
+	if( _this->m_pCon )
+		_this->m_pCon->OnTimer();
+	return true;
+}
+
 void nsPluginInstance::NewCon()
 {
+	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)nsPluginInstance::OnBlinkTimer, this );
+	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)nsPluginInstance::OnEverySecondTimer, this );
+
 	m_pView = new CTelnetView;
 //	gtk_label_new("PCMan plug-in for Mozilla/Firefox")
 	gtk_container_add( GTK_CONTAINER(m_GtkWidget), m_pView->m_Widget);
 
-	CTelnetCon* pCon;
 	CSite site;
-	pCon = new CTelnetCon( m_pView, site );
+	m_pCon = new CTelnetCon( m_pView, site );
 
-	m_pView->SetTermData( pCon );
+	m_pView->SetTermData( m_pCon );
 //	m_pView->SetContextMenu(m_EditMenu);
 	CFont* font = new CFont(m_FontFace, 12, true);
 	m_pView->SetFont(font);
@@ -255,22 +275,26 @@ void nsPluginInstance::NewCon()
 //	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 //	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
-	pCon->m_Site.m_Name = "";
-	pCon->m_Site.m_URL = m_URL;
-	g_print("url = %s\n", m_URL.c_str());
-	pCon->m_Encoding = pCon->m_Site.m_Encoding;
+	m_pCon->m_Site.m_Name = "";
+	m_pCon->m_Site.m_URL = m_URL;
+//	g_print("url = %s\n", m_URL.c_str());
+	m_pCon->m_Encoding = m_pCon->m_Site.m_Encoding;
 
-	pCon->AllocScreenBuf( site.m_RowsPerPage, site.m_RowsPerPage, site.m_ColsPerPage );
+	m_pCon->AllocScreenBuf( site.m_RowsPerPage, site.m_RowsPerPage, site.m_ColsPerPage );
 
 	m_pView->SetFocus();
 
-	pCon->Connect();
+	m_pCon->Connect();
 }
 
 
 
 void nsPluginInstance::shut()
 {
+  g_source_remove( m_BlinkTimer );
+  g_source_remove( m_EverySecondTimer );
+
+  CTelnetCon::Cleanup();
   mInitialized = FALSE;
 }
 

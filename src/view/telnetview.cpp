@@ -141,8 +141,10 @@ static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
 
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {
+#if !defined(MOZ_PLUGIN)
 	if( !m_ContextMenu )
 		return;
+#endif
 
 	if( m_pTermData )	// Copy URL popup menu.
 	{
@@ -193,7 +195,9 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 			return;
 		}
 	}
+#if !defined(MOZ_PLUGIN)
 	gtk_menu_popup( m_ContextMenu, NULL, NULL, NULL, NULL, evt->button, evt->time );
+#endif
 }
 
 bool CTelnetView::PreKeyDown(GdkEventKey* evt)

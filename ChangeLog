@@ -1,5 +1,13 @@
 2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/view/telnetview.cpp:
+	Temporarily enable the popup menu of hyperlinks.
+
+	* plugin/src/plugin.cpp:
+	Add timers to enable cursor blinking and anti-idle.
+
+2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/sitepage.cpp:
 	Adjust the user interface and add a checkbox for double-byte detection.
 

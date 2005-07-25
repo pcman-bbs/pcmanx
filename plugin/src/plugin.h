@@ -52,6 +52,7 @@
 using namespace std;
 
 class CTelnetView;
+class CTelnetCon;
 class nsPluginInstance : public nsPluginInstanceBase
 {
 public:
@@ -66,6 +67,8 @@ public:
   NPError SetWindow(NPWindow* aWindow);
 
   void NewCon();
+  static gboolean OnBlinkTimer(nsPluginInstance* _this);
+  static gboolean OnEverySecondTimer(nsPluginInstance* _this);
 
   // locals
   void showVersion();
@@ -85,8 +88,11 @@ private:
   int mWidth, mHeight;
   GtkWidget* m_GtkWidget;
   CTelnetView* m_pView;
+  CTelnetCon* m_pCon;
   string m_URL;
   string m_FontFace;
+  guint m_BlinkTimer;
+  guint m_EverySecondTimer;
 
   nsScriptablePeer* mScriptablePeer;
 
