@@ -54,7 +54,7 @@ plugindir = $(MOZILLA_LIB_DIR_SEARCH)/plugins
 # We MUST make sure plugin was built as -shared, and we must use some tricky
 # approaches to hanle libtool issues.
 $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)
-	$(CXX) -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
+	$(CXX) $(LDFLAGS) -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
 	  -shared \
 	$(MOZILLA_LIBS) $(GUI_LIBS) \
 	-L$(top_builddir)/src/core/.libs -lpcmanx_core

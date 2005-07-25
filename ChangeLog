@@ -1,4 +1,14 @@
-2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-25  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/nsScriptablePeer.cpp (nsScriptablePeer::QueryOnExit):
+	Implemented.
+
+	* plugin/src/Makefile.am: Put $(LDFLAGS) with pcmanx-plugin.so
+	generation.
+
+	* data/sitelist: Updated.
+
+2005-07-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/view/telnetcon.cpp,
 	src/pcmanx_pure_gtk2.cpp,

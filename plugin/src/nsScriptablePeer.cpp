@@ -130,3 +130,11 @@ NS_IMETHODIMP nsScriptablePeer::Clear()
 
   return NS_OK;
 }
+
+NS_IMETHODIMP nsScriptablePeer::QueryOnExit(PRBool *_retval)
+{
+  if (mPlugin)
+    *_retval = (PRBool) mPlugin->queryOnExit();
+
+  return NS_OK;
+}
