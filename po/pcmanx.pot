@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 23:39+0800\n"
+"POT-Creation-Date: 2005-07-26 04:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,11 +97,11 @@ msgstr ""
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:465 ../src/mainframe.cpp:1178
+#: ../src/mainframe.cpp:465 ../src/mainframe.cpp:1176
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:473 ../src/mainframe.cpp:1186
+#: ../src/mainframe.cpp:473 ../src/mainframe.cpp:1184
 msgid "_Edit Favorites"
 msgstr ""
 
@@ -216,18 +216,18 @@ msgstr ""
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1088
+#: ../src/mainframe.cpp:1086
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1100
+#: ../src/mainframe.cpp:1098
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1112
+#: ../src/mainframe.cpp:1110
 msgid "Add To Favorites"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Name: "
 msgstr ""
 
-#: ../src/sitepage.cpp:82
+#: ../src/sitepage.cpp:79
 msgid "Address: "
 msgstr ""
 
@@ -267,52 +267,56 @@ msgstr ""
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:102 ../src/sitepage.cpp:119
-msgid "Sec"
+#: ../src/sitepage.cpp:102 ../src/sitepage.cpp:120
+msgid "Sec (0 = Disabled)"
 msgstr ""
 
-#: ../src/sitepage.cpp:110
+#: ../src/sitepage.cpp:111
 msgid "Anti-Idle: Send specified string to server when idling for  "
 msgstr ""
 
-#: ../src/sitepage.cpp:127
+#: ../src/sitepage.cpp:129
 msgid "Anti-Idle string to be sent :"
 msgstr ""
 
-#: ../src/sitepage.cpp:147
+#: ../src/sitepage.cpp:142
 msgid "Terminal Screen Size"
 msgstr ""
 
-#: ../src/sitepage.cpp:155
+#: ../src/sitepage.cpp:150
 msgid "Line: "
 msgstr ""
 
-#: ../src/sitepage.cpp:164
+#: ../src/sitepage.cpp:159
 msgid "Col: "
 msgstr ""
 
-#: ../src/sitepage.cpp:181
+#: ../src/sitepage.cpp:173
 msgid "Terminal Type: "
 msgstr ""
 
-#: ../src/sitepage.cpp:194
+#: ../src/sitepage.cpp:182
 msgid "Convert ESC in ANSI color code to  "
 msgstr ""
 
-#: ../src/sitepage.cpp:207
+#: ../src/sitepage.cpp:196
 msgid "Wrap pasted text when there's too many characters per line :"
 msgstr ""
 
-#: ../src/sitepage.cpp:216
-msgid "0 = disabled"
+#: ../src/sitepage.cpp:205
+msgid "(0 = Disabled)"
+msgstr ""
+
+#: ../src/sitepage.cpp:214
+msgid "Site Encoding: "
+msgstr ""
+
+#: ../src/sitepage.cpp:223
+msgid "Detect double-byte characters on typing"
 msgstr ""
 
 #: ../src/sitepage.cpp:227
 msgid "Connect automatically on program startup"
-msgstr ""
-
-#: ../src/sitepage.cpp:231
-msgid "Site Encoding :"
 msgstr ""
 
 #: ../src/prefdlg.cpp:39

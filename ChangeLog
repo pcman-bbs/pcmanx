@@ -1,3 +1,13 @@
+2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/sitepage.cpp:
+	Adjust the user interface and add a checkbox for double-byte detection.
+
+	* src/appconfig.cpp:
+	Check default cols and rows of terminal screen and set them to proper 
+	value if needed.  These values cannot be zero or they will cause the 
+	arithmetic error - "divided by zero".
+
 2005-07-25  Jim Huang  <jserv@kaffe.org>
 
 	* plugin/src/nsScriptablePeer.cpp (nsScriptablePeer::QueryOnExit):

@@ -186,9 +186,17 @@ void CAppConfig::LoadFavorites()
 			else if( 0 == strcmp( pname, "DetectDBChar" ) )
 				pSite->m_DetectDBChar = atoi(pval);
 			else if( 0 == strcmp( pname, "Rows" ) )
+			{
 				pSite->m_RowsPerPage = atoi(pval);
+				if( pSite->m_RowsPerPage < 24 )
+					pSite->m_RowsPerPage = 24;
+			}
 			else if( 0 == strcmp( pname, "Cols" ) )
+			{
 				pSite->m_ColsPerPage = atoi(pval);
+				if(pSite->m_ColsPerPage < 40)
+					pSite->m_ColsPerPage = 40;
+			}
 			else if( 0 == strcmp( pname, "TermType" ) )
 				pSite->m_TermType = pval;
 			else if( 0 == strcmp( pname, "ESCConv" ) )

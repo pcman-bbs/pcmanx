@@ -50,6 +50,7 @@ public:
 	GtkWidget *m_PasteWrap;
 	GtkWidget *m_Encoding;
 	GtkWidget *m_Startup;
+	GtkWidget *m_DetectDBChar;
     CSite&  m_Site;
 };
 

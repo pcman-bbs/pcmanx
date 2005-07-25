@@ -30,245 +30,235 @@ CSitePage::CSitePage(CSite& site)
 {
 	GtkWidget *hbox1;
 	GtkWidget *label1;
-	GtkWidget *hbox2;
-	GtkWidget *label2;
+	GtkWidget *label40;
 	GtkWidget *hbox3;
 	GtkWidget *label3;
+	GtkObject *m_Reconnect_adj;
 	GtkWidget *label4;
 	GtkWidget *hbox6;
 	GtkWidget *label10;
+	GtkObject *m_Idle_adj;
 	GtkWidget *label11;
 	GtkWidget *hbox7;
 	GtkWidget *label12;
-	GtkWidget *fixed1;
 	GtkWidget *hbox13;
-	GtkWidget *hbox8;
 	GtkWidget *label17;
 	GtkWidget *hbox14;
 	GtkWidget *label22;
+	GtkObject *m_Line_adj;
 	GtkWidget *label23;
+	GtkObject *m_Col_adj;
 	GtkWidget *hbox10;
-	GtkWidget *hbox11;
 	GtkWidget *label20;
-	GtkWidget *hbox12;
 	GtkWidget *label21;
 	GtkWidget *hbox15;
 	GtkWidget *label24;
+	GtkObject *m_PasteWrap_adj;
 	GtkWidget *label25;
-	GtkWidget *hbox16;
-	GtkWidget *label126;
-
-
-	m_Widget = gtk_vbox_new(FALSE, 2);
-
+	GtkWidget *hbox25;
+	GtkWidget *label39;
+	
+	m_Widget = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (m_Widget);
-
-	hbox1 = gtk_hbox_new (FALSE, 4);
+	PostCreate();
+	
+	hbox1 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox1);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox1, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox1, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox1), 1);
 	
 	label1 = gtk_label_new (_("Name: "));
 	gtk_widget_show (label1);
-	gtk_box_pack_start (GTK_BOX (hbox1), label1, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox1), label1, FALSE, FALSE, 0);
 	
 	m_Name = gtk_entry_new ();
 	gtk_widget_show (m_Name);
 	gtk_box_pack_start (GTK_BOX (hbox1), m_Name, TRUE, TRUE, 2);
+	gtk_widget_set_size_request (m_Name, 100, -1);
 	
-	hbox2 = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hbox2);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox2, FALSE, TRUE, 2);
-	
-	label2 = gtk_label_new (_("Address: "));
-	gtk_widget_show (label2);
-	gtk_box_pack_start (GTK_BOX (hbox2), label2, FALSE, FALSE, 2);
+	label40 = gtk_label_new (_("Address: "));
+	gtk_widget_show (label40);
+	gtk_box_pack_start (GTK_BOX (hbox1), label40, FALSE, FALSE, 2);
 	
 	m_Address = gtk_entry_new ();
 	gtk_widget_show (m_Address);
-	gtk_box_pack_start (GTK_BOX (hbox2), m_Address, TRUE, TRUE, 2);
-
-	hbox3 = gtk_hbox_new (FALSE, 4);
+	gtk_box_pack_start (GTK_BOX (hbox1), m_Address, TRUE, TRUE, 0);
+	gtk_widget_set_size_request (m_Address, 100, -1);
+	
+	hbox3 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox3);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox3, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox3, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox3), 1);
+	
 	label3 = gtk_label_new (_("Reconnect when disconnected in specified duration : "));
 	gtk_widget_show (label3);
-	gtk_box_pack_start (GTK_BOX (hbox3), label3, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox3), label3, FALSE, FALSE, 0);
 	
-	m_Reconnect = gtk_entry_new ();
+	m_Reconnect_adj = gtk_adjustment_new (0, 0, 65535, 1, 10, 10);
+	m_Reconnect = gtk_spin_button_new (GTK_ADJUSTMENT (m_Reconnect_adj), 1, 0);
 	gtk_widget_show (m_Reconnect);
-	gtk_box_pack_start (GTK_BOX (hbox3), m_Reconnect, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_Reconnect, 40, -1);
+	gtk_box_pack_start (GTK_BOX (hbox3), m_Reconnect, FALSE, TRUE, 0);
 	
 	label4 = gtk_label_new (_("Sec (0 = Disabled)"));
 	gtk_widget_show (label4);
-	gtk_box_pack_start (GTK_BOX (hbox3), label4, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox3), label4, FALSE, FALSE, 0);
 	
-	hbox6 = gtk_hbox_new (FALSE, 0);
+	hbox6 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox6);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox6, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox6, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox6), 1);
 	
 	label10 = gtk_label_new (_("Anti-Idle: Send specified string to server when idling for  "));
 	gtk_widget_show (label10);
-	gtk_box_pack_start (GTK_BOX (hbox6), label10, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox6), label10, FALSE, FALSE, 0);
 	
-	m_Idle = gtk_entry_new ();
+	m_Idle_adj = gtk_adjustment_new (0, 0, 65535, 1, 10, 10);
+	m_Idle = gtk_spin_button_new (GTK_ADJUSTMENT (m_Idle_adj), 1, 0);
 	gtk_widget_show (m_Idle);
-	gtk_box_pack_start (GTK_BOX (hbox6), m_Idle, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_Idle, 40, -1);
-
+	gtk_box_pack_start (GTK_BOX (hbox6), m_Idle, FALSE, TRUE, 0);
+	
 	label11 = gtk_label_new (_("Sec (0 = Disabled)"));
 	gtk_widget_show (label11);
-	gtk_box_pack_start (GTK_BOX (hbox6), label11, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox6), label11, FALSE, FALSE, 0);
 	
-	hbox7 = gtk_hbox_new (FALSE, 0);
+	hbox7 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox7);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox7, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox7, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox7), 1);
 	
 	label12 = gtk_label_new (_("Anti-Idle string to be sent :"));
 	gtk_widget_show (label12);
-	gtk_box_pack_start (GTK_BOX (hbox7), label12, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox7), label12, FALSE, FALSE, 0);
 	
 	m_IdleStr = gtk_entry_new ();
 	gtk_widget_show (m_IdleStr);
-	gtk_box_pack_start (GTK_BOX (hbox7), m_IdleStr, TRUE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox7), m_IdleStr, TRUE, TRUE, 0);
 	
-	fixed1 = gtk_fixed_new ();
-	gtk_widget_show (fixed1);
-	gtk_box_pack_start (GTK_BOX (m_Widget), fixed1, FALSE, TRUE, 2);
-	
-	hbox13 = gtk_hbox_new (FALSE, 4);
+	hbox13 = gtk_hbox_new (FALSE, 16);
 	gtk_widget_show (hbox13);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox13, FALSE, TRUE, 2);
-	
-	hbox8 = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hbox8);
-	gtk_box_pack_start (GTK_BOX (hbox13), hbox8, TRUE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox13, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox13), 1);
 	
 	label17 = gtk_label_new (_("Terminal Screen Size"));
 	gtk_widget_show (label17);
-	gtk_box_pack_start (GTK_BOX (hbox8), label17, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox13), label17, FALSE, TRUE, 0);
 	
 	hbox14 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox14);
-	gtk_box_pack_start (GTK_BOX (hbox13), hbox14, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox13), hbox14, TRUE, TRUE, 0);
 	
 	label22 = gtk_label_new (_("Line: "));
 	gtk_widget_show (label22);
-	gtk_box_pack_start (GTK_BOX (hbox14), label22, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox14), label22, FALSE, FALSE, 0);
 	
-	m_Line = gtk_entry_new ();
+	m_Line_adj = gtk_adjustment_new (24, 24, 96, 1, 10, 10);
+	m_Line = gtk_spin_button_new (GTK_ADJUSTMENT (m_Line_adj), 1, 0);
 	gtk_widget_show (m_Line);
-	gtk_box_pack_start (GTK_BOX (hbox14), m_Line, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_Line, 40, -1);
+	gtk_box_pack_start (GTK_BOX (hbox14), m_Line, FALSE, TRUE, 0);
 	
 	label23 = gtk_label_new (_("Col: "));
 	gtk_widget_show (label23);
-	gtk_box_pack_start (GTK_BOX (hbox14), label23, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox14), label23, FALSE, FALSE, 0);
 	
-	m_Col = gtk_entry_new ();
+	m_Col_adj = gtk_adjustment_new (80, 40, 240, 1, 10, 10);
+	m_Col = gtk_spin_button_new (GTK_ADJUSTMENT (m_Col_adj), 1, 0);
 	gtk_widget_show (m_Col);
-	gtk_box_pack_start (GTK_BOX (hbox14), m_Col, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_Col, 40, -1);
+	gtk_box_pack_start (GTK_BOX (hbox14), m_Col, FALSE, TRUE, 0);
 	
-	hbox10 = gtk_hbox_new (FALSE, 4);
+	hbox10 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox10);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox10, FALSE, TRUE, 2);
-	
-	hbox11 = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hbox11);
-	gtk_box_pack_start (GTK_BOX (hbox10), hbox11, TRUE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox10, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox10), 1);
 	
 	label20 = gtk_label_new (_("Terminal Type: "));
 	gtk_widget_show (label20);
-	gtk_box_pack_start (GTK_BOX (hbox11), label20, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox10), label20, FALSE, FALSE, 0);
 	
 	m_TermType = gtk_entry_new ();
 	gtk_widget_show (m_TermType);
-	gtk_box_pack_start (GTK_BOX (hbox11), m_TermType, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox10), m_TermType, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (m_TermType, 60, -1);
-
-	hbox12 = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hbox12);
-	gtk_box_pack_start (GTK_BOX (hbox10), hbox12, FALSE, TRUE, 2);
 	
 	label21 = gtk_label_new (_("Convert ESC in ANSI color code to  "));
 	gtk_widget_show (label21);
-	gtk_box_pack_start (GTK_BOX (hbox12), label21, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox10), label21, FALSE, FALSE, 0);
 	
 	m_ESCConv = gtk_entry_new ();
 	gtk_widget_show (m_ESCConv);
-	gtk_box_pack_start (GTK_BOX (hbox12), m_ESCConv, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox10), m_ESCConv, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (m_ESCConv, 60, -1);
 	
-	hbox15 = gtk_hbox_new (FALSE, 4);
+	hbox15 = gtk_hbox_new (FALSE, 2);
 	gtk_widget_show (hbox15);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox15, FALSE, TRUE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox15, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox15), 1);
 	
 	label24 = gtk_label_new (_("Wrap pasted text when there's too many characters per line :"));
 	gtk_widget_show (label24);
-	gtk_box_pack_start (GTK_BOX (hbox15), label24, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (hbox15), label24, FALSE, FALSE, 0);
 	
-	m_PasteWrap = gtk_entry_new ();
+	m_PasteWrap_adj = gtk_adjustment_new (78, 0, 100, 1, 10, 10);
+	m_PasteWrap = gtk_spin_button_new (GTK_ADJUSTMENT (m_PasteWrap_adj), 1, 0);
 	gtk_widget_show (m_PasteWrap);
-	gtk_box_pack_start (GTK_BOX (hbox15), m_PasteWrap, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_PasteWrap, 40, -1);
+	gtk_box_pack_start (GTK_BOX (hbox15), m_PasteWrap, FALSE, TRUE, 0);
 	
-	label25 = gtk_label_new (_("0 = Disabled"));
+	label25 = gtk_label_new (_("(0 = Disabled)"));
 	gtk_widget_show (label25);
-	gtk_box_pack_start (GTK_BOX (hbox15), label25, FALSE, FALSE, 2);
-
-	gtk_entry_set_text(GTK_ENTRY(m_Name), m_Site.m_Name.c_str());
-	gtk_entry_set_text(GTK_ENTRY(m_Address), m_Site.m_URL.c_str());
+	gtk_box_pack_start (GTK_BOX (hbox15), label25, FALSE, FALSE, 0);
 	
-	hbox16 = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hbox16);
-	gtk_box_pack_start (GTK_BOX (m_Widget), hbox16, FALSE, TRUE, 2);
-
-	m_Startup = gtk_check_button_new_with_mnemonic (_("Connect automatically on program startup"));
-	gtk_widget_show (m_Startup);
-	gtk_box_pack_start (GTK_BOX (hbox16), m_Startup, FALSE, TRUE, 2);
-
-	label126 = gtk_label_new (_("Site Encoding :"));
-	gtk_widget_show (label126);
-	gtk_box_pack_start (GTK_BOX(hbox16), label126, FALSE, FALSE, 2);
-
+	hbox25 = gtk_hbox_new (FALSE, 2);
+	gtk_widget_show (hbox25);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox25, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox25), 1);
+	
+	label39 = gtk_label_new (_("Site Encoding: "));
+	gtk_widget_show (label39);
+	gtk_box_pack_start (GTK_BOX (hbox25), label39, FALSE, FALSE, 0);
+	
 	m_Encoding = gtk_entry_new ();
 	gtk_widget_show (m_Encoding);
-	gtk_box_pack_start (GTK_BOX (hbox16), m_Encoding, FALSE, TRUE, 2);
-	gtk_widget_set_size_request (m_Encoding, 40, -1);
-
+	gtk_box_pack_start (GTK_BOX (hbox25), m_Encoding, TRUE, TRUE, 0);
+	gtk_widget_set_size_request (m_Encoding, 60, -1);
+	
+	m_DetectDBChar = gtk_check_button_new_with_mnemonic (_("Detect double-byte characters on typing"));
+	gtk_widget_show (m_DetectDBChar);
+	gtk_box_pack_start (GTK_BOX (hbox25), m_DetectDBChar, TRUE, TRUE, 0);
+	
+	m_Startup = gtk_check_button_new_with_mnemonic (_("Connect automatically on program startup"));
+	gtk_widget_show (m_Startup);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_Startup, FALSE, FALSE, 0);
 
 	if( m_Site.m_Name.empty() )
 	{
 		gtk_widget_hide(hbox1);
-		gtk_widget_hide(hbox2);
 		gtk_widget_hide(m_Startup);
 //		gtk_widget_set_sensitive(m_Name, false);
 //		gtk_widget_set_sensitive(m_Address, false);
 	}
 
-	char num[20];
-	sprintf( num, "%d", m_Site.m_AntiIdle );
-	gtk_entry_set_text(GTK_ENTRY(m_Idle), num);
+	gtk_entry_set_text(GTK_ENTRY(m_Name), m_Site.m_Name.c_str());
+	gtk_entry_set_text(GTK_ENTRY(m_Address), m_Site.m_URL.c_str());
+
+	gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_Idle), m_Site.m_AntiIdle);
 	gtk_entry_set_text(GTK_ENTRY(m_IdleStr), m_Site.m_AntiIdleStr.c_str());
 	
-	sprintf( num, "%d", m_Site.m_AutoReconnect );
-	gtk_entry_set_text(GTK_ENTRY(m_Reconnect), num);
+	gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_Reconnect), m_Site.m_AutoReconnect);
 
-	sprintf( num, "%d", m_Site.m_RowsPerPage );
-	gtk_entry_set_text(GTK_ENTRY(m_Line), num);
-	sprintf( num, "%d", m_Site.m_ColsPerPage );
-	gtk_entry_set_text(GTK_ENTRY(m_Col), num);
+	gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_Line), m_Site.m_RowsPerPage);
+
+	gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_Col), m_Site.m_ColsPerPage);
 
 	gtk_entry_set_text(GTK_ENTRY(m_TermType), m_Site.m_TermType.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_ESCConv), m_Site.m_ESCConv.c_str());
 	
-	sprintf( num, "%d", m_Site.m_AutoWrapOnPaste );
-	gtk_entry_set_text(GTK_ENTRY(m_PasteWrap), num);
+	gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_PasteWrap), m_Site.m_AutoWrapOnPaste);
 
 	gtk_entry_set_text(GTK_ENTRY(m_Encoding), m_Site.m_Encoding.c_str());
 
-	 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_Startup), 
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_DetectDBChar), 
+	 								m_Site.m_DetectDBChar);
+
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_Startup), 
 	 								m_Site.m_Startup);
 }
 
@@ -288,16 +278,17 @@ bool CSitePage::OnOK()
 
 	m_Site.m_Encoding = gtk_entry_get_text(GTK_ENTRY(m_Encoding));
 
-	m_Site.m_AutoReconnect = atoi( gtk_entry_get_text(GTK_ENTRY(m_Reconnect)));
+	m_Site.m_AutoReconnect = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_Reconnect));
 
-	m_Site.m_RowsPerPage = atoi( gtk_entry_get_text(GTK_ENTRY(m_Line)) );
-	m_Site.m_ColsPerPage = atoi( gtk_entry_get_text(GTK_ENTRY(m_Col)) );
+	m_Site.m_RowsPerPage = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_Line));
+	m_Site.m_ColsPerPage = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_Col));
 
 	m_Site.m_TermType = gtk_entry_get_text(GTK_ENTRY(m_TermType));
 	m_Site.m_ESCConv = gtk_entry_get_text(GTK_ENTRY(m_ESCConv));
 
-	m_Site.m_AutoWrapOnPaste = atoi( gtk_entry_get_text(GTK_ENTRY(m_PasteWrap)) );
+	m_Site.m_AutoWrapOnPaste = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(m_PasteWrap));
 
+	m_Site.m_DetectDBChar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_DetectDBChar));
 	m_Site.m_Startup = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_Startup));
 	return true;
 }

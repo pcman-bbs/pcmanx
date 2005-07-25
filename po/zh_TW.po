@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-24 23:39+0800\n"
-"PO-Revision-Date: 2005-07-25 02:32+0800\n"
+"PO-Revision-Date: 2005-07-26 04:02+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:608
+#: ../src/sitelistdlg.cpp:33
+#: ../src/mainframe.cpp:608
 msgid "Site List"
 msgstr "BBS 站台列表"
 
@@ -94,11 +95,13 @@ msgstr "個人偏好設定 (_P)"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:465 ../src/mainframe.cpp:1178
+#: ../src/mainframe.cpp:465
+#: ../src/mainframe.cpp:1176
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:473 ../src/mainframe.cpp:1186
+#: ../src/mainframe.cpp:473
+#: ../src/mainframe.cpp:1184
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -142,7 +145,8 @@ msgstr "貼上"
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:656 ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:656
+#: ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr "個人偏好設定"
 
@@ -217,11 +221,11 @@ msgstr ""
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
-#: ../src/mainframe.cpp:1088
+#: ../src/mainframe.cpp:1086
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1100
+#: ../src/mainframe.cpp:1098
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -230,11 +234,12 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1112
+#: ../src/mainframe.cpp:1110
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/sitedlg.cpp:38 ../src/prefdlg.cpp:40
+#: ../src/sitedlg.cpp:38
+#: ../src/prefdlg.cpp:40
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -262,7 +267,7 @@ msgstr "編輯站台設定"
 msgid "Name: "
 msgstr "站台名稱："
 
-#: ../src/sitepage.cpp:82
+#: ../src/sitepage.cpp:79
 msgid "Address: "
 msgstr "站台位址："
 
@@ -270,53 +275,58 @@ msgstr "站台位址："
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:102 ../src/sitepage.cpp:119
-msgid "Sec"
-msgstr "秒"
+#: ../src/sitepage.cpp:102
+#: ../src/sitepage.cpp:120
+msgid "Sec (0 = Disabled)"
+msgstr "(0 = 關閉不用)"
 
-#: ../src/sitepage.cpp:110
+#: ../src/sitepage.cpp:111
 msgid "Anti-Idle: Send specified string to server when idling for  "
 msgstr "防閒置: 每隔指定秒數對主機送出防閒置字串"
 
-#: ../src/sitepage.cpp:127
+#: ../src/sitepage.cpp:129
 msgid "Anti-Idle string to be sent :"
 msgstr "要送出的防閒置字串"
 
-#: ../src/sitepage.cpp:147
+#: ../src/sitepage.cpp:142
 msgid "Terminal Screen Size"
 msgstr "終端機螢幕大小"
 
-#: ../src/sitepage.cpp:155
+#: ../src/sitepage.cpp:150
 msgid "Line: "
 msgstr "列："
 
-#: ../src/sitepage.cpp:164
+#: ../src/sitepage.cpp:159
 msgid "Col: "
 msgstr "行："
 
-#: ../src/sitepage.cpp:181
+#: ../src/sitepage.cpp:173
 msgid "Terminal Type: "
 msgstr "終端機"
 
-#: ../src/sitepage.cpp:194
+#: ../src/sitepage.cpp:182
 msgid "Convert ESC in ANSI color code to  "
 msgstr "將色彩控制碼的ESC轉換成"
 
-#: ../src/sitepage.cpp:207
+#: ../src/sitepage.cpp:196
 msgid "Wrap pasted text when there's too many characters per line :"
 msgstr "貼上文字每行超過指定字數則自動換行"
 
-#: ../src/sitepage.cpp:216
-msgid "0 = disabled"
-msgstr "0 = 關閉不用"
+#: ../src/sitepage.cpp:205
+msgid "(0 = Disabled)"
+msgstr "(0 = 關閉不用)"
+
+#: ../src/sitepage.cpp:214
+msgid "Site Encoding: "
+msgstr "站台編碼："
+
+#: ../src/sitepage.cpp:223
+msgid "Detect double-byte characters on typing"
+msgstr "鍵盤輸入自動偵測雙位元組中文"
 
 #: ../src/sitepage.cpp:227
 msgid "Connect automatically on program startup"
 msgstr "程式啟動時自動連線"
-
-#: ../src/sitepage.cpp:231
-msgid "Site Encoding :"
-msgstr "站台編碼："
 
 #: ../src/prefdlg.cpp:39
 msgid "General"
@@ -354,30 +364,6 @@ msgstr "秒"
 msgid "Web Browser: "
 msgstr "網頁瀏覽器："
 
-#: ../src/view/telnetview.cpp:159
-msgid "_Copy URL to Clipboard"
-msgstr "複製網址到剪貼簿 (_C)"
-
-#: ../src/emoticondlg.cpp:26
-msgid "Emoticons"
-msgstr "表情符號"
-
-#: ../src/emoticondlg.cpp:28
-msgid "Send"
-msgstr "送出"
-
-#: ../src/emoticondlg.cpp:138
-msgid "New Emoticon"
-msgstr "新增表情符號"
-
-#: ../src/emoticondlg.cpp:138 ../src/emoticondlg.cpp:155
-msgid "Input New Emoticon"
-msgstr "輸入新表情符號"
-
-#: ../src/emoticondlg.cpp:155
-msgid "Edit Emoticon"
-msgstr "編輯表情符號"
-
 #: ../src/autologinpage.cpp:40
 msgid "Prelogin Prompt: "
 msgstr "登入前的提示："
@@ -407,13 +393,31 @@ msgid "Post Login String: "
 msgstr "登入後送出的字串："
 
 #: ../src/autologinpage.cpp:114
-msgid ""
-"<big>WARNING:</big> Your password will be stored in <u>plain text</u> "
-"without any encryption.  Use this at your own risk.  Although UNIX-like "
-"systems all have file permissions, there is no guarantee that others won't "
-"get your password."
-msgstr ""
-"<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，"
-"請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔"
-"保。"
+msgid "<big>WARNING:</big> Your password will be stored in <u>plain text</u> without any encryption.  Use this at your own risk.  Although UNIX-like systems all have file permissions, there is no guarantee that others won't get your password."
+msgstr "<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔保。"
+
+#: ../src/emoticondlg.cpp:26
+msgid "Emoticons"
+msgstr "表情符號"
+
+#: ../src/emoticondlg.cpp:28
+msgid "Send"
+msgstr "送出"
+
+#: ../src/emoticondlg.cpp:138
+msgid "New Emoticon"
+msgstr "新增表情符號"
+
+#: ../src/emoticondlg.cpp:138
+#: ../src/emoticondlg.cpp:155
+msgid "Input New Emoticon"
+msgstr "輸入新表情符號"
+
+#: ../src/emoticondlg.cpp:155
+msgid "Edit Emoticon"
+msgstr "編輯表情符號"
+
+#: ../src/view/telnetview.cpp:159
+msgid "_Copy URL to Clipboard"
+msgstr "複製網址到剪貼簿 (_C)"
 
