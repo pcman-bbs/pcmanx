@@ -1063,8 +1063,6 @@ void CMainFrame::OnDestroy()
 
 	while( g_main_context_iteration(NULL, FALSE) );
 
-	CTelnetCon::Cleanup();
-
 	CWidget::OnDestroy();
 
 	gtk_main_quit();
@@ -1115,7 +1113,7 @@ void CMainFrame::OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this)
 		AppConfig.Favorites.push_back(dlg->m_Site);
 		CSite& newsite = AppConfig.Favorites.back();
 
-		GtkWidget* fav_item = gtk_image_menu_item_new_with_label( site.m_Name.c_str() );
+		GtkWidget* fav_item = gtk_image_menu_item_new_with_label( newsite.m_Name.c_str() );
 		gtk_widget_show (fav_item);
 		gtk_menu_shell_insert( GTK_MENU_SHELL(_this->m_FavoritesMenu), fav_item, 
 			AppConfig.Favorites.size()>0 ? (AppConfig.Favorites.size()-1) : 0 );
@@ -1256,7 +1254,7 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::LoadStartupSites()
 {
-	vector<CSite>::iterator it;
+	vector<CSite>::iterator it=AppConfig.Favorites.begin();
 	for( it = AppConfig.Favorites.begin(); it != AppConfig.Favorites.end(); ++it )
 	{
 		CSite& site = *it;

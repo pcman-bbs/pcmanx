@@ -1,5 +1,24 @@
 2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/view/telnetcon.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/mainframe.cpp:
+	Completely rewrite the multi-threading DNS lookup.
+	Remove all implementation based on GThreadPool.
+	No more deadlock or strange blocking.
+	Use IO channel to monitor socket connection instead of blocking calls.
+	Due to better handling of multi-threading, the performance is improved.
+
+	* src/sitepage.cpp:
+	Prevent the user from accidentally creating a new favorite item without 
+	name or URL.
+
+	* src/appconfig.cpp:
+	Fix the problem which previously disable the usage of space character in 
+	the names of sites.
+
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/core/termdata.cpp:
 	Correctly process Esc[A, Esc[B, Esc[C, Esc[D ANSI escape sequence.
 

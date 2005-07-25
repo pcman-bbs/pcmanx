@@ -157,15 +157,16 @@ void CAppConfig::LoadFavorites()
 //		BLOWFISH_CTX* bfc = NULL;
 		while( fgets( line, 1024, fi ) )
 		{
-			char* pname = strtok( line, " =\r\n" );
+			char* pname = strtok( line, "=\r\n" );
 			if( !pname )
 				continue;
+			while( ' ' == *pname )
+				++pname;
 			if( pname[0]=='[' )
 			{
 				pname = strtok(pname, "[]");
 				Favorites.push_back(CSite(pname));
 				pSite = &Favorites.back();
-				
 				continue;
 			}
 			char *pval = strtok( NULL, "\r\n" );

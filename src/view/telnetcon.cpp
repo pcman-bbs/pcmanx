@@ -45,6 +45,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <sys/time.h>
 
@@ -88,6 +89,10 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	m_BellTimeout = 0;
 	m_IsLastLineModified = false;
 
+	// Cache the sockaddr_in which can be used to reconnect.
+	m_InAddr.s_addr = INADDR_NONE;
+	m_Port = 0;
+	
 	gchar* locale_str;
 	gsize l;
 	if( !m_Site.GetPreLoginPrompt().empty() )
@@ -125,24 +130,36 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	}
 }
 
-GThreadPool* CTelnetCon::m_ThreadPool = NULL;
+GThread* CTelnetCon::m_DNSThread = NULL;
 int CTelnetCon::m_SocketTimeout = 30;
+GMutex* CTelnetCon::m_DNSMutex = NULL;
 
 // class destructor
 CTelnetCon::~CTelnetCon()
 {
 	Close();
-
-	vector<CConnectThread*>::iterator it;
-	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
+//	g_print("CTelnetCon::~CTelnetCon\n");
+	list<CDNSRequest*>::iterator it;
+	if(m_DNSMutex)
+		g_mutex_lock(m_DNSMutex);
+	for( it = m_DNSQueue.begin(); it != m_DNSQueue.end(); ++it)
 	{
-		CConnectThread* thread = *it;
+		CDNSRequest* thread = *it;
 		if( thread->m_pCon == this )
 		{
-			thread->m_pCon = NULL;
+			if( thread->m_Running )
+				thread->m_pCon = NULL;
+			else
+			{
+				delete thread;
+				m_DNSQueue.erase(it);
+//				g_print("thread obj deleted in CTelnet::~CTelnet()\n");
+			}
 			break;
 		}
 	}
+	if(m_DNSMutex)
+		g_mutex_unlock(m_DNSMutex);
 
 	if( m_BellTimeout )
 		g_source_remove( m_BellTimeout );
@@ -169,9 +186,8 @@ bool CTelnetCon::Connect()
 	m_State = TS_CONNECTING;
 
 	string address;
-	unsigned short port = 23;
-
-	PreConnect( address, port );
+	m_Port = 23;
+	PreConnect( address, m_Port );
 
 	// If this site has auto-login settings, activate auto-login
 	// and set it to stage 1, waiting for prelogin prompt or stage 2,
@@ -210,19 +226,17 @@ bool CTelnetCon::Connect()
 	else	// Use built-in telnet command handler
 #endif
 	{
-		CConnectThread* connect_thread = new CConnectThread(this, address, port);
-		m_ConnectThreads.push_back( connect_thread );
-		if( !m_ThreadPool )
+		if( m_InAddr.s_addr != INADDR_NONE || inet_aton(address.c_str(), &m_InAddr) )
+			ConnectAsync();
+		else	// It's a domain name, DNS lookup needed.
 		{
-			m_ThreadPool = g_thread_pool_new((GFunc)&CTelnetCon::ConnectThread, 
-											NULL, 
-											MAX_CONCURRENT_CONS, 
-											FALSE, 
-											NULL);
-//			g_print("pool created, %x\n", m_ThreadPool);
+			g_mutex_lock(m_DNSMutex);
+			CDNSRequest* dns_request = new CDNSRequest(this, address, m_Port);
+			m_DNSQueue.push_back( dns_request );
+			if( !m_DNSThread ) // There isn't any runnung thread.
+				m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+			g_mutex_unlock(m_DNSMutex);
 		}
-		g_thread_pool_push(m_ThreadPool, connect_thread, NULL);
-//		g_print("thread pushed, %x\n", connect_thread);
 	}
 
     return true;
@@ -239,7 +253,7 @@ bool CTelnetCon::OnRecv()
 
 	gsize rlen = 0;
 	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen);
-printf("recv, len=%d: %s", rlen, m_pRecvBuf);
+
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
@@ -268,13 +282,12 @@ void CTelnetCon::OnConnect(int code)
 #endif
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
 		m_IOChannelID = g_io_add_watch( m_IOChannel, 
-				GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)OnSocket, this );
+				GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)CTelnetCon::OnSocket, this );
 		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
 		g_io_channel_set_buffered(m_IOChannel, false);
 	}
 	else
 	{
-//		g_print("connection failed.\n");
 		m_State = TS_CLOSED;
 		Close();
 #if !defined(MOZ_PLUGIN)
@@ -300,7 +313,7 @@ void CTelnetCon::OnClose()
 	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConClose((CTelnetView*)m_pView);
 #endif
 	//	if disconnected by the server too soon, reconnect automatically.
-	if( m_Duration < m_Site.m_AutoReconnect )
+	if( m_Site.m_AutoReconnect > 0 && m_Duration < m_Site.m_AutoReconnect )
 		Reconnect();
 }
 
@@ -556,79 +569,31 @@ int CTelnetCon::Send(void *buf, int len)
 	return 0;
 }
 
+list<CDNSRequest*> CTelnetCon::m_DNSQueue;
 
-vector<CConnectThread*> CTelnetCon::m_ConnectThreads;
-
-void CTelnetCon::ConnectThread( CConnectThread* data, gpointer _data )
+void CTelnetCon::DoDNSLookup( CDNSRequest* data )
 {
-//	g_print("thread entered: %x\n", data);
-	sockaddr_in sock_addr;
-	sock_addr.sin_family = AF_INET;
-	sock_addr.sin_port = htons(data->m_Port);
-
 	in_addr addr;
 	addr.s_addr = INADDR_NONE;
 
-	G_LOCK_DEFINE (gethostbyname_mutex);
+//  Because of the usage of thread pool, all DNS requests are queued
+//  and be executed one by one.  So no mutex lock is needed anymore.
 	if( ! inet_aton(data->m_Address.c_str(), &addr) )
 	{
-		G_LOCK( gethostbyname_mutex );
-//		g_print("thread locked: %x\n", data);
+//  gethostbyname is not a thread-safe socket API.
 		hostent* host = gethostbyname(data->m_Address.c_str());
-
 		if( host )
 			addr = *(in_addr*)host->h_addr_list[0];
-
-		G_UNLOCK( gethostbyname_mutex );
-//		g_print("thread unlocked: %x\n", data);
-
-/*		if( (addr.s_addr == INADDR_NONE) && data->m_DNSTry > 0 )
-		{
-			--data->m_DNSTry;	// retry
-			if( m_ThreadPool )	// Theoraticallly, this mustn't be NULL, but...
-			{
-				g_thread_pool_push(m_ThreadPool, data, NULL);
-				return;
-			}
-
-		}
-*/
 	}
 
-	if( data->m_pCon && addr.s_addr != INADDR_NONE )
+	g_mutex_lock(m_DNSMutex);
+	if( data && data->m_pCon)
 	{
-//		g_print("thread connect: %x\n", data);
-		sock_addr.sin_addr = addr;
-		int sock_fd;
-
-		sock_fd = socket(PF_INET, SOCK_STREAM, 0);
-		int sock_flags = fcntl(sock_fd, F_GETFL, 0);
-		fcntl(sock_fd, F_SETFL, sock_flags | O_NONBLOCK);
-		connect( sock_fd, (sockaddr*)&sock_addr, sizeof(sock_addr) );
-		fcntl(sock_fd, F_SETFL, sock_flags );
-		fd_set set;	FD_ZERO(&set);	FD_SET(sock_fd, &set);
-		timeval timeout;	timeout.tv_sec = m_SocketTimeout;	timeout.tv_usec=0;
-		select(sock_fd+1, NULL, &set, NULL, &timeout);
-		if( FD_ISSET(sock_fd, &set) )
-		{
-			data->m_Code = 0;
-			if( data->m_pCon )
-				data->m_pCon->m_SockFD = sock_fd;
-			else
-				close(sock_fd);
-		}
-		else
-			close(sock_fd);
+		data->m_pCon->m_InAddr = addr;
+		g_idle_add((GSourceFunc)OnDNSLookupEnd, data->m_pCon);
 	}
-	else
-		data->m_Code = -1;
-		// Since 0 means success and all known error codes are > 0, 
-		// I use error code that < 0 to mean host not found.
-
-	g_idle_add((GSourceFunc)OnMainIdle, data);
-//	g_print("thread exit: %x\n", data);
+	g_mutex_unlock(m_DNSMutex);
 }
-
 
 void CTelnetCon::Close()
 {
@@ -658,60 +623,17 @@ void CTelnetCon::Close()
 	}
 }
 
-gboolean CTelnetCon::OnMainIdle(CConnectThread* data)
-{
-	vector<CConnectThread*>::iterator it;
-	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
-	{
-		if( *it == data )
-		{
-			m_ConnectThreads.erase(it);
-//			g_print("delete thread from vector\n");
-			break;
-		}
-	}
-
-	if( m_ThreadPool  )
-	{
-		g_thread_pool_stop_unused_threads();
-//		g_print("on connect, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
-		if( 0 == g_thread_pool_unprocessed(m_ThreadPool) )
-		{
-			g_thread_pool_free(m_ThreadPool, TRUE, FALSE);
-			m_ThreadPool = NULL;
-//			g_print("pool freed\n");
-		}
-	}
-
-	CTelnetCon* pCon = data->m_pCon;
-	if( pCon )
-		pCon->OnConnect(data->m_Code);
-	delete data;
-//	g_print("delete thread obj\n");
-	return false;
-}
-
 void CTelnetCon::Cleanup()
 {
-	if(m_ThreadPool)
-	{
-//		g_print("on cleanup, pending=%d\n", g_thread_pool_unprocessed(m_ThreadPool) );
-		g_thread_pool_free(m_ThreadPool, FALSE, TRUE);
-	}
-	// If g_thread_pool_free is called with immediate=TRUE, 
-	// the funtion will hang and never return even there is
-	// no pending task.  After lots of tests, unfortunately, I 
-	// found this is a bug of glib.
+	if( m_DNSThread )
+		g_thread_join(m_DNSThread);
 
-	m_ThreadPool = NULL;
-	vector<CConnectThread*>::iterator it;
-	for( it = m_ConnectThreads.begin(); it != m_ConnectThreads.end(); ++it)
+	if(m_DNSMutex)
 	{
-		g_idle_remove_by_data(*it);
-		CConnectThread* thread = *it;
-		delete *it;
-		break;
+		g_mutex_free(m_DNSMutex);
+		m_DNSMutex = NULL;
 	}
+	
 }
 
 void CTelnetCon::Reconnect()
@@ -787,3 +709,93 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 #endif /* !defined(MOZ_PLUGIN) */
 }
 
+gboolean CTelnetCon::OnDNSLookupEnd(CTelnetCon* _this)
+{
+//	g_print("CTelnetCon::OnDNSLookupEnd\n");
+	g_mutex_lock(m_DNSMutex);
+	if( _this->m_InAddr.s_addr != INADDR_NONE )
+		_this->ConnectAsync();
+	g_mutex_unlock(m_DNSMutex);
+	return false;
+}
+
+
+gboolean CTelnetCon::OnConnectCB(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
+{
+//	g_source_remove(m_IOChannelID);
+	_this->m_IOChannelID = 0;
+	g_io_channel_unref(channel);
+	_this->m_IOChannel = NULL;
+	_this->OnConnect( (type & G_IO_OUT) ? 0 : -1);
+	return false;	// The event source will be removed.
+}
+
+void CTelnetCon::ConnectAsync()
+{
+	sockaddr_in sock_addr;
+	sock_addr.sin_addr = m_InAddr;
+	sock_addr.sin_family = AF_INET;
+	sock_addr.sin_port = htons(m_Port);
+
+	m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+	int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
+	fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
+	int err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
+	fcntl(m_SockFD, F_SETFL, sock_flags );
+
+	if( err == 0 )
+		OnConnect( 0 );
+	else if( errno == EINPROGRESS )
+	{
+		m_IOChannel = g_io_channel_unix_new(m_SockFD);
+		m_IOChannelID = g_io_add_watch( m_IOChannel, 
+			GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_OUT|G_IO_IN|G_IO_NVAL), (GIOFunc)CTelnetCon::OnConnectCB, this );
+	}
+	else
+		OnConnect(-1);
+}
+
+void CTelnetCon::ProcessDNSQueue(gpointer unused)
+{
+//	g_print("begin run dns threads\n");
+	g_mutex_lock(m_DNSMutex);
+	list<CDNSRequest*>::iterator it = m_DNSQueue.begin(), prev_it;
+	while( it != m_DNSQueue.end() )
+	{
+		CDNSRequest* data = *it;
+		data->m_Running = true;
+		if( data->m_pCon )
+		{
+			g_mutex_unlock(m_DNSMutex);
+			DoDNSLookup(data);
+			g_mutex_lock(m_DNSMutex);
+			data->m_Running = false;
+		}
+		prev_it = it;
+		++it;
+		m_DNSQueue.erase(prev_it);
+		delete *prev_it;
+//		g_print("thread obj deleted in CTelnetCon::ProcessDNSQueue()\n");
+	}
+	g_idle_add((GSourceFunc)&CTelnetCon::OnProcessDNSQueueExit, NULL);
+	g_mutex_unlock(m_DNSMutex);
+//	g_print("CTelnetCon::ProcessDNSQueue() returns\n");
+}
+
+bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
+{
+	g_mutex_lock(m_DNSMutex);
+	g_thread_join( m_DNSThread );
+
+	m_DNSThread = NULL;
+	if( !m_DNSQueue.empty() )
+	{
+//	g_print("A new thread has to be started\n");
+		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+		// If some DNS requests are queued just before the thread exits, 
+		// we should start a new thread.
+	}
+	g_mutex_unlock(m_DNSMutex);
+//	g_print("all threads end\n");
+	return false;
+}

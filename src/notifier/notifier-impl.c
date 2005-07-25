@@ -24,7 +24,7 @@
 #define NHEIGHT 80
 #define MAX_SLOTS 10
 #define STEPS 20
-#define SPEED 50
+#define SPEED 80
 
 /* after you have moved the mouse over the window, it will disappear
    in this many microseconds. */

@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -62,7 +63,7 @@ using namespace std;
  * every connections and their sockets, etc.
  */
 
-class CConnectThread;
+class CDNSRequest;
 class CTelnetView;
 class CTelnetCon : public CTermData
 {
@@ -75,7 +76,6 @@ public:
 
 	// A flag used to indicate connecting state;
 	enum{TS_CONNECTING, TS_CONNECTED, TS_CLOSED} m_State;
-	enum{ MAX_CONCURRENT_CONS=2 };
 
 	void Disconnect();
 	// class constructor
@@ -91,10 +91,10 @@ public:
 	unsigned int m_IdleTime;
 
 	CSite m_Site;
-    static vector<CConnectThread*> m_ConnectThreads;
+    static list<CDNSRequest*> m_DNSQueue;
 
 	virtual void OnClose();
-	virtual void OnConnect(int code);
+	void OnConnect(int code);
 	bool OnRecv();
 
 	// Parse received data, process telnet command, and ANSI escape sequence.
@@ -111,7 +111,6 @@ public:
 
 	bool IsBellReceived(){	return (m_BellTimeout != 0);	}
     void Close();
-    static gboolean OnMainIdle(CConnectThread* data);
 
 	static void Cleanup();
     static bool OnBellTimeout( CTelnetCon* _this );
@@ -119,6 +118,13 @@ public:
 
 	static void SetSocketTimeout(int timeout){	m_SocketTimeout=timeout;	}
     bool DetectDBChar(){	return m_Site.m_DetectDBChar;   }
+    void ConnectAsync();
+
+    static void Init()
+    {
+		if( !m_DNSMutex )
+			m_DNSMutex = g_mutex_new();
+    }
 
 protected:
 	GIOChannel* m_IOChannel;
@@ -144,31 +150,37 @@ protected:
 protected:
 	guint m_BellTimeout;
 	bool m_IsLastLineModified;
-    static GThreadPool* m_ThreadPool;
+    static GThread* m_DNSThread;
     string m_PreLoginPrompt;
     string m_LoginPrompt;
     string m_PasswdPrompt;
     static int m_SocketTimeout;
+    in_addr m_InAddr;
+	unsigned short m_Port;
 	void PreConnect(string& address, unsigned short& port);
     void CheckAutoLogin(int row);
     void SendStringAsync(string str);
-    static void ConnectThread( CConnectThread* data, gpointer _data );
+    static void DoDNSLookup( CDNSRequest* data );
     void OnLineModified(int row);
+    static gboolean OnDNSLookupEnd(CTelnetCon* _this);
+    static gboolean OnConnectCB(GIOChannel *channel, GIOCondition type, CTelnetCon* _this);
+    static void ProcessDNSQueue(gpointer unused);
+private:
+    static GMutex* m_DNSMutex;
+private:
+    static bool OnProcessDNSQueueExit(gpointer unused);
 };
 
-class CConnectThread
+class CDNSRequest
 {
 public:
-	CConnectThread(CTelnetCon* con, string address, int port) 
-		: m_pCon(con), m_Address(address), m_Port(port), m_Code(-1)/*, m_DNSTry(3)*/
+	CDNSRequest(CTelnetCon* con, string address, int port) 
+		: m_pCon(con), m_Address(address), m_Running(false)
 	{
 	}
-
 	CTelnetCon* m_pCon;
 	string m_Address;
-	int m_Port;
-	int m_Code;
-//	int m_DNSTry;
+	bool m_Running;
 };
 
 

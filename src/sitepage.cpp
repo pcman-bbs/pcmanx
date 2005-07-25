@@ -99,7 +99,7 @@ CSitePage::CSitePage(CSite& site)
 	gtk_box_pack_start (GTK_BOX (hbox3), m_Reconnect, FALSE, TRUE, 2);
 	gtk_widget_set_size_request (m_Reconnect, 40, -1);
 	
-	label4 = gtk_label_new (_("Sec"));
+	label4 = gtk_label_new (_("Sec (0 = Disabled)"));
 	gtk_widget_show (label4);
 	gtk_box_pack_start (GTK_BOX (hbox3), label4, FALSE, FALSE, 2);
 	
@@ -116,7 +116,7 @@ CSitePage::CSitePage(CSite& site)
 	gtk_box_pack_start (GTK_BOX (hbox6), m_Idle, FALSE, TRUE, 2);
 	gtk_widget_set_size_request (m_Idle, 40, -1);
 
-	label11 = gtk_label_new (_("Sec"));
+	label11 = gtk_label_new (_("Sec (0 = Disabled)"));
 	gtk_widget_show (label11);
 	gtk_box_pack_start (GTK_BOX (hbox6), label11, FALSE, FALSE, 2);
 	
@@ -213,7 +213,7 @@ CSitePage::CSitePage(CSite& site)
 	gtk_box_pack_start (GTK_BOX (hbox15), m_PasteWrap, FALSE, TRUE, 2);
 	gtk_widget_set_size_request (m_PasteWrap, 40, -1);
 	
-	label25 = gtk_label_new (_("0 = disabled"));
+	label25 = gtk_label_new (_("0 = Disabled"));
 	gtk_widget_show (label25);
 	gtk_box_pack_start (GTK_BOX (hbox15), label25, FALSE, FALSE, 2);
 
@@ -281,7 +281,8 @@ bool CSitePage::OnOK()
 {
 	m_Site.m_Name = gtk_entry_get_text(GTK_ENTRY(m_Name));
 	m_Site.m_URL = gtk_entry_get_text(GTK_ENTRY(m_Address));
-
+	if( GTK_WIDGET_VISIBLE(m_Name) && (m_Site.m_Name.empty() || m_Site.m_URL.empty()) )
+		return false;	// Empty name and URL are not allowed.
 	m_Site.m_AntiIdle = atoi( gtk_entry_get_text(GTK_ENTRY(m_Idle)) );
 	m_Site.m_AntiIdleStr = gtk_entry_get_text(GTK_ENTRY(m_IdleStr));
 

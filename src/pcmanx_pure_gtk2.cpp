@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
 	if(AppConfig.ColsPerPage<80)
 		AppConfig.ColsPerPage=80;
 
+	CTelnetCon::Init();
 	CTelnetCon::SetSocketTimeout( AppConfig.SocketTimeout );
 
 	CMainFrame* main_frm = new CMainFrame;
@@ -115,6 +116,8 @@ int main(int argc, char *argv[])
 #endif
 
 	gtk_main ();
+	
+	CTelnetCon::Cleanup();
 
 	AppConfig.SaveFavorites();
 	AppConfig.Save();
