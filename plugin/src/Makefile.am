@@ -51,10 +51,15 @@ $(SOURCES_mozilla): pcmanx_interface.h
 plugin_DATA = $(LIBRARIES_mozilla)
 plugindir = $(MOZILLA_LIB_DIR_SEARCH)/plugins
 
+if CSRG_BASED
+LIBUTIL = -lutil
+endif
+
 # We MUST make sure plugin was built as -shared, and we must use some tricky
 # approaches to hanle libtool issues.
 $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)
-	$(CXX) $(LDFLAGS) -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
+	$(CXX) $(LDFLAGS) $(LIBUTIL) \
+	  -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
 	  -shared \
 	$(MOZILLA_LIBS) $(GUI_LIBS) \
 	-L$(top_builddir)/src/core/.libs -lpcmanx_core

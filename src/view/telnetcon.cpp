@@ -63,7 +63,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-#ifdef USING_FREEBSD
+#if defined(USING_FREEBSD) || defined(CSRG_BASED)
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <libutil.h>

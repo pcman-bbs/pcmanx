@@ -11,6 +11,26 @@ AM_PROG_AS
 AC_PROG_CXX
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+AC_PROG_INSTALL
+
+dnl define a new autoconf test, AC_CSRG_BASED, which will define
+dnl CSRG_BASED for BSD systems in config.h.
+AC_DEFUN([AC_CSRG_BASED],
+[AC_MSG_CHECKING([for CSRG based system])
+AC_EGREP_CPP(yes,
+[#if defined(__Darwin__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+yes
+#endif
+],
+[AC_MSG_RESULT([yes])
+AC_DEFINE([CSRG_BASED],[],[Using a BSD system derived from CSRG sources])
+ac_x11_csrg_based=yes],
+[AC_MSG_RESULT([no])
+ac_x11_csrg_based=no])
+AM_CONDITIONAL([CSRG_BASED], test x$ac_x11_csrg_based = xyes)
+])
+
+AC_CSRG_BASED
 
 # Init gettext
 ALL_LINGUAS="zh_TW"
@@ -228,27 +248,45 @@ fi
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
 AC_SUBST(USE_EXTERNAL)
 
-
 dnl *********************************************************************
 dnl ** Mozilla/Firefox Plugin support ***********************************
 dnl *********************************************************************
 
-if test "$plugin" = "yes"; then
-  gecko_provider=mozilla
-  PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
+AC_ARG_WITH([mozilla],
+  AS_HELP_STRING([--with-mozilla=DIR],
+  [Specify Mozilla root directory]),
+  [ INPUT_MOZILLA_ROOT="$withval" ])
 
-  # Check Firefox
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=firefox
+if test "$plugin" = "yes"; then
+  AC_MSG_CHECKING([for Mozilla support])
+  gecko_provider=mozilla
+  user_specified_mozilla=no
+
+  if test ! -z "$INPUT_MOZILLA_ROOT"; then
+    real_mozilla_root="`cd ${INPUT_MOZILLA_ROOT} 2>/dev/null && pwd`"
+    if test ! -z "${real_mozilla_root}"; then
+      INPUT_MOZILLA_ROOT="$real_mozilla_root"
+      user_specified_mozilla=yes
+      enable_mozilla=yes
+    fi
+  fi
+
+  # Detect via pkg-config
+  if test "$user_specified_mozilla" = "no"; then
     PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
 	enable_mozilla=yes, enable_mozilla=no)
+
+    # Check Firefox
+    if test "x$enable_mozilla" = "xno"; then
+      gecko_provider=firefox
+      PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
+    fi
   fi
 
   MOZILLA_LIB_DIR_SEARCH=
-  if test "x$enable_mozilla" = "xyes" ; then
-    AC_MSG_CHECKING([for Mozilla support])
-    AC_MSG_RESULT([$gecko_provider found!])
+  AC_MSG_RESULT([$gecko_provider found!])
+  if test "$user_specified_mozilla" = "no"; then
     dnl Note: with the infos from mozilla-plugin.pc
     dnl we got all includes and libraries for the C interface
     dnl to Mozilla, but not the XPCOM headers we also need.
@@ -256,50 +294,62 @@ if test "$plugin" = "yes"; then
     MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
     MOZILLA_LIB_ROOT=`$PKG_CONFIG --libs-only-L $gecko_provider-plugin | awk '{print $1}' |  cut -c 3-`
     MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
-
-    dnl See if xpidl is found.
-    XPIDL="$MOZILLA_LIB_ROOT/xpidl"
-    if test ! -x "$XPIDL"; then
-      echo "ERROR:"
-      echo "The utility $XPIDL was not found. Please check your development packages."
-      AC_MSG_ERROR([Fatal Error: no xpidl detected.])
-    fi
-
-   dnl Maybe we don't need all of this...
-    MOZILLA_CFLAGS="$MOZILLA_CFLAGS \
+  else
+    dnl Don't depend on pkg-config
+    MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
+    MOZILLA_INCLUDE_ROOT="$INPUT_MOZILLA_ROOT/include"
+    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT \
+-lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
+    MOZILLA_CFLAGS=" \
 -I$MOZILLA_INCLUDE_ROOT \
+-I$MOZILLA_INCLUDE_ROOT/java \
+-I$MOZILLA_INCLUDE_ROOT/plugin \
+-I$MOZILLA_INCLUDE_ROOT/xpcom \
+-I$MOZILLA_INCLUDE_ROOT/string \
+-I$MOZILLA_INCLUDE_ROOT/nspr \
 -I$MOZILLA_INCLUDE_ROOT/xpcom \
 -I$MOZILLA_INCLUDE_ROOT/xpconnect"
-
-    dnl Search for the idl include directory
-    dnl This only works on Gecko 1.8
-    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
-    dnl Fallback for older versions
-    if test "x$MOZILLA_IDLDIR" = "x"; then
-      MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
-    fi
-    dnl Gentoo has it in unusual places
-    if test "x$MOZILLA_IDLDIR" = "x"; then
-      MOZILLA_IDLDIR="$MOZILLA_INCLUDE_ROOT/idl"
-    fi
-    dnl Debian/Ubuntu have it in unusual places, too.
-    ADDITIONAL_IDLDIR=/usr/share/idl
-    if test "x$gecko_provider" = "xfirefox"; then
-      ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla-firefox
-    else
-      ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
-    fi
-    XPIDL_INCL="-I$MOZILLA_IDLDIR -I$ADDITIONAL_IDLDIR"
-
-    PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
-
-    AC_SUBST(PATH_OF_PCMANX_HTML)
-    AC_SUBST(XPIDL)
-    AC_SUBST([XPIDL_INCL])
-    AC_SUBST(MOZILLA_CFLAGS)
-    AC_SUBST(MOZILLA_LIBS)
-    AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
   fi
+
+  # Workaround
+  MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$MOZILLA_INCLUDE_ROOT"
+
+  dnl See if xpidl is found.
+  XPIDL="$MOZILLA_LIB_ROOT/xpidl"
+  if test ! -x "$XPIDL"; then
+    echo "ERROR:"
+    echo "The utility $XPIDL was not found. Please check your development packages."
+    AC_MSG_ERROR([Fatal Error: no xpidl detected.])
+  fi
+
+  dnl Search for the idl include directory
+  dnl This only works on Gecko 1.8
+  MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+  dnl Fallback for older versions
+  if test "x$MOZILLA_IDLDIR" = "x"; then
+    MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
+  fi
+  dnl Gentoo has it in unusual places
+  if test "x$MOZILLA_IDLDIR" = "x"; then
+    MOZILLA_IDLDIR="$MOZILLA_INCLUDE_ROOT/idl"
+  fi
+  dnl Debian/Ubuntu have it in unusual places, too.
+  ADDITIONAL_IDLDIR=/usr/share/idl
+  if test "x$gecko_provider" = "xfirefox"; then
+    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla-firefox
+  else
+    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
+  fi
+  XPIDL_INCL="-I$MOZILLA_IDLDIR -I$ADDITIONAL_IDLDIR"
+
+  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
+
+  AC_SUBST(PATH_OF_PCMANX_HTML)
+  AC_SUBST(XPIDL)
+  AC_SUBST([XPIDL_INCL])
+  AC_SUBST(MOZILLA_CFLAGS)
+  AC_SUBST(MOZILLA_LIBS)
+  AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
 fi
 
 if test "x$enable_mozilla" = "xno"; then

@@ -1,3 +1,17 @@
+2005-07-26  Jim Huang  <jserv@kaffe.org>
+
+	* src/view/telnetcon.cpp,
+	src/Makefile.am,
+	plugin/src/Makefile.am,
+	configure.ac:
+	Define a new autoconf test, AC_CSRG_BASED, which will define
+	CSRG_BASED for BSD systems in config.h.
+
+	* configure.ac,
+	README:
+	Add new option --with-mozilla=DIR to specify Mozilla root
+	directory.
+
 2005-07-26  Kanru Chen  <koster@debian.org.tw>
 
 	* src/script/api.h,

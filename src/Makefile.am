@@ -15,6 +15,10 @@ INCLUDES = \
 
 pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(PYTHON_LIBS)
 
+if CSRG_BASED
+pcmanx_LDADD += -lutil
+endif
+
 OPTIONAL_DOCKLET = \
 	docklet/clipboard.c \
 	docklet/eggtrayicon.h \

@@ -27,8 +27,11 @@ and here are the latest options:
   --disable-external	Disable the using of external SSH and Telnet program.
 			[Default: Enabled]
   --enable-plugin	Enable the build of Mozilla/Firefox plugin for PCManX.
-			You should install the development packages of Mozilla /
-			Firefox. [Default: Disabled]
+			You should install the development packages of Mozilla
+			/ Firefox. [Default: Disabled]
+
+  --with-mozilla=DIR	Specify DIR as the Mozilla root directory for headers
+			and libraries.
 
 For example, if you are willing to create a special build dedicated to full-
 functional PCManX as standalone program and an independent plugin (no shared
