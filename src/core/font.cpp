@@ -15,6 +15,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+ 
+/*
+ 2005-07-26  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	Use FC_PIXEL_SIZE when opening font by pixel height.
+	Use XftFontOpenPattern so that we don't have to match the pattern
+	every time.
+	s/XFT_/FC_/ and s/XftType/FcType/ where suitable.
+*/
 
 #ifdef __GNUG__
   #pragma implementation "font.h"
@@ -88,11 +97,11 @@ XftFont* CFont::CreateXftFont( string name, int size, bool anti_alias, bool is_p
 	int screen = DefaultScreen (display);
 
 	XftFont* font = XftFontOpen (display, screen,
-					XFT_FAMILY, XftTypeString, name.c_str(),
-					XFT_CORE, XftTypeBool, False,
-					(is_point_size ? XFT_SIZE:XFT_PIXEL_SIZE), XftTypeDouble, (double)size,
-					XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-					XFT_ANTIALIAS, XftTypeBool, anti_alias,
+					FC_FAMILY, FcTypeString, name.c_str(),
+					(is_point_size ? FC_SIZE:FC_PIXEL_SIZE), FcTypeDouble, (double)size,
+					FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
+					FC_ANTIALIAS, FcTypeBool, anti_alias,
+					XFT_CORE, FcTypeBool, False,
 					NULL);
 	return font;
 }
@@ -101,34 +110,54 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 {
 	Display *display = gdk_x11_get_default_xdisplay();
 	int screen = DefaultScreen (display);
+	int size = height;
 
-	int pt_size = height;
-	XftFont* font = XftFontOpen (display, screen,
-					XFT_FAMILY, XftTypeString, name.c_str(),
-					XFT_CORE, XftTypeBool, False,
-					XFT_SIZE, XftTypeDouble, (double)pt_size,
-					XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-					XFT_ANTIALIAS, XftTypeBool, anti_alias,
-					NULL);
+	FcPattern* pattern = FcPatternBuild( NULL,
+			FC_FAMILY, FcTypeString, name.c_str(),
+			FC_PIXEL_SIZE, FcTypeDouble, (double)size,
+			FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
+			FC_ANTIALIAS, FcTypeBool, anti_alias,
+			XFT_CORE, FcTypeBool, False,
+			NULL );
+	if ( !pattern )
+		return NULL;
+
+	FcResult result;
+	FcPattern* match = XftFontMatch( display, screen, pattern, &result );
+	FcPatternDestroy( pattern );
+	if ( !match )
+		return NULL;
+
+	XftFont* font = XftFontOpenPattern( display, match );
+	if ( !font )
+	{
+		FcPatternDestroy( match );
+
+		return NULL;
+	}
 
 	int w = font->max_advance_width;
 	int h = font->ascent + font->descent;
 
-	int max_width = width * 2;
-	while( pt_size > 4 && ( w > max_width || h > height) )
+	/* double-width */
+	width *= 2;
+
+	while ( size > 4 && ( w > width || h > height) )
 	{
-		pt_size --;
+		size --;
 
-		if( font )
+		if ( font )
+		{
+			match = FcPatternDuplicate( font->pattern );
 			XftFontClose(display, font);
+		}
 
-		font = XftFontOpen (display, screen,
-						XFT_FAMILY, XftTypeString, name.c_str(),
-						XFT_CORE, XftTypeBool, False,
-						XFT_SIZE, XftTypeDouble, (double)pt_size,
-						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-						XFT_ANTIALIAS, XftTypeBool, anti_alias,
-						NULL);
+		FcPatternDel( match, FC_PIXEL_SIZE );
+		FcPatternAddDouble( match, FC_PIXEL_SIZE, (double)size );
+
+		font = XftFontOpenPattern( display, match );
+		if ( !font )
+			return NULL;
 
 		w = font->max_advance_width;
 		h = font->ascent + font->descent;
@@ -136,11 +165,11 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 	
 #if 0	// Deprecated: Create XftFont by pixel size
 	XftFont* font = XftFontOpen (display, screen,
-					XFT_FAMILY, XftTypeString, name.c_str(),
-					XFT_CORE, XftTypeBool, False,
-					XFT_PIXEL_SIZE, XftTypeDouble, (double)height,
-					XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-					XFT_ANTIALIAS, XftTypeBool, anti_alias,
+					FC_FAMILY, FcTypeString, name.c_str(),
+					XFT_CORE, FcTypeBool, False,
+					FC_PIXEL_SIZE, FcTypeDouble, (double)height,
+					FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
+					FC_ANTIALIAS, FcTypeBool, anti_alias,
 					NULL);
 
 	int w = font->max_advance_width;
@@ -157,11 +186,11 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 		h--;
 
 		font = XftFontOpen (display, screen,
-						XFT_FAMILY, XftTypeString, name.c_str(),
-						XFT_CORE, XftTypeBool, False,
-						XFT_PIXEL_SIZE, XftTypeDouble, (double)h,
-						XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_MEDIUM,
-						XFT_ANTIALIAS, XftTypeBool, anti_alias,
+						FC_FAMILY, FcTypeString, name.c_str(),
+						XFT_CORE, FcTypeBool, False,
+						FC_PIXEL_SIZE, FcTypeDouble, (double)h,
+						FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
+						FC_ANTIALIAS, FcTypeBool, anti_alias,
 						NULL);
 
 		w = font->max_advance_width;
