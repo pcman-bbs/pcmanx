@@ -225,8 +225,10 @@ dnl *********************************************************************
 
 if test "$script" = "yes"; then
     AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
-	PYTHON_CFLAGS="-I/usr/include/python2.4"
-	PYTHON_LIBS="-lpython2.4"
+	PYTHON_INC=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_inc()'`
+	PYTHON_VERSION=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_version()'`
+	PYTHON_CFLAGS="-I${PYTHON_INC}"
+	PYTHON_LIBS="-lpython${PYTHON_VERSION}"
 fi
 
 AM_CONDITIONAL(USE_SCRIPT, test "$script" = "yes")

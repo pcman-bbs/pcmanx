@@ -1,3 +1,8 @@
+2005-07-26  Kanru Chen  <koster@debian.org.tw>
+	
+	* configure.ac:
+	Add python version and header files auto-detect.
+
 2005-07-26  Jim Huang  <jserv@kaffe.org>
 
 	* src/view/telnetcon.cpp,
