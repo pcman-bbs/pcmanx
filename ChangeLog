@@ -1,3 +1,9 @@
+2005-07-27  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/notifier-impl.c
+	(slow_show_win) (notify_new):
+	Apply gcc-2.95 compilation fix by pav@FreeBSD.org.
+
 2005-07-26  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac:
