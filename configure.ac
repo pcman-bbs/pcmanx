@@ -74,8 +74,8 @@ AC_ARG_ENABLE(notifier,
 	notifier=$enableval, notifier=yes)
 
 AC_ARG_ENABLE(script,
-[  --disable-script      disable script support (default: yes)],
-	script=$enableval, script=yes)
+[  --enable-script      disable script support (default: no)],
+	script=$enableval, script=no)
 
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
