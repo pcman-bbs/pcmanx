@@ -9,11 +9,11 @@ INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
 	$(GUI_CFLAGS) \
-	$(PYTHON_CFLAGS) \
+	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(PYTHON_LIBS)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS)
 
 if CSRG_BASED
 pcmanx_LDADD += -lutil

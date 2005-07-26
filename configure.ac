@@ -220,21 +220,30 @@ AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
 AC_SUBST(USE_NOTIFIER)
 
 dnl *********************************************************************
-dnl ** Notifier *********************************************************
+dnl ** Script support ***************************************************
 dnl *********************************************************************
 
 if test "$script" = "yes"; then
-    AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
-	PYTHON_INC=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_inc()'`
-	PYTHON_VERSION=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_version()'`
-	PYTHON_CFLAGS="-I${PYTHON_INC}"
-	PYTHON_LIBS="-lpython${PYTHON_VERSION}"
+  AC_MSG_CHECKING([for Python script support])
+  AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
+  PYTHON_INC=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_inc()'`
+  real_python_inc="`cd ${PYTHON_INC} 2>/dev/null && pwd`"
+  if test -z "${real_python_inc}"; then
+    AC_MSG_ERROR([Fatal Error: no Python detected.])
+  fi
+  PYTHON_VERSION=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_version()'`
+  AC_MSG_RESULT([Python $PYTHON_VERSION found.])
+  PYTHON_CFLAGS="-I${PYTHON_INC}"
+  PYTHON_LIBS="-lpython${PYTHON_VERSION}"
 fi
+
+SCRIPT_CFLAGS="$PYTHON_CFLAGS"
+SCRIPT_LIBS="$PYTHON_LIBS"
 
 AM_CONDITIONAL(USE_SCRIPT, test "$script" = "yes")
 AC_SUBST(USE_SCRIPT)
-AC_SUBST(PYTHON_CFLAGS)
-AC_SUBST(PYTHON_LIBS)
+AC_SUBST(SCRIPT_CFLAGS)
+AC_SUBST(SCRIPT_LIBS)
 
 
 dnl *********************************************************************
@@ -468,12 +477,16 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
-echo script support................... : $script
+if test "x$script" = "xyes"; then
+  echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
+else
+  echo "Python script support............ : $script"
+fi
 echo External SSH/Telnet support...... : $external
 if test "x$enable_mozilla" = "xyes"; then
-     echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
+  echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
 else
-     echo "Mozilla/Firefox plugin support... : $plugin"
+  echo "Mozilla/Firefox plugin support... : $plugin"
 fi
 echo
 echo The binary will be installed in $prefix/bin

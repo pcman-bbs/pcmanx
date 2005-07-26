@@ -1,3 +1,11 @@
+2005-07-26  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Enhance Python development headers detection.
+	Rename PYTHON_{CFLAGS,LIBS} to SCRIPT_{CFLAGS,LIBS}.
+
+	* src/Makefile.am: Likewise.
+
 2005-07-26  Kanru Chen  <koster@debian.org.tw>
 	
 	* configure.ac:
