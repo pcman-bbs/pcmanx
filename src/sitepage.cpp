@@ -231,6 +231,8 @@ CSitePage::CSitePage(CSite& site)
 	if( m_Site.m_Name.empty() )
 	{
 		gtk_widget_hide(hbox1);
+		gtk_widget_hide(m_Name);
+		gtk_widget_hide(m_Address);
 		gtk_widget_hide(m_Startup);
 //		gtk_widget_set_sensitive(m_Name, false);
 //		gtk_widget_set_sensitive(m_Address, false);
