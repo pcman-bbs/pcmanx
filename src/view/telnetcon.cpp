@@ -23,6 +23,10 @@
 #include "notifier/api.h"
 #endif
 
+#ifdef USE_SCRIPT
+#include "script/api.h"
+#endif
+
 #endif /* !defined(MOZ_PLUGIN) */
 
 #include <string.h>
@@ -677,11 +681,7 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 #if !defined(MOZ_PLUGIN)
 
 #ifdef USE_NOTIFIER
-	if ( !AppConfig.PopupNotifier || !*line )
-		return;
-
-	CMainFrame* mainfrm = ((CTelnetView*)m_pView)->GetParentFrame();
-	if( mainfrm->IsActivated() && mainfrm->GetCurCon() == this )
+	if ( !*line )//!AppConfig.PopupNotifier || !*line )
 		return;
 
 	/* We need to convert the incoming message into UTF-8 encoding from
@@ -692,6 +692,14 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 		line, strlen(line), 
 		"UTF-8", m_Site.m_Encoding.c_str(), 
 		NULL, &l, NULL);
+#ifdef USE_SCRIPT
+	ScriptOnNewIncomingMessage(this, utf8_text);
+#endif
+
+	CMainFrame* mainfrm = ((CTelnetView*)m_pView)->GetParentFrame();
+	if( mainfrm->IsActivated() && mainfrm->GetCurCon() == this )
+		return;
+
 
 	gchar **column = g_strsplit(utf8_text, " ", 2);
 	GtkWidget* popup_win = popup_notifier_notify(

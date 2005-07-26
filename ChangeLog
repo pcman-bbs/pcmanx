@@ -1,3 +1,17 @@
+2005-07-26  Kanru Chen  <koster@debian.org.tw>
+
+	* src/script/api.h,
+	src/script/script.cpp,
+	src/view/telnetcon.cpp,
+	src/mainframe.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/Makefile.am,
+	data/orz.py,
+	data/PCManXlib.py,
+	data/Makefile.am,
+	configure.ac:
+	Initial Python script support. Example please refer to orz.py.
+
 2005-07-26  Chia I Wu  <b90201047@ntu.edu.tw>
 
 	* src/core/font.cpp: Use FC_PIXEL_SIZE when opening font by pixel

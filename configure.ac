@@ -29,6 +29,7 @@ AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
+AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
@@ -71,6 +72,10 @@ AC_ARG_ENABLE(docklet,
 AC_ARG_ENABLE(notifier,
 [  --disable-notifier      disable popup notifier support (default: yes)],
 	notifier=$enableval, notifier=yes)
+
+AC_ARG_ENABLE(script,
+[  --disable-script      disable script support (default: yes)],
+	script=$enableval, script=yes)
 
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
@@ -193,6 +198,21 @@ fi
 
 AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
 AC_SUBST(USE_NOTIFIER)
+
+dnl *********************************************************************
+dnl ** Notifier *********************************************************
+dnl *********************************************************************
+
+if test "$script" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
+	PYTHON_CFLAGS="-I/usr/include/python2.4"
+	PYTHON_LIBS="-lpython2.4"
+fi
+
+AM_CONDITIONAL(USE_SCRIPT, test "$script" = "yes")
+AC_SUBST(USE_SCRIPT)
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
 
 
 dnl *********************************************************************
@@ -396,6 +416,7 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
+echo script support................... : $script
 echo External SSH/Telnet support...... : $external
 if test "x$enable_mozilla" = "xyes"; then
      echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"

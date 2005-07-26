@@ -1,6 +1,8 @@
 pcmanx_DATA = \
 	sitelist \
-	emoticons
+	emoticons \
+	orz.py \
+	PCManXlib.py
 
 pcmanxdir = $(datadir)/pcmanx
 

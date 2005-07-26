@@ -9,10 +9,11 @@ INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
 	$(GUI_CFLAGS) \
+	$(PYTHON_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(PYTHON_LIBS)
 
 OPTIONAL_DOCKLET = \
 	docklet/clipboard.c \
@@ -25,13 +26,18 @@ OPTIONAL_NOTIFIER = \
 	notifier/working_area.h \
 	notifier/working_area.c
 
+OPTIONAL_SCRIPT = \
+	script/api.h \
+	script/script.cpp
+
 EXTRA_DIST = \
 	Makefile-byhand \
 	conn_xpm.xpm \
 	pcmanx_xpm.xpm \
 	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET) \
-	$(OPTIONAL_NOTIFIER)
+	$(OPTIONAL_NOTIFIER) \
+	$(OPTIONAL_SCRIPT)
 
 if USE_DOCKLET
 DOCKLET_SOURCES = $(OPTIONAL_DOCKLET)
@@ -41,6 +47,10 @@ if USE_NOTIFIER
 NOTIFIER_SOURCES = $(OPTIONAL_NOTIFIER)
 endif
 
+if USE_SCRIPT
+SCRIPT_SOURCES = $(OPTIONAL_SCRIPT)
+endif
+
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
 	view/telnetview.cpp view/telnetview.h
@@ -48,6 +58,7 @@ VIEW_IMPLEMENTATION_SOURCES = \
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
 	$(NOTIFIER_SOURCES) \
+	$(SCRIPT_SOURCES) \
 	$(VIEW_IMPLEMENTATION_SOURCES) \
 	appconfig.cpp appconfig.h \
 	notebook.cpp notebook.h \

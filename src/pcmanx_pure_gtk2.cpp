@@ -54,6 +54,10 @@ extern gboolean _get_clipboard();
 #include "notifier/api.h"
 #endif
 
+#ifdef USE_SCRIPT
+#include "script/api.h"
+#endif
+
 int main(int argc, char *argv[])
 {
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -113,6 +117,10 @@ int main(int argc, char *argv[])
 #ifdef USE_NOTIFIER
 	popup_notifier_init(main_frm->GetMainIcon());
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
+#endif
+
+#ifdef USE_SCRIPT
+	InitScriptInterface(".");
 #endif
 
 	gtk_main ();

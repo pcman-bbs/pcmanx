@@ -45,6 +45,10 @@
 #include "notifier/api.h"
 #endif
 
+#ifdef USE_SCRIPT
+#include "script/api.h"
+#endif
+
 #ifdef USE_DOCKLET
 #include "docklet/eggtrayicon.h"
 
@@ -1064,6 +1068,10 @@ void CMainFrame::OnDestroy()
 	while( g_main_context_iteration(NULL, FALSE) );
 
 	CWidget::OnDestroy();
+
+#ifdef USE_SCRIPT
+	FinalizeScriptInterface();
+#endif
 
 	gtk_main_quit();
 }
