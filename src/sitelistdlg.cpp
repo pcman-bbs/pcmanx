@@ -240,6 +240,7 @@ void CSiteListDlg::OnConnect(GtkButton* btn, CSiteListDlg* _this)
 		}
 		g_free(text);
 	}
+	gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
 }
 
 void CSiteListDlg::OnClose(GtkButton* btn, CSiteListDlg* _this)
