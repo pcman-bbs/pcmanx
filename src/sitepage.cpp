@@ -25,6 +25,8 @@
 #include <glib/gi18n.h>
 #include "site.h"
 
+#include "debug.h"
+
 CSitePage::CSitePage(CSite& site)
  : CWidget(), m_Site(site)
 {

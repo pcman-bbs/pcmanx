@@ -24,6 +24,7 @@
 #include "termview.h"
 #include "termdata.h"
 
+#include "debug.h"
 
 #include <string>
 
@@ -92,7 +93,7 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 {
 	XftDrawDestroy( _this->m_XftDraw);
 	_this->m_XftDraw = NULL;
-//	g_print("unrealize, destroy XftDraw\n");
+	DEBUG("unrealize, destroy XftDraw");
 }
 
 GdkCursor* CTermView::m_HandCursor = NULL;
@@ -159,7 +160,7 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc))
 	{
-//		g_print("WARNNING! Draw on DELETED widget!\n");
+		DEBUG("WARNNING! Draw on DELETED widget!");
 		return;
 	}
 
@@ -490,7 +491,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 	int x = (int)evt->x;
 	int y = (int)evt->y;
 
-//	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
+	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
 	PointToLineCol( &x, &y );
 	bool need_refresh = ( m_pTermData->m_SelStart != m_pTermData->m_SelEnd );
@@ -567,7 +568,7 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 	int x = (int)evt->x;
 	int y = (int)evt->y;
 
-//	g_print("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
+	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
 	this->PointToLineCol( &x, &y );
 	if( HasCapture() )	//	Selecting text.
@@ -692,21 +693,15 @@ void CTermView::PasteFromClipboard(bool primary)
 	if(m_s_ANSIColorStr.empty())
 	{
 		GtkClipboard* clipboard = gtk_clipboard_get( primary ? GDK_SELECTION_PRIMARY : GDK_NONE);
-//		g_print("paste\n");
+		INFO("paste");
 		gchar* utext = gtk_clipboard_wait_for_text(clipboard);
 		if( !utext )
 			return;
-//		g_print("%s\n", utext);
+		INFO("%s", utext);
 		gsize wl;
 
-		const gchar* ltext = utext;
-		ltext = g_convert_with_fallback( utext, strlen(utext),
-				m_pTermData->m_Encoding.c_str(), "utf-8", "?", NULL, &wl, NULL);
-		if(!ltext)
-			return;
+		DoPasteFromClipboard( string(utext), false);
 		g_free(utext);
-		DoPasteFromClipboard( string(ltext), false);
-		g_free((void*)ltext);
 	}
 	else
 		DoPasteFromClipboard(m_s_ANSIColorStr, true);
@@ -719,25 +714,32 @@ void CTermView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 
 void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 {
+	string text;
 	if(!m_pTermData)
 		return;
 	if( with_color )
-		m_s_ANSIColorStr = m_pTermData->GetSelectedTextWithColor(trim);
+		text = m_pTermData->GetSelectedTextWithColor(trim);
 	else
 	{
 		m_s_ANSIColorStr = "";
-		string text = m_pTermData->GetSelectedText(trim);
+		text = m_pTermData->GetSelectedText(trim);
+	}
 
-		gsize wl = 0;
-		const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
-				"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
-		if(!utext)
-			return;
+	gsize wl = 0;
+	const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
+			"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
+	if(!utext)
+		return;
+
+	if( with_color )
+		m_s_ANSIColorStr = string(utext);
+	else
+	{
 		GtkClipboard* clipboard = gtk_clipboard_get(  primary ? GDK_SELECTION_PRIMARY : GDK_NONE );
 		gtk_clipboard_set_text(clipboard, utext, wl );
-//		g_print("select: %s\n", utext);
-		g_free((void*)utext);
 	}
+	INFO("select: %s", utext);
+	g_free((void*)utext);
 }
 
 void CTermView::SetFont(CFont* font)
@@ -801,7 +803,7 @@ bool CTermView::HyperLinkHitTest(int x, int y, int* start, int* end)
 		for( _end = x+1; _end < m_pTermData->m_ColsPerPage && pattr[_end].IsHyperLink(); _end++ );
 		*start = _start;
 		*end = _end;
-//		g_print("%d, %d : %d, %d\n", x, y, _start, _end);
+		INFO("%d, %d : %d, %d", x, y, _start, _end);
 		return true;
 	}
 	return false;

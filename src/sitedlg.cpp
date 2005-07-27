@@ -25,6 +25,8 @@
 #include "autologinpage.h"
 #include "notebook.h"
 
+#include "debug.h"
+
 CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
  : CDialog(parent, title, true), m_Site(site)
 {

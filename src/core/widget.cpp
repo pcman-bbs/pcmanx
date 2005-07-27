@@ -24,6 +24,8 @@
 #include "widget.h"
 #include <unistd.h>
 
+#include "debug.h"
+
 CWidget::CWidget()
 	: m_Widget(NULL)
 {
@@ -57,7 +59,7 @@ static void on_destroy(GtkWidget *widget, CWidget* _this)
 
 bool CWidget::PostCreate()
 {
-//	g_print("post create: %s\n", gtk_widget_get_name(m_Widget));
+	INFO("post create: %s", gtk_widget_get_name(m_Widget));
 	g_signal_connect( G_OBJECT(m_Widget), "destroy", G_CALLBACK (on_destroy), this );
 	g_signal_connect( G_OBJECT(m_Widget), "realize", G_CALLBACK (on_create), this );
 	return true;
@@ -65,7 +67,7 @@ bool CWidget::PostCreate()
 
 void CWidget::OnCreate()
 {
-//	g_print("realize %s\n", gtk_widget_get_name(m_Widget));
+	INFO("realize %s", gtk_widget_get_name(m_Widget));
 }
 
 void CWidget::Refresh()
@@ -86,7 +88,7 @@ void CWidget::Destroy()
 	}
 	else
 	{
-		g_print("destroy at NULL\n");
+		DEBUG("destroy at NULL");
 	}
 }
 

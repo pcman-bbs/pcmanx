@@ -27,6 +27,8 @@
 
 #include "sitedlg.h"
 
+#include "debug.h"
+
 CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 {
 	m_Widget = gtk_dialog_new_with_buttons(_("Edit Favorites"),

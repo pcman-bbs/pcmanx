@@ -23,6 +23,8 @@
 
 #include "view.h"
 
+#include "debug.h"
+
 static gboolean on_expose( GtkWidget* widget, GdkEventExpose *evt, CView* _this )
 {
 	_this->OnPaint(evt);

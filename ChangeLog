@@ -1,3 +1,47 @@
+2005-07-28  Kanru Chen  <koster@debian.org.tw>
+
+	* src/autologinpage.cpp,
+	src/sitepage.cpp,
+	src/emoticondlg.cpp,
+	src/configfile.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termview.cpp,
+	src/core/site.cpp,
+	src/core/font.cpp,
+	src/core/termview.h,
+	src/core/view.cpp,
+	src/core/widget.cpp,
+	src/editfavdlg.cpp,
+	src/prefdlg.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetview.cpp,
+	src/view/telnetcon.cpp,
+	src/debug.h,
+	src/sitedlg.cpp,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/listbox.cpp,
+	src/generalprefpage.cpp,
+	src/sitelistdlg.cpp:
+	Add debug routine. Use INFO(..) to info message,
+	INFO_ON(..) really enable info, DEBUG(..) for debug message.
+
+	* src/script/script.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetcon.cpp,
+	data/orz.py:
+	New function SendUnEscapedString().
+
+	* src/view/telnetcon.cpp,
+	src/core/termview.cpp:
+	Only convert encoding when really output.
+
+
 2005-07-27  Jim Huang  <jserv@kaffe.org>
 
 	* src/notifier/notifier-impl.c

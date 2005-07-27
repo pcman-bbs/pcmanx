@@ -12,6 +12,8 @@
 #include "autologinpage.h"
 #include "site.h"
 
+#include "debug.h"
+
 CAutoLoginPage::CAutoLoginPage(CSite& site) : m_Site(site)
 {
 	GtkWidget *hbox21;

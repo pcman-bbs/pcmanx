@@ -5,6 +5,23 @@
 #include "view/telnetcon.h"
 
 static PyObject*
+SendUnEscapedString(PyObject *self, PyObject *args)
+{
+	char *pstr;
+	long lp;
+
+	if (!PyArg_ParseTuple(args, "ls", &lp, &pstr))
+		return NULL;
+
+	string str(pstr);
+
+	((CTelnetCon*)lp)->SendUnEscapedString(str);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject*
 SendString(PyObject *self, PyObject *args)
 {
 	char *pstr;
@@ -24,6 +41,8 @@ SendString(PyObject *self, PyObject *args)
 static PyMethodDef PCManXMethods[] = {
 	{"SendString", SendString, METH_VARARGS,
 		"Send String to Instance Window."},
+	{"SendUnEscapedString", SendUnEscapedString, METH_VARARGS,
+		"Send un escaped string to Instance Window."},
 	{NULL, NULL, 0, NULL}
 };
 

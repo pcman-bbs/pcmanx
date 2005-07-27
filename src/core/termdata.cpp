@@ -18,6 +18,8 @@
 #include "termview.h" // class's header file
 #include <string.h>
 
+#include "debug.h"
+
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.
 //
@@ -706,7 +708,7 @@ static gboolean update_view(CTermData* _this)
 {
 	if(_this->m_pView)
 		_this->DoUpdateDisplay();
-//	g_print("do update\n");
+	INFO("do update");
 	_this->m_DelayedUpdateTimeout = 0;	// Simply returning false will remove the source.
 	return false;	// remove timeout source
 }
@@ -718,7 +720,7 @@ void CTermData::UpdateDisplay()
 
  	if( m_pView && m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
-//		g_print("waiting update\n");
+		INFO("waiting update");
 		m_WaitUpdateDisplay = true;
 
 		if( m_NeedDelayedUpdate )

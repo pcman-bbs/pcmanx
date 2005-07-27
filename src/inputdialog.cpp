@@ -25,6 +25,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
+#include "debug.h"
+
 static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _this)
 {
 	switch(evt->keyval)

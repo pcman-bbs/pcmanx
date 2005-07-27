@@ -8,7 +8,7 @@ bot = eliza.eliza();
 def OnNewIncomingMessage(handle, msg):
 	rmsg = split(msg, " ", 2)[2]
 	reply = bot.respond(rmsg)
-	SendString(handle, "" + reply)
+	SendUnEscapedString(handle, "^R" + reply)
 	SendReturn(handle)
 	SendString(handle, "Y")
 	SendReturn(handle)

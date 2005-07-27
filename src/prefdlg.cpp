@@ -26,6 +26,8 @@
 #include "sitepage.h"
 #include "appconfig.h"
 
+#include "debug.h"
+
 CPrefDlg::CPrefDlg(CWidget* parent)
  : CDialog(parent, _("Preference"), true)
 {

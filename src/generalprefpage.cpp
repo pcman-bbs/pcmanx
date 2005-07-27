@@ -25,6 +25,8 @@
 #include "generalprefpage.h"
 #include "appconfig.h"
 
+#include "debug.h"
+
 CGeneralPrefPage::CGeneralPrefPage()
  : CWidget()
 {	

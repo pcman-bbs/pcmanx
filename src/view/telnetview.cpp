@@ -37,6 +37,8 @@
 CMainFrame* CTelnetView::m_pParentFrame = NULL;
 #endif /* !defined(MOZ_PLUGIN) */
 
+#include "debug.h"
+
 CTelnetView::CTelnetView()
         : CTermView()
 {}
@@ -57,7 +59,7 @@ void CTelnetView::OnTextInput(const gchar* text)
 
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
-//	g_print("CTelnetView::OnKeyDown\n");
+	INFO("CTelnetView::OnKeyDown\n");
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;

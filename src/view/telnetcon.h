@@ -104,6 +104,7 @@ public:
 	inline void ParseTelnetCommand();
 
 	void SendRawString(const char* pdata, int len)	{	Send( (void*)pdata, len);	}
+	void SendUnEscapedString(string str);
 	void SendString(string str);
  	
 	bool IsValid(){	return m_SockFD >= 0;	}

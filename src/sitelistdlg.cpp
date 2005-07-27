@@ -27,6 +27,8 @@
 #include <string.h>
 #include <string>
 
+#include "debug.h"
+
 using namespace std;
 
 CSiteListDlg::CSiteListDlg(CWidget* parent)
@@ -230,7 +232,7 @@ void CSiteListDlg::OnConnect(GtkButton* btn, CSiteListDlg* _this)
 	{
 		gchar* text;
 		gtk_tree_model_get(GTK_TREE_MODEL(_this->m_Store), &it, COL_TEXT, &text, -1);
-		g_print("%s\n", text);
+		INFO_ON("%s", text);
 		char* url = strstr(text, ITEM_SEP);
 		if( url )
 		{

@@ -41,6 +41,8 @@
 #include "font.h"
 #include "emoticondlg.h"
 
+#include "debug.h"
+
 #ifdef USE_NOTIFIER
 #include "notifier/api.h"
 #endif
@@ -115,8 +117,8 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFra
 	gtk_window_get_position( GTK_WINDOW(widget), &AppConfig.MainWndX, & AppConfig.MainWndY );
 	AppConfig.MainWndW = evt->width;
 	AppConfig.MainWndH = evt->height;
-//	g_print("x=%d, y=%d, w=%d, h=%d\n", evt->x, evt->y, evt->width, evt->height );
-//	g_print("get_pos: x=%d, y=%d\n",AppConfig.MainWndX, AppConfig.MainWndY );
+	INFO("x=%d, y=%d, w=%d, h=%d", evt->x, evt->y, evt->width, evt->height );
+	INFO("get_pos: x=%d, y=%d",AppConfig.MainWndX, AppConfig.MainWndY );
 	return false;
 }
 
@@ -961,7 +963,7 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::OnJumpToPage(GtkWidget* widget, CMainFrame* _this)
 {
-//	g_print("On jump to, widget=%x, _this->m_JumpMenuItems[0]=%x\n", widget, _this->m_JumpMenuItems[0]);
+	INFO("On jump to, widget=%x, _this->m_JumpMenuItems[0]=%x", widget, _this->m_JumpMenuItems[0]);
 	for( int i = 0; i < 10; ++i )
 		if( widget == _this->m_JumpMenuItems[i] )
 		{
@@ -1358,10 +1360,10 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 
 int CMainFrame::GetViewIndex(CTermView* view)
 {
-	g_print( "get view index, view = %x\n", view );
+	DEBUG( "get view index, view = %x", view );
 	if( !view )
 		return -1;
-	g_print( "view->m_Widget = %x\n", view->m_Widget );
+	DEBUG( "view->m_Widget = %x", view->m_Widget );
 	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
 }
 
@@ -1369,7 +1371,7 @@ int CMainFrame::GetViewIndex(CTermView* view)
 void CMainFrame::SwitchToCon(CTelnetCon* con)
 {
 	int idx = GetViewIndex( con->GetView() );
-	g_print( "switch to con %d\n", idx );
+	DEBUG( "switch to con %d", idx );
 	if( idx >= 0 )
 		m_pNotebook->SetCurPage(idx);
 }

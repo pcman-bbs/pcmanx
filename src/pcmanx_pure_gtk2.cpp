@@ -43,6 +43,8 @@
 #include "appconfig.h"
 #include "telnetcon.h"
 
+#include "debug.h"
+
 #ifdef USE_DOCKLET
 extern "C" {
 /* clipboard gives the hint if PCManX already runs. */
