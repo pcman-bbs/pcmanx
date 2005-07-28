@@ -351,7 +351,9 @@ if test "$plugin" = "yes"; then
   else
     ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
   fi
-  XPIDL_INCL="-I$MOZILLA_IDLDIR -I$ADDITIONAL_IDLDIR"
+  XPIDL_INCL="-I$MOZILLA_IDLDIR \
+-I$ADDITIONAL_IDLDIR \
+-I/usr/lib/mozilla/include/idl"
 
   PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
 

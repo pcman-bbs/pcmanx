@@ -1,3 +1,14 @@
+2005-07-28  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Workaround to strange Gentoo Mozilla/Firefox package layout.
+
+	* src/debug.h,
+	src/core/debug.h:
+	Move the former to the later.
+
+	* src/core/Makefile.am: Likewise.
+
 2005-07-28  Kanru Chen  <koster@debian.org.tw>
 
 	* src/autologinpage.cpp,
@@ -40,7 +51,6 @@
 	* src/view/telnetcon.cpp,
 	src/core/termview.cpp:
 	Only convert encoding when really output.
-
 
 2005-07-27  Jim Huang  <jserv@kaffe.org>
 

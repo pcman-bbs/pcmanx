@@ -15,6 +15,7 @@ libpcmanx_core_la_LDFLAGS = \
 	@LIBTOOL_EXPORT_OPTIONS@ \
 	-rpath $(libdir)
 libpcmanx_core_la_SOURCES = \
+	debug.h \
 	caret.cpp caret.h \
 	site.cpp site.h \
 	termdata.cpp termdata.h \
