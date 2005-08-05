@@ -426,21 +426,6 @@ void CTermView::CorrectSelPos(int &selstartx, int &selstarty, int &selendx, int 
 
 void CTermView::PrepareDC()
 {
-//	pango_layout_set_text(m_PangoLayout, " ", 1);
-
-	int w=0, h=0;
-//	pango_layout_get_pixel_size(m_PangoLayout, &w, &h);
-
-//	XGlyphInfo inf;
-//	XftTextExtentsUtf8(GDK_WINDOW_XDISPLAY(m_Widget->window), m_XftFont, (FcChar8*)" ", 1, &inf);
-//	w = inf.xOff;
-	w = m_Font->GetMaxWidth();
-	h = m_Font->GetHeight();
-
-	m_CharW = w/2 + m_CharPaddingX + (w % 2 ? 0 : 1);
-//	m_CharW = h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
-	m_CharH = h + m_CharPaddingY;
-
 	if( GDK_IS_GC(m_GC) )
 	{
 		gdk_gc_set_clip_origin( m_GC, 0, 0 );
@@ -470,11 +455,9 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	if( !m_AutoFontSize || !m_pTermData )
 		return;
 
-	int desire_w = (evt->width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
-	int desire_h = (evt->height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
-
-	bool aa_font = m_Font->GetAntiAlias();
-	m_Font->SetFont(m_Font->GetName(), desire_w, desire_h, aa_font);
+	int w, h;
+	GetCellSize( w, h );
+	m_Font->SetFont( m_Font->GetName(), w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
 
 	RecalcCharDimension();
 }
@@ -742,21 +725,64 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 	g_free((void*)utext);
 }
 
-void CTermView::SetFont(CFont* font)
+void CTermView::GetCellSize( int &w, int &h )
 {
-	if( font )
+	if( !m_pTermData->m_ColsPerPage || !m_pTermData->m_RowsPerPage )
 	{
-		if( m_Font )
-			delete m_Font;
-		m_Font = font;
+		w = 0;
+		h = 0;
+		return;
 	}
+			
+	w = ( m_Widget->allocation.width / m_pTermData->m_ColsPerPage ) - m_CharPaddingX;
+	h = ( m_Widget->allocation.height / m_pTermData->m_RowsPerPage ) - m_CharPaddingY;
 }
 
-void CTermView::SetFontFamily(string name)
+void CTermView::SetFont(CFont* font)
 {
-	int desire_w = (m_Widget->allocation.width / m_pTermData->m_ColsPerPage) - m_CharPaddingX;
-	int desire_h = (m_Widget->allocation.height / m_pTermData->m_RowsPerPage) - m_CharPaddingY;
-	m_Font->SetFont(name, desire_w, desire_h, m_Font->GetAntiAlias());
+	if( !font )
+		return;
+
+	if( m_Font )
+		delete m_Font;
+
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_Font = new CFont( font->GetName(), w, h, font->GetCompact(), font->GetAntiAlias() );
+		delete font;
+	}
+	else
+		m_Font = font;
+	RecalcCharDimension();
+}
+
+void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias )
+{
+	if( m_Font )
+		delete m_Font;
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_Font = new CFont( name, w, h, compact, anti_alias );
+	}
+	else
+		m_Font = new CFont( name, pt_size, compact, anti_alias );
+	RecalcCharDimension();
+}
+
+void CTermView::SetFontFamily( string name )
+{
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_Font->SetFont( name, w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
+	}
+	else
+		m_Font->SetFontFamily( name );
 	RecalcCharDimension();
 }
 
@@ -827,8 +853,8 @@ void CTermView::OnDestroy()
 
 void CTermView::RecalcCharDimension()
 {
-	m_CharW = m_Font->GetMaxWidth()/2 + m_CharPaddingX;// w/2 + m_CharPaddingX + (w % 2 ? 0 : 1); //	h/2 + m_CharPaddingX + (h % 2 ? 0 : 1);
-	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
+	m_CharW = m_Font->GetWidth();
+	m_CharH = m_Font->GetHeight();
 
 	if( m_IsHCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;

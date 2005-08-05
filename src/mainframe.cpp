@@ -38,7 +38,6 @@
 #include "prefdlg.h"
 #include "appconfig.h"
 #include "sitelistdlg.h"
-#include "font.h"
 #include "emoticondlg.h"
 
 #include "debug.h"
@@ -220,8 +219,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
-	CFont* font = new CFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.AntiAliasFont);
-	m_pView->SetFont(font);
+	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, false, AppConfig.AntiAliasFont);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 	m_pView->SetHorizontalCenterAlign( AppConfig.HCenterAlign );
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
@@ -833,6 +831,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 	char* authors=_("Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 					 "Jim Huang (Developer) <jserv@kaffe.org>\n"
 					 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
+					 "Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 					 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
 					);
 //	FILE* fp = fopen( AppConfig.GetDataPath("AUTHORS") );

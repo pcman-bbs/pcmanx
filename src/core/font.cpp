@@ -38,74 +38,121 @@
 
 CFont::CFont()
 {
-	m_PointSize = 0;
 	m_XftFont = NULL;
+	m_PointSize = 0;
+	m_MaxWidth = 0;
+	m_MaxHeight = 0;
+	m_Compact = false;
+	m_AntiAlias = false;
 }
 
 CFont::~CFont()
 {
-	if( m_XftFont )
-	{
-		Display *display = gdk_x11_get_default_xdisplay();
-		XftFontClose(display, m_XftFont );
-	}
+	CloseXftFont( m_XftFont );
 }
 
-CFont::CFont( string name, int pt_size, bool anti_alias )
+CFont::CFont( string name, int pt_size, bool compact, bool anti_alias )
 {
+	m_XftFont = NULL;
+	m_Name = name;
    	m_PointSize = pt_size;
-	m_Name = name;
+	m_Compact = compact;
 	m_AntiAlias = anti_alias;
-	m_XftFont = CreateXftFont( name, pt_size, anti_alias, true );
+
+	m_XftFont = CreateXftFont( name, pt_size, m_AntiAlias );
 }
 
-CFont::CFont( string name, int width, int height, bool anti_alias )
-{
-    m_PointSize = 0;
-	m_Name = name;
-	m_AntiAlias = anti_alias;
-	m_XftFont = CreateXftFont( name, width, height, anti_alias );
-}
-
-void CFont::SetFont( string name, int pt_size, bool anti_alias )
-{
-   	m_PointSize = pt_size;
-	m_Name = name;
-	m_AntiAlias = anti_alias;
-	if( m_XftFont )
-	{
-		Display *display = gdk_x11_get_default_xdisplay();
-		XftFontClose(display, m_XftFont );
-	}		
-	m_XftFont = CreateXftFont( name, pt_size, anti_alias, true );
-}
-
-void CFont::SetFont( string name, int width, int height, bool anti_alias )
+CFont::CFont( string name, int width, int height, bool compact, bool anti_alias )
 {
 	m_Name = name;
-	if( m_XftFont )
-	{
-		Display *display = gdk_x11_get_default_xdisplay();
-		XftFontClose(display, m_XftFont );
-	}
-	m_AntiAlias = anti_alias;
-	m_XftFont = CreateXftFont( name, width, height, anti_alias );
 	m_PointSize = 0;
+	m_MaxWidth = width;
+	m_MaxHeight = height;
+	m_Compact = compact;
+	m_AntiAlias = anti_alias;
+
+	m_XftFont = CreateXftFont( name, width, height, m_AntiAlias );
 }
 
-XftFont* CFont::CreateXftFont( string name, int size, bool anti_alias, bool is_point_size )
+void CFont::SetFont( string name, int pt_size, bool compact, bool anti_alias )
+{
+	m_Name = name;
+   	m_PointSize = pt_size;
+	m_Compact = compact;
+	m_AntiAlias = anti_alias;
+
+	CloseXftFont( m_XftFont );
+	m_XftFont = CreateXftFont( name, pt_size, m_AntiAlias );
+}
+
+void CFont::SetFont( string name, int width, int height, bool compact, bool anti_alias )
+{
+	m_Name = name;
+	m_PointSize = 0;
+	m_MaxWidth = width;
+	m_MaxHeight = height;
+	m_Compact = compact;
+	m_AntiAlias = anti_alias;
+
+	CloseXftFont( m_XftFont );
+	m_XftFont = CreateXftFont( name, width, height, m_AntiAlias );
+}
+
+void CFont::CloseXftFont( XftFont* font )
+{
+	if( font )
+	{
+		Display *display = gdk_x11_get_default_xdisplay();
+		XftFontClose(display, font );
+	}
+}
+
+XftFont* CFont::CreateXftFont( string name, int size, bool anti_alias )
 {
 	Display *display = gdk_x11_get_default_xdisplay();
 	int screen = DefaultScreen (display);
 
 	XftFont* font = XftFontOpen (display, screen,
 					FC_FAMILY, FcTypeString, name.c_str(),
-					(is_point_size ? FC_SIZE:FC_PIXEL_SIZE), FcTypeDouble, (double)size,
+					FC_SIZE, FcTypeDouble, (double)size,
 					FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
 					FC_ANTIALIAS, FcTypeBool, anti_alias,
 					XFT_CORE, FcTypeBool, False,
 					NULL);
+
 	return font;
+}
+
+void CFont::RecalculateMetrics( XftFont* font )
+{
+	FT_Face face = XftLockFace( font );
+	FT_Fixed x_scale = face->size->metrics.x_scale;
+	FT_Fixed y_scale = face->size->metrics.y_scale;
+
+	FT_Pos asc = FT_MulFix( face->ascender, y_scale );
+	FT_Pos des = -FT_MulFix( face->descender, y_scale );
+	FT_Pos adv = FT_MulFix( face->max_advance_width, x_scale );
+
+	adv = ( adv + 32 ) >> 6;
+	if( m_Compact )
+	{
+		/* ceil unless the fractional part < 0.0625 */
+		font->height = ( asc  + des  + 60 ) >> 6;
+
+		font->ascent = ( asc  + 32 ) >> 6;
+		font->descent = font->height - font->ascent;
+		font->max_advance_width = adv;
+	}
+	else
+	{
+		font->ascent = ( asc + 63 ) >> 6;
+		font->descent = ( des + 63 ) >> 6;
+		font->height = font->ascent + font->descent;
+		//font->max_advance_width = ( adv + 1 ) & ~1;
+		font->max_advance_width = adv;
+	}
+
+	XftUnlockFace( font );
 }
 
 XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_alias )
@@ -121,99 +168,60 @@ XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_ali
 			FC_ANTIALIAS, FcTypeBool, anti_alias,
 			XFT_CORE, FcTypeBool, False,
 			NULL );
-	if ( !pattern )
+	if( !pattern )
 		return NULL;
 
 	FcResult result;
 	FcPattern* match = XftFontMatch( display, screen, pattern, &result );
 	FcPatternDestroy( pattern );
-	if ( !match )
+	if( !match )
 		return NULL;
 
 	XftFont* font = XftFontOpenPattern( display, match );
-	if ( !font )
+	if( !font )
 	{
 		FcPatternDestroy( match );
 
 		return NULL;
 	}
+	RecalculateMetrics( font );
 
-	int w = font->max_advance_width;
-	int h = font->ascent + font->descent;
+	// width is single width
+	int w = font->max_advance_width / 2;
+	int h = font->height;
 
-	/* double-width */
-	width *= 2;
-
-	while ( size > 4 && ( w > width || h > height) )
+	while( size > 4 && ( w > width || h > height ) )
 	{
-		size --;
+		size--;
 
-		if ( font )
+		if( font )
 		{
 			match = FcPatternDuplicate( font->pattern );
-			XftFontClose(display, font);
+			XftFontClose( display, font );
 		}
 
 		FcPatternDel( match, FC_PIXEL_SIZE );
 		FcPatternAddDouble( match, FC_PIXEL_SIZE, (double)size );
 
 		font = XftFontOpenPattern( display, match );
-		if ( !font )
-			return NULL;
+		if( !font )
+		{
+			FcPatternDestroy( match );
+			break;
+		}
+		RecalculateMetrics( font );
 
-		w = font->max_advance_width;
-		h = font->ascent + font->descent;
+		w = font->max_advance_width / 2;
+		h = font->height;
 	}
-	
-#if 0	// Deprecated: Create XftFont by pixel size
-	XftFont* font = XftFontOpen (display, screen,
-					FC_FAMILY, FcTypeString, name.c_str(),
-					XFT_CORE, FcTypeBool, False,
-					FC_PIXEL_SIZE, FcTypeDouble, (double)height,
-					FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
-					FC_ANTIALIAS, FcTypeBool, anti_alias,
-					NULL);
 
-	int w = font->max_advance_width;
-	int h = font->ascent + font->descent;
-
-	int max_width = width * 2;
-	// TODO: must use new method to determine font size
-	while( (w > 4 && h > 4) && ( w > max_width || h > height) )
-	{
-		if( font )
-			XftFontClose(display, font);
-
-		int old_h = h;
-		h--;
-
-		font = XftFontOpen (display, screen,
-						FC_FAMILY, FcTypeString, name.c_str(),
-						XFT_CORE, FcTypeBool, False,
-						FC_PIXEL_SIZE, FcTypeDouble, (double)h,
-						FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
-						FC_ANTIALIAS, FcTypeBool, anti_alias,
-						NULL);
-
-		w = font->max_advance_width;
-		h = font->ascent + font->descent;
-		if( h >= old_h )
-			h--;
-	}
-#endif
 	return font;
 }
 
-void CFont::SetFontFamily(string name)
+void CFont::SetFontFamily( string name )
 {
-    m_Name = name;
-	if( m_XftFont )
-	{
-		Display *display = gdk_x11_get_default_xdisplay();
-		XftFontClose(display, m_XftFont );
-	}
 	if( m_PointSize > 0 )
-		m_XftFont = CreateXftFont( name, m_PointSize, m_AntiAlias, true );
+		SetFont( name, m_PointSize, m_Compact, m_AntiAlias );
 	else
-		m_XftFont = CreateXftFont( name, GetMaxWidth()/2, GetHeight(), m_AntiAlias );
+		SetFont( name, m_MaxWidth, m_MaxHeight, m_Compact, m_AntiAlias );
 }

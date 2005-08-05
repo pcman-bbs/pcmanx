@@ -35,24 +35,30 @@ class CFont{
 public:
     CFont();
     ~CFont();
-     CFont( string name, int pt_size, bool anti_alias = true );
-     CFont( string name, int width, int height, bool anti_alias = true );
-    void SetFont( string name, int pt_size, bool anti_alias = true );
-    void SetFont( string name, int width, int height, bool anti_alias = true );
-	int GetHeight(){	return m_XftFont->ascent + m_XftFont->descent;	}
-	int GetMaxWidth(){	int w = m_XftFont->max_advance_width;	return w %2 ? w : (w + 1);	}
-	XftFont* GetXftFont(){	return m_XftFont;	}
-	string GetName(){	return m_Name;	}
-	bool GetAntiAlias(){	return m_AntiAlias;	}
-    void SetFontFamily(string name);
+    CFont( string name, int pt_size, bool compact = false, bool anti_alias = true );
+    CFont( string name, int width, int height, bool compact = false, bool anti_alias = true );
+    void SetFont( string name, int pt_size, bool compact = false, bool anti_alias = true );
+    void SetFont( string name, int width, int height, bool compact = false, bool anti_alias = true );
+    void SetFontFamily( string name );
+    inline int GetHeight(){	return m_XftFont->ascent + m_XftFont->descent;	};
+    inline int GetWidth(){	return m_XftFont->max_advance_width / 2;	};
+    XftFont* GetXftFont(){	return m_XftFont;	}
+    string GetName(){		return m_Name;		}
+    bool GetAntiAlias(){	return m_AntiAlias;	}
+    bool GetCompact(){		return m_Compact;	}
 protected:
-	XftFont* m_XftFont;
-	string m_Name;
-	int m_PointSize;
-	bool m_AntiAlias;
+    XftFont* m_XftFont;
+    string m_Name;
+    int m_PointSize;
+    int m_MaxWidth;
+    int m_MaxHeight;
+    bool m_Compact;
+    bool m_AntiAlias;
 private:
-    XftFont* CreateXftFont(string name, int size, bool anti_alias, bool is_point_size );
-    XftFont* CreateXftFont(string name, int width, int height, bool anti_alias);
+    XftFont* CreateXftFont( string name, int size, bool anti_alias );
+    XftFont* CreateXftFont( string name, int width, int heigh, bool anti_alias  );
+    void CloseXftFont( XftFont* font );
+    void RecalculateMetrics( XftFont* font );
 };
 
 #endif

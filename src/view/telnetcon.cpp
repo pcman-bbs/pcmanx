@@ -694,7 +694,7 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 #if !defined(MOZ_PLUGIN)
 
 #ifdef USE_NOTIFIER
-	if ( !*line )//!AppConfig.PopupNotifier || !*line )
+	if ( !AppConfig.PopupNotifier || !*line )
 		return;
 
 	/* We need to convert the incoming message into UTF-8 encoding from

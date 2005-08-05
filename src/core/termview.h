@@ -68,6 +68,7 @@ public:
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void CopyToClipboard(bool primary, bool with_color, bool trim);
+    void SetFont( string name, int pt_size, bool compact, bool anti_alias );
     void SetFontFamily(string name);
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
@@ -90,6 +91,7 @@ protected:
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
     void OnDestroy();
     void RecalcCharDimension();
+    void GetCellSize( int &w, int &h );
 protected:
 	CTermData* m_pTermData;
 

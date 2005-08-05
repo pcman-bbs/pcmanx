@@ -1,3 +1,21 @@
+2005-07-28  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.h, src/core/font.cpp: Code cleanup.
+	GetWidth() returns single width.
+	Remember the width/height used to open a font so that we can avoid
+	unnecessary CreateXftFont(). Also, this helps SetFontFamily() work
+	right.
+	(CFont::RecalculateMetrics): Calculate font metrics ourselves. This
+	enables us to draw characters in a compact way.
+
+	* src/core/termview.cpp: Reflect changes made to CFont.
+	Make font selecting respect m_AutoFontSize.
+	(CTermView::GetCellSize): New member function to calculate cell
+	width/height in a uniform way.
+
+	* src/mainframe.cpp: Use CTermView::SetFont instead of
+	CFont::SetFont.
+
 2005-07-28  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac:
@@ -51,6 +69,12 @@
 	* src/view/telnetcon.cpp,
 	src/core/termview.cpp:
 	Only convert encoding when really output.
+
+2005-07-27  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.h (CFont::RecalculateMetrics), src/core/font.cpp
+	(CFont::RecalculateMetrics): New private member function for
+	re-calculating font metrics.
 
 2005-07-27  Jim Huang  <jserv@kaffe.org>
 

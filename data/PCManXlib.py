@@ -1,19 +1,19 @@
 from PCManX import SendString
 
 def SendLeft(handle):
-	SendString(handle, "\x1bOD\x1bOD")
+	SendString(handle, "\x1bOD")
 def SendRight(handle):
-	SendString(handle, "\x1bOC\x1bOC")
+	SendString(handle, "\x1bOC")
 def SendUp(handle):
 	SendString(handle, "\x1bOA")
 def SendDown(handle):
 	SendString(handle, "\x1bOB")
 def SendBackSpace(handle):
-	SendString(handle, "\b\b")
+	SendString(handle, "\b")
 def SendReturn(handle):
 	SendString(handle, "\r")
 def SendDelete(handle):
-	SendString(handle, "\x1b[3~\x1b[3~")
+	SendString(handle, "\x1b[3~")
 def SendInsert(handle):
 	SendString(handle, "\x1b[2~")
 def SendHome(handle):
