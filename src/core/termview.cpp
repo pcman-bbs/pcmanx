@@ -23,6 +23,7 @@
 
 #include "termview.h"
 #include "termdata.h"
+#include "termsel.h"
 
 #include "debug.h"
 
@@ -80,8 +81,9 @@ static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView*
 {
 	if (evt->is_hint)
 	{
-		int x, y;	GdkModifierType state;
-    	gdk_window_get_pointer (evt->window, &x, &y, &state);
+		int x, y;
+		GdkModifierType state;
+		gdk_window_get_pointer (evt->window, &x, &y, &state);
 		evt->x = x;	evt->y = y;
 		evt->state = state;
 	}
@@ -156,8 +158,6 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	// Hide the caret to prevent drawing problems.
 	m_Caret.Hide();
 
-	PrepareDC();
-
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc))
 	{
@@ -176,16 +176,13 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 		this->PointToLineCol( &right, &bottom );
 
 		if(right < m_pTermData->m_ColsPerPage)	right++;
-		if(bottom < m_pTermData->m_RowsPerPage-1)	bottom++;
+		if(bottom < m_pTermData->m_RowsPerPage)	bottom++;
 		if(top > 0)	top-=top>1?2:1;
-		int iline = m_pTermData->m_FirstLine + top;
-		int ilast = m_pTermData->m_FirstLine + bottom;
-		top *= m_CharH;
 
-		for( ; iline <= ilast; iline++ , top += m_CharH )
+		for( int row = top; row < bottom; row++ )
 		{
 			for( int col = left; col < right; )
-				col += DrawChar( iline, col, top );
+				col += DrawChar( row, col );
 		}
 
 		gdk_gc_set_rgb_fg_color(m_GC, CTermCharAttr::GetDefaultColorTable(0));
@@ -249,7 +246,7 @@ void CTermView::OnCreate()
 }
 
 
-int CTermView::DrawChar(int line, int col, int top)
+int CTermView::DrawChar(int row, int col)
 {
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
@@ -258,7 +255,7 @@ int CTermView::DrawChar(int line, int col, int top)
 		return 1;
 	}
 
-	const char* pLine = m_pTermData->m_Screen[line];
+	const char* pLine = m_pTermData->m_Screen[m_pTermData->m_FirstLine + row];
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
 	int w = 2;
 	bool is_mbcs2 = false;
@@ -277,18 +274,21 @@ int CTermView::DrawChar(int line, int col, int top)
 //	case CTermCharAttr::CS_ASCII:
 		w = 1;
 	}
-
-	const char* pChar = pLine + col;
+	pLine += col;
 	pAttr += col;
-	int left = m_CharW*col + m_LeftMargin;
-	top += m_TopMargin;
 
-	bool bSel[2];	bSel[0]= IsPosInSel( col, line );
-	if( w > 1 )		bSel[1] = IsPosInSel( col+1, line );
+	bool bSel[2];
+	bSel[0] = m_pTermData->m_Sel->Has( row, col );
+	if ( w > 1 )
+		bSel[1] = m_pTermData->m_Sel->Has( row, col + 1 );
+
+	int left = m_CharW * col + m_LeftMargin;
+	int top = m_CharH * row + m_TopMargin;
+	int bgw = m_CharW * w;
 
 	GdkColor iFg, iBg;
 
-	for( int i=0; i < w; i++ )	//	do the drawing
+	for( int i = 0; i < w; i++ )	//	do the drawing
 	{
 		GdkColor* Fg = pAttr[i].GetFgColor( m_pColorTable );
 		GdkColor* Bg = pAttr[i].GetBgColor( m_pColorTable );
@@ -304,10 +304,7 @@ int CTermView::DrawChar(int line, int col, int top)
 			iBg.green = ~Bg->green;
 			iBg.blue = ~Bg->blue;
 			Bg = &iBg;
-
 		}
-
-		gdk_gc_set_rgb_fg_color( m_GC, Bg );
 
 		XftColor xftclr;
 		xftclr.pixel = 0;
@@ -316,29 +313,42 @@ int CTermView::DrawChar(int line, int col, int top)
 		xftclr.color.blue = Fg->blue;
 		xftclr.color.alpha = 0xffff;
 
-		int bgw = m_CharW*w;
+		// set clip mask
+		GdkRectangle rect;
+		XRectangle xrect;
+		xrect.x = rect.x = left + m_CharW * i;
+		xrect.y = rect.y = top;
+		xrect.width = rect.width = m_CharW * ( w - i );
+		xrect.height = rect.height = m_CharH;
+		gdk_gc_set_clip_origin( m_GC, 0, 0 );
+		gdk_gc_set_clip_rectangle( m_GC, &rect );
+		Region xregion = XCreateRegion();
+		XUnionRectWithRegion( &xrect, xregion, xregion );
+		XftDrawSetClip( m_XftDraw, xregion );
+		XDestroyRegion( xregion );
 
-		gdk_draw_rectangle(dc, m_GC, true, left , top, bgw, m_CharH );
+		gdk_gc_set_rgb_fg_color( m_GC, Bg );
+		gdk_draw_rectangle( dc, m_GC, true, left , top, bgw, m_CharH );
 
 		gdk_gc_set_rgb_fg_color( m_GC, Fg );
 
 		if( !pAttr[i].IsBlink() || m_ShowBlink )	// If text shold be draw.
 		{
-			if( ' ' != *pChar && '\0' != *pChar )
+			if( ' ' != *pLine && '\0' != *pLine )
 			{
 				gsize wl;
-				gchar *utf8_ch;
-				if( w > 0 && (utf8_ch = g_convert(pChar, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL)))
+				gchar *utf8_ch = g_convert( pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
+				if( utf8_ch )
 				{
 					XftFont* font = m_Font->GetXftFont();
-					XftDrawStringUtf8(m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, strlen(utf8_ch));
+					XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
 				}
 			}
 			if( pAttr[i].IsUnderLine() )
 			{
-				int bottom = top + m_CharH - 1;
-				gdk_draw_line(dc, m_GC, left, bottom, left + bgw, bottom);
+				int y = top + m_CharH - 1;
+				gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
@@ -350,108 +360,63 @@ int CTermView::DrawChar(int line, int col, int top)
 
 			if(m_pHyperLinkColor)
 	 			gdk_gc_set_rgb_fg_color( m_GC, m_pHyperLinkColor );
-			int bottom = top + m_CharH - 1;
-			gdk_draw_line(dc, m_GC, left, bottom, left + bgw, bottom);
+			int y = top + m_CharH - 1;
+			gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
 		}
 
-		if( w == 1 || i>=1 || (pAttr[i].IsSameAttr(pAttr[i+1].AsShort()) && bSel[0] == bSel[1]) )
+		// two cells have the same attributes
+		if( i == 0 && pAttr[0].IsSameAttr( pAttr[1].AsShort() ) && bSel[0] == bSel[1] )
 			break;
-
-		gdk_gc_set_clip_rectangle( m_GC, NULL );
-		GdkRectangle rect;	rect.x=(left + m_CharW); rect.y=top; rect.width=m_CharW; rect.height=m_CharH;
-		gdk_gc_set_clip_origin( m_GC, rect.x, rect.y );
-		gdk_gc_set_clip_rectangle( m_GC, &rect );
-
-		Region xregion = XCreateRegion();
-		XRectangle xrect;	xrect.x=rect.x;	xrect.y=rect.y;	xrect.width=rect.width;	xrect.height=rect.height;
-		XUnionRectWithRegion (&xrect, xregion, xregion);
-		XftDrawSetClip(m_XftDraw, xregion );
-		XDestroyRegion(xregion);
 	}
 	gdk_gc_set_clip_rectangle( m_GC, NULL );
-	XftDrawSetClip(m_XftDraw, NULL);
+	XftDrawSetClip( m_XftDraw, NULL );
 
 	return is_mbcs2 ? 1 : w;
 }
 
-
-bool CTermView::IsPosInSel(int x, int y)
-{
-//  If the user selected from bottom to top or from right to left, we should swap the
-//	coordinates to make them correct.
-	int selstartx = m_pTermData->m_SelStart.x, selstarty = m_pTermData->m_SelStart.y;
-	int selendx = m_pTermData->m_SelEnd.x, selendy = m_pTermData->m_SelEnd.y;
-	bool one_line_selected = m_pTermData->m_SelStart.y == selendy;
-/*	if( selstarty > selendy )
-	{
-		int tmp = selstarty; selstarty = selendy; selendy = tmp;
-		if( selstartx > selendx )
-		{	int tmp = selstartx; selstartx = selendx; selendx = tmp;	}
-	}
-	else if( (one_line_selected||m_pTermData->m_SelBlock) && selstartx > selendx )
-	{	int tmp = selstartx; selstartx = selendx; selendx = tmp;	}	*/
-//-------------------------------------------------------------------
-	CorrectSelPos(selstartx, selstarty, selendx, selendy );
-//			Check if specified position is in selected area;
-	if( y < selstarty || y > selendy )
-		return false;
-
-	if( m_pTermData->m_SelBlock )	// If selected area is a block
-		return (x >= selstartx && x < selendx );
-	else	// normal selection with multiple lines selected
-	{
-		bool x_larger_than_startx = (x >= selstartx);
-		bool x_smaller_than_endx = (x < selendx);
-		if( one_line_selected )	// if only one line is selected
-			return ( x_larger_than_startx && x_smaller_than_endx );
-		if( y == selstarty )	// If in first selected line
-			return x_larger_than_startx;
-		else if( y == selendy )	// If in last selected line
-			return x_smaller_than_endx;
-	}
-	return true;
-}
-
-
-void CTermView::CorrectSelPos(int &selstartx, int &selstarty, int &selendx, int &selendy)
-{
-//  If the user selected from bottom to top or from right to left, we should swap the
-//	coordinates to make them correct.
-	bool one_line_selected = m_pTermData->m_SelStart.y == selendy;
-	if( selstarty > selendy )
-	{
-		int tmp = selstarty; selstarty = selendy; selendy = tmp;
-		tmp = selstartx; selstartx = selendx; selendx = tmp;
-	}
-	if( (one_line_selected ||m_pTermData->m_SelBlock) && selstartx > selendx )
-	{	int tmp = selstartx; selstartx = selendx; selendx = tmp;	}
-}
-
-void CTermView::PrepareDC()
-{
-	if( GDK_IS_GC(m_GC) )
-	{
-		gdk_gc_set_clip_origin( m_GC, 0, 0 );
-		gdk_gc_set_clip_rectangle( m_GC, NULL);
-	}
-}
-
-
-void CTermView::PointToLineCol(int *x, int *y)
+void CTermView::PointToLineCol(int *x, int *y, bool *left)
 {
 	*x -= m_LeftMargin;
+
+	int pos = *x % m_CharW;
+
 	*x /= m_CharW;
 	if (*x < 0)
+	{
 		*x = 0;
-	else if( *x > m_pTermData->m_ColsPerPage )
-		*x = m_pTermData->m_ColsPerPage;
+		pos = 0; // so that *left = true
+	}
+	else if( *x >= m_pTermData->m_ColsPerPage )
+	{
+		*x = m_pTermData->m_ColsPerPage - 1;
+		pos = m_CharW; // so taht *left = false
+	}
 
 	*y -= m_TopMargin;
 	*y /= m_CharH;
 	if(*y <0 )
 		*y = 0;
-	else if( (*y+1) > m_pTermData->m_RowsPerPage )
+	else if( *y >= m_pTermData->m_RowsPerPage )
 		*y = m_pTermData->m_RowsPerPage-1;
+
+	if ( left )
+	{
+		const char* pLine = m_pTermData->m_Screen[m_pTermData->m_FirstLine + *y];
+		CTermCharAttr* pAttr = m_pTermData->GetLineAttr( pLine );
+
+		switch( pAttr[*x].GetCharSet() )
+		{
+		case CTermCharAttr::CS_MBCS1:
+			*left = true;
+			break;
+		case CTermCharAttr::CS_MBCS2:
+			*left = false;
+			break;
+		default:
+			*left = pos < ( m_CharW + 1 ) / 2;
+			break;
+		}
+	}
 }
 
 void CTermView::OnSize(GdkEventConfigure* evt)
@@ -461,11 +426,18 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 
 	int w, h;
 	GetCellSize( w, h );
+
 	m_Font->SetFont( m_Font->GetName(), w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
 
 	RecalcCharDimension();
 }
 
+static int DrawCharWrapper( int row, int col, void *data )
+{
+	CTermView *tv = (CTermView *) data;
+
+	return tv->DrawChar( row, col );
+}
 
 void CTermView::OnLButtonDown(GdkEventButton* evt)
 {
@@ -473,21 +445,28 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 
 	if( !m_pTermData )
 		return;
+
+	CTermSelection* sel = m_pTermData->m_Sel;
+
+	// clear the old selection
+	if ( !sel->Empty() )
+	{
+		m_Caret.Hide();
+		sel->Unselect( DrawCharWrapper, this );
+		m_Caret.Show( false );
+	}
+
 	SetCapture();
 
 	int x = (int)evt->x;
 	int y = (int)evt->y;
+	bool left;
 
 	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
-	PointToLineCol( &x, &y );
-	bool need_refresh = ( m_pTermData->m_SelStart != m_pTermData->m_SelEnd );
-	m_pTermData->m_SelStart.x = m_pTermData->m_SelEnd.x = x;
-	m_pTermData->m_SelStart.y = m_pTermData->m_SelEnd.y = y;
-	if( need_refresh )
-		Refresh();
-	m_pTermData->m_SelBlock = (evt->state &
-		(GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK) );
+	PointToLineCol( &x, &y, &left );
+	m_pTermData->m_Sel->NewStart( y, x, left,
+			(evt->state & (GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK)) );
 }
 
 
@@ -502,19 +481,16 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 		return;
 	ReleaseCapture();
 
-//	Correct the selected area when users stop selecting.
-//  If the user selected from bottom to top or from right to left, we should swap the
-//	coordinates to make them correct.
-	CorrectSelPos(m_pTermData->m_SelStart.x, m_pTermData->m_SelStart.y, 
-		m_pTermData->m_SelEnd.x, m_pTermData->m_SelEnd.y);
+	m_pTermData->m_Sel->Canonicalize();
 
 	//	2004.08.07 Added by PCMan.  Hyperlink detection.
 	//	If no text is selected, consider hyperlink.
-	if( m_pTermData->m_SelStart == m_pTermData->m_SelEnd && !m_WebBrowser.empty() )
+	if( m_pTermData->m_Sel->Empty() && !m_WebBrowser.empty() )
 	{
 		int x = (int)evt->x;
 		int y = (int)evt->y;
 		PointToLineCol( &x, &y );
+
 		int start, end;
 		if( HyperLinkHitTest( x, y, &start, &end ) )
 		{
@@ -554,19 +530,26 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 
 	int x = (int)evt->x;
 	int y = (int)evt->y;
+	bool left;
 
 	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
-	this->PointToLineCol( &x, &y );
+	this->PointToLineCol( &x, &y, &left );
 	if( HasCapture() )	//	Selecting text.
 	{
-		int oldx = m_pTermData->m_SelEnd.x;
-		int oldy = m_pTermData->m_SelEnd.y;
-		//	Store new SelPos
-		m_pTermData->m_SelEnd.x = x;
-		m_pTermData->m_SelEnd.y = y;
-		//	Update Display
-		RedrawSel( oldx, oldy, x, y );
+		if ( m_pTermData->m_Sel->m_End.row != y
+		  || m_pTermData->m_Sel->m_End.col != x
+		  || m_pTermData->m_Sel->m_End.left != left )
+		{
+			// Always remember to hide the caret before drawing.
+			m_Caret.Hide();
+
+			m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
+
+			// Show the caret again but only set its visibility without
+			// display it immediatly.
+			m_Caret.Show( false );
+		}
 	}
 	else	//	Consider hyperlink detection.
 	{
@@ -579,54 +562,6 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 	}
 }
 
-
-//	This function is used to update selected region.
-//	However, this piece of code is not only inefficient but also ugly.
-//	Although it works, by no means can this be a good solution.
-//	Leaving it temporarily because I don't have much time to do optimization.
-//	Maybe someday there'll be someone who can fix it .
-#define iMAX(x,y) ((x)>(y)?(x):(y))
-#define iMIN(x,y) ((x)>(y)?(y):(x))
-#define MAX3(x,y,z) iMAX(iMAX(x,y),z)
-#define MIN3(x,y,z) iMIN(iMIN(x,y),z)
-void CTermView::RedrawSel(int oldx, int oldy, int newx, int newy)
-{
-	//	Always remember to hide the caret before drawing.
-	m_Caret.Hide();
-
-	GdkDrawable* dc = m_Widget->window;
-	PrepareDC();
-
-	int starty;	int	endy;
-	if( m_pTermData->m_SelBlock )
-	{
-		starty = MIN3( m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
-		endy = MAX3(m_pTermData->m_SelStart.y, oldy, m_pTermData->m_SelEnd.y );
-	}
-	else
-	{
-		if( oldy < newy )	// select downward
-		{	starty = oldy;	endy = newy;	}
-		else	//	upward
-		{	starty = newy;	endy = oldy;	}
-	}
-
-	// This is not efficient at all.  Apparaently it needs some optimization.
-	int top = starty*m_CharH;
-	for( int y= starty; y <= endy; y++, top+=m_CharH )
-	{
-//		CTermCharAttr* pAttr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[starty]);
-		for( int x=0; x< m_pTermData->m_ColsPerPage;  )
-			x += DrawChar( y, x, top );
-	}
-
-	//	Show the caret again but only set its visibility without display it immediatly.
-	m_Caret.Show( false );
-}
-#undef MAX3
-#undef MIN3
-#undef iMIN
-#undef iMAX
 
 void CTermView::OnKillFocus(GdkEventFocus *evt)
 {
@@ -645,19 +580,17 @@ void CTermView::OnBlinkTimer()
 	m_ShowBlink = !m_ShowBlink;
 	if(m_pTermData)
 	{
-		PrepareDC();
-		int top = 0;
-		int iline = m_pTermData->m_FirstLine;
-		int ilast = m_pTermData->m_FirstLine+m_pTermData->m_RowsPerPage-1;
 //		const int left = 0;	const int right = m_pTermData->m_ColsPerPage;
-		for( ; iline <= ilast; iline++ , top += m_CharH )
+		for( int row = 0; row < m_pTermData->m_RowsPerPage; row++ )
 		{
 //			DrawLine( dc, i, y, true , left, right );
-			CTermCharAttr* attr = m_pTermData->GetLineAttr( m_pTermData->m_Screen[iline] );
+			CTermCharAttr* attr = m_pTermData->GetLineAttr(
+					m_pTermData->m_Screen[m_pTermData->m_FirstLine + row] );
+
 			for( int col = 0; col < m_pTermData->m_ColsPerPage; )
 			{
 				if( attr[col].IsBlink())
-					col += DrawChar( iline, col, top );
+					col += DrawChar( row, col );
 				else
 					col++;
 			}
@@ -704,13 +637,11 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 	string text;
 	if(!m_pTermData)
 		return;
+	m_s_ANSIColorStr = "";
 	if( with_color )
 		text = m_pTermData->GetSelectedTextWithColor(trim);
 	else
-	{
-		m_s_ANSIColorStr = "";
 		text = m_pTermData->GetSelectedText(trim);
-	}
 
 	gsize wl = 0;
 	const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
@@ -735,16 +666,17 @@ void CTermView::GetCellSize( int &w, int &h )
 	{
 		w = 0;
 		h = 0;
+
 		return;
 	}
-			
+
 	w = ( m_Widget->allocation.width / m_pTermData->m_ColsPerPage ) - m_CharPaddingX;
 	h = ( m_Widget->allocation.height / m_pTermData->m_RowsPerPage ) - m_CharPaddingY;
 }
 
-void CTermView::SetFont(CFont* font)
+void CTermView::SetFont( CFont* font )
 {
-	if( !font )
+	if( !font || m_AutoFontSize )
 		return;
 
 	if( m_Font )
@@ -759,6 +691,7 @@ void CTermView::SetFont(CFont* font)
 	}
 	else
 		m_Font = font;
+
 	RecalcCharDimension();
 }
 
@@ -774,6 +707,7 @@ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias
 	}
 	else
 		m_Font = new CFont( name, pt_size, compact, anti_alias );
+
 	RecalcCharDimension();
 }
 
@@ -787,6 +721,7 @@ void CTermView::SetFontFamily( string name )
 	}
 	else
 		m_Font->SetFontFamily( name );
+
 	RecalcCharDimension();
 }
 
@@ -872,8 +807,8 @@ void CTermView::OnDestroy()
 
 void CTermView::RecalcCharDimension()
 {
-	m_CharW = m_Font->GetWidth();
-	m_CharH = m_Font->GetHeight();
+	m_CharW = m_Font->GetWidth() + m_CharPaddingX;
+	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
 
 	if( m_IsHCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;

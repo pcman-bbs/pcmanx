@@ -1,3 +1,37 @@
+2005-08-05  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/Makefile.am: Added termsel.h and termsel.cpp.
+
+	* src/core/termsel.h,
+	src/core/termsel.cpp:
+	New files which implement CTermSelection. CTermSelection is used to
+	ease the pain of working on the selected region.
+
+	* src/core/termview.h,
+	src/core/termview.cpp:
+	Some formatting.
+	Added m_pTermData->m_FirstLine in various places (untested).
+	Updated to reflect the changes listed below.
+	(DrawChar): `top' is now derived from `row' automatically.
+	Always set clip box before drawing.
+	(PointToLineCol): Take a third parameter so that the caller can know
+	the point is on the left or right half of the cell.
+	Always return the coordinates of the first byte if there is a
+	multi-byte character on that point.
+	(OnLButtonDown): Don't redraw the whole term.
+	(CopyToClipboard): Always set m_s_ANSIColorStr to "" before copying.
+	(IsPosInSel, CorrectSelPos, RedrawSel, PrepareDC): Removed.
+	
+	* src/view/telnetcon.cpp: Updated to reflect the changes of CTermView.
+
+	* src/core/termdata.h,
+	src/core/termdata.cpp:
+	Updated to use CTermSelection.
+	Added m_FirstLine in various places (untested).
+
+	* src/mainframe.cpp:
+	Updated to use CTermSelection.
+
 2005-08-05  Jim Huang  <jserv@kaffe.org>
 
 	* src/script/script.cpp (FinalizeScriptInterface):

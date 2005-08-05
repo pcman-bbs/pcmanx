@@ -16,6 +16,7 @@
 
 #include "termdata.h" // class's header file
 #include "termview.h" // class's header file
+#include "termsel.h" // class's header file
 #include <string.h>
 
 #include "debug.h"
@@ -113,23 +114,23 @@ CTermCharAttr::operator==(CTermCharAttr& attr){
 CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 {
 	m_CaretPos.x = m_CaretPos.y = 0;
-	m_SelStart.x = m_SelStart.y = 0;
-	m_SelEnd.x = m_SelEnd.y = 0;
 	m_FirstLine = 0;
 	m_RowCount = 0;
 	m_RowsPerPage = m_ColsPerPage = 0;
 	m_ScrollRegionBottom = m_ScrollRegionTop = 0;
 	m_CurAttr.SetToDefault();
-	m_SelBlock = false;
 	m_CmdLine[0] = '\0';
 	m_WaitUpdateDisplay = false;
 	m_NeedDelayedUpdate = false;
 	m_DelayedUpdateTimeout = 0;
+	m_Sel = new CTermSelection(this);
 }
 
 // class destructor
 CTermData::~CTermData()
 {
+	delete m_Sel;
+
 	if( m_DelayedUpdateTimeout )
 		g_source_remove(m_DelayedUpdateTimeout);
 
@@ -739,16 +740,11 @@ void CTermData::DoUpdateDisplay()
 {
 	m_WaitUpdateDisplay = false;
 
-	int line = m_FirstLine;
-	int last_line = line + m_RowsPerPage;
-	int top = line * m_pView->m_CharH;
-
-	m_pView->PrepareDC();
 	m_pView->m_Caret.Hide();
-	for( ; line < last_line; line++, top += m_pView->m_CharH )
+	for( int row = 0; row < m_RowsPerPage; row++ )
 	{
 		int col = 0;
-		CTermCharAttr* attr = GetLineAttr( m_Screen[line] );
+		CTermCharAttr* attr = GetLineAttr( m_Screen[m_FirstLine + row] );
 		bool callback_has_been_called = false;
 		for( ; col < m_ColsPerPage; col++  )
 		{
@@ -756,13 +752,13 @@ void CTermData::DoUpdateDisplay()
 			{
 				if( ! callback_has_been_called )
 				{
-					OnLineModified( line );
+					OnLineModified( m_FirstLine + row );
 					callback_has_been_called = true;
 				}
 
 				if( col>0 && attr[col].GetCharSet()==CTermCharAttr::CS_MBCS2 )
 					col--;
-				m_pView->DrawChar( line, col, top );
+				m_pView->DrawChar( row, col );
 				attr[col].SetNeedUpdate(false);
 				// Check if this is a MBCS char.
 				if( attr[col].GetCharSet()==CTermCharAttr::CS_MBCS1 )
@@ -917,109 +913,12 @@ void CTermData::DetectHyperLinks()
 	}
 }
 
-// 2004.08.27 modified by PCMan
-// if trim == true, excess line at tail will be removed.
-string CTermData::GetText(GdkPoint start, GdkPoint end, bool trim, bool block)
-{
-	string text;
-//	Use system specific design here.
-#ifdef	__WXMSW__
-	char eol[] = "\r\n";
-#else
-	char eol = '\n';
-#endif
-
-	if( trim )
-	{
-		for( ; end.y > start.y ; end.y-- )  // Ignore blank lines at end of file.
-		{
-			if( !IsLineEmpty(end.y) )
-				break;
-		}
-	}
-
-	if( start.y == end.y )
-	{
-		int len = end.x-start.x;
-		if( len > 0 )
-		{
-			text = string( m_Screen[start.y]+start.x, len );
-			size_t n = text.find_last_not_of(' ');
-			if( n != text.npos )
-				text = text.substr(0, n+1);
-		}
-		return text;
-	}
-
-	if( block )
-	{
-		if( end.x < start.x ){int tmp=end.y; end.y=end.x; end.x=tmp;	}
-
-		for( int iline = start.y; iline <= end.y; iline++ )
-		{
-			int len = (end.x-start.x);
-			if( len > 0 )
-			{
-				string line( m_Screen[iline]+start.x, len );
-				size_t n = line.find_last_not_of(' ');
-				if( n != line.npos )
-					line = line.substr(0, n+1);
-				text += line;
-			}
-			text += eol;
-		}
-	}
-	else
-	{
-		int len = m_ColsPerPage-1-start.x;
-		if(len > 0)
-		{
-			text = string( m_Screen[start.y]+start.x, len );
-			size_t n = text.find_last_not_of(' ');
-			if( n != text.npos )
-				text = text.substr(0, n+1);
-		}
-
-		text += eol;
-		for( int iline = start.y+1; iline < end.y; iline++ )
-		{
-//			Due to some unknown bugs, some lines are not null terminated.
-//			This shouldn't happen in my original design, so there must be some
-//			unknown little bugs.
-			m_Screen[iline][m_ColsPerPage]=0;
-			text += m_Screen[iline];
-
-			if(text.length())	//	trim
-			{
-				size_t n = text.find_last_not_of(' ');
-				if( n != text.npos )
-					text = text.substr(0, n+1);
-			}
-
-			text += eol;
-		}
-		if( start.y != end.y )
-		{
-			text += string( m_Screen[end.y], end.x );
-
-			if(text.length())	//	trim
-			{
-				size_t n = text.find_last_not_of(' ');
-				if( n != text.npos )
-					text = text.substr(0, n+1);
-			}
-		}
-	}
-	return text;
-}
-
-// 2004.08.27 modified by PCMan
-// if trim == true, excess line at tail will be removed.
-string CTermData::GetSelectedText(bool trim)
-{
-	return GetText( m_SelStart, m_SelEnd, trim, m_SelBlock );
-}
-
+typedef struct {
+	CTermData* pTermData;
+	string*    text;
+	int        lines;
+	char*      eol;
+} ReadStatus;
 
 string GetChangedAttrStr(CTermCharAttr oldattr, CTermCharAttr newattr)
 {
@@ -1071,102 +970,156 @@ string GetChangedAttrStr(CTermCharAttr oldattr, CTermCharAttr newattr)
 	return text;
 }
 
-
-string CTermData::GetLineWithColor( char* pLine, int start, int end )
+static void read_line_with_color( int row, int col1, int col2, void* data )
 {
-	string text;
-	CTermCharAttr* pAttr = GetLineAttr(pLine);
-	CTermCharAttr attr;	attr.SetToDefault();
-	for( int col = start; col< end; col++ )
+	ReadStatus* rs = (ReadStatus*)data;
+	string* text = rs->text;
+
+	if ( rs->lines )
 	{
-		if( !attr.IsSameAttr( pAttr[col].AsShort() ) )
-		{
-			// Here we've got a characters with different attributes.
-			text += GetChangedAttrStr( attr, pAttr[col] );
-			attr = pAttr[col];
-		}
-		 // Append characters with the same attributes.
-		 if(pLine[col])
-			text += pLine[col];
+		*text += rs->eol;
+
+		if ( col1 == col2 )
+			return;
 	}
-	if( attr.GetBackground() == 0 )	// if current background is black,
-		if(text.length())	//	trim
+
+	CTermData* td = rs->pTermData;
+	char* pLine = td->m_Screen[row];
+	CTermCharAttr* pAttr = td->GetLineAttr( pLine );
+	CTermCharAttr attr;
+	attr.SetToDefault();
+
+	// GetLineWithColor
+	{
+		string line;
+		for ( int i = col1; i < col2; i++ )
 		{
-			size_t n = text.find_last_not_of(' ');
-			if( n != text.npos )
-				text = text.substr(0, n+1);
+			if( !attr.IsSameAttr( pAttr[i].AsShort() ) )
+			{
+				// Here we've got a characters with different attributes.
+				line += GetChangedAttrStr( attr, pAttr[i] );
+				attr = pAttr[i];
+			}
+			// Append characters with the same attributes.
+			if ( pLine[i] )
+				line += pLine[i];
 		}
 
-	return text;
+		// if current background is black,
+		if ( attr.GetBackground() == 0 && line.length() )
+		{
+			size_t n = line.find_last_not_of( ' ' );
+			if( n != text->npos )
+				line = line.substr( 0, n + 1 );
+		}
+
+		*text += line;
+	}
+
+
+	rs->lines++;
 }
 
-
-// 2004.08.27 modified by PCMan
-// if trim == true, excess line at tail will be removed.
-string CTermData::GetTextWithColor(GdkPoint start, GdkPoint end, bool trim, bool block)
+static void read_line( int row, int col1, int col2, void* data )
 {
-//	Use system specific design here.
+	ReadStatus* rs = (ReadStatus*)data;
+	string* text = rs->text;
+
+	CTermData* td = rs->pTermData;
+
+	if ( rs->lines )
+	{
+		if ( rs->lines == 1 && text->length() > 0 )
+		{
+			// the old code does this
+			if ( !td->m_Sel->m_BlockMode )
+				*text = text->substr( 0, text->length() - 1 );
+
+			size_t n = text->find_last_not_of( ' ' );
+			if ( n != text->npos )
+				*text = text->substr( 0, n + 1 );
+		}
+
+		*text += rs->eol;
+	}
+
+	string line( td->m_Screen[row] + col1, col2 - col1 );
+
+	if ( line.length() )
+	{
+		// first line is handled in next call
+		if ( rs->lines )
+		{
+			size_t n = line.find_last_not_of( ' ' );
+			if ( n != line.npos )
+				line = line.substr( 0, n + 1 );
+			else if ( !td->m_Sel->m_BlockMode )
+				line = "";
+		}
+
+		*text += line;
+	}
+	rs->lines++;
+}
+
+string CTermData::GetText( CTermSelection* sel, bool trim, bool color )
+{
+	string text;
+	int endrow;
+	ReadStatus rs = { this, &text, 0 };
+
 #ifdef	__WXMSW__
-	char eol[] = "\r\n";
+	rs.eol = "\r\n";
 #else
-	char eol = '\n';
+	rs.eol = "\n";
 #endif
 
-	if( trim )
+	if ( trim )
 	{
-		for( ; end.y > start.y ; end.y-- )  // Ignore blank lines at end of file.
+		endrow = sel->m_End.row;
+
+		for ( ; sel->m_End.row > sel->m_Start.row; sel->m_End.row-- )
 		{
-			if( !IsLineEmpty(end.y) )
+			if( !IsLineEmpty( sel->m_End.row ) )
 				break;
 		}
 	}
 
-	string text = "\x1b[m";
-	
-	if( start.y == end.y )
+	if ( color )
 	{
-		text += GetLineWithColor( m_Screen[start.y], start.x, end.x );
+		text = "\x1b[m";
+		sel->ForEachLine( read_line_with_color, (void*)&rs );
+		if ( rs.lines > 1 && m_Sel->m_BlockMode )
+			text += rs.eol;
 		text += "\x1b[m";
-		return text;
-	}
-
-	if( block )
-	{
-		if( end.x < start.x ){int tmp=end.y; end.y=end.x; end.x=tmp;	}
-
-
-		for( int iline = start.y; iline <= end.y; iline++ )
-		{
-			text += GetLineWithColor( m_Screen[iline], start.x, end.x );
-			text += eol;
-		}
 	}
 	else
 	{
-		bool one_line_selected = (start.y == end.y);	//Check if only one line is selected.
-		text += GetLineWithColor( m_Screen[start.y], start.x, one_line_selected ? end.x : m_ColsPerPage );
-
-		if( !one_line_selected )
+		sel->ForEachLine( read_line, (void*)&rs );
+		if ( rs.lines == 1 )
 		{
-			text += eol;
-			for( int iline = start.y+1; iline < end.y; iline++ )
-			{
-				text += GetLineWithColor( m_Screen[iline], start.x, m_ColsPerPage );
-				text += eol;
-			}
-			text += GetLineWithColor( m_Screen[end.y], 0, end.x );
+			size_t n = text.find_last_not_of( ' ' );
+			if ( n != text.npos )
+				text = text.substr( 0, n + 1 );
 		}
+		else if ( rs.lines > 1 && m_Sel->m_BlockMode )
+			text += rs.eol;
 	}
-	text += "\x1b[m";
+
+	if ( trim )
+		sel->m_End.row = endrow;
+
 	return text;
 }
 
+string CTermData::GetSelectedText(bool trim)
+{
+	return GetText( m_Sel, trim, false );
+}
 
-// 2004.08.27 modified by PCMan
-// if trim == true, excess line at tail will be removed.
 string CTermData::GetSelectedTextWithColor(bool trim)
 {
-	return GetTextWithColor( m_SelStart, m_SelEnd, trim, m_SelBlock );
+	return GetText( m_Sel, trim, true );
 }
 
 // 2004/08/03  Modified by PCMan

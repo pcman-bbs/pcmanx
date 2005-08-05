@@ -887,7 +887,7 @@ void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
 		_this->GetCurView()->CopyToClipboard(false, false, AppConfig.CopyTrimTail);
 		if( AppConfig.CancelSelAfterCopy )
 		{
-			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
+			_this->GetCurCon()->m_Sel->NewStart(0, 0);
 			_this->GetCurView()->Refresh();
 		}
 	}
@@ -901,7 +901,7 @@ void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this)
 		_this->GetCurView()->CopyToClipboard(false, true, AppConfig.CopyTrimTail);
 		if( AppConfig.CancelSelAfterCopy )
 		{
-			_this->GetCurCon()->m_SelStart = _this->GetCurCon()->m_SelEnd;
+			_this->GetCurCon()->m_Sel->NewStart(0, 0);
 			_this->GetCurView()->Refresh();
 		}
 	}
@@ -1254,10 +1254,7 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)
 	CTelnetCon* con = _this->GetCurCon();
 	if( con )
 	{
-		con->m_SelStart.x = 0;
-		con->m_SelStart.y = 0;
-		con->m_SelEnd.x = con->m_ColsPerPage;
-		con->m_SelEnd.y = con->m_RowsPerPage-1;
+		con->m_Sel->SelectPage();
 		_this->GetCurView()->Refresh();
 	}
 }

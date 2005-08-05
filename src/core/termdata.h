@@ -20,6 +20,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include "termsel.h"
 
 #include <string>
 
@@ -151,7 +152,6 @@ private:
 	//-------------- 7 bits ----------
 };
 
-
 /*
  * Used with CTermView to hold screen buffer, caret position, etc.
  */
@@ -172,8 +172,7 @@ public:
 	string GetSelectedText( bool trim = true );
 	string GetSelectedTextWithColor( bool trim = true );
 
-	string GetText( GdkPoint start, GdkPoint end, bool trim = true, bool block = false );
-	string GetTextWithColor( GdkPoint start, GdkPoint end, bool trim = true, bool block = false );
+	string GetText( CTermSelection* sel, bool trim, bool color );
 
 	// Get text attributes of the line.
 	inline CTermCharAttr* GetLineAttr( const char* pLine, const int ColsPerPage )
@@ -189,24 +188,19 @@ public:
 	//without tail black spaces.
 	inline string GetAllText( bool trim = true )
 	{
-		GdkPoint start;
-		start.x = start.y = 0;
-		GdkPoint end;
-		end.x = m_ColsPerPage;
-		end.y = m_RowCount - 1;
-		return GetText( start, end, trim );
+		CTermSelection sel( this );
+		sel.SelectAll();
+		return GetText( &sel, trim, false );
 	}
 	//The same as GetAllText but get color too.
 	inline string GetAllTextWithColor( bool trim = true )
 	{
-		GdkPoint start;
-		start.x = start.y = 0;
-		GdkPoint end;
-		end.x = m_ColsPerPage;
-		end.y = m_RowCount - 1;
-		return GetTextWithColor( start, end, trim );
+		CTermSelection sel( this );
+		sel.SelectAll();
+		return GetText( &sel, trim, true );
 	}
 
+	void GetLine( int x1, int x2, int y, void* data );
 	string GetLineWithColor( char* pLine, int start, int end );
 	void DetectCharSets();
 	void DetectHyperLinks();
@@ -283,19 +277,16 @@ public:
 	///////////////////////////////////////////////////////////////////
 
 	int m_FirstLine;
-	bool m_SelBlock;
 	CTermCharAttr m_CurAttr;
 	unsigned short m_ScrollRegionBottom;
 	unsigned short m_ScrollRegionTop;
 
 	// Pointor to CTermView window, which is responsible for display.
 	CTermView* m_pView;
+	// selection management
+	CTermSelection* m_Sel;
 	// Caret Position
 	GdkPoint m_CaretPos;
-	// End position of selection
-	GdkPoint m_SelEnd;
-	// Start position of selection
-	GdkPoint m_SelStart;
 
 	// command line buffer, used to store telnet commands and ANSI escape sequence
 	unsigned char m_CmdLine[ 33 ];

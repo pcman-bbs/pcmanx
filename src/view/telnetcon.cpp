@@ -304,7 +304,7 @@ void CTelnetCon::OnConnect(int code)
 		if( GetView()->GetParentFrame()->GetCurView() == m_pView )
 		{
 			for( int col = 0; col < sizeof(failed_msg); )
-				col += m_pView->DrawChar( 0, col, 0 );
+				col += m_pView->DrawChar( 0, col );
 		}
 #endif
 	}

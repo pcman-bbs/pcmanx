@@ -52,9 +52,8 @@ public:
     virtual bool PreKeyDown(GdkEventKey *evt);
     virtual bool OnKeyDown(GdkEventKey* evt);
     virtual void OnTextInput(const gchar* string);
-    int DrawChar(int line, int col, int top);
-    void PrepareDC();
-    void PointToLineCol(int *x, int *y);
+    int DrawChar(int row, int col);
+    void PointToLineCol(int *x, int *y, bool *left = NULL);
 
     GtkIMContext* m_IMContext;
 
@@ -68,7 +67,7 @@ public:
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void CopyToClipboard(bool primary, bool with_color, bool trim);
-    void SetFont( string name, int pt_size, bool compact, bool anti_alias );
+    void SetFont( string name, int pt_size, bool compact, bool anti_alias);
     void SetFontFamily(string name);
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
@@ -81,11 +80,8 @@ public:
 protected:
     void OnPaint(GdkEventExpose* evt);
     void OnSetFocus(GdkEventFocus* evt);
-    bool IsPosInSel(int x, int y);
-    void CorrectSelPos(int &selstartx, int &selstarty, int &selendx, int &selendy);
     void OnCreate();
     void OnSize(GdkEventConfigure* evt);
-    void RedrawSel(int oldx, int oldy, int newx, int newy);
     void OnKillFocus(GdkEventFocus *evt);
 	static void OnBeforeDestroy( GtkWidget* widget, CTermView* _this);
     void UpdateCaretPos();
