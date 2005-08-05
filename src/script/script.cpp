@@ -1,8 +1,8 @@
 #include <Python.h>
 #include <cstring>
 #include <vector>
-#include "api.h"
-#include "view/telnetcon.h"
+#include "script/api.h"
+#include "telnetcon.h"
 
 static PyObject*
 SendUnEscapedString(PyObject *self, PyObject *args)
@@ -123,7 +123,7 @@ void FinalizeScriptInterface()
 {
 	vector<PyObject*>::iterator pModule;
 	for( pModule = pModules.begin(); pModule != pModules.end(); ++pModule )
-		if(!*pModule)
+		if(*pModule)
 			Py_DECREF(*pModule);
 	Py_Finalize();
 }
