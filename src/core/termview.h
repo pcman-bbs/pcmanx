@@ -75,6 +75,7 @@ public:
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
     CFont* GetFont(){	return m_Font;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
+    void SetVerticalCenterAlign( bool is_vcenter );
     void SetTermData(CTermData* data){	m_pTermData = data;	}
 
 protected:
@@ -103,7 +104,7 @@ protected:
 	int m_LeftMargin;
 	int m_TopMargin;
 	bool m_IsHCenterAlign;
-//	bool m_IsVCenterAlign;
+	bool m_IsVCenterAlign;
 
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;

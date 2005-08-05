@@ -104,6 +104,7 @@ public:
 	int CharPaddingX;
 	int CharPaddingY;
 	bool HCenterAlign;
+	bool VCenterAlign;
 
 //	bool TwoDiffFonts;
     int FontSize;

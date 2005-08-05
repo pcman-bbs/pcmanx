@@ -1,3 +1,12 @@
+2005-08-05  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/termview.h,
+	src/appconfig.h,
+	src/mainframe.cpp,
+	src/appconfig.cpp:
+	Add vertical align center.
+
 2005-07-28  Chia I Wu  <b90201047@ntu.edu.tw>
 
 	* src/core/font.h, src/core/font.cpp: Code cleanup.
@@ -1056,7 +1065,7 @@
 	* src/font.h (CFont::GetMaxWidth):
 	Ensure that max width can be devided by 2.
 
-2005-07-04  Shih-yuan Lee  <fourdollars@gmail.com>
+2005-07-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/widget.cpp
 	(delete_CWidget): Check object existence before releasing.

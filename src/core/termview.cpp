@@ -112,6 +112,7 @@ CTermView::CTermView()
 	m_LeftMargin = 0;
 	m_TopMargin = 0;
 	m_IsHCenterAlign = false;
+	m_IsVCenterAlign = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -191,11 +192,12 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 		left = m_pTermData->m_ColsPerPage*m_CharW-2;
 
 		/* repaint some region that should be repainted */
-		gdk_draw_rectangle(dc, m_GC, true, 0, 0, m_LeftMargin, h );
-		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, 0, w-left, h );
+		gdk_draw_rectangle(dc, m_GC, true, 0, 0, m_LeftMargin, h ); // fill left margin
+		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, 0, w-left, h ); // fill right marin
 
 		top = m_pTermData->m_RowsPerPage*m_CharH;
-		gdk_draw_rectangle(dc, m_GC, true, 0, top, w, h-top );
+		gdk_draw_rectangle(dc, m_GC, true, 0, 0, w, m_TopMargin ); // fill top margin
+		gdk_draw_rectangle(dc, m_GC, true, 0, top + m_TopMargin, w, h - top ); // fill bottom margin
 
 		m_Caret.Show();
 	}
@@ -279,6 +281,7 @@ int CTermView::DrawChar(int line, int col, int top)
 	const char* pChar = pLine + col;
 	pAttr += col;
 	int left = m_CharW*col + m_LeftMargin;
+	top += m_TopMargin;
 
 	bool bSel[2];	bSel[0]= IsPosInSel( col, line );
 	if( w > 1 )		bSel[1] = IsPosInSel( col+1, line );
@@ -443,6 +446,7 @@ void CTermView::PointToLineCol(int *x, int *y)
 	else if( *x > m_pTermData->m_ColsPerPage )
 		*x = m_pTermData->m_ColsPerPage;
 
+	*y -= m_TopMargin;
 	*y /= m_CharH;
 	if(*y <0 )
 		*y = 0;
@@ -801,13 +805,28 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 	UpdateCaretPos();
 }
 
+void CTermView::SetVerticalCenterAlign( bool is_vcenter )
+{
+	if( m_IsVCenterAlign == is_vcenter || !m_pTermData )
+		return;
+
+	if( (m_IsVCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
+	else
+		m_TopMargin = 0;
+
+	if( IsVisible() )
+		Refresh();
+	UpdateCaretPos();
+}
+
 void CTermView::UpdateCaretPos()
 {
 	if( !m_pTermData )
 		return;
 
 	int x = m_pTermData->m_CaretPos.x * m_CharW + m_LeftMargin;
-	int y = (m_pTermData->m_CaretPos.y + 1) * m_CharH - 2;
+	int y = (m_pTermData->m_CaretPos.y + 1) * m_CharH - 2 + m_TopMargin;
 	m_Caret.Move( x, y );
 
 	GdkRectangle rc;
@@ -860,6 +879,11 @@ void CTermView::RecalcCharDimension()
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
 	else
 		m_LeftMargin = 0;
+
+	if( m_IsVCenterAlign )
+		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2;
+	else
+		m_TopMargin = 0;
 
 	m_Caret.SetSize(m_CharW, 2);
 	UpdateCaretPos();
