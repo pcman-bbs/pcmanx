@@ -22,6 +22,10 @@
 #include "termdata.h"
 #include "site.h"
 
+#ifdef USE_NANCY
+	#include "nancy_bot/nancybot.h"
+#endif
+
 #include <string>
 #include <vector>
 #include <list>
@@ -128,6 +132,10 @@ public:
     }
 
 protected:
+#ifdef USE_NANCY
+    	NancyBot *bot;
+	bool use_nancy;
+#endif
 	GIOChannel* m_IOChannel;
 	guint m_IOChannelID;
 

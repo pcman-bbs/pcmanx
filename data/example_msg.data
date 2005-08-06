@@ -1,0 +1,9 @@
+# >{received messages}
+>hi
+# {return messages}
+hello
+
+>hello
+hi
+>bot
+Yes I'm a bot!

@@ -34,6 +34,10 @@ OPTIONAL_SCRIPT = \
 	script/api.h \
 	script/script.cpp
 
+OPTIONAL_NANCY = \
+	nancy_bot/nancybot.cpp nancy_bot/nancybot.h \
+	nancy_bot/msgdata.cpp nancy_bot/msgdata.h
+
 EXTRA_DIST = \
 	Makefile-byhand \
 	conn_xpm.xpm \
@@ -41,7 +45,8 @@ EXTRA_DIST = \
 	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET) \
 	$(OPTIONAL_NOTIFIER) \
-	$(OPTIONAL_SCRIPT)
+	$(OPTIONAL_SCRIPT) \
+	$(OPTIONAL_NANCY)
 
 if USE_DOCKLET
 DOCKLET_SOURCES = $(OPTIONAL_DOCKLET)
@@ -55,14 +60,20 @@ if USE_SCRIPT
 SCRIPT_SOURCES = $(OPTIONAL_SCRIPT)
 endif
 
+if USE_NANCY
+NANCY_SOURCES = $(OPTIONAL_NANCY)
+endif
+
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
 	view/telnetview.cpp view/telnetview.h
+
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
 	$(NOTIFIER_SOURCES) \
 	$(SCRIPT_SOURCES) \
+	$(NANCY_SOURCES) \
 	$(VIEW_IMPLEMENTATION_SOURCES) \
 	appconfig.cpp appconfig.h \
 	notebook.cpp notebook.h \

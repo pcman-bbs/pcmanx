@@ -50,6 +50,7 @@ AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
+AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
@@ -97,6 +98,10 @@ AC_ARG_ENABLE(script,
 [  --enable-script      disable script support (default: no)],
 	script=$enableval, script=no)
 
+AC_ARG_ENABLE(nancy,
+[  --enable-nancy	enable nancy bot support (default: no)],
+	nancy=$enableval, nancy=no)
+	
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
 	external=$enableval, external=yes)
@@ -245,6 +250,16 @@ AC_SUBST(USE_SCRIPT)
 AC_SUBST(SCRIPT_CFLAGS)
 AC_SUBST(SCRIPT_LIBS)
 
+dnl *********************************************************************
+dnl ** NancyBot  ********************************************************
+dnl *********************************************************************
+
+if test "$nancy" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_NANCY, [1], [Enable NancyBot support])
+fi
+
+AM_CONDITIONAL(USE_NANCY, test "$nancy" = "yes")
+AC_SUBST(USE_NANCY)
 
 dnl *********************************************************************
 dnl ** External SSH/Telnet **********************************************

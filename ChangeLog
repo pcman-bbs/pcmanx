@@ -1,3 +1,37 @@
+2005-08-06  Youchen Lee	<youchen.lee@gmail.com>
+
+	* src/Makefile.am: 
+	Added nancybot.h, nancybot.cpp, msgdata.h, msgdata.cpp.
+	
+	* src/nancy_bot
+	src/nancy_bot/nancybot.h
+	src/nancy_bot/nancybot.cpp
+	src/nancy_bot/msgdata.h
+	src/nancy_bot/msgdata.cpp
+	src/nancy_bot/main.cpp:
+	New sources for NancyBot
+	
+	* configure.ac: Added nancy support.
+	* README: Added helps for --enable-nancy.
+	* data/default.conf
+	data/default_msg.data:
+	Default messages data for NancyBot.
+
+	* data/example.conf
+	data/example_msg.data:
+	Sample files, perhaps install into
+	/usr/share/doc/pcmanx_pure_gtk2/nancy_bot/ .
+
+	* src/view/telnetcon.cpp
+	src/view/telnetcon.h:
+	Use NancyBot object in TelnetCon between USE_NANCY. Grep water balls
+	in CTelnetCon::OnNewIncomingMessage(char* line) and cut out UserID and
+	additional spaces. Then reply water balls simply use '^R'.
+	Flag use_nancy may used to control if user wanna use Nancy for auto-reply
+	in dynamic time.
+	FIXME: The NancyBot constructor (PATH) in telnetcon.cpp.
+
+
 2005-08-05  Chia I Wu  <b90201047@ntu.edu.tw>
 
 	* src/core/Makefile.am: Added termsel.h and termsel.cpp.

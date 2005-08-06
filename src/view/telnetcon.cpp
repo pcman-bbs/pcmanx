@@ -77,7 +77,12 @@
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
 {
-    m_pBuf = m_pLastByte = m_pRecvBuf = NULL;
+#ifdef USE_NANCY
+	use_nancy = true;  // Dynamic open or close it.
+	if(use_nancy)
+        	bot = new NancyBot("default", "./"); // FIXME get PATH from env?
+#endif
+	m_pBuf = m_pLastByte = m_pRecvBuf = NULL;
     m_pCmdLine = m_CmdLine;
 	m_pCmdLine[0] = '\0';
 
@@ -142,6 +147,9 @@ GMutex* CTelnetCon::m_DNSMutex = NULL;
 // class destructor
 CTelnetCon::~CTelnetCon()
 {
+#ifdef USE_NANCY
+	        delete bot;
+#endif
 	Close();
 	INFO("CTelnetCon::~CTelnetCon\n");
 	list<CDNSRequest*>::iterator it;
@@ -692,6 +700,34 @@ void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 void CTelnetCon::OnNewIncomingMessage(char* line)
 {
 #if !defined(MOZ_PLUGIN)
+#ifdef USE_NANCY
+	if( use_nancy )
+	{
+		if ( !*line )
+			return;
+	
+		// FIXME ugly ugly ugly...
+		string sub;
+		string sub2;
+		string str(line);
+	
+		int n = str.find_first_of("  ");  // cut userid and spaces at head
+		if( n != string::npos) // found
+			sub = str.substr(n+2);
+	
+		int m = sub.find_last_not_of(" ");  // cut spaces at tail
+		if( n != string::npos)
+			sub2 = sub.erase(m+1);
+	
+		SendString("\022");            // ^R
+		SendString(bot->askNancy(sub2));
+		SendString("\015");            // Enter
+		SendString("y");
+		SendString("\015");
+		SendString("\033[A");          // up
+		SendString("\033[B");          // down
+	} // end if
+#endif  // USE_NANCY
 
 #ifdef USE_NOTIFIER
 	if ( !AppConfig.PopupNotifier || !*line )
