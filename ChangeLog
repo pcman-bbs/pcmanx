@@ -1,3 +1,36 @@
+2005-08-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/view/telnetcon.h:
+	Wrap USE_NANCY macro with MOZ_PLUGIN for the sake of plugin.
+
+	* src/view/telnetcon.cpp (CTelnetCon::CTelnetCon):
+	Assign DATADIR"/pcmanx/nancy_bot/" as the path for Nancy bot.
+
+	* src/mainframe.cpp (CMainFrame::OnAbout):
+	Add Youchen Lee <youchen.lee@gmail.com> in author list, and
+	clean up redundant code snip.
+
+	* src/nancy_bot/nancybot.h,
+	src/nancy_bot/api.h:
+	Rename from the former to the later for consistency.
+
+	* src/nancy_bot/main.cpp,
+	src/nancy_bot/standalone.cpp:
+	Rename from the former to the later for consistency.
+
+	* src/Makefile.am,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/nancybot.cpp: Likewise.
+
+	* data/:
+	Adjust directory layout.
+	Put example.conf, example_msg.data, default.conf, and default_msg.data
+	to $(datadir)/pcmanx/nancy_bot.
+	Put orz.py, eliza.py, and PCManXlib.py to $(datadir)/pcmanx/script.
+
+	* po/pcmanx.pot,
+	po/zh_TW.po: Updated.
+
 2005-08-07  Chia I Wu  <b90201047@ntu.edu.tw>
 
 	* src/core/termsel.h (PageBound, Bound): Removed qualifier in
@@ -8,39 +41,38 @@
 	src/mainframe.cpp: 
 	New config option `CompactLayout'.
 
-2005-08-06  Youchen Lee	<youchen.lee@gmail.com>
+2005-08-06  Youchen Lee	 <youchen.lee@gmail.com>
 
 	* src/Makefile.am: 
-	Added nancybot.h, nancybot.cpp, msgdata.h, msgdata.cpp.
+	Added NancyBot files.
 	
-	* src/nancy_bot
-	src/nancy_bot/nancybot.h
+	* src/nancy_bot/nancybot.h
 	src/nancy_bot/nancybot.cpp
 	src/nancy_bot/msgdata.h
 	src/nancy_bot/msgdata.cpp
 	src/nancy_bot/main.cpp:
-	New sources for NancyBot
+	New files. NancyBot implementations.
 	
 	* configure.ac: Added nancy support.
 	* README: Added helps for --enable-nancy.
-	* data/default.conf
+
+	* data/default.conf,
 	data/default_msg.data:
 	Default messages data for NancyBot.
 
-	* data/example.conf
+	* data/example.conf,
 	data/example_msg.data:
-	Sample files, perhaps install into
-	/usr/share/doc/pcmanx_pure_gtk2/nancy_bot/ .
+	Sample nancy configuration files. Perhaps install into
+	/usr/share/doc/pcmanx_pure_gtk2/nancy_bot .
 
-	* src/view/telnetcon.cpp
+	* src/view/telnetcon.cpp,
 	src/view/telnetcon.h:
 	Use NancyBot object in TelnetCon between USE_NANCY. Grep water balls
 	in CTelnetCon::OnNewIncomingMessage(char* line) and cut out UserID and
 	additional spaces. Then reply water balls simply use '^R'.
-	Flag use_nancy may used to control if user wanna use Nancy for auto-reply
-	in dynamic time.
+	Flag use_nancy may used to control if user wanna use Nancy for 
+	auto-reply in dynamic time.
 	FIXME: The NancyBot constructor (PATH) in telnetcon.cpp.
-
 
 2005-08-05  Chia I Wu  <b90201047@ntu.edu.tw>
 

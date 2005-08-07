@@ -77,11 +77,18 @@
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
 {
+#if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
 	use_nancy = true;  // Dynamic open or close it.
-	if(use_nancy)
-        	bot = new NancyBot("default", "./"); // FIXME get PATH from env?
+	if (use_nancy) {
+		/* XXX:
+		 * We should assign the path via built-in configurator.
+		 */
+        	bot = new NancyBot("default", DATADIR "/pcmanx/nancy_bot/");
+	}
 #endif
+#endif /* !defined(MOZ_PLUGIN) */
+
 	m_pBuf = m_pLastByte = m_pRecvBuf = NULL;
     m_pCmdLine = m_CmdLine;
 	m_pCmdLine[0] = '\0';
@@ -147,9 +154,12 @@ GMutex* CTelnetCon::m_DNSMutex = NULL;
 // class destructor
 CTelnetCon::~CTelnetCon()
 {
+#if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
-	        delete bot;
+	delete bot;
 #endif
+#endif /* !defined(MOZ_PLUGIN) */
+
 	Close();
 	INFO("CTelnetCon::~CTelnetCon\n");
 	list<CDNSRequest*>::iterator it;

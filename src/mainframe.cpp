@@ -817,25 +817,14 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
-/*	GtkAboutDialog* dlg = (GtkAboutDialog*)gtk_about_dialog_new();
-	gtk_about_dialog_set_name(dlg, "PCMan X");
-	gtk_about_dialog_set_version(dlg, "0.1 pure GTK+ 2");
-	gtk_about_dialog_set_copyright( dlg, _("Copy (C) 2005"));
-	gtk_about_dialog_set_license(dlg, "GPL");
-	gtk_about_dialog_set_website(dlg, "http://pcmanx.sf.net/");
-	const char *authors[]={"Hong Jen Yee"};
-	gtk_about_dialog_set_authors(dlg, authors );
-	gtk_about_dialog_set_logo(dlg, _this->m_MainIcon);
-*/
-//	gtk_show_about_dialog( GTK_WINDOW(_this->m_Widget) );
-
-	char* authors=_("Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
-					 "Jim Huang (Developer) <jserv@kaffe.org>\n"
-					 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
-					 "Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
-					 "Shih-yuan Lee (Developer) <fourdollars@gmail.com>"
-					);
-//	FILE* fp = fopen( AppConfig.GetDataPath("AUTHORS") );
+	char* authors = _(
+			"Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
+			"Jim Huang (Developer) <jserv@kaffe.org>\n"
+			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
+			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
+			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
+			"Youchen Lee (Developer) <youchen.lee@gmail.com>"
+			);
 
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,

@@ -22,9 +22,13 @@
 #include "termdata.h"
 #include "site.h"
 
+#if !defined(MOZ_PLUGIN)
+
 #ifdef USE_NANCY
-	#include "nancy_bot/nancybot.h"
+#include "nancy_bot/api.h"
 #endif
+
+#endif /* !defined(MOZ_PLUGIN) */
 
 #include <string>
 #include <vector>
@@ -132,10 +136,14 @@ public:
     }
 
 protected:
+
+#if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
     	NancyBot *bot;
 	bool use_nancy;
 #endif
+#endif /* !defined(MOZ_PLUGIN) */
+
 	GIOChannel* m_IOChannel;
 	guint m_IOChannelID;
 

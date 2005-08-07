@@ -4,7 +4,7 @@
 // Author:      Youchen Lee ( utcr.org ) 
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 
-#include "msgdata.h"
+#include "nancy_bot/msgdata.h"
 
 int MsgData::errorHandler(int level, const string &flag)
 {

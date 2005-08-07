@@ -35,8 +35,10 @@ OPTIONAL_SCRIPT = \
 	script/script.cpp
 
 OPTIONAL_NANCY = \
-	nancy_bot/nancybot.cpp nancy_bot/nancybot.h \
-	nancy_bot/msgdata.cpp nancy_bot/msgdata.h
+	nancy_bot/api.h \
+	nancy_bot/nancybot.cpp \
+	nancy_bot/msgdata.cpp \
+	nancy_bot/msgdata.h
 
 EXTRA_DIST = \
 	Makefile-byhand \

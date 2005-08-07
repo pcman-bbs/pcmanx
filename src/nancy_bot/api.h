@@ -17,7 +17,7 @@
 #include <sstream>
 using namespace std;
 
-#include "msgdata.h"
+#include "nancy_bot/msgdata.h"
 
 class NancyBot
 {

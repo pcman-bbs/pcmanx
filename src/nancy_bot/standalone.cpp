@@ -1,4 +1,4 @@
-#include "nancybot.h"
+#include "nancy_bot/api.h"
 #ifdef CONSOLE_BOT
 int
 main (int argc, char **argv)

@@ -9,7 +9,8 @@
 // 1. User defined vars
 // 2. More and better auto-learn
 
-#include "nancybot.h"
+#include "nancy_bot/api.h"
+
 map<string, MsgData* > NancyBot::BOTS_LIST;
 
 
