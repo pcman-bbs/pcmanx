@@ -202,6 +202,28 @@ static void destroy_win(GtkWidget* win, Win* w)
 	g_free(w);
 }
 
+/* Helper function.
+ *
+ * Perform string replacement
+ */
+static gchar *_strreplace(
+		const char *string, const char *delimiter,
+		const char *replacement) 
+{
+	gchar **split;
+	gchar *ret;
+
+	g_return_val_if_fail(string      != NULL, NULL);
+	g_return_val_if_fail(delimiter   != NULL, NULL);
+	g_return_val_if_fail(replacement != NULL, NULL);
+
+	split = g_strsplit(string, delimiter, 0);
+	ret = g_strjoinv(replacement, split);
+	g_strfreev(split);
+
+	return ret;
+}
+
 /*
  * Return GtkWidget of the popup that the caller can get more control such as, 
  * connecting some signal handlers to this widget.
@@ -213,7 +235,7 @@ static GtkWidget* notify_new(
 		gpointer click_cb_data)
 {
 	GtkWidget *win = gtk_window_new(GTK_WINDOW_POPUP);
-	GtkWidget *context, *frame;
+	GtkWidget *context, *body, *frame;
 	gchar *context_text = g_strdup(body_text);
 	gchar *caption_text = g_strdup(_caption_text);
 	GtkWidget *imageNotify;
@@ -221,8 +243,16 @@ static GtkWidget* notify_new(
 	GtkWidget *labelCaption;
 	GtkWidget *button;
 	Win *w;
-	
-	context = gtk_table_new(2, 2, TRUE);
+
+	/* context_text will be passed to GtkLabel, which accepts Rich text
+	 * representations, and we should avoid invalid input.
+	 */
+	context_text = _strreplace(context_text, "<", "〈");
+	context_text = _strreplace(context_text, ">", "〉");
+
+	body = gtk_vbox_new(FALSE, 2);
+	context = gtk_hbox_new(FALSE, 0);
+		//gtk_table_new(2, 2, TRUE);
 	
 	/*
 	 * load the content
@@ -234,21 +264,21 @@ static GtkWidget* notify_new(
 
 	if (icon_pixbuf) {
 		imageNotify = gtk_image_new_from_pixbuf(icon_pixbuf);
-
-		gtk_table_attach(GTK_TABLE(context), imageNotify, 
-			0,1,0,1,
-			GTK_FILL, GTK_FILL,
-			0, 0);
+		gtk_box_pack_start(
+				GTK_BOX(context), 
+				imageNotify,
+				FALSE,
+				FALSE,
+				5);
 	}
 
-	gtk_table_attach(GTK_TABLE(context), labelCaption,
-		1,2,0,1,
-		GTK_FILL, GTK_FILL,
-		0, 0);
-	gtk_table_attach(GTK_TABLE(context), labelNotify,
-		0,2,1,2,
-		GTK_FILL, GTK_FILL,
-		0,0);
+	gtk_box_pack_start(GTK_BOX(context), labelCaption, TRUE, TRUE, 0);
+	gtk_container_add(GTK_CONTAINER(body), context);
+	gtk_label_set_line_wrap(GTK_LABEL(labelNotify), TRUE);
+	gtk_label_set_justify(GTK_LABEL(labelNotify), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(labelNotify), 0.0, 0.5);
+	gtk_misc_set_padding(GTK_MISC(labelNotify), 25, 0);
+	gtk_box_pack_start(GTK_BOX(body), labelNotify, TRUE, TRUE, 0);
 
 	button = gtk_button_new();
 	gtk_container_add(GTK_CONTAINER(win), button);
@@ -259,14 +289,14 @@ static GtkWidget* notify_new(
 	gtk_container_add(GTK_CONTAINER(button), frame);
 
 	gtk_window_set_default_size(GTK_WINDOW(win), win->allocation.width, NHEIGHT);
-	gtk_container_add(GTK_CONTAINER(frame), context);
+	gtk_container_add(GTK_CONTAINER(frame), body);
 
 	if (click_cb)
 		g_signal_connect(
 			G_OBJECT(button), "clicked", 
 			click_cb, click_cb_data);
 
-	w = begin_animation(win, context);
+	w = begin_animation(win, body);
 	g_free(context_text);
 
 	w->parent = parent;

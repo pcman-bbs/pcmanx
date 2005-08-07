@@ -1,5 +1,14 @@
 2005-08-07  Jim Huang  <jserv@kaffe.org>
 
+	* src/notifier/notifier-impl.c
+	(_strreplace): New helper function to perform string replacement.
+	(notify_new): Beautify the popup window, and replace '<' and '>'
+	with '〈' and '〉' to avoid invalid input since context_text will
+	be passed to GtkLabel, which accepts Rich text representations.
+	It's a workaround, and we should introduce a smarter way to fix.
+
+2005-08-07  Jim Huang  <jserv@kaffe.org>
+
 	* src/view/telnetcon.h:
 	Wrap USE_NANCY macro with MOZ_PLUGIN for the sake of plugin.
 
