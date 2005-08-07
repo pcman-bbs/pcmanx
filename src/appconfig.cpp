@@ -93,6 +93,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_STR ( FontFamily )
 		CFG_INT ( FontSize )
 		CFG_BOOL( AntiAliasFont )
+		CFG_BOOL( CompactLayout )
 		CFG_BOOL( HCenterAlign )
 		CFG_BOOL( VCenterAlign )
 		CFG_INT ( CharPaddingX)
@@ -306,6 +307,7 @@ void CAppConfig::SetToDefault()
 	FontSize = 14;
 	FontFamily = "Sans";
 	AntiAliasFont = true;
+	CompactLayout = false;
 	HCenterAlign = false;
 	VCenterAlign = false;
 

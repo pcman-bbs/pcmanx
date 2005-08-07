@@ -101,6 +101,7 @@ public:
 
 //	Display Settings
 	bool AntiAliasFont;
+	bool CompactLayout;
 	int CharPaddingX;
 	int CharPaddingY;
 	bool HCenterAlign;

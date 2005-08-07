@@ -60,8 +60,8 @@ public:
 	void ChangeEnd( int row2, int col2, bool left2, foreach_func ff = NULL , void* data = NULL );
 
 	// bound the point to page or buffer
-	inline void PageBound( int& row, int& col, bool& left );
-	inline void Bound( int& row, int& col, bool& left );
+	void PageBound( int& row, int& col, bool& left );
+	void Bound( int& row, int& col, bool& left );
 
 	// arrange m_Start and m_End appropriately for loop
 	void Canonicalize();
