@@ -1195,6 +1195,70 @@ void CTermData::InsertChar( int line, int col, int n )
 	}
 }
 
+#define CHAR_CLASS_WORD		0x1
+#define CHAR_CLASS_DELIMITER	0x2
+#define CHAR_CLASS_ASCII	0x80
+unsigned char CTermData::GetCharClass( int line, int col )
+{
+	if( col >= m_ColsPerPage || col < 0 )
+		return 0;
+	if( line >= m_RowCount || line < 0 )
+		return 0;
+
+	const char* pLine = m_Screen[line];
+	CTermCharAttr* pAttr = GetLineAttr( pLine );
+	unsigned char ret = 0;
+	bool ascii;
+
+	switch( pAttr[col].GetCharSet() )
+	{
+	case CTermCharAttr::CS_MBCS2:
+		col--;
+	case CTermCharAttr::CS_MBCS1:
+		ascii = false;
+		break;
+	case CTermCharAttr::CS_ASCII:
+		ascii = true;
+		ret |= CHAR_CLASS_ASCII;
+		break;
+	}
+
+	if( ascii )
+	{
+		if( ( 'A' <= pLine[col] && pLine[col] <= 'Z' ) ||
+		    ( 'a' <= pLine[col] && pLine[col] <= 'z' ) ||
+		    ( '0' <= pLine[col] && pLine[col] <= '9' ) )
+			ret |= CHAR_CLASS_WORD;
+		else
+		{
+			switch(pLine[col])
+			{
+			case '#':
+			case '$':
+			case '%':
+			case '-':
+			case '+':
+			case '_':
+			case '.':
+			case '/':
+				ret |= CHAR_CLASS_WORD;
+				break;
+			case ' ':
+				ret |= CHAR_CLASS_DELIMITER;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	else
+	{
+		ret |= CHAR_CLASS_WORD;
+	}
+
+	return ret;
+}
+
 // 2004/08/25	Added by PCMan
 // Set attributes of all text in specified range.
 void CTermData::SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkPoint end, bool block)

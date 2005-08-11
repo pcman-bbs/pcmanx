@@ -1,3 +1,18 @@
+2005-08-11  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h
+	(CTermView::ExtendSelection): Extend selection continuously so that
+	characters having the same class as the cell specified does are
+	selected.
+	(CTermView::OnLButtonDown): Extend selection on double-click.
+	Select whole line on triple-click.
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h
+	(CTermData::GetCharClass): New function to determine the class of a
+	character. It's quite naive now.
+
 2005-08-07  Jim Huang  <jserv@kaffe.org>
 
 	* src/notifier/notifier-impl.c

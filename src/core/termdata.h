@@ -169,6 +169,8 @@ public:
 	void DeleteChar( int line, int col , int n = 1 );
 	int HyperLinkHitTest( const char* line, int col, int* len = NULL );
 
+	unsigned char GetCharClass( int line, int col );
+
 	string GetSelectedText( bool trim = true );
 	string GetSelectedTextWithColor( bool trim = true );
 

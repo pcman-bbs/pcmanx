@@ -89,6 +89,7 @@ protected:
     void OnDestroy();
     void RecalcCharDimension();
     void GetCellSize( int &w, int &h );
+    void ExtendSelection( int row, int col, bool left );
 protected:
 	CTermData* m_pTermData;
 

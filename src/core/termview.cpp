@@ -439,6 +439,62 @@ static int DrawCharWrapper( int row, int col, void *data )
 	return tv->DrawChar( row, col );
 }
 
+void CTermView::ExtendSelection( int row, int col, bool left )
+{
+	row += m_pTermData->m_FirstLine;
+
+	const char* pLine = m_pTermData->m_Screen[row];
+	CTermCharAttr* pAttr = m_pTermData->GetLineAttr( pLine );
+
+	if( pAttr[col].GetCharSet() == CTermCharAttr::CS_MBCS2 )
+		col--;
+
+	int klass = m_pTermData->GetCharClass( row, col );
+	int i;
+
+	/* decide start */
+	for( i = col - 1; i >= 0; i-- )
+	{
+		int w = 1;
+		if( pAttr[col].GetCharSet() == CTermCharAttr::CS_MBCS2 )
+		{
+			i--;
+			w++;
+		}
+
+		if( m_pTermData->GetCharClass( row, i ) != klass )
+		{
+			i += w;
+			break;
+		}
+	}
+	if( i < 0 )
+		i = 0;
+
+	m_pTermData->m_Sel->NewStart( row, i, true );
+
+	/* decide end */
+	for( i = col + 1; i < m_pTermData->m_ColsPerPage; i++ )
+	{
+		int w = 1;
+		if( pAttr[col].GetCharSet() == CTermCharAttr::CS_MBCS2 )
+		{
+			i++;
+			w++;
+		}
+
+		if( m_pTermData->GetCharClass( row, i ) != klass )
+		{
+			i -= w;
+			break;
+		}
+	}
+	if( i >= m_pTermData->m_ColsPerPage )
+		i = m_pTermData->m_ColsPerPage - 1;
+
+	m_pTermData->m_Sel->ChangeEnd( row, i, false, DrawCharWrapper, this );
+}
+
 void CTermView::OnLButtonDown(GdkEventButton* evt)
 {
 	SetFocus();
@@ -446,27 +502,37 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 	if( !m_pTermData )
 		return;
 
-	CTermSelection* sel = m_pTermData->m_Sel;
-
-	// clear the old selection
-	if ( !sel->Empty() )
-	{
-		m_Caret.Hide();
-		sel->Unselect( DrawCharWrapper, this );
-		m_Caret.Show( false );
-	}
-
-	SetCapture();
-
 	int x = (int)evt->x;
 	int y = (int)evt->y;
 	bool left;
 
-	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
-
 	PointToLineCol( &x, &y, &left );
-	m_pTermData->m_Sel->NewStart( y, x, left,
-			(evt->state & (GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK)) );
+
+	if( evt->type == GDK_3BUTTON_PRESS )
+	{
+		m_pTermData->m_Sel->NewStart( y, 0, true );
+		m_pTermData->m_Sel->ChangeEnd( y, m_pTermData->m_ColsPerPage - 1,
+				               false, DrawCharWrapper, this );
+	}
+	else if( evt->type == GDK_2BUTTON_PRESS )
+		ExtendSelection( y, x, left );
+	else
+	{
+		// clear the old selection
+		if( !m_pTermData->m_Sel->Empty() )
+		{
+			m_Caret.Hide();
+			m_pTermData->m_Sel->Unselect( DrawCharWrapper, this );
+			m_Caret.Show( false );
+		}
+
+		SetCapture();
+
+		INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
+
+		m_pTermData->m_Sel->NewStart( y, x, left,
+				(evt->state & (GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK)) );
+	}
 }
 
 
