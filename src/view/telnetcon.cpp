@@ -84,7 +84,8 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 		/* XXX:
 		 * We should assign the path via built-in configurator.
 		 */
-        	bot = new NancyBot("default", DATADIR "/pcmanx/nancy_bot/");
+		string path_home = getenv("HOME");
+        	bot = new NancyBot("default", (path_home + "/.pcmanx/").c_str());
 	}
 #endif
 #endif /* !defined(MOZ_PLUGIN) */

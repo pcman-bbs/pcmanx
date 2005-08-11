@@ -34,11 +34,73 @@ MsgData::MsgData(string bot_name, string config_path, char old_level, int re_lea
 	HARD_WORKING_LEVEL = hard_working_level; // Default: 20
 	RE_LEARNING_LEVEL = re_learning_level; // Default: 10
 	CONFIG_PATH = config_path;
-//	cout << *(CONFIG_PATH.end() -1) << endl;
 	if( *(CONFIG_PATH.end() -1) != '/' )
-		CONFIG_PATH += "/";
+		CONFIG_PATH += '/';
 	ref_counter = 1;
 	initFilename();
+
+#ifndef CONSOLE_BOT
+#ifdef DATADIR
+	string tmp_path_msgdata = CONFIG_PATH + "default_msg.data";
+	string tmp_path_conf = CONFIG_PATH + "default.conf";
+	if( BOT_NAME == "default" )
+	{
+		string data_path = (string)DATADIR "/" + "pcmanx/nancy_bot/";
+		char buf[4096];
+		FILE *fp_orig_conf = fopen((data_path + "default.conf").c_str() ,"r");
+		FILE *fp_new_conf = fopen(tmp_path_conf.c_str() ,"r");
+		if(fp_orig_conf && !fp_new_conf)
+		{
+			FILE *fp_new_conf = fopen(tmp_path_conf.c_str() ,"w+");
+			if(fp_new_conf)
+			{
+				while( fgets(buf, sizeof(buf), fp_orig_conf) )
+				{
+					fputs(buf,fp_new_conf);
+					fflush(fp_new_conf);
+				}
+			}
+			else
+				perror(tmp_path_conf.c_str());
+		}
+		else if(!fp_new_conf)
+			perror((data_path + "default.conf").c_str());
+
+		FILE *fp_new_msgdata = fopen(tmp_path_msgdata.c_str(),"r");
+		FILE *fp_orig_msgdata = fopen((data_path + "default_msg.data").c_str() ,"r");
+		if(fp_orig_msgdata && !fp_new_msgdata)
+		{
+			FILE *fp_new_msgdata = fopen(tmp_path_msgdata.c_str(),"w+");
+			if(fp_new_msgdata)
+			{
+				while( fgets(buf, sizeof(buf), fp_orig_msgdata) )
+				{
+					fputs(buf,fp_new_msgdata);
+					fflush(fp_new_msgdata);
+				}
+			}
+			else
+				perror(tmp_path_msgdata.c_str());
+		}
+		else if(!fp_new_msgdata)
+			perror((data_path + "default_msg.data").c_str());
+
+		if(fp_orig_conf)
+			fclose(fp_orig_conf);
+		if(fp_orig_msgdata)
+			fclose(fp_orig_msgdata);
+		
+		if(fp_new_conf)
+		{
+			fclose(fp_new_conf);
+		}
+		if(fp_new_msgdata)
+		{
+			fclose(fp_new_msgdata);
+		}
+	}
+#endif
+#endif // !CONSOLE_BOT
 	if(BOT_LEVEL & USE_ANGRY)
 	{
 		if( errorHandler( initSpecialMsg("[ANGRY]"), "ANGRY_MSG" ))

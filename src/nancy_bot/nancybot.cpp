@@ -29,8 +29,12 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	memory_index = 0;
 	filename_conf = "";
 	CONFIG_PATH = config_path;
+	if( *(CONFIG_PATH.end() -1) != '/' )
+		CONFIG_PATH += '/';
+		
 	BOT_NAME = bot_name;
 	BOT_INDEX = CONFIG_PATH + BOT_NAME;
+
 
 	if( BOTS_LIST.find(BOT_INDEX) != BOTS_LIST.end() )
 	{

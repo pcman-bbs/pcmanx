@@ -192,7 +192,7 @@ msgstr ""
 "陳侃如 Kanru Chen (開發者) <koster@debian.org.tw>\n"
 "吳佳一 Chia I Wu (開發者) <b90201047@ntu.edu.tw>\n"
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>\n"
-"Youchen Lee (開發者) <youchen.lee@gmail.com>"
+"李宥辰 Youchen Lee (開發者) <youchen.lee@gmail.com>"
 
 #: ../src/mainframe.cpp:832
 #, c-format
