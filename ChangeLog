@@ -1,15 +1,27 @@
+2005-08-11  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am,
+	src/Makefile-byhand: Remove Makefile-byhand since pcmanx_pure_gtk2
+	is so complex.
+	
+	* src/docklet/api.h: New file. API to docklet supporting functions.
+
+	* src/mainframe.h,
+	src/mainframe.cpp,
+	src/pcmanx_pure_gtk2.cpp (main):
+	Use docklet/api.h instead of eggtrayicon header.
+
 2005-08-11  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/nancy_bot/msg_data.cpp,
 	src/nancy_bot/nancy_bot.cpp:
-	Copy DATAPATH/pcmanx/nancy_bot/default.conf,
-	DATAPATH/pcmanx/nancy_bot/default_msg.data to CONFIG_PATH when use
-	"default" as but name. ( when default.conf and default_msg.data not
-	exist in ~/.pcmanx/ ).
+	Copy DATAPATH"/pcmanx/nancy_bot/{default.conf,default_msg.data} to
+	CONFIG_PATH when use "default" as but name. ( when default.conf and
+	default_msg.data don't exist in ~/.pcmanx/ ).
 
 	* src/view/telnetcon.cpp: Set PATH to $HOME/.pcmanx.
 
-	* po/zh_TW.po: Added my Chinese name (zh_TW) :p.
+	* po/zh_TW.po: Added my Chinese name (zh_TW).
 
 2005-08-11  Chia I Wu  <b90201047@ntu.edu.tw>
 

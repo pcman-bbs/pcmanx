@@ -38,11 +38,11 @@ static void clipboard_clear_func(
 }
 
 /*
- * netapplet_get_clipboard - try and get the CLIPBOARD_NAME clipboard
+ * detect_get_clipboard - try and get the CLIPBOARD_NAME clipboard
  *
  * Returns TRUE if successfully retrieved and FALSE otherwise.
  */
-gboolean _get_clipboard()
+gboolean detect_get_clipboard()
 {
 	static const GtkTargetEntry targets[] = { {CLIPBOARD_NAME, 0, 0} };
 	gboolean retval = FALSE;

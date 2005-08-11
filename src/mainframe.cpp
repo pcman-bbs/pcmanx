@@ -51,7 +51,7 @@
 #endif
 
 #ifdef USE_DOCKLET
-#include "docklet/eggtrayicon.h"
+#include "docklet/api.h"
 
 
 void CMainFrame::OnTrayButton_Toggled(

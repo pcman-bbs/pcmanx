@@ -41,7 +41,6 @@ OPTIONAL_NANCY = \
 	nancy_bot/msgdata.h
 
 EXTRA_DIST = \
-	Makefile-byhand \
 	conn_xpm.xpm \
 	pcmanx_xpm.xpm \
 	pcmanx_inverse_xpm.xpm \

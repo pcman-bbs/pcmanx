@@ -30,7 +30,7 @@
 #include "widget.h"
 
 #ifdef USE_DOCKLET
-#include "docklet/eggtrayicon.h"
+#include "docklet/api.h"
 #endif
 
 #include <string>
