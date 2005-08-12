@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+#include <string.h>
+
 #include "notifier/api.h"
 #include "notifier/working_area.h"
 
@@ -202,27 +204,7 @@ static void destroy_win(GtkWidget* win, Win* w)
 	g_free(w);
 }
 
-/* Helper function.
- *
- * Perform string replacement
- */
-static gchar *_strreplace(
-		const char *string, const char *delimiter,
-		const char *replacement) 
-{
-	gchar **split;
-	gchar *ret;
 
-	g_return_val_if_fail(string      != NULL, NULL);
-	g_return_val_if_fail(delimiter   != NULL, NULL);
-	g_return_val_if_fail(replacement != NULL, NULL);
-
-	split = g_strsplit(string, delimiter, 0);
-	ret = g_strjoinv(replacement, split);
-	g_strfreev(split);
-
-	return ret;
-}
 
 /*
  * Return GtkWidget of the popup that the caller can get more control such as, 
@@ -236,19 +218,13 @@ static GtkWidget* notify_new(
 {
 	GtkWidget *win = gtk_window_new(GTK_WINDOW_POPUP);
 	GtkWidget *context, *body, *frame;
-	gchar *context_text = g_strdup(body_text);
+	gchar *context_text = context_text = g_markup_escape_text(body_text, strlen(body_text));
 	gchar *caption_text = g_strdup(_caption_text);
 	GtkWidget *imageNotify;
 	GtkWidget *labelNotify;
 	GtkWidget *labelCaption;
 	GtkWidget *button;
 	Win *w;
-
-	/* context_text will be passed to GtkLabel, which accepts Rich text
-	 * representations, and we should avoid invalid input.
-	 */
-	context_text = _strreplace(context_text, "<", "〈");
-	context_text = _strreplace(context_text, ">", "〉");
 
 	body = gtk_vbox_new(FALSE, 2);
 	context = gtk_hbox_new(FALSE, 0);

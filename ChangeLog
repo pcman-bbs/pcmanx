@@ -1,4 +1,12 @@
-2005-08=12  Jim Huang  <jserv@kaffe.org>
+2005-08-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/notifier/notifier-impl.c
+	(_strreplace): Removed since it's not used in newly written code.
+	All invalid markup characters passed to GtkLabel should be escaped
+	by g_markup_escape_text() function provided by glib, not our own
+	helper function like _strreplace.
+
+2005-08-12  Jim Huang  <jserv@kaffe.org>
 
 	* src/Makefile.am: Fixlet to newly-added src/docklet/api.h .
 
