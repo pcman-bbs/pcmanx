@@ -20,6 +20,7 @@ pcmanx_LDADD += -lutil
 endif
 
 OPTIONAL_DOCKLET = \
+	docklet/api.h \
 	docklet/clipboard.c \
 	docklet/eggtrayicon.h \
 	docklet/eggtrayicon.c

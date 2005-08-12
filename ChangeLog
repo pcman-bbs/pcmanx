@@ -1,10 +1,14 @@
+2005-08=12  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am: Fixlet to newly-added src/docklet/api.h .
+
 2005-08-11  Jim Huang  <jserv@kaffe.org>
 
 	* src/Makefile.am,
 	src/Makefile-byhand: Remove Makefile-byhand since pcmanx_pure_gtk2
-	is so complex.
+	is getting more and more complex.
 	
-	* src/docklet/api.h: New file. API to docklet supporting functions.
+	* src/docklet/api.h: New file. API to docklet supported functions.
 
 	* src/mainframe.h,
 	src/mainframe.cpp,
@@ -15,7 +19,7 @@
 
 	* src/nancy_bot/msg_data.cpp,
 	src/nancy_bot/nancy_bot.cpp:
-	Copy DATAPATH"/pcmanx/nancy_bot/{default.conf,default_msg.data} to
+	Copy DATAPATH/pcmanx/nancy_bot/{default.conf,default_msg.data} to
 	CONFIG_PATH when use "default" as but name. ( when default.conf and
 	default_msg.data don't exist in ~/.pcmanx/ ).
 
