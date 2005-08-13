@@ -129,7 +129,7 @@ NancyBot::askNancy(string msg_input)
 	int random;
 	string unknow_msg;
 	int len = msg_input.length();
-	string msg_out = "Nancy "+ NANCY_VERSION;  // init msg_out
+	string msg_out = "PCManX-NancyBot";  // init msg_out
 	
 	if(just_asking) // AUTO_LEARN
 	{

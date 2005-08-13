@@ -23,7 +23,7 @@ main (int argc, char **argv)
     }
     while (strncmp (input, "exit", 4) != 0 &&
 	   (cout << "Nancy: " << b->askNancy (msg_in) << endl));
-    // ask_nancy return NULL when initial error ( no config file found )
+    // ask_nancy return "PCManX-NancyBot" when initial error ( no config file found )
     delete b;
     return 0;
 }

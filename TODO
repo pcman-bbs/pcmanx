@@ -1,4 +1,4 @@
-TOD List
+TODO List
 ========
 
 jserv
@@ -13,3 +13,10 @@ kanru
 API reference says 'Returns :	 a pointer to the contents of the widget
 as a string. This string points to internally allocated storage in the
 widget and must not be freed, modified or stored.'
+
+copyleft
+-----
+1. Allow to set attributes of NancyBot with GUI. ( open/close bot, auto-learn
+or not, auto-learn level, chatlog or not, bot get angry or not, config_path ).
+2. Convert messages file to utf-8.
+

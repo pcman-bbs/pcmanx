@@ -494,6 +494,7 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
+echo Nancy bot support ............... : $nancy
 if test "x$script" = "xyes"; then
   echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
 else

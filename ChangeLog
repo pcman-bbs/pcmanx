@@ -1,3 +1,16 @@
+2005-08-14  Youchen Lee  <youchen.lee@gmail.com>
+
+	* confiure.ac: Added a line to show if support NancyBot or not after
+	running ./configure.
+	
+	* src/configfile.cpp: Appending slash fixed.
+	
+	* src/view/telnetcon.cpp: Replace SendString() with SendRawString() to
+	send big5 strings.
+
+	* src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/standalone.cpp: Changed the initial value of msg_out.
+	
 2005-08-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/notifier/notifier-impl.c

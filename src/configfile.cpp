@@ -51,7 +51,7 @@ CConfigFile::CConfigFile( string AppName, int LineBufSize )
 	m_LineBufSize = LineBufSize;
 
 	m_ConfigDirPath = getenv("HOME");
-	if( m_ConfigDirPath[m_ConfigDirPath.length()] != '/' )
+	if( m_ConfigDirPath[m_ConfigDirPath.length()-1] != '/' )
 		m_ConfigDirPath += '/';
 
 	m_ConfigDirPath += '.';

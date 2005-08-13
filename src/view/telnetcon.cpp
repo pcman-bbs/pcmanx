@@ -729,14 +729,9 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 		int m = sub.find_last_not_of(" ");  // cut spaces at tail
 		if( n != string::npos)
 			sub2 = sub.erase(m+1);
-	
-		SendString("\022");            // ^R
-		SendString(bot->askNancy(sub2));
-		SendString("\015");            // Enter
-		SendString("y");
-		SendString("\015");
-		SendString("\033[A");          // up
-		SendString("\033[B");          // down
+		string str_to_send = "\022" + bot->askNancy(sub2) 
+			+ "\015y\015\033[A\033[B";
+		SendRawString( str_to_send.c_str(), str_to_send.length() );
 	} // end if
 #endif  // USE_NANCY
 
