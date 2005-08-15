@@ -1,3 +1,8 @@
+2005-08-15  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/core/termview.cpp: Fixed a common bug, when URL includes "&", the
+	command to open URL in browser will be seen as background execution.
+
 2005-08-14  Youchen Lee  <youchen.lee@gmail.com>
 
 	* confiure.ac: Added a line to show if support NancyBot or not after

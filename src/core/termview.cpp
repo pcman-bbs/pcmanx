@@ -562,6 +562,9 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 		{
 			char* pline = m_pTermData->m_Screen[y];
 			string URL( (pline+start), (int)(end-start) );
+			// In URL, the char "&" will be read as "background execution" when run the browser command without " "
+			URL.insert(0,"\"");
+			URL.append("\"");
 
 			char *cmdline = new char[ m_WebBrowser.length() + URL.length() + 10 ];
 			if( strstr(m_WebBrowser.c_str(), "%s") )
