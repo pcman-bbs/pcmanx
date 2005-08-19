@@ -25,7 +25,7 @@
  *                                              to unknow messages MAP.
  * NancyBot::setLevel__AskUnknowMsg(num)      The probability that Nancy ask the messages form unknow
  *                                              messages MAP.
- * NancyBot::setLevel__ReLearning(num)        The probability that Nancy ask the messages she already
+ * NancyBot::setLevel__ReLearning(num)        The probability that Nancy ask the messages she had already
  *                                              known.
  *
  */
@@ -107,6 +107,7 @@ class NancyBot
 	    LEVEL__RE_LEARNING = num;
 	    level__re_learning_changed = true;
     }
+
 #ifdef ADV_BOT_DEBUG
     void debug (void);
 #endif

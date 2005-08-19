@@ -73,14 +73,20 @@
 
 #include "debug.h"
 
+#if !defined(MOZ_PLUGIN)
+#ifdef USE_NANCY
+bool CTelnetCon::with_nancy_support = true;  // start new connections with nancy support.
+#endif
+#endif /* !defined(MOZ_PLUGIN) */
+
 // class constructor
 CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	: CTermData(pView), m_Site(SiteInfo)
 {
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
-	use_nancy = true;  // Dynamic open or close it.
-	if (use_nancy) {
+	use_nancy = false;  // Dynamic open or close it.
+	if (with_nancy_support) {
 		/* XXX:
 		 * We should assign the path via built-in configurator.
 		 */
@@ -157,7 +163,8 @@ CTelnetCon::~CTelnetCon()
 {
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
-	delete bot;
+	if(bot)
+		delete bot;
 #endif
 #endif /* !defined(MOZ_PLUGIN) */
 
@@ -724,19 +731,21 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 {
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
-	if( use_nancy )
+	if( bot && use_nancy )
 	{
 		if ( !*line )
 			return;
 	
-		// FIXME cannot exactly grep waterballs in ptt[123]
 		string sub;
 		string sub2;
 		string str(line);
 	
 		int n = str.find_first_of("  ");  // cut userid and spaces at head
 		if( n != string::npos) // found
-			sub = str.substr(n+2);
+			sub = str.substr(n+1);
+
+		while(sub[0] == ' ')
+			sub = sub.substr(1);
 	
 		int m = sub.find_last_not_of(" ");  // cut spaces at tail
 		if( n != string::npos)

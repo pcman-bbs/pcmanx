@@ -145,7 +145,7 @@ NancyBot::askNancy(string msg_input)
 	string unknow_msg;
 	int len = msg_input.length();
 	string msg_out = "PCManX-NancyBot";  // init msg_out
-	
+
 	if(level__add_to_unknow_msg_changed)
 	{
 		pMyMsgData->setLevel__AddToUnknowMsg(LEVEL__ADD_TO_UNKNOW_MSG);

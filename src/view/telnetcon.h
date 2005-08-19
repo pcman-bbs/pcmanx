@@ -134,12 +134,37 @@ public:
 		if( !m_DNSMutex )
 			m_DNSMutex = g_mutex_new();
     }
+#if !defined(MOZ_PLUGIN)
+#ifdef USE_NANCY
+    void set__UseNancy( bool usenancy )
+    {
+	    use_nancy = usenancy;
+    }
+
+    static void set__OpenConnectionWithNancySupport( bool nancy_support )
+    {
+	    with_nancy_support = nancy_support;
+    }
+
+    bool get__UseNancy()
+    {
+	    return use_nancy;
+    }
+
+    static bool get__OpenConnectionWithNancySupport()
+    {
+	    return with_nancy_support;
+    }
+#endif
+#endif /* !defined(MOZ_PLUGIN) */
+
 
 protected:
 
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
     	NancyBot *bot;
+	static bool with_nancy_support;
 	bool use_nancy;
 #endif
 #endif /* !defined(MOZ_PLUGIN) */

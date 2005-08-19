@@ -1,5 +1,12 @@
 2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
 
+	* src/view/telnetcon.cpp,
+	src/view/telnetcon.h: Fixed grep waterballs in ptts.
+	Added static functions and vars to control with_nancy_support.
+	Added functions to control use_nancy in run time.
+
+2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
+
 	* src/nancy_bot/nancybot.cpp,
 	src/nancy_bot/api.h: Now NancyBot::replaceString() could replace
 	more than one strings.
