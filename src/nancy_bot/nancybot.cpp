@@ -21,7 +21,6 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	LEVEL__ASK_UNKNOW_MSG = 20; // default 20
 	LEVEL__RE_LEARNING = 20; // default 20
 	LEVEL__ADD_TO_UNKNOW_MSG = 100; // default 100, always add
-	NANCY_VERSION = "0.1.402";
 
 	just_asked = false;
 //	level__ask_unknow_msg_changed = false;
@@ -116,16 +115,26 @@ NancyBot::~NancyBot()
 }
 
 
-bool
-NancyBot::replaceFirstString(string &modify_me, string &find_me , string &replace_with_me)
+int
+NancyBot::replaceString(string &modify_me, string &find_me , string &replace_with_me)
 {
-        int i = modify_me.find(find_me, 0);
-	if(i != string::npos)
+	int search_here = 0;
+	int num_replaced = 0;
+	if( find_me == replace_with_me )
+		return 0;
+	while(1)
 	{
-		modify_me.replace(i,find_me.length(),replace_with_me);
-	         return true;
+        	search_here = modify_me.find( find_me, search_here );
+		if( search_here != string::npos && search_here < modify_me.length() ) // found
+		{
+			modify_me.replace( search_here, find_me.length(), replace_with_me );
+			num_replaced++;
+			search_here++;
+		}
+		else
+			break;
 	}
-	else return false;
+	return num_replaced;
 }
 
 string
@@ -169,7 +178,7 @@ NancyBot::askNancy(string msg_input)
 				
 				if(pMyMsgData->getUnknowMsgToAsk(unknow_msg)) // got it
 				{
-					replaceFirstString(msg_out, ask_flag, unknow_msg); // TODO: NOT just first string
+					replaceString(msg_out, ask_flag, unknow_msg);
 					just_asked = true;
 					just_asked_unknow_msg = unknow_msg;
 					

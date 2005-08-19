@@ -4,6 +4,32 @@
 // Author:      Youchen Lee ( utcr.org ) 
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 
+/* ## NancyBot Settings HOWTO ##
+ * 
+ * # Constructor:
+ * 	NancyBot(const char *BOT_NAME, const char *CONFIG_PATH, unsigned char BOT_RUN_LEVEL );
+ *	
+ *	
+ * # BOT_RUN_LEVEL: ( set in constructor, and auto-reset when initialing config files )
+ * <LEVEL>        <OCT>  <Definitions>
+ * USE_BASE        001   Use basic messages in ${BOT_NAME}_msg.data
+ * USE_UNKNOW      002   Use unknow messages in ${BOT_NAME}.conf [UNKNOW]
+ * USE_ANGRY       004   Use angry messages in ${BOT_NAME}.conf [ANGRY]
+ * USE_LOG         010   Use chat log, writting in ${BOT_NAME}._${BOT_NUN}.log
+ * USE_AUTO_LEARN  020   Use auto learning, read below for details.
+ *
+ * 
+ * # AUTO_LEARN SETTINGS: (available to reset in runtime)
+ * 0 <= num <= 100
+ * NancyBot::setLevel__AddToUnknowMsg(num)    The probability that Nancy add unknow messages 
+ *                                              to unknow messages MAP.
+ * NancyBot::setLevel__AskUnknowMsg(num)      The probability that Nancy ask the messages form unknow
+ *                                              messages MAP.
+ * NancyBot::setLevel__ReLearning(num)        The probability that Nancy ask the messages she already
+ *                                              known.
+ *
+ */
+
 #ifndef __INCLUDE_NANCYBOT_H__
 #define __INCLUDE_NANCYBOT_H__
 
@@ -26,7 +52,7 @@ class NancyBot
     int initFilename();
     int checkMsgRepeat(string);
     bool writeLog(string &, string &);
-    bool replaceFirstString(string & modify_me, string &find_me, string &replace_with_me);
+    int replaceString(string & modify_me, string &find_me, string &replace_with_me);
     bool askHowToAnser(string &, string &);
     
     //******************************* vars
@@ -63,7 +89,6 @@ class NancyBot
 		    char old_bot_run_level = 037);
     ~NancyBot ();
     int flag;
-    string NANCY_VERSION;
     string askNancy (string);
     static map<string, MsgData *> BOTS_LIST;
     void setLevel__AskUnknowMsg(int num)

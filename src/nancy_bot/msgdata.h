@@ -15,7 +15,7 @@
 
 using namespace std;
 
-// RUN_LEVEL
+// BOT_RUN_LEVEL
 #define USE_BASE        001
 #define USE_UNKNOW      002
 #define USE_ANGRY       004
