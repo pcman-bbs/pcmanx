@@ -123,7 +123,7 @@ public:
 
 	static void Cleanup();
     static bool OnBellTimeout( CTelnetCon* _this );
-    void OnNewIncomingMessage(char* line);
+    void OnNewIncomingMessage(const char* line);
 
 	static void SetSocketTimeout(int timeout){	m_SocketTimeout=timeout;	}
     bool DetectDBChar(){	return m_Site.m_DetectDBChar;   }

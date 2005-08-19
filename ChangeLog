@@ -1,5 +1,10 @@
 2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/view/telnetcon.cpp: CTelnetCon::OnNewIncomingMessage now receives
+	UTF-8 encoded strings as parameter.
+
+2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/core/termview.cpp,
 	src/view/telnetview.cpp,
 	src/mainframe.cpp,

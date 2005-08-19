@@ -499,7 +499,18 @@ bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 	if( _this->m_IsLastLineModified )
 	{
 		char* line = _this->m_Screen[ _this->m_RowsPerPage-1 ];
-		_this->OnNewIncomingMessage( line );
+		// Convert received message to UTF-8
+		gsize l;
+		gchar *utf8_text = g_convert(
+			line, strlen(line), 
+			"UTF-8", _this->m_Site.m_Encoding.c_str(), 
+			NULL, &l, NULL);
+
+		if(utf8_text)
+		{
+			_this->OnNewIncomingMessage( utf8_text );
+			g_free(utf8_text);
+		}
 		_this->m_IsLastLineModified = false;
 	}
 	_this->m_BellTimeout = 0;
@@ -707,8 +718,9 @@ void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 
 #endif /* !defined(MOZ_PLUGIN) */
 
-// When new incoming message is detected, this function gets called.
-void CTelnetCon::OnNewIncomingMessage(char* line)
+// When new incoming message is detected, this function gets called with the 
+// received message encoded in UTF-8 passed in 'char* line'.
+void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF-8 string.
 {
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
@@ -739,16 +751,12 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 	if ( !AppConfig.PopupNotifier || !*line )
 		return;
 
-	/* We need to convert the incoming message into UTF-8 encoding from
-	 * the original one.
+	/* 
+	   We don't need to convert the incoming message into UTF-8 encoding here.
+	   This is already done before CTelnetCon::OnNewIncomingMessage is called.
 	 */
-	gsize l;
-	gchar *utf8_text = g_convert(
-		line, strlen(line), 
-		"UTF-8", m_Site.m_Encoding.c_str(), 
-		NULL, &l, NULL);
 #ifdef USE_SCRIPT
-	ScriptOnNewIncomingMessage(this, utf8_text);
+	ScriptOnNewIncomingMessage(this, line);
 #endif
 
 	CMainFrame* mainfrm = ((CTelnetView*)m_pView)->GetParentFrame();
@@ -756,7 +764,7 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 		return;
 
 
-	gchar **column = g_strsplit(utf8_text, " ", 2);
+	gchar **column = g_strsplit(line, " ", 2);
 	GtkWidget* popup_win = popup_notifier_notify(
 		g_strdup_printf("%s - %s",
 			m_Site.m_Name.c_str(),
@@ -766,7 +774,6 @@ void CTelnetCon::OnNewIncomingMessage(char* line)
 		G_CALLBACK(popup_win_clicked), 
 		this);
 	g_strfreev(column);
-	g_free(utf8_text);
 #endif
 
 #endif /* !defined(MOZ_PLUGIN) */
