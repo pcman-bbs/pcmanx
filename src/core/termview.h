@@ -62,6 +62,7 @@ public:
     virtual void OnLButtonUp(GdkEventButton* evt);
     virtual void OnRButtonUp(GdkEventButton* evt);
     virtual void OnMouseMove(GdkEventMotion* evt);
+    virtual void OnHyperlinkClicked(string url);
     void OnBlinkTimer();
     virtual void OnMButtonDown(GdkEventButton* evt);
     void PasteFromClipboard(bool primary);
@@ -71,7 +72,6 @@ public:
     void SetFontFamily(string name);
     void SetFont(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
-	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
     CFont* GetFont(){	return m_Font;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
     void SetVerticalCenterAlign( bool is_vcenter );
@@ -119,7 +119,7 @@ protected:
     string m_FontFamily;
 
 	static GdkCursor* m_HandCursor;
-    static string m_WebBrowser;
+
 };
 
 #endif

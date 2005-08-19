@@ -116,6 +116,7 @@ public:
 //	Favorite sites
 	vector<CSite> Favorites;
     string WebBrowser;
+	string MailClient;
     int SocketTimeout;
 
 // protected:

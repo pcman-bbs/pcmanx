@@ -39,6 +39,7 @@ public:
 	GtkWidget *m_CancelSelAfterCopy;
 	GtkWidget *m_ShowTrayIcon;
 	GtkWidget *m_WebBrowser;
+	GtkWidget *m_MailClient;
 	GtkWidget *m_AAFont;
 	GtkWidget *m_PopupNotifier;
 	GtkWidget *m_PopupTimeout;

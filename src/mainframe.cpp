@@ -204,12 +204,16 @@ CMainFrame::CMainFrame()
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
 	CTelnetView::SetParentFrame(this);
-	CTermView::SetWebBrowser( AppConfig.WebBrowser );
+	CTelnetView::SetWebBrowser( AppConfig.WebBrowser );
+	CTelnetView::SetMailClient( AppConfig.MailClient );
 }
 
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
+	if( !site )
+		site = &AppConfig.m_DefaultSite;
+
 	m_pView = new CTelnetView;
 	m_Views.push_back(m_pView);
 
@@ -735,7 +739,7 @@ void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
 	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), NULL, true );
 	if( dlg->ShowModal() == GTK_RESPONSE_OK && !dlg->GetText().empty() )
 	{
-		_this->NewCon( dlg->GetText(), dlg->GetText(), &AppConfig.m_DefaultSite );
+		_this->NewCon( dlg->GetText(), dlg->GetText() );
 	}
 	dlg->Destroy();
 }
@@ -919,7 +923,8 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->ShowModal();
 	dlg->Destroy();
 
-	CTermView::SetWebBrowser( AppConfig.WebBrowser );
+	CTelnetView::SetWebBrowser( AppConfig.WebBrowser );
+	CTelnetView::SetMailClient( AppConfig.MailClient );
 
 #ifdef USE_NOTIFIER
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
@@ -1210,7 +1215,7 @@ void CMainFrame::OnFavorite(GtkMenuItem* item, CMainFrame* _this)
 		CSite& site = *it;
 		if( site.m_MenuItem == (GtkWidget*)item )
 		{
-			_this->NewCon( site.m_Name, site.m_URL, &site);
+			_this->NewCon( site.m_Name, site.m_URL, &site );
 			break;
 		}
 	}
@@ -1318,7 +1323,7 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 		string url = gtk_entry_get_text( GTK_ENTRY(widget) );
 		if( !url.empty() )
 		{
-			_this->NewCon( url, url, &AppConfig.m_DefaultSite );
+			_this->NewCon( url, url );
 			return true;
 		}
 		//	else goto case GDK_Escape

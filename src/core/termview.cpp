@@ -99,7 +99,6 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 }
 
 GdkCursor* CTermView::m_HandCursor = NULL;
-string CTermView::m_WebBrowser;
 
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
@@ -551,7 +550,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 
 	//	2004.08.07 Added by PCMan.  Hyperlink detection.
 	//	If no text is selected, consider hyperlink.
-	if( m_pTermData->m_Sel->Empty() && !m_WebBrowser.empty() )
+	if( m_pTermData->m_Sel->Empty() )
 	{
 		int x = (int)evt->x;
 		int y = (int)evt->y;
@@ -561,23 +560,7 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 		if( HyperLinkHitTest( x, y, &start, &end ) )
 		{
 			char* pline = m_pTermData->m_Screen[y];
-			string URL( (pline+start), (int)(end-start) );
-			// In URL, the char "&" will be read as "background execution" when run the browser command without " "
-			URL.insert(0,"\"");
-			URL.append("\"");
-
-			char *cmdline = new char[ m_WebBrowser.length() + URL.length() + 10 ];
-			if( strstr(m_WebBrowser.c_str(), "%s") )
-				sprintf( cmdline, m_WebBrowser.c_str(), URL.c_str() );
-			else
-			{
-				memcpy(cmdline, m_WebBrowser.c_str(), m_WebBrowser.length());
-				cmdline[m_WebBrowser.length()] = ' ';
-				memcpy( &cmdline[m_WebBrowser.length() + 1], URL.c_str(), URL.length() + 1);
-			}
-			strcat(cmdline, " &");	// launch the browser in background.
-			system(cmdline);	// Is this portable?
-			delete []cmdline;
+			OnHyperlinkClicked( string( (pline+start), (int)(end-start) ) );
 		}
 	}
 	else	// if there is a selected area
@@ -892,5 +875,10 @@ void CTermView::RecalcCharDimension()
 	m_Caret.SetSize(m_CharW, 2);
 	UpdateCaretPos();
 	m_Caret.Show();
+}
+
+void CTermView::OnHyperlinkClicked(string url)	// Overriden in derived classes
+{
+
 }
 

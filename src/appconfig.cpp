@@ -85,6 +85,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( BeepOnBell )
 		CFG_BOOL( ShowTrayIcon )
 		CFG_STR ( WebBrowser )
+		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
 		CFG_INT ( PopupTimeout )
 	END_CONFIG_SECT()
@@ -311,7 +312,7 @@ void CAppConfig::SetToDefault()
 	HCenterAlign = false;
 	VCenterAlign = false;
 
-	WebBrowser = "mozilla %s";
+	MailClient = WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;
 
 	HyperLinkColor.red = 65535;
@@ -326,6 +327,8 @@ void CAppConfig::AfterLoad()
 {
 	if(	!WebBrowser.empty() && !strstr( WebBrowser.c_str(), " %s") )
 		WebBrowser += " %s";
+	if(	!MailClient.empty() && !strstr( MailClient.c_str(), " %s") )
+		MailClient += " %s";
 
 /*	if( 0 == Shadow.length() )
 		return;

@@ -1,3 +1,16 @@
+2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termview.cpp,
+	src/view/telnetview.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/generalprefpage.cpp:
+	Greatly enhance hyperlink handling of the terminal screen.
+	Now, E-mail addresses can be opened by mail client programs, 
+	and telnet:// URLs can be opened directly in pcmanx by one click.
+	(CTermView::OnHyperlinkClicked): Added and overriden by CTelnetView to 
+	handle hyprelinks.
+
 2005-08-15  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/core/termview.cpp: Fixed a common bug, when URL includes "&", the
@@ -73,7 +86,7 @@
 	* src/notifier/notifier-impl.c
 	(_strreplace): New helper function to perform string replacement.
 	(notify_new): Beautify the popup window, and replace '<' and '>'
-	with '〈' and '〉' to avoid invalid input since context_text will
+	with '�� and '�� to avoid invalid input since context_text will
 	be passed to GtkLabel, which accepts Rich text representations.
 	It's a workaround, and we should introduce a smarter way to fix.
 

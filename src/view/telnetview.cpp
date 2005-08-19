@@ -27,12 +27,14 @@
 #include <gdk/gdkkeysyms.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "telnetview.h"
 #include "telnetcon.h"
 
 #if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
+#include "stringutil.h"
 
 CMainFrame* CTelnetView::m_pParentFrame = NULL;
 #endif /* !defined(MOZ_PLUGIN) */
@@ -42,7 +44,8 @@ CMainFrame* CTelnetView::m_pParentFrame = NULL;
 CTelnetView::CTelnetView()
         : CTermView()
 {}
-
+string CTelnetView::m_WebBrowser;
+string CTelnetView::m_MailClient;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -297,3 +300,47 @@ void CTelnetView::OnDestroy()
 		m_pTermData = NULL;
 	}
 }
+
+void CTelnetView::OnHyperlinkClicked(string url)
+{
+	if( 0 == strncmpi( url.c_str(), "telnet:", 7) )
+	{
+		const char* purl = url.c_str() + 7;
+		while( *purl == '/' )
+			++purl;
+		if( !*purl )
+			return;
+		url = purl;
+		if( '/' == url[url.length()-1] )
+			url = string( url.c_str(), 0, url.length()-1 );
+		m_pParentFrame->NewCon( url, url );
+		return;
+	}
+	// In URL, the char "&" will be read as "background execution" when run the browser command without " "
+	url.insert(0,"\"");
+	url.append("\"");
+
+	string app;
+	if( !strstr( url.c_str(), "://") && strchr(url.c_str(), '@'))
+	{
+		app = m_MailClient;
+		if( strncmpi( url.c_str(), "mailto:", 7 ) )
+			url.insert( 0, "mailto:" );
+	}
+	else
+		app = m_WebBrowser;
+
+	char *cmdline = new char[ app.length() + url.length() + 10 ];
+	if( strstr(app.c_str(), "%s") )
+		sprintf( cmdline, app.c_str(), url.c_str() );
+	else
+	{
+		memcpy(cmdline, app.c_str(), app.length());
+		cmdline[app.length()] = ' ';
+		memcpy( &cmdline[app.length() + 1], url.c_str(), url.length() + 1);
+	}
+	strcat(cmdline, " &");	// launch the browser in background.
+	system(cmdline);	// Is this portable?
+	delete []cmdline;
+}
+

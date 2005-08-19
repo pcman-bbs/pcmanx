@@ -41,6 +41,8 @@ CGeneralPrefPage::CGeneralPrefPage()
 	GtkWidget *label28;
 	GtkObject *m_PopupTimeout_adj;
 	GtkWidget *label29;
+	GtkWidget *hbox21;
+	GtkWidget *label30;
 
 	m_QueryOnCloseCon = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections"));
 	gtk_widget_show (m_QueryOnCloseCon);
@@ -91,6 +93,17 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_WebBrowser);
 	gtk_box_pack_start (GTK_BOX (hbox19), m_WebBrowser, TRUE, TRUE, 0);
 
+	hbox21 = gtk_hbox_new (FALSE, 0);
+	gtk_widget_show (hbox21);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hbox21, FALSE, FALSE, 0);
+	label30 = gtk_label_new (_("Mail Client: "));
+	gtk_widget_show (label30);
+	gtk_box_pack_start (GTK_BOX (hbox21), label30, FALSE, FALSE, 0);
+
+	m_MailClient = gtk_entry_new ();
+	gtk_widget_show (m_MailClient);
+ 	gtk_box_pack_start (GTK_BOX (hbox21), m_MailClient, TRUE, TRUE, 0);
+
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon), 
 								AppConfig.QueryOnCloseCon);
 	
@@ -112,6 +125,8 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_PopupTimeout), AppConfig.PopupTimeout);
 
 	gtk_entry_set_text(GTK_ENTRY(m_WebBrowser), AppConfig.WebBrowser.c_str());
+	
+	gtk_entry_set_text(GTK_ENTRY(m_MailClient), AppConfig.MailClient.c_str());
 }
 
 
@@ -131,4 +146,5 @@ void CGeneralPrefPage::OnOK()
 
 
 	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
+	AppConfig.MailClient = gtk_entry_get_text(GTK_ENTRY(m_MailClient));
 }

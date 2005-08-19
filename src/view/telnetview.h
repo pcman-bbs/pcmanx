@@ -37,13 +37,16 @@ public:
     CTelnetView();
 
     void OnTextInput(const gchar* text);
-
+    void OnHyperlinkClicked(string url);
     CTelnetCon* GetCon(){  return (CTelnetCon*)m_pTermData;  }
 
 #if !defined(MOZ_PLUGIN)
 	static void SetParentFrame(CMainFrame* frame){	m_pParentFrame = frame;	}
 	static CMainFrame* GetParentFrame(){	return m_pParentFrame;	}
 #endif /* !defined(MOZ_PLUGIN) */
+
+	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
+	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -57,6 +60,8 @@ protected:
 protected:
     static CMainFrame* m_pParentFrame;
 #endif /* !defined(MOZ_PLUGIN) */
+    static string m_WebBrowser;
+    static string m_MailClient;
 };
 
 #endif

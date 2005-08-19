@@ -54,7 +54,7 @@ class CMainFrame : public CWidget
 public:
     CMainFrame();
 
-    CTelnetCon* NewCon( string title, string url, CSite* site);
+    CTelnetCon* NewCon( string title, string url, CSite* site = NULL );
 	CNotebook* GetNotebook(){	return m_pNotebook;	}
     void OnTelnetConBell(CTelnetView* con);
     void OnTelnetConClose(CTelnetView* con);
