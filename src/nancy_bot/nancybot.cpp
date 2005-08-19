@@ -14,14 +14,19 @@
 map<string, MsgData* > NancyBot::BOTS_LIST;
 
 
-NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_level)
+NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_run_level)
 {
 	BOT_STATUS = 0;
-	BOT_LEVEL = old_bot_level;
-	HARD_WORKING = 20; // default 20
+	BOT_RUN_LEVEL = old_bot_run_level;
+	LEVEL__ASK_UNKNOW_MSG = 20; // default 20
+	LEVEL__RE_LEARNING = 20; // default 20
+	LEVEL__ADD_TO_UNKNOW_MSG = 100; // default 100, always add
 	NANCY_VERSION = "0.1.402";
 
-	just_asking = false;
+	just_asked = false;
+//	level__ask_unknow_msg_changed = false;
+	level__re_learning_changed = false;
+	level__add_to_unknow_msg_changed = false;
 	ask_flag = "{ask}";
 	fp_log = NULL;
 	
@@ -43,13 +48,14 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	}
 	else
 	{
-		BOTS_LIST[BOT_INDEX] = new MsgData(BOT_NAME, CONFIG_PATH, BOT_LEVEL, HARD_WORKING);
+		BOTS_LIST[BOT_INDEX] = new MsgData(BOT_NAME, CONFIG_PATH, BOT_RUN_LEVEL, LEVEL__ADD_TO_UNKNOW_MSG);
 		pMyMsgData = BOTS_LIST[BOT_INDEX];
 		pMyMsgData->ref_counter = 1;
 	}
-	BOT_LEVEL = pMyMsgData->getBotLevel(); // get truly bot level
+	BOT_RUN_LEVEL = pMyMsgData->getBotRunLevel(); // get bot level ( after initialed,
+						      // BOT_RUN_LEVLE may changed )
 	
-	//printf("%x\n",BOT_LEVEL);  // DEBUG
+	//printf("%x\n",BOT_RUN_LEVEL);  // DEBUG
 	string filename_log;
 	std::ostringstream os_num;
 	os_num << pMyMsgData->ref_counter;
@@ -59,7 +65,7 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	fp_log = fopen((CONFIG_PATH + filename_log + ".log").c_str() , "a+t");
 	if(!fp_log){
 		perror(filename_log.c_str());
-		BOT_LEVEL ^= USE_LOG;
+		BOT_RUN_LEVEL ^= USE_LOG;
 	}
 	
 }
@@ -131,15 +137,26 @@ NancyBot::askNancy(string msg_input)
 	int len = msg_input.length();
 	string msg_out = "PCManX-NancyBot";  // init msg_out
 	
-	if(just_asking) // AUTO_LEARN
+	if(level__add_to_unknow_msg_changed)
 	{
-		pMyMsgData->learning(just_asking_unknow_msg, msg_input);
-		just_asking = false;
+		pMyMsgData->setLevel__AddToUnknowMsg(LEVEL__ADD_TO_UNKNOW_MSG);
+		level__add_to_unknow_msg_changed = false;
+	}
+	if(level__re_learning_changed)
+	{
+		pMyMsgData->setLevel__ReLearning(LEVEL__RE_LEARNING);
+		level__re_learning_changed = false;
 	}
 	
-	if( BOT_LEVEL & USE_AUTO_LEARN)
+	if(just_asked) // AUTO_LEARN
 	{
-		if( (rand()%100 ) < HARD_WORKING )
+		pMyMsgData->learning(just_asked_unknow_msg, msg_input);
+		just_asked = false;
+	}
+	
+	if( BOT_RUN_LEVEL & USE_AUTO_LEARN)
+	{
+		if( (rand()%100 ) < LEVEL__ASK_UNKNOW_MSG )
 			BOT_STATUS = 3; // Auto learn;
 		if(BOT_STATUS == 3)
 		{
@@ -153,10 +170,10 @@ NancyBot::askNancy(string msg_input)
 				if(pMyMsgData->getUnknowMsgToAsk(unknow_msg)) // got it
 				{
 					replaceFirstString(msg_out, ask_flag, unknow_msg); // TODO: NOT just first string
-					just_asking = true;
-					just_asking_unknow_msg = unknow_msg;
+					just_asked = true;
+					just_asked_unknow_msg = unknow_msg;
 					
-					if( BOT_LEVEL & USE_LOG )
+					if( BOT_RUN_LEVEL & USE_LOG )
 					{
 						writeLog(msg_input, msg_out);
 					}
@@ -168,7 +185,7 @@ NancyBot::askNancy(string msg_input)
 	
 	
 
-	if( BOT_LEVEL & USE_ANGRY )
+	if( BOT_RUN_LEVEL & USE_ANGRY )
 	{
 		if( checkMsgRepeat(msg_input) > 3)
 		{
@@ -179,11 +196,11 @@ NancyBot::askNancy(string msg_input)
 		}
 	}
 		
-	if( (BOT_LEVEL & USE_BASE ) && BOT_STATUS != 1 ) // use_base and nancy not angry
+	if( (BOT_RUN_LEVEL & USE_BASE ) && BOT_STATUS != 1 ) // use_base and nancy not angry
 	{
 		if(pMyMsgData->getCommonMsg(msg_input, msg_out) == 0) // not found
 		{
-			if(BOT_LEVEL & USE_UNKNOW)
+			if(BOT_RUN_LEVEL & USE_UNKNOW)
 			{
 				BOT_STATUS = 2; // BOT UNKNOW
 			}
@@ -191,12 +208,12 @@ NancyBot::askNancy(string msg_input)
 		if(BOT_STATUS == 2) // UNKNOW MSG
 		{
 			pMyMsgData->getSpecialMsg(BOT_STATUS, msg_out );
-			//if( BOT_LEVEL & USE_AUTO_LEARN)
+			//if( BOT_RUN_LEVEL & USE_AUTO_LEARN)
 			//	pMyMsgData->addUnknowMsgToAsk(msg_input);
 		}
 	}
 	
-	if( BOT_LEVEL & USE_LOG )
+	if( BOT_RUN_LEVEL & USE_LOG )
 	{
 		writeLog(msg_input, msg_out);
 	}

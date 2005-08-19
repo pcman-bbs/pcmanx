@@ -35,7 +35,7 @@ class NancyBot
     string CONFIG_PATH;
     string BOT_NAME;
     string BOT_INDEX;
-    unsigned char BOT_LEVEL;
+    unsigned char BOT_RUN_LEVEL;
     MsgData *pMyMsgData;
     int BOT_STATUS;
 
@@ -44,10 +44,15 @@ class NancyBot
     int memory_index;  // index for Array_MsgRemember
 
     // learning
-    bool just_asking;
-    string just_asking_unknow_msg;
-    unsigned int HARD_WORKING;
+    bool just_asked;
+    string just_asked_unknow_msg;
+    unsigned int LEVEL__ASK_UNKNOW_MSG;
+    unsigned int LEVEL__ADD_TO_UNKNOW_MSG;
+    unsigned int LEVEL__RE_LEARNING;
     string ask_flag;
+    bool level__ask_unknow_msg_changed;
+    bool level__add_to_unknow_msg_changed;
+    bool level__re_learning_changed;
 
     // log
     FILE *fp_log;
@@ -55,15 +60,27 @@ class NancyBot
     
   public:
     NancyBot (const char * bot_name = "default", const char * config_path = "./",
-		    char old_bot_level = 037);
+		    char old_bot_run_level = 037);
     ~NancyBot ();
     int flag;
     string NANCY_VERSION;
     string askNancy (string);
     static map<string, MsgData *> BOTS_LIST;
-    void setHardWorking(int num)
+    void setLevel__AskUnknowMsg(int num)
     {
-	    HARD_WORKING = num;
+	    LEVEL__ASK_UNKNOW_MSG = num;
+	    level__ask_unknow_msg_changed = true;
+    }
+    void setLevel__AddToUnknowMsg(int num)
+    {
+	    LEVEL__ADD_TO_UNKNOW_MSG = num;
+	    level__add_to_unknow_msg_changed = true;
+    }
+
+    void setLevel__ReLearning(int num)
+    {
+	    LEVEL__RE_LEARNING = num;
+	    level__re_learning_changed = true;
     }
 #ifdef ADV_BOT_DEBUG
     void debug (void);

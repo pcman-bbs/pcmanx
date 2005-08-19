@@ -729,7 +729,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 		if ( !*line )
 			return;
 	
-		// FIXME ugly ugly ugly...
+		// FIXME cannot exactly grep waterballs in ptt[123]
 		string sub;
 		string sub2;
 		string str(line);
@@ -743,7 +743,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 			sub2 = sub.erase(m+1);
 		string str_to_send = "\022" + bot->askNancy(sub2) 
 			+ "\015y\015\033[A\033[B";
-		SendRawString( str_to_send.c_str(), str_to_send.length() );
+		SendString( str_to_send.c_str() );
 	} // end if
 #endif  // USE_NANCY
 

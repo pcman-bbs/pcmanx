@@ -25,14 +25,14 @@ int MsgData::errorHandler(int level, const string &flag, const string &msg)
 }
 
 
-MsgData::MsgData(string bot_name, string config_path, char old_level, int re_learning_level, int hard_working_level)
+MsgData::MsgData(string bot_name, string config_path, char old_run_level, int level__re_learning, int level__add_to_unknow_msg)
 {
 	learn_something = false;
 	srand(time(NULL));
 	BOT_NAME = bot_name;
-	BOT_LEVEL = old_level;
-	HARD_WORKING_LEVEL = hard_working_level; // Default: 20
-	RE_LEARNING_LEVEL = re_learning_level; // Default: 10
+	BOT_RUN_LEVEL = old_run_level;
+	LEVEL__ADD_TO_UNKNOW_MSG = level__add_to_unknow_msg; // Default: 100
+	LEVEL__RE_LEARNING = level__re_learning; // Default: 20
 	CONFIG_PATH = config_path;
 	if( *(CONFIG_PATH.end() -1) != '/' )
 		CONFIG_PATH += '/';
@@ -101,32 +101,32 @@ MsgData::MsgData(string bot_name, string config_path, char old_level, int re_lea
 	}
 #endif
 #endif // !CONSOLE_BOT
-	if(BOT_LEVEL & USE_ANGRY)
+	if(BOT_RUN_LEVEL & USE_ANGRY)
 	{
 		if( errorHandler( initSpecialMsg("[ANGRY]"), "ANGRY_MSG" ))
-			BOT_LEVEL ^= USE_ANGRY;
+			BOT_RUN_LEVEL ^= USE_ANGRY;
 	}
-	if(BOT_LEVEL & USE_UNKNOW)
+	if(BOT_RUN_LEVEL & USE_UNKNOW)
 	{
 		if( errorHandler ( initSpecialMsg("[UNKNOW]"), "UNKNOW_MSG"))
-			BOT_LEVEL ^= USE_UNKNOW;
+			BOT_RUN_LEVEL ^= USE_UNKNOW;
 	}
 
 	
-	if(BOT_LEVEL & USE_AUTO_LEARN)
+	if(BOT_RUN_LEVEL & USE_AUTO_LEARN)
 	{
 		errorHandler ( initUnknowMsgToAsk() ,"INITIAL UNKNOW MSG TO ASK" );
 		if( (errorHandler ( initSpecialMsg("[ASK]"), "ASK_MSG")) )
 		{
-			BOT_LEVEL ^= USE_AUTO_LEARN;
+			BOT_RUN_LEVEL ^= USE_AUTO_LEARN;
 		}
 	}
 		
 
-	if(BOT_LEVEL & USE_BASE)
+	if(BOT_RUN_LEVEL & USE_BASE)
 	{
 		if (errorHandler( initCommonMsg(), "BASE_MSG" ) < 0 )
-			BOT_LEVEL ^= USE_BASE;
+			BOT_RUN_LEVEL ^= USE_BASE;
 	}
 }
 
@@ -176,7 +176,7 @@ MsgData::writeUnknowLog()
 
 MsgData::~MsgData()
 {
-	if(BOT_LEVEL & USE_AUTO_LEARN)
+	if(BOT_RUN_LEVEL & USE_AUTO_LEARN)
 	{
 		if(learn_something)
 		{
@@ -457,13 +457,13 @@ int MsgData::getCommonMsg(string &input, string &msg)
 	int learn_this;
 	VS_map::iterator cur;
 	
-	if(BOT_LEVEL & USE_AUTO_LEARN)
+	if(BOT_RUN_LEVEL & USE_AUTO_LEARN)
 	{
-		if( (rand() % 100) < RE_LEARNING_LEVEL ) // old msg to learn again
+		if( (rand() % 100) < LEVEL__RE_LEARNING ) // old msg to learn again
 			re_learn = true;
 		
 		// FIXME: Are the two rand()s different?
-		if( (rand() % 100 ) < HARD_WORKING_LEVEL ) // ask ( new Msg to leran )
+		if( (rand() % 100 ) < LEVEL__ADD_TO_UNKNOW_MSG ) // ask ( new Msg to leran )
 			ask = true;
 	}
 
@@ -503,9 +503,9 @@ int MsgData::getCommonMsg(string &input, string &msg)
 }
 		
 char
-MsgData::getBotLevel()
+MsgData::getBotRunLevel()
 {
-	return BOT_LEVEL;
+	return BOT_RUN_LEVEL;
 }
 
 

@@ -53,16 +53,17 @@ class MsgData
 		string filename_common_msg;
 		string filename_unknow_log;
 
-		char BOT_LEVEL;
-		unsigned int HARD_WORKING_LEVEL;
-		unsigned int RE_LEARNING_LEVEL;
+		char BOT_RUN_LEVEL;
+		unsigned int LEVEL__ADD_TO_UNKNOW_MSG;
+//		unsigned int LEVEL__ASK_UNKNOW_MSG;
+		unsigned int LEVEL__RE_LEARNING;
 		bool learn_something;
 	public:
 		MsgData(string bot_name = "default",
 				string config_path = "./",
 				char old_level = 037, 
-				int re_learning_level = 10,
-				int hard_working_level = 20 );
+				int level__re_learning = 10,
+				int level__ask_unknow_msg = 20 );
 		~MsgData();
 		int ref_counter;
 		int getSpecialMsg(int status, string &);
@@ -71,17 +72,27 @@ class MsgData
 		bool getUnknowMsgToAsk(string &);
 		int addUnknowMsgToAsk(string &);
 		int addOldMsgToAskAgain(string);
-		bool setReLearningLevel(int num)
+		bool setLevel__ReLearning(int num)
 		{
 			if( num >= 0 )
 			{
-				RE_LEARNING_LEVEL = num;
+				LEVEL__RE_LEARNING = num;
+				return true;
+			}
+			else return false;
+		}
+
+		bool setLevel__AddToUnknowMsg(int num)
+		{
+			if( num >= 0 )
+			{
+				LEVEL__ADD_TO_UNKNOW_MSG = num;
 				return true;
 			}
 			else return false;
 		}
 		
-		char getBotLevel();
+		char getBotRunLevel();
 
 };
 

@@ -1,3 +1,16 @@
+2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/api.h,
+	src/nancy_bot/msgdata.h: Fixed unclear variable and function names about
+	"Bot Level".
+
+	* data/nancy_bot/default_msg.data,
+	data/nancy_bot/default.conf: Convert from big5 to utf-8.
+
+	* src/view/telnetcon.cpp: Use SendString() to send utf-8 strings.
+
 2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/view/telnetcon.cpp: CTelnetCon::OnNewIncomingMessage now receives
