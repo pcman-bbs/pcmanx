@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-07 15:50+0800\n"
-"PO-Revision-Date: 2005-08-21 19:28+0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2005-08-22 01:51+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:35
-#: ../src/mainframe.cpp:726
+#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:729
 msgid "Site List"
 msgstr ""
 
@@ -97,13 +97,11 @@ msgstr ""
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:500
-#: ../src/mainframe.cpp:1289
+#: ../src/mainframe.cpp:500 ../src/mainframe.cpp:1292
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:508
-#: ../src/mainframe.cpp:1297
+#: ../src/mainframe.cpp:508 ../src/mainframe.cpp:1300
 msgid "_Edit Favorites"
 msgstr ""
 
@@ -111,96 +109,93 @@ msgstr ""
 msgid "_View"
 msgstr ""
 
-#: ../src/mainframe.cpp:532
+#: ../src/mainframe.cpp:533
 msgid "Bot (Current Connection)"
 msgstr ""
 
-#: ../src/mainframe.cpp:543
-#: ../src/mainframe.cpp:570
+#: ../src/mainframe.cpp:544 ../src/mainframe.cpp:571
 msgid "Disable Bot"
 msgstr ""
 
-#: ../src/mainframe.cpp:554
-#: ../src/mainframe.cpp:581
+#: ../src/mainframe.cpp:555 ../src/mainframe.cpp:582
 msgid "Nancy Bot"
 msgstr ""
 
-#: ../src/mainframe.cpp:559
+#: ../src/mainframe.cpp:560
 msgid "Bot (All Opened Connections)"
 msgstr ""
 
-#: ../src/mainframe.cpp:586
+#: ../src/mainframe.cpp:589
 msgid "_Help"
 msgstr ""
 
-#: ../src/mainframe.cpp:676
+#: ../src/mainframe.cpp:679
 msgid "Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:731
+#: ../src/mainframe.cpp:734
 msgid "New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:736
+#: ../src/mainframe.cpp:739
 msgid "Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:741
+#: ../src/mainframe.cpp:744
 msgid "Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:750
+#: ../src/mainframe.cpp:753
 msgid "Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:755
+#: ../src/mainframe.cpp:758
 msgid "Copy with ANSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:760
+#: ../src/mainframe.cpp:763
 msgid "Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:769
+#: ../src/mainframe.cpp:772
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:774
-#: ../src/prefdlg.cpp:32
+#: ../src/mainframe.cpp:777 ../src/prefdlg.cpp:32
 msgid "Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:779
+#: ../src/mainframe.cpp:782
 msgid "About"
 msgstr ""
 
-#: ../src/mainframe.cpp:822
+#: ../src/mainframe.cpp:825
 msgid "A_ddress:"
 msgstr ""
 
-#: ../src/mainframe.cpp:825
+#: ../src/mainframe.cpp:828
 msgid "Type URL here, then hit \"Enter\""
 msgstr ""
 
-#: ../src/mainframe.cpp:848
+#: ../src/mainframe.cpp:851
 msgid "Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:848
+#: ../src/mainframe.cpp:851
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
 msgstr ""
 
-#: ../src/mainframe.cpp:880
+#: ../src/mainframe.cpp:883
 msgid "Font"
 msgstr ""
 
-#: ../src/mainframe.cpp:885
+#: ../src/mainframe.cpp:888
 msgid "Apply to all opened pages"
 msgstr ""
 
-#: ../src/mainframe.cpp:934
+#: ../src/mainframe.cpp:937
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -210,7 +205,7 @@ msgid ""
 "Youchen Lee (Developer) <youchen.lee@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:945
+#: ../src/mainframe.cpp:948
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -224,40 +219,39 @@ msgid ""
 "%s\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:973
+#: ../src/mainframe.cpp:976
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1199
+#: ../src/mainframe.cpp:1202
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1211
+#: ../src/mainframe.cpp:1214
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1223
+#: ../src/mainframe.cpp:1226
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:1336
+#: ../src/mainframe.cpp:1339
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr ""
 
-#: ../src/mainframe.cpp:1552
+#: ../src/mainframe.cpp:1555
 msgid "Nancy Bot is enabled"
 msgstr ""
 
-#: ../src/mainframe.cpp:1559
+#: ../src/mainframe.cpp:1562
 msgid "Nancy Bot is disabled"
 msgstr ""
 
-#: ../src/sitedlg.cpp:40
-#: ../src/prefdlg.cpp:42
+#: ../src/sitedlg.cpp:40 ../src/prefdlg.cpp:42
 msgid "Site Settings"
 msgstr ""
 
@@ -293,8 +287,7 @@ msgstr ""
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:104
-#: ../src/sitepage.cpp:122
+#: ../src/sitepage.cpp:104 ../src/sitepage.cpp:122
 msgid "Sec (0 = Disabled)"
 msgstr ""
 
@@ -386,6 +379,30 @@ msgstr ""
 msgid "Mail Client: "
 msgstr ""
 
+#: ../src/view/telnetview.cpp:166
+msgid "_Copy URL to Clipboard"
+msgstr ""
+
+#: ../src/emoticondlg.cpp:28
+msgid "Emoticons"
+msgstr ""
+
+#: ../src/emoticondlg.cpp:30
+msgid "Send"
+msgstr ""
+
+#: ../src/emoticondlg.cpp:140
+msgid "New Emoticon"
+msgstr ""
+
+#: ../src/emoticondlg.cpp:140 ../src/emoticondlg.cpp:157
+msgid "Input New Emoticon"
+msgstr ""
+
+#: ../src/emoticondlg.cpp:157
+msgid "Edit Emoticon"
+msgstr ""
+
 #: ../src/autologinpage.cpp:42
 msgid "Prelogin Prompt: "
 msgstr ""
@@ -415,31 +432,9 @@ msgid "Post Login String: "
 msgstr ""
 
 #: ../src/autologinpage.cpp:116
-msgid "<big>WARNING:</big> Your password will be stored in <u>plain text</u> without any encryption.  Use this at your own risk.  Although UNIX-like systems all have file permissions, there is no guarantee that others won't get your password."
+msgid ""
+"<big>WARNING:</big> Your password will be stored in <u>plain text</u> "
+"without any encryption.  Use this at your own risk.  Although UNIX-like "
+"systems all have file permissions, there is no guarantee that others won't "
+"get your password."
 msgstr ""
-
-#: ../src/emoticondlg.cpp:28
-msgid "Emoticons"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:30
-msgid "Send"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:140
-msgid "New Emoticon"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:140
-#: ../src/emoticondlg.cpp:157
-msgid "Input New Emoticon"
-msgstr ""
-
-#: ../src/emoticondlg.cpp:157
-msgid "Edit Emoticon"
-msgstr ""
-
-#: ../src/view/telnetview.cpp:166
-msgid "_Copy URL to Clipboard"
-msgstr ""
-
