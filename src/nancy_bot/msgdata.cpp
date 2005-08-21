@@ -47,8 +47,12 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 
 	if(BOT_NAME == "default")
 	{
-                copyfile( DATADIR "/nancy_bot/default.conf" , (CONFIG_PATH + "default.conf").c_str() );
-		copyfile( DATADIR "/nancy_bot/default_msg.conf" , (CONFIG_PATH + "default_msg.conf").c_str() );
+		string srcdir = DATADIR;
+		if( '/' != srcdir[srcdir.length()-1] )
+			srcdir += '/';
+		srcdir += "pcmanx/nancy_bot/";
+		copyfile( (srcdir + "default_msg.data" ).c_str(), (CONFIG_PATH + "default_msg.data").c_str(), false);
+		copyfile( (srcdir + "default.conf" ).c_str(), (CONFIG_PATH + "default.conf").c_str(), false);
 	}
 #endif
 #endif
