@@ -23,7 +23,35 @@ int MsgData::errorHandler(int level, const string &flag, const string &msg)
 	}
 	else return 0;
 }
+int my_copy( const string &old_path, const string &old_file, const string &new_path, const string &new_file)
+{
+/*	bool new_file_ok = false;
+	bool old_file_ok = false;
+	if( *(old_path.end() -1) != '/' )
+		old_path += '/';
+	if( *(new_path.end() -1) != '/' )
+		new_path += '/';
+	char *f_old = (char *) (old_path + old_file).c_str();
+	char *f_new = (char *) (new_path + new_file).c_str();
 
+	if( access( f_new, R_OK | W_OK) == 0)
+		new_file_ok = true;
+	if( access( f_old, R_OK)  == 0 )
+		old_file_ok = true;
+	if( new_file_ok )
+		return 0;
+	if(!old_file_ok)
+		return -1;
+	int fd_old = open(f_old, O_RDONLY);
+	int fd_new = open(f_new, O_WRONLY | O_CREAT);
+	char buf[4096];
+	while( read( fd_old, buf, sizeof(buf ) ))
+		write(fd_new, buf, sizeof(buf));
+	close(fd_old);
+	close(fd_new);
+	*/
+	return 0;
+}
 
 MsgData::MsgData(string bot_name, string config_path, char old_run_level, int level__re_learning, int level__add_to_unknow_msg)
 {
@@ -41,66 +69,16 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 
 #ifndef CONSOLE_BOT
 #ifdef DATADIR
-	string tmp_path_msgdata = CONFIG_PATH + "default_msg.data";
-	string tmp_path_conf = CONFIG_PATH + "default.conf";
-	if( BOT_NAME == "default" )
+	if(access(CONFIG_PATH.c_str(), F_OK))
+		mkdir( CONFIG_PATH.c_str(), 0755 );
+
+	if(BOT_NAME == "default")
 	{
-		string data_path = (string)DATADIR "/" + "pcmanx/nancy_bot/";
-		char buf[4096];
-		FILE *fp_orig_conf = fopen((data_path + "default.conf").c_str() ,"r");
-		FILE *fp_new_conf = fopen(tmp_path_conf.c_str() ,"r");
-		if(fp_orig_conf && !fp_new_conf)
-		{
-			FILE *fp_new_conf = fopen(tmp_path_conf.c_str() ,"w+");
-			if(fp_new_conf)
-			{
-				while( fgets(buf, sizeof(buf), fp_orig_conf) )
-				{
-					fputs(buf,fp_new_conf);
-					fflush(fp_new_conf);
-				}
-			}
-			else
-				perror(tmp_path_conf.c_str());
-		}
-		else if(!fp_new_conf)
-			perror((data_path + "default.conf").c_str());
-
-		FILE *fp_new_msgdata = fopen(tmp_path_msgdata.c_str(),"r");
-		FILE *fp_orig_msgdata = fopen((data_path + "default_msg.data").c_str() ,"r");
-		if(fp_orig_msgdata && !fp_new_msgdata)
-		{
-			FILE *fp_new_msgdata = fopen(tmp_path_msgdata.c_str(),"w+");
-			if(fp_new_msgdata)
-			{
-				while( fgets(buf, sizeof(buf), fp_orig_msgdata) )
-				{
-					fputs(buf,fp_new_msgdata);
-					fflush(fp_new_msgdata);
-				}
-			}
-			else
-				perror(tmp_path_msgdata.c_str());
-		}
-		else if(!fp_new_msgdata)
-			perror((data_path + "default_msg.data").c_str());
-
-		if(fp_orig_conf)
-			fclose(fp_orig_conf);
-		if(fp_orig_msgdata)
-			fclose(fp_orig_msgdata);
-		
-		if(fp_new_conf)
-		{
-			fclose(fp_new_conf);
-		}
-		if(fp_new_msgdata)
-		{
-			fclose(fp_new_msgdata);
-		}
+//		my_copy("qwerty", "default.conf", "sdf" ,"default.conf");
+//		my_copy((string &) DATADIR "/", (string &)"default_msg.data", CONFIG_PATH, (string &)"default_msg.data");
 	}
 #endif
-#endif // !CONSOLE_BOT
+#endif
 	if(BOT_RUN_LEVEL & USE_ANGRY)
 	{
 		if( errorHandler( initSpecialMsg("[ANGRY]"), "ANGRY_MSG" ))
@@ -344,7 +322,8 @@ int MsgData::initUnknowMsgToAsk()
 		}
 		fclose(fptr);
 	}
-	return (int)M_MsgUnknowToAsk.size();
+	return 1;
+//	return (int)M_MsgUnknowToAsk.size();
 }
 
 int

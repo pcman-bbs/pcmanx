@@ -33,7 +33,7 @@ AM_CONDITIONAL([CSRG_BASED], test x$ac_x11_csrg_based = xyes)
 AC_CSRG_BASED
 
 # Init gettext
-ALL_LINGUAS="zh_TW"
+ALL_LINGUAS="zh_TW zh_CN"
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.14.1)
 GETTEXT_PACKAGE=pcmanx
