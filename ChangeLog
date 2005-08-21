@@ -1,4 +1,17 @@
-2005=08-22  Youchen Lee  <youchen.lee@gmail.com>
+2005-08-21  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/fileutil.c:
+	Add copyfile() to copy file since it's not provided by the system.
+
+	* src/nancy_bot/msgdata.cpp:
+	Remove MsgData::my_copy(), use copyfile() instead.
+
+	* src/nancy_bot/nancybot.cpp:
+	Change default learning level:
+	LEVEL__ASK_UNKNOW_MSG = 10
+	LEVEL__RE_LEARNING = 5
+
+2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
 
 	* configure.ac: Added zh_CN.po ( Edited by Optical-dlz ).
 	

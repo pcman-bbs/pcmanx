@@ -39,7 +39,6 @@ class MsgData
 		bool writeUnknowLog();
 		int errorHandler(int, const string &);
 		int errorHandler(int, const string &, const string &);
-		int my_copy(const string &old_path, const string &old_file, const string &new_path, const string &new_file);
 		
 		// STL
 		vector<string> V_MsgAngry;

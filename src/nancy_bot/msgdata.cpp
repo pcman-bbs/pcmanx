@@ -5,6 +5,7 @@
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 
 #include "nancy_bot/msgdata.h"
+#include "fileutil.h"
 
 int MsgData::errorHandler(int level, const string &flag)
 {
@@ -23,35 +24,7 @@ int MsgData::errorHandler(int level, const string &flag, const string &msg)
 	}
 	else return 0;
 }
-int my_copy( const string &old_path, const string &old_file, const string &new_path, const string &new_file)
-{
-/*	bool new_file_ok = false;
-	bool old_file_ok = false;
-	if( *(old_path.end() -1) != '/' )
-		old_path += '/';
-	if( *(new_path.end() -1) != '/' )
-		new_path += '/';
-	char *f_old = (char *) (old_path + old_file).c_str();
-	char *f_new = (char *) (new_path + new_file).c_str();
 
-	if( access( f_new, R_OK | W_OK) == 0)
-		new_file_ok = true;
-	if( access( f_old, R_OK)  == 0 )
-		old_file_ok = true;
-	if( new_file_ok )
-		return 0;
-	if(!old_file_ok)
-		return -1;
-	int fd_old = open(f_old, O_RDONLY);
-	int fd_new = open(f_new, O_WRONLY | O_CREAT);
-	char buf[4096];
-	while( read( fd_old, buf, sizeof(buf ) ))
-		write(fd_new, buf, sizeof(buf));
-	close(fd_old);
-	close(fd_new);
-	*/
-	return 0;
-}
 
 MsgData::MsgData(string bot_name, string config_path, char old_run_level, int level__re_learning, int level__add_to_unknow_msg)
 {
