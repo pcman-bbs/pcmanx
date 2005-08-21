@@ -3,9 +3,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <stdio.h>
 /* 2005.08.22  Written by Hong Jen Yee (PCMan) */
-int copyfile(const char* src, const char* dest)
+int copyfile(const char* src, const char* dest, int overwrite)
 {
 	int fdsrc;
 	int fddest;
@@ -15,11 +15,11 @@ int copyfile(const char* src, const char* dest)
 	if( -1 != (fdsrc = open(src, O_RDONLY)) )
 	{
 		/* File already exists */
-		/* if( !access( dest, F_OK) )
-			unlink( dest );	*/
+		if( !overwrite && !access( dest, F_OK) )
+			return 0;
 		if( -1 != (fddest = open(dest, O_CREAT|O_WRONLY|O_TRUNC) ) )
 		{
-			while( rlen = read( fdsrc, buf, sizeof(buf) ) )
+			while( (rlen = read( fdsrc, buf, sizeof(buf) )) )
 				write( fddest, buf, rlen );
 			close(fddest);
 			close(fdsrc);
