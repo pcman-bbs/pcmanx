@@ -5,6 +5,13 @@
 
 2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/view/telnetview.cpp:
+	Convert UTF-8 encoded text from clipboad to site-specific encoding.
+	This can prevent the broken UTF-8 string caused by auto-wrap.
+	This is just a workaround and should be fixed in the future.
+
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/nancy_bot/msgdata.cpp:
 	Remove MsgData::my_copy(), use copyfile() instead.
 

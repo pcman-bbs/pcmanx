@@ -244,11 +244,19 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			// Only when no control character is in this string can 
 			// autowrap be enabled
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
+			gsize convl;
+			gchar* locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
+			if( !locale_text )
+				return;
+			// FIXME: Convert UTF-8 string to locale string.to prevent invalid UTF-8 string
+			// caused by the auto-wrapper.
+			// Just a workaround.  This needs to be modified in the future.
+			const char* ptext = locale_text;
 			if( GetCon()->m_Site.m_AutoWrapOnPaste > 0 )
 			{
 				string str2;
-				const char* pstr = text.c_str();
-				for( ; *pstr; pstr++ )
+				const char* pstr = locale_text;
+				for( ; *pstr; ++pstr )
 				{
 					size_t word_len = 1;
 					const char* pword = pstr;
@@ -259,16 +267,16 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 						else
 						{
 							while( *pstr && ((unsigned char)*(pstr+1)) && ((unsigned char)*(pstr+1)) < 128  && !strchr(" \t\n\r", *pstr) )
-								pstr++;
+								++pstr;
 							word_len = (pstr - pword) + (*pstr != '\t' ? 1 : 4);	// assume tab width = 4, may be changed in the future
 						}
 					}
 					else
 					{
-						pstr++;
+						++pstr;
 						word_len = ( *pstr ? 2 : 1 );
 					}
-		
+
 					if( (len + word_len) > max_len )
 					{
 						len = 0;
@@ -284,9 +292,12 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 						len = 0;
 				}
 				text = str2;
+				ptext = text.c_str();
 			}
 
-			GetCon()->SendString(text);
+			GetCon()->SendRawString(ptext, strlen(ptext));
+
+			g_free( locale_text );
 		}
 	}
 }
