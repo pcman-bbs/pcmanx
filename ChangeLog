@@ -1,3 +1,10 @@
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetview.cpp:
+	Convert all '\n' characters to correct CR/LF before pasting text
+	from the clipboard.
+	This is just a workaround and should be fixed in the future.
+
 2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
 
 	* data/nancy_bot/default_msg.data,

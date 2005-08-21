@@ -252,6 +252,7 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			// caused by the auto-wrapper.
 			// Just a workaround.  This needs to be modified in the future.
 			const char* ptext = locale_text;
+			const char* crlf = GetCon()->m_Site.GetCRLF();
 			if( GetCon()->m_Site.m_AutoWrapOnPaste > 0 )
 			{
 				string str2;
@@ -295,7 +296,14 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 				ptext = text.c_str();
 			}
 
-			GetCon()->SendRawString(ptext, strlen(ptext));
+			string text2;
+			for( const char* pstr = ptext; *pstr; ++pstr )
+				if( *pstr == '\n' )
+					text2 += crlf;
+				else
+					text2 += *pstr;
+
+			GetCon()->SendRawString(text2.c_str(), text2.length() );
 
 			g_free( locale_text );
 		}
