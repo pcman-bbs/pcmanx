@@ -29,7 +29,8 @@ and here are the latest options:
   --enable-plugin	Enable the build of Mozilla/Firefox plugin for PCManX.
 			You should install the development packages of Mozilla
 			/ Firefox. [Default: Disabled]
-  --enable-nancy	Enable NancyBot to play tricks. [Default: Disabled]
+  --disable-nancy	Disable NancyBot. ( Disable auto-reply waterballs )
+			[Default: Enabled]
 
   --with-mozilla=DIR	Specify DIR as the Mozilla root directory for headers
 			and libraries.

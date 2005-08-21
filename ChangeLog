@@ -1,3 +1,9 @@
+2005-08-21  Youchen Lee <youchen.lee@gmail.com>
+
+	* configure.ac,
+	README: Set --enable-nancy as default.
+	* TODO: Added severial todos.
+
 2005-08-21  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/mainframe.cpp:

@@ -95,12 +95,12 @@ AC_ARG_ENABLE(notifier,
 	notifier=$enableval, notifier=yes)
 
 AC_ARG_ENABLE(script,
-[  --enable-script      disable script support (default: no)],
+[  --enable-script      enable script support (default: no)],
 	script=$enableval, script=no)
 
 AC_ARG_ENABLE(nancy,
-[  --enable-nancy	enable nancy bot support (default: no)],
-	nancy=$enableval, nancy=no)
+[  --disable-nancy	disable nancy bot support (default: yes)],
+	nancy=$enableval, nancy=yes)
 	
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
