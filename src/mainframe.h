@@ -121,6 +121,12 @@ protected:
     void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
+#ifdef USE_NANCY
+    void UpdateBotStatus();
+    static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
+    static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
+#endif
+
 #ifdef USE_DOCKLET
     static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
 //    static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
@@ -150,6 +156,14 @@ protected:
 	bool m_IsFlashing;
     GtkWidget* m_URLEntry;
     GtkTooltips* m_Tooltips;
+    GtkLabel* m_StatusBarTime;
+#ifdef USE_NANCY
+    GtkLabel* m_StatusBarBotState;
+    GtkRadioMenuItem* m_DisableCurBotRadio;
+    GtkRadioMenuItem* m_CurBotNancyRadio;
+    GtkRadioMenuItem* m_DisableAllBotRadio;
+    GtkRadioMenuItem* m_AllBotNancyRadio;
+#endif
 };
 
 #endif
