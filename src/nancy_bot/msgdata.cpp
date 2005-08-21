@@ -47,8 +47,8 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 
 	if(BOT_NAME == "default")
 	{
-//		my_copy("qwerty", "default.conf", "sdf" ,"default.conf");
-//		my_copy((string &) DATADIR "/", (string &)"default_msg.data", CONFIG_PATH, (string &)"default_msg.data");
+                copyfile( DATADIR "/nancy_bot/default.conf" , (CONFIG_PATH + "default.conf").c_str() );
+		copyfile( DATADIR "/nancy_bot/default_msg.conf" , (CONFIG_PATH + "default_msg.conf").c_str() );
 	}
 #endif
 #endif
