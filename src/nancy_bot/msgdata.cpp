@@ -33,7 +33,7 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 	BOT_NAME = bot_name;
 	BOT_RUN_LEVEL = old_run_level;
 	LEVEL__ADD_TO_UNKNOW_MSG = level__add_to_unknow_msg; // Default: 100
-	LEVEL__RE_LEARNING = level__re_learning; // Default: 20
+	LEVEL__RE_LEARNING = level__re_learning; // Default: 5
 	CONFIG_PATH = config_path;
 	if( *(CONFIG_PATH.end() -1) != '/' )
 		CONFIG_PATH += '/';

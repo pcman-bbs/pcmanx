@@ -64,8 +64,8 @@ class MsgData
 		MsgData(string bot_name = "default",
 				string config_path = "./",
 				char old_level = 037, 
-				int level__re_learning = 10,
-				int level__ask_unknow_msg = 20 );
+				int level__re_learning = 5,
+				int level__add_to_unknow_msg = 10 );
 		~MsgData();
 		int ref_counter;
 		int getSpecialMsg(int status, string &);

@@ -47,7 +47,7 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	}
 	else
 	{
-		BOTS_LIST[BOT_INDEX] = new MsgData(BOT_NAME, CONFIG_PATH, BOT_RUN_LEVEL, LEVEL__ADD_TO_UNKNOW_MSG);
+		BOTS_LIST[BOT_INDEX] = new MsgData(BOT_NAME, CONFIG_PATH, BOT_RUN_LEVEL, LEVEL__RE_LEARNING, LEVEL__ADD_TO_UNKNOW_MSG);
 		pMyMsgData = BOTS_LIST[BOT_INDEX];
 		pMyMsgData->ref_counter = 1;
 	}
