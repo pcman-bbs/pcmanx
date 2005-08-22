@@ -402,7 +402,7 @@ MsgData::getSpecialMsg(int status, string &msg )
 
 
 // FIXME: What a massup!!  ugly ugly ugly..
-int MsgData::getCommonMsg(string &input, string &msg)
+int MsgData::getCommonMsg(string &input, string &msg, bool add_to_unknow)
 {
 	int len = input.length();
 	int random;
@@ -419,7 +419,7 @@ int MsgData::getCommonMsg(string &input, string &msg)
 			re_learn = true;
 		
 		// FIXME: Are the two rand()s different?
-		if( (rand() % 100 ) < LEVEL__ADD_TO_UNKNOW_MSG ) // ask ( new Msg to leran )
+		if( add_to_unknow && (rand() % 100 ) < LEVEL__ADD_TO_UNKNOW_MSG ) // ask ( new Msg to leran )
 			ask = true;
 	}
 

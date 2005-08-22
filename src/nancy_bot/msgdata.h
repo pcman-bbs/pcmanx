@@ -69,7 +69,7 @@ class MsgData
 		~MsgData();
 		int ref_counter;
 		int getSpecialMsg(int status, string &);
-		int getCommonMsg(string &, string &);
+		int getCommonMsg(string &, string &, bool);
 		int learning(string &, string &);
 		bool getUnknowMsgToAsk(string &);
 		int addUnknowMsgToAsk(string &);

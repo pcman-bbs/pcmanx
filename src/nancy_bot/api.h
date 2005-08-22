@@ -32,7 +32,6 @@
 
 #ifndef __INCLUDE_NANCYBOT_H__
 #define __INCLUDE_NANCYBOT_H__
-
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
@@ -44,7 +43,7 @@
 using namespace std;
 
 #include "nancy_bot/msgdata.h"
-
+#define TEACH_BOT
 class NancyBot
 {
   private:
@@ -54,7 +53,15 @@ class NancyBot
     bool writeLog(string &, string &);
     int replaceString(string & modify_me, string &find_me, string &replace_with_me);
     bool askHowToAnser(string &, string &);
-    
+    inline string trim(const string& str) {
+	    if(str.length() == 0)
+		    return str;
+	    int first = str.find_first_not_of(" \t");
+	    int end = str.find_last_not_of(" \t");
+	    if(first == -1)
+		    return "";
+	    return std::string(str, first, end - first + 1);
+    }
     //******************************* vars
     // base
     string filename_conf;
@@ -71,6 +78,7 @@ class NancyBot
 
     // learning
     bool just_asked;
+    bool add_to_unknow;
     string just_asked_unknow_msg;
     unsigned int LEVEL__ASK_UNKNOW_MSG;
     unsigned int LEVEL__ADD_TO_UNKNOW_MSG;

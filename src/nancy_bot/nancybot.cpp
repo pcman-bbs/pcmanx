@@ -23,6 +23,7 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	LEVEL__ADD_TO_UNKNOW_MSG = 100; // default 100, always add
 
 	just_asked = false;
+	add_to_unknow = true;
 //	level__ask_unknow_msg_changed = false;
 	level__re_learning_changed = false;
 	level__add_to_unknow_msg_changed = false;
@@ -140,11 +141,33 @@ NancyBot::replaceString(string &modify_me, string &find_me , string &replace_wit
 string
 NancyBot::askNancy(string msg_input)
 {
+	string msg_out = "PCManX-NancyBot";  // init msg_out
+#ifdef TEACH_BOT
+	int get_here;
+	if( BOT_RUN_LEVEL & USE_AUTO_LEARN)
+	{
+		if( (get_here = msg_input.find_first_of('=')) != string::npos ) // found
+		{
+			string str_first = msg_input.substr(0,get_here);
+			cout << str_first << endl;
+			string str_second = msg_input.substr(get_here+1);
+			cout << str_second << endl;
+			str_first = trim(str_first);
+			str_second = trim(str_second);
+			if(!(str_first.empty() || str_second.empty()))
+			{
+				pMyMsgData->learning(str_first, str_second);
+				return "Got it!";
+			}
+		}
+	}
+#endif
 	BOT_STATUS = 0;
 	int random;
+	add_to_unknow = true;
 	string unknow_msg;
 	int len = msg_input.length();
-	string msg_out = "PCManX-NancyBot";  // init msg_out
+
 
 	if(level__add_to_unknow_msg_changed)
 	{
@@ -161,6 +184,7 @@ NancyBot::askNancy(string msg_input)
 	{
 		pMyMsgData->learning(just_asked_unknow_msg, msg_input);
 		just_asked = false;
+		add_to_unknow = false;
 	}
 	
 	if( BOT_RUN_LEVEL & USE_AUTO_LEARN)
@@ -207,7 +231,7 @@ NancyBot::askNancy(string msg_input)
 		
 	if( (BOT_RUN_LEVEL & USE_BASE ) && BOT_STATUS != 1 ) // use_base and nancy not angry
 	{
-		if(pMyMsgData->getCommonMsg(msg_input, msg_out) == 0) // not found
+		if(pMyMsgData->getCommonMsg(msg_input, msg_out, add_to_unknow) == 0) // not found
 		{
 			if(BOT_RUN_LEVEL & USE_UNKNOW)
 			{

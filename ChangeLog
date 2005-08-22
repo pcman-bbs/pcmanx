@@ -1,3 +1,12 @@
+2005-08=23  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/api.h:
+	Fixed that bot add all replies to unknow messages.
+	Add "xxx = yyy" teaching. (#define TEACH_BOT).
+
 2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/nancy_bot/msgdata.cpp,
