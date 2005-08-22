@@ -1,3 +1,12 @@
+2005-08-22  Kanru Chen  <koster@debian.org.tw>
+
+	* src/view/telnetview.cpp
+	(CTelnetView::OnHyperlinkClicked):
+	Disable parsing telnet:// in firefox plugin.
+
+	* configure.ac:
+	Bump release version to 0.3.1.
+
 2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/view/telnetview.cpp:

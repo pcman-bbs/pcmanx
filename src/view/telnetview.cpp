@@ -322,6 +322,7 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string url)
 {
+#if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( url.c_str(), "telnet:", 7) )
 	{
 		const char* purl = url.c_str() + 7;
@@ -335,6 +336,8 @@ void CTelnetView::OnHyperlinkClicked(string url)
 		m_pParentFrame->NewCon( url, url );
 		return;
 	}
+#endif /* !defined(MOZ_PLUGIN) */
+
 	// In URL, the char "&" will be read as "background execution" when run the browser command without " "
 	url.insert(0,"\"");
 	url.append("\"");
