@@ -19,11 +19,13 @@
 using namespace std;
 
 // BOT_RUN_LEVEL
-#define USE_BASE        001
-#define USE_UNKNOW      002
-#define USE_ANGRY       004
-#define USE_LOG         010
-#define USE_AUTO_LEARN	020
+#define USE_BASE        	(unsigned char) 001
+#define USE_UNKNOW      	(unsigned char) 002
+#define USE_ANGRY       	(unsigned char) 004
+#define USE_LOG         	(unsigned char) 010
+#define USE_AUTO_LEARN		(unsigned char) 020
+#define USE_TEACH		(unsigned char) 040
+#define USE_USER_DEFINED_USAGES	(unsigned char) 0100
 
 class MsgData
 {
@@ -33,6 +35,7 @@ class MsgData
 		int initSpecialMsg(string);
 		int initCommonMsg();
 		int initUnknowMsgToAsk();
+		int initUserDefinedUsages();
 		int writeToMsgData();
 		bool writeUnknowLog();
 		int errorHandler(int, const string &);
@@ -46,6 +49,7 @@ class MsgData
 		map<int, VS_map> MT; // map table
 
 		VS_map VSM_MsgLearnToSave;
+		VS_map VSM_UserDefinedUsages;
 		map<string, bool> M_MsgUnknowToAsk;
 
 		// vars
@@ -54,8 +58,9 @@ class MsgData
 		string filename_conf;
 		string filename_common_msg;
 		string filename_unknow_log;
+		string filename_user_defined_usages;
 
-		char BOT_RUN_LEVEL;
+		unsigned char BOT_RUN_LEVEL;
 		unsigned int LEVEL__ADD_TO_UNKNOW_MSG;
 //		unsigned int LEVEL__ASK_UNKNOW_MSG;
 		unsigned int LEVEL__RE_LEARNING;
@@ -63,7 +68,7 @@ class MsgData
 	public:
 		MsgData(string bot_name = "default",
 				string config_path = "./",
-				char old_level = 037, 
+				unsigned char old_level = 0177, 
 				int level__re_learning = 5,
 				int level__add_to_unknow_msg = 10 );
 		~MsgData();
@@ -72,8 +77,11 @@ class MsgData
 		int getCommonMsg(string &, string &, bool);
 		int learning(string &, string &);
 		bool getUnknowMsgToAsk(string &);
+		bool getUserDefinedUsages(string &key,string &query, string &msg);
 		int addUnknowMsgToAsk(string &);
 		int addOldMsgToAskAgain(string);
+		unsigned char getBotRunLevel();
+
 		bool setLevel__ReLearning(int num)
 		{
 			if( num >= 0 )
@@ -94,7 +102,6 @@ class MsgData
 			else return false;
 		}
 		
-		char getBotRunLevel();
 
 };
 

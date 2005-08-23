@@ -1,0 +1,2 @@
+>google # key
+http://www.google.com/search?q={google} # query ---> google | pcmanx  ==> http://www.google.com/search?q=pcmanx

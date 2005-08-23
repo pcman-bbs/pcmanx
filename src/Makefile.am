@@ -39,7 +39,8 @@ OPTIONAL_NANCY = \
 	nancy_bot/api.h \
 	nancy_bot/nancybot.cpp \
 	nancy_bot/msgdata.cpp \
-	nancy_bot/msgdata.h
+	nancy_bot/msgdata.h \
+	nancy_bot/botutil.h
 
 EXTRA_DIST = \
 	conn_xpm.xpm \

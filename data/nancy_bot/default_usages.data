@@ -1,0 +1,6 @@
+>google
+http://www.google.com/search?q={google}
+http://www.google.com.tw/search?q={google}
+
+>dpkg
+http://packages.debian.org/cgi-bin/search_packages.pl?keywords={dpkg}&version=all

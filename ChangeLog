@@ -1,4 +1,20 @@
-2005-08=23  Youchen Lee  <youchen.lee@gmail.com>
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/Makefile.am,
+	data/Makefile.am,
+	src/nancy_bot/botutil.h,
+	data/nancy_bot/default_usages.data,
+	data/nancy_bot/example_usages.data: Added utils for Nancy. Added
+	user-defined usages.
+
+	* src/nancy_bot/api.h,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/nancybot.cpp: Added user-defined usages. Replaced char
+	with unsigned char. Several bugs fixed.
+
+
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/nancy_bot/msgdata.cpp,
 	src/nancy_bot/nancybot.cpp,

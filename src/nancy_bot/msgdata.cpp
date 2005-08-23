@@ -5,6 +5,7 @@
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 
 #include "nancy_bot/msgdata.h"
+#include "nancy_bot/botutil.h"
 #include "fileutil.h"
 
 int MsgData::errorHandler(int level, const string &flag)
@@ -26,7 +27,7 @@ int MsgData::errorHandler(int level, const string &flag, const string &msg)
 }
 
 
-MsgData::MsgData(string bot_name, string config_path, char old_run_level, int level__re_learning, int level__add_to_unknow_msg)
+MsgData::MsgData(string bot_name, string config_path, unsigned char old_run_level, int level__re_learning, int level__add_to_unknow_msg)
 {
 	learn_something = false;
 	srand(time(NULL));
@@ -53,9 +54,14 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 		srcdir += "pcmanx/nancy_bot/";
 		copyfile( (srcdir + "default_msg.data" ).c_str(), (CONFIG_PATH + "default_msg.data").c_str(), false);
 		copyfile( (srcdir + "default.conf" ).c_str(), (CONFIG_PATH + "default.conf").c_str(), false);
+		copyfile( (srcdir + "default_usages.data" ).c_str(), (CONFIG_PATH + "default_usages.data").c_str(), false);
 	}
 #endif
 #endif
+	if( (BOT_RUN_LEVEL & USE_TEACH) && !(BOT_RUN_LEVEL & USE_AUTO_LEARN) )
+	{
+		BOT_RUN_LEVEL ^= USE_TEACH;
+	}
 	if(BOT_RUN_LEVEL & USE_ANGRY)
 	{
 		if( errorHandler( initSpecialMsg("[ANGRY]"), "ANGRY_MSG" ))
@@ -82,6 +88,13 @@ MsgData::MsgData(string bot_name, string config_path, char old_run_level, int le
 	{
 		if (errorHandler( initCommonMsg(), "BASE_MSG" ) < 0 )
 			BOT_RUN_LEVEL ^= USE_BASE;
+	}
+	if(BOT_RUN_LEVEL & USE_USER_DEFINED_USAGES)
+	{
+		if (errorHandler( initUserDefinedUsages(), "USER_DEFINED_USAGES" ) < 0 )
+		{
+			BOT_RUN_LEVEL ^= USE_USER_DEFINED_USAGES;
+		}
 	}
 }
 
@@ -147,6 +160,7 @@ int MsgData::initFilename()
 		filename_conf = CONFIG_PATH + BOT_NAME + ".conf";
 		filename_common_msg = CONFIG_PATH + BOT_NAME + "_msg.data";
 		filename_unknow_log = CONFIG_PATH + BOT_NAME + "_unknow.log";
+		filename_user_defined_usages = CONFIG_PATH + BOT_NAME + "_usages.data";
 		return 0;
 	}
 	else return -1;
@@ -210,6 +224,56 @@ MsgData::initSpecialMsg(string flag)
 		fclose(fptr);
 	}
 	return (int)pVMsg->size(); 
+}
+
+int MsgData::initUserDefinedUsages()
+{
+	string filename = filename_user_defined_usages;
+	FILE *fptr = fopen( filename.c_str(), "rt");
+	string index;
+	
+	
+	if(!fptr)
+	{
+		return 0;
+	}
+	else
+	{
+		char buf[4096];
+		while (fgets (buf, sizeof (buf), fptr) )
+		{
+			bool just_got_key = false;
+		        char *line = strtok (buf, "\n\r\t");
+		        if (!line || !*line)
+			{
+				continue;
+			}
+			if (*line == '#')
+				continue;
+			if(!just_got_key && *line == '>')
+			{
+					goto GOT_ME;
+			}
+			else
+			{
+				VSM_UserDefinedUsages[index].push_back( (string)line );
+				continue;
+			}
+			
+			if (*line == '>')
+			{
+GOT_ME:
+				just_got_key = true;
+				line++;
+				index = (string)line;
+				vector<string> V_s;
+				VSM_UserDefinedUsages[index] = V_s;
+				continue;
+			}
+		}
+		fclose(fptr);
+	}
+	return (int)VSM_UserDefinedUsages.size(); 
 }
 
 int
@@ -457,8 +521,26 @@ int MsgData::getCommonMsg(string &input, string &msg, bool add_to_unknow)
 	}
 	return 0;
 }
-		
-char
+
+bool
+MsgData::getUserDefinedUsages(string &key,string &query, string &msg)
+{
+	VS_map::iterator cur;
+	if( (cur = VSM_UserDefinedUsages.find(key)) == VSM_UserDefinedUsages.end() ) // not found
+	{
+		return 0;
+	}
+	else
+	{
+		msg = (cur->second)[rand() % (cur->second).size()];
+		key.insert( 0,"{" );
+		key.append( "}" );
+		replaceString(msg, key, query);
+		return 1;
+	}
+}
+
+unsigned char
 MsgData::getBotRunLevel()
 {
 	return BOT_RUN_LEVEL;

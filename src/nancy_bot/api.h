@@ -51,17 +51,7 @@ class NancyBot
     int initFilename();
     int checkMsgRepeat(string);
     bool writeLog(string &, string &);
-    int replaceString(string & modify_me, string &find_me, string &replace_with_me);
     bool askHowToAnser(string &, string &);
-    inline string trim(const string& str) {
-	    if(str.length() == 0)
-		    return str;
-	    int first = str.find_first_not_of(" \t");
-	    int end = str.find_last_not_of(" \t");
-	    if(first == -1)
-		    return "";
-	    return std::string(str, first, end - first + 1);
-    }
     //******************************* vars
     // base
     string filename_conf;
@@ -94,7 +84,7 @@ class NancyBot
     
   public:
     NancyBot (const char * bot_name = "default", const char * config_path = "./",
-		    char old_bot_run_level = 037);
+		    unsigned char old_bot_run_level = 0177);
     ~NancyBot ();
     int flag;
     string askNancy (string);

@@ -10,11 +10,12 @@
 // 2. More and better auto-learn
 
 #include "nancy_bot/api.h"
+#include "nancy_bot/botutil.h"
 
 map<string, MsgData* > NancyBot::BOTS_LIST;
 
 
-NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_run_level)
+NancyBot::NancyBot(const char *bot_name , const char *config_path, unsigned char old_bot_run_level)
 {
 	BOT_STATUS = 0;
 	BOT_RUN_LEVEL = old_bot_run_level;
@@ -55,17 +56,20 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, char old_bot_
 	BOT_RUN_LEVEL = pMyMsgData->getBotRunLevel(); // get bot level ( after initialed,
 						      // BOT_RUN_LEVLE may changed )
 	
-	//printf("%x\n",BOT_RUN_LEVEL);  // DEBUG
+	//printf("RUN_LEVEL=%x\n",BOT_RUN_LEVEL);  // DEBUG
 	string filename_log;
 	std::ostringstream os_num;
 	os_num << pMyMsgData->ref_counter;
 		      
 	filename_log = BOT_NAME + "_" + os_num.str();
 		
-	fp_log = fopen((CONFIG_PATH + filename_log + ".log").c_str() , "a+t");
-	if(!fp_log){
-		perror(filename_log.c_str());
-		BOT_RUN_LEVEL ^= USE_LOG;
+	if(BOT_RUN_LEVEL & USE_LOG)
+	{
+		fp_log = fopen((CONFIG_PATH + filename_log + ".log").c_str() , "a+t");
+		if(!fp_log){
+			perror(filename_log.c_str());
+			BOT_RUN_LEVEL ^= USE_LOG;
+		}
 	}
 	
 }
@@ -115,43 +119,17 @@ NancyBot::~NancyBot()
 		fclose(fp_log);
 }
 
-
-int
-NancyBot::replaceString(string &modify_me, string &find_me , string &replace_with_me)
-{
-	int search_here = 0;
-	int num_replaced = 0;
-	if( find_me == replace_with_me )
-		return 0;
-	while(1)
-	{
-        	search_here = modify_me.find( find_me, search_here );
-		if( search_here != string::npos && search_here < modify_me.length() ) // found
-		{
-			modify_me.replace( search_here, find_me.length(), replace_with_me );
-			num_replaced++;
-			search_here++;
-		}
-		else
-			break;
-	}
-	return num_replaced;
-}
-
 string
 NancyBot::askNancy(string msg_input)
 {
 	string msg_out = "PCManX-NancyBot";  // init msg_out
-#ifdef TEACH_BOT
-	int get_here;
-	if( BOT_RUN_LEVEL & USE_AUTO_LEARN)
+	if( (BOT_RUN_LEVEL & USE_TEACH )&& (BOT_RUN_LEVEL & USE_AUTO_LEARN))
 	{
+		int get_here;
 		if( (get_here = msg_input.find_first_of('=')) != string::npos ) // found
 		{
 			string str_first = msg_input.substr(0,get_here);
-			cout << str_first << endl;
 			string str_second = msg_input.substr(get_here+1);
-			cout << str_second << endl;
 			str_first = trim(str_first);
 			str_second = trim(str_second);
 			if(!(str_first.empty() || str_second.empty()))
@@ -161,7 +139,22 @@ NancyBot::askNancy(string msg_input)
 			}
 		}
 	}
-#endif
+	if (BOT_RUN_LEVEL & USE_USER_DEFINED_USAGES)
+	{
+		int get_here;
+		if( (get_here = msg_input.find_first_of('|')) != string::npos ) // found
+		{
+			string str_first = msg_input.substr(0,get_here);
+			string str_second = msg_input.substr(get_here+1);
+			str_first = trim(str_first);
+			str_second = trim(str_second);
+			if(!(str_first.empty() || str_second.empty()))
+			{
+				if(pMyMsgData->getUserDefinedUsages(str_first, str_second, msg_out ));
+					return msg_out;
+			}
+		}
+	}
 	BOT_STATUS = 0;
 	int random;
 	add_to_unknow = true;

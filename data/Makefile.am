@@ -9,8 +9,10 @@ if USE_NANCY
 NANCY_FILES = \
 	nancy_bot/default.conf \
 	nancy_bot/default_msg.data \
+	nancy_bot/default_usages.data \
 	nancy_bot/example.conf \
-	nancy_bot/example_msg.data
+	nancy_bot/example_msg.data \
+	nancy_bot/example_usages.data
 endif
 
 pcmanx_DATA = \
