@@ -1,17 +1,24 @@
 2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
+	
+	* src/nancy_bot/nancybot.cpp: Fixed an unexpected semicolon in
+	NancyBot::askNancy().
+
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/Makefile.am,
 	data/Makefile.am,
 	src/nancy_bot/botutil.h,
 	data/nancy_bot/default_usages.data,
-	data/nancy_bot/example_usages.data: Added utils for Nancy. Added
-	user-defined usages.
+	data/nancy_bot/example_usages.data: Divided utils for Nancy:
+	replaceString() and trim(). Added data files for
+	USE_USER_DEFINED_USAGES .
 
 	* src/nancy_bot/api.h,
 	src/nancy_bot/msgdata.cpp,
 	src/nancy_bot/msgdata.h,
-	src/nancy_bot/nancybot.cpp: Added user-defined usages. Replaced char
-	with unsigned char. Several bugs fixed.
+	src/nancy_bot/nancybot.cpp: Added two functions
+	MsgData::initUserDefinedUsages() and MsgData::getUserDefinedUsages().
+	Replaced char with unsigned char. Several bugs fixed.
 
 
 2005-08-23  Youchen Lee  <youchen.lee@gmail.com>

@@ -150,7 +150,7 @@ NancyBot::askNancy(string msg_input)
 			str_second = trim(str_second);
 			if(!(str_first.empty() || str_second.empty()))
 			{
-				if(pMyMsgData->getUserDefinedUsages(str_first, str_second, msg_out ));
+				if(pMyMsgData->getUserDefinedUsages(str_first, str_second, msg_out ))
 					return msg_out;
 			}
 		}
