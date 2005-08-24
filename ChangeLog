@@ -1,3 +1,9 @@
+2005-08-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/script/script.cpp:
+	Change char* parameters to const char* since these strings are not 
+	modified in these functions.
+
 2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
 	
 	* src/nancy_bot/nancybot.cpp: Fixed an unexpected semicolon in

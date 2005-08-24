@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-void InitScriptInterface(char *path);
-void ScriptOnNewIncomingMessage(void *handle, char *text);
+void InitScriptInterface(const char *path);
+void ScriptOnNewIncomingMessage(void *handle, const char *text);
 void FinalizeScriptInterface();
 
 #ifdef __cplusplus

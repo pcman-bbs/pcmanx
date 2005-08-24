@@ -47,7 +47,7 @@ static PyMethodDef PCManXMethods[] = {
 };
 
 vector<PyObject*> pModules;
-void InitScriptInterface(char *path)
+void InitScriptInterface(const char *path)
 {
 	char *cmd;
 	PyObject *pName;
@@ -70,7 +70,7 @@ void InitScriptInterface(char *path)
 		PyErr_Print();
 }
 
-void ScriptOnNewIncomingMessage(void *handle, char *text)
+void ScriptOnNewIncomingMessage(void *handle, const char *text)
 {
 	PyObject *pHandle, *pFunc, *pArgs, *pMsg, *pDict;
 
