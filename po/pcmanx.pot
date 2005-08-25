@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-25 14:56+0800\n"
+"POT-Creation-Date: 2005-08-25 16:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,11 +97,11 @@ msgstr ""
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:500 ../src/mainframe.cpp:1292
+#: ../src/mainframe.cpp:500 ../src/mainframe.cpp:1294
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:508 ../src/mainframe.cpp:1300
+#: ../src/mainframe.cpp:508 ../src/mainframe.cpp:1302
 msgid "_Edit Favorites"
 msgstr ""
 
@@ -205,7 +205,11 @@ msgid ""
 "Youchen Lee (Developer) <youchen.lee@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:948
+#: ../src/mainframe.cpp:944
+msgid "Haifeng Chen <optical.dlz@gmail.com>"
+msgstr ""
+
+#: ../src/mainframe.cpp:949
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -217,37 +221,41 @@ msgid ""
 "\n"
 "Authors:\n"
 "%s\n"
+"\n"
+"Translators:\n"
+"%s\n"
+"\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:976
+#: ../src/mainframe.cpp:978
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1202
+#: ../src/mainframe.cpp:1204
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1214
+#: ../src/mainframe.cpp:1216
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1226
+#: ../src/mainframe.cpp:1228
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:1339
+#: ../src/mainframe.cpp:1341
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr ""
 
-#: ../src/mainframe.cpp:1555
+#: ../src/mainframe.cpp:1557
 msgid "Nancy Bot is enabled"
 msgstr ""
 
-#: ../src/mainframe.cpp:1562
+#: ../src/mainframe.cpp:1564
 msgid "Nancy Bot is disabled"
 msgstr ""
 

@@ -941,6 +941,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <youchen.lee@gmail.com>"
 			);
+	char* translators = _( "Haifeng Chen <optical.dlz@gmail.com>" );
 
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -949,7 +950,8 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 						"Copyright (C) 2005\n"
 						"License: GNU Genral Public License\n"
 						"Project Homepage: http://pcmanx.csie.net/\n\n"
-						"Authors:\n%s\n"), VERSION, authors );
+						"Authors:\n%s\n\n"
+						"Translators:\n%s\n\n"), VERSION, authors, translators );
 
 // GTK+ supports this API since ver 2.6.
 /*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,

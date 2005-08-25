@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-07 15:50+0800\n"
+"POT-Creation-Date: 2005-08-25 16:40+0800\n"
 "PO-Revision-Date: 2005-08-21 19:32+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
@@ -13,8 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: ../src/sitelistdlg.cpp:35
-#: ../src/mainframe.cpp:726
+#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:729
 msgid "Site List"
 msgstr "BBS 站台列表"
 
@@ -95,13 +94,11 @@ msgstr "個人偏好設定 (_P)"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:500
-#: ../src/mainframe.cpp:1289
+#: ../src/mainframe.cpp:500 ../src/mainframe.cpp:1294
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:508
-#: ../src/mainframe.cpp:1297
+#: ../src/mainframe.cpp:508 ../src/mainframe.cpp:1302
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -109,82 +106,79 @@ msgstr "編輯我的最愛 (_E)"
 msgid "_View"
 msgstr "檢視 (_V)"
 
-#: ../src/mainframe.cpp:532
+#: ../src/mainframe.cpp:533
 msgid "Bot (Current Connection)"
 msgstr "自動回訊機器人 (只套用到目前連線)"
 
-#: ../src/mainframe.cpp:543
-#: ../src/mainframe.cpp:570
+#: ../src/mainframe.cpp:544 ../src/mainframe.cpp:571
 msgid "Disable Bot"
 msgstr "不使用自動回訊機器人"
 
-#: ../src/mainframe.cpp:554
-#: ../src/mainframe.cpp:581
+#: ../src/mainframe.cpp:555 ../src/mainframe.cpp:582
 msgid "Nancy Bot"
 msgstr "啟動 Nancy 機器人"
 
-#: ../src/mainframe.cpp:559
+#: ../src/mainframe.cpp:560
 msgid "Bot (All Opened Connections)"
 msgstr "自動回訊機器人 (套用到全部連線)"
 
-#: ../src/mainframe.cpp:586
+#: ../src/mainframe.cpp:589
 msgid "_Help"
 msgstr "說明 (_H)"
 
-#: ../src/mainframe.cpp:676
+#: ../src/mainframe.cpp:679
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:731
+#: ../src/mainframe.cpp:734
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../src/mainframe.cpp:736
+#: ../src/mainframe.cpp:739
 msgid "Reconnect"
 msgstr "重新連線"
 
-#: ../src/mainframe.cpp:741
+#: ../src/mainframe.cpp:744
 msgid "Close Connection"
 msgstr "關閉連線分頁"
 
-#: ../src/mainframe.cpp:750
+#: ../src/mainframe.cpp:753
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/mainframe.cpp:755
+#: ../src/mainframe.cpp:758
 msgid "Copy with ANSI Color"
 msgstr "複製(包含ANSI彩色)"
 
-#: ../src/mainframe.cpp:760
+#: ../src/mainframe.cpp:763
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/mainframe.cpp:769
+#: ../src/mainframe.cpp:772
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:774
-#: ../src/prefdlg.cpp:32
+#: ../src/mainframe.cpp:777 ../src/prefdlg.cpp:32
 msgid "Preference"
 msgstr "個人偏好設定"
 
-#: ../src/mainframe.cpp:779
+#: ../src/mainframe.cpp:782
 msgid "About"
 msgstr "關於"
 
-#: ../src/mainframe.cpp:822
+#: ../src/mainframe.cpp:825
 msgid "A_ddress:"
 msgstr "位址 (_D)："
 
-#: ../src/mainframe.cpp:825
+#: ../src/mainframe.cpp:828
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此輸入位址，然後按下\"Enter\""
 
-#: ../src/mainframe.cpp:848
+#: ../src/mainframe.cpp:851
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:848
+#: ../src/mainframe.cpp:851
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -192,15 +186,15 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:880
+#: ../src/mainframe.cpp:883
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:885
+#: ../src/mainframe.cpp:888
 msgid "Apply to all opened pages"
 msgstr "套用到所有開啟中的連線"
 
-#: ../src/mainframe.cpp:934
+#: ../src/mainframe.cpp:937
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -216,8 +210,12 @@ msgstr ""
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>\n"
 "李宥辰 Youchen Lee (開發者) <youchen.lee@gmail.com>"
 
-#: ../src/mainframe.cpp:945
-#, c-format
+#: ../src/mainframe.cpp:944
+msgid "Haifeng Chen <optical.dlz@gmail.com>"
+msgstr "陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
+
+#: ../src/mainframe.cpp:949
+#, fuzzy, c-format
 msgid ""
 "<big>PCMan X  %s\n"
 "A free BBS client developed with GTK+ 2.x</big>\n"
@@ -228,6 +226,10 @@ msgid ""
 "\n"
 "Authors:\n"
 "%s\n"
+"\n"
+"Translators:\n"
+"%s\n"
+"\n"
 msgstr ""
 "<big>PCMan X  %s\n"
 "用 GTK+ 2.x 開發的自由 BBS 連線軟體</big>\n"
@@ -239,15 +241,15 @@ msgstr ""
 "軟體作者：\n"
 "%s\n"
 
-#: ../src/mainframe.cpp:973
+#: ../src/mainframe.cpp:978
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
-#: ../src/mainframe.cpp:1199
+#: ../src/mainframe.cpp:1204
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1211
+#: ../src/mainframe.cpp:1216
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -256,25 +258,24 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1223
+#: ../src/mainframe.cpp:1228
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1336
+#: ../src/mainframe.cpp:1341
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1552
+#: ../src/mainframe.cpp:1557
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1559
+#: ../src/mainframe.cpp:1564
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 
-#: ../src/sitedlg.cpp:40
-#: ../src/prefdlg.cpp:42
+#: ../src/sitedlg.cpp:40 ../src/prefdlg.cpp:42
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -310,8 +311,7 @@ msgstr "站台位址："
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:104
-#: ../src/sitepage.cpp:122
+#: ../src/sitepage.cpp:104 ../src/sitepage.cpp:122
 msgid "Sec (0 = Disabled)"
 msgstr "(0 = 關閉不用)"
 
@@ -403,6 +403,30 @@ msgstr "網頁瀏覽器："
 msgid "Mail Client: "
 msgstr "郵件程式："
 
+#: ../src/view/telnetview.cpp:166
+msgid "_Copy URL to Clipboard"
+msgstr "複製網址到剪貼簿 (_C)"
+
+#: ../src/emoticondlg.cpp:28
+msgid "Emoticons"
+msgstr "表情符號"
+
+#: ../src/emoticondlg.cpp:30
+msgid "Send"
+msgstr "送出"
+
+#: ../src/emoticondlg.cpp:140
+msgid "New Emoticon"
+msgstr "新增表情符號"
+
+#: ../src/emoticondlg.cpp:140 ../src/emoticondlg.cpp:157
+msgid "Input New Emoticon"
+msgstr "輸入新表情符號"
+
+#: ../src/emoticondlg.cpp:157
+msgid "Edit Emoticon"
+msgstr "編輯表情符號"
+
 #: ../src/autologinpage.cpp:42
 msgid "Prelogin Prompt: "
 msgstr "登入前的提示："
@@ -432,31 +456,12 @@ msgid "Post Login String: "
 msgstr "登入後送出的字串："
 
 #: ../src/autologinpage.cpp:116
-msgid "<big>WARNING:</big> Your password will be stored in <u>plain text</u> without any encryption.  Use this at your own risk.  Although UNIX-like systems all have file permissions, there is no guarantee that others won't get your password."
-msgstr "<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔保。"
-
-#: ../src/emoticondlg.cpp:28
-msgid "Emoticons"
-msgstr "表情符號"
-
-#: ../src/emoticondlg.cpp:30
-msgid "Send"
-msgstr "送出"
-
-#: ../src/emoticondlg.cpp:140
-msgid "New Emoticon"
-msgstr "新增表情符號"
-
-#: ../src/emoticondlg.cpp:140
-#: ../src/emoticondlg.cpp:157
-msgid "Input New Emoticon"
-msgstr "輸入新表情符號"
-
-#: ../src/emoticondlg.cpp:157
-msgid "Edit Emoticon"
-msgstr "編輯表情符號"
-
-#: ../src/view/telnetview.cpp:166
-msgid "_Copy URL to Clipboard"
-msgstr "複製網址到剪貼簿 (_C)"
-
+msgid ""
+"<big>WARNING:</big> Your password will be stored in <u>plain text</u> "
+"without any encryption.  Use this at your own risk.  Although UNIX-like "
+"systems all have file permissions, there is no guarantee that others won't "
+"get your password."
+msgstr ""
+"<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，"
+"請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔"
+"保。"
