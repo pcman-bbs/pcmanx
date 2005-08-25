@@ -2,6 +2,7 @@
 
 	* configure.ac:
 	Temporarily disable --enable-script option in the configure script.
+	Bump release version to 0.3.2.
 
 2005-08-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 

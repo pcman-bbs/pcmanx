@@ -19,7 +19,7 @@ NancyBot::NancyBot(const char *bot_name , const char *config_path, unsigned char
 {
 	BOT_STATUS = 0;
 	BOT_RUN_LEVEL = old_bot_run_level;
-	LEVEL__ASK_UNKNOW_MSG = 10; // default 10
+	LEVEL__ASK_UNKNOW_MSG = 25; // default 10
 	LEVEL__RE_LEARNING = 5; // default 5
 	LEVEL__ADD_TO_UNKNOW_MSG = 100; // default 100, always add
 
@@ -103,7 +103,10 @@ bool NancyBot::writeLog(string &msg_in, string &msg_out)
 		return false;
 	}
 	else
+	{
+		fflush(fp_log);
 		return true;
+	}
 		
 }
 
