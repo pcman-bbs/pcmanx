@@ -1,3 +1,8 @@
+2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* configure.ac:
+	Temporarily disable --enable-script option in the configure script.
+
 2005-08-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/script/script.cpp:

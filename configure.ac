@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
 AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.3.1, hzysoft@sina.com.tw)
+AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.3.2, hzysoft@sina.com.tw)
 #AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
@@ -94,9 +94,9 @@ AC_ARG_ENABLE(notifier,
 [  --disable-notifier      disable popup notifier support (default: yes)],
 	notifier=$enableval, notifier=yes)
 
-AC_ARG_ENABLE(script,
-[  --enable-script      enable script support (default: no)],
-	script=$enableval, script=no)
+dnl AC_ARG_ENABLE(script,
+dnl [  --enable-script      enable script support (default: no)],
+dnl 	script=$enableval, script=no)
 
 AC_ARG_ENABLE(nancy,
 [  --disable-nancy	disable nancy bot support (default: yes)],
@@ -228,27 +228,27 @@ dnl *********************************************************************
 dnl ** Script support ***************************************************
 dnl *********************************************************************
 
-if test "$script" = "yes"; then
-  AC_MSG_CHECKING([for Python script support])
-  AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
-  PYTHON_INC=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_inc()'`
-  real_python_inc="`cd ${PYTHON_INC} 2>/dev/null && pwd`"
-  if test -z "${real_python_inc}"; then
-    AC_MSG_ERROR([Fatal Error: no Python detected.])
-  fi
-  PYTHON_VERSION=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_version()'`
-  AC_MSG_RESULT([Python $PYTHON_VERSION found.])
-  PYTHON_CFLAGS="-I${PYTHON_INC}"
-  PYTHON_LIBS="-lpython${PYTHON_VERSION}"
-fi
+dnl if test "$script" = "yes"; then
+dnl   AC_MSG_CHECKING([for Python script support])
+dnl   AC_DEFINE_UNQUOTED(USE_SCRIPT, [1], [Enable script support])
+dnl   PYTHON_INC=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_inc()'`
+dnl   real_python_inc="`cd ${PYTHON_INC} 2>/dev/null && pwd`"
+dnl   if test -z "${real_python_inc}"; then
+dnl     AC_MSG_ERROR([Fatal Error: no Python detected.])
+dnl   fi
+dnl   PYTHON_VERSION=`python -c 'import distutils.sysconfig;print distutils.sysconfig.get_python_version()'`
+dnl   AC_MSG_RESULT([Python $PYTHON_VERSION found.])
+dnl   PYTHON_CFLAGS="-I${PYTHON_INC}"
+dnl   PYTHON_LIBS="-lpython${PYTHON_VERSION}"
+dnl fi
 
-SCRIPT_CFLAGS="$PYTHON_CFLAGS"
-SCRIPT_LIBS="$PYTHON_LIBS"
+dnl SCRIPT_CFLAGS="$PYTHON_CFLAGS"
+dnl SCRIPT_LIBS="$PYTHON_LIBS"
 
 AM_CONDITIONAL(USE_SCRIPT, test "$script" = "yes")
 AC_SUBST(USE_SCRIPT)
-AC_SUBST(SCRIPT_CFLAGS)
-AC_SUBST(SCRIPT_LIBS)
+dnl AC_SUBST(SCRIPT_CFLAGS)
+dnl AC_SUBST(SCRIPT_LIBS)
 
 dnl *********************************************************************
 dnl ** NancyBot  ********************************************************
@@ -495,11 +495,11 @@ echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo Nancy bot support ............... : $nancy
-if test "x$script" = "xyes"; then
-  echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
-else
-  echo "Python script support............ : $script"
-fi
+dnl if test "x$script" = "xyes"; then
+dnl   echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
+dnl else
+dnl   echo "Python script support............ : $script"
+dnl fi
 echo External SSH/Telnet support...... : $external
 if test "x$enable_mozilla" = "xyes"; then
   echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
