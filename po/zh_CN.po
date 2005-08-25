@@ -1,15 +1,18 @@
+# translation of zh_CN.po to 
+# translation of zh_CN.po to
 # PCMan <hzysoft@sina.com.tw>, 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: PCManX\n"
+"Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-25 16:41+0800\n"
-"PO-Revision-Date: 2005-08-21 21:58+0800\n"
+"POT-Creation-Date: 2005-08-25 17:18+0800\n"
+"PO-Revision-Date: 2005-08-25 17:17+0800\n"
 "Last-Translator: \n"
-"Language-Team: zh_CN <zh@li.org>\n"
+"Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:729
 msgid "Site List"
@@ -209,11 +212,11 @@ msgstr ""
 "李宥辰 Youchen Lee (开发者) <youchen.lee@gmail.com>"
 
 #: ../src/mainframe.cpp:944
-msgid "Haifeng Chen <optical.dlz@gmail.com>"
-msgstr "陈海峰 Haifeng Chen <optical.dlz@gmail.com>"
+msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
+msgstr "简体中文 (zh_CN)：陈海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
 #: ../src/mainframe.cpp:949
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<big>PCMan X  %s\n"
 "A free BBS client developed with GTK+ 2.x</big>\n"
@@ -238,6 +241,9 @@ msgstr ""
 "\n"
 "软件作者：\n"
 "%s\n"
+"翻译者：\n"
+"%s\n"
+"\n"
 
 #: ../src/mainframe.cpp:978
 msgid "Close Connection?"

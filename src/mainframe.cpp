@@ -941,7 +941,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <youchen.lee@gmail.com>"
 			);
-	char* translators = _( "Haifeng Chen <optical.dlz@gmail.com>" );
+	char* translators = _( "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>" );
 
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,

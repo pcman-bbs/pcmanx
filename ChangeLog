@@ -1,3 +1,10 @@
+2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: Little fix.
+
 2005-08-25  Youchen Lee  <youchen.lee@gmail.com>
 
 	* src/mainframe.cpp,
