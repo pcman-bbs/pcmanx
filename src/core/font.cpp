@@ -126,30 +126,34 @@ XftFont* CFont::CreateXftFont( string name, int size, bool anti_alias )
 void CFont::RecalculateMetrics( XftFont* font )
 {
 	FT_Face face = XftLockFace( font );
-	FT_Fixed x_scale = face->size->metrics.x_scale;
-	FT_Fixed y_scale = face->size->metrics.y_scale;
 
-	FT_Pos asc = FT_MulFix( face->ascender, y_scale );
-	FT_Pos des = -FT_MulFix( face->descender, y_scale );
-	FT_Pos adv = FT_MulFix( face->max_advance_width, x_scale );
-
-	adv = ( adv + 32 ) >> 6;
-	if( m_Compact )
+	if( face->face_flags & FT_FACE_FLAG_SCALABLE )
 	{
-		/* ceil unless the fractional part < 0.0625 */
-		font->height = ( asc  + des  + 60 ) >> 6;
+		FT_Fixed x_scale = face->size->metrics.x_scale;
+		FT_Fixed y_scale = face->size->metrics.y_scale;
 
-		font->ascent = ( asc  + 32 ) >> 6;
-		font->descent = font->height - font->ascent;
-		font->max_advance_width = adv;
-	}
-	else
-	{
-		font->ascent = ( asc + 63 ) >> 6;
-		font->descent = ( des + 63 ) >> 6;
-		font->height = font->ascent + font->descent;
-		//font->max_advance_width = ( adv + 1 ) & ~1;
-		font->max_advance_width = adv;
+		FT_Pos asc = FT_MulFix( face->ascender, y_scale );
+		FT_Pos des = -FT_MulFix( face->descender, y_scale );
+		FT_Pos adv = FT_MulFix( face->max_advance_width, x_scale );
+
+		adv = ( adv + 32 ) >> 6;
+		if( m_Compact )
+		{
+			/* ceil unless the fractional part < 0.0625 */
+			font->height = ( asc  + des  + 60 ) >> 6;
+
+			font->ascent = ( asc  + 32 ) >> 6;
+			font->descent = font->height - font->ascent;
+			font->max_advance_width = adv;
+		}
+		else
+		{
+			font->ascent = ( asc + 63 ) >> 6;
+			font->descent = ( des + 63 ) >> 6;
+			font->height = font->ascent + font->descent;
+			//font->max_advance_width = ( adv + 1 ) & ~1;
+			font->max_advance_width = adv;
+		}
 	}
 
 	XftUnlockFace( font );
