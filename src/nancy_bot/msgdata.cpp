@@ -491,7 +491,7 @@ int MsgData::getCommonMsg(string &input, string &msg, bool add_to_unknow)
 	{
 		if(MT.find(len) != MT.end()) // found this len key in MAP
 		{
-			learn_this = random2 % MT[len].size();
+			learn_this = random2 % (MT[len].size()+1);
 			for(cur = MT[len].begin(); cur != MT[len].end(); cur++)
 			{
 				// choose which one to learn by a random num -- learn_this
