@@ -1,5 +1,10 @@
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
+	* src/core/termdata.cpp:
+	(CTermData::ScrollUp): Fix a problem with screen scrolling.
+
+2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
 	* src/nancy_bot/msgdata.cpp:
 	(MsgData::getCommonMsg): Temporary workaround to fix the SIGFPE caused
 	by division by zero.

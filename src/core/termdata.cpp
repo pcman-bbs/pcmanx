@@ -114,11 +114,13 @@ CTermCharAttr::operator==(CTermCharAttr& attr){
 CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 {
 	m_CaretPos.x = m_CaretPos.y = 0;
+	m_OldCaretPos = m_CaretPos;
 	m_FirstLine = 0;
 	m_RowCount = 0;
 	m_RowsPerPage = m_ColsPerPage = 0;
 	m_ScrollRegionBottom = m_ScrollRegionTop = 0;
 	m_CurAttr.SetToDefault();
+	m_SavedAttr.SetToDefault();
 	m_CmdLine[0] = '\0';
 	m_WaitUpdateDisplay = false;
 	m_NeedDelayedUpdate = false;
@@ -385,7 +387,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 	int start = m_FirstLine + m_ScrollRegionTop;
 	int end = m_FirstLine + m_ScrollRegionBottom - n;
 	int i;
-	for( i = start; i < end; i++ )
+	for( i = start; i <= end; i++ )
 	{
 		// Swap two lines to prevent memmory reallocation.
 		char* tmp = m_Screen[i];
@@ -393,7 +395,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 		m_Screen[i+n] = tmp;
 		SetWholeLineUpdate(m_Screen[i]);
 	}
-	for( i = 0; i < n; i++ )
+	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end+i], ' ', m_ColsPerPage-1 );
 		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );	
@@ -495,6 +497,7 @@ void CTermData::ParseAnsiEscapeSequence(const char* CmdLine, char type)
 						m_ScrollRegionTop = p1;
 					break;
 				}
+//				printf("scroll region: %d, %d\n", m_ScrollRegionTop, m_ScrollRegionBottom );
 				break;
 			case 's':	//save cursor pos
 				break;
@@ -536,13 +539,13 @@ void CTermData::ParseAnsiEscapeSequence(const char* CmdLine, char type)
  		case 'E':
  			break;
 		case '7':
-//			oldcurpos=curpos;
-//			saveatb=curatb;
+			m_OldCaretPos = m_CaretPos;
+			m_SavedAttr = m_CurAttr;
 			break;
 		case '8':
-//			curpos=oldcurpos;
-//			curatb=saveatb;
-//			update_cursor_pos();
+			m_CaretPos = m_OldCaretPos;
+			m_CurAttr = m_SavedAttr;
+			m_pView->UpdateCaretPos();
 			break;
  		}	//end switch
 	}

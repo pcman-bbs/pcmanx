@@ -284,7 +284,6 @@ bool CTelnetCon::OnRecv()
 
 	gsize rlen = 0;
 	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen);
-
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
@@ -294,7 +293,7 @@ bool CTelnetCon::OnRecv()
     m_pRecvBuf[rlen] = '\0';
     m_pBuf = m_pRecvBuf;
     m_pLastByte = m_pRecvBuf + rlen;
-//printf("recv: %s", m_pRecvBuf);
+//	printf("recv (%d): %s\n\n", rlen, m_pRecvBuf);
     ParseReceivedData();
 
 	UpdateDisplay();

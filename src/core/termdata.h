@@ -280,6 +280,7 @@ public:
 
 	int m_FirstLine;
 	CTermCharAttr m_CurAttr;
+	CTermCharAttr m_SavedAttr;
 	unsigned short m_ScrollRegionBottom;
 	unsigned short m_ScrollRegionTop;
 
@@ -289,6 +290,7 @@ public:
 	CTermSelection* m_Sel;
 	// Caret Position
 	GdkPoint m_CaretPos;
+	GdkPoint m_OldCaretPos;
 
 	// command line buffer, used to store telnet commands and ANSI escape sequence
 	unsigned char m_CmdLine[ 33 ];
