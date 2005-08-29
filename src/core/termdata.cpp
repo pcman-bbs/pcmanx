@@ -352,15 +352,24 @@ void CTermData::PutChar(unsigned char ch)
 				*m_pCmdLine = ch;
 				m_pCmdLine++;
 			}
-			if( ch >= '@' && ch != '[')
+
+			if( m_CmdLine[1] == '[' )
 			{
-				if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
-					*m_pCmdLine = '\0';
-				// Current ANSI escape type is stored in *m_pBuf.
-				ParseAnsiEscapeSequence( (const char*)m_CmdLine, ch);
-				m_CmdLine[0] = '\0';
-				m_pCmdLine = m_CmdLine;
+				if( ch < '@' || ch == '[' || ch > '~' )
+					break;
 			}
+			else
+			{
+				if( ch < '0' || ch > '_' )
+					break;
+			}
+
+			if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
+				*m_pCmdLine = '\0';
+			// Current ANSI escape type is stored in *m_pBuf.
+			ParseAnsiEscapeSequence( (const char*)m_CmdLine, ch);
+			m_CmdLine[0] = '\0';
+			m_pCmdLine = m_CmdLine;
 		} // end switch( m_CmdLine[0] )
 	}
 }
@@ -540,10 +549,12 @@ void CTermData::ParseAnsiEscapeSequence(const char* CmdLine, char type)
  			break;
 		case '7':
 			m_OldCaretPos = m_CaretPos;
+//			printf("save cursor: %d, %d\n", (int)m_CaretPos.x, (int)m_CaretPos.y );
 			m_SavedAttr = m_CurAttr;
 			break;
 		case '8':
 			m_CaretPos = m_OldCaretPos;
+//			printf("restored cursor: %d, %d\n", m_CaretPos.x, m_CaretPos.y );
 			m_CurAttr = m_SavedAttr;
 			m_pView->UpdateCaretPos();
 			break;

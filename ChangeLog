@@ -1,7 +1,13 @@
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/core/termdata.cpp:
+	(CTermData::PutChar): Fix incorrect parsing of ANSI control characters.
+
+2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termdata.cpp:
 	(CTermData::ScrollUp): Fix a problem with screen scrolling.
+	(CTermData::ParseAnsiEscapeSequence): Implement ESC 7 and ESC 8.
 
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
