@@ -5,7 +5,7 @@ Summary:   user-friendly telnet client designed for BBS browsing.
 Name:      pcmanx-pure-gtk2
 Version:   %{ver}
 Release:   %{rel}
-Copyright: GPL
+License:   GPL
 Vendor:    PCMan X pure GTK+ 2 project
 Group:     Applications/Internet
 Source:    pcmanx-pure-gtk2-%{ver}.tar.gz
