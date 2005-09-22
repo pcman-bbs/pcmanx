@@ -24,10 +24,10 @@ yes
 ],
 [AC_MSG_RESULT([yes])
 AC_DEFINE([CSRG_BASED],[],[Using a BSD system derived from CSRG sources])
-ac_x11_csrg_based=yes],
+ac_csrg_based=yes],
 [AC_MSG_RESULT([no])
-ac_x11_csrg_based=no])
-AM_CONDITIONAL([CSRG_BASED], test x$ac_x11_csrg_based = xyes)
+ac_csrg_based=no])
+AM_CONDITIONAL([CSRG_BASED], test x$ac_csrg_based = xyes)
 ])
 
 AC_CSRG_BASED
@@ -44,12 +44,12 @@ AM_GLIB_GNU_GETTEXT
 dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
-AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
+AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
@@ -422,12 +422,6 @@ AC_TRY_COMPILE(
 		AC_DEFINE(USE_SIGACTION) 
 	],
 	AC_MSG_RESULT(no))
-
-AC_PATH_PROG(gdkpixbufcsourcepath, gdk-pixbuf-csource)
-AC_SUBST(gdkpixbufcsourcepath)
-if test "$gtkfe" != no -a "_$gdkpixbufcsourcepath" = _; then
-	AC_MSG_ERROR("Cannot find gdk-pixbuf-csource: Install GTK+ 2.0\!")
-fi
 
 dnl if we don't have this, use g_snprintf instead
 AC_CHECK_FUNCS(snprintf)

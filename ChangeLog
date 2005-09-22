@@ -1,3 +1,7 @@
+2005-09-22  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac: Clean up redundant GTK+ checking.
+
 2005-09-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* pcmanx-pure-gtk2.spec.in : Modify string from "Copyright" to "License".
