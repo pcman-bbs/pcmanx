@@ -1,3 +1,12 @@
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/mainframe.h
+	src/view/telnetview.cpp
+	src/mainframe.cpp
+	po/pcmanx.pot
+	po/zh_TW.po
+	: Add update BBS list mechanism.
+
 2005-09-22  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac: Clean up redundant GTK+ checking.

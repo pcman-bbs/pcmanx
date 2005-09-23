@@ -166,6 +166,18 @@ msgstr "個人偏好設定"
 msgid "About"
 msgstr "關於"
 
+#: ../src/mainframe.cpp:788
+msgid "Update BBS List"
+msgstr "更新站台列表"
+
+#: ../src/mainframe.cpp:994
+msgid "Update BBS List Success!"
+msgstr "更新成功! *^^*"
+
+#: ../src/mainframe.cpp:995
+msgid "Update BBS List Fault."
+msgstr "更新失敗... Orz"
+
 #: ../src/mainframe.cpp:825
 msgid "A_ddress:"
 msgstr "位址 (_D)："

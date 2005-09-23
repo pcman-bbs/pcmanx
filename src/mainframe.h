@@ -52,117 +52,118 @@ class CSite;
 class CMainFrame : public CWidget
 {
 public:
-    CMainFrame();
+	CMainFrame();
 
-    CTelnetCon* NewCon( string title, string url, CSite* site = NULL );
+	CTelnetCon* NewCon( string title, string url, CSite* site = NULL );
 	CNotebook* GetNotebook(){	return m_pNotebook;	}
-    void OnTelnetConBell(CTelnetView* con);
-    void OnTelnetConClose(CTelnetView* con);
-    void OnTelnetConConnect(CTelnetView* con);
-    void OnTelnetConRecv(CTelnetView* con);
-    static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnNextCon(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnPaste(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnPreference(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this);
+	void OnTelnetConBell(CTelnetView* con);
+	void OnTelnetConClose(CTelnetView* con);
+	void OnTelnetConConnect(CTelnetView* con);
+	void OnTelnetConRecv(CTelnetView* con);
+	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
+	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnNextCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnPaste(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnPreference(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this);
 	void SetCurView(CTelnetView* view);
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
 	static gboolean OnBlinkTimer(CMainFrame* _this);
 	static gboolean OnEverySecondTimer(CMainFrame* _this);
-    static gboolean OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this );
-    static gboolean OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this );
-    GtkWidget* m_JumpMenuItems[10];
-    void OnDestroy();
-    virtual void OnCreate();
-    virtual bool CanClose();
-    void NotImpl(const char* str);
-    static void OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this);
-    static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
-    static void OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this);
-    static gboolean OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
+	static gboolean OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this );
+	static gboolean OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this );
+	GtkWidget* m_JumpMenuItems[10];
+	void OnDestroy();
+	virtual void OnCreate();
+	virtual bool CanClose();
+	void NotImpl(const char* str);
+	static void OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this);
+	static void OnFavorite(GtkMenuItem* item, CMainFrame* _this);
+	static void OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this);
+	static gboolean OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
 
-    bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
-    static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
-    int GetViewIndex(CTermView* view);
-    void SwitchToCon(CTelnetCon* con);
+	bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
+	static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
+	int GetViewIndex(CTermView* view);
+	void SwitchToCon(CTelnetCon* con);
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
-    void ShowTrayIcon(){    gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) );    };
-    void HideTrayIcon(){    gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) );    };
-    EggTrayIcon *m_TrayIcon_Instance;
+	void ShowTrayIcon(){ gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) ); };
+	void HideTrayIcon(){ gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) ); };
+	EggTrayIcon *m_TrayIcon_Instance;
 #endif
 
 #ifdef USE_NOTIFIER
-    GdkPixbuf *GetMainIcon() { return m_MainIcon; };
+	GdkPixbuf *GetMainIcon() { return m_MainIcon; };
 #endif
 
 protected:
-    void CreateMenu();
-    void CreateToolbar();
-    static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
-    void LoadIcons();
+	void CreateMenu();
+	void CreateToolbar();
+	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
+	void LoadIcons();
 	void LoadStartupSites();
-    static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
-    void CloseCon(int idx, bool confirm = false);
-    static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
-    void CreateFavoritesMenu();
-    static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
-    static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
-    void FlashWindow( bool flash );
+	static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
+	void CloseCon(int idx, bool confirm = false);
+	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
+	void CreateFavoritesMenu();
+	static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
+	void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
 #ifdef USE_NANCY
-    void UpdateBotStatus();
-    static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
-    static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
+	void UpdateBotStatus();
+	static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
+	static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
 #endif
 
 #ifdef USE_DOCKLET
-    static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
-//    static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
-    void set_tray_icon();
-    GtkWidget *m_TrayButton;
-    GtkWidget *m_TrayIcon;
+	static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
+//	static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
+	void set_tray_icon();
+	GtkWidget *m_TrayButton;
+	GtkWidget *m_TrayIcon;
 #endif
 
-    GdkPixbuf* m_ConnIcon;
-    GdkPixbuf* m_MainIcon;
-    GdkPixbuf* m_InverseMainIcon;
+	GdkPixbuf* m_ConnIcon;
+	GdkPixbuf* m_MainIcon;
+	GdkPixbuf* m_InverseMainIcon;
 
 protected:
-    CTelnetView* m_pView;
-    CNotebook* m_pNotebook;
-    GtkWidget* m_Toolbar;
-    GtkWidget* m_Menubar;
-    GtkWidget* m_EditMenu;
+	CTelnetView* m_pView;
+	CNotebook* m_pNotebook;
+	GtkWidget* m_Toolbar;
+	GtkWidget* m_Menubar;
+	GtkWidget* m_EditMenu;
 
-    GtkAccelGroup* m_AccelGroup;
+	GtkAccelGroup* m_AccelGroup;
 
-    guint m_BlinkTimer;
+	guint m_BlinkTimer;
 	guint m_EverySecondTimer;
-    GtkWidget* m_FavoritesMenuItem;
-    GtkWidget* m_FavoritesMenu;
+	GtkWidget* m_FavoritesMenuItem;
+	GtkWidget* m_FavoritesMenu;
 
 	bool m_IsFlashing;
-    GtkWidget* m_URLEntry;
-    GtkTooltips* m_Tooltips;
-    GtkLabel* m_StatusBarTime;
+	GtkWidget* m_URLEntry;
+	GtkTooltips* m_Tooltips;
+	GtkLabel* m_StatusBarTime;
 #ifdef USE_NANCY
-    GtkLabel* m_StatusBarBotState;
-    GtkRadioMenuItem* m_DisableCurBotRadio;
-    GtkRadioMenuItem* m_CurBotNancyRadio;
-    GtkRadioMenuItem* m_DisableAllBotRadio;
-    GtkRadioMenuItem* m_AllBotNancyRadio;
+	GtkLabel* m_StatusBarBotState;
+	GtkRadioMenuItem* m_DisableCurBotRadio;
+	GtkRadioMenuItem* m_CurBotNancyRadio;
+	GtkRadioMenuItem* m_DisableAllBotRadio;
+	GtkRadioMenuItem* m_AllBotNancyRadio;
 #endif
 };
 

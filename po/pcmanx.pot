@@ -169,6 +169,18 @@ msgstr ""
 msgid "About"
 msgstr ""
 
+#: ../src/mainframe.cpp:788
+msgid "Update BBS List"
+msgstr ""
+
+#: ../src/mainframe.cpp:994
+msgid "Update BBS List Success!"
+msgstr ""
+
+#: ../src/mainframe.cpp:995
+msgid "Update BBS List Fault."
+msgstr ""
+
 #: ../src/mainframe.cpp:825
 msgid "A_ddress:"
 msgstr ""

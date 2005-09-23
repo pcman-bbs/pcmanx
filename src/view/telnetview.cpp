@@ -42,7 +42,7 @@ CMainFrame* CTelnetView::m_pParentFrame = NULL;
 #include "debug.h"
 
 CTelnetView::CTelnetView()
-        : CTermView()
+	: CTermView()
 {}
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;

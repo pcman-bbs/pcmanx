@@ -319,6 +319,8 @@ void CMainFrame::CreateMenu()
 	GtkWidget *help;
 	GtkWidget *help_menu;
 	GtkWidget *about_menu;
+	GtkWidget *update_bbs_list_menu;
+	GtkWidget *image933;
 
 	GtkAccelGroup *accel_group = gtk_accel_group_new ();
 
@@ -338,6 +340,15 @@ void CMainFrame::CreateMenu()
 	gtk_widget_add_accelerator (site_list_menu, "activate", accel_group,
 								GDK_S, GDK_MOD1_MASK,
 								GTK_ACCEL_VISIBLE);
+
+	update_bbs_list_menu = gtk_image_menu_item_new_with_mnemonic (_("Update BBS List"));
+	gtk_widget_show (update_bbs_list_menu);
+	gtk_container_add (GTK_CONTAINER (connect_menu), update_bbs_list_menu);
+	
+	image933 = gtk_image_new_from_stock ("gtk-refresh", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image933);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (update_bbs_list_menu), image933);
+
 	
 	image917 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image917);
@@ -484,7 +495,7 @@ void CMainFrame::CreateMenu()
 	image928 = gtk_image_new_from_stock ("gtk-preferences", GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image928);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (preference_menu), image928);
-	
+
 	favorites = gtk_menu_item_new_with_mnemonic (_("F_avorites"));
 	gtk_widget_show (favorites);
 	gtk_container_add (GTK_CONTAINER (m_Menubar), favorites);
@@ -644,6 +655,9 @@ void CMainFrame::CreateMenu()
 	g_signal_connect ((gpointer) about_menu, "activate",
 					G_CALLBACK (CMainFrame::OnAbout),
 					this);
+	g_signal_connect ((gpointer) update_bbs_list_menu, "activate",
+					G_CALLBACK (CMainFrame::updateBBSList),
+					this);
 
 #ifdef USE_NANCY
 
@@ -713,6 +727,7 @@ void CMainFrame::CreateToolbar()
 	GtkWidget *add_to_fav_btn;
 	GtkWidget *pref_btn;
 	GtkWidget *about_btn;
+	GtkWidget *update_bbs_list;
 	GtkAccelGroup *accel_group;
 	GtkTooltips *tooltips;
 	
@@ -781,6 +796,10 @@ void CMainFrame::CreateToolbar()
 	gtk_container_add (GTK_CONTAINER (toolbar), about_btn);
 	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (about_btn), tooltips, _("About"), NULL);
 
+	update_bbs_list = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-refresh");
+	gtk_widget_show (update_bbs_list);
+	gtk_container_add (GTK_CONTAINER (toolbar), update_bbs_list);
+	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (update_bbs_list), tooltips, _("Update BBS List"), NULL);
 
 	m_Toolbar = toolbar;
 
@@ -813,6 +832,9 @@ void CMainFrame::CreateToolbar()
 					this);
 	g_signal_connect ((gpointer) about_btn, "clicked",
 					G_CALLBACK (CMainFrame::OnAbout),
+					this);
+	g_signal_connect ((gpointer) update_bbs_list, "clicked",
+					G_CALLBACK (CMainFrame::updateBBSList),
 					this);
 					
 
@@ -967,6 +989,26 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 
 }
 
+void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
+{
+	char* t_pcSuccess = _( "Update BBS List Success!");
+	char* t_pcFault = _( "Update BBS List Fault.");
+	char* t_pcMessage = NULL;
+
+	int t_nRet = system("cd /tmp && rm -f site_list.utf8 && wget http://free.ym.edu.tw/pcman/site_list.utf8 && rm -f ~/.pcmanx/sitelist && mv site_list.utf8 ~/.pcmanx/sitelist && cd -");
+
+	if (t_nRet == 0)
+		t_pcMessage = t_pcSuccess;
+	else
+		t_pcMessage = t_pcFault;
+
+	GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
+		(GtkWindow*) pThis->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
+
+	gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, pThis->m_MainIcon);
+	gtk_dialog_run((GtkDialog*) t_pDialog) == GTK_RESPONSE_OK;
+	gtk_widget_destroy(t_pDialog);
+}
 
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)
 {
