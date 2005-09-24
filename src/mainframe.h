@@ -39,6 +39,7 @@
 using namespace std;
 
 #include "telnetview.h"
+#include <signal.h>
 
 /**
 @author PCMan
@@ -51,6 +52,9 @@ class CSite;
 
 class CMainFrame : public CWidget
 {
+	static bool g_bIsUpateHandlerExisted;
+	static bool g_bUpdateingBBSList;
+	static CMainFrame* g_pMyself;
 public:
 	CMainFrame();
 
@@ -63,6 +67,7 @@ public:
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
+	static void updateBBSListHandler(int nSignalNumber);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);

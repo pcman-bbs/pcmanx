@@ -42,6 +42,10 @@
 
 #include "debug.h"
 
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
+
 #ifdef USE_NOTIFIER
 #include "notifier/api.h"
 #endif
@@ -52,7 +56,6 @@
 
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
-
 
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button,
@@ -110,6 +113,10 @@ void CMainFrame::set_tray_icon()
         g_object_unref (tray_icon_pixbuf);
 }
 #endif
+
+bool CMainFrame::g_bIsUpateHandlerExisted = false;
+bool CMainFrame::g_bUpdateingBBSList = false;
+CMainFrame* CMainFrame::g_pMyself = NULL;
 
 gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this )
 {
@@ -991,23 +998,55 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 {
-	char* t_pcSuccess = _( "Update BBS List Success!");
-	char* t_pcFault = _( "Update BBS List Fault.");
-	char* t_pcMessage = NULL;
+	if (g_bIsUpateHandlerExisted == false) {
+		struct sigaction sa;
+		memset(&sa, 0, sizeof(sa));
+		sa.sa_handler = &CMainFrame::updateBBSListHandler;
+		g_pMyself = pThis;
+		sigaction(SIGUSR1, &sa, NULL);
+		sigaction(SIGUSR2, &sa, NULL);
+		g_bIsUpateHandlerExisted = true;
+	}
+	
+	if (g_bUpdateingBBSList == false) {
+		pid_t child_pid = 0, parent_pid = getpid();
 
-	int t_nRet = system("cd /tmp && rm -f site_list.utf8 && wget http://free.ym.edu.tw/pcman/site_list.utf8 && rm -f ~/.pcmanx/sitelist && mv site_list.utf8 ~/.pcmanx/sitelist && cd -");
+		g_bUpdateingBBSList = true;
 
-	if (t_nRet == 0)
-		t_pcMessage = t_pcSuccess;
-	else
-		t_pcMessage = t_pcFault;
+		child_pid = fork();
+		if (child_pid == 0)
+		{
+			int t_nRet = system("cd /tmp && rm -f site_list.utf8 && wget http://free.ym.edu.tw/pcman/site_list.utf8 && rm -f ~/.pcmanx/sitelist && mv site_list.utf8 ~/.pcmanx/sitelist && cd -");
+			if (t_nRet == 0)
+				kill(parent_pid, SIGUSR1);
+			else
+				kill(parent_pid, SIGUSR2);
+			exit(0);
+		}
+	}
+}
 
-	GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
-		(GtkWindow*) pThis->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
+void CMainFrame::updateBBSListHandler(int nSignalNumber)
+{
+	if (nSignalNumber == SIGUSR1 || nSignalNumber == SIGUSR2)
+	{
+		char* t_pcSuccess = _( "Update BBS List Success!");
+		char* t_pcFault = _( "Update BBS List Fault.");
+		char* t_pcMessage = NULL;
 
-	gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, pThis->m_MainIcon);
-	gtk_dialog_run((GtkDialog*) t_pDialog) == GTK_RESPONSE_OK;
-	gtk_widget_destroy(t_pDialog);
+		if (nSignalNumber == SIGUSR1)
+			t_pcMessage = t_pcSuccess;
+		else
+			t_pcMessage = t_pcFault;
+
+		GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
+			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
+
+		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
+		gtk_dialog_run((GtkDialog*) t_pDialog) == GTK_RESPONSE_OK;
+		gtk_widget_destroy(t_pDialog);
+		g_bUpdateingBBSList = false;
+	}
 }
 
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)

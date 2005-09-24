@@ -1,17 +1,21 @@
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+	* src/mainframe.h
+	src/view/telnetcon.cpp
+	src/mainframe.cpp
+	: Modify BBS list update mechanism. (not to block the user interaction)
 
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 	* src/view/telnetcon.h
 	src/view/telnetcon.cpp
 	: Remove g_mutex_new inline for code-reading friendly.
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-
 	* src/mainframe.h
 	src/view/telnetview.cpp
 	src/mainframe.cpp
 	po/pcmanx.pot
 	po/zh_TW.po
-	: Add update BBS list mechanism.
+	: Add BBS list update mechanism.
 
 2005-09-22  Jim Huang  <jserv@kaffe.org>
 

@@ -209,8 +209,6 @@ gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon
 	return ret;
 }
 
-
-
 // No description
 bool CTelnetCon::Connect()
 {
@@ -312,7 +310,7 @@ void CTelnetCon::OnConnect(int code)
 #endif
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
 		m_IOChannelID = g_io_add_watch( m_IOChannel, 
-				GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)CTelnetCon::OnSocket, this );
+		GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)CTelnetCon::OnSocket, this );
 		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
 		g_io_channel_set_buffered(m_IOChannel, false);
 	}
@@ -355,7 +353,7 @@ void CTelnetCon::ParseReceivedData()
 {
     for( m_pBuf = m_pRecvBuf; m_pBuf < m_pLastByte; m_pBuf++ )
     {
-		if( 0 == m_Pid ) // No external program.  Handle telnet commands ourselves.
+		if (m_Pid == 0) // No external program.  Handle telnet commands ourselves.
 		{
 			if( m_CmdLine[0] == TC_IAC )	// IAC, in telnet command mode.
 			{
