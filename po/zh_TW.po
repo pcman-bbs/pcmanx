@@ -172,11 +172,11 @@ msgstr "更新站台列表"
 
 #: ../src/mainframe.cpp:994
 msgid "Update BBS List Success!"
-msgstr "更新成功! *^^*"
+msgstr "BBS站台列表更新成功! *^^*"
 
 #: ../src/mainframe.cpp:995
 msgid "Update BBS List Fault."
-msgstr "更新失敗... Orz"
+msgstr "BBS站台列表更新失敗... Orz"
 
 #: ../src/mainframe.cpp:825
 msgid "A_ddress:"
