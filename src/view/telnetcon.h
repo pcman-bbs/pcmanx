@@ -129,11 +129,7 @@ public:
     bool DetectDBChar(){	return m_Site.m_DetectDBChar;   }
     void ConnectAsync();
 
-    static void Init()
-    {
-		if( !m_DNSMutex )
-			m_DNSMutex = g_mutex_new();
-    }
+    static void Init();
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
     void set__UseNancy( bool usenancy )

@@ -676,6 +676,12 @@ void CTelnetCon::Close()
 	}
 }
 
+void CTelnetCon::Init()
+{
+	if (m_DNSMutex == NULL)
+		m_DNSMutex = g_mutex_new();
+}
+
 void CTelnetCon::Cleanup()
 {
 	if( m_DNSThread )
