@@ -23,3 +23,7 @@ auto-learn level, chatlog or not, bot get angry or not, config_path ).
 4. Combine two config files to just one.
 5. Allow Chinese botnames.
 
+FourDollars
+-----
+1. cancel the selected region when any key event
+2. vi moving option
