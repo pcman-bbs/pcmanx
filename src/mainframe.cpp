@@ -328,6 +328,8 @@ void CMainFrame::CreateMenu()
 	GtkWidget *about_menu;
 	GtkWidget *update_bbs_list_menu;
 	GtkWidget *image933;
+	GtkWidget *t_pPasteFromClipboard;
+	GtkWidget *image934;
 
 	GtkAccelGroup *accel_group = gtk_accel_group_new ();
 
@@ -478,6 +480,17 @@ void CMainFrame::CreateMenu()
 	image927 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image927);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (paste_menu), image927);
+
+	t_pPasteFromClipboard = gtk_image_menu_item_new_with_mnemonic (_("Paste from Clipboard"));
+	gtk_widget_show (t_pPasteFromClipboard);
+	gtk_container_add (GTK_CONTAINER (edit_menu), t_pPasteFromClipboard);
+	gtk_widget_add_accelerator (t_pPasteFromClipboard, "activate", accel_group,
+								GDK_Insert, GDK_SHIFT_MASK,
+								GTK_ACCEL_VISIBLE);
+
+	image934 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image934);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (t_pPasteFromClipboard), image934);
 	
 	select_all_menu = gtk_menu_item_new_with_mnemonic (_("Select A_ll"));
 	gtk_widget_show (select_all_menu);
@@ -664,6 +677,9 @@ void CMainFrame::CreateMenu()
 					this);
 	g_signal_connect ((gpointer) update_bbs_list_menu, "activate",
 					G_CALLBACK (CMainFrame::updateBBSList),
+					this);
+	g_signal_connect ((gpointer) t_pPasteFromClipboard, "activate",
+					G_CALLBACK (CMainFrame::pasteFromClipboard),
 					this);
 
 #ifdef USE_NANCY
@@ -1047,6 +1063,13 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 		gtk_widget_destroy(t_pDialog);
 		g_bUpdateingBBSList = false;
 	}
+}
+
+void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem, CMainFrame* pMainFrame)
+{
+	CTelnetView* t_pView = pMainFrame->GetCurView();
+	if (t_pView != NULL)
+		t_pView->PasteFromClipboard(true);
 }
 
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)

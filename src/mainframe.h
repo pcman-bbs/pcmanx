@@ -68,6 +68,7 @@ public:
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSListHandler(int nSignalNumber);
+	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);

@@ -78,6 +78,10 @@ msgstr "複製(包含ANSI彩色) (_N)"
 msgid "_Paste"
 msgstr "貼上 (_P)"
 
+#: ../src/mainframe.cpp:484
+msgid "Paste from Clipboard"
+msgstr "貼上剪貼簿內容"
+
 #: ../src/mainframe.cpp:464
 msgid "Select A_ll"
 msgstr "全部選取 (_L)"

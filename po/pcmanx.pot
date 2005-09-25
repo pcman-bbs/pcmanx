@@ -81,6 +81,10 @@ msgstr ""
 msgid "_Paste"
 msgstr ""
 
+#: ../src/mainframe.cpp:484
+msgid "Paste from Clipboard"
+msgstr ""
+
 #: ../src/mainframe.cpp:464
 msgid "Select A_ll"
 msgstr ""

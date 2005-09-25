@@ -1,4 +1,11 @@
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+	* src/mainframe.h
+	src/mainframe.cpp
+	po/pcmanx.pot
+	po/zh_TW.po
+	: Add menu item "Paste from Clipboard".
+
+2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 	* src/mainframe.cpp
 	: Make the ugly command shorter.
 
