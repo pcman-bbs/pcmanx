@@ -1016,7 +1016,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			int t_nRet = system("cd /tmp && rm -f site_list.utf8 && wget http://free.ym.edu.tw/pcman/site_list.utf8 && rm -f ~/.pcmanx/sitelist && mv site_list.utf8 ~/.pcmanx/sitelist && cd -");
+			int t_nRet = system("wget -O ~/.pcmanx/sitelist http://free.ym.edu.tw/pcman/site_list.utf8");
 			if (t_nRet == 0)
 				kill(parent_pid, SIGUSR1);
 			else

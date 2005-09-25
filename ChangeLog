@@ -1,4 +1,8 @@
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+	* src/mainframe.cpp
+	: Make the ugly command shorter.
+
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 	* po/zh_TW.po
 	: Update the Traditional Chinese Message for BBS list update.
 
