@@ -222,8 +222,9 @@ CMainFrame::CMainFrame()
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
 	CTelnetView::SetParentFrame(this);
-	CTelnetView::SetWebBrowser( AppConfig.WebBrowser );
-	CTelnetView::SetMailClient( AppConfig.MailClient );
+	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
+	CTelnetView::SetMailClient(AppConfig.MailClient);
+	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
 }
 
 
@@ -1141,8 +1142,9 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->ShowModal();
 	dlg->Destroy();
 
-	CTelnetView::SetWebBrowser( AppConfig.WebBrowser );
-	CTelnetView::SetMailClient( AppConfig.MailClient );
+	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
+	CTelnetView::SetMailClient(AppConfig.MailClient);
+	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
 
 #ifdef USE_NOTIFIER
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );

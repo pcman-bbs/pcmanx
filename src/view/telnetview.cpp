@@ -46,6 +46,7 @@ CTelnetView::CTelnetView()
 {}
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
+bool CTelnetView::m_bWgetFiles = false;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -320,46 +321,65 @@ void CTelnetView::OnDestroy()
 	}
 }
 
-void CTelnetView::OnHyperlinkClicked(string url)
+void CTelnetView::OnHyperlinkClicked(string sURL)
 {
+	if (m_bWgetFiles == true) {
+		const char* t_pcURL = sURL.c_str();
+		char* t_pcDot = strrchr(t_pcURL, '.') + 1;
+		char t_cFileType = strlen(t_pcURL) - (t_pcDot -t_pcURL);
+		if (t_cFileType == 3) {
+			if (strncmp(t_pcDot, "rar", 3) == 0 ||
+				strncmp(t_pcDot, "zip", 3) == 0 ||
+				strncmp(t_pcDot, "tgz", 3) == 0 ||
+				strncmp(t_pcDot, "tbz", 3) == 0)
+			{
+				string t_sURL = sURL;
+				t_sURL.insert(0, "wget ");
+				t_sURL.append(" &");
+				system(t_sURL.c_str());
+				return;
+			}
+		}
+	}
+
 #if !defined(MOZ_PLUGIN)
-	if( 0 == strncmpi( url.c_str(), "telnet:", 7) )
+	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )
 	{
-		const char* purl = url.c_str() + 7;
-		while( *purl == '/' )
-			++purl;
-		if( !*purl )
+		const char* psURL = sURL.c_str() + 7;
+		while( *psURL == '/' )
+			++psURL;
+		if( !*psURL )
 			return;
-		url = purl;
-		if( '/' == url[url.length()-1] )
-			url = string( url.c_str(), 0, url.length()-1 );
-		m_pParentFrame->NewCon( url, url );
+		sURL = psURL;
+		if( '/' == sURL[sURL.length()-1] )
+			sURL = string( sURL.c_str(), 0, sURL.length()-1 );
+		m_pParentFrame->NewCon( sURL, sURL );
 		return;
 	}
 #endif /* !defined(MOZ_PLUGIN) */
 
 	// In URL, the char "&" will be read as "background execution" when run the browser command without " "
-	url.insert(0,"\"");
-	url.append("\"");
+	sURL.insert(0,"\"");
+	sURL.append("\"");
 
 	string app;
-	if( !strstr( url.c_str(), "://") && strchr(url.c_str(), '@'))
+	if( !strstr( sURL.c_str(), "://") && strchr(sURL.c_str(), '@'))
 	{
 		app = m_MailClient;
-		if( strncmpi( url.c_str(), "mailto:", 7 ) )
-			url.insert( 0, "mailto:" );
+		if( strncmpi( sURL.c_str(), "mailto:", 7 ) )
+			sURL.insert( 0, "mailto:" );
 	}
 	else
 		app = m_WebBrowser;
 
-	char *cmdline = new char[ app.length() + url.length() + 10 ];
+	char *cmdline = new char[ app.length() + sURL.length() + 10 ];
 	if( strstr(app.c_str(), "%s") )
-		sprintf( cmdline, app.c_str(), url.c_str() );
+		sprintf( cmdline, app.c_str(), sURL.c_str() );
 	else
 	{
 		memcpy(cmdline, app.c_str(), app.length());
 		cmdline[app.length()] = ' ';
-		memcpy( &cmdline[app.length() + 1], url.c_str(), url.length() + 1);
+		memcpy( &cmdline[app.length() + 1], sURL.c_str(), sURL.length() + 1);
 	}
 	strcat(cmdline, " &");	// launch the browser in background.
 	system(cmdline);	// Is this portable?

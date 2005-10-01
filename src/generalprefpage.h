@@ -43,6 +43,7 @@ public:
 	GtkWidget *m_AAFont;
 	GtkWidget *m_PopupNotifier;
 	GtkWidget *m_PopupTimeout;
+	GtkWidget *m_pWgetFiles;
 
 };
 

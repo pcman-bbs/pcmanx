@@ -84,6 +84,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
 		CFG_BOOL( ShowTrayIcon )
+		CFG_BOOL( UseWgetFiles )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -288,8 +289,8 @@ void CAppConfig::SaveFavorites()
 
 void CAppConfig::SetToDefault()
 {
-	RowsPerPage=24;
-	ColsPerPage=80;
+	RowsPerPage = 24;
+	ColsPerPage = 80;
 	MainWndX = MainWndY = EditorX = EditorY = 40;
 	MainWndW = EditorW = 640;	MainWndH = EditorH = 480;
 	QueryOnExit = 1;
@@ -298,6 +299,7 @@ void CAppConfig::SetToDefault()
 	CopyTrimTail = 1;
 	PopupNotifier = true;
 	PopupTimeout = 6;
+	UseWgetFiles = false;
 
 	CharPaddingX = 0;
 	CharPaddingY = 0;
@@ -316,7 +318,7 @@ void CAppConfig::SetToDefault()
 	ShowTrayIcon = true;
 
 	HyperLinkColor.red = 65535;
-	HyperLinkColor.green = 65536*102/256;
+	HyperLinkColor.green = 65536 * 102 / 256;
 	HyperLinkColor.blue = 0;
 
 	SocketTimeout = 30;

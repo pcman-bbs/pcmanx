@@ -407,6 +407,10 @@ msgstr "顯示系統列圖示 (Docklet) (重新啟動程式後才有效)"
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr "顯示字型使用反鋸齒 (重新啟動程式後才有效)"
 
+#: ../src/generalprefpage.cpp:67
+msgid "Use \"wget\" to download files."
+msgstr "使用 \"wget\" 下載檔案. (.rar .zip .tgz .tbz)"
+
 #: ../src/generalprefpage.cpp:71
 msgid "Display popup notifier for "
 msgstr "來訊彈出通知視窗，顯示"

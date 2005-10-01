@@ -47,6 +47,7 @@ public:
 
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
 	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
+	static void setWgetFiles(const bool bBool){ m_bWgetFiles = bBool; }
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -62,6 +63,7 @@ protected:
 #endif /* !defined(MOZ_PLUGIN) */
     static string m_WebBrowser;
     static string m_MailClient;
+	static bool m_bWgetFiles;
 };
 
 #endif

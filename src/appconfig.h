@@ -92,6 +92,7 @@ public:
 	bool CopyTrimTail;
 	bool ShowTrayIcon;
 	bool PopupNotifier;
+	bool UseWgetFiles;
 	int PopupTimeout;
 	
 //	Terminal Settings

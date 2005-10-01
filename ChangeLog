@@ -1,3 +1,15 @@
+2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+	* src/appconfig.h
+	src/view/telnetview.cpp
+	src/view/telnetview.h
+	src/generalprefpage.h
+	src/mainframe.cpp
+	src/appconfig.cpp
+	src/generalprefpage.cpp
+	po/pcmanx.pot
+	po/zh_TW.po
+	: Use wget compressed files.
+
 2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 	* src/mainframe.h
 	src/mainframe.cpp

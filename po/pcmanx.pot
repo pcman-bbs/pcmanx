@@ -387,6 +387,10 @@ msgstr ""
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr ""
 
+#: ../src/generalprefpage.cpp:67
+msgid "Use \"wget\" to download files."
+msgstr ""
+
 #: ../src/generalprefpage.cpp:71
 msgid "Display popup notifier for "
 msgstr ""
