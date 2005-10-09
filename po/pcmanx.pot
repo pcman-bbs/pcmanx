@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-25 17:18+0800\n"
+"POT-Creation-Date: 2005-10-10 00:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:729
+#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:768
 msgid "Site List"
 msgstr ""
 
@@ -29,189 +29,181 @@ msgstr ""
 msgid "Keyword \"%s\" not found!"
 msgstr ""
 
-#: ../src/mainframe.cpp:328
+#: ../src/mainframe.cpp:340
 msgid "_Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:335
+#: ../src/mainframe.cpp:347
 msgid "_Site List"
 msgstr ""
 
-#: ../src/mainframe.cpp:346
-msgid "_New Connection"
-msgstr ""
-
-#: ../src/mainframe.cpp:357
-msgid "_Reconnect"
-msgstr ""
-
-#: ../src/mainframe.cpp:368
-msgid "_Close Connection"
-msgstr ""
-
-#: ../src/mainframe.cpp:384
-msgid "Next Page"
-msgstr ""
-
-#: ../src/mainframe.cpp:395
-msgid "Previous Page"
-msgstr ""
-
-#: ../src/mainframe.cpp:406
-msgid "_Jump to"
-msgstr ""
-
-#: ../src/mainframe.cpp:419
-msgid "_Quit"
-msgstr ""
-
-#: ../src/mainframe.cpp:427
-msgid "_Edit"
-msgstr ""
-
-#: ../src/mainframe.cpp:434
-msgid "_Copy"
-msgstr ""
-
-#: ../src/mainframe.cpp:445
-msgid "Copy with A_NSI Color"
-msgstr ""
-
-#: ../src/mainframe.cpp:453
-msgid "_Paste"
-msgstr ""
-
-#: ../src/mainframe.cpp:484
-msgid "Paste from Clipboard"
-msgstr ""
-
-#: ../src/mainframe.cpp:464
-msgid "Select A_ll"
-msgstr ""
-
-#: ../src/mainframe.cpp:473
-msgid "_Emoticons"
-msgstr ""
-
-#: ../src/mainframe.cpp:480
-msgid "_Preference"
-msgstr ""
-
-#: ../src/mainframe.cpp:488
-msgid "F_avorites"
-msgstr ""
-
-#: ../src/mainframe.cpp:500 ../src/mainframe.cpp:1294
-msgid "_Add to Favorites"
-msgstr ""
-
-#: ../src/mainframe.cpp:508 ../src/mainframe.cpp:1302
-msgid "_Edit Favorites"
-msgstr ""
-
-#: ../src/mainframe.cpp:516
-msgid "_View"
-msgstr ""
-
-#: ../src/mainframe.cpp:533
-msgid "Bot (Current Connection)"
-msgstr ""
-
-#: ../src/mainframe.cpp:544 ../src/mainframe.cpp:571
-msgid "Disable Bot"
-msgstr ""
-
-#: ../src/mainframe.cpp:555 ../src/mainframe.cpp:582
-msgid "Nancy Bot"
-msgstr ""
-
-#: ../src/mainframe.cpp:560
-msgid "Bot (All Opened Connections)"
-msgstr ""
-
-#: ../src/mainframe.cpp:589
-msgid "_Help"
-msgstr ""
-
-#: ../src/mainframe.cpp:679
-msgid "Page"
-msgstr ""
-
-#: ../src/mainframe.cpp:734
-msgid "New Connection"
-msgstr ""
-
-#: ../src/mainframe.cpp:739
-msgid "Reconnect"
-msgstr ""
-
-#: ../src/mainframe.cpp:744
-msgid "Close Connection"
-msgstr ""
-
-#: ../src/mainframe.cpp:753
-msgid "Copy"
-msgstr ""
-
-#: ../src/mainframe.cpp:758
-msgid "Copy with ANSI Color"
-msgstr ""
-
-#: ../src/mainframe.cpp:763
-msgid "Paste"
-msgstr ""
-
-#: ../src/mainframe.cpp:772
-msgid "Add to Favorites"
-msgstr ""
-
-#: ../src/mainframe.cpp:777 ../src/prefdlg.cpp:32
-msgid "Preference"
-msgstr ""
-
-#: ../src/mainframe.cpp:782
-msgid "About"
-msgstr ""
-
-#: ../src/mainframe.cpp:788
+#: ../src/mainframe.cpp:354 ../src/mainframe.cpp:826
 msgid "Update BBS List"
 msgstr ""
 
-#: ../src/mainframe.cpp:994
-msgid "Update BBS List Success!"
+#: ../src/mainframe.cpp:367
+msgid "_New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:995
-msgid "Update BBS List Fault."
+#: ../src/mainframe.cpp:378
+msgid "_Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:825
+#: ../src/mainframe.cpp:389
+msgid "_Close Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:405
+msgid "Next Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:416
+msgid "Previous Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:427
+msgid "_Jump to"
+msgstr ""
+
+#: ../src/mainframe.cpp:440
+msgid "_Quit"
+msgstr ""
+
+#: ../src/mainframe.cpp:448
+msgid "_Edit"
+msgstr ""
+
+#: ../src/mainframe.cpp:455
+msgid "_Copy"
+msgstr ""
+
+#: ../src/mainframe.cpp:466
+msgid "Copy with A_NSI Color"
+msgstr ""
+
+#: ../src/mainframe.cpp:474
+msgid "_Paste"
+msgstr ""
+
+#: ../src/mainframe.cpp:485
+msgid "Paste from Clipboard"
+msgstr ""
+
+#: ../src/mainframe.cpp:496
+msgid "Select A_ll"
+msgstr ""
+
+#: ../src/mainframe.cpp:505
+msgid "_Emoticons"
+msgstr ""
+
+#: ../src/mainframe.cpp:512
+msgid "_Preference"
+msgstr ""
+
+#: ../src/mainframe.cpp:520
+msgid "F_avorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:532 ../src/mainframe.cpp:1400
+msgid "_Add to Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:540 ../src/mainframe.cpp:1408
+msgid "_Edit Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:548
+msgid "_View"
+msgstr ""
+
+#: ../src/mainframe.cpp:565
+msgid "Bot (Current Connection)"
+msgstr ""
+
+#: ../src/mainframe.cpp:576 ../src/mainframe.cpp:603
+msgid "Disable Bot"
+msgstr ""
+
+#: ../src/mainframe.cpp:587 ../src/mainframe.cpp:614
+msgid "Nancy Bot"
+msgstr ""
+
+#: ../src/mainframe.cpp:592
+msgid "Bot (All Opened Connections)"
+msgstr ""
+
+#: ../src/mainframe.cpp:621
+msgid "_Help"
+msgstr ""
+
+#: ../src/mainframe.cpp:717
+msgid "Page"
+msgstr ""
+
+#: ../src/mainframe.cpp:773
+msgid "New Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:778
+msgid "Reconnect"
+msgstr ""
+
+#: ../src/mainframe.cpp:783
+msgid "Close Connection"
+msgstr ""
+
+#: ../src/mainframe.cpp:792
+msgid "Copy"
+msgstr ""
+
+#: ../src/mainframe.cpp:797
+msgid "Copy with ANSI Color"
+msgstr ""
+
+#: ../src/mainframe.cpp:802
+msgid "Paste"
+msgstr ""
+
+#: ../src/mainframe.cpp:811
+msgid "Add to Favorites"
+msgstr ""
+
+#: ../src/mainframe.cpp:816 ../src/prefdlg.cpp:32
+msgid "Preference"
+msgstr ""
+
+#: ../src/mainframe.cpp:821
+msgid "About"
+msgstr ""
+
+#: ../src/mainframe.cpp:871
 msgid "A_ddress:"
 msgstr ""
 
-#: ../src/mainframe.cpp:828
+#: ../src/mainframe.cpp:874
 msgid "Type URL here, then hit \"Enter\""
 msgstr ""
 
-#: ../src/mainframe.cpp:851
+#: ../src/mainframe.cpp:897
 msgid "Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:851
+#: ../src/mainframe.cpp:897
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
 msgstr ""
 
-#: ../src/mainframe.cpp:883
+#: ../src/mainframe.cpp:929
 msgid "Font"
 msgstr ""
 
-#: ../src/mainframe.cpp:888
+#: ../src/mainframe.cpp:934
 msgid "Apply to all opened pages"
 msgstr ""
 
-#: ../src/mainframe.cpp:937
+#: ../src/mainframe.cpp:983
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -221,11 +213,11 @@ msgid ""
 "Youchen Lee (Developer) <youchen.lee@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:944
+#: ../src/mainframe.cpp:990
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:949
+#: ../src/mainframe.cpp:995
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -243,35 +235,48 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:978
+#: ../src/mainframe.cpp:1050
+msgid "Update BBS List Success!"
+msgstr ""
+
+#: ../src/mainframe.cpp:1051
+msgid "Update BBS List Fault."
+msgstr ""
+
+#: ../src/mainframe.cpp:1060
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: ../src/mainframe.cpp:1083
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1204
+#: ../src/mainframe.cpp:1310
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1216
+#: ../src/mainframe.cpp:1322
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1228
+#: ../src/mainframe.cpp:1334
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:1341
+#: ../src/mainframe.cpp:1447
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr ""
 
-#: ../src/mainframe.cpp:1557
+#: ../src/mainframe.cpp:1663
 msgid "Nancy Bot is enabled"
 msgstr ""
 
-#: ../src/mainframe.cpp:1564
+#: ../src/mainframe.cpp:1670
 msgid "Nancy Bot is disabled"
 msgstr ""
 
@@ -391,23 +396,23 @@ msgstr ""
 msgid "Use \"wget\" to download files."
 msgstr ""
 
-#: ../src/generalprefpage.cpp:71
+#: ../src/generalprefpage.cpp:75
 msgid "Display popup notifier for "
 msgstr ""
 
-#: ../src/generalprefpage.cpp:80
+#: ../src/generalprefpage.cpp:84
 msgid "seconds"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:88
+#: ../src/generalprefpage.cpp:92
 msgid "Web Browser: "
 msgstr ""
 
-#: ../src/generalprefpage.cpp:99
+#: ../src/generalprefpage.cpp:103
 msgid "Mail Client: "
 msgstr ""
 
-#: ../src/view/telnetview.cpp:166
+#: ../src/view/telnetview.cpp:167
 msgid "_Copy URL to Clipboard"
 msgstr ""
 

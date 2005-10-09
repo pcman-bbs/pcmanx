@@ -1,52 +1,63 @@
 2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* configure.ac
-	: release 0.3.3
+
+	* configure.ac: release 0.3.3
+
+2005-10-09  Kanru Chen  <koster@debian.org.tw>
+
+	* ChangeLog: Reformating.
+
+	* po/zh_TW.po: Update.
 
 2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/appconfig.h
-	src/view/telnetview.cpp
-	src/view/telnetview.h
-	src/generalprefpage.h
-	src/mainframe.cpp
-	src/appconfig.cpp
-	src/generalprefpage.cpp
-	po/pcmanx.pot
-	po/zh_TW.po
-	: Use wget compressed files.
+
+	* src/appconfig.h,
+	src/view/telnetview.cpp,
+	src/view/telnetview.h,
+	src/generalprefpage.h,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/generalprefpage.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Use wget compressed files.
 
 2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/mainframe.h
-	src/mainframe.cpp
-	po/pcmanx.pot
-	po/zh_TW.po
-	: Add menu item "Paste from Clipboard".
+
+	* src/mainframe.h,
+	src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Add menu item "Paste from Clipboard".
 
 2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/mainframe.cpp
-	: Make the ugly command shorter.
+
+	* src/mainframe.cpp: Make the ugly command shorter.
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* po/zh_TW.po
-	: Update the Traditional Chinese Message for BBS list update.
+
+	* po/zh_TW.po: Update the Traditional Chinese Message for BBS list update.
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/mainframe.h
-	src/view/telnetcon.cpp
-	src/mainframe.cpp
-	: Modify BBS list update mechanism. (not to block the user interaction)
+
+	* src/mainframe.h,
+	src/view/telnetcon.cpp,
+	src/mainframe.cpp:
+	Modify BBS list update mechanism. (not to block the user interaction)
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/view/telnetcon.h
-	src/view/telnetcon.cpp
-	: Remove g_mutex_new inline for code-reading friendly.
+
+	* src/view/telnetcon.h,
+	src/view/telnetcon.cpp:
+	Remove g_mutex_new inline for code-reading friendly.
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
-	* src/mainframe.h
-	src/view/telnetview.cpp
-	src/mainframe.cpp
-	po/pcmanx.pot
-	po/zh_TW.po
-	: Add BBS list update mechanism.
+
+	* src/mainframe.h,
+	src/view/telnetview.cpp,
+	src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Add BBS list update mechanism.
 
 2005-09-22  Jim Huang  <jserv@kaffe.org>
 
