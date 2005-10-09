@@ -1,3 +1,7 @@
+2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+	* configure.ac
+	: release 0.3.3
+
 2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 	* src/appconfig.h
 	src/view/telnetview.cpp
