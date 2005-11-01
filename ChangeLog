@@ -1,10 +1,16 @@
+2005-11-01  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/Makefile.am:
+	Enforce plugin shared library to be compiled with the -fPIC option.
+	Reported by: Emfox Zhou <emfoxzhou@gmail.com>.
+
 2005-10-18  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* po/zh_CN.po: Translated by emfox.
 
 2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* configure.ac: release 0.3.3
+	* configure.ac: Bump release version to 0.3.3
 
 2005-10-09  Kanru Chen  <koster@debian.org.tw>
 
@@ -14,22 +20,22 @@
 
 2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* src/appconfig.h,
-	src/view/telnetview.cpp,
-	src/view/telnetview.h,
-	src/generalprefpage.h,
-	src/mainframe.cpp,
-	src/appconfig.cpp,
-	src/generalprefpage.cpp,
-	po/pcmanx.pot,
-	po/zh_TW.po:
-	Use wget compressed files.
+	* src/appconfig.h
+	src/view/telnetview.cpp
+	src/view/telnetview.h
+	src/generalprefpage.h
+	src/mainframe.cpp
+	src/appconfig.cpp
+	src/generalprefpage.cpp: Use wget compressed files.
+
+	* po/pcmanx.pot,
+	po/zh_TW.po: Messages updated.
 
 2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* src/mainframe.h,
-	src/mainframe.cpp,
-	po/pcmanx.pot,
+	* src/mainframe.h
+	src/mainframe.cpp
+	po/pcmanx.pot
 	po/zh_TW.po:
 	Add menu item "Paste from Clipboard".
 
@@ -39,14 +45,15 @@
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* po/zh_TW.po: Update the Traditional Chinese Message for BBS list update.
+	* po/zh_TW.po: Updated the Traditional Chinese Messages for BBS 
+	list update
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/mainframe.h,
 	src/view/telnetcon.cpp,
 	src/mainframe.cpp:
-	Modify BBS list update mechanism. (not to block the user interaction)
+	Modify BBS list update mechanism not to block the user interaction.
 
 2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
