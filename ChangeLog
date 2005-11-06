@@ -1,3 +1,8 @@
+2005-11-07  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/Makefile.am: Use AM_CXXFLAGS with -fPIC.
+	Reported by: Emfox Zhou <emfoxzhou@gmail.com>.
+
 2005-11-06  Kanru Chen  <koster@debian.org.tw>
 
 	* src/mainframe.cpp

@@ -12,6 +12,8 @@ INCLUDES = \
 	$(MOZILLA_CFLAGS) \
 	-DMOZ_PLUGIN
 
+AM_CXXFLAGS = -fPIC
+
 noinst_LIBRARIES = $(noinst_LIBRARIES_mozilla)
 	                                     
 MOSTLYCLEANFILES = \
@@ -60,7 +62,7 @@ endif
 $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBUTIL) \
 	  -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
-	  -Wl,-shared \
+	  -shared \
 	$(MOZILLA_LIBS) $(GUI_LIBS) \
 	-L$(top_builddir)/src/core/.libs -lpcmanx_core
 
