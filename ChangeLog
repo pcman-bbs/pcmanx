@@ -1,5 +1,21 @@
 2005-11-07  Jim Huang  <jserv@kaffe.org>
 
+	* src/pcmanx_pure_gtk2.cpp,
+	src/pcmanx_gtk2.cpp: Rename from the former to the later.
+
+	* pcmanx-pure-gtk2.spec.in,
+	pcmanx-gtk2.spec.in: Likewise.
+	Added zh_CN messages file.
+
+	* Doxygen.in,
+	src/Makefile.am,
+	README,
+	configure.ac,
+	Makefile.am: Likewise.
+	Suggested by: Emfox Zhou <emfoxzhou@gmail.com>.
+
+2005-11-07  Jim Huang  <jserv@kaffe.org>
+
 	* plugin/src/Makefile.am: Use AM_CXXFLAGS with -fPIC.
 	Reported by: Emfox Zhou <emfoxzhou@gmail.com>.
 

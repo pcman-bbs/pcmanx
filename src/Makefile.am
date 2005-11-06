@@ -82,7 +82,7 @@ pcmanx_SOURCES = \
 	notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h \
 	generalprefpage.cpp generalprefpage.h \
-	pcmanx_pure_gtk2.cpp \
+	pcmanx_gtk2.cpp \
 	sitepage.cpp sitepage.h \
 	configfile.cpp configfile.h \
 	inputdialog.cpp inputdialog.h \

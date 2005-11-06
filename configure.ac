@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
 AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.3.3, hzysoft@sina.com.tw)
+AM_INIT_AUTOMAKE(pcmanx-gtk2, 0.3.3, hzysoft@sina.com.tw)
 #AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
@@ -72,7 +72,7 @@ else
 	fi
 fi
 
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_pure_gtk2])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
 
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
@@ -144,7 +144,7 @@ if $pkgconfigpath xft --exists; then
 	GUI_CFLAGS="$GUI_CFLAGS `$pkgconfigpath xft --cflags`"
 	GUI_LIBS="$GUI_LIBS `$pkgconfigpath xft --libs`"
 else
-	echo pcmanx_pure_gtk2 depends on Xft\!
+	echo pcmanx_gtk2 depends on Xft\!
 	exit
 fi
 
@@ -466,7 +466,7 @@ AC_CONFIG_FILES([
 	po/Makefile.in
 	data/Makefile
 	pcmanx.desktop
-	pcmanx-pure-gtk2.spec
+	pcmanx-gtk2.spec
 	Doxygen
 ])
 
@@ -481,7 +481,7 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 echo
-echo pcmanx_pure_gtk2 ................ : Version $VERSION
+echo pcmanx_gtk2 ..................... : Version $VERSION
 echo
 echo Prefix........................... : $prefix
 echo Debug support ................... : $debug

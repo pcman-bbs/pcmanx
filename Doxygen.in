@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = pcmanx_pure_gtk2
+PROJECT_NAME           = pcmanx_gtk2
 PROJECT_NUMBER         = @VERSION@
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO
@@ -239,7 +239,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       = pcmanx_pure_gtk2.tag
+GENERATE_TAGFILE       = pcmanx_gtk2.tag
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = @PERL@
