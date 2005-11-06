@@ -43,6 +43,7 @@
 #include "debug.h"
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -1040,6 +1041,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 				kill(parent_pid, SIGUSR2);
 			exit(0);
 		}
+		wait(NULL);
 	}
 }
 
