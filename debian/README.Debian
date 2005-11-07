@@ -1,0 +1,8 @@
+pcmanx-gtk2 for Debian
+---------------------------
+
+PCManX can use a sitelist as default bookmark, please see
+/usr/share/pcmanx/sitelist for details.  For example, you can do
+'cp /usr/share/pcmanx/sitelist ~/.pcmanx/' then modify it.
+
+ -- Kanru Chen <koster@debian.org.tw>, Thu,  7 Jul 2005 11:48:21 +0800

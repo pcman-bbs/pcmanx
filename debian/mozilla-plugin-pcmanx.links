@@ -1,0 +1,5 @@
+usr/lib/mozilla/plugins/pcmanx-plugin.so usr/lib/mozilla-firefox/plugins/pcmanx-plugin.so
+usr/lib/mozilla/components/pcmanx.html usr/lib/mozilla-firefox/components/pcmanx.html
+usr/lib/mozilla/components/pcmanx.png usr/lib/mozilla-firefox/components/pcmanx.png
+usr/lib/mozilla/components/TelnetProtocol.js usr/lib/mozilla-firefox/components/TelnetProtocol.js
+usr/lib/mozilla/components/pcmanx_interface.xpt usr/lib/mozilla-firefox/components/pcmanx_interface.xpt

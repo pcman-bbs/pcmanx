@@ -1,0 +1,6 @@
+pcmanx-gtk2 (0.3.3-1) unstable; urgency=low
+
+  * Initial release. (Closes: #336414)
+  * pull package name changing from upstream CVS.
+
+ -- Emfox Zhou <EmfoxZhou@gmail.com>  Mon,  7 Nov 2005 12:29:26 +0800
