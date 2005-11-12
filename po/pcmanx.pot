@@ -393,6 +393,14 @@ msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr ""
 
 #: ../src/generalprefpage.cpp:67
+msgid "Let screen align center vertically."
+msgstr ""
+
+#: ../src/generalprefpage.cpp:67
+msgid "Let screen align center horizontally."
+msgstr ""
+
+#: ../src/generalprefpage.cpp:67
 msgid "Use \"wget\" to download files."
 msgstr ""
 

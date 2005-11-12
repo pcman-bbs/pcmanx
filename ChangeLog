@@ -1,3 +1,10 @@
+2005-11-13  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/generalprefpage.h,
+	src/generalprefpage.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po : Add align center checkbox to generalprefpage.cpp.
+
 2005-11-07  Jim Huang  <jserv@kaffe.org>
 
 	* src/pcmanx_pure_gtk2.cpp,

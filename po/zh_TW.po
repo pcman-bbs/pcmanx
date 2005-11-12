@@ -413,6 +413,14 @@ msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr "顯示字型使用反鋸齒 (重新啟動程式後才有效)"
 
 #: ../src/generalprefpage.cpp:67
+msgid "Let screen align center vertically."
+msgstr "讓顯示垂直置中對齊"
+
+#: ../src/generalprefpage.cpp:67
+msgid "Let screen align center horizontally."
+msgstr "讓顯示水平置中對齊"
+
+#: ../src/generalprefpage.cpp:67
 msgid "Use \"wget\" to download files."
 msgstr "使用 \"wget\" 下載檔案. (.rar .zip .tgz .tbz)"
 

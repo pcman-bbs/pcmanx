@@ -64,6 +64,14 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_AAFont);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
 
+	m_pVerticalAlign = gtk_check_button_new_with_mnemonic (_("Let screen align center vertically."));
+	gtk_widget_show (m_pVerticalAlign);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_pVerticalAlign, FALSE, FALSE, 0);
+
+	m_pHorizontalAlign = gtk_check_button_new_with_mnemonic (_("Let screen align center horizontally."));
+	gtk_widget_show (m_pHorizontalAlign);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_pHorizontalAlign, FALSE, FALSE, 0);
+
 	m_pWgetFiles = gtk_check_button_new_with_mnemonic (_("Use \"wget\" to download files."));
 	gtk_widget_show (m_pWgetFiles);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_pWgetFiles, FALSE, FALSE, 0);
@@ -113,6 +121,8 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy), AppConfig.CancelSelAfterCopy);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pVerticalAlign), AppConfig.VCenterAlign);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pHorizontalAlign), AppConfig.HCenterAlign);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pWgetFiles), AppConfig.UseWgetFiles);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), AppConfig.PopupNotifier);
 
@@ -130,6 +140,8 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
+	AppConfig.VCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pVerticalAlign));
+	AppConfig.HCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pHorizontalAlign));
 	AppConfig.UseWgetFiles = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pWgetFiles));
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
 	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_PopupTimeout));

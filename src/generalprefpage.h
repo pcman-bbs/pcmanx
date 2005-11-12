@@ -44,6 +44,8 @@ public:
 	GtkWidget *m_PopupNotifier;
 	GtkWidget *m_PopupTimeout;
 	GtkWidget *m_pWgetFiles;
+	GtkWidget *m_pVerticalAlign;
+	GtkWidget *m_pHorizontalAlign;
 
 };
 
