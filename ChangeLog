@@ -1,3 +1,10 @@
+2005-11-15  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/sitepage.cpp,
+	src/sitepage.h,
+	src/generalprefpage.cpp,
+	src/generalprefpage.h : move align checkbox to sitepage.cpp
+
 2005-11-13  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/generalprefpage.h,

@@ -51,6 +51,8 @@ public:
 	GtkWidget *m_Encoding;
 	GtkWidget *m_Startup;
 	GtkWidget *m_DetectDBChar;
+	GtkWidget *m_pVerticalAlign;
+	GtkWidget *m_pHorizontalAlign;
     CSite&  m_Site;
 };
 
