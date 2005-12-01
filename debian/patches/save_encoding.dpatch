@@ -1,0 +1,18 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## save_encoding.dpatch by  <emfox@emfox.3322.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad pcmanx-gtk2-0.3.3~/src/appconfig.cpp pcmanx-gtk2-0.3.3/src/appconfig.cpp
+--- pcmanx-gtk2-0.3.3~/src/appconfig.cpp	2005-10-09 23:58:35.000000000 +0800
++++ pcmanx-gtk2-0.3.3/src/appconfig.cpp	2005-12-01 22:55:42.000000000 +0800
+@@ -129,6 +129,7 @@
+ 		_CFG_INT ( "Cols", m_DefaultSite.m_ColsPerPage )
+ 		_CFG_INT ( "Rows", m_DefaultSite.m_RowsPerPage )
+ 		_CFG_STR ( "TermType", m_DefaultSite.m_TermType )
++                _CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
+ 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
+ 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+ 		CFG_INT  ( SocketTimeout )

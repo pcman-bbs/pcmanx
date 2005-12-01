@@ -1,3 +1,9 @@
+pcmanx-gtk2 (0.3.3-2) unstable; urgency=low
+
+  * save_enconding.dpatch: fixed encoding change not saved.
+
+ -- Emfox Zhou <EmfoxZhou@gmail.com>  Thu,  1 Dec 2005 22:56:20 +0800
+
 pcmanx-gtk2 (0.3.3-1) unstable; urgency=low
 
   * Initial release. (Closes: #336414)
