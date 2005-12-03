@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-04 00:28+0800\n"
+"POT-Creation-Date: 2005-12-04 02:25+0800\n"
 "PO-Revision-Date: 2005-08-25 17:10+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:769
+#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:771
 msgid "Site List"
 msgstr "BBS 站台列表"
 
@@ -26,167 +26,167 @@ msgstr "連線 (_O)"
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到關鍵字 \"%s\"！"
 
-#: ../src/mainframe.cpp:341
+#: ../src/mainframe.cpp:343
 msgid "_Connect"
 msgstr "連線 (_C)"
 
-#: ../src/mainframe.cpp:348
+#: ../src/mainframe.cpp:350
 msgid "_Site List"
 msgstr "BBS 站台列表"
 
-#: ../src/mainframe.cpp:355 ../src/mainframe.cpp:827
+#: ../src/mainframe.cpp:357 ../src/mainframe.cpp:829
 msgid "Update BBS List"
 msgstr "更新站台列表"
 
-#: ../src/mainframe.cpp:368
+#: ../src/mainframe.cpp:370
 msgid "_New Connection"
 msgstr "開啟新連線 (_N)"
 
-#: ../src/mainframe.cpp:379
+#: ../src/mainframe.cpp:381
 msgid "_Reconnect"
 msgstr "重新連線 (_R)"
 
-#: ../src/mainframe.cpp:390
+#: ../src/mainframe.cpp:392
 msgid "_Close Connection"
 msgstr "關閉連線分頁 (_C)"
 
-#: ../src/mainframe.cpp:406
+#: ../src/mainframe.cpp:408
 msgid "Next Page"
 msgstr "切換到下一個分頁"
 
-#: ../src/mainframe.cpp:417
+#: ../src/mainframe.cpp:419
 msgid "Previous Page"
 msgstr "切換到上一個分頁"
 
-#: ../src/mainframe.cpp:428
+#: ../src/mainframe.cpp:430
 msgid "_Jump to"
 msgstr "切換到 (_J)"
 
-#: ../src/mainframe.cpp:441
+#: ../src/mainframe.cpp:443
 msgid "_Quit"
 msgstr "離開 (_Q)"
 
-#: ../src/mainframe.cpp:449
+#: ../src/mainframe.cpp:451
 msgid "_Edit"
 msgstr "編輯 (_E)"
 
-#: ../src/mainframe.cpp:456
+#: ../src/mainframe.cpp:458
 msgid "_Copy"
 msgstr "複製 (_C)"
 
-#: ../src/mainframe.cpp:467
+#: ../src/mainframe.cpp:469
 msgid "Copy with A_NSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
-#: ../src/mainframe.cpp:475
+#: ../src/mainframe.cpp:477
 msgid "_Paste"
 msgstr "貼上 (_P)"
 
-#: ../src/mainframe.cpp:486
+#: ../src/mainframe.cpp:488
 msgid "Paste from Clipboard"
 msgstr "貼上剪貼簿內容"
 
-#: ../src/mainframe.cpp:497
+#: ../src/mainframe.cpp:499
 msgid "Select A_ll"
 msgstr "全部選取 (_L)"
 
-#: ../src/mainframe.cpp:506
+#: ../src/mainframe.cpp:508
 msgid "_Emoticons"
 msgstr "表情符號 (_E)"
 
-#: ../src/mainframe.cpp:513
+#: ../src/mainframe.cpp:515
 msgid "_Preference"
 msgstr "個人偏好設定 (_P)"
 
-#: ../src/mainframe.cpp:521
+#: ../src/mainframe.cpp:523
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:533 ../src/mainframe.cpp:1402
+#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1440
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:541 ../src/mainframe.cpp:1410
+#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1448
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
-#: ../src/mainframe.cpp:549
+#: ../src/mainframe.cpp:551
 msgid "_View"
 msgstr "檢視 (_V)"
 
-#: ../src/mainframe.cpp:566
+#: ../src/mainframe.cpp:568
 msgid "Bot (Current Connection)"
 msgstr "自動回訊機器人 (只套用到目前連線)"
 
-#: ../src/mainframe.cpp:577 ../src/mainframe.cpp:604
+#: ../src/mainframe.cpp:579 ../src/mainframe.cpp:606
 msgid "Disable Bot"
 msgstr "不使用自動回訊機器人"
 
-#: ../src/mainframe.cpp:588 ../src/mainframe.cpp:615
+#: ../src/mainframe.cpp:590 ../src/mainframe.cpp:617
 msgid "Nancy Bot"
 msgstr "啟動 Nancy 機器人"
 
-#: ../src/mainframe.cpp:593
+#: ../src/mainframe.cpp:595
 msgid "Bot (All Opened Connections)"
 msgstr "自動回訊機器人 (套用到全部連線)"
 
-#: ../src/mainframe.cpp:622
+#: ../src/mainframe.cpp:624
 msgid "_Help"
 msgstr "說明 (_H)"
 
-#: ../src/mainframe.cpp:718
+#: ../src/mainframe.cpp:720
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:774
+#: ../src/mainframe.cpp:776
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../src/mainframe.cpp:779
+#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1251
 msgid "Reconnect"
 msgstr "重新連線"
 
-#: ../src/mainframe.cpp:784
+#: ../src/mainframe.cpp:786
 msgid "Close Connection"
 msgstr "關閉連線分頁"
 
-#: ../src/mainframe.cpp:793
+#: ../src/mainframe.cpp:795
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/mainframe.cpp:798
+#: ../src/mainframe.cpp:800
 msgid "Copy with ANSI Color"
 msgstr "複製(包含ANSI彩色)"
 
-#: ../src/mainframe.cpp:803
+#: ../src/mainframe.cpp:805
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/mainframe.cpp:812
+#: ../src/mainframe.cpp:814
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:817 ../src/prefdlg.cpp:32
+#: ../src/mainframe.cpp:819 ../src/prefdlg.cpp:32
 msgid "Preference"
 msgstr "個人偏好設定"
 
-#: ../src/mainframe.cpp:822
+#: ../src/mainframe.cpp:824
 msgid "About"
 msgstr "關於"
 
-#: ../src/mainframe.cpp:872
+#: ../src/mainframe.cpp:874
 msgid "A_ddress:"
 msgstr "位址 (_D)："
 
-#: ../src/mainframe.cpp:875
+#: ../src/mainframe.cpp:877
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此輸入位址，然後按下\"Enter\""
 
-#: ../src/mainframe.cpp:898
+#: ../src/mainframe.cpp:900
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:898
+#: ../src/mainframe.cpp:900
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -194,15 +194,15 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:930
+#: ../src/mainframe.cpp:932
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:935
+#: ../src/mainframe.cpp:937
 msgid "Apply to all opened pages"
 msgstr "套用到所有開啟中的連線"
 
-#: ../src/mainframe.cpp:984
+#: ../src/mainframe.cpp:986
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -218,11 +218,11 @@ msgstr ""
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>\n"
 "李宥辰 Youchen Lee (開發者) <youchen.lee@gmail.com>"
 
-#: ../src/mainframe.cpp:991
+#: ../src/mainframe.cpp:993
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "簡體中文 (zh_CN)：陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:996
+#: ../src/mainframe.cpp:998
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -253,28 +253,32 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:1052
+#: ../src/mainframe.cpp:1054
 msgid "Update BBS List Success!"
 msgstr "BBS站台列表更新成功! *^^*"
 
-#: ../src/mainframe.cpp:1053
+#: ../src/mainframe.cpp:1055
 msgid "Update BBS List Fault."
 msgstr "BBS站台列表更新失敗... Orz"
 
-#: ../src/mainframe.cpp:1062
+#: ../src/mainframe.cpp:1064
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../src/mainframe.cpp:1085
+#: ../src/mainframe.cpp:1087
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
-#: ../src/mainframe.cpp:1312
+#: ../src/mainframe.cpp:1250
+msgid "Close"
+msgstr "關閉"
+
+#: ../src/mainframe.cpp:1350
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1324
+#: ../src/mainframe.cpp:1362
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -283,20 +287,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1336
+#: ../src/mainframe.cpp:1374
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1449
+#: ../src/mainframe.cpp:1487
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1665
+#: ../src/mainframe.cpp:1703
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1672
+#: ../src/mainframe.cpp:1710
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 

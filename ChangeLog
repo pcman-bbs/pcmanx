@@ -1,3 +1,14 @@
+2005-12-04  Youchen Lee  <copyleft@utcr.org>
+
+	* src/mainframe.h,
+	src/mainframe.cpp: added CMainFrame::OnNotebookPopupMenu -- show popup-menu
+	with "Close" and "Reconnect" menu items when right check mouse botton on 
+	connection tabs.
+	
+	* po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: updated related po files.
+
 2005-12-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
