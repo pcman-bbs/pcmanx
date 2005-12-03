@@ -1,3 +1,9 @@
+2005-12-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po : revise po files.
+
 2005-11-15  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,

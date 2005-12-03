@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-10-10 00:11+0800\n"
+"POT-Creation-Date: 2005-12-04 00:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:768
+#: ../src/sitelistdlg.cpp:35 ../src/mainframe.cpp:769
 msgid "Site List"
 msgstr ""
 
@@ -29,181 +29,181 @@ msgstr ""
 msgid "Keyword \"%s\" not found!"
 msgstr ""
 
-#: ../src/mainframe.cpp:340
+#: ../src/mainframe.cpp:341
 msgid "_Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:347
+#: ../src/mainframe.cpp:348
 msgid "_Site List"
 msgstr ""
 
-#: ../src/mainframe.cpp:354 ../src/mainframe.cpp:826
+#: ../src/mainframe.cpp:355 ../src/mainframe.cpp:827
 msgid "Update BBS List"
 msgstr ""
 
-#: ../src/mainframe.cpp:367
+#: ../src/mainframe.cpp:368
 msgid "_New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:378
+#: ../src/mainframe.cpp:379
 msgid "_Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:389
+#: ../src/mainframe.cpp:390
 msgid "_Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:405
+#: ../src/mainframe.cpp:406
 msgid "Next Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:416
+#: ../src/mainframe.cpp:417
 msgid "Previous Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:427
+#: ../src/mainframe.cpp:428
 msgid "_Jump to"
 msgstr ""
 
-#: ../src/mainframe.cpp:440
+#: ../src/mainframe.cpp:441
 msgid "_Quit"
 msgstr ""
 
-#: ../src/mainframe.cpp:448
+#: ../src/mainframe.cpp:449
 msgid "_Edit"
 msgstr ""
 
-#: ../src/mainframe.cpp:455
+#: ../src/mainframe.cpp:456
 msgid "_Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:466
+#: ../src/mainframe.cpp:467
 msgid "Copy with A_NSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:474
+#: ../src/mainframe.cpp:475
 msgid "_Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:485
+#: ../src/mainframe.cpp:486
 msgid "Paste from Clipboard"
 msgstr ""
 
-#: ../src/mainframe.cpp:496
+#: ../src/mainframe.cpp:497
 msgid "Select A_ll"
 msgstr ""
 
-#: ../src/mainframe.cpp:505
+#: ../src/mainframe.cpp:506
 msgid "_Emoticons"
 msgstr ""
 
-#: ../src/mainframe.cpp:512
+#: ../src/mainframe.cpp:513
 msgid "_Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:520
+#: ../src/mainframe.cpp:521
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:532 ../src/mainframe.cpp:1400
+#: ../src/mainframe.cpp:533 ../src/mainframe.cpp:1402
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:540 ../src/mainframe.cpp:1408
+#: ../src/mainframe.cpp:541 ../src/mainframe.cpp:1410
 msgid "_Edit Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:548
+#: ../src/mainframe.cpp:549
 msgid "_View"
 msgstr ""
 
-#: ../src/mainframe.cpp:565
+#: ../src/mainframe.cpp:566
 msgid "Bot (Current Connection)"
 msgstr ""
 
-#: ../src/mainframe.cpp:576 ../src/mainframe.cpp:603
+#: ../src/mainframe.cpp:577 ../src/mainframe.cpp:604
 msgid "Disable Bot"
 msgstr ""
 
-#: ../src/mainframe.cpp:587 ../src/mainframe.cpp:614
+#: ../src/mainframe.cpp:588 ../src/mainframe.cpp:615
 msgid "Nancy Bot"
 msgstr ""
 
-#: ../src/mainframe.cpp:592
+#: ../src/mainframe.cpp:593
 msgid "Bot (All Opened Connections)"
 msgstr ""
 
-#: ../src/mainframe.cpp:621
+#: ../src/mainframe.cpp:622
 msgid "_Help"
 msgstr ""
 
-#: ../src/mainframe.cpp:717
+#: ../src/mainframe.cpp:718
 msgid "Page"
 msgstr ""
 
-#: ../src/mainframe.cpp:773
+#: ../src/mainframe.cpp:774
 msgid "New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:778
+#: ../src/mainframe.cpp:779
 msgid "Reconnect"
 msgstr ""
 
-#: ../src/mainframe.cpp:783
+#: ../src/mainframe.cpp:784
 msgid "Close Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:792
+#: ../src/mainframe.cpp:793
 msgid "Copy"
 msgstr ""
 
-#: ../src/mainframe.cpp:797
+#: ../src/mainframe.cpp:798
 msgid "Copy with ANSI Color"
 msgstr ""
 
-#: ../src/mainframe.cpp:802
+#: ../src/mainframe.cpp:803
 msgid "Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:811
+#: ../src/mainframe.cpp:812
 msgid "Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:816 ../src/prefdlg.cpp:32
+#: ../src/mainframe.cpp:817 ../src/prefdlg.cpp:32
 msgid "Preference"
 msgstr ""
 
-#: ../src/mainframe.cpp:821
+#: ../src/mainframe.cpp:822
 msgid "About"
 msgstr ""
 
-#: ../src/mainframe.cpp:871
+#: ../src/mainframe.cpp:872
 msgid "A_ddress:"
 msgstr ""
 
-#: ../src/mainframe.cpp:874
+#: ../src/mainframe.cpp:875
 msgid "Type URL here, then hit \"Enter\""
 msgstr ""
 
-#: ../src/mainframe.cpp:897
+#: ../src/mainframe.cpp:898
 msgid "Connect"
 msgstr ""
 
-#: ../src/mainframe.cpp:897
+#: ../src/mainframe.cpp:898
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
 msgstr ""
 
-#: ../src/mainframe.cpp:929
+#: ../src/mainframe.cpp:930
 msgid "Font"
 msgstr ""
 
-#: ../src/mainframe.cpp:934
+#: ../src/mainframe.cpp:935
 msgid "Apply to all opened pages"
 msgstr ""
 
-#: ../src/mainframe.cpp:983
+#: ../src/mainframe.cpp:984
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -213,11 +213,11 @@ msgid ""
 "Youchen Lee (Developer) <youchen.lee@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:990
+#: ../src/mainframe.cpp:991
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr ""
 
-#: ../src/mainframe.cpp:995
+#: ../src/mainframe.cpp:996
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -235,48 +235,48 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/mainframe.cpp:1050
+#: ../src/mainframe.cpp:1052
 msgid "Update BBS List Success!"
 msgstr ""
 
-#: ../src/mainframe.cpp:1051
+#: ../src/mainframe.cpp:1053
 msgid "Update BBS List Fault."
 msgstr ""
 
-#: ../src/mainframe.cpp:1060
+#: ../src/mainframe.cpp:1062
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1083
+#: ../src/mainframe.cpp:1085
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1310
+#: ../src/mainframe.cpp:1312
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1322
+#: ../src/mainframe.cpp:1324
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1334
+#: ../src/mainframe.cpp:1336
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:1447
+#: ../src/mainframe.cpp:1449
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr ""
 
-#: ../src/mainframe.cpp:1663
+#: ../src/mainframe.cpp:1665
 msgid "Nancy Bot is enabled"
 msgstr ""
 
-#: ../src/mainframe.cpp:1670
+#: ../src/mainframe.cpp:1672
 msgid "Nancy Bot is disabled"
 msgstr ""
 
@@ -304,68 +304,76 @@ msgstr ""
 msgid "Edit Site Settings"
 msgstr ""
 
-#: ../src/sitepage.cpp:72
+#: ../src/sitepage.cpp:73
 msgid "Name: "
 msgstr ""
 
-#: ../src/sitepage.cpp:81
+#: ../src/sitepage.cpp:82
 msgid "Address: "
 msgstr ""
 
-#: ../src/sitepage.cpp:95
+#: ../src/sitepage.cpp:96
 msgid "Reconnect when disconnected in specified duration : "
 msgstr ""
 
-#: ../src/sitepage.cpp:104 ../src/sitepage.cpp:122
+#: ../src/sitepage.cpp:105 ../src/sitepage.cpp:123
 msgid "Sec (0 = Disabled)"
 msgstr ""
 
-#: ../src/sitepage.cpp:113
+#: ../src/sitepage.cpp:114
 msgid "Anti-Idle: Send specified string to server when idling for  "
 msgstr ""
 
-#: ../src/sitepage.cpp:131
+#: ../src/sitepage.cpp:132
 msgid "Anti-Idle string to be sent :"
 msgstr ""
 
-#: ../src/sitepage.cpp:144
+#: ../src/sitepage.cpp:145
 msgid "Terminal Screen Size"
 msgstr ""
 
-#: ../src/sitepage.cpp:152
+#: ../src/sitepage.cpp:153
 msgid "Line: "
 msgstr ""
 
-#: ../src/sitepage.cpp:161
+#: ../src/sitepage.cpp:162
 msgid "Col: "
 msgstr ""
 
-#: ../src/sitepage.cpp:175
+#: ../src/sitepage.cpp:176
 msgid "Terminal Type: "
 msgstr ""
 
-#: ../src/sitepage.cpp:184
+#: ../src/sitepage.cpp:185
 msgid "Convert ESC in ANSI color code to  "
 msgstr ""
 
-#: ../src/sitepage.cpp:198
+#: ../src/sitepage.cpp:199
 msgid "Wrap pasted text when there's too many characters per line :"
 msgstr ""
 
-#: ../src/sitepage.cpp:207
+#: ../src/sitepage.cpp:208
 msgid "(0 = Disabled)"
 msgstr ""
 
-#: ../src/sitepage.cpp:216
+#: ../src/sitepage.cpp:217
 msgid "Site Encoding: "
 msgstr ""
 
-#: ../src/sitepage.cpp:225
+#: ../src/sitepage.cpp:226
 msgid "Detect double-byte characters on typing"
 msgstr ""
 
-#: ../src/sitepage.cpp:229
+#: ../src/sitepage.cpp:230
 msgid "Connect automatically on program startup"
+msgstr ""
+
+#: ../src/sitepage.cpp:239
+msgid "Let screen align center vertically."
+msgstr ""
+
+#: ../src/sitepage.cpp:243
+msgid "Let screen align center horizontally."
 msgstr ""
 
 #: ../src/prefdlg.cpp:41
@@ -390,14 +398,6 @@ msgstr ""
 
 #: ../src/generalprefpage.cpp:63
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
-msgstr ""
-
-#: ../src/generalprefpage.cpp:67
-msgid "Let screen align center vertically."
-msgstr ""
-
-#: ../src/generalprefpage.cpp:67
-msgid "Let screen align center horizontally."
 msgstr ""
 
 #: ../src/generalprefpage.cpp:67
