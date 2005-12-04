@@ -118,8 +118,17 @@ protected:
     int m_FontSize;
     string m_FontFamily;
 
-	static GdkCursor* m_HandCursor;
+    static GdkCursor* m_HandCursor;
+    static GdkCursor* m_ExitCursor;
+    static GdkCursor* m_BullsEyeCursor;
+    static GdkCursor* m_PageDownCursor;
+    static GdkCursor* m_PageUpCursor;
+    static GdkCursor* m_EndCursor;
+    static GdkCursor* m_HomeCursor;
 
+    // Mouse Cursor State for Click Behaviour
+    // Hand=-1, Normal=0, Exit=1, BullsEye=2, PageDown=3, PageUp=4, End=6, Home=6
+    static int m_CursorState;
 };
 
 #endif

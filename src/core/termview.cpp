@@ -99,6 +99,13 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 }
 
 GdkCursor* CTermView::m_HandCursor = NULL;
+GdkCursor* CTermView::m_ExitCursor = NULL;
+GdkCursor* CTermView::m_BullsEyeCursor = NULL;
+GdkCursor* CTermView::m_PageDownCursor = NULL;
+GdkCursor* CTermView::m_PageUpCursor = NULL;
+GdkCursor* CTermView::m_EndCursor = NULL;
+GdkCursor* CTermView::m_HomeCursor = NULL;
+int CTermView::m_CursorState = 0;
 
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
@@ -149,6 +156,31 @@ CTermView::CTermView()
 		gdk_cursor_ref(m_HandCursor);
 	else
 		m_HandCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
+	if( m_ExitCursor )
+	  gdk_cursor_ref(m_ExitCursor);
+	else
+	  m_ExitCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_LEFT_ARROW);
+	if( m_BullsEyeCursor )
+	  gdk_cursor_ref(m_BullsEyeCursor);
+	else
+	  m_BullsEyeCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_RIGHT_ARROW);
+	if( m_PageUpCursor )
+	  gdk_cursor_ref(m_PageUpCursor);
+	else
+	  m_PageUpCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_UP_ARROW);
+	if( m_PageDownCursor )
+	  gdk_cursor_ref(m_PageDownCursor);
+	else
+	  m_PageDownCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_DOWN_ARROW);
+	if( m_EndCursor )
+	  gdk_cursor_ref(m_EndCursor);
+	else
+	  m_EndCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_BOTTOM_SIDE);
+	if( m_HomeCursor )
+	  gdk_cursor_ref(m_HomeCursor);
+	else
+	  m_HomeCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_TOP_SIDE);
+
 }
 
 
@@ -535,6 +567,12 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 }
 
 
+void CTermView::OnMouseMove(GdkEventMotion* evt)
+{
+
+}
+
+
 void CTermView::OnRButtonDown(GdkEventButton* evt)
 {
 
@@ -573,47 +611,6 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 void CTermView::OnRButtonUp(GdkEventButton* evt)
 {
 }
-
-
-void CTermView::OnMouseMove(GdkEventMotion* evt)
-{
-	if( !m_pTermData )
-		return;
-
-	int x = (int)evt->x;
-	int y = (int)evt->y;
-	bool left;
-
-	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
-
-	this->PointToLineCol( &x, &y, &left );
-	if( HasCapture() )	//	Selecting text.
-	{
-		if ( m_pTermData->m_Sel->m_End.row != y
-		  || m_pTermData->m_Sel->m_End.col != x
-		  || m_pTermData->m_Sel->m_End.left != left )
-		{
-			// Always remember to hide the caret before drawing.
-			m_Caret.Hide();
-
-			m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
-
-			// Show the caret again but only set its visibility without
-			// display it immediatly.
-			m_Caret.Show( false );
-		}
-	}
-	else	//	Consider hyperlink detection.
-	{
-		/* Todo: hyperlink detection. */
-		CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
-		if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
-			gdk_window_set_cursor(m_Widget->window, m_HandCursor);
-		else
-			gdk_window_set_cursor(m_Widget->window, NULL);
-	}
-}
-
 
 void CTermView::OnKillFocus(GdkEventFocus *evt)
 {

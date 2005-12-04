@@ -43,7 +43,8 @@ CMainFrame* CTelnetView::m_pParentFrame = NULL;
 
 CTelnetView::CTelnetView()
 	: CTermView()
-{}
+{
+}
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
 bool CTelnetView::m_bWgetFiles = false;
@@ -60,6 +61,13 @@ void CTelnetView::OnTextInput(const gchar* text)
 }
 
 #define	GDK_MODIFIER_DOWN(key, mod)	(key & (mod|(~GDK_SHIFT_MASK&~GDK_CONTROL_MASK&~GDK_MOD1_MASK)))
+
+static int DrawCharWrapper( int row, int col, void *data )
+{
+	CTermView *tv = (CTermView *) data;
+
+	return tv->DrawChar( row, col );
+}
 
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
@@ -145,6 +153,188 @@ static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
 	*do_copy = true;
 }
 
+void CTelnetView::OnMouseMove(GdkEventMotion* evt)
+{
+  if( !m_pTermData )
+    return;
+  
+  int x = (int)evt->x;
+  int y = (int)evt->y;
+  bool left;
+  
+  INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
+
+  this->PointToLineCol( &x, &y, &left );
+  if( HasCapture() )	//	Selecting text.
+    {
+      if ( m_pTermData->m_Sel->m_End.row != y
+	   || m_pTermData->m_Sel->m_End.col != x
+	   || m_pTermData->m_Sel->m_End.left != left )
+	{
+	  // Always remember to hide the caret before drawing.
+	  m_Caret.Hide();
+	  
+	  m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
+	  
+	  // Show the caret again but only set its visibility without
+	  // display it immediatly.
+	  m_Caret.Show( false );
+	}
+    }
+  else	//	Consider hyperlink detection.
+    {
+      /* Todo: hyperlink detection. */
+      CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
+	{gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
+      else
+	{
+	  // set mouse cursor and save the state to m_CursorState.
+	  // ugly code, but functional, will rewrite soon.
+	  switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
+	    {
+	    case -1: //NORMAL
+	      gdk_window_set_cursor(m_Widget->window, NULL);
+	      m_CursorState=0;
+	      break;
+	    case 1: //LIST
+	      if ( y>2 && y < m_pTermData->m_RowsPerPage-1 )
+		{
+		  if ( x <= 6 )
+		    {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+		  else if ( x >= m_pTermData->m_ColsPerPage-16 )
+		    {
+		      if ( y > m_pTermData->m_RowsPerPage /2 )
+			{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
+		      else
+			{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+		    }					
+		  else
+		    {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
+		}      
+	      else if ( y==1 || y==2 )
+		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+	      else if ( y==0 ) 
+		{gdk_window_set_cursor(m_Widget->window, m_HomeCursor);m_CursorState=6;}
+	      else //if ( y = m_pTermData->m_RowsPerPage-1) 
+		{gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
+	      break;
+	    case 2: //READING
+	      if ( y == m_pTermData->m_RowsPerPage-1)
+		{gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
+	      else if ( x<7 )
+		{gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+	      else if ( y < (m_pTermData->m_RowsPerPage-1)/2 )
+		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+	      else
+		{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
+	      break;  
+	    case 0: //MENU
+	      if ( y>0 && y < m_pTermData->m_RowsPerPage-1 )
+		{
+		  if (x>7)
+		    {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
+		  else
+		    {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+		}      
+	      else    
+		{gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
+	      break;
+	    default:
+	      break;       
+	    }        
+	}
+    }
+}
+
+// copy from pipiterm, need working later
+/*
+void CTelnetView::OnMouseWheel(GdkEventMotion* evt)
+{
+	if( !m_pTermData )
+		return;
+	int i = evt.GetWheelRotation();
+	if ( i < 0 )
+		((CTelnetCon*)m_pTermData)->Send("\x1bOB",3);
+	if ( i > 0 )
+		((CTelnetCon*)m_pTermData)->Send("\x1bOA",3);
+}
+*/
+
+void CTelnetView::OnLButtonUp(GdkEventButton* evt)
+{
+	CTermView::OnLButtonUp(evt);
+    
+	if( !m_pTermData )
+		return;
+
+	int x = (int)evt->x;
+	int y = (int)evt->y;
+	bool left;
+	this->PointToLineCol( &x, &y, &left );
+
+	//some text is selected
+	if ( m_pTermData->m_Sel->m_End.row != y
+	     || m_pTermData->m_Sel->m_End.col != x
+	     || m_pTermData->m_Sel->m_End.left != left )
+	  return;
+	
+	int cur = m_CursorState;
+	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
+    
+	if ( cur == 2 ) // modified from qterm
+	  {
+	    switch (ps)
+	      {
+	      case 1: // list
+		{        
+		  int n = y - m_pTermData->m_CaretPos.y; 
+		  if ( n>0 )
+		    while(n)
+		      {
+			GetCon()->SendRawString("\x1bOB",3);
+			n--;
+		      }
+		  if ( n<0 )
+		    {
+		      n=-n;   
+		      while(n)
+			{
+			  GetCon()->SendRawString("\x1bOA",3); 
+			  n--;
+			}
+		    }                                      
+		  GetCon()->SendRawString("\r",1); //return key
+		  break;
+		}
+	      case 0: // menu
+		{
+		  char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
+		  GetCon()->SendRawString( &cMenu, 1 );
+		  GetCon()->SendRawString( "\r", 1 );    
+		  break;      
+		} 
+	      case -1: //normal
+		GetCon()->SendRawString( "\r", 1 );   
+		break;                       
+	      default:
+		break;      
+	      }     
+	  }
+	else if (cur == 1)
+	  GetCon()->SendRawString("\x1bOD",3); //left arrow 
+	else if (cur == 6)
+	  GetCon()->SendRawString("\x1b[1~",4);         
+	else if (cur == 5)
+	  GetCon()->SendRawString("\x1b[4~",4); 
+	else if (cur == 4)
+	  GetCon()->SendRawString("\x1b[5~",4); 
+	else if (cur == 3)
+	  GetCon()->SendRawString("\x1b[6~",4); 
+	else
+	  GetCon()->SendRawString( "\r", 1 );                                        
+}
+         
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {
 #if !defined(MOZ_PLUGIN)

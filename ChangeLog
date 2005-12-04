@@ -1,3 +1,16 @@
+2005-12-05  Emfox Zhou  <emfoxzhou@gmail.com>
+	* src/core/termview.cpp,
+	src/core/termview.h,
+	src/view/telnetcon.h,
+	src/view/telnetview.cpp,
+	src/view/telnetcon.cpp,
+	src/view/telnetview.h: add Mouse Support for menu and list click. Current
+	code is a little ugly and will be reworked soon.
+
+	* TODO: metion ugly code of mouse support.
+
+	* AUTHORS: add myself.
+
 2005-12-04  Youchen Lee  <copyleft@utcr.org>
 
 	* src/mainframe.h,

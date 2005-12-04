@@ -29,5 +29,5 @@ FourDollars
 
 emfox
 -----
-1. add mouse support
-
+1. rewrite GUI definiton
+2. add mouse support (functional now, but the ugly code need reworking)

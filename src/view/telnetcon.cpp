@@ -196,6 +196,20 @@ CTelnetCon::~CTelnetCon()
 		g_source_remove( m_BellTimeout );
 }
 
+char CTelnetCon::GetMenuChar(int y)
+{ 
+	gchar* str = m_Screen[y];
+	int i;
+	for(i=0;;i++)
+	  {
+	    if (str[i]!=' ')
+	      if ( g_ascii_isalpha(str[i]) )
+		return str[i];
+	      else 
+		return str[i+1];
+	  }
+}
+
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
 {
 	bool ret = false;
@@ -294,6 +308,7 @@ bool CTelnetCon::OnRecv()
 //	printf("recv (%d): %s\n\n", rlen, m_pRecvBuf);
     ParseReceivedData();
 
+    SetPageState();
 	UpdateDisplay();
 
 //	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
@@ -881,3 +896,49 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
 	INFO("all threads end\n");
 	return false;
 }
+
+void CTelnetCon::SetPageState()
+{
+	m_nPageState = -1; //NORMAL
+
+	char* pLine = m_Screen[m_FirstLine];
+
+	if(IsUnicolor(pLine))
+	{
+		pLine = m_Screen[m_FirstLine+2];
+		if(IsUnicolor(pLine))
+			m_nPageState = 1; // LIST
+		else
+			m_nPageState = 0; // MENU
+	}
+	else
+	{
+		pLine = m_Screen[m_FirstLine+m_RowsPerPage-1];
+		if(IsUnicolor(pLine))
+			m_nPageState = 2; // READING
+	}
+	
+}
+
+bool CTelnetCon::IsUnicolor(char* pLine)  
+{
+
+	bool bSame = true;
+    
+	CTermCharAttr* pAttr = GetLineAttr(pLine);
+	GdkColor* clr = pAttr[0].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
+    
+	for ( int i=0; i<m_ColsPerPage/2; i++) 
+	{
+		GdkColor* clr1 = pAttr[i].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
+		if (clr1 != clr || clr1 == CTermCharAttr::GetDefaultColorTable(0))
+		{
+			bSame = false;
+			//wxBell();
+			break;
+		}       
+	}
+	
+	return bSame;
+}     
+

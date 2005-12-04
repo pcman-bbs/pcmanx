@@ -52,6 +52,9 @@ public:
 protected:
     bool OnKeyDown(GdkEventKey* evt);
 protected:
+    void OnMouseMove(GdkEventMotion* evt);
+    void OnMouseWheel(GdkEventMotion* evt);
+    void OnLButtonUp(GdkEventButton* evt);
     void OnRButtonDown(GdkEventButton* evt);
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
