@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-04 02:25+0800\n"
+"POT-Creation-Date: 2005-12-05 23:48+0800\n"
 "PO-Revision-Date: 2005-10-11 14:22+0800\n"
 "Last-Translator: EmfoxZhou@gmail.com\n"
 "Language-Team: \n"
@@ -101,11 +101,11 @@ msgstr "个人偏好设置(_P)"
 msgid "F_avorites"
 msgstr "收藏夹(_A)"
 
-#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1440
+#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1457
 msgid "_Add to Favorites"
 msgstr "加入到收藏夹(_A)"
 
-#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1448
+#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1465
 msgid "_Edit Favorites"
 msgstr "编辑收藏夹(_E)"
 
@@ -141,7 +141,7 @@ msgstr "分页"
 msgid "New Connection"
 msgstr "新连接"
 
-#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1251
+#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1253
 msgid "Reconnect"
 msgstr "重新连接"
 
@@ -161,7 +161,7 @@ msgstr "复制(包含ANSI彩色)"
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/mainframe.cpp:814
+#: ../src/mainframe.cpp:814 ../src/mainframe.cpp:1254
 msgid "Add to Favorites"
 msgstr "加入到收藏夹"
 
@@ -268,15 +268,16 @@ msgstr "%s"
 msgid "Close Connection?"
 msgstr "确定关闭连接分页?"
 
-#: ../src/mainframe.cpp:1250
+#. set menu items
+#: ../src/mainframe.cpp:1252
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/mainframe.cpp:1350
+#: ../src/mainframe.cpp:1367
 msgid "Quit PCMan X ?"
 msgstr "离开 PCMan X ?"
 
-#: ../src/mainframe.cpp:1362
+#: ../src/mainframe.cpp:1379
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -285,20 +286,20 @@ msgstr ""
 "功能尚未完成！\n"
 "侦错讯息： %s"
 
-#: ../src/mainframe.cpp:1374
+#: ../src/mainframe.cpp:1391
 msgid "Add To Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:1487
+#: ../src/mainframe.cpp:1504
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "经过的时间：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1703
+#: ../src/mainframe.cpp:1720
 msgid "Nancy Bot is enabled"
 msgstr "机器人 Nancy 已经启动"
 
-#: ../src/mainframe.cpp:1710
+#: ../src/mainframe.cpp:1727
 msgid "Nancy Bot is disabled"
 msgstr "机器人 Nancy 已经禁用"
 
@@ -442,7 +443,7 @@ msgstr "网页浏览器："
 msgid "Mail Client: "
 msgstr "邮件客户端："
 
-#: ../src/view/telnetview.cpp:167
+#: ../src/view/telnetview.cpp:357
 msgid "_Copy URL to Clipboard"
 msgstr "复制网址到剪贴板(_C)"
 

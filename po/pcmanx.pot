@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-04 02:25+0800\n"
+"POT-Creation-Date: 2005-12-05 23:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,11 +105,11 @@ msgstr ""
 msgid "F_avorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1440
+#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1457
 msgid "_Add to Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1448
+#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1465
 msgid "_Edit Favorites"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "New Connection"
 msgstr ""
 
-#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1251
+#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1253
 msgid "Reconnect"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Paste"
 msgstr ""
 
-#: ../src/mainframe.cpp:814
+#: ../src/mainframe.cpp:814 ../src/mainframe.cpp:1254
 msgid "Add to Favorites"
 msgstr ""
 
@@ -252,35 +252,36 @@ msgstr ""
 msgid "Close Connection?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1250
+#. set menu items
+#: ../src/mainframe.cpp:1252
 msgid "Close"
 msgstr ""
 
-#: ../src/mainframe.cpp:1350
+#: ../src/mainframe.cpp:1367
 msgid "Quit PCMan X ?"
 msgstr ""
 
-#: ../src/mainframe.cpp:1362
+#: ../src/mainframe.cpp:1379
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
 "Debug: %s"
 msgstr ""
 
-#: ../src/mainframe.cpp:1374
+#: ../src/mainframe.cpp:1391
 msgid "Add To Favorites"
 msgstr ""
 
-#: ../src/mainframe.cpp:1487
+#: ../src/mainframe.cpp:1504
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr ""
 
-#: ../src/mainframe.cpp:1703
+#: ../src/mainframe.cpp:1720
 msgid "Nancy Bot is enabled"
 msgstr ""
 
-#: ../src/mainframe.cpp:1710
+#: ../src/mainframe.cpp:1727
 msgid "Nancy Bot is disabled"
 msgstr ""
 
@@ -424,7 +425,7 @@ msgstr ""
 msgid "Mail Client: "
 msgstr ""
 
-#: ../src/view/telnetview.cpp:167
+#: ../src/view/telnetview.cpp:357
 msgid "_Copy URL to Clipboard"
 msgstr ""
 

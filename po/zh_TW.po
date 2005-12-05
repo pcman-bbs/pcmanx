@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-04 02:25+0800\n"
+"POT-Creation-Date: 2005-12-05 23:48+0800\n"
 "PO-Revision-Date: 2005-08-25 17:10+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
@@ -102,11 +102,11 @@ msgstr "個人偏好設定 (_P)"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1440
+#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1457
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1448
+#: ../src/mainframe.cpp:543 ../src/mainframe.cpp:1465
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -142,7 +142,7 @@ msgstr "分頁"
 msgid "New Connection"
 msgstr "新連線"
 
-#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1251
+#: ../src/mainframe.cpp:781 ../src/mainframe.cpp:1253
 msgid "Reconnect"
 msgstr "重新連線"
 
@@ -162,7 +162,7 @@ msgstr "複製(包含ANSI彩色)"
 msgid "Paste"
 msgstr "貼上"
 
-#: ../src/mainframe.cpp:814
+#: ../src/mainframe.cpp:814 ../src/mainframe.cpp:1254
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
@@ -270,15 +270,16 @@ msgstr "%s"
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
-#: ../src/mainframe.cpp:1250
+#. set menu items
+#: ../src/mainframe.cpp:1252
 msgid "Close"
 msgstr "關閉"
 
-#: ../src/mainframe.cpp:1350
+#: ../src/mainframe.cpp:1367
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1362
+#: ../src/mainframe.cpp:1379
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -287,20 +288,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1374
+#: ../src/mainframe.cpp:1391
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1487
+#: ../src/mainframe.cpp:1504
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1703
+#: ../src/mainframe.cpp:1720
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1710
+#: ../src/mainframe.cpp:1727
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 
@@ -444,7 +445,7 @@ msgstr "網頁瀏覽器："
 msgid "Mail Client: "
 msgstr "郵件程式："
 
-#: ../src/view/telnetview.cpp:167
+#: ../src/view/telnetview.cpp:357
 msgid "_Copy URL to Clipboard"
 msgstr "複製網址到剪貼簿 (_C)"
 
