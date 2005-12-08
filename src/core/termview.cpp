@@ -91,6 +91,12 @@ static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView*
 	return true;
 }
 
+static gboolean on_mouse_scroll(GtkWidget* widget, GdkEventScroll* evt, CTermView* _this)
+{
+	_this->OnMouseScroll(evt);
+	return true;
+}
+
 void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 {
 	XftDrawDestroy( _this->m_XftDraw);
@@ -143,6 +149,8 @@ CTermView::CTermView()
 	g_signal_connect(G_OBJECT(m_Widget), "button_release_event", G_CALLBACK(on_mouse_up), this);
 
 	g_signal_connect(G_OBJECT(m_Widget), "motion_notify_event", G_CALLBACK(on_mouse_move), this);
+
+	g_signal_connect(G_OBJECT(m_Widget), "scroll_event", G_CALLBACK(on_mouse_scroll), this);
 
 	m_CharPaddingX = m_CharPaddingY = 0;
 	m_AutoFontSize = true;
@@ -572,6 +580,11 @@ void CTermView::OnMouseMove(GdkEventMotion* evt)
 
 }
 
+
+void CTermView::OnMouseScroll(GdkEventScroll* evt)
+{
+
+}
 
 void CTermView::OnRButtonDown(GdkEventButton* evt)
 {

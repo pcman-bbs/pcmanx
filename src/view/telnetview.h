@@ -53,7 +53,7 @@ protected:
     bool OnKeyDown(GdkEventKey* evt);
 protected:
     void OnMouseMove(GdkEventMotion* evt);
-    void OnMouseWheel(GdkEventMotion* evt);
+    void OnMouseScroll(GdkEventScroll* evt);
     void OnLButtonUp(GdkEventButton* evt);
     void OnRButtonDown(GdkEventButton* evt);
     bool PreKeyDown(GdkEventKey* evt);

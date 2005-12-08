@@ -190,7 +190,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
       else
 	{
 	  // set mouse cursor and save the state to m_CursorState.
-	  // ugly code, but functional, will rewrite soon.
+	  // m_CursorState will be used to detect mouse states in OnLButtonUp().
 	  switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
 	    {
 	    case -1: //NORMAL
@@ -247,19 +247,17 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
     }
 }
 
-// copy from pipiterm, need working later
-/*
-void CTelnetView::OnMouseWheel(GdkEventMotion* evt)
+void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 {
 	if( !m_pTermData )
 		return;
-	int i = evt.GetWheelRotation();
-	if ( i < 0 )
-		((CTelnetCon*)m_pTermData)->Send("\x1bOB",3);
-	if ( i > 0 )
-		((CTelnetCon*)m_pTermData)->Send("\x1bOA",3);
+
+	GdkScrollDirection i = evt->direction;;
+	if ( i == GDK_SCROLL_UP )
+	  GetCon()->SendRawString("\x1bOA",3);
+	if ( i == GDK_SCROLL_DOWN )
+	  GetCon()->SendRawString("\x1bOB",3);
 }
-*/
 
 void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 {
@@ -282,7 +280,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	int cur = m_CursorState;
 	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
     
-	if ( cur == 2 ) // modified from qterm
+	if ( cur == 2 ) // mouse on entering mode
 	  {
 	    switch (ps)
 	      {
@@ -314,7 +312,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 		  GetCon()->SendRawString( "\r", 1 );    
 		  break;      
 		} 
-	      case -1: //normal
+	      case -1: // normal
 		GetCon()->SendRawString( "\r", 1 );   
 		break;                       
 	      default:
@@ -322,15 +320,15 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	      }     
 	  }
 	else if (cur == 1)
-	  GetCon()->SendRawString("\x1bOD",3); //left arrow 
+	  GetCon()->SendRawString("\x1bOD",3); //exiting mode
 	else if (cur == 6)
-	  GetCon()->SendRawString("\x1b[1~",4);         
+	  GetCon()->SendRawString("\x1b[1~",4); //home
 	else if (cur == 5)
-	  GetCon()->SendRawString("\x1b[4~",4); 
+	  GetCon()->SendRawString("\x1b[4~",4); //end
 	else if (cur == 4)
-	  GetCon()->SendRawString("\x1b[5~",4); 
+	  GetCon()->SendRawString("\x1b[5~",4); //pageup
 	else if (cur == 3)
-	  GetCon()->SendRawString("\x1b[6~",4); 
+	  GetCon()->SendRawString("\x1b[6~",4); //pagedown
 	else
 	  GetCon()->SendRawString( "\r", 1 );                                        
 }

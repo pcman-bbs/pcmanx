@@ -1,3 +1,14 @@
+2005-12-08 Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/termview.h,
+	src/view/telnetview.cpp,
+	src/view/telnetview.h: add Mouse Wheel Scrolling Support for menu and list.
+
+	* src/mainframe.cpp: add myself as developer in About Dialog.
+
+	* TODO: update
+	
 2005-12-05  Youchen Lee  <copyleft@utcr.org>
 
 	* src/mainframe.cpp: CMainFrame::OnNotebookPopupMenu, added "Add to
@@ -8,6 +19,7 @@
 	po/zh_CN.po: updated related po files.
 
 2005-12-05  Emfox Zhou  <emfoxzhou@gmail.com>
+
 	* src/core/termview.cpp,
 	src/core/termview.h,
 	src/view/telnetcon.h,

@@ -62,6 +62,7 @@ public:
     virtual void OnLButtonUp(GdkEventButton* evt);
     virtual void OnRButtonUp(GdkEventButton* evt);
     virtual void OnMouseMove(GdkEventMotion* evt);
+    virtual void OnMouseScroll(GdkEventScroll* evt);
     virtual void OnHyperlinkClicked(string url);
     void OnBlinkTimer();
     virtual void OnMButtonDown(GdkEventButton* evt);
@@ -127,7 +128,7 @@ protected:
     static GdkCursor* m_HomeCursor;
 
     // Mouse Cursor State for Click Behaviour
-    // Hand=-1, Normal=0, Exit=1, BullsEye=2, PageDown=3, PageUp=4, End=6, Home=6
+    // Hand=-1, Normal=0, Exit=1, BullsEye=2, PageDown=3, PageUp=4, End=5, Home=6
     static int m_CursorState;
 };
 
