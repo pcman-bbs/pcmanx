@@ -903,42 +903,42 @@ void CTelnetCon::SetPageState()
 
 	char* pLine = m_Screen[m_FirstLine];
 
-	if(IsUnicolor(pLine))
+	if(IsUnicolor(pLine,0,m_ColsPerPage/2))
 	{
-		pLine = m_Screen[m_FirstLine+2];
-		if(IsUnicolor(pLine))
-			m_nPageState = 1; // LIST
-		else
-			m_nPageState = 0; // MENU
+	  pLine = m_Screen[m_FirstLine+2];
+	  if(IsUnicolor(pLine,0,m_ColsPerPage/2))
+	    m_nPageState = 1; // LIST
+	  else
+	    m_nPageState = 0; // MENU
 	}
 	else
 	{
-		pLine = m_Screen[m_FirstLine+m_RowsPerPage-1];
-		if(IsUnicolor(pLine))
+	  pLine = m_Screen[m_FirstLine+m_RowsPerPage-1];
+	  if(IsUnicolor(pLine,m_ColsPerPage/3,m_ColsPerPage*2/3))
 			m_nPageState = 2; // READING
 	}
 	
 }
 
-bool CTelnetCon::IsUnicolor(char* pLine)  
+bool CTelnetCon::IsUnicolor(char* pLine, int start, int end)
 {
 
 	bool bSame = true;
     
 	CTermCharAttr* pAttr = GetLineAttr(pLine);
-	GdkColor* clr = pAttr[0].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
-    
-	for ( int i=0; i<m_ColsPerPage/2; i++) 
+	GdkColor* clr = pAttr[start].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
+
+	// a dirty hacking, because of the difference between maple and firebird bbs.
+	for ( int i=start; i<end; i++)
 	{
 		GdkColor* clr1 = pAttr[i].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
 		if (clr1 != clr || clr1 == CTermCharAttr::GetDefaultColorTable(0))
 		{
 			bSame = false;
-			//wxBell();
 			break;
 		}       
 	}
-	
+
 	return bSame;
 }     
 

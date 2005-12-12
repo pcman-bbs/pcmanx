@@ -220,7 +220,7 @@ private:
 private:
     static bool OnProcessDNSQueueExit(gpointer unused);
     void SetPageState();
-    bool IsUnicolor(char* line);
+    bool IsUnicolor(char* line, int start, int end);
 };
 
 class CDNSRequest

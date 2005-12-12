@@ -173,7 +173,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	{
 	  // Always remember to hide the caret before drawing.
 	  m_Caret.Hide();
-	  
+
 	  m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
 	  
 	  // Show the caret again but only set its visibility without

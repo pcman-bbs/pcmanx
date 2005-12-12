@@ -1,3 +1,9 @@
+2005-12-11 Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/view/telnetcon.h
+	src/view/telnetview.cpp
+	src/view/telnetcon.cpp: coordinate with maple bbs for Mouse Support.
+
 2005-12-08 Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/core/termview.cpp,
