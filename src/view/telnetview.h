@@ -53,8 +53,10 @@ protected:
     bool OnKeyDown(GdkEventKey* evt);
 protected:
     void OnMouseMove(GdkEventMotion* evt);
+#ifdef USE_MOUSE
     void OnMouseScroll(GdkEventScroll* evt);
     void OnLButtonUp(GdkEventButton* evt);
+#endif
     void OnRButtonDown(GdkEventButton* evt);
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);

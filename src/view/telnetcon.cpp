@@ -196,6 +196,7 @@ CTelnetCon::~CTelnetCon()
 		g_source_remove( m_BellTimeout );
 }
 
+#ifdef USE_MOUSE
 char CTelnetCon::GetMenuChar(int y)
 { 
 	gchar* str = m_Screen[y];
@@ -209,6 +210,7 @@ char CTelnetCon::GetMenuChar(int y)
 		return str[i+1];
 	  }
 }
+#endif
 
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
 {
@@ -308,7 +310,9 @@ bool CTelnetCon::OnRecv()
 //	printf("recv (%d): %s\n\n", rlen, m_pRecvBuf);
     ParseReceivedData();
 
+#ifdef USE_MOUSE
     SetPageState();
+#endif
 	UpdateDisplay();
 
 //	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
@@ -897,6 +901,7 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
 	return false;
 }
 
+#ifdef USE_MOUSE
 void CTelnetCon::SetPageState()
 {
 	m_nPageState = -1; //NORMAL
@@ -941,4 +946,4 @@ bool CTelnetCon::IsUnicolor(char* pLine, int start, int end)
 
 	return bSame;
 }     
-
+#endif

@@ -51,6 +51,7 @@ AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
+AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
@@ -101,6 +102,10 @@ dnl 	script=$enableval, script=no)
 AC_ARG_ENABLE(nancy,
 [  --disable-nancy	disable nancy bot support (default: yes)],
 	nancy=$enableval, nancy=yes)
+
+AC_ARG_ENABLE(mouse,
+[  --disable-mouse	disable mouse click and wheel support (default: yes)],
+	mouse=$enableval, mouse=yes)
 	
 AC_ARG_ENABLE(external,
 [  --disable-external      disable external SSH/Telnet support (default: yes)],
@@ -260,6 +265,17 @@ fi
 
 AM_CONDITIONAL(USE_NANCY, test "$nancy" = "yes")
 AC_SUBST(USE_NANCY)
+
+dnl *********************************************************************
+dnl ** Mouse Click and Wheel ********************************************
+dnl *********************************************************************
+
+if test "$mouse" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_MOUSE, [1], [Enable mouse click and wheel support])
+fi
+
+AM_CONDITIONAL(USE_MOUSE, test "$mouse" = "yes")
+AC_SUBST(USE_MOUSE)
 
 dnl *********************************************************************
 dnl ** External SSH/Telnet **********************************************
@@ -489,6 +505,7 @@ echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo Nancy bot support ............... : $nancy
+echo Mouse click and wheel support ... : $mouse
 dnl if test "x$script" = "xyes"; then
 dnl   echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
 dnl else

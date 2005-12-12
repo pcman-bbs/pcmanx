@@ -154,8 +154,11 @@ public:
 #endif
 #endif /* !defined(MOZ_PLUGIN) */
 
+#ifdef USE_MOUSE
     inline int GetPageState() {return m_nPageState;}
     char GetMenuChar(int y);
+#endif
+
 protected:
 
 #if !defined(MOZ_PLUGIN)
@@ -187,6 +190,7 @@ protected:
     int m_SockFD;
 	int m_Pid;
 
+#ifdef USE_MOUSE
 	// Page state for mouse browsing
 	/*	enum m_nPageState
 	{
@@ -196,6 +200,7 @@ protected:
 	  READING=2
 	  };*/
 	int m_nPageState;
+#endif
 
 protected:
 	guint m_BellTimeout;

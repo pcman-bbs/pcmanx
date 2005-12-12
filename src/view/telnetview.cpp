@@ -189,8 +189,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	{gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
       else
 	{
-	  // set mouse cursor and save the state to m_CursorState.
-	  // m_CursorState will be used to detect mouse states in OnLButtonUp().
+#ifdef USE_MOUSE
 	  switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
 	    {
 	    case -1: //NORMAL
@@ -241,12 +240,16 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 		{gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
 	      break;
 	    default:
-	      break;       
-	    }        
+	      break;
+	    }
+#else
+	  {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
+#endif
 	}
     }
 }
 
+#ifdef USE_MOUSE
 void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 {
 	if( !m_pTermData )
@@ -332,6 +335,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	else
 	  GetCon()->SendRawString( "\r", 1 );                                        
 }
+#endif
          
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {
