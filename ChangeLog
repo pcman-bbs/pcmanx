@@ -1,9 +1,14 @@
+2005-12-19  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac: Use AS_HELP_STRING with AC_ARG_ENABLE for better
+	expression.
+
 2005-12-15  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/sitelistdlg.cpp:
 	(CSiteListDlg::LoadSiteList): Fix some problem with icons of treeview.
 
-2005-12-11 Emfox Zhou  <emfoxzhou@gmail.com>
+2005-12-11  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/view/telnetcon.h,
 	src/view/telnetview.cpp,
@@ -11,13 +16,13 @@
 	src/view/telnetview.h,
 	configure.ac: --disable-mouse for compiling without Mouse Support.
 	
-2005-12-11 Emfox Zhou  <emfoxzhou@gmail.com>
+2005-12-11  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/view/telnetcon.h,
 	src/view/telnetview.cpp,
 	src/view/telnetcon.cpp: coordinate with maple bbs for Mouse Support.
 
-2005-12-08 Emfox Zhou  <emfoxzhou@gmail.com>
+2005-12-08  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/termview.h,

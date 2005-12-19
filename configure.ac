@@ -79,41 +79,50 @@ dnl *********************************************************************
 dnl ** configure switches ***********************************************
 dnl *********************************************************************
 
-AC_ARG_ENABLE(debug,
-[  --enable-debug          enable Debug (default: no)],
-        debug=$enableval, debug=no)
+AC_ARG_ENABLE([debug],
+	AS_HELP_STRING([--enable-debug],
+		[enable Debug (default: no)]),
+        debug=$enableval, debug="no")
 
-AC_ARG_ENABLE(mmx,
-[  --disable-mmx           disable MMX optimizations (default: yes)],
-        mmx=$enableval, mmx=yes)
+AC_ARG_ENABLE([mmx],
+	AS_HELP_STRING([--disable-mmx],
+		[disable MMX optimizations (default: yes)]),
+        mmx=$enableval, mmx="yes")
 
-AC_ARG_ENABLE(docklet,
-[  --disable-docklet       disable docklet / system tray support (default: yes)],
-	docklet=$enableval, docklet=yes)
+AC_ARG_ENABLE([docklet],
+	AS_HELP_STRING([--disable-docklet],
+		[disable docklet / system tray support (default: yes)]),
+	docklet=$enableval, docklet="yes")
 
-AC_ARG_ENABLE(notifier,
-[  --disable-notifier      disable popup notifier support (default: yes)],
-	notifier=$enableval, notifier=yes)
+AC_ARG_ENABLE([notifier],
+	AS_HELP_STRING([--disable-notifier],
+		[disable popup notifier support (default: yes)]),
+	notifier=$enableval, notifier="yes")
 
-dnl AC_ARG_ENABLE(script,
-dnl [  --enable-script      enable script support (default: no)],
-dnl 	script=$enableval, script=no)
+dnl AC_ARG_ENABLE([script],
+dnl 	AS_HELP_STRING([--enable-script],
+dnl		[enable script support (default: no)]),
+dnl 	script=$enableval, script="no")
 
-AC_ARG_ENABLE(nancy,
-[  --disable-nancy	disable nancy bot support (default: yes)],
-	nancy=$enableval, nancy=yes)
+AC_ARG_ENABLE([nancy],
+	AS_HELP_STRING([--disable-nancy],
+		[disable nancy bot support (default: yes)]),
+	nancy=$enableval, nancy="yes")
 
-AC_ARG_ENABLE(mouse,
-[  --disable-mouse	disable mouse click and wheel support (default: yes)],
-	mouse=$enableval, mouse=yes)
+AC_ARG_ENABLE([mouse],
+	AS_HELP_STRING([--disable-mouse],
+		[disable mouse click and wheel support (default: yes)]),
+	mouse=$enableval, mouse="yes")
 	
-AC_ARG_ENABLE(external,
-[  --disable-external      disable external SSH/Telnet support (default: yes)],
-	external=$enableval, external=yes)
+AC_ARG_ENABLE([external],
+	AS_HELP_STRING([--disable-external],
+		[disable external SSH/Telnet support (default: yes)]),
+	external=$enableval, external="yes")
 
-AC_ARG_ENABLE(plugin,
-[  --enable-plugin         enable Mozilla/Firefox plugin support (default: no)],
-	plugin=$enableval, plugin=no)
+AC_ARG_ENABLE([plugin],
+	AS_HELP_STRING([--enable-plugin],
+		[enable Mozilla/Firefox plugin support (default: no)]),
+	plugin=$enableval, plugin="no")
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
