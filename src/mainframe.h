@@ -55,6 +55,7 @@ class CMainFrame : public CWidget
 	static bool g_bIsUpateHandlerExisted;
 	static bool g_bUpdateingBBSList;
 	static CMainFrame* g_pMyself;
+	static GtkActionEntry entries[];
 public:
 	CMainFrame();
 
@@ -114,6 +115,7 @@ public:
 #endif
 
 protected:
+	void MakeUI();
 	void CreateMenu();
 	void CreateToolbar();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
@@ -150,6 +152,7 @@ protected:
 protected:
 	CTelnetView* m_pView;
 	CNotebook* m_pNotebook;
+	GtkUIManager* m_UIManager;
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;

@@ -1,3 +1,8 @@
+2005-12-23  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/mainframe.h,
+	src/mainframe.cpp: start to rebuild UI using GtkUIManager.
+
 2005-12-19  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac: Use AS_HELP_STRING with AC_ARG_ENABLE for better

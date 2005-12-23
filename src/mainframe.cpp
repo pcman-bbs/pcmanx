@@ -179,6 +179,7 @@ CMainFrame::CMainFrame()
 
 	CreateMenu();
 	CreateToolbar();
+	MakeUI();
 
 	gtk_window_set_icon((GtkWindow*)m_Widget, m_MainIcon);
 
@@ -190,6 +191,10 @@ CMainFrame::CMainFrame()
 
 	gtk_container_add(GTK_CONTAINER(m_Widget), vbox);
 
+	GtkWidget* m_MenuBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+	GtkWidget* m_ToolBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+	//gtk_box_pack_start (GTK_BOX (vbox), m_MenuBar, FALSE, FALSE, 0);
+	//gtk_box_pack_start (GTK_BOX (vbox), m_ToolBar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Menubar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Toolbar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_pNotebook->m_Widget, TRUE, TRUE, 0);
@@ -265,6 +270,72 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	pCon->Connect();
 
 	return pCon;
+}
+
+GtkActionEntry CMainFrame::entries[] =
+  {
+    {"connect_menu", NULL, _("_Connect")},
+    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", NULL, G_CALLBACK (CMainFrame::OnSiteList)},
+    {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, NULL, G_CALLBACK (CMainFrame::updateBBSList)},
+    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", NULL, G_CALLBACK (CMainFrame::OnNewCon)},
+    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", NULL, G_CALLBACK (CMainFrame::OnReconnect)},
+    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", NULL, G_CALLBACK (CMainFrame::OnCloseCon)},
+    {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
+    {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
+    {"jump_menu", GTK_STOCK_JUMP_TO, _("_Jump to")},
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)}
+  };
+
+static const char *ui_info = 
+  "<ui>"
+  "  <menubar>"
+  "    <menu action='connect_menu'>"
+  "      <menuitem action='site_list'/>"
+  "      <menuitem action='update_bbs_list'/>"
+  "      <menuitem action='new_con'/>"
+  "      <menuitem action='reconnect'/>"
+  "      <menuitem action='close'/>"
+  "      <separator/>"
+  "      <menuitem action='next_con'/>"
+  "      <menuitem action='previous_con'/>"
+  "      <menu action='jump_menu'>"
+  "      <placeholder/>"
+  //"        <menuitem action='previous_con'/>"
+  "      </menu>"
+  "      <separator/>"
+  "      <menuitem action='quit'/>"
+  "    </menu>"
+  "  </menubar>"
+  "  <toolbar>"
+  "    <placeholder>"
+  "      <separator/>"
+  "      <toolitem action='site_list'/>"
+  "      <toolitem action='new_con'/>"
+  "      <toolitem action='reconnect'/>"
+  "      <toolitem action='close'/>"
+  "      <separator/>"
+  "    </placeholder>"
+  "  </toolbar>"
+  "</ui>";
+
+void CMainFrame::MakeUI()
+{
+  GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
+  gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
+	
+  m_UIManager = gtk_ui_manager_new();
+	
+  gtk_ui_manager_insert_action_group(m_UIManager, action_group, 0);
+	
+  GError * error = NULL;
+  if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
+    {
+      g_message("Building menu failed : %s", error->message);
+      g_error_free(error); exit(EXIT_FAILURE);
+    }
+  
+  //popupmenu = gtk_ui_manager_get_widget(m_UIManager, "/PopMenu");
+	
 }
 
 void CMainFrame::CreateMenu()
