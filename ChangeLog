@@ -1,3 +1,13 @@
+2006-01-23  Jim Huang  <jserv@kaffe.org>
+
+	* src/view/telnetcon.cpp
+	(CTelnetCon::ConnectAsync): Disable the Nagle (TCP No Delay)
+	algorithm. Nagle algorithm works well to minimize small packets by
+	concatenating them into larger ones. However, for telnet application,
+	the experience would be less than desirable if the user were required
+	to fill a segment with typed characters before the packet was sent.
+	(CTelnetCon::IsUnicolor): Clean up.
+	
 2005-12-23  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/mainframe.h,
@@ -10,7 +20,7 @@
 
 2005-12-15  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/sitelistdlg.cpp:
+	* src/sitelistdlg.cpp
 	(CSiteListDlg::LoadSiteList): Fix some problem with icons of treeview.
 
 2005-12-11  Emfox Zhou  <emfoxzhou@gmail.com>
