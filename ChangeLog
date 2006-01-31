@@ -1,5 +1,10 @@
 2006-01-31  Kanru Chen  <koster@debian.org.tw>
 
+	* configure.ac: Export @LIBTOOL_EXPORT_OPTIONS@ macro, though whether it
+	is useful has to be discussed.
+
+2006-01-31  Kanru Chen  <koster@debian.org.tw>
+
 	* configure.ac: Use AC_CHECK_FT2 to check and setup freetype2 library
 	including path.
 
