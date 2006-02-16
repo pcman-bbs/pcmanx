@@ -283,7 +283,22 @@ GtkActionEntry CMainFrame::entries[] =
     {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
     {"jump_menu", GTK_STOCK_JUMP_TO, _("_Jump to")},
-    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)}
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
+    {"edit_menu", NULL, _("_Edit")},
+    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", NULL, G_CALLBACK (CMainFrame::OnCopy)},
+    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, NULL, G_CALLBACK (CMainFrame::OnCopyWithColor)},
+    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", NULL, G_CALLBACK (CMainFrame::OnPaste)},
+    {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
+    {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
+    {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
+    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, NULL, G_CALLBACK (CMainFrame::OnPreference)},
+    {"favorites_menu", NULL, _("F_avorites")},
+    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnAddToFavorites)},
+    {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
+    {"view_menu", NULL, _("_View")},
+    {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"help_menu", NULL, _("_Help")},
+    {"about", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnAbout)}
   };
 
 static const char *ui_info = 
@@ -299,11 +314,32 @@ static const char *ui_info =
   "      <menuitem action='next_con'/>"
   "      <menuitem action='previous_con'/>"
   "      <menu action='jump_menu'>"
-  "      <placeholder/>"
   //"        <menuitem action='previous_con'/>"
   "      </menu>"
   "      <separator/>"
   "      <menuitem action='quit'/>"
+  "    </menu>"
+  "    <menu action='edit_menu'>"
+  "      <menuitem action='copy'/>"
+  "      <menuitem action='copy_with_ansi'/>"
+  "      <menuitem action='paste'/>"
+  "      <menuitem action='paste_from_clipboard'/>"
+  "      <menuitem action='select_all'/>"
+  "      <separator/>"
+  "      <menuitem action='emoticon'/>"
+  "      <menuitem action='preference'/>"
+  "    </menu>"
+  "    <menu action='favorites_menu'>"
+  "      <separator/>"
+  "      <menuitem action='add_to_fav'/>"
+  "      <menuitem action='edit_fav'/>"
+  "    </menu>"
+  "    <menu action='view_menu'>"
+  "      <menuitem action='font'/>"
+  "      <separator/>"
+  "    </menu>"
+  "    <menu action='help_menu'>"
+  "      <menuitem action='about'/>"
   "    </menu>"
   "  </menubar>"
   "  <toolbar>"
@@ -313,6 +349,15 @@ static const char *ui_info =
   "      <toolitem action='new_con'/>"
   "      <toolitem action='reconnect'/>"
   "      <toolitem action='close'/>"
+  "      <separator/>"
+  "      <toolitem action='copy'/>"
+  "      <toolitem action='copy_with_ansi'/>"
+  "      <toolitem action='paste'/>"
+  "      <separator/>"
+  "      <toolitem action='add_to_fav'/>"
+  "      <toolitem action='preference'/>"
+  "      <toolitem action='about'/>"
+  "      <toolitem action='update_bbs_list'/>"
   "      <separator/>"
   "    </placeholder>"
   "  </toolbar>"

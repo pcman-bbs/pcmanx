@@ -1,3 +1,7 @@
+2006-02-16  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/mainframe.cpp: continue working at UIManager.
+
 2006-01-31  Kanru Chen  <koster@debian.org.tw>
 
 	* configure.ac: Export @LIBTOOL_EXPORT_OPTIONS@ macro, though whether it
