@@ -185,7 +185,6 @@ CMainFrame::CMainFrame()
 	gtk_widget_show (vbox);
 
 	GtkWidget* status_bar = gtk_statusbar_new ();
-	gtk_widget_show (status_bar);
 
 	gtk_container_add(GTK_CONTAINER(m_Widget), vbox);
 
@@ -218,7 +217,9 @@ CMainFrame::CMainFrame()
 #endif
 	m_StatusBarTime = (GtkLabel*)gtk_label_new("");
 	gtk_box_pack_start (GTK_BOX (status_bar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
-	gtk_widget_show_all(status_bar);
+	if (AppConfig.ShowStatusBar) {
+		gtk_widget_show_all(status_bar);
+	}
 	
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );

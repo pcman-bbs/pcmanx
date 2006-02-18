@@ -60,6 +60,10 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_ShowTrayIcon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowTrayIcon, FALSE, FALSE, 0);
 
+	m_ShowStatusBar = gtk_check_button_new_with_mnemonic (_("Show Status Bar on bottom"));
+	gtk_widget_show (m_ShowStatusBar);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowStatusBar, FALSE, FALSE, 0);
+
 	m_AAFont = gtk_check_button_new_with_mnemonic (_("Use Anti-Aliasing Fonts (Take effect after restart)"));
 	gtk_widget_show (m_AAFont);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
@@ -112,6 +116,7 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnExit), AppConfig.QueryOnExit);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy), AppConfig.CancelSelAfterCopy);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pWgetFiles), AppConfig.UseWgetFiles);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), AppConfig.PopupNotifier);
@@ -129,6 +134,7 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
+	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
 	AppConfig.UseWgetFiles = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pWgetFiles));
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));

@@ -91,6 +91,7 @@ public:
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
 	bool ShowTrayIcon;
+	bool ShowStatusBar;
 	bool PopupNotifier;
 	bool UseWgetFiles;
 	int PopupTimeout;

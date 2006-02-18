@@ -84,6 +84,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
 		CFG_BOOL( ShowTrayIcon )
+		CFG_BOOL( ShowStatusBar )
 		CFG_BOOL( UseWgetFiles )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
@@ -317,6 +318,7 @@ void CAppConfig::SetToDefault()
 
 	MailClient = WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;
+	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536 * 102 / 256;

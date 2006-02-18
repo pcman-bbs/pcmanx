@@ -1,9 +1,25 @@
+2006-02-19  Jim Huang  <jserv@kaffe.org>
+
+	* src/appconfig.h (ShowStatusBar),
+	src/generalprefpage.h (m_ShowStatusBar),
+	src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault): New members to indicate if
+	status bar should be shown. Default: shown.
+
+	* src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage)
+	(CGeneralPrefPage::CGeneralPrefPage) (CGeneralPrefPage::OnOK): Handle
+	the toggled value of show/hide for status bar.
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Toggle show/hide for
+	status bar.
+	TODO: we shall be able to toggle and show/hide the status bar
+	immediately.
+
 2006-02-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po: cd po && make update-po
-
 
 2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
 
