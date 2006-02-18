@@ -116,8 +116,6 @@ public:
 
 protected:
 	void MakeUI();
-	void CreateMenu();
-	void CreateToolbar();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
@@ -137,8 +135,6 @@ protected:
 	void UpdateBotStatus();
 	static void OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this);
 	static void OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this);
-	static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
-	static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
 #endif
 
 #ifdef USE_DOCKLET
@@ -157,8 +153,6 @@ protected:
 	CTelnetView* m_pView;
 	CNotebook* m_pNotebook;
 	GtkUIManager* m_UIManager;
-	GtkWidget* m_ToolBar;
-	GtkWidget* m_MenuBar;
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;
