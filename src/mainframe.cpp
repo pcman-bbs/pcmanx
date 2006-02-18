@@ -291,11 +291,20 @@ GtkActionEntry CMainFrame::entries[] =
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
     {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+#ifdef USE_NANCY
     {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)")},
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
+#endif
     {"help_menu", NULL, _("_Help")},
     {"about", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnAbout)}
   };
+
+#ifdef USE_MOUSE
+GtkToggleActionEntry CMainFrame::mouse_toggle_entries[] =
+  {
+    {"mouse_support", NULL, _("Mouse Support"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleMouse), false}
+  };
+#endif
 
 #ifdef USE_NANCY
 GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
@@ -355,6 +364,9 @@ static const char *ui_info =
   "        <menuitem action='nancy_bot_all'/>"
   "      </menu>"
 #endif
+#ifdef USE_MOUSE
+  "      <menuitem action='mouse_support'/>"
+#endif
   "    </menu>"
   "    <menu action='help_menu'>"
   "      <menuitem action='about'/>"
@@ -386,6 +398,11 @@ void CMainFrame::MakeUI()
   gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
 
   gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
+
+#ifdef USE_MOUSE
+  gtk_action_group_add_toggle_actions(action_group, mouse_toggle_entries,
+				      G_N_ELEMENTS(mouse_toggle_entries), this);
+#endif
 
 #ifdef USE_NANCY
   gtk_action_group_add_radio_actions(action_group,
@@ -1265,6 +1282,13 @@ void CMainFrame::SwitchToCon(CTelnetCon* con)
 	if( idx >= 0 )
 		m_pNotebook->SetCurPage(idx);
 }
+
+#ifdef USE_MOUSE
+void CMainFrame::OnToggleMouse(GtkToggleAction* action, CMainFrame* _this)
+{
+  _this->m_MouseSupport = gtk_toggle_action_get_active(action);
+}
+#endif
 
 #ifdef USE_NANCY
 

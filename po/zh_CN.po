@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-05 23:48+0800\n"
-"PO-Revision-Date: 2005-10-11 14:22+0800\n"
+"PO-Revision-Date: 2006-02-18 14:39+0800\n"
 "Last-Translator: EmfoxZhou@gmail.com\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "编辑收藏夹(_E)"
 
 #: ../src/mainframe.cpp:551
 msgid "_View"
-msgstr "视图(_V)"
+msgstr "查看(_V)"
 
 #: ../src/mainframe.cpp:568
 msgid "Bot (Current Connection)"

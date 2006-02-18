@@ -179,17 +179,19 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	  // Show the caret again but only set its visibility without
 	  // display it immediatly.
 	  m_Caret.Show( false );
+#ifdef USE_MOUSE
+	  {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}	  
+#endif
 	}
     }
-  else	//	Consider hyperlink detection.
+#ifdef USE_MOUSE
+  else if ( m_pParentFrame->m_MouseSupport == true )
     {
-      /* Todo: hyperlink detection. */
       CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
       if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
 	{gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
       else
 	{
-#ifdef USE_MOUSE
 	  switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
 	    {
 	    case -1: //NORMAL
@@ -242,17 +244,20 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	    default:
 	      break;
 	    }
-#else
-	  {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
-#endif
 	}
     }
+  else
+    {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
+#endif //USE_MOUSE
 }
 
 #ifdef USE_MOUSE
 void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 {
 	if( !m_pTermData )
+		return;
+
+	if ( m_pParentFrame->m_MouseSupport != true )
 		return;
 
 	GdkScrollDirection i = evt->direction;;
@@ -269,6 +274,9 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	if( !m_pTermData )
 		return;
 
+	if ( m_pParentFrame->m_MouseSupport != true )
+		return;
+
 	int x = (int)evt->x;
 	int y = (int)evt->y;
 	bool left;
@@ -277,9 +285,12 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	//some text is selected
 	if ( m_pTermData->m_Sel->m_End.row != y
 	     || m_pTermData->m_Sel->m_End.col != x
-	     || m_pTermData->m_Sel->m_End.left != left )
+	     || m_pTermData->m_Sel->m_End.left != left
+	     || m_pTermData->m_Sel->m_Start.row != y
+	     || m_pTermData->m_Sel->m_Start.col != x
+	     || m_pTermData->m_Sel->m_Start.left != left )
 	  return;
-	
+
 	int cur = m_CursorState;
 	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
     

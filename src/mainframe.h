@@ -114,6 +114,10 @@ public:
 	GdkPixbuf *GetMainIcon() { return m_MainIcon; };
 #endif
 
+#ifdef USE_MOUSE
+	gboolean m_MouseSupport;
+#endif
+
 protected:
 	void MakeUI();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
@@ -129,12 +133,17 @@ protected:
 	void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
+#ifdef USE_MOUSE
+	static GtkToggleActionEntry mouse_toggle_entries[];
+	static void OnToggleMouse(GtkToggleAction* action, CMainFrame* _this);
+#endif
+
 #ifdef USE_NANCY
 	static GtkRadioActionEntry cur_bot_entries[];
 	static GtkRadioActionEntry all_bot_entries[];
 	void UpdateBotStatus();
-	static void OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this);
-	static void OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this);
+	static void OnChangeCurrentBot(GtkRadioAction* action, GtkRadioAction* current, CMainFrame* _this);
+	static void OnChangeAllBot(GtkRadioAction* action, GtkRadioAction* all, CMainFrame* _this);
 #endif
 
 #ifdef USE_DOCKLET
@@ -168,6 +177,7 @@ protected:
 	GtkWidget* m_URLEntry;
 	GtkTooltips* m_Tooltips;
 	GtkLabel* m_StatusBarTime;
+
 #ifdef USE_NANCY
 	GtkLabel* m_StatusBarBotState;
 	GtkRadioMenuItem* m_DisableCurBotRadio;
