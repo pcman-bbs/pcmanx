@@ -132,7 +132,11 @@ protected:
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
 #ifdef USE_NANCY
+	static GtkRadioActionEntry cur_bot_entries[];
+	static GtkRadioActionEntry all_bot_entries[];
 	void UpdateBotStatus();
+	static void OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this);
+	static void OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this);
 	static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
 	static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
 #endif
@@ -153,6 +157,8 @@ protected:
 	CTelnetView* m_pView;
 	CNotebook* m_pNotebook;
 	GtkUIManager* m_UIManager;
+	GtkWidget* m_ToolBar;
+	GtkWidget* m_MenuBar;
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;

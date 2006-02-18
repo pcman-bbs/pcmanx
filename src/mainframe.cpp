@@ -191,8 +191,6 @@ CMainFrame::CMainFrame()
 
 	gtk_container_add(GTK_CONTAINER(m_Widget), vbox);
 
-	GtkWidget* m_MenuBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
-	GtkWidget* m_ToolBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
 	//gtk_box_pack_start (GTK_BOX (vbox), m_MenuBar, FALSE, FALSE, 0);
 	//gtk_box_pack_start (GTK_BOX (vbox), m_ToolBar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Menubar, FALSE, FALSE, 0);
@@ -282,7 +280,7 @@ GtkActionEntry CMainFrame::entries[] =
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", NULL, G_CALLBACK (CMainFrame::OnCloseCon)},
     {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
-    {"jump_menu", GTK_STOCK_JUMP_TO, _("_Jump to")},
+    {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
     {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit")},
     {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", NULL, G_CALLBACK (CMainFrame::OnCopy)},
@@ -297,9 +295,25 @@ GtkActionEntry CMainFrame::entries[] =
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
     {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"cur_bot_menu", NULL, _("Bot (Current Connection)")},
+    {"all_bot_menu", NULL, _("Bot (All Opened Connections)")},
     {"help_menu", NULL, _("_Help")},
     {"about", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnAbout)}
   };
+
+#ifdef USE_NANCY
+GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
+  {
+    {"disable_cur_bot", NULL, _("Disable Bot"), NULL, NULL, 0},
+    {"nancy_bot_current", NULL, _("Nancy Bot"), NULL, NULL, 1}
+  };
+
+GtkRadioActionEntry CMainFrame::all_bot_entries[] =
+  {
+    {"disable_all_bot", NULL, _("Disable Bot"), NULL, NULL, 0},
+    {"nancy_bot_all", NULL, _("Nancy Bot"), NULL, NULL, 1}
+  };
+#endif
 
 static const char *ui_info = 
   "<ui>"
@@ -313,9 +327,7 @@ static const char *ui_info =
   "      <separator/>"
   "      <menuitem action='next_con'/>"
   "      <menuitem action='previous_con'/>"
-  "      <menu action='jump_menu'>"
-  //"        <menuitem action='previous_con'/>"
-  "      </menu>"
+  "      <menuitem action='jump'/>"
   "      <separator/>"
   "      <menuitem action='quit'/>"
   "    </menu>"
@@ -336,30 +348,38 @@ static const char *ui_info =
   "    </menu>"
   "    <menu action='view_menu'>"
   "      <menuitem action='font'/>"
+#ifdef USE_NANCY
   "      <separator/>"
+  "      <menu action='cur_bot_menu'>"
+  "        <menuitem action='disable_cur_bot'/>"
+  "        <menuitem action='nancy_bot_current'/>"
+  "      </menu>"
+  "      <menu action='all_bot_menu'>"
+  "        <menuitem action='disable_all_bot'/>"
+  "        <menuitem action='nancy_bot_all'/>"
+  "      </menu>"
+#endif
   "    </menu>"
   "    <menu action='help_menu'>"
   "      <menuitem action='about'/>"
   "    </menu>"
   "  </menubar>"
   "  <toolbar>"
-  "    <placeholder>"
-  "      <separator/>"
-  "      <toolitem action='site_list'/>"
-  "      <toolitem action='new_con'/>"
-  "      <toolitem action='reconnect'/>"
-  "      <toolitem action='close'/>"
-  "      <separator/>"
-  "      <toolitem action='copy'/>"
-  "      <toolitem action='copy_with_ansi'/>"
-  "      <toolitem action='paste'/>"
-  "      <separator/>"
-  "      <toolitem action='add_to_fav'/>"
-  "      <toolitem action='preference'/>"
-  "      <toolitem action='about'/>"
-  "      <toolitem action='update_bbs_list'/>"
-  "      <separator/>"
-  "    </placeholder>"
+  "    <separator/>"
+  "    <toolitem action='site_list'/>"
+  "    <toolitem action='new_con'/>"
+  "    <toolitem action='reconnect'/>"
+  "    <toolitem action='close'/>"
+  "    <separator/>"
+  "    <toolitem action='copy'/>"
+  "    <toolitem action='copy_with_ansi'/>"
+  "    <toolitem action='paste'/>"
+  "    <separator/>"
+  "    <toolitem action='add_to_fav'/>"
+  "    <toolitem action='preference'/>"
+  "    <toolitem action='about'/>"
+  "    <toolitem action='update_bbs_list'/>"
+  "    <separator/>"
   "  </toolbar>"
   "</ui>";
 
@@ -367,10 +387,27 @@ void CMainFrame::MakeUI()
 {
   GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
   gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
-	
+
+#ifdef USE_NANCY
+  gtk_action_group_add_radio_actions(action_group,
+				     cur_bot_entries,
+				     G_N_ELEMENTS(cur_bot_entries),
+				     0,
+				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
+				     this);
+  gtk_action_group_add_radio_actions(action_group,
+				     all_bot_entries,
+				     G_N_ELEMENTS(all_bot_entries),
+				     0,
+				     G_CALLBACK (CMainFrame::OnChangeAllBot),
+				     this);
+#endif
+
   m_UIManager = gtk_ui_manager_new();
-	
   gtk_ui_manager_insert_action_group(m_UIManager, action_group, 0);
+
+  GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
+  gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
 	
   GError * error = NULL;
   if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
@@ -378,6 +415,77 @@ void CMainFrame::MakeUI()
       g_message("Building menu failed : %s", error->message);
       g_error_free(error); exit(EXIT_FAILURE);
     }
+
+  m_MenuBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+  m_ToolBar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+
+  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/edit_menu");
+  m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+
+#ifdef USE_NANCY
+
+  m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			 "/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
+  m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+		       "/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+  
+  m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+       			 "/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
+  m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
+		       "/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
+
+#endif
+
+  GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
+  
+  GtkWidget* jump_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
+  
+  const char* page_str = _("Page");
+  for(int i = 1; i < 11; i++)
+    {
+      long keyval = (i == 10 ? GDK_0 : GDK_0 + +i);
+      char title[32];
+      sprintf(title, "%s _%d", page_str, i);
+      
+      GtkWidget* jump_item = m_JumpMenuItems[i-1] = gtk_menu_item_new_with_mnemonic ( title );
+      gtk_widget_show (jump_item);
+      gtk_container_add (GTK_CONTAINER (jump_menu), jump_item);
+      gtk_widget_add_accelerator (jump_item, "activate", accel_group,
+				  keyval, (GdkModifierType) GDK_MOD1_MASK,
+				  GTK_ACCEL_VISIBLE);
+      g_signal_connect( G_OBJECT(jump_item), "activate",
+			G_CALLBACK (CMainFrame::OnJumpToPage),
+			this);
+    }
+
+  GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
+  gtk_widget_show(sep);
+  gtk_container_add (GTK_CONTAINER (m_ToolBar), sep);
+  // Create the URL address bar
+  GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
+  GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
+  m_URLEntry = (GtkWidget*) gtk_entry_new();
+  gtk_widget_set_size_request(m_URLEntry, 0, -1);
+  //gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+  gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
+  gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
+  gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
+  
+  GtkToolItem* url_bar_item = gtk_tool_item_new();
+  gtk_tool_item_set_expand(url_bar_item, true);
+  gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
+  gtk_widget_show_all ( (GtkWidget*)url_bar_item);
+  gtk_toolbar_insert(GTK_TOOLBAR(m_ToolBar), url_bar_item, -1);
+  
+  g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
+		    G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
+		    this);
+  g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
+		    G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
+		    this);
+  
+  CreateFavoritesMenu();
   
   //popupmenu = gtk_ui_manager_get_widget(m_UIManager, "/PopMenu");
 	
@@ -1791,6 +1899,18 @@ void CMainFrame::SwitchToCon(CTelnetCon* con)
 
 #ifdef USE_NANCY
 
+void CMainFrame::OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this)
+{
+  CTelnetCon* con = _this->GetCurCon();
+  if( !con ) return;
+  if( gtk_radio_action_get_current_value(current) == 0 )
+    con->set__UseNancy(false);
+  else
+    con->set__UseNancy(true);
+
+  _this->UpdateBotStatus();
+}
+
 void CMainFrame::OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this)
 {
 	if( !gtk_check_menu_item_get_active( (GtkCheckMenuItem*)menu ) )
@@ -1804,6 +1924,24 @@ void CMainFrame::OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this)
 		con->set__UseNancy(true);
 
 	_this->UpdateBotStatus();
+}
+
+void CMainFrame::OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this)
+{
+  if( _this->m_Views.empty() ) return;
+  gboolean use_nancy = ( gtk_radio_action_get_current_value(all) != 0 );
+  CTelnetCon::set__OpenConnectionWithNancySupport(use_nancy);
+
+  vector<CTelnetView*>::iterator it = _this->m_Views.begin();
+  for( ; it != _this->m_Views.end() ; ++it )
+    (*it)->GetCon()->set__UseNancy(use_nancy);
+  
+  if( use_nancy )
+    gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_CurBotNancyRadio, true );
+  else
+    gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_DisableCurBotRadio, true );
+  
+  _this->UpdateBotStatus();
 }
 
 void CMainFrame::OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this)

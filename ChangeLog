@@ -1,6 +1,11 @@
+2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/mainframe.h,
+	src/mainframe.cpp: Finish GUI transition to UIManager.
+
 2006-02-16  Emfox Zhou  <emfoxzhou@gmail.com>
 
-	* src/mainframe.cpp: continue working at UIManager.
+	* src/mainframe.cpp: Continue working at UIManager.
 
 2006-01-31  Kanru Chen  <koster@debian.org.tw>
 
