@@ -1,5 +1,9 @@
 2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
 
+	* src/mainframe.cpp: Oops, missing translations and bot icons, added.
+
+2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
+
 	* src/mainframe.h,
 	src/mainframe.cpp: Remove deprecated codes of GUI.
 

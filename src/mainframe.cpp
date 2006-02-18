@@ -291,8 +291,8 @@ GtkActionEntry CMainFrame::entries[] =
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
     {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
-    {"cur_bot_menu", NULL, _("Bot (Current Connection)")},
-    {"all_bot_menu", NULL, _("Bot (All Opened Connections)")},
+    {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)")},
+    {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
     {"help_menu", NULL, _("_Help")},
     {"about", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnAbout)}
   };
@@ -382,6 +382,9 @@ static const char *ui_info =
 void CMainFrame::MakeUI()
 {
   GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
+
+  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+
   gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
 
 #ifdef USE_NANCY
