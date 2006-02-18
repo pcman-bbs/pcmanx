@@ -1,5 +1,9 @@
 2006-02-19  Jim Huang  <jserv@kaffe.org>
 
+	* configure.ac: Added Xft headers detection workaround.
+
+2006-02-19  Jim Huang  <jserv@kaffe.org>
+
 	* src/appconfig.h (ShowStatusBar),
 	src/generalprefpage.h (m_ShowStatusBar),
 	src/appconfig.cpp (CAppConfig::DoDataExchange)

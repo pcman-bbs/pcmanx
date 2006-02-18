@@ -160,12 +160,18 @@ dnl ** XFT **************************************************************
 dnl *********************************************************************
 
 AC_PATH_PROG(pkgconfigpath, pkg-config)
+AC_MSG_CHECKING([for Xft])
 if $pkgconfigpath xft --exists; then
 	GUI_CFLAGS="$GUI_CFLAGS `$pkgconfigpath xft --cflags`"
 	GUI_LIBS="$GUI_LIBS `$pkgconfigpath xft --libs`"
+
+	dnl Workaround for some *stupid* distributions.
+	if test -f /usr/include/X11/Xft/Xft.h; then
+		AC_MSG_RESULT([using workaround for Xft.])
+  		GUI_CLFAGS="$GUI_CFLAGS -I/usr/include/X11"
+	fi
 else
-	echo pcmanx_gtk2 depends on Xft\!
-	exit
+	AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])
 fi
 
 dnl *********************************************************************
