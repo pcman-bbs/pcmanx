@@ -1,3 +1,7 @@
+2006-02-20  Jim Huang  <jserv@kaffe.org>
+
+	* autogen.sh: Fixlet to autotool generation.
+
 2006-02-19  Jim Huang  <jserv@kaffe.org>
 
 	* configure.ac: Added Xft headers detection workaround.
@@ -268,22 +272,22 @@
 
 2005-09-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* pcmanx-pure-gtk2.spec.in : Modify string from "Copyright" to "License".
+	* pcmanx-pure-gtk2.spec.in: Modify string from "Copyright" to "License".
 
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/core/termdata.cpp:
+	* src/core/termdata.cpp
 	(CTermData::PutChar): Fix incorrect parsing of ANSI control characters.
 
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/core/termdata.cpp:
+	* src/core/termdata.cpp
 	(CTermData::ScrollUp): Fix a problem with screen scrolling.
 	(CTermData::ParseAnsiEscapeSequence): Implement ESC 7 and ESC 8.
 
 2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
-	* src/nancy_bot/msgdata.cpp:
+	* src/nancy_bot/msgdata.cpp
 	(MsgData::getCommonMsg): Temporary workaround to fix the SIGFPE caused
 	by division by zero.
 
@@ -1496,7 +1500,7 @@
 2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
 	* src/mainframe.cpp (CMainFrame::OnAbout):
-	Use a GTK+ 2.4x compatible About Dialog.
+	Use a GTK+ 2.4.x compatible About Dialog.
 
 2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
 
