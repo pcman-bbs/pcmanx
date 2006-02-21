@@ -51,6 +51,9 @@ public:
     void NextPage()	{	gtk_notebook_next_page((GtkNotebook*)m_Widget);	}
     void PrevPage()	{	gtk_notebook_prev_page((GtkNotebook*)m_Widget);	}
     void SetPageTitle(CWidget* page, string title);
+    void HideTabs()	{	gtk_notebook_set_show_tabs((GtkNotebook*)m_Widget, false); }
+    void ShowTabs()	{	gtk_notebook_set_show_tabs((GtkNotebook*)m_Widget, true); }
+    
 };
 
 #endif

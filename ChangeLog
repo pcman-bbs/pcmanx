@@ -1,3 +1,17 @@
+2006-02-22  Youchen Lee  <copyleft@utcr.org>
+
+	* src/mainframe.h,
+	src/mainframe.cpp (CMainFrame::OnFullscreenMode)
+	(CMainFrame::fullscreen_mode_entries[]),
+	src/notebook.h (CNotebook::HideTabs) (CNotebook::ShowTabs): Added
+	Fullscreen Mode support.
+	
+	* po/pcmanx.pot,
+	po/zh_TW.po
+	po/zh_CN.po: Updated po files for fullscreen mode, modified my email
+	address, added developer Emfox Zhou to zh_TW.po and zh_CN.po (not
+	contained Chinese name yet).
+
 2006-02-20  Jim Huang  <jserv@kaffe.org>
 
 	* autogen.sh: Fixlet to autotool generation.

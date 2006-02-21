@@ -122,6 +122,8 @@ protected:
 	void MakeUI();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this);
+	static GtkToggleActionEntry fullscreen_mode_entries[];
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
@@ -165,6 +167,7 @@ protected:
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;
+	GtkWidget* m_Statusbar;
 
 	GtkAccelGroup* m_AccelGroup;
 

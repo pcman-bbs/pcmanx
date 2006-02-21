@@ -184,7 +184,8 @@ CMainFrame::CMainFrame()
 	GtkWidget* vbox = gtk_vbox_new(false, 0);
 	gtk_widget_show (vbox);
 
-	GtkWidget* status_bar = gtk_statusbar_new ();
+	//GtkWidget* m_Statusbar = gtk_statusbar_new ();
+	m_Statusbar = gtk_statusbar_new ();
 
 	gtk_container_add(GTK_CONTAINER(m_Widget), vbox);
 
@@ -192,7 +193,7 @@ CMainFrame::CMainFrame()
 	gtk_box_pack_start (GTK_BOX (vbox), m_Toolbar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_pNotebook->m_Widget, TRUE, TRUE, 0);
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
-	gtk_box_pack_start (GTK_BOX (vbox), status_bar, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
 
 	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
@@ -208,17 +209,17 @@ CMainFrame::CMainFrame()
 
 //	g_signal_connect(G_OBJECT(m_Widget), "focus-out-event", G_CALLBACK(CMainFrame::OnDeactivated), this);
 
-	gtk_box_set_spacing( GTK_BOX (status_bar), 4 );
+	gtk_box_set_spacing( GTK_BOX (m_Statusbar), 4 );
 #ifdef USE_NANCY
 	m_StatusBarBotState = (GtkLabel*)gtk_label_new("");
-	gtk_box_pack_start (GTK_BOX (status_bar), (GtkWidget*)m_StatusBarBotState, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarBotState, FALSE, FALSE, 2);
 	GtkWidget* vsep = gtk_vseparator_new ();
- 	gtk_box_pack_start (GTK_BOX (status_bar), vsep, FALSE, FALSE, 2);
+ 	gtk_box_pack_start (GTK_BOX (m_Statusbar), vsep, FALSE, FALSE, 2);
 #endif
 	m_StatusBarTime = (GtkLabel*)gtk_label_new("");
-	gtk_box_pack_start (GTK_BOX (status_bar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
 	if (AppConfig.ShowStatusBar) {
-		gtk_widget_show_all(status_bar);
+		gtk_widget_show_all(m_Statusbar);
 	}
 	
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
@@ -307,6 +308,11 @@ GtkToggleActionEntry CMainFrame::mouse_toggle_entries[] =
   };
 #endif
 
+GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
+{
+    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
+};
+
 #ifdef USE_NANCY
 GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
   {
@@ -354,6 +360,7 @@ static const char *ui_info =
   "    </menu>"
   "    <menu action='view_menu'>"
   "      <menuitem action='font'/>"
+  "      <menuitem action='fullscreen' />"
 #ifdef USE_NANCY
   "      <separator/>"
   "      <menu action='cur_bot_menu'>"
@@ -404,6 +411,8 @@ void CMainFrame::MakeUI()
   gtk_action_group_add_toggle_actions(action_group, mouse_toggle_entries,
 				      G_N_ELEMENTS(mouse_toggle_entries), this);
 #endif
+  gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
+		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
 
 #ifdef USE_NANCY
   gtk_action_group_add_radio_actions(action_group,
@@ -592,6 +601,25 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		gtk_widget_destroy(dlg);
 }
 
+void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
+{
+	if(gtk_toggle_action_get_active(action))
+	{
+		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->HideTabs();
+	}
+	else
+	{
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->ShowTabs();
+	}
+}
 
 void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
@@ -601,7 +629,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
-			"Youchen Lee (Developer) <youchen.lee@gmail.com>\n"
+			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
 			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 			);
 	char* translators = _( "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>" );
