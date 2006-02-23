@@ -301,13 +301,6 @@ GtkActionEntry CMainFrame::entries[] =
     {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
   };
 
-#ifdef USE_MOUSE
-GtkToggleActionEntry CMainFrame::mouse_toggle_entries[] =
-  {
-    {"mouse_support", NULL, _("Mouse Support"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleMouse), false}
-  };
-#endif
-
 GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
 {
     {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
@@ -372,9 +365,6 @@ static const char *ui_info =
   "        <menuitem action='nancy_bot_all'/>"
   "      </menu>"
 #endif
-#ifdef USE_MOUSE
-  "      <menuitem action='mouse_support'/>"
-#endif
   "    </menu>"
   "    <menu action='help_menu'>"
   "      <menuitem action='about'/>"
@@ -414,10 +404,6 @@ void CMainFrame::MakeUI()
 
   gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
 
-#ifdef USE_MOUSE
-  gtk_action_group_add_toggle_actions(action_group, mouse_toggle_entries,
-				      G_N_ELEMENTS(mouse_toggle_entries), this);
-#endif
   gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
 		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
 
@@ -1318,13 +1304,6 @@ void CMainFrame::SwitchToCon(CTelnetCon* con)
 	if( idx >= 0 )
 		m_pNotebook->SetCurPage(idx);
 }
-
-#ifdef USE_MOUSE
-void CMainFrame::OnToggleMouse(GtkToggleAction* action, CMainFrame* _this)
-{
-  _this->m_MouseSupport = gtk_toggle_action_get_active(action);
-}
-#endif
 
 #ifdef USE_NANCY
 

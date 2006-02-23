@@ -35,6 +35,7 @@
 #if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
 #include "stringutil.h"
+#include "appconfig.h"
 
 CMainFrame* CTelnetView::m_pParentFrame = NULL;
 #endif /* !defined(MOZ_PLUGIN) */
@@ -185,7 +186,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	}
     }
 #ifdef USE_MOUSE
-  else if ( m_pParentFrame->m_MouseSupport == true )
+  else if ( AppConfig.MouseSupport == true )
     {
       CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
       if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
@@ -257,7 +258,7 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 	if( !m_pTermData )
 		return;
 
-	if ( m_pParentFrame->m_MouseSupport != true )
+	if ( AppConfig.MouseSupport != true )
 		return;
 
 	GdkScrollDirection i = evt->direction;;
@@ -274,7 +275,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	if( !m_pTermData )
 		return;
 
-	if ( m_pParentFrame->m_MouseSupport != true )
+	if ( AppConfig.MouseSupport != true )
 		return;
 
 	int x = (int)evt->x;

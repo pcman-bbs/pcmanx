@@ -37,6 +37,7 @@ public:
 	GtkWidget *m_QueryOnCloseCon;
 	GtkWidget *m_QueryOnExit;
 	GtkWidget *m_CancelSelAfterCopy;
+	GtkWidget *m_MouseSupport;
 	GtkWidget *m_ShowTrayIcon;
 	GtkWidget *m_ShowStatusBar;
 	GtkWidget *m_WebBrowser;

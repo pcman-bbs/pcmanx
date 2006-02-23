@@ -90,6 +90,9 @@ public:
 	bool QueryOnCloseCon;
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
+#ifdef USE_MOUSE
+	bool MouseSupport;
+#endif
 	bool ShowTrayIcon;
 	bool ShowStatusBar;
 	bool PopupNotifier;

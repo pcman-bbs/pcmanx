@@ -83,6 +83,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CancelSelAfterCopy)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
+		CFG_BOOL( MouseSupport )
 		CFG_BOOL( ShowTrayIcon )
 		CFG_BOOL( ShowStatusBar )
 		CFG_BOOL( UseWgetFiles )
@@ -299,6 +300,7 @@ void CAppConfig::SetToDefault()
 	QueryOnCloseCon = 1;
 	CancelSelAfterCopy =1;
 	CopyTrimTail = 1;
+	MouseSupport = 0;
 	PopupNotifier = true;
 	PopupTimeout = 6;
 	UseWgetFiles = false;

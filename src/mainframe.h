@@ -114,10 +114,6 @@ public:
 	GdkPixbuf *GetMainIcon() { return m_MainIcon; };
 #endif
 
-#ifdef USE_MOUSE
-	gboolean m_MouseSupport;
-#endif
-
 protected:
 	void MakeUI();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
@@ -134,11 +130,6 @@ protected:
 	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 	void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
-
-#ifdef USE_MOUSE
-	static GtkToggleActionEntry mouse_toggle_entries[];
-	static void OnToggleMouse(GtkToggleAction* action, CMainFrame* _this);
-#endif
 
 #ifdef USE_NANCY
 	static GtkRadioActionEntry cur_bot_entries[];

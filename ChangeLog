@@ -1,5 +1,10 @@
 2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
 
+	* src/mainframe.cpp: Move runtime Mouse Support switch to Preference,
+	so it's savable now.
+
+2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
+
 	* src/mainframe.cpp: also, translation of toolbar tooltips back.
 
 2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
