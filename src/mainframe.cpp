@@ -271,25 +271,25 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 GtkActionEntry CMainFrame::entries[] =
   {
     {"connect_menu", NULL, _("_Connect")},
-    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", NULL, G_CALLBACK (CMainFrame::OnSiteList)},
-    {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, NULL, G_CALLBACK (CMainFrame::updateBBSList)},
-    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", NULL, G_CALLBACK (CMainFrame::OnNewCon)},
-    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", NULL, G_CALLBACK (CMainFrame::OnReconnect)},
-    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", NULL, G_CALLBACK (CMainFrame::OnCloseCon)},
+    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+    {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
+    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("_New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("_Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("_Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
     {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
     {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit")},
-    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", NULL, G_CALLBACK (CMainFrame::OnCopy)},
-    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, NULL, G_CALLBACK (CMainFrame::OnCopyWithColor)},
-    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", NULL, G_CALLBACK (CMainFrame::OnPaste)},
+    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("_Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with A_NSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
+    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("_Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
     {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
-    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, NULL, G_CALLBACK (CMainFrame::OnPreference)},
+    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("_Preference"), G_CALLBACK (CMainFrame::OnPreference)},
     {"favorites_menu", NULL, _("F_avorites")},
-    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnAddToFavorites)},
+    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("_Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
     {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
@@ -397,6 +397,13 @@ static const char *ui_info =
   "    <toolitem action='update_bbs_list'/>"
   "    <separator/>"
   "  </toolbar>"
+  "  <popup>"
+  "    <menuitem action='copy'/>"
+  "    <menuitem action='copy_with_ansi'/>"
+  "    <menuitem action='paste'/>"
+  "    <menuitem action='paste_from_clipboard'/>"
+  "    <menuitem action='select_all'/>"
+  "  </popup>"
   "</ui>";
 
 void CMainFrame::MakeUI()
@@ -445,7 +452,8 @@ void CMainFrame::MakeUI()
   m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
   m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
 
-  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/edit_menu");
+  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
+	
   m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
 #ifdef USE_NANCY
@@ -513,8 +521,6 @@ void CMainFrame::MakeUI()
   
   CreateFavoritesMenu();
   
-  //popupmenu = gtk_ui_manager_get_widget(m_UIManager, "/PopMenu");
-	
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)

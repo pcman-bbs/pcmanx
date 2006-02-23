@@ -1,3 +1,7 @@
+2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/mainframe.cpp: Fix popup menu, add tooltips back to toolbar.
+
 2006-02-22  Jim Huang  <jserv@kaffe.org>
 
 	* src/docklet/eggtrayicon.h,
