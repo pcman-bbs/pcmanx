@@ -273,23 +273,23 @@ GtkActionEntry CMainFrame::entries[] =
     {"connect_menu", NULL, _("_Connect")},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
     {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
-    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("_New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
-    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("_Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
-    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("_Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
+    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
     {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
     {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit")},
-    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("_Copy"), G_CALLBACK (CMainFrame::OnCopy)},
-    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with A_NSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
-    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("_Paste"), G_CALLBACK (CMainFrame::OnPaste)},
+    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
+    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
     {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
-    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("_Preference"), G_CALLBACK (CMainFrame::OnPreference)},
+    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
     {"favorites_menu", NULL, _("F_avorites")},
-    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("_Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
+    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
     {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
@@ -298,7 +298,7 @@ GtkActionEntry CMainFrame::entries[] =
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
 #endif
     {"help_menu", NULL, _("_Help")},
-    {"about", GTK_STOCK_ABOUT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnAbout)}
+    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
   };
 
 #ifdef USE_MOUSE
@@ -501,7 +501,8 @@ void CMainFrame::MakeUI()
   GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
   m_URLEntry = (GtkWidget*) gtk_entry_new();
   gtk_widget_set_size_request(m_URLEntry, 0, -1);
-  //gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+  GtkTooltips* tooltips = gtk_tooltips_new();
+  gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
   gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
   gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
   gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);

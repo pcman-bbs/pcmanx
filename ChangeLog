@@ -1,4 +1,8 @@
-2006-02-18  Emfox Zhou  <emfoxzhou@gmail.com>
+2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* src/mainframe.cpp: also, translation of toolbar tooltips back.
+
+2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/mainframe.cpp: Fix popup menu, add tooltips back to toolbar.
 
