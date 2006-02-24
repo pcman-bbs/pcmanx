@@ -1,3 +1,9 @@
+2006-02-24  Emfox Zhou  <emfoxzhou@gmail.com>
+
+	* po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: Update my name, complete zh_CN.po.
+
 2006-02-23  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* src/mainframe.cpp: Move runtime Mouse Support switch to Preference,

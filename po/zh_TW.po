@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-22 01:22+0800\n"
-"PO-Revision-Date: 2005-08-25 17:10+0800\n"
+"POT-Creation-Date: 2006-02-24 16:29+0800\n"
+"PO-Revision-Date: 2006-02-24 16:37+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,13 +42,25 @@ msgstr "更新站台列表"
 msgid "_New Connection"
 msgstr "開啟新連線 (_N)"
 
+#: ../src/mainframe.cpp:276
+msgid "New Connection"
+msgstr "新連線"
+
 #: ../src/mainframe.cpp:277
 msgid "_Reconnect"
 msgstr "重新連線 (_R)"
 
+#: ../src/mainframe.cpp:277 ../src/mainframe.cpp:888
+msgid "Reconnect"
+msgstr "重新連線"
+
 #: ../src/mainframe.cpp:278
 msgid "_Close Connection"
 msgstr "關閉連線分頁 (_C)"
+
+#: ../src/mainframe.cpp:278
+msgid "Close Connection"
+msgstr "關閉連線分頁"
 
 #: ../src/mainframe.cpp:279
 msgid "Next Page"
@@ -74,13 +86,25 @@ msgstr "編輯 (_E)"
 msgid "_Copy"
 msgstr "複製 (_C)"
 
+#: ../src/mainframe.cpp:284
+msgid "Copy"
+msgstr "複製"
+
 #: ../src/mainframe.cpp:285
 msgid "Copy with A_NSI Color"
 msgstr "複製(包含ANSI彩色) (_N)"
 
+#: ../src/mainframe.cpp:285
+msgid "Copy with ANSI Color"
+msgstr "複製(包含ANSI彩色)"
+
 #: ../src/mainframe.cpp:286
 msgid "_Paste"
 msgstr "貼上 (_P)"
+
+#: ../src/mainframe.cpp:286
+msgid "Paste"
+msgstr "貼上"
 
 #: ../src/mainframe.cpp:287
 msgid "Paste from Clipboard"
@@ -98,15 +122,23 @@ msgstr "表情符號 (_E)"
 msgid "_Preference"
 msgstr "個人偏好設定 (_P)"
 
+#: ../src/mainframe.cpp:290 ../src/prefdlg.cpp:32
+msgid "Preference"
+msgstr "個人偏好設定"
+
 #: ../src/mainframe.cpp:291
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:1097
+#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:1090
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:293 ../src/mainframe.cpp:1105
+#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:889
+msgid "Add to Favorites"
+msgstr "加入到我的最愛"
+
+#: ../src/mainframe.cpp:293 ../src/mainframe.cpp:1098
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -126,35 +158,39 @@ msgstr "自動回訊機器人 (套用到全部連線)"
 msgid "_Help"
 msgstr "說明 (_H)"
 
-#: ../src/mainframe.cpp:307
-msgid "Mouse Support"
-msgstr "滑鼠支援"
+#: ../src/mainframe.cpp:301
+msgid "About"
+msgstr "關於"
 
-#: ../src/mainframe.cpp:313
+#: ../src/mainframe.cpp:306
 msgid "F_ullscreen Mode"
 msgstr "全螢幕模式 (_U)"
 
-#: ../src/mainframe.cpp:319 ../src/mainframe.cpp:325
+#: ../src/mainframe.cpp:312 ../src/mainframe.cpp:318
 msgid "Disable Bot"
 msgstr "不使用自動回訊機器人"
 
-#: ../src/mainframe.cpp:320 ../src/mainframe.cpp:326
+#: ../src/mainframe.cpp:313 ../src/mainframe.cpp:319
 msgid "Nancy Bot"
 msgstr "啟動 Nancy 機器人"
 
-#: ../src/mainframe.cpp:470
+#: ../src/mainframe.cpp:464
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:493
+#: ../src/mainframe.cpp:487
 msgid "A_ddress:"
 msgstr "位址 (_D)："
 
-#: ../src/mainframe.cpp:522
+#: ../src/mainframe.cpp:491
+msgid "Type URL here, then hit \"Enter\""
+msgstr "在此輸入位址，然後按下\"Enter\""
+
+#: ../src/mainframe.cpp:515
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:522
+#: ../src/mainframe.cpp:515
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -162,15 +198,15 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:554
+#: ../src/mainframe.cpp:547
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:559
+#: ../src/mainframe.cpp:552
 msgid "Apply to all opened pages"
 msgstr "套用到所有開啟中的連線"
 
-#: ../src/mainframe.cpp:627
+#: ../src/mainframe.cpp:620
 msgid ""
 "Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
@@ -186,13 +222,13 @@ msgstr ""
 "吳佳一 Chia I Wu (開發者) <b90201047@ntu.edu.tw>\n"
 "李世元 Shih-yuan Lee (開發者) <fourdollars@gmail.com>\n"
 "李宥辰 Youchen Lee (開發者) <copyleft@utcr.org>\n"
-"Emfox Zhou (開發者) <emfoxzhou@gmail.com>"
+"周  玮 Emfox Zhou (開發者) <emfoxzhou@gmail.com>"
 
-#: ../src/mainframe.cpp:635
+#: ../src/mainframe.cpp:628
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "簡體中文 (zh_CN)：陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:640
+#: ../src/mainframe.cpp:633
 #, c-format
 msgid ""
 "<big>PCMan X  %s\n"
@@ -223,41 +259,33 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:696
+#: ../src/mainframe.cpp:689
 msgid "Update BBS List Success!"
 msgstr "BBS站台列表更新成功! *^^*"
 
-#: ../src/mainframe.cpp:697
+#: ../src/mainframe.cpp:690
 msgid "Update BBS List Fault."
 msgstr "BBS站台列表更新失敗... Orz"
 
-#: ../src/mainframe.cpp:706
+#: ../src/mainframe.cpp:699
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../src/mainframe.cpp:729
+#: ../src/mainframe.cpp:722
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
 #. set menu items
-#: ../src/mainframe.cpp:894
+#: ../src/mainframe.cpp:887
 msgid "Close"
 msgstr "關閉"
 
-#: ../src/mainframe.cpp:895
-msgid "Reconnect"
-msgstr "重新連線"
-
-#: ../src/mainframe.cpp:896
-msgid "Add to Favorites"
-msgstr "加入到我的最愛"
-
-#: ../src/mainframe.cpp:1007
+#: ../src/mainframe.cpp:1000
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1019
+#: ../src/mainframe.cpp:1012
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -266,20 +294,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1031
+#: ../src/mainframe.cpp:1024
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1144
+#: ../src/mainframe.cpp:1137
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1359
+#: ../src/mainframe.cpp:1345
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1366
+#: ../src/mainframe.cpp:1352
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 
@@ -379,10 +407,6 @@ msgstr "讓顯示垂直置中對齊"
 msgid "Let screen align center horizontally."
 msgstr "讓顯示水平置中對齊"
 
-#: ../src/prefdlg.cpp:32
-msgid "Preference"
-msgstr "個人偏好設定"
-
 #: ../src/prefdlg.cpp:41
 msgid "General"
 msgstr "一般"
@@ -400,38 +424,43 @@ msgid "Cancel selection after copying text"
 msgstr "複製完畢自動取消選取"
 
 #: ../src/generalprefpage.cpp:59
+#, fuzzy
+msgid "Enable Mouse Support"
+msgstr "滑鼠支援"
+
+#: ../src/generalprefpage.cpp:63
 msgid "Show System Tray Icon (Docklet) (Take effect after restart)"
 msgstr "顯示系統列圖示 (Docklet) (重新啟動程式後才有效)"
 
-#: ../src/generalprefpage.cpp:63
+#: ../src/generalprefpage.cpp:67
 msgid "Show Status Bar on bottom"
 msgstr ""
 
-#: ../src/generalprefpage.cpp:67
+#: ../src/generalprefpage.cpp:71
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr "顯示字型使用反鋸齒 (重新啟動程式後才有效)"
 
-#: ../src/generalprefpage.cpp:71
+#: ../src/generalprefpage.cpp:75
 msgid "Use \"wget\" to download files."
 msgstr "使用 \"wget\" 下載檔案. (.rar .zip .tgz .tbz)"
 
-#: ../src/generalprefpage.cpp:79
+#: ../src/generalprefpage.cpp:83
 msgid "Display popup notifier for "
 msgstr "來訊彈出通知視窗，顯示"
 
-#: ../src/generalprefpage.cpp:88
+#: ../src/generalprefpage.cpp:92
 msgid "seconds"
 msgstr "秒"
 
-#: ../src/generalprefpage.cpp:96
+#: ../src/generalprefpage.cpp:100
 msgid "Web Browser: "
 msgstr "網頁瀏覽器："
 
-#: ../src/generalprefpage.cpp:107
+#: ../src/generalprefpage.cpp:111
 msgid "Mail Client: "
 msgstr "郵件程式："
 
-#: ../src/view/telnetview.cpp:370
+#: ../src/view/telnetview.cpp:371
 msgid "_Copy URL to Clipboard"
 msgstr "複製網址到剪貼簿 (_C)"
 
@@ -493,24 +522,3 @@ msgstr ""
 "<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，"
 "請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔"
 "保。"
-
-#~ msgid "New Connection"
-#~ msgstr "新連線"
-
-#~ msgid "Close Connection"
-#~ msgstr "關閉連線分頁"
-
-#~ msgid "Copy"
-#~ msgstr "複製"
-
-#~ msgid "Copy with ANSI Color"
-#~ msgstr "複製(包含ANSI彩色)"
-
-#~ msgid "Paste"
-#~ msgstr "貼上"
-
-#~ msgid "About"
-#~ msgstr "關於"
-
-#~ msgid "Type URL here, then hit \"Enter\""
-#~ msgstr "在此輸入位址，然後按下\"Enter\""
