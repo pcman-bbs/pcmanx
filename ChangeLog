@@ -1,3 +1,11 @@
+2006-02-27  Jim Huang  <jserv@kaffe.org>
+
+	* src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault),
+	src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage)
+	(CGeneralPrefPage::OnOK): Fixlet to compilation if mouse support is
+	disabled.
+
 2006-02-26  Chia-I Wu  <b90201047@ntu.edu.tw>
 
 	* src/core/font.cpp (CFont::RecalculateMetrics): Lock may fail.

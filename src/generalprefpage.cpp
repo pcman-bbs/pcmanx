@@ -119,7 +119,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon), AppConfig.QueryOnCloseCon);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnExit), AppConfig.QueryOnExit);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy), AppConfig.CancelSelAfterCopy);
+#ifdef USE_MOUSE
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_MouseSupport), AppConfig.MouseSupport);
+#endif
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
@@ -138,7 +140,9 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.QueryOnCloseCon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon));
 	AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
+#ifdef USE_MOUSE
 	AppConfig.MouseSupport = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport));
+#endif
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
 	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
