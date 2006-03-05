@@ -185,7 +185,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 #endif
 	}
     }
-#ifdef USE_MOUSE
+#if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
   else if ( AppConfig.MouseSupport == true )
     {
       CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
@@ -249,10 +249,10 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
     }
   else
     {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
-#endif //USE_MOUSE
+#endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 }
 
-#ifdef USE_MOUSE
+#if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 {
 	if( !m_pTermData )
@@ -347,7 +347,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	else
 	  GetCon()->SendRawString( "\r", 1 );                                        
 }
-#endif
+#endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
          
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {

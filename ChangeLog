@@ -1,3 +1,9 @@
+2006-03-05  Youchen Lee  <copyleft@utcr.org>
+
+	* src/view/telnetview.cpp, src/view/telnetview.h
+	(CAppConfig::OnMouseScroll), (CAppConfig::OnLButtonUp): Make
+	mozilla-plugin compile available. ( Need someone to check it again.)
+
 2006-02-27  Jim Huang  <jserv@kaffe.org>
 
 	* src/appconfig.cpp (CAppConfig::DoDataExchange)
