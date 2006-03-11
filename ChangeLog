@@ -1,3 +1,9 @@
+2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp (CTermView::OnLButtonDown),
+	src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
+	unnecessary mouse action when canceling selection.
+
 2006-03-05  Youchen Lee  <copyleft@utcr.org>
 
 	* src/view/telnetview.cpp, src/view/telnetview.h
@@ -143,7 +149,7 @@
 	* configure.ac: Use AS_HELP_STRING with AC_ARG_ENABLE for better
 	expression.
 
-2005-12-15  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-12-15  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/sitelistdlg.cpp
 	(CSiteListDlg::LoadSiteList): Fix some problem with icons of treeview.
@@ -334,18 +340,18 @@
 
 	* pcmanx-pure-gtk2.spec.in: Modify string from "Copyright" to "License".
 
-2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-28  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termdata.cpp
 	(CTermData::PutChar): Fix incorrect parsing of ANSI control characters.
 
-2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-28  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termdata.cpp
 	(CTermData::ScrollUp): Fix a problem with screen scrolling.
 	(CTermData::ParseAnsiEscapeSequence): Implement ESC 7 and ESC 8.
 
-2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-28  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/nancy_bot/msgdata.cpp
 	(MsgData::getCommonMsg): Temporary workaround to fix the SIGFPE caused
@@ -357,7 +363,7 @@
 	Recalculate metrics only when face is scalable. Reported by
 	wilkins@ptt.
 
-2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-25  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp,
 	po/pcmanx.pot,
@@ -371,13 +377,13 @@
 	po/zh_TW.po,
 	po/zh_CN.po: Added zh_CN translator Optical-dlz.
 
-2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-25  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* configure.ac:
 	Temporarily disable --enable-script option in the configure script.
 	Bump release version to 0.3.2.
 
-2005-08-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-23  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/script/script.cpp:
 	Change char* parameters to const char* since these strings are not 
@@ -430,7 +436,7 @@
 	* configure.ac:
 	Bump release version to 0.3.1.
 
-2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetview.cpp:
 	Convert all '\n' characters to correct CR/LF before pasting text
@@ -442,19 +448,19 @@
 	* data/nancy_bot/default_msg.data,
 	data/nancy_bot/default.conf: Added more comments for user.
 
-2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetview.cpp:
 	Convert UTF-8 encoded text from clipboad to site-specific encoding.
 	This can prevent the broken UTF-8 string caused by auto-wrap.
 	This is just a workaround and should be fixed in the future.
 
-2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/nancy_bot/msgdata.cpp:
 	Remove MsgData::my_copy(), use copyfile() instead.
 
-2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/fileutil.c:
 	Add copyfile() to copy file since it's not provided by the system.
@@ -484,7 +490,7 @@
 	README: Set --enable-nancy as default.
 	* TODO: Added severial todos.
 
-2005-08-21  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-21  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp:
 	Add a simple control menu to swich Nancy Bot on and off.
@@ -520,12 +526,12 @@
 
 	* src/view/telnetcon.cpp: Use SendString() to send utf-8 strings.
 
-2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetcon.cpp: CTelnetCon::OnNewIncomingMessage now receives
 	UTF-8 encoded strings as parameter.
 
-2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termview.cpp,
 	src/view/telnetview.cpp,
@@ -556,7 +562,7 @@
 	* src/nancy_bot/nancybot.cpp,
 	src/nancy_bot/standalone.cpp: Changed the initial value of msg_out.
 	
-2005-08-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-08-13  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/notifier/notifier-impl.c
 	(_strreplace): Removed since it's not used in newly written code.
@@ -875,7 +881,7 @@
 	every time.
 	s/XFT_/FC_/ and s/XftType/FcType/ where suitable.
 
-2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetview.cpp:
 	Temporarily enable the popup menu of hyperlinks.
@@ -883,7 +889,7 @@
 	* plugin/src/plugin.cpp:
 	Add timers to enable cursor blinking and anti-idle.
 
-2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/sitepage.cpp:
 	Adjust the user interface and add a checkbox for double-byte detection.
@@ -903,7 +909,7 @@
 
 	* data/sitelist: Updated.
 
-2005-07-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-25  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetcon.cpp,
 	src/pcmanx_pure_gtk2.cpp,
@@ -922,7 +928,7 @@
 	Fix the problem which previously disable the usage of space character in 
 	the names of sites.
 
-2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-24  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termdata.cpp:
 	Correctly process Esc[A, Esc[B, Esc[C, Esc[D ANSI escape sequence.
@@ -949,13 +955,13 @@
 	po/POTFILES.in,
 	po/zh_TW.po: Updated.
 
-2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-24  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/appconfig.h,
 	src/appconfig.cpp:
 	Comment out some unnecessary code.
 
-2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-24  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/autologinpage.cpp,
 	src/autologinpage.h:
@@ -1040,7 +1046,7 @@
 	plugin/data/pcmanx.png,
 	plugin/Makefile.am:
 	New files. Merge Mozilla/Firefox plugin implementation based on the 
-	excellent work of PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+	excellent work of PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>.
 	NOTE: The IDL detection is not done yet. And pure-static build for
 	plugin is disabled at the moment.
 
@@ -1051,7 +1057,7 @@
 
 	* Makefile.am: Add plugin in SUBDIRS.
 	
-2005-07-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-23  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp
 	(CMainFrame::OnDeactivated): Removed
@@ -1062,12 +1068,12 @@
 	* src/notifier/notifier-impl.c:
 	Little bug fix.
 
-2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* po/POTFILES.in:
 	Correct wrong file paths.
 
-2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/notifier/notifier-impl.c:
 	Take height of taskbar into consideration and prevent taskbar from being
@@ -1091,7 +1097,7 @@
 	src/pcmanx_pure_gtk2.cpp:
 	Add some preference options for popup notifier.
 
-2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-22  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/notifier/notifier-impl.c, 
 	src/view/telnetcon.cpp:
@@ -1205,7 +1211,7 @@
 
 	* TODO: Updated.
 	
-2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp,
 	src/telnetcon.h,
@@ -1213,22 +1219,22 @@
 	src/telnetview.cpp:
 	Apply some patch files from pav@FreeBSD.org.
 
-2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetview.cpp (CTelnetView::DoPasteFromClipboard):
 	Add "Auto Wrap" on paste.
 
-2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp (CTelnetCon::OnMainIdle):
 	Little bug fix.
 
-2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::OnURLEntryKillFocus):
 	Little bug fix. We should reutrn FALSE in this handler.
 
-2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-20  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp,
 	src/emoticondlg.cpp,
@@ -1250,7 +1256,7 @@
 	* src/telnetcon.cpp:
 	Improve multi-threading handling.
 
-2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-19  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::~CTermView):
 	Fix the bug in destructor.
@@ -1260,7 +1266,7 @@
 	Rearrange the order of some operations to fix a serious bug which 
 	causes frequent segmentation fault.
 
-2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-19  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp:
 	Exclude characters '(' and ')' from URL detection.
@@ -1293,12 +1299,12 @@
 	* src/telnetcon.cpp:
 	Should not assign local variable to member object.
 
-2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-19  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp:
 	Little bug fix.
 
-2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-19  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp:
 	Add (CTermView::HyperLinkHitTest)
@@ -1324,13 +1330,13 @@
 	Limit the number of concurrent running threads to prevent explosive 
 	increase on socket operation which often leads to connection failure.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp:
 	Apply patch file provided by chinsan.
 	Make some modification to enable compilation on FreeBSD.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp, 
 	src/termview.cpp:
@@ -1353,7 +1359,7 @@
 	* src/sitelistdlg.cpp:
 	Enable searching by hitting 'Enter' key.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/site.cpp (CSite::SaveToFile):
 	Minor bug fix for UseExternalTelnet.
@@ -1361,7 +1367,7 @@
 	* src/telnetcon.cpp (CTelnetCon::OnSocket), (CTelnetCon::OnRecv):
 	Fix a serious bug and prevent invalid io channel operation.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp (CTermData::UpdateCaret):
 	Calculate caret position corectly.
@@ -1382,7 +1388,7 @@
 	* src/termview.cpp:
 	Fix bug of selected region.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/sitedlg.h,
 	src/sitepage.cpp,
@@ -1434,7 +1440,7 @@
 	* src/termview.cpp:
 	Add horizontal align center.
 
-2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-16  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp:
 	Fix wrong color settings in default color table.
@@ -1470,7 +1476,7 @@
 	Makefile.am:
 	Generate package information with autotools.
 
-2005-07-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-13  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp (CTermData::OnLineModified),
 	src/telnetcon.cpp (CTelnetCon::OnLineModified), (CTelnetCon::OnBellTimer)
@@ -1480,7 +1486,7 @@
 	All automation can be done in CTelnetCon::OnLineModified and
 	CTelnetCon::OnNewIncomingMessage.
 
-2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-12  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::OnPaint), (CTermView::DrawChar):
 	Greatly improve drawing performance by update invalid area only.
@@ -1496,12 +1502,12 @@
 	Update tab title of connection when state chages.
 	Minor bug fix.
 
-2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-12  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/emoticondlg.cpp (CEmoticonDlg::SaveEmoticons):
 	Minor bug fix.
 
-2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-12  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/dialog.cpp (CDialog::OnResponse):
 	Manually connect "response" signal to this handler can enable default 
@@ -1527,7 +1533,7 @@
 	* src/termview.cpp (CTermView::OnTextInput):
 	Change the parameter to const.
 
-2005-07-10  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-10  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::OnEverySecondTimer) (CMainFrame::OnSize), 
 	src/pcmanx_pure_gtk2.cpp (main) :
@@ -1557,12 +1563,12 @@
 	* src/mainframe.h:
 	Fixlet when --disable-docklet.
 
-2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-08  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::OnAbout):
 	Use a GTK+ 2.4.x compatible About Dialog.
 
-2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-08  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp,
 	src/site.cpp,
@@ -1580,12 +1586,12 @@
 	Bump version to 0.1.1 .
 	Add AM_CONDITIONAL of ENABLE_DEBUG.
 
-2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-08  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/listbox.cpp (CListBox::GetCurSel):
 	Minor bug fix.
 
-2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-08  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::PasteFromClipboard):
 	Some cleanup.
@@ -1596,7 +1602,7 @@
 	(CTermView::PasteFromClipboard) (CTermView::CopyToClipboard):
 	Use user's encoding setting to convert clipboard strings.
 
-2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-07  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::OnMouseMove):
 	Display hand cursor when hyperlinks are hovered.
@@ -1628,12 +1634,12 @@
 	* TODO:
 	For developers, please file your todo list here.
 
-2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-07  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/pcmanx_pure_gtk2.cpp:
 	Add "bindtextdomain" to correctly locate message catalog file.
 
-2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-07  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp (CTelnetCon::SendString):
 	Replace all "\n" in string with correct CRLF before sent.
@@ -1650,12 +1656,12 @@
 	configure.ac:
 	Add entries for pcmanx.desktop generation.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* data/Makefile.am:
 	Add install-hook.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/Makefile.am:
 	Add all necessary headers to Makefile.am.
@@ -1665,7 +1671,7 @@
 	* src/Makefile.am:
 	Fixlet to previous changes.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp (CTermData::UpdateDisplay),
 	src/termview.cpp,
@@ -1683,9 +1689,9 @@
 	* src/Makefile.am,
 	Makefile.am:
 	Fixlet to missing EXTRA_DIST.
-	Reported by PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+	Reported by PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp: Minor bug Fix.
 
@@ -1709,13 +1715,13 @@
 
 	* AUTHORS: Updated.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/telnetcon.cpp
 	(CTelnetCon::OnClose): Add "auto reconnect" support.
 	Fix lots of thread-related bugs.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp
 	(CMainFrame::OnFont): Disable "style" in font selection dialog.
@@ -1729,7 +1735,7 @@
 	* src/Makefile.am:
 	Add all-local to strip the compiled executable file.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp:
 	Some bug fix.
@@ -1747,7 +1753,7 @@
 	* src/sitepage.cpp:
 	Add "Connect on startup" check box.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp
 	(CTermView::OnDestroy): Removed.
@@ -1757,7 +1763,7 @@
 	* src/mainframe.cpp (CMainFrame::CloseCon):
 	Use wrapper function provided by CNotebook instead of raw gtk+ API.
 
-2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-06  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termdata.cpp (CTermView::UpdateDisplay)
 	src/termdata.h:
@@ -1777,22 +1783,22 @@
 	src/telnetview.cpp:
 	Add encoding preference.
 
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-05  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::DrawChar):
 	Enable drawing one double-byte character with two different colors.
 
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-05  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/termview.cpp (CTermView::SetFontFamily):
 	Recalculate font size when font family is changed.
 
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-05  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/widget.cpp (CWidget::Refresh):
 	Fix a typo.
 
-2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-05  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/font.cpp (CFont::CreateXftFont):
 	Fix some problems in font size calculation.
@@ -1817,7 +1823,7 @@
 	NOTE: PCMan reported a strange behavior of tray icons padding
 	under KDE 3.3 .
 
-2005-07-04  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-04  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/pcmanx_pure_gtk2.cpp (main):
 	Remove redundant CWidget::Init.
@@ -2003,6 +2009,6 @@
 	* src/Makefile-byhand:
 	Cleanup pkgconfig rules.
 
-2005-07-01  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+2005-07-01  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* Initial import of pcmanx_pure_gtk2.

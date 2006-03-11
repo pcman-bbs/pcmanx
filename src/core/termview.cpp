@@ -127,6 +127,8 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_IsHCenterAlign = false;
 	m_IsVCenterAlign = false;
+	
+	m_CancelSel = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -537,6 +539,7 @@ void CTermView::ExtendSelection( int row, int col, bool left )
 void CTermView::OnLButtonDown(GdkEventButton* evt)
 {
 	SetFocus();
+	m_CancelSel = false;
 
 	if( !m_pTermData )
 		return;
@@ -560,6 +563,8 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 		// clear the old selection
 		if( !m_pTermData->m_Sel->Empty() )
 		{
+			m_CancelSel = true;
+
 			m_Caret.Hide();
 			m_pTermData->m_Sel->Unselect( DrawCharWrapper, this );
 			m_Caret.Show( false );

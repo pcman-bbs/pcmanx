@@ -284,7 +284,8 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	this->PointToLineCol( &x, &y, &left );
 
 	//some text is selected
-	if ( m_pTermData->m_Sel->m_End.row != y
+	if ( m_CancelSel
+	     || m_pTermData->m_Sel->m_End.row != y
 	     || m_pTermData->m_Sel->m_End.col != x
 	     || m_pTermData->m_Sel->m_End.left != left
 	     || m_pTermData->m_Sel->m_Start.row != y

@@ -114,6 +114,8 @@ protected:
 	GdkColor* m_pHyperLinkColor;
     GdkGC* m_GC;
     bool m_AutoFontSize;
+    
+    bool m_CancelSel;	// If selection is canceled in OnLButtonDown, this flag is set to true.
 
     static string m_s_ANSIColorStr;
     int m_FontSize;
