@@ -46,9 +46,12 @@ CTelnetView::CTelnetView()
 	: CTermView()
 {
 }
+
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
 bool CTelnetView::m_bWgetFiles = false;
+
+static GtkWidget* input_menu_item = NULL;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -354,7 +357,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	  GetCon()->SendRawString( "\r", 1 );                                        
 }
 #endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
-         
+
 void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 {
 #if !defined(MOZ_PLUGIN)
@@ -412,6 +415,17 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 		}
 	}
 #if !defined(MOZ_PLUGIN)
+	if( input_menu_item )
+		gtk_widget_destroy( input_menu_item );
+	input_menu_item = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
+	gtk_widget_show (input_menu_item);
+	GtkWidget* submenu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (input_menu_item), submenu);
+
+	gtk_menu_shell_append (GTK_MENU_SHELL (m_ContextMenu), input_menu_item);
+
+	gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (m_IMContext),
+					GTK_MENU_SHELL (submenu));
 	gtk_menu_popup( m_ContextMenu, NULL, NULL, NULL, NULL, evt->button, evt->time );
 #endif
 }

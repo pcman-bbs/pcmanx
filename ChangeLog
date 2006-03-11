@@ -1,5 +1,10 @@
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
+ * src/view/telnetview.cpp (CTelnetView::OnRButtonDown): Add 
+ "Input Method" sub menu to popup menu.
+
+2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
  * src/sitepage.cpp: Update some text on UI elements.
  
  * src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 

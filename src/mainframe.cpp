@@ -439,7 +439,7 @@ void CMainFrame::MakeUI()
   m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
 
   m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
-	
+    
   m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
 #ifdef USE_NANCY
