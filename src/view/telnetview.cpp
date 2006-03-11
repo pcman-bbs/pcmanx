@@ -283,6 +283,11 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	bool left;
 	this->PointToLineCol( &x, &y, &left );
 
+  int start, end;
+  // Don't send mouse action when the user click on hyperlinks
+  if( HyperLinkHitTest( x, y, &start, &end ) )
+		  return;
+
 	//some text is selected
 	if ( m_CancelSel
 	     || m_pTermData->m_Sel->m_End.row != y

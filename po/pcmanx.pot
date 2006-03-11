@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 16:29+0800\n"
+"POT-Creation-Date: 2006-03-11 17:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,11 +379,11 @@ msgid "Connect automatically on program startup"
 msgstr ""
 
 #: ../src/sitepage.cpp:239
-msgid "Let screen align center vertically."
+msgid "Center terminal screen vertically"
 msgstr ""
 
 #: ../src/sitepage.cpp:243
-msgid "Let screen align center horizontally."
+msgid "Center terminal screen  horizontally"
 msgstr ""
 
 #: ../src/prefdlg.cpp:41
@@ -438,7 +438,7 @@ msgstr ""
 msgid "Mail Client: "
 msgstr ""
 
-#: ../src/view/telnetview.cpp:371
+#: ../src/view/telnetview.cpp:377
 msgid "_Copy URL to Clipboard"
 msgstr ""
 

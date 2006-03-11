@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-24 16:29+0800\n"
-"PO-Revision-Date: 2006-02-24 16:37+0800\n"
+"POT-Creation-Date: 2006-03-11 17:20+0800\n"
+"PO-Revision-Date: 2006-03-11 17:21+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,8 @@ msgstr "新連線"
 msgid "_Reconnect"
 msgstr "重新連線 (_R)"
 
-#: ../src/mainframe.cpp:277 ../src/mainframe.cpp:888
+#: ../src/mainframe.cpp:277
+#: ../src/mainframe.cpp:888
 msgid "Reconnect"
 msgstr "重新連線"
 
@@ -122,7 +123,8 @@ msgstr "表情符號 (_E)"
 msgid "_Preference"
 msgstr "個人偏好設定 (_P)"
 
-#: ../src/mainframe.cpp:290 ../src/prefdlg.cpp:32
+#: ../src/mainframe.cpp:290
+#: ../src/prefdlg.cpp:32
 msgid "Preference"
 msgstr "個人偏好設定"
 
@@ -130,15 +132,18 @@ msgstr "個人偏好設定"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:1090
+#: ../src/mainframe.cpp:292
+#: ../src/mainframe.cpp:1090
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:889
+#: ../src/mainframe.cpp:292
+#: ../src/mainframe.cpp:889
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:293 ../src/mainframe.cpp:1098
+#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:1098
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -166,11 +171,13 @@ msgstr "關於"
 msgid "F_ullscreen Mode"
 msgstr "全螢幕模式 (_U)"
 
-#: ../src/mainframe.cpp:312 ../src/mainframe.cpp:318
+#: ../src/mainframe.cpp:312
+#: ../src/mainframe.cpp:318
 msgid "Disable Bot"
 msgstr "不使用自動回訊機器人"
 
-#: ../src/mainframe.cpp:313 ../src/mainframe.cpp:319
+#: ../src/mainframe.cpp:313
+#: ../src/mainframe.cpp:319
 msgid "Nancy Bot"
 msgstr "啟動 Nancy 機器人"
 
@@ -311,7 +318,8 @@ msgstr "Nancy 機器人作用中"
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 
-#: ../src/sitedlg.cpp:40 ../src/prefdlg.cpp:42
+#: ../src/sitedlg.cpp:40
+#: ../src/prefdlg.cpp:42
 msgid "Site Settings"
 msgstr "站台設定"
 
@@ -347,7 +355,8 @@ msgstr "站台位址："
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒數內被斷線則重連："
 
-#: ../src/sitepage.cpp:105 ../src/sitepage.cpp:123
+#: ../src/sitepage.cpp:105
+#: ../src/sitepage.cpp:123
 msgid "Sec (0 = Disabled)"
 msgstr "(0 = 關閉不用)"
 
@@ -400,12 +409,12 @@ msgid "Connect automatically on program startup"
 msgstr "程式啟動時自動連線"
 
 #: ../src/sitepage.cpp:239
-msgid "Let screen align center vertically."
-msgstr "讓顯示垂直置中對齊"
+msgid "Center terminal screen vertically"
+msgstr "終端機畫面垂直置中"
 
 #: ../src/sitepage.cpp:243
-msgid "Let screen align center horizontally."
-msgstr "讓顯示水平置中對齊"
+msgid "Center terminal screen  horizontally"
+msgstr "終端機畫面水平置中"
 
 #: ../src/prefdlg.cpp:41
 msgid "General"
@@ -424,9 +433,8 @@ msgid "Cancel selection after copying text"
 msgstr "複製完畢自動取消選取"
 
 #: ../src/generalprefpage.cpp:59
-#, fuzzy
 msgid "Enable Mouse Support"
-msgstr "滑鼠支援"
+msgstr "使用滑鼠支援"
 
 #: ../src/generalprefpage.cpp:63
 msgid "Show System Tray Icon (Docklet) (Take effect after restart)"
@@ -434,7 +442,7 @@ msgstr "顯示系統列圖示 (Docklet) (重新啟動程式後才有效)"
 
 #: ../src/generalprefpage.cpp:67
 msgid "Show Status Bar on bottom"
-msgstr ""
+msgstr "顯示狀態列"
 
 #: ../src/generalprefpage.cpp:71
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
@@ -460,7 +468,7 @@ msgstr "網頁瀏覽器："
 msgid "Mail Client: "
 msgstr "郵件程式："
 
-#: ../src/view/telnetview.cpp:371
+#: ../src/view/telnetview.cpp:377
 msgid "_Copy URL to Clipboard"
 msgstr "複製網址到剪貼簿 (_C)"
 
@@ -476,7 +484,8 @@ msgstr "送出"
 msgid "New Emoticon"
 msgstr "新增表情符號"
 
-#: ../src/emoticondlg.cpp:140 ../src/emoticondlg.cpp:157
+#: ../src/emoticondlg.cpp:140
+#: ../src/emoticondlg.cpp:157
 msgid "Input New Emoticon"
 msgstr "輸入新表情符號"
 
@@ -513,12 +522,6 @@ msgid "Post Login String: "
 msgstr "登入後送出的字串："
 
 #: ../src/autologinpage.cpp:116
-msgid ""
-"<big>WARNING:</big> Your password will be stored in <u>plain text</u> "
-"without any encryption.  Use this at your own risk.  Although UNIX-like "
-"systems all have file permissions, there is no guarantee that others won't "
-"get your password."
-msgstr ""
-"<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，"
-"請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔"
-"保。"
+msgid "<big>WARNING:</big> Your password will be stored in <u>plain text</u> without any encryption.  Use this at your own risk.  Although UNIX-like systems all have file permissions, there is no guarantee that others won't get your password."
+msgstr "<big>警告：</big> 你的密碼將會以 <u>明碼形式</u> 儲存，並不會有任何加密處理，請小心使用。雖然 UNIX 一類的系統有權限保護機制，不過這裡不作任何關於密碼的擔保。"
+

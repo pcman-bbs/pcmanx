@@ -236,11 +236,11 @@ CSitePage::CSitePage(CSite& site)
 	gtk_box_pack_start(GTK_BOX(m_Widget), t_pScreenAlignBox, FALSE, TRUE, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(t_pScreenAlignBox), 1);
 
-	m_pVerticalAlign = gtk_check_button_new_with_mnemonic(_("Let screen align center vertically."));
+	m_pVerticalAlign = gtk_check_button_new_with_mnemonic(_("Center terminal screen vertically"));
 	gtk_widget_show(m_pVerticalAlign);
 	gtk_box_pack_start(GTK_BOX(t_pScreenAlignBox), m_pVerticalAlign, FALSE, FALSE, 0);
 
-	m_pHorizontalAlign = gtk_check_button_new_with_mnemonic(_("Let screen align center horizontally."));
+	m_pHorizontalAlign = gtk_check_button_new_with_mnemonic(_("Center terminal screen  horizontally"));
 	gtk_widget_show(m_pHorizontalAlign);
 	gtk_box_pack_start(GTK_BOX(t_pScreenAlignBox), m_pHorizontalAlign, FALSE, FALSE, 0);
 

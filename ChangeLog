@@ -1,5 +1,19 @@
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
+ * src/sitepage.cpp: Update some text on UI elements.
+ 
+ * src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
+ sending mouse action when the user clicked on hyperlinks.
+ 
+ * src/mainframe.cpp: Move "About" toolbutton to the right of 
+ toolbar.
+ 
+ * po/zh_TW.po: Update zh_TW locale.
+ 
+ * configure.ac: Bump version number to 0.3.4
+
+2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
 	* src/core/termview.cpp (CTermView::OnLButtonDown),
 	src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
 	unnecessary mouse action when canceling selection.
