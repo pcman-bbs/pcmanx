@@ -393,6 +393,7 @@ static const char *ui_info =
   "    <menuitem action='paste'/>"
   "    <menuitem action='paste_from_clipboard'/>"
   "    <menuitem action='select_all'/>"
+  "    <separator/>"
   "  </popup>"
   "</ui>";
 

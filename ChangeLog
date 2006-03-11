@@ -1,5 +1,11 @@
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
+ * src/mainframe.cpp,
+ po/zh_TW.po: Add missing separator and translation in popup menu.
+
+
+2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
  * src/view/telnetview.cpp (CTelnetView::OnRButtonDown): Add 
  "Input Method" sub menu to popup menu.
 

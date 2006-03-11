@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-11 17:20+0800\n"
+"POT-Creation-Date: 2006-03-11 21:14+0800\n"
 "PO-Revision-Date: 2006-02-24 16:36+0800\n"
 "Last-Translator: EmfoxZhou@gmail.com\n"
 "Language-Team: \n"
@@ -459,9 +459,13 @@ msgstr "网页浏览器："
 msgid "Mail Client: "
 msgstr "邮件客户端："
 
-#: ../src/view/telnetview.cpp:377
+#: ../src/view/telnetview.cpp:380
 msgid "_Copy URL to Clipboard"
 msgstr "复制网址到剪贴板(_C)"
+
+#: ../src/view/telnetview.cpp:420
+msgid "Input _Methods"
+msgstr ""
 
 #: ../src/emoticondlg.cpp:28
 msgid "Emoticons"
