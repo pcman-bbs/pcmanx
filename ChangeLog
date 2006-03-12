@@ -11,7 +11,7 @@
 	, src/appconfig.h
 	, src/mainframe.cpp
 	, src/appconfig.cpp
-	: Bug fix and new feature add.
+	: Polish center alignment mechanism.
 
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
