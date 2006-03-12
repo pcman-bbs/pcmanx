@@ -383,7 +383,7 @@ msgid "Center terminal screen vertically"
 msgstr ""
 
 #: ../src/sitepage.cpp:243
-msgid "Center terminal screen  horizontally"
+msgid "Center terminal screen horizontally"
 msgstr ""
 
 #: ../src/prefdlg.cpp:41

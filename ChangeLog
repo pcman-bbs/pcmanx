@@ -1,5 +1,12 @@
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
+	* po/pcmanx.pot
+	, po/zh_TW.po
+	, po/zh_CN.po
+	: Update the po files.
+
+2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
 	* src/sitepage.cpp
 	, src/core/termview.cpp
 	, src/core/site.cpp
