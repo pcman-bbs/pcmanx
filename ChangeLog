@@ -1,3 +1,9 @@
+2006-03-12  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac: Added CXXFLAGS += -fno-exceptions and -fno-rtti
+	to reduce C++ overhead. In x86, the reduced size could be over
+	100kb.
+
 2006-03-12  Emfox Zhou  <emfoxzhou@gmail.com>
 
 	* configure.ac, autogen.sh,
@@ -7,40 +13,35 @@
 
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* src/sitepage.cpp
-	, src/appconfig.h
-	, src/mainframe.cpp
-	, src/appconfig.cpp
-	: Polish center alignment mechanism.
+	* src/sitepage.cpp,
+	src/appconfig.h,
+	src/mainframe.cpp,
+	src/appconfig.cpp: Polish center alignment mechanism.
 
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* po/pcmanx.pot
-	, po/zh_TW.po
-	, po/zh_CN.po
-	: Update the po files.
+	* po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: Update the po files.
 
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* src/sitepage.cpp
-	, src/core/termview.cpp
-	, src/core/site.cpp
-	, src/core/termview.h
-	, src/core/site.h
-	, src/appconfig.h
-	, src/mainframe.cpp
-	, src/sitepage.h
-	, src/appconfig.cpp
-	, po/zh_TW.po
-	, po/zh_CN.po
-	: Modify the horizontal and vertical center align mechanism.
-
+	* src/sitepage.cpp,
+	src/core/termview.cpp,
+	src/core/site.cpp,
+	src/core/termview.h,
+	src/core/site.h,
+	src/appconfig.h,
+	src/mainframe.cpp,
+	src/sitepage.h,
+	src/appconfig.cpp,
+	po/zh_TW.po,
+	po/zh_CN.po: Modify the horizontal and vertical center align mechanism.
 
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp,
 	po/zh_TW.po: Add missing separator and translation in popup menu.
-
 
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 

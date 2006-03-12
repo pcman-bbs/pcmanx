@@ -493,6 +493,11 @@ fi
 dnl FreeBSD needs this
 LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
+
+dnl Reduce C++ overhead
+CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
+LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
+
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
