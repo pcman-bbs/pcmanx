@@ -11,6 +11,7 @@ AM_PROG_AS
 AC_PROG_CXX
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+AC_PROG_INTLTOOL(, [no-xml])
 AC_PROG_INSTALL
 
 dnl define a new autoconf test, AC_CSRG_BASED, which will define

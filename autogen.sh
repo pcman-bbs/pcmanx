@@ -18,12 +18,4 @@ ${AUTOCONF:-autoconf$AC_VERSION}
 # mkinstalldirs was not correctly installed in some cases.
 cp -f /usr/share/automake-1.9/mkinstalldirs .
 
-# quick fix against the strange intltool behavior
-if [ -f po/Makefile.in.in ]; then
-	sed -i -e 's/\@GENCAT\@/\/usr\/bin\/gencat/' \
-	    -e 's/\@INTLTOOL_UPDATE\@/\/usr\/bin\/intltool-update/' \
-	    -e 's/\@INTLTOOL_EXTRACT\@/\/usr\/bin\/intltool-extract/' \
-	    po/Makefile.in.in
-fi
-
 rm -rf autom4te.cache
