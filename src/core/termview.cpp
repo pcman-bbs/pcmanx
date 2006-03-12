@@ -125,8 +125,8 @@ CTermView::CTermView()
 	m_CharH = 18;
 	m_LeftMargin = 0;
 	m_TopMargin = 0;
-	m_IsHCenterAlign = false;
-	m_IsVCenterAlign = false;
+	m_bHorizontalCenterAlign = false;
+	m_bVerticalCenterAlign = false;
 	
 	m_CancelSel = false;
 
@@ -794,10 +794,10 @@ void CTermView::SetFontFamily( string name )
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 {
-	if( m_IsHCenterAlign == is_hcenter || !m_pTermData )
+	if( m_bHorizontalCenterAlign == is_hcenter || !m_pTermData )
 		return;
 
-	if( (m_IsHCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bHorizontalCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
 	else
 		m_LeftMargin = 0;
@@ -809,10 +809,10 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 
 void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 {
-	if( m_IsVCenterAlign == is_vcenter || !m_pTermData )
+	if( m_bVerticalCenterAlign == is_vcenter || !m_pTermData )
 		return;
 
-	if( (m_IsVCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bVerticalCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
 		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
 	else
 		m_TopMargin = 0;
@@ -877,12 +877,12 @@ void CTermView::RecalcCharDimension()
 	m_CharW = m_Font->GetWidth() + m_CharPaddingX;
 	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
 
-	if( m_IsHCenterAlign )
+	if( m_bHorizontalCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
 	else
 		m_LeftMargin = 0;
 
-	if( m_IsVCenterAlign )
+	if( m_bVerticalCenterAlign )
 		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2;
 	else
 		m_TopMargin = 0;

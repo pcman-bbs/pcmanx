@@ -101,8 +101,8 @@ protected:
 	int m_CharH;
 	int m_LeftMargin;
 	int m_TopMargin;
-	bool m_IsHCenterAlign;
-	bool m_IsVCenterAlign;
+	bool m_bHorizontalCenterAlign;
+	bool m_bVerticalCenterAlign;
 
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;

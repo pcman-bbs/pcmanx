@@ -1,27 +1,43 @@
+2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/sitepage.cpp
+	, src/core/termview.cpp
+	, src/core/site.cpp
+	, src/core/termview.h
+	, src/core/site.h
+	, src/appconfig.h
+	, src/mainframe.cpp
+	, src/sitepage.h
+	, src/appconfig.cpp
+	, po/zh_TW.po
+	, po/zh_CN.po
+	: Modify the horizontal and vertical center align mechanism.
+
+
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
- * src/mainframe.cpp,
- po/zh_TW.po: Add missing separator and translation in popup menu.
+	* src/mainframe.cpp,
+	po/zh_TW.po: Add missing separator and translation in popup menu.
 
 
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
- * src/view/telnetview.cpp (CTelnetView::OnRButtonDown): Add 
- "Input Method" sub menu to popup menu.
+	* src/view/telnetview.cpp (CTelnetView::OnRButtonDown): Add 
+	"Input Method" sub menu to popup menu.
 
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
- * src/sitepage.cpp: Update some text on UI elements.
- 
- * src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
- sending mouse action when the user clicked on hyperlinks.
- 
- * src/mainframe.cpp: Move "About" toolbutton to the right of 
- toolbar.
- 
- * po/zh_TW.po: Update zh_TW locale.
- 
- * configure.ac: Bump version number to 0.3.4
+	* src/sitepage.cpp: Update some text on UI elements.
+
+	* src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
+	sending mouse action when the user clicked on hyperlinks.
+
+	* src/mainframe.cpp: Move "About" toolbutton to the right of 
+	toolbar.
+
+	* po/zh_TW.po: Update zh_TW locale.
+
+	* configure.ac: Bump version number to 0.3.4
 
 2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 

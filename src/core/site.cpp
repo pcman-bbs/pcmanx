@@ -70,6 +70,9 @@ CSite::CSite(string Name)
 	m_UseExternalTelnet = false;
 #endif
 
+	m_bHorizontalCenterAlign = false;
+	m_bVerticalCenterAlign = false;
+
 	m_MenuItem = NULL;
 
 	// Detect double-byte characters by default
@@ -101,6 +104,8 @@ void CSite::SaveToFile(FILE *fo)
 	fprintf( fo, "UseExternalSSH=%d\n", m_UseExternalSSH );
 	fprintf( fo, "UseExternalTelnet=%d\n", m_UseExternalTelnet );
 #endif
+	fprintf( fo, "HorizontalCenterAlign=%d\n", m_bHorizontalCenterAlign );
+	fprintf( fo, "VerticalCenterAlign=%d\n", m_bVerticalCenterAlign );
 
 	fprintf( fo, "PreLoginPrompt=%s\n", m_PreLoginPrompt.c_str() );
 	fprintf( fo, "PreLogin=%s\n", m_PreLogin.c_str() );

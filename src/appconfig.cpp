@@ -100,8 +100,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSize )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
-		CFG_BOOL( HCenterAlign )
-		CFG_BOOL( VCenterAlign )
+		CFG_BOOL( m_bHorizontalCenterAlign )
+		CFG_BOOL( m_bVerticalCenterAlign )
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
@@ -220,6 +220,10 @@ void CAppConfig::LoadFavorites()
 			else if( 0 == strcmp( pname, "UseExternalTelnet" ) )
 				pSite->m_UseExternalTelnet = (bool)atoi(pval);
 #endif
+			else if( 0 == strcmp( pname, "HorizontalCenterAlign" ) )
+				pSite->m_bHorizontalCenterAlign = (bool)atoi(pval);
+			else if( 0 == strcmp( pname, "VerticalCenterAlign" ) )
+				pSite->m_bVerticalCenterAlign = (bool)atoi(pval);
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );
 			else if( 0 == strcmp( pname, "PreLogin" ) )
@@ -319,8 +323,8 @@ void CAppConfig::SetToDefault()
 	FontFamily = "Sans";
 	AntiAliasFont = true;
 	CompactLayout = false;
-	HCenterAlign = false;
-	VCenterAlign = false;
+	m_bHorizontalCenterAlign = false;
+	m_bVerticalCenterAlign = false;
 
 	MailClient = WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;
