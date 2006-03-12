@@ -100,8 +100,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSize )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
-		CFG_BOOL( m_bHorizontalCenterAlign )
-		CFG_BOOL( m_bVerticalCenterAlign )
+		CFG_BOOL( HorizontalCenterAlign )
+		CFG_BOOL( VerticalCenterAlign )
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
@@ -323,8 +323,8 @@ void CAppConfig::SetToDefault()
 	FontFamily = "Sans";
 	AntiAliasFont = true;
 	CompactLayout = false;
-	m_bHorizontalCenterAlign = false;
-	m_bVerticalCenterAlign = false;
+	HorizontalCenterAlign = false;
+	VerticalCenterAlign = false;
 
 	MailClient = WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;

@@ -279,8 +279,8 @@ CSitePage::CSitePage(CSite& site)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_Startup), 
 	 								m_Site.m_Startup);
 
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign), AppConfig.m_bVerticalCenterAlign);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign), AppConfig.m_bHorizontalCenterAlign);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign), m_Site.m_bVerticalCenterAlign);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign), m_Site.m_bHorizontalCenterAlign);
 }
 
 
@@ -312,8 +312,8 @@ bool CSitePage::OnOK()
 	m_Site.m_DetectDBChar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_DetectDBChar));
 	m_Site.m_Startup = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_Startup));
 
-	AppConfig.m_bVerticalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign));
-	AppConfig.m_bHorizontalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign));
+	m_Site.m_bVerticalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign));
+	m_Site.m_bHorizontalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign));
 
 	return true;
 }

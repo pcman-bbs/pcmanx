@@ -1,5 +1,13 @@
 2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
+	* src/sitepage.cpp
+	, src/appconfig.h
+	, src/mainframe.cpp
+	, src/appconfig.cpp
+	: Bug fix and new feature add.
+
+2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
 	* po/pcmanx.pot
 	, po/zh_TW.po
 	, po/zh_CN.po

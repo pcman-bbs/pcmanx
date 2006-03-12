@@ -234,7 +234,7 @@ CMainFrame::CMainFrame()
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
-	if( !site )
+	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
 
 	m_pView = new CTelnetView;
@@ -248,8 +248,8 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->SetContextMenu(m_EditMenu);
 	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
-	m_pView->SetHorizontalCenterAlign( AppConfig.m_bHorizontalCenterAlign );
-	m_pView->SetVerticalCenterAlign( AppConfig.m_bVerticalCenterAlign );
+	m_pView->SetHorizontalCenterAlign( site->m_bHorizontalCenterAlign );
+	m_pView->SetVerticalCenterAlign( site->m_bVerticalCenterAlign );
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 

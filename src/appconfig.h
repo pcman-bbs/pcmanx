@@ -109,8 +109,8 @@ public:
 	bool CompactLayout;
 	int CharPaddingX;
 	int CharPaddingY;
-	bool m_bHorizontalCenterAlign;
-	bool m_bVerticalCenterAlign;
+	bool HorizontalCenterAlign;
+	bool VerticalCenterAlign;
 
 //	bool TwoDiffFonts;
     int FontSize;
