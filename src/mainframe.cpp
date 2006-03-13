@@ -43,6 +43,7 @@
 #include "debug.h"
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
 
@@ -173,17 +174,18 @@ CMainFrame::CMainFrame()
 	
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
+	g_signal_connect( G_OBJECT(m_pNotebook->m_Widget), "button_press_event", 
+			G_CALLBACK(CMainFrame::OnNotebookPopupMenu), this );
 
-	CreateMenu();
-	CreateToolbar();
+	MakeUI();
 
 	gtk_window_set_icon((GtkWindow*)m_Widget, m_MainIcon);
 
 	GtkWidget* vbox = gtk_vbox_new(false, 0);
 	gtk_widget_show (vbox);
 
-	GtkWidget* status_bar = gtk_statusbar_new ();
-	gtk_widget_show (status_bar);
+	//GtkWidget* m_Statusbar = gtk_statusbar_new ();
+	m_Statusbar = gtk_statusbar_new ();
 
 	gtk_container_add(GTK_CONTAINER(m_Widget), vbox);
 
@@ -191,7 +193,7 @@ CMainFrame::CMainFrame()
 	gtk_box_pack_start (GTK_BOX (vbox), m_Toolbar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_pNotebook->m_Widget, TRUE, TRUE, 0);
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
-	gtk_box_pack_start (GTK_BOX (vbox), status_bar, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
 
 	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
@@ -207,16 +209,18 @@ CMainFrame::CMainFrame()
 
 //	g_signal_connect(G_OBJECT(m_Widget), "focus-out-event", G_CALLBACK(CMainFrame::OnDeactivated), this);
 
-	gtk_box_set_spacing( GTK_BOX (status_bar), 4 );
+	gtk_box_set_spacing( GTK_BOX (m_Statusbar), 4 );
 #ifdef USE_NANCY
 	m_StatusBarBotState = (GtkLabel*)gtk_label_new("");
-	gtk_box_pack_start (GTK_BOX (status_bar), (GtkWidget*)m_StatusBarBotState, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarBotState, FALSE, FALSE, 2);
 	GtkWidget* vsep = gtk_vseparator_new ();
- 	gtk_box_pack_start (GTK_BOX (status_bar), vsep, FALSE, FALSE, 2);
+ 	gtk_box_pack_start (GTK_BOX (m_Statusbar), vsep, FALSE, FALSE, 2);
 #endif
 	m_StatusBarTime = (GtkLabel*)gtk_label_new("");
-	gtk_box_pack_start (GTK_BOX (status_bar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
-	gtk_widget_show_all(status_bar);
+	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
+	if (AppConfig.ShowStatusBar) {
+		gtk_widget_show_all(m_Statusbar);
+	}
 	
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
@@ -230,7 +234,7 @@ CMainFrame::CMainFrame()
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
-	if( !site )
+	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
 
 	m_pView = new CTelnetView;
@@ -244,8 +248,8 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->SetContextMenu(m_EditMenu);
 	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
-	m_pView->SetHorizontalCenterAlign( AppConfig.HCenterAlign );
-	m_pView->SetVerticalCenterAlign( AppConfig.VCenterAlign );
+	m_pView->SetHorizontalCenterAlign( site->m_bHorizontalCenterAlign );
+	m_pView->SetVerticalCenterAlign( site->m_bVerticalCenterAlign );
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
@@ -264,632 +268,247 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	return pCon;
 }
 
-void CMainFrame::CreateMenu()
+GtkActionEntry CMainFrame::entries[] =
+  {
+    {"connect_menu", NULL, _("_Connect")},
+    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+    {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
+    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
+    {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
+    {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
+    {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
+    {"edit_menu", NULL, _("_Edit")},
+    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
+    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
+    {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
+    {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
+    {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
+    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
+    {"favorites_menu", NULL, _("F_avorites")},
+    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
+    {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
+    {"view_menu", NULL, _("_View")},
+    {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+#ifdef USE_NANCY
+    {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)")},
+    {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
+#endif
+    {"help_menu", NULL, _("_Help")},
+    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
+  };
+
+GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
 {
-	GtkWidget *connect;
-	GtkWidget *connect_menu;
-	GtkWidget *site_list_menu;
-	GtkWidget *image917;
-	GtkWidget *new_con_menu;
-	GtkWidget *image918;
-	GtkWidget *reconnect_menu;
-	GtkWidget *image919;
-	GtkWidget *close_menu;
-	GtkWidget *image920;
-	GtkWidget *separatormenuitem1;
-	GtkWidget *next_con_menu;
-	GtkWidget *image921;
-	GtkWidget *previous_con_menu;
-	GtkWidget *image922;
-	GtkWidget *jump;
-	GtkWidget *image923;
-	GtkWidget *separator2;
-	GtkWidget *quit_menu;
-	GtkWidget *image924;
-	GtkWidget *edit;
-	GtkWidget *edit_menu;
-	GtkWidget *copy_menu;
-	GtkWidget *image925;
-	GtkWidget *copy_with_ansi_menu;
-	GtkWidget *image926;
-	GtkWidget *paste_menu;
-	GtkWidget *image927;
-	GtkWidget *select_all_menu;
-	GtkWidget *separator1;
-	GtkWidget *emoticon_menu;
-	GtkWidget *preference_menu;
-	GtkWidget *image928;
-	GtkWidget *favorites;
-	GtkWidget *favorites_menu;
-	GtkWidget *separator3;
-	GtkWidget *add_to_fav_menu;
-	GtkWidget *image929;
-	GtkWidget *edit_fav_menu;
-	GtkWidget *image930;
-	GtkWidget *view;
-	GtkWidget *view_menu;
-	GtkWidget *font_menu;
-	GtkWidget *separator4;
-	GtkWidget *current_bot_menu;
-	GtkWidget *image931;
-	GtkWidget *current_bot_menu_menu;
-	GSList *disable_cur_bot_menu_group = NULL;
-	GtkWidget *disable_cur_bot_menu;
-	GtkWidget *separator5;
-	GtkWidget *nancy_bot_current_menu;
-	GtkWidget *all_bot_menu;
-	GtkWidget *image932;
-	GtkWidget *all_bot_menu_menu;
-	GSList *disable_all_bot_menu_group = NULL;
-	GtkWidget *disable_all_bot_menu;
-	GtkWidget *separator6;
-	GtkWidget *nancy_bot_all_menu;
-	GtkWidget *help;
-	GtkWidget *help_menu;
-	GtkWidget *about_menu;
-	GtkWidget *update_bbs_list_menu;
-	GtkWidget *image933;
-	GtkWidget *t_pPasteFromClipboard;
-	GtkWidget *image934;
+    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
+};
 
-	GtkAccelGroup *accel_group = gtk_accel_group_new ();
-
-	m_Menubar = gtk_menu_bar_new ();
-	gtk_widget_show (m_Menubar);
-	
-	connect = gtk_menu_item_new_with_mnemonic (_("_Connect"));
-	gtk_widget_show (connect);
-	gtk_container_add (GTK_CONTAINER (m_Menubar), connect);
-	
-	connect_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (connect), connect_menu);
-	
-	site_list_menu = gtk_image_menu_item_new_with_mnemonic (_("_Site List"));
-	gtk_widget_show (site_list_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), site_list_menu);
-	gtk_widget_add_accelerator (site_list_menu, "activate", accel_group,
-								GDK_S, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-
-	update_bbs_list_menu = gtk_image_menu_item_new_with_mnemonic (_("Update BBS List"));
-	gtk_widget_show (update_bbs_list_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), update_bbs_list_menu);
-	
-	image933 = gtk_image_new_from_stock ("gtk-refresh", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image933);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (update_bbs_list_menu), image933);
-
-	
-	image917 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image917);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (site_list_menu), image917);
-	
-	new_con_menu = gtk_image_menu_item_new_with_mnemonic (_("_New Connection"));
-	gtk_widget_show (new_con_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), new_con_menu);
-	gtk_widget_add_accelerator (new_con_menu, "activate", accel_group,
-								GDK_Q, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image918 = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image918);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (new_con_menu), image918);
-	
-	reconnect_menu = gtk_image_menu_item_new_with_mnemonic (_("_Reconnect"));
-	gtk_widget_show (reconnect_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), reconnect_menu);
-	gtk_widget_add_accelerator (reconnect_menu, "activate", accel_group,
-								GDK_R, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image919 = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image919);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (reconnect_menu), image919);
-	
-	close_menu = gtk_image_menu_item_new_with_mnemonic (_("_Close Connection"));
-	gtk_widget_show (close_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), close_menu);
-	gtk_widget_add_accelerator (close_menu, "activate", accel_group,
-								GDK_W, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image920 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image920);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (close_menu), image920);
-	
-	separatormenuitem1 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separatormenuitem1);
-	gtk_container_add (GTK_CONTAINER (connect_menu), separatormenuitem1);
-	gtk_widget_set_sensitive (separatormenuitem1, FALSE);
-	
-	next_con_menu = gtk_image_menu_item_new_with_mnemonic (_("Next Page"));
-	gtk_widget_show (next_con_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), next_con_menu);
-	gtk_widget_add_accelerator (next_con_menu, "activate", accel_group,
-								GDK_X, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image921 = gtk_image_new_from_stock ("gtk-go-down", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image921);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (next_con_menu), image921);
-	
-	previous_con_menu = gtk_image_menu_item_new_with_mnemonic (_("Previous Page"));
-	gtk_widget_show (previous_con_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), previous_con_menu);
-	gtk_widget_add_accelerator (previous_con_menu, "activate", accel_group,
-								GDK_Z, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image922 = gtk_image_new_from_stock ("gtk-go-up", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image922);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (previous_con_menu), image922);
-	
-	jump = gtk_image_menu_item_new_with_mnemonic (_("_Jump to"));
-	gtk_widget_show (jump);
-	gtk_container_add (GTK_CONTAINER (connect_menu), jump);
-	
-	image923 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image923);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (jump), image923);
-	
-	separator2 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator2);
-	gtk_container_add (GTK_CONTAINER (connect_menu), separator2);
-	gtk_widget_set_sensitive (separator2, FALSE);
-	
-	quit_menu = gtk_image_menu_item_new_with_mnemonic (_("_Quit"));
-	gtk_widget_show (quit_menu);
-	gtk_container_add (GTK_CONTAINER (connect_menu), quit_menu);
-	
-	image924 = gtk_image_new_from_stock ("gtk-quit", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image924);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (quit_menu), image924);
-	
-	edit = gtk_menu_item_new_with_mnemonic (_("_Edit"));
-	gtk_widget_show (edit);
-	gtk_container_add (GTK_CONTAINER (m_Menubar), edit);
-	
-	edit_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (edit), edit_menu);
-	
-	copy_menu = gtk_image_menu_item_new_with_mnemonic (_("_Copy"));
-	gtk_widget_show (copy_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), copy_menu);
-	gtk_widget_add_accelerator (copy_menu, "activate", accel_group,
-								GDK_O, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image925 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image925);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_menu), image925);
-	
-	copy_with_ansi_menu = gtk_image_menu_item_new_with_mnemonic (_("Copy with A_NSI Color"));
-	gtk_widget_show (copy_with_ansi_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), copy_with_ansi_menu);
-	
-	image926 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image926);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (copy_with_ansi_menu), image926);
-	
-	paste_menu = gtk_image_menu_item_new_with_mnemonic (_("_Paste"));
-	gtk_widget_show (paste_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), paste_menu);
-	gtk_widget_add_accelerator (paste_menu, "activate", accel_group,
-								GDK_P, GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	image927 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image927);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (paste_menu), image927);
-
-	t_pPasteFromClipboard = gtk_image_menu_item_new_with_mnemonic (_("Paste from Clipboard"));
-	gtk_widget_show (t_pPasteFromClipboard);
-	gtk_container_add (GTK_CONTAINER (edit_menu), t_pPasteFromClipboard);
-	gtk_widget_add_accelerator (t_pPasteFromClipboard, "activate", accel_group,
-								GDK_Insert, GDK_SHIFT_MASK,
-								GTK_ACCEL_VISIBLE);
-
-	image934 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image934);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (t_pPasteFromClipboard), image934);
-	
-	select_all_menu = gtk_menu_item_new_with_mnemonic (_("Select A_ll"));
-	gtk_widget_show (select_all_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), select_all_menu);
-	
-	separator1 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator1);
-	gtk_container_add (GTK_CONTAINER (edit_menu), separator1);
-	gtk_widget_set_sensitive (separator1, FALSE);
-	
-	emoticon_menu = gtk_menu_item_new_with_mnemonic (_("_Emoticons"));
-	gtk_widget_show (emoticon_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), emoticon_menu);
-	gtk_widget_add_accelerator (emoticon_menu, "activate", accel_group,
-								GDK_Return, GDK_CONTROL_MASK,
-								GTK_ACCEL_VISIBLE);
-	
-	preference_menu = gtk_image_menu_item_new_with_mnemonic (_("_Preference"));
-	gtk_widget_show (preference_menu);
-	gtk_container_add (GTK_CONTAINER (edit_menu), preference_menu);
-	
-	image928 = gtk_image_new_from_stock ("gtk-preferences", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image928);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (preference_menu), image928);
-
-	favorites = gtk_menu_item_new_with_mnemonic (_("F_avorites"));
-	gtk_widget_show (favorites);
-	gtk_container_add (GTK_CONTAINER (m_Menubar), favorites);
-	
-	favorites_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (favorites), favorites_menu);
-	
-	separator3 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator3);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), separator3);
-	gtk_widget_set_sensitive (separator3, FALSE);
-	
-	add_to_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Add to Favorites"));
-	gtk_widget_show (add_to_fav_menu);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
-	
-	image929 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image929);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image929);
-	
-	edit_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Edit Favorites"));
-	gtk_widget_show (edit_fav_menu);
-	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
-	
-	image930 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image930);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image930);
-	
-	view = gtk_menu_item_new_with_mnemonic (_("_View"));
-	gtk_widget_show (view);
-	gtk_container_add (GTK_CONTAINER (m_Menubar), view);
-	
-	view_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (view), view_menu);
-	
-	font_menu = gtk_image_menu_item_new_from_stock ("gtk-select-font", accel_group);
-	gtk_widget_show (font_menu);
-	gtk_container_add (GTK_CONTAINER (view_menu), font_menu);
-	
 #ifdef USE_NANCY
-	separator4 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator4);
-	gtk_container_add (GTK_CONTAINER (view_menu), separator4);
-	gtk_widget_set_sensitive (separator4, FALSE);
-	
-	current_bot_menu = gtk_image_menu_item_new_with_mnemonic (_("Bot (Current Connection)"));
-	gtk_widget_show (current_bot_menu);
-	gtk_container_add (GTK_CONTAINER (view_menu), current_bot_menu);
-	
-	image931 = gtk_image_new_from_stock ("gtk-execute", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image931);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (current_bot_menu), image931);
-	
-	current_bot_menu_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (current_bot_menu), current_bot_menu_menu);
-	
-	disable_cur_bot_menu = gtk_radio_menu_item_new_with_mnemonic (disable_cur_bot_menu_group, _("Disable Bot"));
-	disable_cur_bot_menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (disable_cur_bot_menu));
-	gtk_widget_show (disable_cur_bot_menu);
-	gtk_container_add (GTK_CONTAINER (current_bot_menu_menu), disable_cur_bot_menu);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (disable_cur_bot_menu), TRUE);
-	
-	separator5 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator5);
-	gtk_container_add (GTK_CONTAINER (current_bot_menu_menu), separator5);
-	gtk_widget_set_sensitive (separator5, FALSE);
-	
-	nancy_bot_current_menu = gtk_radio_menu_item_new_with_mnemonic (disable_cur_bot_menu_group, _("Nancy Bot"));
-	disable_cur_bot_menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (nancy_bot_current_menu));
-	gtk_widget_show (nancy_bot_current_menu);
-	gtk_container_add (GTK_CONTAINER (current_bot_menu_menu), nancy_bot_current_menu);
-	
-	all_bot_menu = gtk_image_menu_item_new_with_mnemonic (_("Bot (All Opened Connections)"));
-	gtk_widget_show (all_bot_menu);
-	gtk_container_add (GTK_CONTAINER (view_menu), all_bot_menu);
-	
-	image932 = gtk_image_new_from_stock ("gtk-execute", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image932);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (all_bot_menu), image932);
-	
-	all_bot_menu_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (all_bot_menu), all_bot_menu_menu);
-	
-	disable_all_bot_menu = gtk_radio_menu_item_new_with_mnemonic (disable_all_bot_menu_group, _("Disable Bot"));
-	disable_all_bot_menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (disable_all_bot_menu));
-	gtk_widget_show (disable_all_bot_menu);
-	gtk_container_add (GTK_CONTAINER (all_bot_menu_menu), disable_all_bot_menu);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (disable_all_bot_menu), TRUE);
-	
-	separator6 = gtk_separator_menu_item_new ();
-	gtk_widget_show (separator6);
-	gtk_container_add (GTK_CONTAINER (all_bot_menu_menu), separator6);
-	gtk_widget_set_sensitive (separator6, FALSE);
-	
-	nancy_bot_all_menu = gtk_radio_menu_item_new_with_mnemonic (disable_all_bot_menu_group, _("Nancy Bot"));
-	disable_all_bot_menu_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (nancy_bot_all_menu));
-	gtk_widget_show (nancy_bot_all_menu);
-	gtk_container_add (GTK_CONTAINER (all_bot_menu_menu), nancy_bot_all_menu);
-	
-#endif	//	#ifdef USE_NANCY
+GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
+  {
+    {"disable_cur_bot", NULL, _("Disable Bot"), NULL, NULL, 0},
+    {"nancy_bot_current", NULL, _("Nancy Bot"), NULL, NULL, 1}
+  };
 
-	help = gtk_menu_item_new_with_mnemonic (_("_Help"));
-	gtk_widget_show (help);
-	gtk_container_add (GTK_CONTAINER (m_Menubar), help);
-	
-	help_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (help), help_menu);
-	
-	about_menu = gtk_image_menu_item_new_from_stock ("gtk-about", accel_group);
-	gtk_widget_show (about_menu);
-	gtk_container_add (GTK_CONTAINER (help_menu), about_menu);
+GtkRadioActionEntry CMainFrame::all_bot_entries[] =
+  {
+    {"disable_all_bot", NULL, _("Disable Bot"), NULL, NULL, 0},
+    {"nancy_bot_all", NULL, _("Nancy Bot"), NULL, NULL, 1}
+  };
+#endif
 
-	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
+static const char *ui_info = 
+  "<ui>"
+  "  <menubar>"
+  "    <menu action='connect_menu'>"
+  "      <menuitem action='site_list'/>"
+  "      <menuitem action='update_bbs_list'/>"
+  "      <menuitem action='new_con'/>"
+  "      <menuitem action='reconnect'/>"
+  "      <menuitem action='close'/>"
+  "      <separator/>"
+  "      <menuitem action='next_con'/>"
+  "      <menuitem action='previous_con'/>"
+  "      <menuitem action='jump'/>"
+  "      <separator/>"
+  "      <menuitem action='quit'/>"
+  "    </menu>"
+  "    <menu action='edit_menu'>"
+  "      <menuitem action='copy'/>"
+  "      <menuitem action='copy_with_ansi'/>"
+  "      <menuitem action='paste'/>"
+  "      <menuitem action='paste_from_clipboard'/>"
+  "      <menuitem action='select_all'/>"
+  "      <separator/>"
+  "      <menuitem action='emoticon'/>"
+  "      <menuitem action='preference'/>"
+  "    </menu>"
+  "    <menu action='favorites_menu'>"
+  "      <separator/>"
+  "      <menuitem action='add_to_fav'/>"
+  "      <menuitem action='edit_fav'/>"
+  "    </menu>"
+  "    <menu action='view_menu'>"
+  "      <menuitem action='font'/>"
+  "      <menuitem action='fullscreen' />"
+#ifdef USE_NANCY
+  "      <separator/>"
+  "      <menu action='cur_bot_menu'>"
+  "        <menuitem action='disable_cur_bot'/>"
+  "        <menuitem action='nancy_bot_current'/>"
+  "      </menu>"
+  "      <menu action='all_bot_menu'>"
+  "        <menuitem action='disable_all_bot'/>"
+  "        <menuitem action='nancy_bot_all'/>"
+  "      </menu>"
+#endif
+  "    </menu>"
+  "    <menu action='help_menu'>"
+  "      <menuitem action='about'/>"
+  "    </menu>"
+  "  </menubar>"
+  "  <toolbar>"
+  "    <separator/>"
+  "    <toolitem action='site_list'/>"
+  "    <toolitem action='new_con'/>"
+  "    <toolitem action='reconnect'/>"
+  "    <toolitem action='close'/>"
+  "    <separator/>"
+  "    <toolitem action='copy'/>"
+  "    <toolitem action='copy_with_ansi'/>"
+  "    <toolitem action='paste'/>"
+  "    <separator/>"
+  "    <toolitem action='add_to_fav'/>"
+  "    <toolitem action='preference'/>"
+  "    <toolitem action='update_bbs_list'/>"
+  "    <toolitem action='about'/>"
+  "    <separator/>"
+  "  </toolbar>"
+  "  <popup>"
+  "    <menuitem action='copy'/>"
+  "    <menuitem action='copy_with_ansi'/>"
+  "    <menuitem action='paste'/>"
+  "    <menuitem action='paste_from_clipboard'/>"
+  "    <menuitem action='select_all'/>"
+  "    <separator/>"
+  "  </popup>"
+  "</ui>";
 
-	g_signal_connect ((gpointer) site_list_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSiteList),
-					this);
-	g_signal_connect ((gpointer) new_con_menu, "activate",
-					G_CALLBACK (CMainFrame::OnNewCon),
-					this);
-	g_signal_connect ((gpointer) reconnect_menu, "activate",
-					G_CALLBACK (CMainFrame::OnReconnect),
-					this);
-	g_signal_connect ((gpointer) close_menu, "activate",
-					G_CALLBACK (CMainFrame::OnCloseCon),
-					this);
-	g_signal_connect ((gpointer) next_con_menu, "activate",
-					G_CALLBACK (CMainFrame::OnNextCon),
-					this);
-	g_signal_connect ((gpointer) previous_con_menu, "activate",
-					G_CALLBACK (CMainFrame::OnPrevCon),
-					this);
-	g_signal_connect ((gpointer) quit_menu, "activate",
-					G_CALLBACK (CMainFrame::OnQuit),
-					this);
-	g_signal_connect ((gpointer) copy_menu, "activate",
-					G_CALLBACK (CMainFrame::OnCopy),
-					this);
-	g_signal_connect ((gpointer) copy_with_ansi_menu, "activate",
-					G_CALLBACK (CMainFrame::OnCopyWithColor),
-					this);
-	g_signal_connect ((gpointer) paste_menu, "activate",
-					G_CALLBACK (CMainFrame::OnPaste),
-					this);
-	g_signal_connect ((gpointer) select_all_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSelectAll),
-					this);	
-	g_signal_connect ((gpointer) emoticon_menu, "activate",
-					G_CALLBACK (CMainFrame::OnEmoticons),
-					this);	
-	g_signal_connect ((gpointer) preference_menu, "activate",
-					G_CALLBACK (CMainFrame::OnPreference),
-					this);
-	g_signal_connect ((gpointer) font_menu, "activate",
-					G_CALLBACK (CMainFrame::OnFont),
-					this);
-	g_signal_connect ((gpointer) about_menu, "activate",
-					G_CALLBACK (CMainFrame::OnAbout),
-					this);
-	g_signal_connect ((gpointer) update_bbs_list_menu, "activate",
-					G_CALLBACK (CMainFrame::updateBBSList),
-					this);
-	g_signal_connect ((gpointer) t_pPasteFromClipboard, "activate",
-					G_CALLBACK (CMainFrame::pasteFromClipboard),
-					this);
+void CMainFrame::MakeUI()
+{
+  GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
+
+  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+
+  gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
+
+  gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
+		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
+
+#ifdef USE_NANCY
+  gtk_action_group_add_radio_actions(action_group,
+				     cur_bot_entries,
+				     G_N_ELEMENTS(cur_bot_entries),
+				     0,
+				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
+				     this);
+  gtk_action_group_add_radio_actions(action_group,
+				     all_bot_entries,
+				     G_N_ELEMENTS(all_bot_entries),
+				     0,
+				     G_CALLBACK (CMainFrame::OnChangeAllBot),
+				     this);
+#endif
+
+  m_UIManager = gtk_ui_manager_new();
+  gtk_ui_manager_insert_action_group(m_UIManager, action_group, 0);
+
+  GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
+  gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
+	
+  GError * error = NULL;
+  if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
+    {
+      g_message("Building menu failed : %s", error->message);
+      g_error_free(error); exit(EXIT_FAILURE);
+    }
+
+  m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+  m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+
+  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
+    
+  m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
 #ifdef USE_NANCY
 
-	m_DisableCurBotRadio = (GtkRadioMenuItem*)disable_cur_bot_menu;
-	m_CurBotNancyRadio = (GtkRadioMenuItem*)nancy_bot_current_menu;
-	m_DisableAllBotRadio = (GtkRadioMenuItem*)disable_all_bot_menu;
-	m_AllBotNancyRadio = (GtkRadioMenuItem*)nancy_bot_all_menu;
-
-	g_signal_connect ((gpointer) disable_cur_bot_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSetCurrentBot),
-					this);
-	g_signal_connect ((gpointer) nancy_bot_current_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSetCurrentBot),
-					this);
-
-	g_signal_connect ((gpointer) disable_all_bot_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSetAllBot),
-					this);
-	g_signal_connect ((gpointer) nancy_bot_all_menu, "activate",
-					G_CALLBACK (CMainFrame::OnSetAllBot),
-					this);
+  m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			 "/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
+  m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+		       "/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+  
+  m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+       			 "/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
+  m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
+		       "/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
 
 #endif
 
-	m_EditMenu = edit_menu;
-	m_FavoritesMenuItem = favorites;
-	m_AccelGroup = accel_group;
+  GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
+  
+  GtkWidget* jump_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
+  
+  const char* page_str = _("Page");
+  for(int i = 1; i < 11; i++)
+    {
+      long keyval = (i == 10 ? GDK_0 : GDK_0 + +i);
+      char title[32];
+      sprintf(title, "%s _%d", page_str, i);
+      
+      GtkWidget* jump_item = m_JumpMenuItems[i-1] = gtk_menu_item_new_with_mnemonic ( title );
+      gtk_widget_show (jump_item);
+      gtk_container_add (GTK_CONTAINER (jump_menu), jump_item);
+      gtk_widget_add_accelerator (jump_item, "activate", accel_group,
+				  keyval, (GdkModifierType) GDK_MOD1_MASK,
+				  GTK_ACCEL_VISIBLE);
+      g_signal_connect( G_OBJECT(jump_item), "activate",
+			G_CALLBACK (CMainFrame::OnJumpToPage),
+			this);
+    }
 
-	
-	GtkWidget* jump_menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
-
-	const char* page_str = _("Page");
-	for(int i = 1; i < 11; i++)
-	{
-		long keyval = (i == 10 ? GDK_0 : GDK_0 + +i);
-		char title[32];
-		sprintf(title, "%s _%d", page_str, i);
-
-		GtkWidget* jump_item = m_JumpMenuItems[i-1] = gtk_menu_item_new_with_mnemonic ( title );
-		gtk_widget_show (jump_item);
-		gtk_container_add (GTK_CONTAINER (jump_menu), jump_item);
-		gtk_widget_add_accelerator (jump_item, "activate", accel_group,
-								keyval, (GdkModifierType) GDK_MOD1_MASK,
-								GTK_ACCEL_VISIBLE);
-		g_signal_connect( G_OBJECT(jump_item), "activate",
-        		          G_CALLBACK (CMainFrame::OnJumpToPage),
-                		  this);
-	}
-
-	CreateFavoritesMenu();
-}
-
-void CMainFrame::CreateToolbar()
-{
-	GtkWidget *toolbar;
-	GtkIconSize tmp_toolbar_icon_size;
-	GtkWidget *site_list_btn;
-	GtkWidget *new_con_btn;
-	GtkWidget *recon_btn;
-	GtkWidget *close_btn;
-	GtkWidget *separatortoolitem2;
-	GtkWidget *copy_btn;
-	GtkWidget *copy_ansi_btn;
-	GtkWidget *paste_btn;
-	GtkWidget *separatortoolitem1;
-	GtkWidget *add_to_fav_btn;
-	GtkWidget *pref_btn;
-	GtkWidget *about_btn;
-	GtkWidget *update_bbs_list;
-	GtkAccelGroup *accel_group;
-	GtkTooltips *tooltips;
-	
-	tooltips = gtk_tooltips_new ();
-
-	toolbar = gtk_toolbar_new ();
-	gtk_widget_show (toolbar);
-	gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
-	tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar));
-	
-	site_list_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-open");
-	gtk_widget_show (site_list_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), site_list_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (site_list_btn), tooltips, _("Site List"), NULL);
-	
-	new_con_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-network");
-	gtk_widget_show (new_con_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), new_con_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (new_con_btn), tooltips, _("New Connection"), NULL);
-
-	recon_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-undo");
-	gtk_widget_show (recon_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), recon_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (recon_btn), tooltips, _("Reconnect"), NULL);
-
-	close_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-close");
-	gtk_widget_show (close_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), close_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (close_btn), tooltips, _("Close Connection"), NULL);
-	
-	separatortoolitem2 = (GtkWidget*) gtk_separator_tool_item_new ();
-	gtk_widget_show (separatortoolitem2);
-	gtk_container_add (GTK_CONTAINER (toolbar), separatortoolitem2);
-	
-	copy_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-copy");
-	gtk_widget_show (copy_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), copy_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (copy_btn), tooltips, _("Copy"), NULL);
-	
-	copy_ansi_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-select-color");
-	gtk_widget_show (copy_ansi_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), copy_ansi_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (copy_ansi_btn), tooltips, _("Copy with ANSI Color"), NULL);
-	
-	paste_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-paste");
-	gtk_widget_show (paste_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), paste_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (paste_btn), tooltips, _("Paste"), NULL);
-	
-	separatortoolitem1 = (GtkWidget*) gtk_separator_tool_item_new ();
-	gtk_widget_show (separatortoolitem1);
-	gtk_container_add (GTK_CONTAINER (toolbar), separatortoolitem1);
-	
-	add_to_fav_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-add");
-	gtk_widget_show (add_to_fav_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), add_to_fav_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (add_to_fav_btn), tooltips, _("Add to Favorites"), NULL);
-	
-	pref_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-preferences");
-	gtk_widget_show (pref_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), pref_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (pref_btn), tooltips, _("Preference"), NULL);
-	
-	about_btn = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-about");
-	gtk_widget_show (about_btn);
-	gtk_container_add (GTK_CONTAINER (toolbar), about_btn);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (about_btn), tooltips, _("About"), NULL);
-
-	update_bbs_list = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-refresh");
-	gtk_widget_show (update_bbs_list);
-	gtk_container_add (GTK_CONTAINER (toolbar), update_bbs_list);
-	gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (update_bbs_list), tooltips, _("Update BBS List"), NULL);
-
-	m_Toolbar = toolbar;
-
-	g_signal_connect ((gpointer) site_list_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnSiteList),
-					this);
-	g_signal_connect ((gpointer) new_con_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnNewCon),
-					this);
-	g_signal_connect ((gpointer) recon_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnReconnect),
-					this);
-	g_signal_connect ((gpointer) close_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnCloseCon),
-					this);
-	g_signal_connect ((gpointer) copy_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnCopy),
-					this);
-	g_signal_connect ((gpointer) copy_ansi_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnCopyWithColor),
-					this);
-	g_signal_connect ((gpointer) paste_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnPaste),
-					this);
-	g_signal_connect ((gpointer) pref_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnPreference),
-					this);
-	g_signal_connect ((gpointer) add_to_fav_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnAddToFavorites),
-					this);
-	g_signal_connect ((gpointer) about_btn, "clicked",
-					G_CALLBACK (CMainFrame::OnAbout),
-					this);
-	g_signal_connect ((gpointer) update_bbs_list, "clicked",
-					G_CALLBACK (CMainFrame::updateBBSList),
-					this);
-					
-
-	GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
-	gtk_widget_show(sep);
-	gtk_container_add (GTK_CONTAINER (toolbar), sep);
-
-	// Create the URL address bar
-	GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
-	GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
-	m_URLEntry = (GtkWidget*) gtk_entry_new();
-	gtk_widget_set_size_request(m_URLEntry, 0, -1);
-	gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
-	gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
-	gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
-	gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
-
-	GtkToolItem* url_bar_item = gtk_tool_item_new();
-	gtk_tool_item_set_expand(url_bar_item, true);
-	gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
-	gtk_widget_show_all ( (GtkWidget*)url_bar_item);
-	gtk_toolbar_insert(GTK_TOOLBAR(toolbar), url_bar_item, -1);
-
-	g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
-					G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
-					this);
-	g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
-					G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
-					this);
-
-	m_Tooltips = tooltips;
+  GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
+  gtk_widget_show(sep);
+  gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
+  // Create the URL address bar
+  GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
+  GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
+  m_URLEntry = (GtkWidget*) gtk_entry_new();
+  gtk_widget_set_size_request(m_URLEntry, 0, -1);
+  GtkTooltips* tooltips = gtk_tooltips_new();
+  gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+  gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
+  gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
+  gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
+  
+  GtkToolItem* url_bar_item = gtk_tool_item_new();
+  gtk_tool_item_set_expand(url_bar_item, true);
+  gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
+  gtk_widget_show_all ( (GtkWidget*)url_bar_item);
+  gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
+  
+  g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
+		    G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
+		    this);
+  g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
+		    G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
+		    this);
+  
+  CreateFavoritesMenu();
+  
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
@@ -976,6 +595,25 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		gtk_widget_destroy(dlg);
 }
 
+void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
+{
+	if(gtk_toggle_action_get_active(action))
+	{
+		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->HideTabs();
+	}
+	else
+	{
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->ShowTabs();
+	}
+}
 
 void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
@@ -985,7 +623,8 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
-			"Youchen Lee (Developer) <youchen.lee@gmail.com>"
+			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
+			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 			);
 	char* translators = _( "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>" );
 
@@ -1040,6 +679,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 				kill(parent_pid, SIGUSR2);
 			exit(0);
 		}
+		wait(NULL);
 	}
 }
 
@@ -1240,6 +880,59 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* p
 	_this->SetCurView( _this->m_Views[page_num] );
 }
 
+gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget, GdkEventButton *event, gpointer p_mainframe)
+{
+       static GtkWidget *menu = NULL;
+
+       // set menu items
+       GtkWidget *menu_item_close = gtk_image_menu_item_new_with_label( _("Close") );
+       GtkWidget *menu_item_reconnect = gtk_image_menu_item_new_with_label( _("Reconnect") );
+       GtkWidget *menu_item_add2fav = gtk_image_menu_item_new_with_label( _("Add to Favorites") );
+       // set images
+       GtkWidget *image_close = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+       GtkWidget *image_reconnect = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+       GtkWidget *image_add2fav = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_close, image_close);
+       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_reconnect, image_reconnect);
+       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_add2fav, image_add2fav);
+
+       // if not right check the mouse
+       if (event->type != GDK_BUTTON_PRESS || event->button != 3)
+               return FALSE;
+
+       // if menu exists
+       if (menu != NULL)
+               gtk_widget_destroy(menu);
+       menu = gtk_menu_new();
+
+       // widgets show
+       gtk_widget_show (menu_item_reconnect);
+       gtk_container_add (GTK_CONTAINER (menu), menu_item_reconnect);
+
+       gtk_widget_show (menu_item_close);
+       gtk_container_add (GTK_CONTAINER (menu), menu_item_close);
+
+       gtk_widget_show (menu_item_add2fav);
+       gtk_container_add (GTK_CONTAINER (menu), menu_item_add2fav);
+
+       // signals
+       g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
+                       G_CALLBACK (CMainFrame::OnReconnect),
+                       p_mainframe);
+       g_signal_connect ( G_OBJECT(menu_item_close), "activate",
+                       G_CALLBACK (CMainFrame::OnCloseCon),
+                       p_mainframe);
+       g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
+                       G_CALLBACK (CMainFrame::OnAddToFavorites),
+                       p_mainframe);
+
+       // popup
+       gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
+       return TRUE;
+
+}
+
+
 void CMainFrame::CloseCon(int idx, bool confirm)
 {
 	m_pNotebook->RemovePage(idx);
@@ -1275,8 +968,6 @@ void CMainFrame::OnDestroy()
 {
 	g_source_remove( m_BlinkTimer );
 	g_source_remove( m_EverySecondTimer );
-
-	gtk_object_destroy((GtkObject*)m_Tooltips);
 
 	Hide();
 	gtk_widget_destroy( GTK_WIDGET(m_TrayIcon_Instance) );
@@ -1617,42 +1308,34 @@ void CMainFrame::SwitchToCon(CTelnetCon* con)
 
 #ifdef USE_NANCY
 
-void CMainFrame::OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this)
+void CMainFrame::OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this)
 {
-	if( !gtk_check_menu_item_get_active( (GtkCheckMenuItem*)menu ) )
-		return;
-	CTelnetCon* con = _this->GetCurCon();
-	if( !con )
-		return;
-	if( menu == (GtkMenuItem*)_this->m_DisableCurBotRadio )
-		con->set__UseNancy(false);
-	else
-		con->set__UseNancy(true);
+  CTelnetCon* con = _this->GetCurCon();
+  if( !con ) return;
+  if( gtk_radio_action_get_current_value(current) == 0 )
+    con->set__UseNancy(false);
+  else
+    con->set__UseNancy(true);
 
-	_this->UpdateBotStatus();
+  _this->UpdateBotStatus();
 }
 
-void CMainFrame::OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this)
+void CMainFrame::OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this)
 {
-	if( !gtk_check_menu_item_get_active( (GtkCheckMenuItem*)menu ) )
-		return;
-	if( _this->m_Views.empty() )
-		return;
-	bool use_nancy = ( menu != (GtkMenuItem*)_this->m_DisableAllBotRadio );
+  if( _this->m_Views.empty() ) return;
+  gboolean use_nancy = ( gtk_radio_action_get_current_value(all) != 0 );
+  CTelnetCon::set__OpenConnectionWithNancySupport(use_nancy);
 
-	CTelnetCon::set__OpenConnectionWithNancySupport(use_nancy);
-
-	vector<CTelnetView*>::iterator it = _this->m_Views.begin();
-	for( ; it != _this->m_Views.end() ; ++it )
-	{
-		(*it)->GetCon()->set__UseNancy(use_nancy);
-	}
-	if( use_nancy )
-		gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_CurBotNancyRadio, true );
-	else
-		gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_DisableCurBotRadio, true );
-
-	_this->UpdateBotStatus();
+  vector<CTelnetView*>::iterator it = _this->m_Views.begin();
+  for( ; it != _this->m_Views.end() ; ++it )
+    (*it)->GetCon()->set__UseNancy(use_nancy);
+  
+  if( use_nancy )
+    gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_CurBotNancyRadio, true );
+  else
+    gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_DisableCurBotRadio, true );
+  
+  _this->UpdateBotStatus();
 }
 
 void CMainFrame::UpdateBotStatus()

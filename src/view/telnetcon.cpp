@@ -45,7 +45,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h> 
+#include <arpa/inet.h>
+#include <netinet/tcp.h>
 #include <netdb.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -196,6 +197,22 @@ CTelnetCon::~CTelnetCon()
 		g_source_remove( m_BellTimeout );
 }
 
+#ifdef USE_MOUSE
+char CTelnetCon::GetMenuChar(int y)
+{ 
+	gchar* str = m_Screen[y];
+	for (int i = 0; ; i++)
+	{
+		if (str[ i ] !=' ')
+		{
+			if ( g_ascii_isalpha(str[i]) )
+				return str[ i ];
+			return str[i + 1];
+		}
+	}
+}
+#endif
+
 gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
 {
 	bool ret = false;
@@ -294,6 +311,9 @@ bool CTelnetCon::OnRecv()
 //	printf("recv (%d): %s\n\n", rlen, m_pRecvBuf);
     ParseReceivedData();
 
+#ifdef USE_MOUSE
+    SetPageState();
+#endif
 	UpdateDisplay();
 
 //	((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConRecv((CTelnetView*)m_pView);
@@ -822,6 +842,15 @@ void CTelnetCon::ConnectAsync()
 	m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
 	int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
 	fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
+	/* Disable the Nagle (TCP No Delay) algorithm
+	 * 
+	 * Nagle algorithm works well to minimize small packets by
+	 * concatenating them into larger ones. However, for telnet
+	 * application, the experience would be less than desirable
+	 * if the user were required to fill a segment with typed
+	 * characters before the packet was sent.
+	 */
+	setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
 	int err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
 	fcntl(m_SockFD, F_SETFL, sock_flags );
 
@@ -881,3 +910,46 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
 	INFO("all threads end\n");
 	return false;
 }
+
+#ifdef USE_MOUSE
+void CTelnetCon::SetPageState()
+{
+	m_nPageState = -1; //NORMAL
+
+	char* pLine = m_Screen[m_FirstLine];
+
+	if( IsUnicolor(pLine, 0, m_ColsPerPage / 2) )
+	{
+		pLine = m_Screen[m_FirstLine + 2];
+		if(IsUnicolor(pLine,0,m_ColsPerPage / 2))
+			m_nPageState = 1; // LIST
+		else
+			m_nPageState = 0; // MENU
+	}
+	else
+	{
+		pLine = m_Screen[m_FirstLine + m_RowsPerPage - 1];
+		if( IsUnicolor(pLine, m_ColsPerPage / 3, m_ColsPerPage * 2 / 3) )
+			m_nPageState = 2; // READING
+	}
+
+}
+
+bool CTelnetCon::IsUnicolor(char* pLine, int start, int end)
+{
+	CTermCharAttr* pAttr = GetLineAttr(pLine);
+	GdkColor* clr = pAttr[start].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
+
+	// a dirty hacking, because of the difference between maple and firebird bbs.
+	for ( int i = start; i < end; i++)
+	{
+		GdkColor* clr1 = pAttr[i].GetBgColor( CTermCharAttr::GetDefaultColorTable() );
+		if (clr1 != clr || clr1 == CTermCharAttr::GetDefaultColorTable(0))
+		{
+			return false;
+		}       
+	}
+
+	return true;
+}     
+#endif

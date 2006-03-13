@@ -1,3 +1,17 @@
+pcmanx-gtk2 (0.3.4-1) unstable; urgency=low
+
+  * New upstream release
+    - Add Mouse Support for some of the BBS.
+  * All patches removed, they are intergrated upstream.
+
+ -- Emfox Zhou <EmfoxZhou@gmail.com>  Mon, 13 Mar 2006 13:49:40 +0800
+
+pcmanx-gtk2 (0.3.3-3) unstable; urgency=low
+
+  * Fix dependency and lintian error.
+
+ -- Emfox Zhou <EmfoxZhou@gmail.com>  Sun, 19 Feb 2006 14:16:54 +0800
+
 pcmanx-gtk2 (0.3.3-2) unstable; urgency=low
 
   * save_enconding.dpatch: fixed encoding change not saved.

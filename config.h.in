@@ -127,6 +127,9 @@
 
 #undef USE_MMX
 
+/* Enable mouse click and wheel support */
+#undef USE_MOUSE
+
 /* Enable NancyBot support */
 #undef USE_NANCY
 
@@ -143,7 +146,7 @@
 
 #undef USING_LINUX
 
-/* The version of pcmanx_pure_gtk2 */
+/* The version of pcmanx_gtk2 */
 #undef VERSION
 
 #undef socklen_t

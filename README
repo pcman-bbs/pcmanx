@@ -1,7 +1,7 @@
 How to Build
 ============
 
-PCManX-pure-gtk2 uses autotools (Automake / Autoconf / libtool) to construct
+PCManX-gtk2 uses autotools (Automake / Autoconf / libtool) to construct
 its building process, and provides various options for different profiles.
 
 You can launch configure script with --help to dump the supported options, 

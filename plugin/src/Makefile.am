@@ -12,6 +12,8 @@ INCLUDES = \
 	$(MOZILLA_CFLAGS) \
 	-DMOZ_PLUGIN
 
+AM_CXXFLAGS = -fPIC
+
 noinst_LIBRARIES = $(noinst_LIBRARIES_mozilla)
 	                                     
 MOSTLYCLEANFILES = \

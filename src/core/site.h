@@ -88,6 +88,8 @@ public:
 	bool m_UseExternalSSH;
 	bool m_UseExternalTelnet;
 #endif
+	bool m_bHorizontalCenterAlign;
+	bool m_bVerticalCenterAlign;
 
 	CSite(string Name = "");
 	~CSite();

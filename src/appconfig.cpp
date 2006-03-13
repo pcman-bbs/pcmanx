@@ -83,7 +83,11 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CancelSelAfterCopy)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
+#ifdef USE_MOUSE
+		CFG_BOOL( MouseSupport )
+#endif
 		CFG_BOOL( ShowTrayIcon )
+		CFG_BOOL( ShowStatusBar )
 		CFG_BOOL( UseWgetFiles )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
@@ -96,8 +100,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSize )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
-		CFG_BOOL( HCenterAlign )
-		CFG_BOOL( VCenterAlign )
+		CFG_BOOL( HorizontalCenterAlign )
+		CFG_BOOL( VerticalCenterAlign )
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
@@ -129,6 +133,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_INT ( "Cols", m_DefaultSite.m_ColsPerPage )
 		_CFG_INT ( "Rows", m_DefaultSite.m_RowsPerPage )
 		_CFG_STR ( "TermType", m_DefaultSite.m_TermType )
+		_CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
 		CFG_INT  ( SocketTimeout )
@@ -215,6 +220,10 @@ void CAppConfig::LoadFavorites()
 			else if( 0 == strcmp( pname, "UseExternalTelnet" ) )
 				pSite->m_UseExternalTelnet = (bool)atoi(pval);
 #endif
+			else if( 0 == strcmp( pname, "HorizontalCenterAlign" ) )
+				pSite->m_bHorizontalCenterAlign = (bool)atoi(pval);
+			else if( 0 == strcmp( pname, "VerticalCenterAlign" ) )
+				pSite->m_bVerticalCenterAlign = (bool)atoi(pval);
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );
 			else if( 0 == strcmp( pname, "PreLogin" ) )
@@ -297,6 +306,9 @@ void CAppConfig::SetToDefault()
 	QueryOnCloseCon = 1;
 	CancelSelAfterCopy =1;
 	CopyTrimTail = 1;
+#ifdef USE_MOUSE
+	MouseSupport = 0;
+#endif
 	PopupNotifier = true;
 	PopupTimeout = 6;
 	UseWgetFiles = false;
@@ -311,11 +323,12 @@ void CAppConfig::SetToDefault()
 	FontFamily = "Sans";
 	AntiAliasFont = true;
 	CompactLayout = false;
-	HCenterAlign = false;
-	VCenterAlign = false;
+	HorizontalCenterAlign = false;
+	VerticalCenterAlign = false;
 
 	MailClient = WebBrowser = "mozilla %s";
 	ShowTrayIcon = true;
+	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536 * 102 / 256;

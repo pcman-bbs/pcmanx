@@ -55,6 +55,7 @@ class CMainFrame : public CWidget
 	static bool g_bIsUpateHandlerExisted;
 	static bool g_bUpdateingBBSList;
 	static CMainFrame* g_pMyself;
+	static GtkActionEntry entries[];
 public:
 	CMainFrame();
 
@@ -78,6 +79,7 @@ public:
 	static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this);
+	static gboolean OnNotebookPopupMenu(GtkWidget *widget, GdkEventButton *event, gpointer p_mainframe);
 	void SetCurView(CTelnetView* view);
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
@@ -113,10 +115,11 @@ public:
 #endif
 
 protected:
-	void CreateMenu();
-	void CreateToolbar();
+	void MakeUI();
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this);
+	static GtkToggleActionEntry fullscreen_mode_entries[];
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
@@ -129,9 +132,11 @@ protected:
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
 #ifdef USE_NANCY
+	static GtkRadioActionEntry cur_bot_entries[];
+	static GtkRadioActionEntry all_bot_entries[];
 	void UpdateBotStatus();
-	static void OnSetCurrentBot(GtkMenuItem *menu, CMainFrame* _this );
-	static void OnSetAllBot(GtkMenuItem *menu, CMainFrame* _this );
+	static void OnChangeCurrentBot(GtkRadioAction* action, GtkRadioAction* current, CMainFrame* _this);
+	static void OnChangeAllBot(GtkRadioAction* action, GtkRadioAction* all, CMainFrame* _this);
 #endif
 
 #ifdef USE_DOCKLET
@@ -149,9 +154,11 @@ protected:
 protected:
 	CTelnetView* m_pView;
 	CNotebook* m_pNotebook;
+	GtkUIManager* m_UIManager;
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;
+	GtkWidget* m_Statusbar;
 
 	GtkAccelGroup* m_AccelGroup;
 
@@ -164,6 +171,7 @@ protected:
 	GtkWidget* m_URLEntry;
 	GtkTooltips* m_Tooltips;
 	GtkLabel* m_StatusBarTime;
+
 #ifdef USE_NANCY
 	GtkLabel* m_StatusBarBotState;
 	GtkRadioMenuItem* m_DisableCurBotRadio;

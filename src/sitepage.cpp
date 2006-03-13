@@ -20,9 +20,9 @@
   #pragma implementation "sitepage.h"
 #endif
 
-
-#include "sitepage.h"
 #include <glib/gi18n.h>
+#include "appconfig.h"
+#include "sitepage.h"
 #include "site.h"
 
 #include "debug.h"
@@ -59,6 +59,7 @@ CSitePage::CSitePage(CSite& site)
 	GtkWidget *label25;
 	GtkWidget *hbox25;
 	GtkWidget *label39;
+	GtkWidget *t_pScreenAlignBox;
 	
 	m_Widget = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (m_Widget);
@@ -230,6 +231,19 @@ CSitePage::CSitePage(CSite& site)
 	gtk_widget_show (m_Startup);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_Startup, FALSE, FALSE, 0);
 
+	t_pScreenAlignBox = gtk_hbox_new(FALSE, 2);
+	gtk_widget_show(t_pScreenAlignBox);
+	gtk_box_pack_start(GTK_BOX(m_Widget), t_pScreenAlignBox, FALSE, TRUE, 0);
+	gtk_container_set_border_width(GTK_CONTAINER(t_pScreenAlignBox), 1);
+
+	m_pVerticalCenterAlign = gtk_check_button_new_with_mnemonic(_("Center terminal screen vertically"));
+	gtk_widget_show(m_pVerticalCenterAlign);
+	gtk_box_pack_start(GTK_BOX(t_pScreenAlignBox), m_pVerticalCenterAlign, FALSE, FALSE, 0);
+
+	m_pHorizontalCenterAlign = gtk_check_button_new_with_mnemonic(_("Center terminal screen horizontally"));
+	gtk_widget_show(m_pHorizontalCenterAlign);
+	gtk_box_pack_start(GTK_BOX(t_pScreenAlignBox), m_pHorizontalCenterAlign, FALSE, FALSE, 0);
+
 	if( m_Site.m_Name.empty() )
 	{
 		gtk_widget_hide(hbox1);
@@ -264,6 +278,9 @@ CSitePage::CSitePage(CSite& site)
 
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_Startup), 
 	 								m_Site.m_Startup);
+
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign), m_Site.m_bVerticalCenterAlign);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign), m_Site.m_bHorizontalCenterAlign);
 }
 
 
@@ -294,5 +311,9 @@ bool CSitePage::OnOK()
 
 	m_Site.m_DetectDBChar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_DetectDBChar));
 	m_Site.m_Startup = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_Startup));
+
+	m_Site.m_bVerticalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign));
+	m_Site.m_bHorizontalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign));
+
 	return true;
 }

@@ -2,13 +2,13 @@
 %define rel 1
 
 Summary:   user-friendly telnet client designed for BBS browsing.
-Name:      pcmanx-pure-gtk2
+Name:      pcmanx-gtk2
 Version:   %{ver}
 Release:   %{rel}
 License:   GPL
-Vendor:    PCMan X pure GTK+ 2 project
+Vendor:    PCMan X GTK+ 2 project
 Group:     Applications/Internet
-Source:    pcmanx-pure-gtk2-%{ver}.tar.gz
+Source:    pcmanx-gtk2-%{ver}.tar.gz
 Url:       http://pcmanx.csie.net/
 Packager:  Hong Jen Yee (PCMan) <hzysoft@sina.com.tw>
 
@@ -32,3 +32,4 @@ It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS b
 	/usr/share/pixmaps/pcmanx.png
 	/usr/share/applications/pcmanx.desktop
 	/usr/share/locale/zh_TW/LC_MESSAGES/pcmanx.mo
+	/usr/share/locale/zh_CN/LC_MESSAGES/pcmanx.mo

@@ -59,7 +59,7 @@ am__pcmanx_SOURCES_DIST = docklet/api.h docklet/clipboard.c \
 	view/telnetcon.h view/telnetview.cpp view/telnetview.h \
 	appconfig.cpp appconfig.h notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h generalprefpage.cpp \
-	generalprefpage.h pcmanx_pure_gtk2.cpp sitepage.cpp sitepage.h \
+	generalprefpage.h pcmanx_gtk2.cpp sitepage.cpp sitepage.h \
 	configfile.cpp configfile.h inputdialog.cpp inputdialog.h \
 	prefdlg.cpp prefdlg.h dialog.cpp dialog.h listbox.cpp \
 	listbox.h editfavdlg.cpp editfavdlg.h mainframe.cpp \
@@ -77,7 +77,7 @@ am__objects_9 = telnetcon.$(OBJEXT) telnetview.$(OBJEXT)
 am_pcmanx_OBJECTS = $(am__objects_2) $(am__objects_4) $(am__objects_6) \
 	$(am__objects_8) $(am__objects_9) appconfig.$(OBJEXT) \
 	notebook.$(OBJEXT) sitelistdlg.$(OBJEXT) \
-	generalprefpage.$(OBJEXT) pcmanx_pure_gtk2.$(OBJEXT) \
+	generalprefpage.$(OBJEXT) pcmanx_gtk2.$(OBJEXT) \
 	sitepage.$(OBJEXT) configfile.$(OBJEXT) inputdialog.$(OBJEXT) \
 	prefdlg.$(OBJEXT) dialog.$(OBJEXT) listbox.$(OBJEXT) \
 	editfavdlg.$(OBJEXT) mainframe.$(OBJEXT) sitedlg.$(OBJEXT) \
@@ -156,6 +156,9 @@ ENABLE_DEBUG_TRUE = @ENABLE_DEBUG_TRUE@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FT2_CFLAGS = @FT2_CFLAGS@
+FT2_CONFIG = @FT2_CONFIG@
+FT2_LIBS = @FT2_LIBS@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
@@ -169,6 +172,32 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INSTOBJEXT = @INSTOBJEXT@
 INTLLIBS = @INTLLIBS@
+INTLTOOL_CAVES_RULE = @INTLTOOL_CAVES_RULE@
+INTLTOOL_DESKTOP_RULE = @INTLTOOL_DESKTOP_RULE@
+INTLTOOL_DIRECTORY_RULE = @INTLTOOL_DIRECTORY_RULE@
+INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
+INTLTOOL_ICONV = @INTLTOOL_ICONV@
+INTLTOOL_KBD_RULE = @INTLTOOL_KBD_RULE@
+INTLTOOL_KEYS_RULE = @INTLTOOL_KEYS_RULE@
+INTLTOOL_MERGE = @INTLTOOL_MERGE@
+INTLTOOL_MSGFMT = @INTLTOOL_MSGFMT@
+INTLTOOL_MSGMERGE = @INTLTOOL_MSGMERGE@
+INTLTOOL_OAF_RULE = @INTLTOOL_OAF_RULE@
+INTLTOOL_PERL = @INTLTOOL_PERL@
+INTLTOOL_PONG_RULE = @INTLTOOL_PONG_RULE@
+INTLTOOL_PROP_RULE = @INTLTOOL_PROP_RULE@
+INTLTOOL_SCHEMAS_RULE = @INTLTOOL_SCHEMAS_RULE@
+INTLTOOL_SERVER_RULE = @INTLTOOL_SERVER_RULE@
+INTLTOOL_SERVICE_RULE = @INTLTOOL_SERVICE_RULE@
+INTLTOOL_SHEET_RULE = @INTLTOOL_SHEET_RULE@
+INTLTOOL_SOUNDLIST_RULE = @INTLTOOL_SOUNDLIST_RULE@
+INTLTOOL_THEME_RULE = @INTLTOOL_THEME_RULE@
+INTLTOOL_UI_RULE = @INTLTOOL_UI_RULE@
+INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTLTOOL_XAM_RULE = @INTLTOOL_XAM_RULE@
+INTLTOOL_XGETTEXT = @INTLTOOL_XGETTEXT@
+INTLTOOL_XML_NOMERGE_RULE = @INTLTOOL_XML_NOMERGE_RULE@
+INTLTOOL_XML_RULE = @INTLTOOL_XML_RULE@
 INTL_MACOSX_LIBS = @INTL_MACOSX_LIBS@
 LDFLAGS = @LDFLAGS@
 LIBICONV = @LIBICONV@
@@ -176,6 +205,7 @@ LIBINTL = @LIBINTL@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
+LIBTOOL_EXPORT_OPTIONS = @LIBTOOL_EXPORT_OPTIONS@
 LN_S = @LN_S@
 LTLIBICONV = @LTLIBICONV@
 LTLIBINTL = @LTLIBINTL@
@@ -213,6 +243,9 @@ USE_EXTERNAL_FALSE = @USE_EXTERNAL_FALSE@
 USE_EXTERNAL_TRUE = @USE_EXTERNAL_TRUE@
 USE_MMX_FALSE = @USE_MMX_FALSE@
 USE_MMX_TRUE = @USE_MMX_TRUE@
+USE_MOUSE = @USE_MOUSE@
+USE_MOUSE_FALSE = @USE_MOUSE_FALSE@
+USE_MOUSE_TRUE = @USE_MOUSE_TRUE@
 USE_NANCY = @USE_NANCY@
 USE_NANCY_FALSE = @USE_NANCY_FALSE@
 USE_NANCY_TRUE = @USE_NANCY_TRUE@
@@ -338,7 +371,7 @@ pcmanx_SOURCES = \
 	notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h \
 	generalprefpage.cpp generalprefpage.h \
-	pcmanx_pure_gtk2.cpp \
+	pcmanx_gtk2.cpp \
 	sitepage.cpp sitepage.h \
 	configfile.cpp configfile.h \
 	inputdialog.cpp inputdialog.h \
@@ -438,7 +471,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nancybot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/notebook.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/notifier-impl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcmanx_pure_gtk2.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcmanx_gtk2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prefdlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/script.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sitedlg.Po@am__quote@

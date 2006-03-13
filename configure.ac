@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
 AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(pcmanx-pure-gtk2, 0.3.3, hzysoft@sina.com.tw)
+AM_INIT_AUTOMAKE(pcmanx-gtk2, 0.3.4, hzysoft@sina.com.tw)
 #AM_MAINTAINER_MODE
 AC_PROG_CC
 AC_PROG_CPP
@@ -11,6 +11,7 @@ AM_PROG_AS
 AC_PROG_CXX
 AM_DISABLE_STATIC
 AM_PROG_LIBTOOL
+AC_PROG_INTLTOOL(, [no-xml])
 AC_PROG_INSTALL
 
 dnl define a new autoconf test, AC_CSRG_BASED, which will define
@@ -51,6 +52,7 @@ AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
+AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
@@ -72,43 +74,56 @@ else
 	fi
 fi
 
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_pure_gtk2])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
 
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
 dnl *********************************************************************
 
-AC_ARG_ENABLE(debug,
-[  --enable-debug          enable Debug (default: no)],
-        debug=$enableval, debug=no)
+AC_ARG_ENABLE([debug],
+	AS_HELP_STRING([--enable-debug],
+		[enable Debug (default: no)]),
+        debug=$enableval, debug="no")
 
-AC_ARG_ENABLE(mmx,
-[  --disable-mmx           disable MMX optimizations (default: yes)],
-        mmx=$enableval, mmx=yes)
+AC_ARG_ENABLE([mmx],
+	AS_HELP_STRING([--disable-mmx],
+		[disable MMX optimizations (default: yes)]),
+        mmx=$enableval, mmx="yes")
 
-AC_ARG_ENABLE(docklet,
-[  --disable-docklet       disable docklet / system tray support (default: yes)],
-	docklet=$enableval, docklet=yes)
+AC_ARG_ENABLE([docklet],
+	AS_HELP_STRING([--disable-docklet],
+		[disable docklet / system tray support (default: yes)]),
+	docklet=$enableval, docklet="yes")
 
-AC_ARG_ENABLE(notifier,
-[  --disable-notifier      disable popup notifier support (default: yes)],
-	notifier=$enableval, notifier=yes)
+AC_ARG_ENABLE([notifier],
+	AS_HELP_STRING([--disable-notifier],
+		[disable popup notifier support (default: yes)]),
+	notifier=$enableval, notifier="yes")
 
-dnl AC_ARG_ENABLE(script,
-dnl [  --enable-script      enable script support (default: no)],
-dnl 	script=$enableval, script=no)
+dnl AC_ARG_ENABLE([script],
+dnl 	AS_HELP_STRING([--enable-script],
+dnl		[enable script support (default: no)]),
+dnl 	script=$enableval, script="no")
 
-AC_ARG_ENABLE(nancy,
-[  --disable-nancy	disable nancy bot support (default: yes)],
-	nancy=$enableval, nancy=yes)
+AC_ARG_ENABLE([nancy],
+	AS_HELP_STRING([--disable-nancy],
+		[disable nancy bot support (default: yes)]),
+	nancy=$enableval, nancy="yes")
+
+AC_ARG_ENABLE([mouse],
+	AS_HELP_STRING([--disable-mouse],
+		[disable mouse click and wheel support (default: yes)]),
+	mouse=$enableval, mouse="yes")
 	
-AC_ARG_ENABLE(external,
-[  --disable-external      disable external SSH/Telnet support (default: yes)],
-	external=$enableval, external=yes)
+AC_ARG_ENABLE([external],
+	AS_HELP_STRING([--disable-external],
+		[disable external SSH/Telnet support (default: yes)]),
+	external=$enableval, external="yes")
 
-AC_ARG_ENABLE(plugin,
-[  --enable-plugin         enable Mozilla/Firefox plugin support (default: no)],
-	plugin=$enableval, plugin=no)
+AC_ARG_ENABLE([plugin],
+	AS_HELP_STRING([--enable-plugin],
+		[enable Mozilla/Firefox plugin support (default: no)]),
+	plugin=$enableval, plugin="no")
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -134,18 +149,30 @@ else
 	GUI_CFLAGS="`$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --cflags`"
 	GUI_LIBS="$GUI_LIBS `$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --libs`"
 fi
+dnl *********************************************************************
+dnl ** Freetype2 ********************************************************
+dnl *********************************************************************
+AC_CHECK_FT2()
+GUI_CFLAGS="$GUI_CFLAGS $FT2_CFLAGS"
+GUI_LIBS="$GUI_LIBS $FT2_LIBS"
 
 dnl *********************************************************************
 dnl ** XFT **************************************************************
 dnl *********************************************************************
 
 AC_PATH_PROG(pkgconfigpath, pkg-config)
+AC_MSG_CHECKING([for Xft])
 if $pkgconfigpath xft --exists; then
 	GUI_CFLAGS="$GUI_CFLAGS `$pkgconfigpath xft --cflags`"
 	GUI_LIBS="$GUI_LIBS `$pkgconfigpath xft --libs`"
+
+	dnl Workaround for some *stupid* distributions.
+	if test -f /usr/include/X11/Xft/Xft.h; then
+		AC_MSG_RESULT([using workaround for Xft.])
+  		GUI_CLFAGS="$GUI_CFLAGS -I/usr/include/X11"
+	fi
 else
-	echo pcmanx_pure_gtk2 depends on Xft\!
-	exit
+	AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])
 fi
 
 dnl *********************************************************************
@@ -260,6 +287,17 @@ fi
 
 AM_CONDITIONAL(USE_NANCY, test "$nancy" = "yes")
 AC_SUBST(USE_NANCY)
+
+dnl *********************************************************************
+dnl ** Mouse Click and Wheel ********************************************
+dnl *********************************************************************
+
+if test "$mouse" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_MOUSE, [1], [Enable mouse click and wheel support])
+fi
+
+AM_CONDITIONAL(USE_MOUSE, test "$mouse" = "yes")
+AC_SUBST(USE_MOUSE)
 
 dnl *********************************************************************
 dnl ** External SSH/Telnet **********************************************
@@ -455,10 +493,16 @@ fi
 dnl FreeBSD needs this
 LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
+
+dnl Reduce C++ overhead
+CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
+LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
+
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
-
+LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
+AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
@@ -466,7 +510,7 @@ AC_CONFIG_FILES([
 	po/Makefile.in
 	data/Makefile
 	pcmanx.desktop
-	pcmanx-pure-gtk2.spec
+	pcmanx-gtk2.spec
 	Doxygen
 ])
 
@@ -481,7 +525,7 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 echo
-echo pcmanx_pure_gtk2 ................ : Version $VERSION
+echo pcmanx_gtk2 ..................... : Version $VERSION
 echo
 echo Prefix........................... : $prefix
 echo Debug support ................... : $debug
@@ -489,6 +533,7 @@ echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo Nancy bot support ............... : $nancy
+echo Mouse click and wheel support ... : $mouse
 dnl if test "x$script" = "xyes"; then
 dnl   echo "Python script support............ : $script (Using Python $PYTHON_VERSION)"
 dnl else

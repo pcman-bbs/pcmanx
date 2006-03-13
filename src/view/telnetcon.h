@@ -154,6 +154,10 @@ public:
 #endif
 #endif /* !defined(MOZ_PLUGIN) */
 
+#ifdef USE_MOUSE
+    inline int GetPageState() {return m_nPageState;}
+    char GetMenuChar(int y);
+#endif
 
 protected:
 
@@ -185,6 +189,19 @@ protected:
 	// Client socket
     int m_SockFD;
 	int m_Pid;
+
+#ifdef USE_MOUSE
+	// Page state for mouse browsing
+	/*	enum m_nPageState
+	{
+	  NORMAL=-1,
+	  MENU=0,
+	  LIST=1,
+	  READING=2
+	  };*/
+	int m_nPageState;
+#endif
+
 protected:
 	guint m_BellTimeout;
 	bool m_IsLastLineModified;
@@ -207,6 +224,8 @@ private:
     static GMutex* m_DNSMutex;
 private:
     static bool OnProcessDNSQueueExit(gpointer unused);
+    void SetPageState();
+    bool IsUnicolor(char* line, int start, int end);
 };
 
 class CDNSRequest

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* eggtrayicon.h
  * Copyright (C) 2002 Anders Carlsson <andersca@gnu.org>
  *
@@ -13,15 +14,17 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
- * Boston, MA 02110-1301 USA.
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 #ifndef __EGG_TRAY_ICON_H__
 #define __EGG_TRAY_ICON_H__
 
 #include <gtk/gtkplug.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 G_BEGIN_DECLS
 
@@ -41,12 +44,13 @@ struct _EggTrayIcon
 
   guint stamp;
   
+#ifdef GDK_WINDOWING_X11
   Atom selection_atom;
   Atom manager_atom;
   Atom system_tray_opcode_atom;
   Atom orientation_atom;
   Window manager_window;
-
+#endif
   GtkOrientation orientation;
 };
 
