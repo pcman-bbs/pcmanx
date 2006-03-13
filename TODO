@@ -29,5 +29,5 @@ FourDollars
 
 emfox
 -----
-1. rewrite GUI definiton
-2. add mouse support (done, need testing)
+1. Polish UIManager.
+2. Add mouse support to more site.
