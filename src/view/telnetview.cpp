@@ -62,6 +62,17 @@ void CTelnetView::OnTextInput(const gchar* text)
 		((CTelnetCon*)m_pTermData)->Send(_text, l);
 		g_free(_text);
 	}
+	// clear the old selection
+	// Workaround FIXME please
+	if (!m_pTermData->m_Sel->Empty())
+	{
+		GdkEventButton t_PseudoEvent;
+		t_PseudoEvent.x = 0;
+		t_PseudoEvent.y = 0;
+		t_PseudoEvent.type = GDK_BUTTON_PRESS; 
+		CTermView::OnLButtonDown(&t_PseudoEvent);
+		CTermView::OnLButtonUp(&t_PseudoEvent);
+	}
 }
 
 #define	GDK_MODIFIER_DOWN(key, mod)	(key & (mod|(~GDK_SHIFT_MASK&~GDK_CONTROL_MASK&~GDK_MOD1_MASK)))
@@ -79,6 +90,18 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
+
+	// clear the old selection
+	// Workaround FIXME please
+	if (!m_pTermData->m_Sel->Empty())
+	{
+		GdkEventButton t_PseudoEvent;
+		t_PseudoEvent.x = 0;
+		t_PseudoEvent.y = 0;
+		t_PseudoEvent.type = GDK_BUTTON_PRESS; 
+		CTermView::OnLButtonDown(&t_PseudoEvent);
+		CTermView::OnLButtonUp(&t_PseudoEvent);
+	}
 
 	if( evt->keyval < 127 && GDK_MODIFIER_DOWN(evt->state, GDK_CONTROL_MASK))// Ctrl down
 	{
@@ -166,7 +189,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
   int y = (int)evt->y;
   bool left;
   
-  INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
+  INFO("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
 
   this->PointToLineCol( &x, &y, &left );
   if( HasCapture() )	//	Selecting text.

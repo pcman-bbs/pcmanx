@@ -1,3 +1,11 @@
+2005-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/debug.h,
+	src/view/telnetview.cpp,
+	src/mainframe.cpp,
+	src/notebook.cpp: Cancel the selected region when any key event.
+
 2006-03-31  Jim Huang  <jserv@kaffe.org>
 
 	* src/nancy_bot/msgdata.cpp: Include <unistd.h>.

@@ -6,4 +6,8 @@
 #define INFO_ON(format...)
 #endif
 
+#if 0
+#define INFO(format...) printf(format);
+#else
 #define INFO(format...)
+#endif
