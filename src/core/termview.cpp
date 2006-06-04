@@ -373,7 +373,7 @@ int CTermView::DrawChar(int row, int col)
 
 		gdk_gc_set_rgb_fg_color( m_GC, Fg );
 
-		if( !pAttr[i].IsBlink() || m_ShowBlink )	// If text shold be draw.
+		if( !pAttr[i].IsBlink() || m_ShowBlink )	// If text should be drawn.
 		{
 			if( ' ' != *pLine && '\0' != *pLine )
 			{

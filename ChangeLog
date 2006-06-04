@@ -1,3 +1,9 @@
+2006-06-04  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Add fallback if {mozilla,firefox}-plugin is not
+	available.
+	Fallbacks used: "xulrunner-plugin". 
+
 2005-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,

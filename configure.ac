@@ -335,17 +335,26 @@ if test "$plugin" = "yes"; then
     fi
   fi
 
-  # Detect via pkg-config
+  dnl Detect via pkg-config
+
+  # Check Mozilla
   if test "$user_specified_mozilla" = "no"; then
     PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
 	enable_mozilla=yes, enable_mozilla=no)
+  fi
 
-    # Check Firefox
-    if test "x$enable_mozilla" = "xno"; then
-      gecko_provider=firefox
-      PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+  # Check Firefox
+  if test "x$enable_mozilla" = "xno"; then
+    gecko_provider=firefox
+    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
 	enable_mozilla=yes, enable_mozilla=no)
-    fi
+  fi
+
+  # Check XULRunner
+  if test "x$enable_mozilla" = "xno"; then
+    gecko_provider=xulrunner
+    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
   fi
 
   MOZILLA_LIB_DIR_SEARCH=
