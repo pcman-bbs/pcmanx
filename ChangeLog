@@ -1,3 +1,14 @@
+2006-07-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Change bug-reporting address to PCManX in Google
+	Groups.
+
+	* po/Makevars: New file. Makefile variables for PO directory in any
+	package using GNU gettext. This is required in recent intltools.
+
+	* autogen.sh: Add '--force' to intltoolize to ensure generating
+	latest Makefile.in.in .
+
 2006-06-04  Jim Huang  <jserv.tw@gmail.com>
 
 	* configure.ac: Add fallback if {mozilla,firefox}-plugin is not
