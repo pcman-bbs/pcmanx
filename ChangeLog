@@ -1,3 +1,7 @@
+2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Modify the spec for fedora rpm package build.
+
 2006-07-16  Jim Huang  <jserv.tw@gmail.com>
 
 	* configure.ac: Change bug-reporting address to PCManX in Google

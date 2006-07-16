@@ -4,13 +4,14 @@
 Summary:   user-friendly telnet client designed for BBS browsing.
 Name:      pcmanx-gtk2
 Version:   %{ver}
-Release:   %{rel}
+Release:   %{rel}.fc5
 License:   GPL
 Vendor:    PCMan X GTK+ 2 project
 Group:     Applications/Internet
 Source:    pcmanx-gtk2-%{ver}.tar.gz
-Url:       http://pcmanx.csie.net/
-Packager:  Hong Jen Yee (PCMan) <hzysoft@sina.com.tw>
+Url:       http://pcmanx.csie.net
+Packager:  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 An easy-to-use telnet client mainly targets BBS users.
@@ -18,18 +19,38 @@ PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS 
 It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
 
 %prep
+%setup -q
 
-%setup
-	./configure --prefix=/usr
 %build
-	make
+%configure
+make %{?_smp_mflags}
+
 %install
-	make install-strip
+rm -rf $RPM_BUILD_ROOT
+make install-strip DESTDIR=$RPM_BUILD_ROOT
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
-	/usr/bin/pcmanx
-	/usr/share/pcmanx/sitelist
-	/usr/share/pcmanx/emoticons
-	/usr/share/pixmaps/pcmanx.png
-	/usr/share/applications/pcmanx.desktop
-	/usr/share/locale/zh_TW/LC_MESSAGES/pcmanx.mo
-	/usr/share/locale/zh_CN/LC_MESSAGES/pcmanx.mo
+%defattr(-,root,root,-)
+%doc
+   /usr/bin/pcmanx
+   /usr/lib/libpcmanx_core.la
+   /usr/lib/libpcmanx_core.so
+   /usr/lib/libpcmanx_core.so.0
+   /usr/lib/libpcmanx_core.so.0.0.0
+   /usr/share/applications/pcmanx.desktop
+   /usr/share/locale/zh_CN/LC_MESSAGES/pcmanx.mo
+   /usr/share/locale/zh_TW/LC_MESSAGES/pcmanx.mo
+   /usr/share/pcmanx/emoticons
+   /usr/share/pcmanx/nancy_bot/default.conf
+   /usr/share/pcmanx/nancy_bot/default_msg.data
+   /usr/share/pcmanx/nancy_bot/default_usages.data
+   /usr/share/pcmanx/nancy_bot/example.conf
+   /usr/share/pcmanx/nancy_bot/example_msg.data
+   /usr/share/pcmanx/nancy_bot/example_usages.data
+   /usr/share/pcmanx/sitelist
+   /usr/share/pixmaps/pcmanx.png
+
+%changelog
