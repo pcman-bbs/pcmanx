@@ -1,4 +1,11 @@
-2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-07-26  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/pcmanx_gtk2.cpp 
+	(GOptionEntry entries): New structure for runtime options.
+	(main): Initialize Runtime options and check if multiple-instance is
+	allowed. This enables "pcmanx --help" to dump options.
+
+2006-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Modify the spec for fedora rpm package build.
 
