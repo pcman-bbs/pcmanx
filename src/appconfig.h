@@ -115,6 +115,8 @@ public:
 //	bool TwoDiffFonts;
     int FontSize;
     string FontFamily;
+    int FontSizeEn;
+    string FontFamilyEn;
 
 	GdkColor HyperLinkColor;
 

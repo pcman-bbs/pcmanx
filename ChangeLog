@@ -1,3 +1,12 @@
+2006-07-28  Kanru Chen  <koster@debian.org.tw>
+
+	* src/appconfig.cpp,
+	  src/appconfig.h,
+	  src/core/termview.cpp,
+	  src/core/termview.h,
+	  src/mainframe.cpp,
+	  src/mainframe.h: Support setting seprated english/ascii font.
+
 2006-07-26  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/pcmanx_gtk2.cpp 

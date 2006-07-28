@@ -120,6 +120,7 @@ CTermView::CTermView()
 	m_GC = NULL;
 	m_ShowBlink = false;
 	m_Font = NULL;
+	m_FontEn = NULL;
 	m_XftDraw = NULL;
 	m_CharW = 18;
 	m_CharH = 18;
@@ -278,6 +279,8 @@ void CTermView::OnCreate()
 
 	if( !m_Font )
 		m_Font = new CFont("Sans", 16);
+	if( !m_FontEn )
+		m_FontEn = new CFont("Sans", 16);
 
 	m_GC = gdk_gc_new(m_Widget->window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
@@ -381,7 +384,12 @@ int CTermView::DrawChar(int row, int col)
 				gchar *utf8_ch = g_convert( pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
 				if( utf8_ch )
 				{
-					XftFont* font = m_Font->GetXftFont();
+					XftFont* font;
+					if (isascii (utf8_ch[0])) {
+						font = m_FontEn->GetXftFont();
+					} else {
+						font = m_Font->GetXftFont();
+					}
 					XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
 				}
@@ -469,6 +477,7 @@ void CTermView::OnSize(GdkEventConfigure* evt)
 	GetCellSize( w, h );
 
 	m_Font->SetFont( m_Font->GetName(), w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
+	m_FontEn->SetFont( m_FontEn->GetName(), w, h, m_FontEn->GetCompact(), m_FontEn->GetAntiAlias() );
 
 	RecalcCharDimension();
 }
@@ -762,6 +771,27 @@ void CTermView::SetFont( CFont* font )
 	RecalcCharDimension();
 }
 
+void CTermView::SetFontEn( CFont* font )
+{
+	if( !font || m_AutoFontSize )
+		return;
+
+	if( m_FontEn )
+		delete m_FontEn;
+
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_FontEn = new CFont( font->GetName(), w, h, font->GetCompact(), font->GetAntiAlias() );
+		delete font;
+	}
+	else
+		m_FontEn = font;
+
+	RecalcCharDimension();
+}
+
 void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias )
 {
 	if( m_Font )
@@ -778,6 +808,22 @@ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias
 	RecalcCharDimension();
 }
 
+void CTermView::SetFontEn( string name, int pt_size, bool compact, bool anti_alias )
+{
+	if( m_FontEn )
+		delete m_FontEn;
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_FontEn = new CFont( name, w, h, compact, anti_alias );
+	}
+	else
+		m_FontEn = new CFont( name, pt_size, compact, anti_alias );
+
+	RecalcCharDimension();
+}
+
 void CTermView::SetFontFamily( string name )
 {
 	if( m_AutoFontSize )
@@ -788,6 +834,20 @@ void CTermView::SetFontFamily( string name )
 	}
 	else
 		m_Font->SetFontFamily( name );
+
+	RecalcCharDimension();
+}
+
+void CTermView::SetFontFamilyEn( string name )
+{
+	if( m_AutoFontSize )
+	{
+		int w, h;
+		GetCellSize( w, h );
+		m_FontEn->SetFont( name, w, h, m_FontEn->GetCompact(), m_FontEn->GetAntiAlias() );
+	}
+	else
+		m_FontEn->SetFontFamily( name );
 
 	RecalcCharDimension();
 }
@@ -861,6 +921,8 @@ void CTermView::OnDestroy()
 {
 	if( m_Font )
 		delete m_Font;
+	if( m_FontEn )
+		delete m_FontEn;
 	if( m_pTermData )
 		m_pTermData->m_pView = NULL;
 

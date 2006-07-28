@@ -66,6 +66,7 @@ public:
 	void OnTelnetConConnect(CTelnetView* con);
 	void OnTelnetConRecv(CTelnetView* con);
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnFontEn(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSListHandler(int nSignalNumber);

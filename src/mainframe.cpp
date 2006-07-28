@@ -247,6 +247,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
 	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
+	m_pView->SetFontEn(AppConfig.FontFamilyEn, AppConfig.FontSizeEn, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 	m_pView->SetHorizontalCenterAlign( site->m_bHorizontalCenterAlign );
 	m_pView->SetVerticalCenterAlign( site->m_bVerticalCenterAlign );
@@ -292,7 +293,8 @@ GtkActionEntry CMainFrame::entries[] =
     {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View")},
-    {"font", GTK_STOCK_SELECT_FONT, NULL, NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"font", GTK_STOCK_SELECT_FONT,  _("_Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFontEn)},
 #ifdef USE_NANCY
     {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)")},
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
@@ -353,6 +355,7 @@ static const char *ui_info =
   "    </menu>"
   "    <menu action='view_menu'>"
   "      <menuitem action='font'/>"
+  "      <menuitem action='ascii_font'/>"
   "      <menuitem action='fullscreen' />"
 #ifdef USE_NANCY
   "      <separator/>"
@@ -585,6 +588,58 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		}
 		else if( _this->GetCurView() )
 			_this->GetCurView()->SetFontFamily(AppConfig.FontFamily);
+
+		gtk_widget_destroy(dlg);
+
+		if( _this->GetCurView() )
+			_this->GetCurView()->Refresh();
+	}
+	else
+		gtk_widget_destroy(dlg);
+}
+
+void CMainFrame::OnFontEn(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
+	gtk_window_set_modal( (GtkWindow*)dlg, true);
+	gtk_window_set_transient_for( (GtkWindow*)dlg, (GtkWindow*)_this->m_Widget);
+
+	GtkFontSelectionDialog* fsdlg = (GtkFontSelectionDialog*)dlg;
+	GtkWidget* apply_to_all = gtk_check_button_new_with_label( _("Apply to all opened pages") );
+	gtk_widget_show(apply_to_all);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(apply_to_all), true);
+	gtk_box_pack_start( GTK_BOX(fsdlg->action_area), apply_to_all, true, true, 4);
+	gtk_box_reorder_child( GTK_BOX(fsdlg->action_area), apply_to_all, 0 );
+	gtk_box_set_homogeneous(GTK_BOX(fsdlg->action_area), false);
+
+	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
+	// But we need this functionality.
+	GtkFontSelection* fontsel = GTK_FONT_SELECTION(fsdlg->fontsel);
+	gtk_widget_set_sensitive(fontsel->face_list, false);
+
+	char pango_font_name[32];
+	sprintf( pango_font_name, "%s %d", AppConfig.FontFamilyEn.c_str(), (AppConfig.FontSizeEn > 6 && AppConfig.FontSizeEn <= 72) ? AppConfig.FontSizeEn : 12 );
+	gtk_font_selection_dialog_set_font_name(fsdlg, pango_font_name);
+
+	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
+	{
+		gchar* name = gtk_font_selection_dialog_get_font_name( fsdlg );
+		PangoFontDescription* desc = pango_font_description_from_string( name );
+		g_free( name );
+		const char* family = pango_font_description_get_family(desc);
+		AppConfig.FontFamilyEn = family;
+		AppConfig.FontSizeEn = pango_font_description_get_size(desc);
+		pango_font_description_free(desc);
+
+		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
+		{
+			vector<CTelnetView*>::iterator it;
+			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
+				(*it)->SetFontFamilyEn(AppConfig.FontFamilyEn);
+			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
+		}
+		else if( _this->GetCurView() )
+			_this->GetCurView()->SetFontFamilyEn(AppConfig.FontFamilyEn);
 
 		gtk_widget_destroy(dlg);
 
