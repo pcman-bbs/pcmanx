@@ -441,6 +441,7 @@ void CMainFrame::MakeUI()
 
   m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
   m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+  gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 
   m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
     

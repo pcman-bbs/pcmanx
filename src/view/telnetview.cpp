@@ -274,7 +274,14 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	}
     }
   else
-    {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
+    {
+			CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
+				gdk_window_set_cursor(m_Widget->window, m_HandCursor);
+      else
+				gdk_window_set_cursor(m_Widget->window, NULL);;
+			m_CursorState=0;
+		}
 #endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 }
 
