@@ -1,3 +1,7 @@
+2006-08-01  Kanru Chen  <koster@debian.org.tw>
+
+	* ChangeLog: Correct timestamps.
+
 2006-07-28  Kanru Chen  <koster@debian.org.tw>
 
 	* src/appconfig.cpp,
@@ -35,7 +39,7 @@
 	available.
 	Fallbacks used: "xulrunner-plugin". 
 
-2005-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/debug.h,
@@ -60,20 +64,20 @@
 
 	* po/pcmanx.pot: deleted, now not necessary.
 
-2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/appconfig.h,
 	src/mainframe.cpp,
 	src/appconfig.cpp: Polish center alignment mechanism.
 
-2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po: Update the po files.
 
-2005-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/core/termview.cpp,
@@ -87,17 +91,17 @@
 	po/zh_TW.po,
 	po/zh_CN.po: Modify the horizontal and vertical center align mechanism.
 
-2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+2006-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp,
 	po/zh_TW.po: Add missing separator and translation in popup menu.
 
-2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+2006-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/view/telnetview.cpp (CTelnetView::OnRButtonDown): Add 
 	"Input Method" sub menu to popup menu.
 
-2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+2006-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/sitepage.cpp: Update some text on UI elements.
 
@@ -111,7 +115,7 @@
 
 	* configure.ac: Bump version number to 0.3.4
 
-2005-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+2006-03-11  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termview.cpp (CTermView::OnLButtonDown),
 	src/view/telnetview.cpp (CTelnetView::OnLButtonUp): Prevent 
