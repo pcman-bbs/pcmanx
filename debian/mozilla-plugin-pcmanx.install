@@ -1,2 +1,2 @@
-usr/lib/mozilla/plugins
-usr/lib/mozilla/components
+usr/lib/xulrunner/plugins usr/lib/pcmanx-gtk2
+usr/lib/xulrunner/components usr/lib/pcmanx-gtk2

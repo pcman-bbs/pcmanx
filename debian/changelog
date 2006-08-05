@@ -1,3 +1,15 @@
+pcmanx-gtk2 (0.3.4-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Remove image file from usr/lib.
+  * Build depends on xulrunner. (Closes: #364379)
+    - Set urgency to medium as it fixes a RC bug.
+    - Add LDFLAGS="-Wl,--as-needed" to prevent linking to librarys from
+      libxul-dev.
+  * Bump standards version to 3.7.2, no changes needed.
+
+ -- Kanru Chen <koster@debian.org.tw>  Sat,  5 Aug 2006 13:24:10 +0800
+
 pcmanx-gtk2 (0.3.4-1) unstable; urgency=low
 
   * New upstream release

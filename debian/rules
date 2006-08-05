@@ -15,6 +15,7 @@ DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 include /usr/share/dpatch/dpatch.make
 
 CXXFLAGS = -Wall -g
+LDFLAGS += -Wl,--as-needed
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CXXFLAGS += -O0
@@ -25,7 +26,7 @@ endif
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
-	CXXFLAGS="$(CXXFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
+	CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
 		   --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info \
 		   --enable-plugin
 
@@ -59,6 +60,7 @@ install: build
 	# Add here commands to install the package into debian/pcmanx-gtk2.
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	install -m 644 debian/pcmanx.xpm $(CURDIR)/debian/tmp/usr/share/pixmaps/
+	rm $(CURDIR)/debian/tmp/usr/lib/xulrunner/components/pcmanx.png
 
 binary-indep: build install
 
@@ -74,7 +76,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -V -Xmozilla
+	dh_makeshlibs -V -Xfirefox
 	dh_installdeb
 	dh_shlibdeps -L libpcmanx-core0 -l debian/libpcmanx-core0/usr/lib
 	dh_gencontrol

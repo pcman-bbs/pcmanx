@@ -1,4 +1,4 @@
 usr/lib
 usr/share/doc
-usr/lib/mozilla/plugins
-usr/lib/mozilla/components
+usr/lib/pcmanx-gtk2/plugins
+usr/lib/pcmanx-gtk2/components

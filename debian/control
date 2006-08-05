@@ -2,8 +2,8 @@ Source: pcmanx-gtk2
 Section: x11
 Priority: optional
 Maintainer: Emfox Zhou <EmfoxZhou@gmail.com>
-Build-Depends: debhelper (>= 4.0.0), autotools-dev, libxft-dev, libgtk2.0-dev, mozilla-dev, sharutils, dpatch (>= 2.0)
-Standards-Version: 3.6.2
+Build-Depends: debhelper (>= 4.0.0), autotools-dev, libxft-dev, libgtk2.0-dev, libxul-dev, libxt-dev, sharutils, dpatch (>= 2.0)
+Standards-Version: 3.7.2
 
 Package: pcmanx-gtk2
 Architecture: any
@@ -25,7 +25,7 @@ Package: mozilla-plugin-pcmanx
 Section: web
 Architecture: any
 Depends: ${shlibs:Depends}
-Recommends: mozilla-browser | mozilla-firefox
+Recommends: mozilla-browser | firefox
 Description: pcmanx plugin for Mozilla based browser
  This plugin adds support for telnet:// protocol to your Mozilla
  browser. The protocol engine is done by PCManX and the output window

@@ -1,5 +1,5 @@
-usr/lib/mozilla/plugins/pcmanx-plugin.so usr/lib/mozilla-firefox/plugins/pcmanx-plugin.so
-usr/lib/mozilla/components/pcmanx.html usr/lib/mozilla-firefox/components/pcmanx.html
-usr/lib/mozilla/components/pcmanx.png usr/lib/mozilla-firefox/components/pcmanx.png
-usr/lib/mozilla/components/TelnetProtocol.js usr/lib/mozilla-firefox/components/TelnetProtocol.js
-usr/lib/mozilla/components/pcmanx_interface.xpt usr/lib/mozilla-firefox/components/pcmanx_interface.xpt
+usr/lib/pcmanx-gtk2/plugins/pcmanx-plugin.so usr/lib/firefox/plugins/pcmanx-plugin.so
+usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/firefox/components/pcmanx.html
+usr/lib/pcmanx-gtk2/components/pcmanx.png usr/lib/firefox/components/pcmanx.png
+usr/lib/pcmanx-gtk2/components/TelnetProtocol.js usr/lib/firefox/components/TelnetProtocol.js
+usr/lib/pcmanx-gtk2/components/pcmanx_interface.xpt usr/lib/firefox/components/pcmanx_interface.xpt
