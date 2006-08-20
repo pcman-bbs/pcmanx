@@ -1,5 +1,9 @@
 2006-08-20  Kanru Chen  <koster@debian.org.tw>
 
+	* configure.ac: Bump version number to 0.3.5, let's make a good release.
+
+2006-08-20  Kanru Chen  <koster@debian.org.tw>
+
 	* plugin/src/Makefile.am: Remove $(MOZILLA_LIBS) to avoid unnecessary
 	dependency.
 	* NEWS: Prepare 0.3.5 release.
