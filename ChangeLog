@@ -1,4 +1,10 @@
-2006-08-01 PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+2006-08-20  Kanru Chen  <koster@debian.org.tw>
+
+	* plugin/src/Makefile.am: Remove $(MOZILLA_LIBS) to avoid unnecessary
+	dependency.
+	* NEWS: Prepare 0.3.5 release.
+
+2006-08-01  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/mainframe.cpp: Always hide the text on toolbar buttons.
 	
