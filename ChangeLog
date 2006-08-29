@@ -1,3 +1,9 @@
+2006-08-29  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: rpm spec file modify
+
+	* TODO: task add
+
 2006-08-20  Kanru Chen  <koster@debian.org.tw>
 
 	* configure.ac: Bump version number to 0.3.5, let's make a good release.

@@ -25,6 +25,11 @@ auto-learn level, chatlog or not, bot get angry or not, config_path ).
 
 FourDollars
 -----
+1. Customized function key
+2. Config file refactor
+3. Shrink margin at fullscreen
+4. Polish bbs list update mechanism
+5. Polish center align mechanism
 
 emfox
 -----
