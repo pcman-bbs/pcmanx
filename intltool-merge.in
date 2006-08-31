@@ -35,7 +35,7 @@
 ## Release information
 my $PROGRAM = "intltool-merge";
 my $PACKAGE = "intltool";
-my $VERSION = "0.34.2";
+my $VERSION = "0.35.0";
 
 ## Loaded modules
 use strict; 
@@ -395,7 +395,7 @@ sub create_translation_database
             } 
             else 
             {
-		print STDERR "WARNING: $po_file is not in UTF-8 but $encoding, converting...\n" unless $QUIET_ARG;;
+		print "NOTICE: $po_file is not in UTF-8 but $encoding, converting...\n" unless $QUIET_ARG;;
 
                 open PO_FILE, "$iconv -f $encoding -t UTF-8 $po_file|";	
             }

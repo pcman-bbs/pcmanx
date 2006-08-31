@@ -1,2 +1,1 @@
-use_xulrunner.dpatch
 remove_image_file_in_usr_lib.dpatch

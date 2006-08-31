@@ -72,8 +72,12 @@ public:
     void SetFont( string name, int pt_size, bool compact, bool anti_alias);
     void SetFontFamily(string name);
     void SetFont(CFont* font);
+    void SetFontEn( string name, int pt_size, bool compact, bool anti_alias);
+    void SetFontFamilyEn(string name);
+    void SetFontEn(CFont* font);
 	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
     CFont* GetFont(){	return m_Font;	}
+    CFont* GetFontEn(){	return m_FontEn;	}
     void SetHorizontalCenterAlign( bool is_hcenter );
     void SetVerticalCenterAlign( bool is_vcenter );
     void SetTermData(CTermData* data){	m_pTermData = data;	}
@@ -96,6 +100,7 @@ protected:
 
     XftDraw* m_XftDraw;
     CFont* m_Font;
+    CFont* m_FontEn;
 
 	int m_CharW;
 	int m_CharH;

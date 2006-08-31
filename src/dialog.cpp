@@ -50,7 +50,7 @@ CDialog::CDialog(CWidget* parent, const char* title, bool show_okcancel)
 	if(show_okcancel)
 	{
 		m_Widget = gtk_dialog_new_with_buttons(title, parent ? GTK_WINDOW(parent->m_Widget) : NULL,
-		 GtkDialogFlags(GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT), GTK_STOCK_OK, GTK_RESPONSE_OK, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+		 GtkDialogFlags(GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 		gtk_dialog_set_default_response((GtkDialog*)m_Widget, GTK_RESPONSE_OK);
 	}
 	else

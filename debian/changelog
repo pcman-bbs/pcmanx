@@ -1,3 +1,16 @@
+pcmanx-gtk2 (0.3.5-1) unstable; urgency=low
+
+  * New upstream release
+    - Can change input method by right click.
+    - Cancel the selected region when any key event.
+    - Support compiling with xulrunner. (Closes: #364379)
+    - Support setting seprated english/ascii font.
+    - Display hand cursor on hyperlinks when no mouse support.
+    - Other minor improvments and fixes.
+  * use_xulrunner.dpatch: dropped, intergrated into upstream.
+
+ -- Emfox Zhou <EmfoxZhou@gmail.com>  Fri,  1 Sep 2006 07:29:50 +0800
+
 pcmanx-gtk2 (0.3.4-1.1) unstable; urgency=medium
 
   * Non-maintainer upload.

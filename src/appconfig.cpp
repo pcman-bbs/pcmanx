@@ -98,6 +98,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 	BEGIN_CONFIG_SECT(Display)
 		CFG_STR ( FontFamily )
 		CFG_INT ( FontSize )
+		CFG_STR ( FontFamilyEn )
+		CFG_INT ( FontSizeEn )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
 		CFG_BOOL( HorizontalCenterAlign )
@@ -321,6 +323,8 @@ void CAppConfig::SetToDefault()
 
 	FontSize = 14;
 	FontFamily = "Sans";
+	FontSizeEn = 14;
+	FontFamilyEn = "Sans";
 	AntiAliasFont = true;
 	CompactLayout = false;
 	HorizontalCenterAlign = false;
