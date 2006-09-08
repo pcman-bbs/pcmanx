@@ -10,8 +10,11 @@ Vendor:    PCMan X GTK+ 2 project
 Group:     Applications/Internet
 Source:    pcmanx-gtk2-%{ver}.tar.gz
 Url:       http://pcmanx.csie.net
-Packager:  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+Packager:  Shih-yuan Lee (FourDollars) <fourdollars@gmail.com>
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRequires: gettext
+BuildRequires: pkgconfig
+BuildRequires: gtk2-devel >= 2.4.0
 
 %description
 An easy-to-use telnet client mainly targets BBS users.

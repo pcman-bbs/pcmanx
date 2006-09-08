@@ -1,6 +1,10 @@
+2006-09-08  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: remove tag for Fedora Core 5, add dependency term.
+
 2006-08-29  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
-	* pcmanx-gtk2.spec.in: rpm spec file modify
+	* pcmanx-gtk2.spec.in: add tag for Fedora Core 5
 
 	* TODO: task add
 
