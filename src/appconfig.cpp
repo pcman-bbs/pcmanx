@@ -192,7 +192,7 @@ void CAppConfig::LoadFavorites()
 				pSite->m_AutoReconnect = atoi(pval);
 			else if( 0 == strcmp( pname, "AntiIdle" ) )
 				pSite->m_AntiIdle = atoi(pval);
-			else if( 0 == strcmp( pname, "Antiidlestr" ) )
+			else if( 0 == strcmp( pname, "AntiIdleStr" ) )
 				pSite->m_AntiIdleStr = pval;
 			else if( 0 == strcmp( pname, "Encoding" ) )
 				pSite->m_Encoding = pval;

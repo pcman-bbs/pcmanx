@@ -3,8 +3,6 @@ TODO List
 
 jserv
 -----
-3. Improve automake rules for extensive Mozilla/Firefox detections and
-their configurations.
 4. Enhance the interaction for plugin via XPCOM / XPConnect.
 
 kanru

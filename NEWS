@@ -4,7 +4,7 @@ Version 0.3.5 - August 2006
 * Some support of horizontal and vertical center align. (almost broken)
 * Cancel the selected region when any key event.
 * Support compiling with xulrunner.
-* Support setting seprated english/ascii font.
+* Support setting seprated English/ASCII font.
 * Swap OK and Cancel button to be compatible with GNOME.
 * Display hand cursor on hyperlinks when no mouse support.
 
