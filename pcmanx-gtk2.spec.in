@@ -1,25 +1,30 @@
 %define ver @VERSION@
 %define rel 1
 
-Summary:   user-friendly telnet client designed for BBS browsing.
 Name:      pcmanx-gtk2
 Version:   %{ver}
-Release:   %{rel}
-License:   GPL
-Vendor:    PCMan X GTK+ 2 project
+Release:   %{rel}%{?dist}
+Summary:   user-friendly telnet client designed for BBS browsing.
+
 Group:     Applications/Internet
-Source:    pcmanx-gtk2-%{ver}.tar.gz
+License:   GPL
 Url:       http://pcmanx.csie.net
+Source:    http://pcmanx.csie.net/release/%{name}-%{version}.tar.gz
+Vendor:    PCMan X GTK+ 2 project
 Packager:  Shih-yuan Lee (FourDollars) <fourdollars@gmail.com>
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: gettext
-BuildRequires: pkgconfig
-BuildRequires: gtk2-devel >= 2.4.0
+
+BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRequires:    gettext, pkgconfig, gtk2-devel >= 2.4.0, desktop-file-utils
+Requires:         gtk2
+Requires(post):   desktop-file-utils
+Requires(postun): desktop-file-utils
 
 %description
 An easy-to-use telnet client mainly targets BBS users.
-PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS client formerly designed for MS Windows only.
-It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
+PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS
+client formerly designed for MS Windows only. It aimed to be an easy-to-use yet
+full-featured telnet client facilitating BBS browsing with the ability to
+process double-byte characters.
 
 %prep
 %setup -q
@@ -37,23 +42,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc
-   /usr/bin/pcmanx
-   /usr/lib/libpcmanx_core.la
-   /usr/lib/libpcmanx_core.so
-   /usr/lib/libpcmanx_core.so.0
-   /usr/lib/libpcmanx_core.so.0.0.0
-   /usr/share/applications/pcmanx.desktop
-   /usr/share/locale/zh_CN/LC_MESSAGES/pcmanx.mo
-   /usr/share/locale/zh_TW/LC_MESSAGES/pcmanx.mo
-   /usr/share/pcmanx/emoticons
-   /usr/share/pcmanx/nancy_bot/default.conf
-   /usr/share/pcmanx/nancy_bot/default_msg.data
-   /usr/share/pcmanx/nancy_bot/default_usages.data
-   /usr/share/pcmanx/nancy_bot/example.conf
-   /usr/share/pcmanx/nancy_bot/example_msg.data
-   /usr/share/pcmanx/nancy_bot/example_usages.data
-   /usr/share/pcmanx/sitelist
-   /usr/share/pixmaps/pcmanx.png
+%doc ABOUT-NLS AUTHORS COPYING INSTALL NEWS README TODO
+%{_bindir}/pcmanx
+%{_libdir}/libpcmanx*
+%{_datadir}/applications/pcmanx.desktop
+%{_datadir}/pcmanx/
+%{_datadir}/pixmaps/pcmanx.png
+%{_datadir}/locale/
 
 %changelog

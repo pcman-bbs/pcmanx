@@ -1,3 +1,8 @@
+2006-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Polish the spec for redhat/fedora.
+	* pcmanx.desktop.in: Remove the duplicated item.
+
 2006-09-12  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/appconfig.cpp (CAppConfig::LoadFavorites): Fixlet to AntiIdleStr
