@@ -346,7 +346,7 @@ void CTelnetCon::OnConnect(int code)
 #if !defined(MOZ_PLUGIN)
 		if( GetView()->GetParentFrame()->GetCurView() == m_pView )
 		{
-			for( int col = 0; col < sizeof(failed_msg); )
+			for( unsigned int col = 0; col < sizeof(failed_msg); )
 				col += m_pView->DrawChar( 0, col );
 		}
 #endif
@@ -686,7 +686,7 @@ void CTelnetCon::Close()
 			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
-			INFO("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+			DEBUG("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
 		close( m_SockFD );
@@ -763,7 +763,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 		string sub2;
 		string str(line);
 	
-		int n = str.find_first_of("  ");  // cut userid and spaces at head
+		unsigned int n = str.find_first_of("  ");  // cut userid and spaces at head
 		if( n != string::npos) // found
 			sub = str.substr(n+1);
 
@@ -797,7 +797,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 
 
 	gchar **column = g_strsplit(line, " ", 2);
-	GtkWidget* popup_win = popup_notifier_notify(
+	/*GtkWidget* popup_win = */ popup_notifier_notify(
 		g_strdup_printf("%s - %s",
 			m_Site.m_Name.c_str(),
 			g_strchomp(column[0])),

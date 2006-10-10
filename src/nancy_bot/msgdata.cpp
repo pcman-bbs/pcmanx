@@ -112,7 +112,7 @@ MsgData::writeToMsgData() // FIXME
 	for(; cur != VSM_MsgLearnToSave.end(); cur++)
 	{
 		buf += ">" + cur->first + "\n";
-		for(int i = 0; i < (cur->second).size()  ; i++)
+		for(unsigned int i = 0; i < (cur->second).size()  ; i++)
 		{
 			buf += (cur->second)[i] + "\n";
 		}
@@ -338,7 +338,6 @@ GOT_VALUE:
 int MsgData::initUnknowMsgToAsk()
 {
 	FILE *fptr = fopen( filename_unknow_log.c_str(), "rt");
-	int len;
 	string index;
 	if(!fptr)
 	{
@@ -481,11 +480,11 @@ int MsgData::getCommonMsg(string &input, string &msg, bool add_to_unknow)
 	
 	if(BOT_RUN_LEVEL & USE_AUTO_LEARN)
 	{
-		if( (rand() % 100) < LEVEL__RE_LEARNING ) // old msg to learn again
+		if( (unsigned int) (rand() % 100) < LEVEL__RE_LEARNING ) // old msg to learn again
 			re_learn = true;
 		
 		// FIXME: Are the two rand()s different?
-		if( add_to_unknow && (rand() % 100 ) < LEVEL__ADD_TO_UNKNOW_MSG ) // ask ( new Msg to leran )
+		if( add_to_unknow && ((unsigned int) (rand() % 100 ) < LEVEL__ADD_TO_UNKNOW_MSG) ) // ask ( new Msg to leran )
 			ask = true;
 	}
 
@@ -505,7 +504,7 @@ int MsgData::getCommonMsg(string &input, string &msg, bool add_to_unknow)
 				is_this++;
 				
 				// not learn, just search other maching messages
-				if(input.find((string)cur->first) != -1 ) // found 
+				if(input.find((string)cur->first) != string::npos ) // found 
 				{
 					random = rand() % (cur->second).size();
 					msg = (cur->second)[random];

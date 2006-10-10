@@ -703,7 +703,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 						, authors	);
 */
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
-	gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
+	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
 
 }
@@ -756,7 +756,7 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
 
 		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
-		gtk_dialog_run((GtkDialog*) t_pDialog) == GTK_RESPONSE_OK;
+		gtk_dialog_run((GtkDialog*) t_pDialog); // == GTK_RESPONSE_OK)
 		gtk_widget_destroy(t_pDialog);
 		g_bUpdateingBBSList = false;
 	}
@@ -1346,10 +1346,10 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 
 int CMainFrame::GetViewIndex(CTermView* view)
 {
-	DEBUG( "get view index, view = %x", view );
+	DEBUG( "get view index, view = %x", (unsigned int) view );
 	if( !view )
 		return -1;
-	DEBUG( "view->m_Widget = %x", view->m_Widget );
+	DEBUG( "view->m_Widget = %x", (unsigned int) view->m_Widget );
 	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
 }
 

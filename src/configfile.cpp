@@ -239,7 +239,7 @@ string CConfigFile::GetDataPath( string FileName )
 	string path = GetConfigPath(FileName);
 //	if( ::wxFileExists( path ) )	// Find the same file in users' home dir first.
 	FILE *fp;
-	if( fp = fopen(path.c_str(), "r") )
+	if( (fp = fopen(path.c_str(), "r")) )
 	{
 		fclose(fp);
 		return path;

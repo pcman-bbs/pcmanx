@@ -38,7 +38,6 @@ CGeneralPrefPage::CGeneralPrefPage()
 	GtkWidget *hbox19;
 	GtkWidget *label27;
 	GtkWidget *hbox20;
-	GtkWidget *label28;
 	GtkObject *m_PopupTimeout_adj;
 	GtkWidget *label29;
 	GtkWidget *hbox21;

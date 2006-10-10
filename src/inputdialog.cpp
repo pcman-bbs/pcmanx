@@ -27,6 +27,7 @@
 
 #include "debug.h"
 
+#if 0
 static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _this)
 {
 	switch(evt->keyval)
@@ -42,7 +43,7 @@ static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _th
 	}
 	return false;
 }
-
+#endif
 
 CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text, bool can_be_empty)
         : CDialog(parent, title, true), m_CanBeEmpty(can_be_empty)

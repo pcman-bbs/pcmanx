@@ -694,7 +694,6 @@ void CTermView::PasteFromClipboard(bool primary)
 		if( !utext )
 			return;
 		INFO("%s", utext);
-		gsize wl;
 
 		DoPasteFromClipboard( string(utext), false);
 		g_free(utext);

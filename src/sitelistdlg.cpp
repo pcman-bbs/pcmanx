@@ -46,7 +46,6 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	GtkWidget *image349;
 	GtkWidget *label26;
 	GtkWidget *close_btn;
-	GtkWidget *dialog_action_area3;
 	
 	dialog_vbox3 = GTK_DIALOG (m_Widget)->vbox;
 	gtk_widget_show (dialog_vbox3);

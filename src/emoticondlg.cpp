@@ -45,7 +45,6 @@ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
 	GtkWidget *remove_btn;
 	GtkWidget *up_btn;
 	GtkWidget *down_btn;
-	GtkWidget *dialog_action_area;
 
 	vbox = GTK_DIALOG (m_Widget)->vbox;
 	gtk_widget_show (vbox);

@@ -1,15 +1,41 @@
-2006-10-10	Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+2006-10-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/emoticondlg.cpp (CEmoticonDlg::CEmoticonDlg),
+	src/editfavdlg.cpp (CEditFavDlg::CEditFavDlg),
+	src/core/termview.cpp (CTermView::PasteFromClipboard),
+	src/appconfig.cpp (CAppConfig::SaveFavorites): Remove redundant
+	variables.
+
+	* src/view/telnetcon.cpp (CTelnetCon::OnConnect)
+	(CTelnetCon::OnNewIncomingMessage),
+	src/nancy_bot/msgdata.cpp (MsgData::writeToMsgData)
+	(MsgData::getCommonMsg),
+	src/nancy_bot/botutil.h (replaceString),
+	src/nancy_bot/nancybot.cpp (NancyBot::askNancy): Eliminate casting
+	warnings.
+
+	* src/view/telnetcon.cpp (CTelnetCon::OnConnect): Use DEBUG macro
+	instead of INFO.
+
+	* src/mainframe.cpp (CMainFrame::OnAbout)
+	(CMainFrame::updateBBSListHandler): Eliminate compilation warnings.
+
+	* NEWS: Fix typo.
+
+2006-10-10  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/notifier/notifier-impl.c,
-	src/notifier/working_area.c: Clean some warning messages during compilation.
+	src/notifier/working_area.c: Clean some warning messages during
+	compilation.
 
-2006-10-10	Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+2006-10-10  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Add debuginfo rpm for debug.
 
 2006-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Polish the spec for redhat/fedora.
+
 	* pcmanx.desktop.in: Remove the duplicated item.
 
 2006-09-12  Jim Huang  <jserv.tw@gmail.com>

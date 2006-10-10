@@ -278,7 +278,7 @@ void CAppConfig::SaveFavorites()
 	FILE* fo = fopen( fpath.c_str() , "w" );
 	if( fo )
 	{
-		bool has_sensitive_data = false;
+		// bool has_sensitive_data = false;
 		vector<CSite>::iterator it;
 		for( it = Favorites.begin(); it != Favorites.end(); ++it )
 		{
