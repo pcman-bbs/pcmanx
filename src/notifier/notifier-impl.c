@@ -301,6 +301,7 @@ GtkWidget* popup_notifier_notify(
 			caption, text, 
 			parent, 
 			click_cb, click_cb_data);
+	return NULL;
 }
 
 void popup_notifier_set_timeout( int popup_timeout_sec )
@@ -317,4 +318,3 @@ void popup_notifier_init(GdkPixbuf *pixbuf)
 	icon_pixbuf = pixbuf;
 	notifier_initialized = 1;
 }
-

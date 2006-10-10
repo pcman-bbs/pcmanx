@@ -1,8 +1,13 @@
-2006-10-10	FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-10-10	Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/notifier/notifier-impl.c,
+	src/notifier/working_area.c: Clean some warning messages during compilation.
+
+2006-10-10	Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Add debuginfo rpm for debug.
 
-2006-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Polish the spec for redhat/fedora.
 	* pcmanx.desktop.in: Remove the duplicated item.
@@ -12,11 +17,11 @@
 	* src/appconfig.cpp (CAppConfig::LoadFavorites): Fixlet to AntiIdleStr
 	typo. Anti idle string should be working now.
 
-2006-09-08  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-09-08  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: remove tag for Fedora Core 5, add dependency term.
 
-2006-08-29  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-08-29  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: add tag for Fedora Core 5
 
@@ -60,7 +65,7 @@
 	(main): Initialize Runtime options and check if multiple-instance is
 	allowed. This enables "pcmanx --help" to dump options.
 
-2006-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Modify the spec for fedora rpm package build.
 
@@ -81,7 +86,7 @@
 	available.
 	Fallbacks used: "xulrunner-plugin". 
 
-2006-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-04-22  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/debug.h,
@@ -106,20 +111,20 @@
 
 	* po/pcmanx.pot: deleted, now not necessary.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/appconfig.h,
 	src/mainframe.cpp,
 	src/appconfig.cpp: Polish center alignment mechanism.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po: Update the po files.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/core/termview.cpp,
@@ -248,7 +253,7 @@
 	TODO: we shall be able to toggle and show/hide the status bar
 	immediately.
 
-2006-02-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-02-19  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
@@ -372,20 +377,20 @@
 	po/zh_TW.po,
 	po/zh_CN.po: updated related po files.
 
-2005-12-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-12-04  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po : revise po files.
 
-2005-11-15  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-11-15  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/sitepage.h,
 	src/generalprefpage.cpp,
 	src/generalprefpage.h : move align checkbox to sitepage.cpp
 
-2005-11-13  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-11-13  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/generalprefpage.h,
 	src/generalprefpage.cpp,
@@ -425,11 +430,11 @@
 	Enforce plugin shared library to be compiled with the -fPIC option.
 	Reported by: Emfox Zhou <emfoxzhou@gmail.com>.
 
-2005-10-18  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-18  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/zh_CN.po: Translated by emfox.
 
-2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-09  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* configure.ac: Bump release version to 0.3.3
 
@@ -439,7 +444,7 @@
 
 	* po/zh_TW.po: Update.
 
-2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-01  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/appconfig.h
 	src/view/telnetview.cpp
@@ -452,7 +457,7 @@
 	* po/pcmanx.pot,
 	po/zh_TW.po: Messages updated.
 
-2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-25  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h
 	src/mainframe.cpp
@@ -460,29 +465,29 @@
 	po/zh_TW.po:
 	Add menu item "Paste from Clipboard".
 
-2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-25  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.cpp: Make the ugly command shorter.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/zh_TW.po: Updated the Traditional Chinese Messages for BBS 
 	list update
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h,
 	src/view/telnetcon.cpp,
 	src/mainframe.cpp:
 	Modify BBS list update mechanism not to block the user interaction.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/view/telnetcon.h,
 	src/view/telnetcon.cpp:
 	Remove g_mutex_new inline for code-reading friendly.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h,
 	src/view/telnetview.cpp,
@@ -495,7 +500,7 @@
 
 	* configure.ac: Clean up redundant GTK+ checking.
 
-2005-09-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-19  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-pure-gtk2.spec.in: Modify string from "Copyright" to "License".
 
@@ -898,7 +903,7 @@
 	Fixlet to module query.
 	Clarify headers including.
 
-2005-08-05  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-08-05  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/termview.h,
@@ -1542,7 +1547,7 @@
 	* src/mainframe.cpp (CMainFrame::NewCon):
 	Call CTermView::SetHorizontalCenterAlign with proper parameter.
 
-2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/termview.cpp:
 	Fix bug of selected region.
@@ -1593,7 +1598,7 @@
 	src/termview.cpp (CTermView::OnSize):
 	Anti-alias font can be turned off now.
 
-2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/termdata.cpp:
 	* src/termview.cpp:
@@ -1965,7 +1970,7 @@
 	* src/font.h (CFont::GetMaxWidth):
 	Ensure that max width can be devided by 2.
 
-2005-07-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-04  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/widget.cpp
 	(delete_CWidget): Check object existence before releasing.
