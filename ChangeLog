@@ -1,3 +1,7 @@
+2006-10-10	FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Add debuginfo rpm for debug.
+
 2006-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Polish the spec for redhat/fedora.

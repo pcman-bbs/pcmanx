@@ -19,6 +19,11 @@ Requires:         gtk2
 Requires(post):   desktop-file-utils
 Requires(postun): desktop-file-utils
 
+%{?!DEBUGINFO:     %define DEBUGINFO    1}
+%if !%{DEBUGINFO}
+%define debug_package %{nil}
+%endif
+
 %description
 An easy-to-use telnet client mainly targets BBS users.
 PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS
@@ -30,12 +35,16 @@ process double-byte characters.
 %setup -q
 
 %build
-%configure
+%configure \
+%if %{DEBUGINFO}
+	--enable-debug \
+%endif
+;
 make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install-strip DESTDIR=$RPM_BUILD_ROOT
+%makeinstall
 
 %clean
 rm -rf $RPM_BUILD_ROOT
