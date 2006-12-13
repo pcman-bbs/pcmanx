@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ CWidget::~CWidget()
 	// All CWidget derived class should do its destruction in 
 	// OnDestroy(), not in C++ destructor.
 	// Because GTK+ calls CWidget::Destroy() on GtkObject destruction, 
-	// all resources should be release at that time or some obscure bug
-	// will be generated.
+	// all resources should be released at that time, otherwise some 
+	// obscure bug will be generated.
 	// CWidget derived objects used as wrapper of GtkObjects are destructed
 	// on idle handler, which is called later then GtkObject destruction.
 

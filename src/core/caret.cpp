@@ -4,7 +4,7 @@
 // Name:        caret.cpp
 // Purpose:     Show a cursor on the black terminal screen
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw2004.7.17
+// E-mail:      pcman.tw@gmail.com2004.7.17
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 // Modified by:

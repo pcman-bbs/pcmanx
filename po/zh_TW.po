@@ -1,5 +1,5 @@
 # translation of zh_TW.po to 
-# PCMan <hzysoft@sina.com.tw>, 2005.
+# PCMan <pcman.tw@gmail.com>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
@@ -208,7 +208,7 @@ msgstr "套用到所有開啟中的連線"
 
 #: ../src/mainframe.cpp:621
 msgid ""
-"Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
+"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
 "Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
@@ -216,7 +216,7 @@ msgid ""
 "Youchen Lee (Developer) <copyleft@utcr.org>\n"
 "Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 msgstr ""
-"洪任諭 Hong Jen Yee (主要開發者) <hzysoft@sina.com.tw>\n"
+"洪任諭 Hong Jen Yee (主要開發者) <pcman.tw@gmail.com>\n"
 "黃敬群 Jim Huang (開發者) <jserv@kaffe.org>\n"
 "陳侃如 Kanru Chen (開發者) <koster@debian.org.tw>\n"
 "吳佳一 Chia I Wu (開發者) <b90201047@ntu.edu.tw>\n"

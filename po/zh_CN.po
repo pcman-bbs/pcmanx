@@ -1,5 +1,5 @@
 # translation of zh_CN.po to
-# PCMan <hzysoft@sina.com.tw>, 2005.
+# PCMan <pcman.tw@gmail.com>, 2005.
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
@@ -207,7 +207,7 @@ msgstr "应用于所有打开的分页"
 
 #: ../src/mainframe.cpp:621
 msgid ""
-"Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
+"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv@kaffe.org>\n"
 "Kanru Chen (Developer) <koster@debian.org.tw>\n"
 "Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
@@ -215,7 +215,7 @@ msgid ""
 "Youchen Lee (Developer) <copyleft@utcr.org>\n"
 "Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 msgstr ""
-"洪任谕 Hong Jen Yee (主要开发者) <hzysoft@sina.com.tw>\n"
+"洪任谕 Hong Jen Yee (主要开发者) <pcman.tw@gmail.com>\n"
 "黄敬群 Jim Huang (开发者) <jserv@kaffe.org>\n"
 "陈侃如 Kanru Chen (开发者) <koster@debian.org.tw>\n"
 "吴佳一 Chia I Wu (开发者) <b90201047@ntu.edu.tw>\n"

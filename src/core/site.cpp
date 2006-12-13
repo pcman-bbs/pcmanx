@@ -3,7 +3,7 @@
 // Name:        site.cpp
 // Purpose:     Site Settings
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.07.15
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html

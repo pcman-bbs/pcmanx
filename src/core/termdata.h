@@ -2,7 +2,7 @@
 // Name:        termdata.h
 // Purpose:     Store terminal screen data and parse ANSI escape sequence
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.7.16
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html

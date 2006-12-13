@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2005
  *	Jim Huang <jserv@kaffe.org>
- *	PCMan (Hong Jen Yee) <hzysoft@sina.com.tw>
+ *	PCMan (Hong Jen Yee) <pcman.tw@gmail.com>
  *
  * Licensed under the GNU GPL v2.  See COPYING.
  */

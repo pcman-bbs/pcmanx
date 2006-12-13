@@ -4,7 +4,7 @@
 // Description: 
 //
 //
-// Author: Hong Jen Yee (PCMan) <hzysoft@sina.com.tw>, (C) 2005
+// Author: Hong Jen Yee (PCMan) <pcman.tw@gmail.com>, (C) 2005
 //
 // Copyright: See COPYING file that comes with this distribution
 //

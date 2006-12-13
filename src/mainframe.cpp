@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -674,7 +674,7 @@ void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
 void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	char* authors = _(
-			"Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
+			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 			"Jim Huang (Developer) <jserv@kaffe.org>\n"
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
