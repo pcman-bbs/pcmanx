@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## change_default_en_font_to_mono.dpatch by  <emfox@localhost>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad pcmanx-gtk2-0.3.5~/src/core/termview.cpp pcmanx-gtk2-0.3.5/src/core/termview.cpp
+--- pcmanx-gtk2-0.3.5~/src/core/termview.cpp	2006-07-28 06:08:35.000000000 +0000
++++ pcmanx-gtk2-0.3.5/src/core/termview.cpp	2006-11-24 19:40:44.000000000 +0000
+@@ -280,7 +280,7 @@
+ 	if( !m_Font )
+ 		m_Font = new CFont("Sans", 16);
+ 	if( !m_FontEn )
+-		m_FontEn = new CFont("Sans", 16);
++		m_FontEn = new CFont("Monospace", 16);
+ 
+ 	m_GC = gdk_gc_new(m_Widget->window);
+ 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);

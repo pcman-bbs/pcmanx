@@ -76,7 +76,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -V -Xfirefox
+	dh_makeshlibs -V -Xiceweasel
 	dh_installdeb
 	dh_shlibdeps -L libpcmanx-core0 -l debian/libpcmanx-core0/usr/lib
 	dh_gencontrol
