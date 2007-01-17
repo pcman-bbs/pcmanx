@@ -1,5 +1,14 @@
 2007-01-18  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/docklet/eggtrayicon.c (egg_tray_icon_class_init)
+	(egg_tray_icon_manager_window_destroyed) (egg_tray_icon_realize)
+	(egg_tray_icon_send_message): Sync with GNOME cvs repository.
+	Updated: transparent icons, sending of messages, and fix 1 pixel.
+	(egg_tray_icon_add) (transparent_expose_event)
+	(make_transparent_again) (make_transparent): New helper functions.
+
+2007-01-18  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/mainframe.cpp (CMainFrame::CMainFrame): Remove the call of
 	gtk_widget_grab_focus to avoid SIGSEGV caused by gtk+-2.10.7 .
 	Reported by Leo <sdl.web@gmail.com>.
