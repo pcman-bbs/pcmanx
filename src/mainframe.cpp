@@ -195,7 +195,7 @@ CMainFrame::CMainFrame()
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
 
-	gtk_widget_grab_focus(m_pNotebook->m_Widget);
+//	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
 //	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
 
