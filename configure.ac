@@ -54,6 +54,7 @@ AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
+AH_VERBATIM([USE_WGET], [#undef USE_WGET])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -124,6 +125,11 @@ AC_ARG_ENABLE([plugin],
 	AS_HELP_STRING([--enable-plugin],
 		[enable Mozilla/Firefox plugin support (default: no)]),
 	plugin=$enableval, plugin="no")
+
+AC_ARG_ENABLE([wget],
+	AS_HELP_STRING([--enable-wget],
+		[enable wget support (default: no)]),
+	wget=$enableval, wget="no")
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -311,6 +317,17 @@ fi
 
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
 AC_SUBST(USE_EXTERNAL)
+
+dnl *********************************************************************
+dnl ** wget support ***********************************
+dnl *********************************************************************
+
+if test "$wget" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_WGET, [1], [Enable wget support])
+fi
+
+AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
+AC_SUBST(USE_WGET)
 
 dnl *********************************************************************
 dnl ** Mozilla/Firefox Plugin support ***********************************
@@ -554,6 +571,7 @@ if test "x$enable_mozilla" = "xyes"; then
 else
   echo "Mozilla/Firefox plugin support... : $plugin"
 fi
+echo wget support..................... : $wget
 echo
 echo The binary will be installed in $prefix/bin
 echo

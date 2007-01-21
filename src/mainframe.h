@@ -68,8 +68,10 @@ public:
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFontEn(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
+#ifdef USE_WGET
 	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSListHandler(int nSignalNumber);
+#endif
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);

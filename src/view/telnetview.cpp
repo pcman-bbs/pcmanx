@@ -49,7 +49,9 @@ CTelnetView::CTelnetView()
 
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
+#ifdef USE_WGET
 bool CTelnetView::m_bWgetFiles = false;
+#endif
 
 static GtkWidget* input_menu_item = NULL;
 
@@ -577,6 +579,7 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string sURL)
 {
+#ifdef USE_WGET
 	if (m_bWgetFiles == true) {
 		const char* t_pcURL = sURL.c_str();
 		char* t_pcDot = strrchr(t_pcURL, '.') + 1;
@@ -595,6 +598,7 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 			}
 		}
 	}
+#endif
 
 #if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )

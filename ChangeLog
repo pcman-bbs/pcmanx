@@ -1,3 +1,14 @@
+2007-01-21  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac,
+	src/appconfig.cpp,
+	src/appconfig.h,
+	src/generalprefpage.cpp,
+	src/mainframe.cpp,
+	src/mainframe.h,
+	src/view/telnetview.cpp,
+	src/view/telnetview.h: disable the buggy "BBS List Update" and wget download by default.
+
 2007-01-18  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/docklet/eggtrayicon.c (egg_tray_icon_class_init)

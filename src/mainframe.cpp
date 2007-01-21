@@ -115,8 +115,10 @@ void CMainFrame::set_tray_icon()
 }
 #endif
 
+#ifdef USE_WGET
 bool CMainFrame::g_bIsUpateHandlerExisted = false;
 bool CMainFrame::g_bUpdateingBBSList = false;
+#endif
 CMainFrame* CMainFrame::g_pMyself = NULL;
 
 gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this )
@@ -228,7 +230,9 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+#ifdef USE_WGET
 	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
+#endif
 }
 
 
@@ -273,7 +277,9 @@ GtkActionEntry CMainFrame::entries[] =
   {
     {"connect_menu", NULL, _("_Connect")},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+#ifdef USE_WGET
     {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
+#endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
@@ -327,7 +333,9 @@ static const char *ui_info =
   "  <menubar>"
   "    <menu action='connect_menu'>"
   "      <menuitem action='site_list'/>"
+#ifdef USE_WGET
   "      <menuitem action='update_bbs_list'/>"
+#endif
   "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
   "      <menuitem action='close'/>"
@@ -708,6 +716,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 
 }
 
+#ifdef USE_WGET
 void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 {
 	if (g_bIsUpateHandlerExisted == false) {
@@ -761,6 +770,7 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 		g_bUpdateingBBSList = false;
 	}
 }
+#endif
 
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem, CMainFrame* pMainFrame)
 {
@@ -840,7 +850,9 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+#ifdef USE_WGET
 	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
+#endif
 
 #ifdef USE_NOTIFIER
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );

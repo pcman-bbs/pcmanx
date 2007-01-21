@@ -71,9 +71,11 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_AAFont);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
 
+#ifdef USE_WGET
 	m_pWgetFiles = gtk_check_button_new_with_mnemonic (_("Use \"wget\" to download files."));
 	gtk_widget_show (m_pWgetFiles);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_pWgetFiles, FALSE, FALSE, 0);
+#endif
 
 	hbox20 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox20);
@@ -124,7 +126,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
+#ifdef USE_WGET
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pWgetFiles), AppConfig.UseWgetFiles);
+#endif
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), AppConfig.PopupNotifier);
 
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_PopupTimeout), AppConfig.PopupTimeout);
@@ -145,7 +149,9 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
 	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
+#ifdef USE_WGET
 	AppConfig.UseWgetFiles = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pWgetFiles));
+#endif
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
 	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_PopupTimeout));
 	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));

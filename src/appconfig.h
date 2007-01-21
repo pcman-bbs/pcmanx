@@ -96,7 +96,9 @@ public:
 	bool ShowTrayIcon;
 	bool ShowStatusBar;
 	bool PopupNotifier;
+#ifdef USE_WGET
 	bool UseWgetFiles;
+#endif
 	int PopupTimeout;
 	
 //	Terminal Settings
