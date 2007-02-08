@@ -48,7 +48,11 @@
 #include <signal.h>
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -854,7 +858,7 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
 #endif
 
-#ifdef USE_NOTIFIER
+#if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
 #endif
 //	FIXME: Currently we cannot freely hide or show tray icon.

@@ -46,7 +46,11 @@
 #endif
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -126,8 +130,15 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+	if (!notify_is_initted())
+	{
+	  notify_init("pcmanx-gtk2");
+	}
+#else
 	popup_notifier_init(main_frm->GetMainIcon());
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -135,7 +146,10 @@ int main(int argc, char *argv[])
 #endif
 
 	gtk_main ();
-	
+
+#ifdef USE_LIBNOTIFY
+	notify_uninit();
+#endif	
 	CTelnetCon::Cleanup();
 
 	AppConfig.SaveFavorites();

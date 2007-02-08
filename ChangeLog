@@ -1,3 +1,11 @@
+2007-02-08  Kanru Chen  <koster@debian.org.tw>
+
+	* configure.ac,
+	src/mainframe.cpp,
+	src/pcmanx_gtk2.cpp,
+	src/view/telnetcon.cpp:
+	Added libnotify notifier support, use --enable-libnotify to switch.
+
 2007-01-21  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* configure.ac,
@@ -7,7 +15,8 @@
 	src/mainframe.cpp,
 	src/mainframe.h,
 	src/view/telnetview.cpp,
-	src/view/telnetview.h: disable the buggy "BBS List Update" and wget download by default.
+	src/view/telnetview.h: disable the buggy "BBS List Update" and
+	wget download by default.
 
 2007-01-18  Jim Huang  <jserv.tw@gmail.com>
 

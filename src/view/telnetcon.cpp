@@ -20,7 +20,11 @@
 #include "mainframe.h"
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -710,7 +714,6 @@ void CTelnetCon::Cleanup()
 		g_mutex_free(m_DNSMutex);
 		m_DNSMutex = NULL;
 	}
-	
 }
 
 void CTelnetCon::Reconnect()
@@ -795,8 +798,33 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	if( mainfrm->IsActivated() && mainfrm->GetCurCon() == this )
 		return;
 
-
 	gchar **column = g_strsplit(line, " ", 2);
+#ifdef USE_LIBNOTIFY
+	gchar *t;
+	char body[256];
+	char summary[256];
+	t = g_markup_escape_text(column[0], -1);
+	g_snprintf(summary, 256, "%s - %s",
+		   m_Site.m_Name.c_str(),
+		   g_strchomp(t));
+    g_free(t);
+	t = g_markup_escape_text(column[1], -1);
+	g_snprintf(body, 256, "%s", g_strchomp(t));
+	g_free(t);
+	NotifyNotification *notification =
+	  notify_notification_new(
+				  summary,
+				  body,
+				  NULL,
+				  NULL);
+	notify_notification_set_timeout(notification,
+					AppConfig.PopupTimeout*1000);
+	notify_notification_set_icon_from_pixbuf(notification,
+						 mainfrm->GetMainIcon());
+	notify_notification_show(notification,
+				 NULL);
+	g_object_unref(G_OBJECT(notification));
+#else
 	/*GtkWidget* popup_win = */ popup_notifier_notify(
 		g_strdup_printf("%s - %s",
 			m_Site.m_Name.c_str(),
@@ -805,6 +833,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 		m_pView->m_Widget, 
 		G_CALLBACK(popup_win_clicked), 
 		this);
+#endif
 	g_strfreev(column);
 #endif
 

@@ -49,6 +49,7 @@ AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
+AH_VERBATIM([USE_LIBNOTIFY],[#undef USE_LIBNOTIFY])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
@@ -100,6 +101,11 @@ AC_ARG_ENABLE([notifier],
 	AS_HELP_STRING([--disable-notifier],
 		[disable popup notifier support (default: yes)]),
 	notifier=$enableval, notifier="yes")
+
+AC_ARG_ENABLE([libnotify],
+	AS_HELP_STRING([--enable-libnotify],
+		[enable popup notifier support by libnotify (default: no)]),
+	libnotify=$enableval, libnotify="no")
 
 dnl AC_ARG_ENABLE([script],
 dnl 	AS_HELP_STRING([--enable-script],
@@ -256,6 +262,18 @@ fi
 
 AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
 AC_SUBST(USE_NOTIFIER)
+
+if test "$notifier" = "yes"; then
+	if test "$libnotify" = "yes"; then
+		AC_DEFINE_UNQUOTED(USE_LIBNOTIFY, [1], [Enable libnotify notifier support])
+		PKG_CHECK_MODULES(LIBNOTIFY, libnotify) 
+		CFLAGS="$CFLAGS $LIBNOTIFY_CFLAGS"
+		LIBS="$LIBS $LIBNOTIFY_LIBS"
+	fi
+fi
+
+AM_CONDITIONAL(USE_LIBNOTIFY, test "$libnotify" = "yes")
+AC_SUBST(USE_LIBNOTIFY)
 
 dnl *********************************************************************
 dnl ** Script support ***************************************************
@@ -558,6 +576,7 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
+echo Libnotify support................ : $libnotify
 echo Nancy bot support ............... : $nancy
 echo Mouse click and wheel support ... : $mouse
 dnl if test "x$script" = "xyes"; then
