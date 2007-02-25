@@ -1,3 +1,8 @@
+2007-02-26  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp: add a workaround to prevent zombie process after
+	updating BBS list.
+
 2007-02-21  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/appconfig.cpp: fix the bug of center align.

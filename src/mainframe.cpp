@@ -739,16 +739,23 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 		g_bUpdateingBBSList = true;
 
 		child_pid = fork();
-		if (child_pid == 0)
-		{
+		if (child_pid == 0) {
 			int t_nRet = system("wget -O ~/.pcmanx/sitelist http://free.ym.edu.tw/pcman/site_list.utf8");
 			if (t_nRet == 0)
 				kill(parent_pid, SIGUSR1);
 			else
 				kill(parent_pid, SIGUSR2);
 			exit(0);
+		} else {
+			int stat_val = 0;
+			pid_t stat_pid = 0;
+			sleep(1);
+			stat_pid = wait(&stat_val);
+#ifdef USE_DEBUG
+			if (child_pid != stat_pid)
+				DEBUG("child_pid=%d stat_pid=%d stat_val=%d\n", child_pid, stat_pid, stat_val);
+#endif
 		}
-		wait(NULL);
 	}
 }
 
