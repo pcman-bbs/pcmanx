@@ -1,3 +1,10 @@
+2007-03-03  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac,
+	po/zh_TW.po,
+	po/Makevars,
+	po/zh_CN.po: update the address of forum.
+
 2007-02-26  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.cpp: add a workaround to prevent zombie process after
