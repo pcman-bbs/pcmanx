@@ -8,6 +8,7 @@ Standards-Version: 3.7.2
 Package: pcmanx-gtk2
 Architecture: any
 Depends: ${shlibs:Depends}
+Recommends: wget
 Suggests: mozilla-plugin-pcmanx
 Description: user-friendly telnet client mainly targets BBS users
  PCMan X is a newly developed GPL'd version of PCMan, a full-featured

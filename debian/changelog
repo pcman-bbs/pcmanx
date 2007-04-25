@@ -1,3 +1,10 @@
+pcmanx-gtk2 (0.3.5-3) unstable; urgency=low
+
+  * Recommend wget, so that update BBS list works.
+  * add essential includes of c++. (Closes: #420917)
+
+ -- Emfox Zhou <emfox@debian.org>  Wed, 25 Apr 2007 20:36:53 +0800
+
 pcmanx-gtk2 (0.3.5-2) unstable; urgency=low
 
   * Change to cope with the migration of firefox to iceweasel.

@@ -20,6 +20,7 @@
   #pragma implementation "sitepage.h"
 #endif
 
+#include <cstdlib>
 #include <glib/gi18n.h>
 #include "appconfig.h"
 #include "sitepage.h"

@@ -4,6 +4,7 @@
 // Author:      Youchen Lee ( utcr.org ) 
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
 
+#include <cstdlib>
 #include <unistd.h>
 
 #include "nancy_bot/msgdata.h"
