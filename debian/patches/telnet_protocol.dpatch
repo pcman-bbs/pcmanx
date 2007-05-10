@@ -1,0 +1,31 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## telnet_protocol.dpatch by Theppitak Karoonboonyanan <thep@linux.thai.net>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix path of pcmanx.html in generated TelnetProtocol.js
+
+@DPATCH@
+diff -urNad pcmanx-gtk2-0.3.5~/configure pcmanx-gtk2-0.3.5/configure
+--- pcmanx-gtk2-0.3.5~/configure	2006-08-20 20:15:19.000000000 +0700
++++ pcmanx-gtk2-0.3.5/configure	2007-05-10 08:38:13.000000000 +0700
+@@ -26147,7 +26147,7 @@
+ -I$ADDITIONAL_IDLDIR \
+ -I/usr/lib/mozilla/include/idl"
+ 
+-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
++  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
+ 
+ 
+ 
+diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
+--- pcmanx-gtk2-0.3.5~/configure.ac	2006-08-20 20:11:16.000000000 +0700
++++ pcmanx-gtk2-0.3.5/configure.ac	2007-05-10 08:38:15.000000000 +0700
+@@ -417,7 +417,7 @@
+ -I$ADDITIONAL_IDLDIR \
+ -I/usr/lib/mozilla/include/idl"
+ 
+-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
++  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
+ 
+   AC_SUBST(PATH_OF_PCMANX_HTML)
+   AC_SUBST(XPIDL)

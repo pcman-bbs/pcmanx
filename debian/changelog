@@ -1,3 +1,22 @@
+pcmanx-gtk2 (0.3.5-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * xpcom_libdir.dpatch: Detect gecko xpcom include/libdir with pkg-config
+    variable instead of relying on -I, -L flags, to allow build with
+    xulrunner-plugin.pc without xulrunner-xpcom dependency. (Closes: #414108)
+  * Fix typo for iceweasel rec and replace mozilla-browser rec with
+    iceape-browser. Also install plugin in /usr/lib/iceape/plugins to match
+    recommended packages. (Closes: #423035)
+  * mozilla-plugin-pcmanx.links: Do not install dangling symlinks to
+    components/pcmanx.png. It should be unneeded, with
+    remove_image_file_in_usr_lib.dpatch applied.
+  * Add postinst, postrm to update iceape/iceweasel chrome. (Closes: #423033)
+  * telnet_protocol.dpatch: Fix path of pcmanx.html in generated
+    TelnetProtocol.js. Partially fixes #410519. Deeper fix is also described
+    in #423036, but that would be too much for this NMU.
+
+ -- Theppitak Karoonboonyanan <thep@linux.thai.net>  Thu, 10 May 2007 14:22:32 +0700
+
 pcmanx-gtk2 (0.3.5-3) unstable; urgency=low
 
   * Recommend wget, so that update BBS list works.
