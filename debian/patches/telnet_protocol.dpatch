@@ -5,22 +5,10 @@
 ## DP: Fix path of pcmanx.html in generated TelnetProtocol.js
 
 @DPATCH@
-diff -urNad pcmanx-gtk2-0.3.5~/configure pcmanx-gtk2-0.3.5/configure
---- pcmanx-gtk2-0.3.5~/configure	2006-08-20 20:15:19.000000000 +0700
-+++ pcmanx-gtk2-0.3.5/configure	2007-05-10 08:38:13.000000000 +0700
-@@ -26147,7 +26147,7 @@
- -I$ADDITIONAL_IDLDIR \
- -I/usr/lib/mozilla/include/idl"
- 
--  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
-+  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
- 
- 
- 
 diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
---- pcmanx-gtk2-0.3.5~/configure.ac	2006-08-20 20:11:16.000000000 +0700
-+++ pcmanx-gtk2-0.3.5/configure.ac	2007-05-10 08:38:15.000000000 +0700
-@@ -417,7 +417,7 @@
+--- pcmanx-gtk2-0.3.5~/configure.ac	2007-05-13 09:42:07.000000000 +0800
++++ pcmanx-gtk2-0.3.5/configure.ac	2007-05-13 09:42:07.000000000 +0800
+@@ -416,7 +416,7 @@
  -I$ADDITIONAL_IDLDIR \
  -I/usr/lib/mozilla/include/idl"
  
@@ -29,3 +17,25 @@ diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
  
    AC_SUBST(PATH_OF_PCMANX_HTML)
    AC_SUBST(XPIDL)
+diff -urNad pcmanx-gtk2-0.3.5~/aclocal.m4 pcmanx-gtk2-0.3.5/aclocal.m4
+--- pcmanx-gtk2-0.3.5~/aclocal.m4	2006-08-20 21:15:06.000000000 +0800
++++ pcmanx-gtk2-0.3.5/aclocal.m4	2007-05-13 09:42:32.000000000 +0800
+@@ -1,5 +1,5 @@
+ # generated automatically by aclocal 1.9.6 -*- Autoconf -*-
+-
++# touch it to not regen ./configure
+ # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+ # 2005  Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+diff -urNad pcmanx-gtk2-0.3.5~/configure pcmanx-gtk2-0.3.5/configure
+--- pcmanx-gtk2-0.3.5~/configure	2007-05-13 09:42:07.000000000 +0800
++++ pcmanx-gtk2-0.3.5/configure	2007-05-13 09:42:07.000000000 +0800
+@@ -26146,7 +26146,7 @@
+ -I$ADDITIONAL_IDLDIR \
+ -I/usr/lib/mozilla/include/idl"
+ 
+-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
++  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
+ 
+ 
+ 
