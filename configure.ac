@@ -385,6 +385,13 @@ if test "$plugin" = "yes"; then
 	enable_mozilla=yes, enable_mozilla=no)
   fi
 
+  # Check Firefox-plugin
+  if test "x$enable_mozilla" = "xno"; then
+    gecko_provider=firefox-plugin
+    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
+  fi
+
   # Check XULRunner
   if test "x$enable_mozilla" = "xno"; then
     gecko_provider=xulrunner
@@ -400,7 +407,7 @@ if test "$plugin" = "yes"; then
     dnl to Mozilla, but not the XPCOM headers we also need.
     MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin | awk '{print $1}' | sed "s/^-I//"`
     MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
-    MOZILLA_LIB_ROOT=`$PKG_CONFIG --libs-only-L $gecko_provider-plugin | awk '{print $1}' |  cut -c 3-`
+    MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
     MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
   else
     dnl Don't depend on pkg-config
