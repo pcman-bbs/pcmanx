@@ -1,5 +1,13 @@
 2007-05-19  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::OnAbout),
+	AUTHORS: Update contact information and copyright date.
+
+	* src/appconfig.cpp (CAppConfig::SetToDefault): Change default web
+	browser to firefox.
+
+2007-05-19  Jim Huang  <jserv.tw@gmail.com>
+
 	* configure.ac: Added firefox-plugin detection for Firefox version
 	2.x.
 

@@ -687,7 +687,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	char* authors = _(
 			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
-			"Jim Huang (Developer) <jserv@kaffe.org>\n"
+			"Jim Huang (Developer) <jserv.tw@gmail.com>\n"
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
@@ -700,7 +700,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>\n\n"
-						"Copyright (C) 2005\n"
+						"Copyright (c) 2005-2007\n"
 						"License: GNU Genral Public License\n"
 						"Project Homepage: http://pcmanx.csie.net/\n\n"
 						"Authors:\n%s\n\n"
