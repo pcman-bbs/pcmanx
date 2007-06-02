@@ -1,3 +1,10 @@
+pcmanx-gtk2 (0.3.5-5) unstable; urgency=low
+
+  * Add dependency of libgconf2-4. (Closes: #410519)
+  * Remove pcmanx.html links, further fix depend on upstream. (Closes: #423036)
+
+ -- Emfox Zhou <emfox@debian.org>  Sat, 02 Jun 2007 15:14:21 +0800
+
 pcmanx-gtk2 (0.3.5-4) unstable; urgency=low
 
   * Acknowledge the NMU, thanks to Theppitak Karoonboonyanan.

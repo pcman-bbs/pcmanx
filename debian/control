@@ -25,7 +25,7 @@ Description: user-friendly telnet client mainly targets BBS users
 Package: mozilla-plugin-pcmanx
 Section: web
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, libgconf2-4
 Recommends: iceweasel | iceape-browser | firefox
 Description: pcmanx plugin for Mozilla based browser
  This plugin adds support for telnet:// protocol to your Mozilla based

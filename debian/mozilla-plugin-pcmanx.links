@@ -1,8 +1,6 @@
 usr/lib/pcmanx-gtk2/plugins/pcmanx-plugin.so usr/lib/iceweasel/plugins/pcmanx-plugin.so
-usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/iceweasel/components/pcmanx.html
 usr/lib/pcmanx-gtk2/components/TelnetProtocol.js usr/lib/iceweasel/components/TelnetProtocol.js
 usr/lib/pcmanx-gtk2/components/pcmanx_interface.xpt usr/lib/iceweasel/components/pcmanx_interface.xpt
 usr/lib/pcmanx-gtk2/plugins/pcmanx-plugin.so usr/lib/iceape/plugins/pcmanx-plugin.so
-usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/iceape/components/pcmanx.html
 usr/lib/pcmanx-gtk2/components/TelnetProtocol.js usr/lib/iceape/components/TelnetProtocol.js
 usr/lib/pcmanx-gtk2/components/pcmanx_interface.xpt usr/lib/iceape/components/pcmanx_interface.xpt
