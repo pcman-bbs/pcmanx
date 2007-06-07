@@ -1,3 +1,14 @@
+2007-06-08  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/caret.h (CCaret::~CCaret) (CCaret::Hide) (CCaret::Show),
+	src/core/termdata.h (CTermCharAttr::m_DefaultColorTable),
+	src/core/site.h (CSite::SaveToFile) (CSite::CSite) (CSite::~CSite),
+	src/core/termsel.h (CTermSelection::NewStart)
+	(CTermSelection::ChangeEnd) (CTermSelection::SelectPage)
+	(CTermSelection::Empty),
+	src/core/fileutil.h (copyfile): Aggressive GCC Visibility tweaks.
+	Now, symbol number in libpcmanx_core.so down to 144.
+
 2007-06-07  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/debug.h,

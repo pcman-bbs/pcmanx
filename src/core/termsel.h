@@ -29,7 +29,7 @@
 #include <cstdlib>
 
 class CTermData;
-class X_EXPORT CTermSelection
+class CTermSelection
 {
 public:
 	typedef struct {
@@ -56,10 +56,10 @@ public:
 	~CTermSelection() {}
 
 	// begin a new selection process
-	void NewStart( int row, int col, bool left = true, bool block = false );
+	X_EXPORT void NewStart( int row, int col, bool left = true, bool block = false );
 
 	// update m_End and optionally run foreach_func on all points changed
-	void ChangeEnd( int row2, int col2, bool left2, foreach_func ff = NULL , void* data = NULL );
+	X_EXPORT void ChangeEnd( int row2, int col2, bool left2, foreach_func ff = NULL , void* data = NULL );
 
 	// bound the point to page or buffer
 	void PageBound( int& row, int& col, bool& left );
@@ -68,7 +68,7 @@ public:
 	// arrange m_Start and m_End appropriately for loop
 	void Canonicalize();
 
-	void SelectPage( foreach_func ff = NULL, void* data = NULL );
+	X_EXPORT void SelectPage( foreach_func ff = NULL, void* data = NULL );
 	void SelectAll( foreach_func ff = NULL, void* data = NULL );
 	void Unselect( foreach_func ff = NULL, void* data = NULL )
 	{
@@ -76,7 +76,7 @@ public:
 	}
 
 	// true if nothing selected
-	bool Empty();
+	X_EXPORT bool Empty();
 
 	// see if the point specified is selected
 	bool Has( int row, int col );

@@ -29,11 +29,11 @@
 
 using namespace std;
 
-class X_EXPORT CSite
+class CSite
 {
 public:
 	bool m_Startup;
-	void SaveToFile(FILE* fo);
+	X_EXPORT void SaveToFile(FILE* fo);
 	// Name of site
 	string m_Name;
 
@@ -89,8 +89,8 @@ public:
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
 
-	CSite(string Name = "");
-	~CSite();
+	X_EXPORT CSite(string Name = "");
+	X_EXPORT ~CSite();
 
     string& GetPasswd(){	return m_Passwd;	}
     void SetPasswd( string passwd ){	m_Passwd = passwd;	}

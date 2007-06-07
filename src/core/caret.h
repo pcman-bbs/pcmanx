@@ -30,12 +30,12 @@
 *	 There are some problems with wxCaret, so I decide to implement caret myself.
 */
 
-class X_EXPORT CCaret
+class CCaret
 {
 public:
 	//Constructor/Destructor
 	CCaret();
-	~CCaret();
+	X_EXPORT ~CCaret();
 	//Getter by neversay Jan/18/2005
 	inline bool IsShow(){return m_IsShow;}
 	inline bool IsVisible(){return m_IsVisible;}
@@ -64,9 +64,9 @@ public:
 	//Blink this caret	
 	void Blink();
 	//Hide this caret
-	void Hide();
+	X_EXPORT void Hide();
 	//Unhide the caret.
-	void Show(bool bImmediately = true);
+	X_EXPORT void Show(bool bImmediately = true);
 
 private:
 	//Flag if the caret is show up.

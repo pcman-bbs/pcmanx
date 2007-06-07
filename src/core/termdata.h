@@ -45,10 +45,10 @@ using namespace std;
 
 
 // Character attributes for text displayed in CTermView.
-class X_EXPORT CTermCharAttr
+class CTermCharAttr
 {
     public:
-	static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
+	X_EXPORT static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
 
 	enum charset {CS_ASCII=0, CS_MBCS1=1, CS_MBCS2=2};	// MBCS : multi-byte character set
 

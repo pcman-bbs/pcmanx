@@ -9,7 +9,7 @@ extern "C"
 #endif
 
 	/* 2005.08.22  Written by Hong Jen Yee (PCMan) */
-	int copyfile(const char* src, const char* dest, int overwrite);
+	X_EXPORT int copyfile(const char* src, const char* dest, int overwrite);
 
 #ifdef __cplusplus
 }
