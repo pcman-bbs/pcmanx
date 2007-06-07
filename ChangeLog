@@ -6,7 +6,8 @@
 
 	* configure.ac: Initial support of GCC Visibility. Added
 	"-fvisibility=hidden" to compiler flags, which makes symbol
-	number in libpcmanx_core.so reduced from 363 to 336.
+	number in libpcmanx_core.so reduced from 248 to 221.
+	# nm -D /usr/lib/libpcmanx_core.so.0.0.0 | egrep "[BTW]" | wc -l
 
 	* src/notifier/api.h,
 	src/autologinpage.cpp,
