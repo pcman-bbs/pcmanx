@@ -22,8 +22,6 @@
 
 #include "listbox.h"
 
-#include "debug.h"
-
 CListBox::CListBox()
         : CWidget()
 {

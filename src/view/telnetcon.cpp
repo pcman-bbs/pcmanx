@@ -76,8 +76,6 @@
 
 #define RECV_BUF_SIZE (4097)
 
-#include "debug.h"
-
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
 bool CTelnetCon::with_nancy_support = true;  // start new connections with nancy support.

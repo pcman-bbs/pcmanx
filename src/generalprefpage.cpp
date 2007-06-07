@@ -20,12 +20,9 @@
   #pragma implementation "generalprefpage.h"
 #endif
 
-
 #include <glib/gi18n.h>
 #include "generalprefpage.h"
 #include "appconfig.h"
-
-#include "debug.h"
 
 CGeneralPrefPage::CGeneralPrefPage()
  : CWidget()

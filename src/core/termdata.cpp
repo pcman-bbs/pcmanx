@@ -19,8 +19,6 @@
 #include "termsel.h" // class's header file
 #include <string.h>
 
-#include "debug.h"
-
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.
 //

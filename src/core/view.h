@@ -23,12 +23,14 @@
   #pragma interface "view.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include "widget.h"
 
 /**
 @author PCMan
 */
-class CView : public CWidget
+class X_EXPORT CView : public CWidget
 {
 public:
     CView();

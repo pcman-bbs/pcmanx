@@ -23,6 +23,8 @@
   #pragma interface "font.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <string>
 #include <X11/Xft/Xft.h>
 

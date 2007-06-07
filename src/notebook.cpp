@@ -23,8 +23,6 @@
 
 #include "notebook.h"
 
-#include "debug.h"
-
 CNotebook::CNotebook()
         : CWidget()
 {

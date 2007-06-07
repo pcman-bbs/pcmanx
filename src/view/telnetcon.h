@@ -17,6 +17,8 @@
   #pragma interface "telnetcon.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 
 #include "termdata.h"

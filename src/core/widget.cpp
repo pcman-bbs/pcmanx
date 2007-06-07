@@ -20,11 +20,8 @@
   #pragma implementation "widget.h"
 #endif
 
-
 #include "widget.h"
 #include <unistd.h>
-
-#include "debug.h"
 
 CWidget::CWidget()
 	: m_Widget(NULL)

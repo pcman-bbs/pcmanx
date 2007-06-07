@@ -27,8 +27,6 @@
 #include <string.h>
 #include <string>
 
-#include "debug.h"
-
 using namespace std;
 
 CSiteListDlg::CSiteListDlg(CWidget* parent)

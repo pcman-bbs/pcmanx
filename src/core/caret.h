@@ -20,6 +20,8 @@
   #pragma interface "caret.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
@@ -28,7 +30,7 @@
 *	 There are some problems with wxCaret, so I decide to implement caret myself.
 */
 
-class CCaret
+class X_EXPORT CCaret
 {
 public:
 	//Constructor/Destructor

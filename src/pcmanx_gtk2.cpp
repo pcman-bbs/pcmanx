@@ -16,9 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "core/pcmanx_utils.h"
 
 #if defined(HAVE_GETTEXT)
 #include <libintl.h>
@@ -38,8 +36,6 @@
 #include "mainframe.h"
 #include "appconfig.h"
 #include "telnetcon.h"
-
-#include "debug.h"
 
 #ifdef USE_DOCKLET
 #include "docklet/api.h"

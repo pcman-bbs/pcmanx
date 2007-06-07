@@ -34,8 +34,6 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
-#include "debug.h"
-
 CFont::CFont()
 {
 	m_XftFont = NULL;

@@ -549,6 +549,24 @@ dnl Reduce C++ overhead
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
+dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
+AC_MSG_CHECKING([whether the compiler supports the visibility arg])
+dnl Check for gcc4 or greater
+AC_TRY_COMPILE([
+void
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+foo () {};                                                                                         
+#endif
+], [], [
+  has_visibility=yes
+  CFLAGS="$CFLAGS -fvisibility=hidden"
+  CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
+], [
+  has_visibility=no
+]
+)
+AC_MSG_RESULT($has_visibility)
+
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)

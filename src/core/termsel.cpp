@@ -21,10 +21,8 @@
   #pragma implementation "termsel.h"
 #endif
 
-
 #include "termsel.h" // class's header file
 #include "termdata.h" // class's header file
-#include "debug.h"
 
 void CTermSelection::NewStart( int row, int col, bool left, bool block )
 {

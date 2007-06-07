@@ -1,3 +1,62 @@
+2007-06-07  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/debug.h,
+	src/core/pcmanx_utils.h: Rename from the former to the later.
+	Added new macro "X_EXPORT" making use of GCC Visibility.
+
+	* configure.ac: Initial support of GCC Visibility. Added
+	"-fvisibility=hidden" to compiler flags, which makes symbol
+	number in libpcmanx_core.so reduced from 363 to 336.
+
+	* src/notifier/api.h,
+	src/autologinpage.cpp,
+	src/sitepage.cpp,
+	src/docklet/api.h,
+	src/mainframe.h,
+	src/emoticondlg.cpp,
+	src/configfile.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termview.cpp,
+	src/core/caret.h,
+	src/core/site.cpp,
+	src/core/font.cpp,
+	src/core/termdata.h,
+	src/core/termview.h,
+	src/core/site.h,
+	src/core/stringutil.h,
+	src/core/view.cpp,
+	src/core/font.h,
+	src/core/termsel.cpp,
+	src/core/view.h,
+	src/core/termsel.h,
+	src/core/fileutil.h,
+	src/core/widget.cpp,
+	src/core/widget.h,
+	src/core/Makefile.am,
+	src/editfavdlg.cpp,
+	src/pcmanx_gtk2.cpp,
+	src/prefdlg.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetview.cpp,
+	src/view/telnetcon.cpp,
+	src/view/telnetview.h,
+	src/sitedlg.cpp,
+	src/dialog.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/script/api.h,
+	src/listbox.cpp,
+	src/generalprefpage.cpp,
+	src/sitelistdlg.cpp,
+	src/nancy_bot/api.h: Mark X_EXPORT for libpcmanx_core.so .
+	TODO: Better splitting classes and member functions could deeply
+	reduce ELF symbols.
+
+	* AUTHORS: Mentioned Neversay as contributor.
+
 2007-06-02  Jim Huang  <jserv.tw@gmail.com>
 
 	* po/zh_TW.po,

@@ -18,6 +18,8 @@
   #pragma interface "termdata.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "termsel.h"
@@ -43,7 +45,7 @@ using namespace std;
 
 
 // Character attributes for text displayed in CTermView.
-class CTermCharAttr
+class X_EXPORT CTermCharAttr
 {
     public:
 	static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
@@ -156,7 +158,8 @@ private:
  * Used with CTermView to hold screen buffer, caret position, etc.
  */
 class CTermView;
-class CTermData
+
+class X_EXPORT CTermData
 {
 public:
 	//Detect if the specified line is empty.

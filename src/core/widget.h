@@ -23,6 +23,8 @@
   #pragma interface "widget.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
@@ -31,8 +33,8 @@ GTK+ GtkWidget wrapper.
 
 @author PCMan
 */
-	
-class CWidget{
+
+class X_EXPORT CWidget{
 public:
     CWidget();
 

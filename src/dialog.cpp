@@ -24,8 +24,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "debug.h"
-
 void CDialog::OnResponse(GtkDialog* dlg, gint arg, CDialog* _this)
 {
 	switch(arg)

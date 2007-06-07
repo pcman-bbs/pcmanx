@@ -40,8 +40,6 @@
 CMainFrame* CTelnetView::m_pParentFrame = NULL;
 #endif /* !defined(MOZ_PLUGIN) */
 
-#include "debug.h"
-
 CTelnetView::CTelnetView()
 	: CTermView()
 {

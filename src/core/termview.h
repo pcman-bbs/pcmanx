@@ -23,9 +23,7 @@
   #pragma interface "termview.h"
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "pcmanx_utils.h"
 
 #include "view.h"
 #include "caret.h"
@@ -43,7 +41,7 @@ class CTermData;
 class CHyperLink;
 class CFont;
 
-class CTermView : public CView
+class X_EXPORT CTermView : public CView
 {
 friend class CTermData;
 public:

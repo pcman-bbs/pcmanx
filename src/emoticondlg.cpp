@@ -18,8 +18,6 @@
 #include "inputdialog.h"
 #include "appconfig.h"
 
-#include "debug.h"
-
 static const char emoticon_file_name[] = "emoticons";
 
 CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)

@@ -25,8 +25,6 @@
 #include "sitepage.h"
 #include "site.h"
 
-#include "debug.h"
-
 CSitePage::CSitePage(CSite& site)
  : CWidget(), m_Site(site)
 {

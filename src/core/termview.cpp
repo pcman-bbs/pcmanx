@@ -25,8 +25,6 @@
 #include "termdata.h"
 #include "termsel.h"
 
-#include "debug.h"
-
 #include <string>
 
 #include <gdk/gdkx.h>

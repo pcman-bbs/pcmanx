@@ -23,6 +23,8 @@
   #pragma interface "telnetview.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include "termview.h"
 
 /**

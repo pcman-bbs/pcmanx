@@ -1,6 +1,8 @@
 #ifndef  FILEUTIL_H
 #define  FILEUTIL_H
 
+#include "pcmanx_utils.h"
+
 #ifdef __cplusplus
 extern "C"
 {

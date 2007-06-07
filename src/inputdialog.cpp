@@ -25,8 +25,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
-#include "debug.h"
-
 #if 0
 static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _this)
 {

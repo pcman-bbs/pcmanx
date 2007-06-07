@@ -33,8 +33,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "debug.h"
-
 CAppConfig AppConfig;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -24,10 +24,12 @@
   #pragma interface "termsel.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <cstdlib>
 
 class CTermData;
-class CTermSelection
+class X_EXPORT CTermSelection
 {
 public:
 	typedef struct {
