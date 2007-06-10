@@ -558,9 +558,14 @@ void
 foo () {};                                                                                         
 #endif
 ], [], [
-  has_visibility=yes
-  CFLAGS="$CFLAGS -fvisibility=hidden"
-  CXXFLAGS="$CXXFLAGS -fvisibility=hidden"
+  if test "$debug" = yes; then
+dnl It's important for collecting runtime information
+    has_visibility=no
+  else
+    has_visibility=yes
+    CFLAGS="$CFLAGS -fvisibility=hidden"
+    CXXFLAGS="$CXXFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
+  fi
 ], [
   has_visibility=no
 ]

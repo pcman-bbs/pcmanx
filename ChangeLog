@@ -1,3 +1,8 @@
+2007-06-10  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Disable GCC Visibility when --enable-debug.
+	It's important to help resolving problems.
+
 2007-06-08  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/caret.h (CCaret::~CCaret) (CCaret::Hide) (CCaret::Show),
