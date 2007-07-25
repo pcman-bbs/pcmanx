@@ -287,6 +287,73 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
+bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle* rc, GdkColor* clr)
+{
+	GdkDrawable* dc = m_Widget->window;
+	if( len >= 3 && (int)uchar[0] == 0xe2 )
+	{
+//		gdk_gc_set_rgb_fg_color( m_GC, clr );
+		switch( uchar[1] )
+		{
+		case 0x96:
+			if( uchar[2] >= 0x81 && uchar[2] <= 0x88 )
+			{
+				int h = m_CharH * (uchar[2] - 0x80) / 8;
+				gdk_draw_rectangle( dc, m_GC, true, rc->x , rc->y + m_CharH - h, m_CharW * 2, h );
+			}
+			else if( uchar[2] >= 0x89 && uchar[2] <= 0xa0 )
+			{
+				int w = m_CharW * 2 * (uchar[2] - 0x88) / 8;
+				gdk_draw_rectangle( dc, m_GC, true, rc->x, rc->y, w, m_CharH );
+			}
+/*			else if( uchar[2] == 0xa1 )
+			{
+				int w = m_CharW * 2 * (uchar[2] - 0x88) / 8;
+				gdk_draw_rectangle( dc, m_GC, false, rc->x, rc->y, w, m_CharH );
+			}
+*/			else
+				return false;
+			return true;
+		case 0x95:
+			return true;
+		case 0x94:
+			return true;
+		case 0x97:
+			{
+				GdkTrapezoid tz;
+
+				tz.y1 = rc->y;
+				tz.y2 = rc->y + m_CharH;
+				tz.x11 = tz.x12 = rc->x;
+				tz.x21 =	tz.x22 = rc->x + m_CharW * 2;
+
+				switch( uchar[2] )
+				{
+				case 0xa2:
+					// FIXME: according to the gtk+ API doc, this should work, but it didn't. Why?
+					tz.x11 = tz.x21;
+					break;
+				case 0xa3:
+					tz.x21 = tz.x11;
+					break;
+				case 0xa4:
+					tz.x22 = tz.x21;
+					break;
+				case 0xa5:
+					tz.x21 = tz.x22;
+					break;
+				default:
+					return true;
+				}
+
+				// g_debug("y1=%4f, x11=%4f, x21=%4f, y2=%4f, x12=%4f, x22=%4f", tz.y1, tz.x11, tz.x21, tz.y2, tz.x12, tz.x22 );
+				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 int CTermView::DrawChar(int row, int col)
 {
@@ -388,7 +455,8 @@ int CTermView::DrawChar(int row, int col)
 					} else {
 						font = m_Font->GetXftFont();
 					}
-					XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
+					if( ! DrawSpaceFillingChar( (guchar*)utf8_ch, wl, &rect, Fg ) )
+						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
 				}
 			}

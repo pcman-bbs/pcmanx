@@ -93,6 +93,7 @@ protected:
     void RecalcCharDimension();
     void GetCellSize( int &w, int &h );
     void ExtendSelection( int row, int col, bool left );
+    bool DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle* rc, GdkColor* clr);
 protected:
 	CTermData* m_pTermData;
 
