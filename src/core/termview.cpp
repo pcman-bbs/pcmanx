@@ -287,6 +287,59 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
+// gtk+ 2.8.0 to 2.10.13 all have serious bug in gdk_draw_trapezoids()
+// So version check is needed here.
+#if GTK_CHECK_VERSION( 2, 10, 13 ) ||  ! GTK_CHECK_VERSION( 2, 8, 0 )
+#else
+#define	HAVE_GDK_DRAW_TRAPEZOIDS_BUG
+
+// This is the correct implementation of gdk_draw_trapezoids taken from gtk+ 2.10.14
+static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable, 
+						GdkGC *gc, GdkTrapezoid   *trapezoids,
+						gint n_trapezoids, GdkColor* color, GdkRectangle* clip_rect )
+{
+  cairo_t *cr;
+  int i;
+
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
+
+  cr = gdk_cairo_create (drawable);
+
+  // color
+  gdk_cairo_set_source_color (cr, color);
+
+  //clip
+  cairo_reset_clip (cr);
+  if (clip_rect)
+    {
+      cairo_save (cr);
+
+      cairo_identity_matrix (cr);
+      cairo_translate (cr, gc->clip_x_origin, gc->clip_y_origin);
+
+      cairo_new_path (cr);
+      gdk_cairo_rectangle (cr, clip_rect);
+
+      cairo_restore (cr);
+
+      cairo_clip (cr);
+    }
+ 
+  for (i = 0; i < n_trapezoids; i++)
+    {
+      cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
+      cairo_line_to (cr, trapezoids[i].x12, trapezoids[i].y2);
+      cairo_close_path (cr);
+    }
+  cairo_fill (cr);
+  cairo_destroy (cr);
+}
+#endif
+
 bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle* rc, GdkColor* clr)
 {
 	GdkDrawable* dc = m_Widget->window;
@@ -301,12 +354,19 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 				int h = m_CharH * (uchar[2] - 0x80) / 8;
 				gdk_draw_rectangle( dc, m_GC, true, rc->x , rc->y + m_CharH - h, m_CharW * 2, h );
 			}
-			else if( uchar[2] >= 0x89 && uchar[2] <= 0xa0 )
+			else if( uchar[2] >= 0x89 && uchar[2] <= 0x8f )
 			{
-				int w = m_CharW * 2 * (uchar[2] - 0x88) / 8;
+				// FIXME: There are still some potential bugs here.
+				// See the welcome screen of telnet://ptt.cc for example
+				int w = m_CharW * 2 * (8 - (uchar[2] - 0x88)) / 8;
 				gdk_draw_rectangle( dc, m_GC, true, rc->x, rc->y, w, m_CharH );
 			}
-/*			else if( uchar[2] == 0xa1 )
+/*
+			else if( uchar[2] == 0xa0 )
+			{
+				gdk_draw_rectangle( dc, m_GC, true, rc->x, rc->y, m_CharW * 2, m_CharH );
+			}
+			else if( uchar[2] == 0xa1 )
 			{
 				int w = m_CharW * 2 * (uchar[2] - 0x88) / 8;
 				gdk_draw_rectangle( dc, m_GC, false, rc->x, rc->y, w, m_CharH );
@@ -330,24 +390,27 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 				switch( uchar[2] )
 				{
 				case 0xa2:
-					// FIXME: according to the gtk+ API doc, this should work, but it didn't. Why?
 					tz.x11 = tz.x21;
 					break;
 				case 0xa3:
 					tz.x21 = tz.x11;
 					break;
 				case 0xa4:
-					tz.x22 = tz.x21;
+					tz.x22 = tz.x12;
 					break;
 				case 0xa5:
-					tz.x21 = tz.x22;
+					tz.x12 = tz.x22;
 					break;
 				default:
 					return true;
 				}
 
-				// g_debug("y1=%4f, x11=%4f, x21=%4f, y2=%4f, x12=%4f, x22=%4f", tz.y1, tz.x11, tz.x21, tz.y2, tz.x12, tz.x22 );
+// workarounds for serious bug in gtk+ 2.8.0 to 2.10.12
+#ifdef HAVE_GDK_DRAW_TRAPEZOIDS_BUG
+				fixed_gdk_draw_trapezoids( dc, m_GC, &tz, 1, clr, rc );
+#else
 				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
+#endif
 				return true;
 			}
 		}
@@ -455,6 +518,7 @@ int CTermView::DrawChar(int row, int col)
 					} else {
 						font = m_Font->GetXftFont();
 					}
+
 					if( ! DrawSpaceFillingChar( (guchar*)utf8_ch, wl, &rect, Fg ) )
 						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
