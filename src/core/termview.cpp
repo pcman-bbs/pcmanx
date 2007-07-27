@@ -402,7 +402,7 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 					tz.x12 = tz.x22;
 					break;
 				default:
-					return true;
+					return false;
 				}
 
 // workarounds for serious bug in gtk+ 2.8.0 to 2.10.12
