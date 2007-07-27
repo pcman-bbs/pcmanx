@@ -1,3 +1,21 @@
+2007-07-27  Kanru Chen  <koster@debian.org.tw>
+
+	* src/core/termview.cpp:
+	Draw characters that are not handled in CTermView::DrawSpaceFillingChar.
+
+2007-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp:
+	Fix bugs in CTermView::DrawSpaceFillingChar and use some workarounds to
+	overcome the serious bugs in gtk+ itself.
+
+2007-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/termview.h:
+	Dramatically optimize the displaying of space-filling characters used to
+	draw ASCII arts.
+
 2007-06-10  Jim Huang  <jserv.tw@gmail.com>
 
 	* configure.ac: Disable GCC Visibility when --enable-debug.

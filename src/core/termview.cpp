@@ -375,9 +375,9 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 				return false;
 			return true;
 		case 0x95:
-			return true;
+			return false;
 		case 0x94:
-			return true;
+			return false;
 		case 0x97:
 			{
 				GdkTrapezoid tz;
