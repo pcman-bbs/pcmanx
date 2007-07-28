@@ -37,8 +37,6 @@
 
 
 #include <X11/Xlib.h>
-#include <X11/Intrinsic.h>
-#include <X11/cursorfont.h>
 
 #include "plugin.h"
 #include "nsIServiceManager.h"

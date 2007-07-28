@@ -1,3 +1,18 @@
+2007-07-28  Jim Huang  <jserv@openmoko.org>
+
+	* src/pcmanx_gtk2.cpp (main): Disable glib's own malloc/free wrapper
+	while --enable-debug.
+	glib introduces its own memory management mechanism, which confuses
+	memory debuggers such as valgrind and disable their own wrapper
+	against the applications.
+
+	* plugin/src/plugin.cpp,
+	plugin/src/plugin.h: Remove <X11/Intrinsic.h> and <X11/cursorfont.h>
+	because recently xlib package has changed the headers.
+
+	* configure.ac: Added c3|c3_2|x86_64 to MMX supported arch.
+	Added warning to libnotify when popup notifier support is not enabled.
+
 2007-07-27  Kanru Chen  <koster@debian.org.tw>
 
 	* src/core/termview.cpp:
@@ -19,7 +34,8 @@
 2007-06-10  Jim Huang  <jserv.tw@gmail.com>
 
 	* configure.ac: Disable GCC Visibility when --enable-debug.
-	It's important to help resolving problems.
+	It's important to help resolving problems. Applied CXXFLAGS +=
+	"-fvisibility-inlines-hidden" for better visibility tweaks.
 
 2007-06-08  Jim Huang  <jserv.tw@gmail.com>
 

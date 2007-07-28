@@ -40,8 +40,6 @@
 
 /* Xlib/Xt stuff */
 #include <X11/Xlib.h>
-#include <X11/Intrinsic.h>
-#include <X11/cursorfont.h>
 
 #include "pluginbase.h"
 #include "nsScriptablePeer.h"

@@ -221,7 +221,7 @@ dnl we don't need mmx on *this* machine, just i386, because
 dnl it's checked at runtime.
 if test "$mmx" = "yes"; then
 	case $host_cpu in
-    i386|i486|i586|i686|i786|k6|k7)
+    i386|i486|i586|i686|i786|k6|k7|c3|c3_2|x86_64)
     mmx=yes
         ;;
      *)
@@ -270,6 +270,8 @@ if test "$notifier" = "yes"; then
 		CFLAGS="$CFLAGS $LIBNOTIFY_CFLAGS"
 		LIBS="$LIBS $LIBNOTIFY_LIBS"
 	fi
+else
+	AC_MSG_WARN(popup notifier support is not enabled, so this option is invalid.)
 fi
 
 AM_CONDITIONAL(USE_LIBNOTIFY, test "$libnotify" = "yes")
