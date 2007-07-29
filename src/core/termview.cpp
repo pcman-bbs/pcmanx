@@ -340,10 +340,13 @@ static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 }
 #endif
 
-bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle* rc, GdkColor* clr)
+bool CTermView::DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr)
 {
 	GdkDrawable* dc = m_Widget->window;
-	if( len >= 3 && (int)uchar[0] == 0xe2 )
+	guchar* uchar = (guchar*)ch;
+// NOTE: Omit this check to increase performance.
+// IsSpaceFillingChar should be called prior to calling this method.
+//	if( len >= 3 && (int)uchar[0] == 0xe2 )
 	{
 //		gdk_gc_set_rgb_fg_color( m_GC, clr );
 		switch( uchar[1] )
@@ -352,14 +355,14 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 			if( uchar[2] >= 0x81 && uchar[2] <= 0x88 )
 			{
 				int h = m_CharH * (uchar[2] - 0x80) / 8;
-				gdk_draw_rectangle( dc, m_GC, true, rc->x , rc->y + m_CharH - h, m_CharW * 2, h );
+				gdk_draw_rectangle( dc, m_GC, true, x , y + m_CharH - h, m_CharW * 2, h );
 			}
 			else if( uchar[2] >= 0x89 && uchar[2] <= 0x8f )
 			{
 				// FIXME: There are still some potential bugs here.
 				// See the welcome screen of telnet://ptt.cc for example
 				int w = m_CharW * 2 * (8 - (uchar[2] - 0x88)) / 8;
-				gdk_draw_rectangle( dc, m_GC, true, rc->x, rc->y, w, m_CharH );
+				gdk_draw_rectangle( dc, m_GC, true, x, y, w, m_CharH );
 			}
 /*
 			else if( uchar[2] == 0xa0 )
@@ -382,10 +385,10 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 			{
 				GdkTrapezoid tz;
 
-				tz.y1 = rc->y;
-				tz.y2 = rc->y + m_CharH;
-				tz.x11 = tz.x12 = rc->x;
-				tz.x21 =	tz.x22 = rc->x + m_CharW * 2;
+				tz.y1 = y;
+				tz.y2 = y + m_CharH;
+				tz.x11 = tz.x12 = x;
+				tz.x21 =	tz.x22 = x + m_CharW * 2;
 
 				switch( uchar[2] )
 				{
@@ -407,7 +410,7 @@ bool CTermView::DrawSpaceFillingChar(const guchar* uchar, int len, GdkRectangle*
 
 // workarounds for serious bug in gtk+ 2.8.0 to 2.10.12
 #ifdef HAVE_GDK_DRAW_TRAPEZOIDS_BUG
-				fixed_gdk_draw_trapezoids( dc, m_GC, &tz, 1, clr, rc );
+				fixed_gdk_draw_trapezoids( dc, m_GC, &tz, 1, clr, clip );
 #else
 				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
 #endif
@@ -519,7 +522,7 @@ int CTermView::DrawChar(int row, int col)
 						font = m_Font->GetXftFont();
 					}
 
-					if( ! DrawSpaceFillingChar( (guchar*)utf8_ch, wl, &rect, Fg ) )
+					if( !IsSpaceFillingChar(utf8_ch, wl) || !DrawSpaceFillingChar( utf8_ch, wl, left, top, &rect, Fg ) )
 						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
 				}
