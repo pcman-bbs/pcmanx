@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src)
 AM_CONFIG_HEADER(config.h)
-AC_PREFIX_DEFAULT(/usr)
+#AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE(pcmanx-gtk2, 0.3.6, http://groups.google.com/group/PCManX)
 #AM_MAINTAINER_MODE
 AC_PROG_CC
@@ -35,7 +35,7 @@ AC_CSRG_BASED
 
 # Init gettext
 ALL_LINGUAS="zh_TW zh_CN"
-AM_GNU_GETTEXT([external])
+#AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.14.1)
 GETTEXT_PACKAGE=pcmanx
 AC_SUBST(GETTEXT_PACKAGE)

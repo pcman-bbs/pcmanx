@@ -1,3 +1,9 @@
+2007-08-29  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Modify the packager info.
+
+	* configure.ac, autogen.sh: Use automake 1.10.
+
 2007-07-30  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
 
 	* src/core/termview.cpp (CTermView::DrawSpaceFillingChar),

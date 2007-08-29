@@ -1,5 +1,5 @@
 #! /bin/sh
-AM_VERSION=-1.9
+AM_VERSION=-1.10
 AC_VERSION=
 
 set -x
@@ -16,6 +16,6 @@ ${AUTOMAKE:-automake$AM_VERSION} --add-missing --copy --include-deps
 ${AUTOCONF:-autoconf$AC_VERSION}
 
 # mkinstalldirs was not correctly installed in some cases.
-cp -f /usr/share/automake-1.9/mkinstalldirs .
+cp -f /usr/share/automake${AM_VERSION}/mkinstalldirs .
 
 rm -rf autom4te.cache
