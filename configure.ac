@@ -1,15 +1,30 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src)
+AC_INIT(pcmanx-gtk2, 0.3.6.1, http://groups.google.com/group/PCManX)
+
 AM_CONFIG_HEADER(config.h)
 #AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(pcmanx-gtk2, 0.3.6, http://groups.google.com/group/PCManX)
+AM_INIT_AUTOMAKE
 #AM_MAINTAINER_MODE
+AC_C_CONST
+AC_C_INLINE
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_STAT
+AC_CHECK_FUNCS([gethostbyname isascii memset mkdir setenv socket strchr strrchr strstr])
+AC_HEADER_STDBOOL
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
+AC_PATH_X
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
 AC_PROG_CC
 AC_PROG_CPP
 AM_PROG_AS
 AC_PROG_CXX
 AM_DISABLE_STATIC
+AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 AC_PROG_INTLTOOL(, [no-xml])
 AC_PROG_INSTALL

@@ -22,8 +22,8 @@ MOSTLYCLEANFILES = \
 	pcmanx_interface.h
 	
 EXTRA_DIST = \
-	$(SOURCES_mozilla) \
-	pcmanx_interface.idl
+	pcmanx_interface.idl \
+	$(SOURCES_mozilla)
 BUILT_SOURCES = $(BUILT_SOURCES_mozilla)
 
 SOURCES_view = \

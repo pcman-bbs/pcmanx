@@ -1,3 +1,16 @@
+2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac: Polish for better usage and release 0.3.6.1
+
+	* pcmanx.desktop.in: Add more description.
+
+	* plugin/src/Makefile.am: Fix the problem of Mozilla/Firefox plugin.
+
+	* po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp: Add bug report link to about dialog, and polish
+	sitelist update mechanism.
+
 2007-08-29  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Modify the packager info.

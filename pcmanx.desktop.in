@@ -1,7 +1,9 @@
 [Desktop Entry]
 Categories=Application;Network;
 Encoding=UTF-8
-Name=PCManX
+Name=PCMan X BBS Client
+Name[zh_TW]=PCMan X BBS 連線軟體
+Name[zh_CN]=PCMan X BBS 连线软件
 Exec=pcmanx
 Icon=@prefix@/share/pixmaps/pcmanx.png
 Type=Application
@@ -10,5 +12,5 @@ GenericName=PCMan X BBS Client
 GenericName[zh_TW]=PCMan X BBS 連線軟體
 GenericName[zh_CN]=PCMan X BBS 连线软件
 Comment=PCMan X BBS Client
-Comment[zh_TW]=PCMan X BBS 連線軟體
-Comment[zh_CN]=PCMan X BBS 连线软件
+Comment[zh_TW]=PCMan X BBS 用 GTK+ 2.x 開發的自由 BBS 連線軟體
+Comment[zh_CN]=PCMan X BBS 用 GTK+ 2.x 开发的自由 BBS 连接软件

@@ -688,7 +688,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Jim Huang (Developer) <jserv.tw@gmail.com>\n"
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
-			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
+			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
 			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 			);
@@ -697,12 +697,13 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>\n\n"
+						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
 						"Copyright (c) 2005-2007\n"
 						"License: GNU Genral Public License\n"
-						"Project Homepage: http://pcmanx.csie.net/\n\n"
-						"Authors:\n%s\n\n"
-						"Translators:\n%s\n\n"), VERSION, authors, translators );
+						"Project Homepage: http://pcmanx.csie.net\n"
+						"Bug Report: %s\n\n"
+						"<b>Authors</b>:\n%s\n\n"
+						"<b>Translators</b>:\n%s\n\n"), PACKAGE_VERSION, PACKAGE_BUGREPORT, authors, translators );
 
 // GTK+ supports this API since ver 2.6.
 /*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
@@ -738,7 +739,9 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 
 		child_pid = fork();
 		if (child_pid == 0) {
-			int t_nRet = system("wget -O ~/.pcmanx/sitelist http://free.ym.edu.tw/pcman/site_list.utf8");
+			int t_nRet = system("wget -O ~/.pcmanx/sitelist.tmp "
+				"http://free.ym.edu.tw/pcman/site_list.utf8 && "
+				"mv -f ~/.pcmanx/sitelist.tmp ~/.pcmanx/sitelist");
 			if (t_nRet == 0)
 				kill(parent_pid, SIGUSR1);
 			else
@@ -771,7 +774,7 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 			t_pcMessage = t_pcFault;
 
 		GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
-			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
+			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", t_pcMessage);
 
 		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
 		gtk_dialog_run((GtkDialog*) t_pDialog); // == GTK_RESPONSE_OK)
