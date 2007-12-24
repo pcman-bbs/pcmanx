@@ -1,5 +1,9 @@
 2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
+	* po/zh_CN.po: Fix a translation mistake.
+
+2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
 	* configure.ac: Polish for better usage and release 0.3.6.1
 
 	* pcmanx.desktop.in: Add more description.
