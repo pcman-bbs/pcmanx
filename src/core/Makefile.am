@@ -11,6 +11,7 @@ INCLUDES = \
 
 libpcmanx_core_la_LIBADD = $(GUI_LIBS)
 libpcmanx_core_la_LDFLAGS = \
+	-version-info @LIBTOOL_VERSION_INFO@ \
 	-export-dynamic \
 	@LIBTOOL_EXPORT_OPTIONS@ \
 	-rpath $(libdir)

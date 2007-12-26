@@ -592,6 +592,8 @@ AC_MSG_RESULT($has_visibility)
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
+LIBTOOL_VERSION_INFO=`echo $PACKAGE_VERSION | awk -F. '{ printf "%d:%d:%d", $1+$2, $3, $2 }'`
+AC_SUBST(LIBTOOL_VERSION_INFO)
 LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([

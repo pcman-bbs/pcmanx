@@ -1,3 +1,8 @@
+2007-12-26  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/core/Makefile.am,
+	configure.ac: Add -version-info to libtool.
+
 2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/zh_CN.po: Fix a translation mistake.
