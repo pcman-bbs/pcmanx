@@ -1,5 +1,12 @@
 2008-01-01  Jim Huang  <jserv@openmoko.org>
 
+	* plugin/src/np_entry.cpp (NP_Shutdown) (NP_Initialize)
+	(NP_GetMIMEDescription) (NP_GetValue) (main): Fix the unusable plugin,
+	caused by 'visibility' of interfaces.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
 	* src/qqwryseeker/qqwryseeker.c,
 	src/qqwryseeker/qqwryseeker.h: New files.
 	Helper functions to lookup IP location information contributed by
