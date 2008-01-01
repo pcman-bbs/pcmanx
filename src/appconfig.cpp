@@ -146,6 +146,12 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+#ifdef USE_EXTERNAL
+		_CFG_BOOL ( "UseExternalSSH",
+			m_DefaultSite.m_UseExternalSSH )
+		_CFG_BOOL ( "UseExternalTelnet",
+			m_DefaultSite.m_UseExternalTelnet )
+#endif
 		CFG_INT  ( SocketTimeout )
 	END_CONFIG_SECT()
 
