@@ -1,5 +1,14 @@
 2008-01-01  Jim Huang  <jserv@openmoko.org>
 
+	* src/view/telnetcon.cpp (CTelnetCon::Connect) (CTelnetCon::Close):
+	Adjust the semantics of UseExternalTelnet and UseExternalSSH
+	to be more reasonable. Also fix a program hanging bug when opening
+	multiple external ssh connections and then closing the one which is
+	not the last connection.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
 	* src/appconfig.cpp (CAppConfig::DoDataExchange): Respect
 	UseExternalSSH and UseExternalTelnet options.
 	Patched by Jason Xia <jasonxh@gmail.com>.

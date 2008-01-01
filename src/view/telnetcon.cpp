@@ -248,11 +248,13 @@ bool CTelnetCon::Connect()
 
 #ifdef USE_EXTERNAL
 	// Run external program to handle connection.
-	if( m_Site.m_UseExternalTelnet || m_Site.m_UseExternalSSH )
+
+	/* external telnet */
+	if ( m_Port == 23 && m_Site.m_UseExternalTelnet )
 	{
 		// Suggestion from kyl <kylinx@gmail.com>
 		// Call forkpty() to use pseudo terminal and run an external program.
-		const char* prog = m_Site.m_UseExternalSSH ? "ssh" : "telnet";
+		const char* prog = "telnet";
 		setenv("TERM", m_Site.m_TermType.c_str() , 1);
 		// Current terminal emulation is buggy and only suitable for BBS browsing.
 		// Both xterm or vt??? terminal emulation has not been fully implemented.
@@ -260,14 +262,46 @@ bool CTelnetCon::Connect()
 		if ( m_Pid == 0 )
 		{
 			// Child Process;
-			if( m_Site.m_UseExternalSSH )
-				execlp ( prog, prog, address.c_str(), NULL ) ;
-			else
-				execlp ( prog, prog, "-8", address.c_str(), NULL ) ;
+			close(m_SockFD);
+			execlp ( prog, prog, "-8", address.c_str(), NULL ) ;
+			exit(EXIT_FAILURE);
 		}
 		else
 		{
 			// Parent process
+			int flags = fcntl(m_SockFD, F_GETFD);
+			fcntl(m_SockFD, F_SETFD,
+				flags | FD_CLOEXEC); /* make m_SockFD
+							auto close on exec */
+		}
+		OnConnect(0);				  
+	}
+	/* external ssh */
+	else if ( m_Port == 22 && m_Site.m_UseExternalSSH )
+	{
+		// Suggestion from kyl <kylinx@gmail.com>
+		// Call forkpty() to use pseudo terminal and run
+		// an external program.
+		const char* prog = "ssh";
+		setenv("TERM", m_Site.m_TermType.c_str() , 1);
+		// Current terminal emulation is buggy and only suitable
+		// for BBS browsing. Both xterm or vt??? terminal emulation
+		// has not been fully implemented.
+		m_Pid = forkpty (& m_SockFD, NULL, NULL, NULL );
+		if ( m_Pid == 0 )
+		{
+			// Child Process;
+			close(m_SockFD);
+			execlp ( prog, prog, address.c_str(), NULL ) ;
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			// Parent process
+			int flags = fcntl(m_SockFD, F_GETFD);
+			fcntl(m_SockFD, F_SETFD,
+				flags | FD_CLOEXEC); /* make m_SockFD
+							auto close on exec */
 		}
 		OnConnect(0);
 	}
@@ -683,16 +717,20 @@ void CTelnetCon::Close()
 
 	if( m_SockFD != -1 )
 	{
+		close( m_SockFD ); /* FIXME: actually unnecessary, since
+				      g_io_channel operations will take care
+				      of this. */
+		m_SockFD = -1;
 		if( m_Pid )
 		{
+			/* FIXME: unnecessary again, since child has already
+			 * received SIGHUP when m_SockFD was closed. */
 			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
 			DEBUG("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
-		close( m_SockFD );
-		m_SockFD = -1;
 	}
 }
 
