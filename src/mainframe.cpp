@@ -240,6 +240,12 @@ CMainFrame::CMainFrame()
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
+	/* Remove leading and trailing spaces from url. */
+	size_t first = url.find_first_not_of(" \t");
+	size_t last = url.find_last_not_of(" \t");
+	if (last >= first)
+		url = url.substr(first, last - first + 1);
+
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
 

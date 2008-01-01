@@ -1,3 +1,10 @@
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* src/mainframe.cpp (CMainFrame::NewCon): Remove leading and trailing
+	spaces from URL when making connections. This fixes the bug of being
+	unable to connect to some sites from site browser, e.g. newsmth.net)
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
 2007-12-26  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/Makefile.am,
