@@ -57,6 +57,8 @@
 #include "telnetview.h"
 #include "telnetcon.h"
 
+#include "appconfig.h"
+
 static int strcmp_ci( register const char* str1, register const char* str2)
 {
 	for(; *str1 && *str2; ++str1, ++str2)
@@ -137,6 +139,13 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData * aCreateDataStruct) : nsP
   m_GtkWidget(NULL),
   mScriptablePeer(NULL)
 {
+	if (AppConfig.FontFamily.empty()) // This is the first instance
+	{
+		AppConfig.SetToDefault();
+		AppConfig.Load();
+	}
+	m_FontFace = AppConfig.FontFamily;
+	m_FontFaceEn = AppConfig.FontFamilyEn;
 	mString[0] = '\0';
 	if( aCreateDataStruct->mode==NP_EMBED )
 	{
@@ -148,6 +157,8 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData * aCreateDataStruct) : nsP
 				m_URL = aCreateDataStruct->argv[i];
 			else if( 0 == strcmp_ci( "FontFace", aCreateDataStruct->argn[i] ) )
 				m_FontFace = aCreateDataStruct->argv[i];
+			else if( 0 == strcmp_ci( "FontFaceEn", aCreateDataStruct->argn[i] ) )
+				m_FontFaceEn = aCreateDataStruct->argv[i];
 		}
 	}
 }
@@ -257,13 +268,13 @@ void nsPluginInstance::NewCon()
 //	gtk_label_new("PCMan plug-in for Mozilla/Firefox")
 	gtk_container_add( GTK_CONTAINER(m_GtkWidget), m_pView->m_Widget);
 
-	CSite site;
+	CSite site = AppConfig.m_DefaultSite;
 	m_pCon = new CTelnetCon( m_pView, site );
 
 	m_pView->SetTermData( m_pCon );
 //	m_pView->SetContextMenu(m_EditMenu);
-	CFont* font = new CFont(m_FontFace, 12, true);
-	m_pView->SetFont(font);
+	m_pView->SetFont(m_FontFace, 12, true, true);
+	m_pView->SetFontEn(m_FontFaceEn, 12, true, true);
 	static GdkColor HyperLinkColor;
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536*102/256;

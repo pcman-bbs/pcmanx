@@ -89,6 +89,7 @@ private:
   CTelnetCon* m_pCon;
   string m_URL;
   string m_FontFace;
+  string m_FontFaceEn;
   guint m_BlinkTimer;
   guint m_EverySecondTimer;
 

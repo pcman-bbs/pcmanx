@@ -1,5 +1,18 @@
 2008-01-01  Jim Huang  <jserv@openmoko.org>
 
+	* plugin/src/plugin.cpp (nsPluginInstance::nsPluginInstance)
+	(nsPluginInstance::NewCon),
+	plugin/src/plugin.h (nsPluginInstance::m_FontFaceEn):
+	Add "load default options from config file" support for
+	pcmanx-plugin. It shares the same config file and options with pcmanx
+	$HOME/.pcmanx/pcmanx. Also fix the not working FontFace parameter in
+	<embed> tags, and add FontFaceEn parameter support in <embed> tags.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* plugin/src/Makefile.am: Link appconfig as well.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
 	* plugin/src/np_entry.cpp (NP_Shutdown) (NP_Initialize)
 	(NP_GetMIMEDescription) (NP_GetValue) (main): Fix the unusable plugin,
 	caused by 'visibility' of interfaces.

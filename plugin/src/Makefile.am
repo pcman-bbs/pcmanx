@@ -8,9 +8,11 @@ INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
 	-I$(top_srcdir)/plugin/src \
+	-I$(top_srcdir)/src \
 	$(GUI_CFLAGS) \
 	$(MOZILLA_CFLAGS) \
-	-DMOZ_PLUGIN
+	-DMOZ_PLUGIN \
+	-DDATADIR=\"$(datadir)\"
 
 AM_CXXFLAGS = -fPIC
 
@@ -32,6 +34,12 @@ SOURCES_view = \
 	$(top_srcdir)/src/view/telnetcon.cpp \
 	$(top_srcdir)/src/view/telnetcon.h
 
+SOURCES_appconfig = \
+	$(top_srcdir)/src/appconfig.cpp \
+	$(top_srcdir)/src/appconfig.h \
+	$(top_srcdir)/src/configfile.cpp \
+	$(top_srcdir)/src/configfile.h
+
 SOURCES_mozilla = \
 	np_entry.cpp \
 	npn_gate.cpp \
@@ -45,7 +53,8 @@ noinst_LIBRARIES_mozilla = libplugin.a
 
 libplugin_a_SOURCES = \
 	$(SOURCES_mozilla) \
-	$(SOURCES_view)
+	$(SOURCES_view) \
+	$(SOURCES_appconfig)
 
 BUILT_SOURCES_mozilla = pcmanx_interface.h
 $(SOURCES_mozilla): pcmanx_interface.h
