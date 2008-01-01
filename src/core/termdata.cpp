@@ -124,6 +124,8 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 	m_NeedDelayedUpdate = false;
 	m_DelayedUpdateTimeout = 0;
 	m_Sel = new CTermSelection(this);
+
+	regcomp( &m_RegIp, "([0-9]{1,3}\\.){3}([0-9]{1,3}|\\*)", REG_EXTENDED );
 }
 
 // class destructor
@@ -140,6 +142,8 @@ CTermData::~CTermData()
 			delete []m_Screen[i];
 		delete []m_Screen;
 	}
+
+	regfree(&m_RegIp);
 }
 
 
@@ -730,6 +734,7 @@ void CTermData::UpdateDisplay()
 {
 	DetectCharSets();
 	DetectHyperLinks();
+	DetectIpAddrs();
 
  	if( m_pView && m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
@@ -922,6 +927,42 @@ void CTermData::DetectHyperLinks()
 			attr[col].SetHyperLink(false);
 		DetectEMails( line, attr, m_ColsPerPage );	// Search for E-mails.
 		DetectCommonURLs( line, attr, m_ColsPerPage );	// Search for URLs other than E-mail.
+	}
+}
+
+/* detect ipv4 addresses. */
+inline void DetectIpPatterns( const char *line, CTermCharAttr *attr, int len, const regex_t *regip)
+{
+	regmatch_t match;
+	const char *p = line;
+
+	while ( p < line + len && regexec( regip, p, 1, &match, 0 ) == 0 )
+	{
+		int offset = p - line;
+		if ( CTermCharAttr::CS_ASCII == attr[offset + match.rm_so].GetCharSet()
+		  && CTermCharAttr::CS_ASCII == attr[offset + match.rm_eo - 1].GetCharSet() )
+			for ( int i = match.rm_so; i < match.rm_eo; i++ )
+			{
+				attr[offset + i].SetIpAddr(true);
+				attr[offset + i].SetNeedUpdate(true);
+			}
+		p += match.rm_eo + 1;
+	}
+}
+
+/* Detect IP addresses (called from UpdateDisplay()) */
+void CTermData::DetectIpAddrs()
+{
+	int iline = m_FirstLine;
+	int ilast_line = iline + m_RowsPerPage;
+	for( ; iline < ilast_line; iline++ )
+	{
+		char* line = m_Screen[iline];
+		CTermCharAttr* attr = GetLineAttr( line );
+		// Clear all marks.
+		for( int col = 0; col < m_ColsPerPage; col ++ )
+			attr[col].SetIpAddr(false);
+		DetectIpPatterns( line, attr, m_ColsPerPage, &m_RegIp );
 	}
 }
 

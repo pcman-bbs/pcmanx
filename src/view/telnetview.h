@@ -27,6 +27,10 @@
 
 #include "termview.h"
 
+#ifndef MOZ_PLUGIN
+#include "qqwryseeker.h"
+#endif
+
 /**
 @author PCMan
 */
@@ -37,6 +41,7 @@ class CTelnetView : public CTermView
 friend class CMainFrame;
 public:
     CTelnetView();
+    ~CTelnetView();
 
     void OnTextInput(const gchar* text);
     void OnHyperlinkClicked(string url);
@@ -69,6 +74,7 @@ protected:
 #if !defined(MOZ_PLUGIN)
 protected:
     static CMainFrame* m_pParentFrame;
+    QQWrySeeker *m_pIpSeeker;
 #endif /* !defined(MOZ_PLUGIN) */
     static string m_WebBrowser;
     static string m_MailClient;

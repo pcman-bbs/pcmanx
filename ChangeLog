@@ -1,5 +1,31 @@
 2008-01-01  Jim Huang  <jserv@openmoko.org>
 
+	* src/qqwryseeker/qqwryseeker.c,
+	src/qqwryseeker/qqwryseeker.h: New files.
+	Helper functions to lookup IP location information contributed by
+	Jason Xia <jasonxh@gmail.com>.
+
+	* src/Makefile.am: Build src/qqwryseeker/*.[ch]
+
+	* src/mainframe.h (PushStatus) (PopStatus): New functions for
+	Statusbar controlling.
+
+	* src/core/termdata.cpp (CTermData::CTermData) (CTermData::~CTermData)
+	(CTermData::UpdateDisplay) (DetectIpPatterns)
+	(CTermData::DetectIpAddrs),
+	src/view/telnetview.cpp (CTelnetView::CTelnetView)
+	(CTelnetView::~CTelnetView) (ipstr2int) (CTelnetView::OnMouseMove):
+	Add IP location lookup functionality (on mouse hovering over),
+	using the publicly available qqwry.dat database. Not everyone may need
+	this feature since qqwry.dat is an IP location database file in
+	Simplified Chinese and it is most accurate in areas in mainland Chin.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* src/core/termdata.h,
+	src/view/telnetview.h: Likewise.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
 	* src/view/telnetcon.cpp (CTelnetCon::Connect) (CTelnetCon::Close):
 	Adjust the semantics of UseExternalTelnet and UseExternalSSH
 	to be more reasonable. Also fix a program hanging bug when opening

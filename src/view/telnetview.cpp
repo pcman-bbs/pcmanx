@@ -43,6 +43,16 @@ CMainFrame* CTelnetView::m_pParentFrame = NULL;
 CTelnetView::CTelnetView()
 	: CTermView()
 {
+#ifndef MOZ_PLUGIN
+  m_pIpSeeker = seeker_new(AppConfig.GetConfigDirPath().append("/qqwry.dat").c_str());
+#endif
+}
+
+CTelnetView::~CTelnetView()
+{
+#ifndef MOZ_PLUGIN
+  if (m_pIpSeeker) seeker_delete(m_pIpSeeker);
+#endif
 }
 
 string CTelnetView::m_WebBrowser;
@@ -180,6 +190,16 @@ static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
 	*do_copy = true;
 }
 
+static inline unsigned int ipstr2int(const char *str)
+{
+	unsigned char ip[4];
+	if (sscanf(str, " %hhu . %hhu . %hhu . %hhu"
+				, ip + 3, ip + 2, ip + 1, ip) != 4)
+		return 0;
+	return *((unsigned int*)ip);
+}
+
+
 void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 {
   if( !m_pTermData )
@@ -215,6 +235,38 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
   else if ( AppConfig.MouseSupport == true )
     {
       CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+
+      // Update status bar for ip address lookup.
+      m_pParentFrame->PopStatus("show ip");
+      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsIpAddr() )
+      {
+	int ip_beg, ip_end;
+	for (ip_beg = x; ip_beg >= 0 && pattr[ip_beg].IsIpAddr(); ip_beg--);
+	ip_beg++;
+	for (ip_end = x; ip_end < m_pTermData->m_ColsPerPage && pattr[ip_end].IsIpAddr(); ip_end++);
+	string ipstr(m_pTermData->m_Screen[y] + ip_beg, ip_end - ip_beg);
+	string::iterator star = find(ipstr.begin(), ipstr.end(), '*');
+	while (star != ipstr.end())
+	{
+	  *star = '0';
+	  star = find(star + 1, ipstr.end(), '*');
+	}
+
+	char buf[255];
+	if (m_pIpSeeker)
+	{
+	  seeker_lookup(m_pIpSeeker, ipstr2int(ipstr.c_str()), buf, sizeof(buf));
+	  gchar *location = g_convert_with_fallback(buf, -1, "utf8", "gbk", "?", NULL, NULL, NULL);
+	  snprintf(buf, sizeof(buf), "Detected IP address: %s (%s)", ipstr.c_str(), location);
+	  g_free(location);
+	}
+	else
+	  snprintf(buf, sizeof(buf), "Detected IP address: %s "
+	      "(Download qqwry.dat under config directory to get IP location lookup!)", ipstr.c_str());
+
+	m_pParentFrame->PushStatus("show ip", buf);
+      }
+
       if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
 	{gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
       else
