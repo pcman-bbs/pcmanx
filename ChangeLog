@@ -1,3 +1,12 @@
+2008-01-02  Jim Huang  <jserv@openmoko.org>
+
+	* plugin/src/plugin.cpp (NS_PluginInitialize)
+	(nsPluginInstance::nsPluginInstance): Properly initialize the
+	AppConfig instance in the plugin.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* AUTHORS: mentioning Jason Xia.
+
 2008-01-01  Jim Huang  <jserv@openmoko.org>
 
 	* plugin/data/pcmanx.html (function autoConnect): No more fixed font

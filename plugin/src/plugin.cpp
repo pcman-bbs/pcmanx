@@ -81,6 +81,8 @@ char* NPP_GetMIMEDescription(void)
 //
 NPError NS_PluginInitialize()
 {
+  AppConfig.SetToDefault();
+  AppConfig.Load();
   return NPERR_NO_ERROR;
 }
 
@@ -137,15 +139,10 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData * aCreateDataStruct) : nsP
   m_pView(NULL),
   m_pCon(NULL),
   m_GtkWidget(NULL),
-  mScriptablePeer(NULL)
+  mScriptablePeer(NULL),
+  m_FontFace(AppConfig.FontFamily),
+  m_FontFaceEn(AppConfig.FontFamilyEn)
 {
-	if (AppConfig.FontFamily.empty()) // This is the first instance
-	{
-		AppConfig.SetToDefault();
-		AppConfig.Load();
-	}
-	m_FontFace = AppConfig.FontFamily;
-	m_FontFaceEn = AppConfig.FontFamilyEn;
 	mString[0] = '\0';
 	if( aCreateDataStruct->mode==NP_EMBED )
 	{
