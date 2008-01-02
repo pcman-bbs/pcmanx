@@ -1,5 +1,9 @@
 2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
 
+	* NEWS: Update the release news.
+
+2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
+
 	* src/mainframe.cpp,
 	po/zh_TW.po,
 	po/zh_CN.po: Update copyright to 2008.

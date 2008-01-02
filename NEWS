@@ -1,3 +1,17 @@
+Version 0.3.7 - January 2008
+
+* Feature: Let Firefox plugin use font config under ~/pcmanx/pcmanx
+* Feature: IP location lookup (need qqwry.dat and mouse support) (for simpified chinese user)
+* Bugfix: Blank BBS list if updating BBS list fails.
+* Bugfix: Firefox plugin cannot run.
+* Bugfix: Strip the leading nd trailing space of URL detection.
+
+Version 0.3.6 - August 2007
+
+* Feature: ASCII art with programming support
+* Feature: Support libnotify
+* Bugfix: Screen center align
+
 Version 0.3.5 - August 2006
 
 * Can change input method by right click.
