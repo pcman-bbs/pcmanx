@@ -704,7 +704,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
-						"Copyright (c) 2005-2007\n"
+						"Copyright (c) 2005-2008\n"
 						"License: GNU Genral Public License\n"
 						"Project Homepage: http://pcmanx.csie.net\n"
 						"Bug Report: %s\n\n"

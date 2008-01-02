@@ -1,3 +1,11 @@
+2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp,
+	po/zh_TW.po,
+	po/zh_CN.po: Update copyright to 2008.
+
+	* configure.ac: Bump to 0.3.7
+
 2008-01-02  Jim Huang  <jserv@openmoko.org>
 
 	* plugin/src/plugin.cpp (NS_PluginInitialize)
