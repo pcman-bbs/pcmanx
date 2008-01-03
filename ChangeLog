@@ -1,5 +1,9 @@
 2008-01-03  Jim Huang  <jserv@openmoko.org>
 
+	* AUTHORS: Mentioned the contributors of all refered codes.
+
+2008-01-03  Jim Huang  <jserv@openmoko.org>
+
 	* src/docklet/eggtrayicon.c: Disabled if gtk+ version >= 2.10.
 	EggTrayIcon is deprecated. Use GtkStatusIcon instead.
 
