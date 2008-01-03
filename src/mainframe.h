@@ -106,9 +106,17 @@ public:
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	void ShowTrayIcon() {
+		gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
+	void HideTrayIcon() {
+		gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
+	GtkStatusIcon *m_TrayIcon;
+#else
 	void ShowTrayIcon(){ gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) ); };
 	void HideTrayIcon(){ gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) ); };
 	EggTrayIcon *m_TrayIcon_Instance;
+#endif
 #endif
 
 #ifdef USE_NOTIFIER
@@ -156,9 +164,11 @@ protected:
 #ifdef USE_DOCKLET
 	static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
 //	static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
+#if ! GTK_CHECK_VERSION(2,10,0)
 	void set_tray_icon();
 	GtkWidget *m_TrayButton;
 	GtkWidget *m_TrayIcon;
+#endif
 #endif
 
 	GdkPixbuf* m_ConnIcon;

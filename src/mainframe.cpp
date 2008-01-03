@@ -84,6 +84,7 @@ void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocati
 }
 */
 
+#if ! GTK_CHECK_VERSION(2,10,0)
 void CMainFrame::set_tray_icon()
 {
         int panel_w;
@@ -115,6 +116,7 @@ void CMainFrame::set_tray_icon()
         gtk_image_set_from_pixbuf(GTK_IMAGE (m_TrayIcon), tray_icon_pixbuf);
         g_object_unref (tray_icon_pixbuf);
 }
+#endif
 #endif
 
 #ifdef USE_WGET
@@ -151,6 +153,13 @@ CMainFrame::CMainFrame()
 	LoadIcons();
 
 #ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	m_TrayIcon = gtk_status_icon_new();
+	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+
+	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+#else
 	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
 
 	m_TrayButton = gtk_toggle_button_new ();
@@ -169,8 +178,8 @@ CMainFrame::CMainFrame()
 	m_TrayIcon = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
 	gtk_widget_show (m_TrayIcon);
-
 	set_tray_icon();
+#endif
 #endif
 
 
@@ -1056,7 +1065,13 @@ void CMainFrame::OnDestroy()
 	g_source_remove( m_EverySecondTimer );
 
 	Hide();
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	g_object_unref( m_TrayIcon );
+#else
 	gtk_widget_destroy( GTK_WIDGET(m_TrayIcon_Instance) );
+#endif
+#endif
 
 	while( g_main_context_iteration(NULL, FALSE) );
 

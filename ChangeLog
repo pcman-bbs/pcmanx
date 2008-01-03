@@ -1,3 +1,18 @@
+2008-01-03  Jim Huang  <jserv@openmoko.org>
+
+	* src/docklet/eggtrayicon.c: Disabled if gtk+ version >= 2.10.
+	EggTrayIcon is deprecated. Use GtkStatusIcon instead.
+
+	* src/mainframe.h (CMainFrame::ShowTrayIcon)
+	(CMainFrame::HideTrayIcon) (CMainFrame::m_TrayIcon): Use
+	GtkStatusIcon implementation.
+	(CMainFrame::set_tray_icon) (CMainFrame::m_TrayButton)
+	(CMainFrame::m_TrayIcon): Commented out if gtk+ version >= 2.10.
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Reimplement using
+	GtkStatusIcon.
+	(CMainFrame::OnDestroy) (CMainFrame::set_tray_icon): Likewise.
+
 2008-01-03  Shih-Yuan Lee  <fourdollars@gmail.com>
 
 	* AUTHORS,
