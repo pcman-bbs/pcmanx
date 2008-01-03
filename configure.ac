@@ -422,25 +422,23 @@ if test "$plugin" = "yes"; then
     dnl Note: with the infos from mozilla-plugin.pc
     dnl we got all includes and libraries for the C interface
     dnl to Mozilla, but not the XPCOM headers we also need.
-    MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin | awk '{print $1}' | sed "s/^-I//"`
-    MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
+    MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
     MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
     MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
   else
     dnl Don't depend on pkg-config
     MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
     MOZILLA_INCLUDE_ROOT="$INPUT_MOZILLA_ROOT/include"
-    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT \
--lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
+    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT -lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
     MOZILLA_CFLAGS=" \
--I$MOZILLA_INCLUDE_ROOT \
--I$MOZILLA_INCLUDE_ROOT/java \
--I$MOZILLA_INCLUDE_ROOT/plugin \
--I$MOZILLA_INCLUDE_ROOT/xpcom \
--I$MOZILLA_INCLUDE_ROOT/string \
--I$MOZILLA_INCLUDE_ROOT/nspr \
--I$MOZILLA_INCLUDE_ROOT/xpcom \
--I$MOZILLA_INCLUDE_ROOT/xpconnect"
+      -I$MOZILLA_INCLUDE_ROOT \
+      -I$MOZILLA_INCLUDE_ROOT/java \
+      -I$MOZILLA_INCLUDE_ROOT/plugin \
+      -I$MOZILLA_INCLUDE_ROOT/xpcom \
+      -I$MOZILLA_INCLUDE_ROOT/string \
+      -I$MOZILLA_INCLUDE_ROOT/nspr \
+      -I$MOZILLA_INCLUDE_ROOT/xpcom \
+      -I$MOZILLA_INCLUDE_ROOT/xpconnect"
   fi
 
   # Workaround

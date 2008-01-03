@@ -1,3 +1,9 @@
+2008-01-03  Shih-Yuan Lee  <fourdollars@gmail.com>
+
+	* AUTHORS,
+	configure.ac: Fix the compiling error on Gentoo Linux.
+	Patched by Chen Yung Chou <scsichen@gmail.com>.
+
 2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
 
 	* NEWS: Update the release news.
