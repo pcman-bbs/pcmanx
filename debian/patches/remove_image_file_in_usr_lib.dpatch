@@ -2,12 +2,12 @@
 ## remove_image_file_in_usr_lib.dpatch by Kanru Chen <koster@debian.org.tw>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Images should be in share directory.
 
 @DPATCH@
-diff -urNad pcmanx-gtk2-0.3.4~/plugin/data/pcmanx.html pcmanx-gtk2-0.3.4/plugin/data/pcmanx.html
---- pcmanx-gtk2-0.3.4~/plugin/data/pcmanx.html	2006-03-13 13:48:03.000000000 +0800
-+++ pcmanx-gtk2-0.3.4/plugin/data/pcmanx.html	2006-08-01 01:58:13.000000000 +0800
+diff -urNad pcmanx-gtk2-0.3.7~/plugin/data/pcmanx.html pcmanx-gtk2-0.3.7/plugin/data/pcmanx.html
+--- pcmanx-gtk2-0.3.7~/plugin/data/pcmanx.html	2008-01-09 11:17:06.000000000 +0800
++++ pcmanx-gtk2-0.3.7/plugin/data/pcmanx.html	2008-01-09 11:21:56.000000000 +0800
 @@ -2,7 +2,7 @@
  <head>
  <meta http-equiv="Content-Type" content="text/html; charset=big5" />

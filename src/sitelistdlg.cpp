@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@
 #include <string.h>
 #include <string>
 
-#include "debug.h"
-
 using namespace std;
 
 CSiteListDlg::CSiteListDlg(CWidget* parent)
@@ -46,7 +44,6 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	GtkWidget *image349;
 	GtkWidget *label26;
 	GtkWidget *close_btn;
-	GtkWidget *dialog_action_area3;
 	
 	dialog_vbox3 = GTK_DIALOG (m_Widget)->vbox;
 	gtk_widget_show (dialog_vbox3);

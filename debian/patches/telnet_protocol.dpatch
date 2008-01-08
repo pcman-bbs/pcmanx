@@ -8,7 +8,7 @@
 diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
 --- pcmanx-gtk2-0.3.5~/configure.ac	2007-05-13 09:42:07.000000000 +0800
 +++ pcmanx-gtk2-0.3.5/configure.ac	2007-05-13 09:42:07.000000000 +0800
-@@ -416,7 +416,7 @@
+@@ -476,7 +476,7 @@
  -I$ADDITIONAL_IDLDIR \
  -I/usr/lib/mozilla/include/idl"
  
@@ -21,16 +21,16 @@ diff -urNad pcmanx-gtk2-0.3.5~/aclocal.m4 pcmanx-gtk2-0.3.5/aclocal.m4
 --- pcmanx-gtk2-0.3.5~/aclocal.m4	2006-08-20 21:15:06.000000000 +0800
 +++ pcmanx-gtk2-0.3.5/aclocal.m4	2007-05-13 09:42:32.000000000 +0800
 @@ -1,5 +1,5 @@
- # generated automatically by aclocal 1.9.6 -*- Autoconf -*-
+ # generated automatically by aclocal 1.10 -*- Autoconf -*-
 -
 +# touch it to not regen ./configure
  # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
- # 2005  Free Software Foundation, Inc.
+ # 2005, 2006  Free Software Foundation, Inc.
  # This file is free software; the Free Software Foundation
 diff -urNad pcmanx-gtk2-0.3.5~/configure pcmanx-gtk2-0.3.5/configure
 --- pcmanx-gtk2-0.3.5~/configure	2007-05-13 09:42:07.000000000 +0800
 +++ pcmanx-gtk2-0.3.5/configure	2007-05-13 09:42:07.000000000 +0800
-@@ -26146,7 +26146,7 @@
+@@ -27088,7 +27088,7 @@
  -I$ADDITIONAL_IDLDIR \
  -I/usr/lib/mozilla/include/idl"
  

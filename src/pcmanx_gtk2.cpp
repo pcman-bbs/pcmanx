@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "core/pcmanx_utils.h"
 
 #if defined(HAVE_GETTEXT)
 #include <libintl.h>
@@ -39,14 +37,16 @@
 #include "appconfig.h"
 #include "telnetcon.h"
 
-#include "debug.h"
-
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
 #endif
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -68,6 +68,20 @@ int main(int argc, char *argv[])
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
+
+#ifdef USE_DEBUG
+	/* glib introduces its own memory management mechanism, which
+         * confuses memory debuggers such as valgrind and disable their
+         * malloc/free wrapper against the applications.
+         *
+         * Here, we enforce glib to use malloc instead of original ones
+         * for debugging need.
+         */
+	if (getenv("BYPASS_GLIB_POOLS") != NULL) {
+		g_slice_set_config(G_SLICE_CONFIG_ALWAYS_MALLOC, TRUE);
+
+	}
+#endif
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
@@ -126,8 +140,15 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+	if (!notify_is_initted())
+	{
+	  notify_init("pcmanx-gtk2");
+	}
+#else
 	popup_notifier_init(main_frm->GetMainIcon());
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -135,7 +156,10 @@ int main(int argc, char *argv[])
 #endif
 
 	gtk_main ();
-	
+
+#ifdef USE_LIBNOTIFY
+	notify_uninit();
+#endif	
 	CTelnetCon::Cleanup();
 
 	AppConfig.SaveFavorites();

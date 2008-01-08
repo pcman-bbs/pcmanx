@@ -2,7 +2,7 @@
 ## change_default_en_font_to_mono.dpatch by  <emfox@localhost>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Change the default English font from Sans to Monospace.
 
 @DPATCH@
 diff -urNad pcmanx-gtk2-0.3.5~/src/appconfig.cpp pcmanx-gtk2-0.3.5/src/appconfig.cpp

@@ -7,7 +7,7 @@ using namespace std;
 inline int
 replaceString (string & modify_me, string & find_me, string & replace_with_me)
 {
-	int search_here = 0;
+	unsigned int search_here = 0;
 	int num_replaced = 0;
 	if (find_me == replace_with_me)
 		return 0;

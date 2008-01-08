@@ -1,6 +1,8 @@
 #ifndef DOCKLET_API_H
 #define DOCKLET_API_H
 
+#include "pcmanx_utils.h"
+
 #include "eggtrayicon.h"
 
 G_BEGIN_DECLS

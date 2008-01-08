@@ -3,8 +3,6 @@ TODO List
 
 jserv
 -----
-3. Improve automake rules for extensive Mozilla/Firefox detections and
-their configurations.
 4. Enhance the interaction for plugin via XPCOM / XPConnect.
 
 kanru
@@ -25,6 +23,11 @@ auto-learn level, chatlog or not, bot get angry or not, config_path ).
 
 FourDollars
 -----
+1. Customized function key
+2. Config file refactor
+3. Shrink margin at fullscreen
+4. Polish bbs list update mechanism
+5. Polish center align mechanism
 
 emfox
 -----

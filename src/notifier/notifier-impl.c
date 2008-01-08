@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2005
  *	Jim Huang <jserv@kaffe.org>
- *	PCMan (Hong Jen Yee) <hzysoft@sina.com.tw>
+ *	PCMan (Hong Jen Yee) <pcman.tw@gmail.com>
  *
  * Licensed under the GNU GPL v2.  See COPYING.
  */
@@ -301,6 +301,7 @@ GtkWidget* popup_notifier_notify(
 			caption, text, 
 			parent, 
 			click_cb, click_cb_data);
+	return NULL;
 }
 
 void popup_notifier_set_timeout( int popup_timeout_sec )
@@ -317,4 +318,3 @@ void popup_notifier_init(GdkPixbuf *pixbuf)
 	icon_pixbuf = pixbuf;
 	notifier_initialized = 1;
 }
-

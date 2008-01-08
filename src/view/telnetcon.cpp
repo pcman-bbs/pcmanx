@@ -2,7 +2,7 @@
 // Name:        telnetcon.cpp
 // Purpose:     Class dealing with telnet connections, parsing telnet commands.
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.7.16
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -20,7 +20,11 @@
 #include "mainframe.h"
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -71,8 +75,6 @@
 #endif
 
 #define RECV_BUF_SIZE (4097)
-
-#include "debug.h"
 
 #if !defined(MOZ_PLUGIN)
 #ifdef USE_NANCY
@@ -246,11 +248,13 @@ bool CTelnetCon::Connect()
 
 #ifdef USE_EXTERNAL
 	// Run external program to handle connection.
-	if( m_Site.m_UseExternalTelnet || m_Site.m_UseExternalSSH )
+
+	/* external telnet */
+	if ( m_Port == 23 && m_Site.m_UseExternalTelnet )
 	{
 		// Suggestion from kyl <kylinx@gmail.com>
 		// Call forkpty() to use pseudo terminal and run an external program.
-		const char* prog = m_Site.m_UseExternalSSH ? "ssh" : "telnet";
+		const char* prog = "telnet";
 		setenv("TERM", m_Site.m_TermType.c_str() , 1);
 		// Current terminal emulation is buggy and only suitable for BBS browsing.
 		// Both xterm or vt??? terminal emulation has not been fully implemented.
@@ -258,14 +262,46 @@ bool CTelnetCon::Connect()
 		if ( m_Pid == 0 )
 		{
 			// Child Process;
-			if( m_Site.m_UseExternalSSH )
-				execlp ( prog, prog, address.c_str(), NULL ) ;
-			else
-				execlp ( prog, prog, "-8", address.c_str(), NULL ) ;
+			close(m_SockFD);
+			execlp ( prog, prog, "-8", address.c_str(), NULL ) ;
+			exit(EXIT_FAILURE);
 		}
 		else
 		{
 			// Parent process
+			int flags = fcntl(m_SockFD, F_GETFD);
+			fcntl(m_SockFD, F_SETFD,
+				flags | FD_CLOEXEC); /* make m_SockFD
+							auto close on exec */
+		}
+		OnConnect(0);				  
+	}
+	/* external ssh */
+	else if ( m_Port == 22 && m_Site.m_UseExternalSSH )
+	{
+		// Suggestion from kyl <kylinx@gmail.com>
+		// Call forkpty() to use pseudo terminal and run
+		// an external program.
+		const char* prog = "ssh";
+		setenv("TERM", m_Site.m_TermType.c_str() , 1);
+		// Current terminal emulation is buggy and only suitable
+		// for BBS browsing. Both xterm or vt??? terminal emulation
+		// has not been fully implemented.
+		m_Pid = forkpty (& m_SockFD, NULL, NULL, NULL );
+		if ( m_Pid == 0 )
+		{
+			// Child Process;
+			close(m_SockFD);
+			execlp ( prog, prog, address.c_str(), NULL ) ;
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			// Parent process
+			int flags = fcntl(m_SockFD, F_GETFD);
+			fcntl(m_SockFD, F_SETFD,
+				flags | FD_CLOEXEC); /* make m_SockFD
+							auto close on exec */
 		}
 		OnConnect(0);
 	}
@@ -346,7 +382,7 @@ void CTelnetCon::OnConnect(int code)
 #if !defined(MOZ_PLUGIN)
 		if( GetView()->GetParentFrame()->GetCurView() == m_pView )
 		{
-			for( int col = 0; col < sizeof(failed_msg); )
+			for( unsigned int col = 0; col < sizeof(failed_msg); )
 				col += m_pView->DrawChar( 0, col );
 		}
 #endif
@@ -681,16 +717,20 @@ void CTelnetCon::Close()
 
 	if( m_SockFD != -1 )
 	{
+		close( m_SockFD ); /* FIXME: actually unnecessary, since
+				      g_io_channel operations will take care
+				      of this. */
+		m_SockFD = -1;
 		if( m_Pid )
 		{
+			/* FIXME: unnecessary again, since child has already
+			 * received SIGHUP when m_SockFD was closed. */
 			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
-			INFO("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+			DEBUG("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
-		close( m_SockFD );
-		m_SockFD = -1;
 	}
 }
 
@@ -710,7 +750,6 @@ void CTelnetCon::Cleanup()
 		g_mutex_free(m_DNSMutex);
 		m_DNSMutex = NULL;
 	}
-	
 }
 
 void CTelnetCon::Reconnect()
@@ -763,7 +802,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 		string sub2;
 		string str(line);
 	
-		int n = str.find_first_of("  ");  // cut userid and spaces at head
+		unsigned int n = str.find_first_of("  ");  // cut userid and spaces at head
 		if( n != string::npos) // found
 			sub = str.substr(n+1);
 
@@ -795,9 +834,34 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	if( mainfrm->IsActivated() && mainfrm->GetCurCon() == this )
 		return;
 
-
 	gchar **column = g_strsplit(line, " ", 2);
-	GtkWidget* popup_win = popup_notifier_notify(
+#ifdef USE_LIBNOTIFY
+	gchar *t;
+	char body[256];
+	char summary[256];
+	t = g_markup_escape_text(column[0], -1);
+	g_snprintf(summary, 256, "%s - %s",
+		   m_Site.m_Name.c_str(),
+		   g_strchomp(t));
+    g_free(t);
+	t = g_markup_escape_text(column[1], -1);
+	g_snprintf(body, 256, "%s", g_strchomp(t));
+	g_free(t);
+	NotifyNotification *notification =
+	  notify_notification_new(
+				  summary,
+				  body,
+				  NULL,
+				  NULL);
+	notify_notification_set_timeout(notification,
+					AppConfig.PopupTimeout*1000);
+	notify_notification_set_icon_from_pixbuf(notification,
+						 mainfrm->GetMainIcon());
+	notify_notification_show(notification,
+				 NULL);
+	g_object_unref(G_OBJECT(notification));
+#else
+	/*GtkWidget* popup_win = */ popup_notifier_notify(
 		g_strdup_printf("%s - %s",
 			m_Site.m_Name.c_str(),
 			g_strchomp(column[0])),
@@ -805,6 +869,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 		m_pView->m_Widget, 
 		G_CALLBACK(popup_win_clicked), 
 		this);
+#endif
 	g_strfreev(column);
 #endif
 

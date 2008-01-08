@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "pcmanx_utils.h"
+
 void InitScriptInterface(const char *path);
 void ScriptOnNewIncomingMessage(void *handle, const char *text);
 void FinalizeScriptInterface();

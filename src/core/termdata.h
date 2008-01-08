@@ -2,7 +2,7 @@
 // Name:        termdata.h
 // Purpose:     Store terminal screen data and parse ANSI escape sequence
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.7.16
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -18,11 +18,16 @@
   #pragma interface "termdata.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "termsel.h"
 
 #include <string>
+
+#include <sys/types.h>
+#include <regex.h>
 
 using namespace std;
 
@@ -46,7 +51,7 @@ using namespace std;
 class CTermCharAttr
 {
     public:
-	static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
+	X_EXPORT static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
 
 	enum charset {CS_ASCII=0, CS_MBCS1=1, CS_MBCS2=2};	// MBCS : multi-byte character set
 
@@ -73,6 +78,7 @@ class CTermCharAttr
 	inline bool IsInverse(){return (m_Inverse==1?true:false);}
 	inline bool IsInvisible(){return (m_Invisible==1?true:false);}
 	inline bool IsHyperLink(){return (m_HyperLink==1?true:false);}
+	inline bool IsIpAddr(){return (m_IpAddr==1?true:false);}
 	inline bool IsNeedUpdate(){return (m_NeedUpdate==1?true:false);}
 	inline short GetCharSet(){return (short)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
@@ -102,6 +108,7 @@ class CTermCharAttr
 	inline bool SetInverse(bool flag){m_Inverse = flag?1:0;return flag;}
 	inline bool SetInvisible(bool flag){m_Invisible = flag?1:0;return flag;}
 	inline bool SetHyperLink(bool flag){m_HyperLink = flag?1:0;return flag;}
+	inline bool SetIpAddr(bool flag){m_IpAddr = flag?1:0;return flag;}
 	inline bool SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;return flag;}
 	inline bool SetCharSet(enum charset charset){
 		if(charset >= 0){
@@ -147,16 +154,18 @@ private:
 	unsigned char m_Inverse:BIT_NUMBER_OF_BOOL;	//Flag for exchanging color of background and foreground.
 	unsigned char m_Invisible:BIT_NUMBER_OF_BOOL;	// May be removed in the future
 	unsigned char m_HyperLink:BIT_NUMBER_OF_BOOL;	// For hyperlink detection
+	unsigned char m_IpAddr:BIT_NUMBER_OF_BOOL;	// For ip address detection
 	unsigned char m_NeedUpdate:BIT_NUMBER_OF_BOOL;	// a flag indicate the need for re-drawing
 	unsigned char m_CharSet:BIT_NUMBER_OF_CHARSET;	// character set, = CS_ASCII, CS_MBCS1, or CS_MBCS2
-	//-------------- 7 bits ----------
+	//-------------- 1 byte ----------
 };
 
 /*
  * Used with CTermView to hold screen buffer, caret position, etc.
  */
 class CTermView;
-class CTermData
+
+class X_EXPORT CTermData
 {
 public:
 	//Detect if the specified line is empty.
@@ -206,6 +215,7 @@ public:
 	string GetLineWithColor( char* pLine, int start, int end );
 	void DetectCharSets();
 	void DetectHyperLinks();
+	void DetectIpAddrs();
 	void UpdateDisplay();
 	void DoUpdateDisplay();
 	static void memset16( void* dest, short val, size_t n );
@@ -313,7 +323,7 @@ public:
 	bool m_NeedDelayedUpdate;
 	guint m_DelayedUpdateTimeout;
 private:
-
+	regex_t m_RegIp;
 };
 inline bool operator == (GdkPoint& pt1, GdkPoint& pt2)
 {	return (pt1.x == pt2.x && pt1.y == pt2.y);	}

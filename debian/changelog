@@ -1,3 +1,10 @@
+pcmanx-gtk2 (0.3.7-1) unstable; urgency=low
+
+  * New upstream release
+  * Policy updated to 3.7.3, menu field changed.
+
+ -- Emfox Zhou <emfox@debian.org>  Tue, 08 Jan 2008 18:03:39 +0800
+
 pcmanx-gtk2 (0.3.5-5) unstable; urgency=low
 
   * Add dependency of libgconf2-4. (Closes: #410519)

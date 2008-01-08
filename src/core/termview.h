@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,7 @@
   #pragma interface "termview.h"
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "pcmanx_utils.h"
 
 #include "view.h"
 #include "caret.h"
@@ -43,7 +41,7 @@ class CTermData;
 class CHyperLink;
 class CFont;
 
-class CTermView : public CView
+class X_EXPORT CTermView : public CView
 {
 friend class CTermData;
 public:
@@ -95,6 +93,8 @@ protected:
     void RecalcCharDimension();
     void GetCellSize( int &w, int &h );
     void ExtendSelection( int row, int col, bool left );
+    bool DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr);
+    inline bool IsSpaceFillingChar( const char* ch, int len ) {	return bool( len >= 3 && *(guchar*)ch == 0xe2 );	}
 protected:
 	CTermData* m_pTermData;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,6 @@
 #include "generalprefpage.h"
 #include "sitepage.h"
 #include "appconfig.h"
-
-#include "debug.h"
 
 CPrefDlg::CPrefDlg(CWidget* parent)
  : CDialog(parent, _("Preference"), true)
