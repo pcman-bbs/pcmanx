@@ -1,3 +1,7 @@
+2008-01-09  Emfox Zhou  <emfox@debian.org>
+
+	* plugin/data/pcmanx.html: convert to unix format other than dos.
+
 2008-01-03  Jim Huang  <jserv@openmoko.org>
 
 	* AUTHORS: Mentioned the contributors of all refered codes.
