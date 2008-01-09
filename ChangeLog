@@ -1,5 +1,10 @@
 2008-01-09  Emfox Zhou  <emfox@debian.org>
 
+	* src/sitepage.cpp, src/configfile.cpp, src/nancy_bot/msgdata.cpp:
+	directly include essential C++ headers (http://bugs.debian.org/420917)
+
+2008-01-09  Emfox Zhou  <emfox@debian.org>
+
 	* plugin/data/pcmanx.html: convert to unix format other than dos.
 
 2008-01-03  Jim Huang  <jserv@openmoko.org>
