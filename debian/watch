@@ -1,8 +1,4 @@
 # Compulsory line, this is a version 3 file
 version=3
 
-# Uncomment to examine a Webserver directory
-http://pcmanx.csie.net/release/pcmanx-gtk2-(.*)\.tar\.gz debian uupdate
-
-# Uncommment to examine a FTP server
-#ftp://ftp.example.com/pub/pcmanx-gtk2-(.*)\.tar\.gz debian uupdate
+http://pcmanx.csie.net/release/pcmanx-gtk2-(.*)\.tar\.bz2 debian uupdate

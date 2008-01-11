@@ -1,3 +1,11 @@
+pcmanx-gtk2 (0.3.7-2) unstable; urgency=low
+
+  * watch file updated, upstream now using .bz2 instead of .gz.
+  * lib dependency should be very strict. (Closes: #460161)
+  * Update README.Debian to mention IP address detection.
+
+ -- Emfox Zhou <emfox@debian.org>  Fri, 11 Jan 2008 11:17:17 +0800
+
 pcmanx-gtk2 (0.3.7-1) unstable; urgency=low
 
   * New upstream release
