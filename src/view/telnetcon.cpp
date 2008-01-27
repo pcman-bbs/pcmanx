@@ -243,6 +243,8 @@ bool CTelnetCon::Connect()
 	INFO("login = %s\n", m_Site.GetLogin().c_str());
 	if( !m_Site.GetLogin().empty() /*&& AppConfig.IsLoggedIn()*/ )
 		m_AutoLoginStage = m_Site.GetPreLogin().empty() ? ALS_LOGIN : ALS_PRELOGIN ;
+	else if ( !m_Site.GetPasswd().empty() ) /* in case we only need password (ssh) */
+		m_AutoLoginStage = ALS_PASSWD;
 	else
 		m_AutoLoginStage = ALS_OFF;
 

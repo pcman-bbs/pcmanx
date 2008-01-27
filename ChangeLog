@@ -1,3 +1,8 @@
+2008-01-26  Jason Xia  <jasonxh@gmail.com>
+
+	* src/view/telnetcon.cpp (CTelnetCon::Connect): Add support for auto
+	login in case only password is needed. (e.g. SSH)
+
 2008-01-09  Emfox Zhou  <emfox@debian.org>
 
 	* src/sitepage.cpp, src/configfile.cpp, src/nancy_bot/msgdata.cpp:
