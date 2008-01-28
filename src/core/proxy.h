@@ -1,19 +1,22 @@
 /* -- vi: set ts=4 sw=4: --
- * ===========================================================================
+ *                                                                                  
+ * proxy.h - Simple implementation of SOCKS client
  *
- *       Filename:  proxy.h
+ * Copyright (C) 2008 Jason Xia <jasonxh@gmail.com>
  *
- *    Description:  Simple implementation of SOCKS client
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- *        Version:  1.0
- *        Created:  27/01/08 05:32:30 PM
- *       Revision:  none
- *       Compiler:  gcc
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *         Author:  Jason Xia (jasonxh), jasonxh@gmail.com
- *        Company:  
- *
- * ===========================================================================
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifndef _PROXY_H

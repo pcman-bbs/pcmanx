@@ -1,3 +1,8 @@
+2008-01-28  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/proxy.c,
+	src/core/proxy.h:  Use consistent GPL licensing terms.
+
 2008-01-28  Jason Xia  <jasonxh@gmail.com>
 
 	* src/core/proxy.c, src/core/proxy.h: New files.
