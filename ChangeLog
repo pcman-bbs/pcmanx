@@ -1,5 +1,13 @@
 2008-01-28  Jason Xia  <jasonxh@gmail.com>
 
+	* src/view/telnetview.cpp (CTelnetView::OnMouseMove): Use i18n for
+	strings of iplookup.
+
+	* po/zh_CN.po, po/zh_TW: Update line numbers and add
+	translations(zh_CN) for strings of iplookup.
+
+2008-01-28  Jason Xia  <jasonxh@gmail.com>
+
 	* configure.ac, src/Makefile.am: Make IP location lookup a
 	configurable feature. Disabled by default.
 

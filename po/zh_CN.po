@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-01-02 15:39+0800\n"
+"POT-Creation-Date: 2008-01-28 13:21-0500\n"
 "PO-Revision-Date: 2006-03-12 22:16+0800\n"
 "Last-Translator: EmfoxZhou@gmail.com\n"
 "Language-Team: \n"
@@ -25,179 +25,179 @@ msgstr "连接(_O)"
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到关键字 \"%s\"！"
 
-#: ../src/mainframe.cpp:286
+#: ../src/mainframe.cpp:295
 msgid "_Connect"
 msgstr "连接(_C)"
 
-#: ../src/mainframe.cpp:287
+#: ../src/mainframe.cpp:296
 msgid "_Site List"
 msgstr "BBS 站点列表"
 
-#: ../src/mainframe.cpp:289
+#: ../src/mainframe.cpp:298
 msgid "Update BBS List"
 msgstr "更新 BBS 列表"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:300
 msgid "_New Connection"
 msgstr "开启新连接(_N)"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:300
 msgid "New Connection"
 msgstr "新连接"
 
-#: ../src/mainframe.cpp:292
+#: ../src/mainframe.cpp:301
 msgid "_Reconnect"
 msgstr "重新连接(_R)"
 
-#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:975
+#: ../src/mainframe.cpp:301 ../src/mainframe.cpp:984
 msgid "Reconnect"
 msgstr "重新连接"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:302
 msgid "_Close Connection"
 msgstr "关闭连接分页(_C)"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:302
 msgid "Close Connection"
 msgstr "关闭连接分页"
 
-#: ../src/mainframe.cpp:294
+#: ../src/mainframe.cpp:303
 msgid "Next Page"
 msgstr "切换到下一个分页"
 
-#: ../src/mainframe.cpp:295
+#: ../src/mainframe.cpp:304
 msgid "Previous Page"
 msgstr "切换到上一个分页"
 
-#: ../src/mainframe.cpp:296
+#: ../src/mainframe.cpp:305
 msgid "_Jump to"
 msgstr "切换到(_J)"
 
-#: ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:306
 msgid "_Quit"
 msgstr "离开(_Q)"
 
-#: ../src/mainframe.cpp:298
+#: ../src/mainframe.cpp:307
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:308
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:308
 msgid "Copy"
 msgstr "复制"
 
-#: ../src/mainframe.cpp:300
+#: ../src/mainframe.cpp:309
 msgid "Copy with A_NSI Color"
 msgstr "复制(包含ANSI彩色)(_N)"
 
-#: ../src/mainframe.cpp:300
+#: ../src/mainframe.cpp:309
 msgid "Copy with ANSI Color"
 msgstr "复制(包含ANSI彩色)"
 
-#: ../src/mainframe.cpp:301
+#: ../src/mainframe.cpp:310
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: ../src/mainframe.cpp:301
+#: ../src/mainframe.cpp:310
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/mainframe.cpp:302
+#: ../src/mainframe.cpp:311
 msgid "Paste from Clipboard"
 msgstr "从剪切板粘贴"
 
-#: ../src/mainframe.cpp:303
+#: ../src/mainframe.cpp:312
 msgid "Select A_ll"
 msgstr "全部选取(_L)"
 
-#: ../src/mainframe.cpp:304
+#: ../src/mainframe.cpp:313
 msgid "_Emoticons"
 msgstr "表情符号(_E)"
 
-#: ../src/mainframe.cpp:305
+#: ../src/mainframe.cpp:314
 msgid "_Preference"
 msgstr "个人偏好设置(_P)"
 
-#: ../src/mainframe.cpp:305 ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:314 ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr "个人偏好设置"
 
-#: ../src/mainframe.cpp:306
+#: ../src/mainframe.cpp:315
 msgid "F_avorites"
 msgstr "收藏夹(_A)"
 
-#: ../src/mainframe.cpp:307 ../src/mainframe.cpp:1177
+#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:1192
 msgid "_Add to Favorites"
 msgstr "加入到收藏夹(_A)"
 
-#: ../src/mainframe.cpp:307 ../src/mainframe.cpp:976
+#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:985
 msgid "Add to Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:308 ../src/mainframe.cpp:1185
+#: ../src/mainframe.cpp:317 ../src/mainframe.cpp:1200
 msgid "_Edit Favorites"
 msgstr "编辑收藏夹(_E)"
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:318
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/mainframe.cpp:310
+#: ../src/mainframe.cpp:319
 msgid "_Font"
 msgstr "字型 (_F)"
 
-#: ../src/mainframe.cpp:311
+#: ../src/mainframe.cpp:320
 msgid "_ASCII Font"
 msgstr "ASCII 字型 (_A)"
 
-#: ../src/mainframe.cpp:313
+#: ../src/mainframe.cpp:322
 msgid "Bot (Current Connection)"
 msgstr "机器人(当前的连接)"
 
-#: ../src/mainframe.cpp:314
+#: ../src/mainframe.cpp:323
 msgid "Bot (All Opened Connections)"
 msgstr "机器人(所有打开的连接)"
 
-#: ../src/mainframe.cpp:316
+#: ../src/mainframe.cpp:325
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/mainframe.cpp:317
+#: ../src/mainframe.cpp:326
 msgid "About"
 msgstr "关于"
 
-#: ../src/mainframe.cpp:322
+#: ../src/mainframe.cpp:331
 msgid "F_ullscreen Mode"
 msgstr "全屏模式(_U)"
 
-#: ../src/mainframe.cpp:328 ../src/mainframe.cpp:334
+#: ../src/mainframe.cpp:337 ../src/mainframe.cpp:343
 msgid "Disable Bot"
 msgstr "禁用机器人"
 
-#: ../src/mainframe.cpp:329 ../src/mainframe.cpp:335
+#: ../src/mainframe.cpp:338 ../src/mainframe.cpp:344
 msgid "Nancy Bot"
 msgstr "机器人 Nancy"
 
-#: ../src/mainframe.cpp:485
+#: ../src/mainframe.cpp:494
 msgid "Page"
 msgstr "分页"
 
-#: ../src/mainframe.cpp:508
+#: ../src/mainframe.cpp:517
 msgid "A_ddress:"
 msgstr "地址(_D)："
 
-#: ../src/mainframe.cpp:512
+#: ../src/mainframe.cpp:521
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此输入地址，然后按下\"Enter\""
 
-#: ../src/mainframe.cpp:536
+#: ../src/mainframe.cpp:545
 msgid "Connect"
 msgstr "连接"
 
-#: ../src/mainframe.cpp:536
+#: ../src/mainframe.cpp:545
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -205,15 +205,15 @@ msgstr ""
 "主机 IP 地址：\n"
 "如果连接端口不是 23，请将连接端口号码接在 IP 后面, 并用冒号隔开。"
 
-#: ../src/mainframe.cpp:568 ../src/mainframe.cpp:620
+#: ../src/mainframe.cpp:577 ../src/mainframe.cpp:629
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:573 ../src/mainframe.cpp:625
+#: ../src/mainframe.cpp:582 ../src/mainframe.cpp:634
 msgid "Apply to all opened pages"
 msgstr "应用于所有打开的分页"
 
-#: ../src/mainframe.cpp:693
+#: ../src/mainframe.cpp:702
 msgid ""
 "Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv.tw@gmail.com>\n"
@@ -231,11 +231,11 @@ msgstr ""
 "李宥辰 Youchen Lee (开发者) <copyleft@utcr.org>\n"
 "周  玮 Emfox Zhou (开发者) <emfoxzhou@gmail.com>"
 
-#: ../src/mainframe.cpp:701
+#: ../src/mainframe.cpp:710
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "简体中文 (zh_CN)：陈海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:706
+#: ../src/mainframe.cpp:715
 #, c-format
 msgid ""
 "<b>PCMan X %s</b>\n"
@@ -268,28 +268,28 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:773
+#: ../src/mainframe.cpp:782
 msgid "Update BBS List Success!"
 msgstr "更新 BBS 列表成功！"
 
-#: ../src/mainframe.cpp:774
+#: ../src/mainframe.cpp:783
 msgid "Update BBS List Fault."
 msgstr "更新 BBS 列表失败。"
 
-#: ../src/mainframe.cpp:807
+#: ../src/mainframe.cpp:816
 msgid "Close Connection?"
 msgstr "确定关闭连接分页?"
 
 #. set menu items
-#: ../src/mainframe.cpp:974
+#: ../src/mainframe.cpp:983
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/mainframe.cpp:1087
+#: ../src/mainframe.cpp:1102
 msgid "Quit PCMan X ?"
 msgstr "离开 PCMan X ?"
 
-#: ../src/mainframe.cpp:1099
+#: ../src/mainframe.cpp:1114
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -298,20 +298,20 @@ msgstr ""
 "功能尚未完成！\n"
 "侦错讯息： %s"
 
-#: ../src/mainframe.cpp:1111
+#: ../src/mainframe.cpp:1126
 msgid "Add To Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:1224
+#: ../src/mainframe.cpp:1239
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "经过的时间：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1432
+#: ../src/mainframe.cpp:1447
 msgid "Nancy Bot is enabled"
 msgstr "机器人 Nancy 已经启动"
 
-#: ../src/mainframe.cpp:1439
+#: ../src/mainframe.cpp:1454
 msgid "Nancy Bot is disabled"
 msgstr "机器人 Nancy 已经禁用"
 
@@ -339,75 +339,75 @@ msgstr "新增站点设置"
 msgid "Edit Site Settings"
 msgstr "编辑站点设置"
 
-#: ../src/sitepage.cpp:71
+#: ../src/sitepage.cpp:72
 msgid "Name: "
 msgstr "站点名称："
 
-#: ../src/sitepage.cpp:80
+#: ../src/sitepage.cpp:81
 msgid "Address: "
 msgstr "站点地址："
 
-#: ../src/sitepage.cpp:94
+#: ../src/sitepage.cpp:95
 msgid "Reconnect when disconnected in specified duration : "
 msgstr "如果在指定秒数内被断线则重连："
 
-#: ../src/sitepage.cpp:103 ../src/sitepage.cpp:121
+#: ../src/sitepage.cpp:104 ../src/sitepage.cpp:122
 msgid "Sec (0 = Disabled)"
 msgstr "秒 (0 = 关闭不用)"
 
-#: ../src/sitepage.cpp:112
+#: ../src/sitepage.cpp:113
 msgid "Anti-Idle: Send specified string to server when idling for  "
 msgstr "防发呆：每隔指定秒数对主机送出防发呆字符串"
 
-#: ../src/sitepage.cpp:130
+#: ../src/sitepage.cpp:131
 msgid "Anti-Idle string to be sent :"
 msgstr "要送出的防发呆字符串："
 
-#: ../src/sitepage.cpp:143
+#: ../src/sitepage.cpp:144
 msgid "Terminal Screen Size"
 msgstr "终端机屏幕大小"
 
-#: ../src/sitepage.cpp:151
+#: ../src/sitepage.cpp:152
 msgid "Line: "
 msgstr "列："
 
-#: ../src/sitepage.cpp:160
+#: ../src/sitepage.cpp:161
 msgid "Col: "
 msgstr "行："
 
-#: ../src/sitepage.cpp:174
+#: ../src/sitepage.cpp:175
 msgid "Terminal Type: "
 msgstr "终端类型："
 
-#: ../src/sitepage.cpp:183
+#: ../src/sitepage.cpp:184
 msgid "Convert ESC in ANSI color code to  "
 msgstr "将色彩控制码的 ESC 转换成"
 
-#: ../src/sitepage.cpp:197
+#: ../src/sitepage.cpp:198
 msgid "Wrap pasted text when there's too many characters per line :"
 msgstr "贴上文字每行超过指定字数则自动换行："
 
-#: ../src/sitepage.cpp:206
+#: ../src/sitepage.cpp:207
 msgid "(0 = Disabled)"
 msgstr "(0 = 关闭不用)"
 
-#: ../src/sitepage.cpp:215
+#: ../src/sitepage.cpp:216
 msgid "Site Encoding: "
 msgstr "站点编码:"
 
-#: ../src/sitepage.cpp:224
+#: ../src/sitepage.cpp:225
 msgid "Detect double-byte characters on typing"
 msgstr "输入时检测双字节字符"
 
-#: ../src/sitepage.cpp:228
+#: ../src/sitepage.cpp:229
 msgid "Connect automatically on program startup"
 msgstr "程序启动时自动连接"
 
-#: ../src/sitepage.cpp:237
+#: ../src/sitepage.cpp:238
 msgid "Center terminal screen vertically"
 msgstr "让屏幕垂直居中对齐。"
 
-#: ../src/sitepage.cpp:241
+#: ../src/sitepage.cpp:242
 msgid "Center terminal screen horizontally"
 msgstr "让屏幕水平居中对齐。"
 
@@ -463,11 +463,19 @@ msgstr "网页浏览器："
 msgid "Mail Client: "
 msgstr "邮件客户端："
 
-#: ../src/view/telnetview.cpp:462
+#: ../src/view/telnetview.cpp:263 ../src/view/telnetview.cpp:268
+msgid "Detected IP address:"
+msgstr "检测到的IP地址："
+
+#: ../src/view/telnetview.cpp:269
+msgid "Download qqwry.dat to get IP location lookup"
+msgstr "请下载qqwry.dat以使用IP地址查询"
+
+#: ../src/view/telnetview.cpp:472
 msgid "_Copy URL to Clipboard"
 msgstr "复制网址到剪贴板(_C)"
 
-#: ../src/view/telnetview.cpp:502
+#: ../src/view/telnetview.cpp:512
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 

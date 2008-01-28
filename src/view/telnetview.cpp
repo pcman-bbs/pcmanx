@@ -259,12 +259,14 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
       {
 	seeker_lookup(m_pIpSeeker, ipstr2int(ipstr.c_str()), buf, sizeof(buf));
 	gchar *location = g_convert_with_fallback(buf, -1, "utf8", "gbk", "?", NULL, NULL, NULL);
-	snprintf(buf, sizeof(buf), "Detected IP address: %s (%s)", ipstr.c_str(), location);
+	snprintf(buf, sizeof(buf), "%s %s (%s)"
+	    , _("Detected IP address:"), ipstr.c_str(), location);
 	g_free(location);
       }
       else
-	snprintf(buf, sizeof(buf), "Detected IP address: %s "
-	    "(Download qqwry.dat under config directory to get IP location lookup!)", ipstr.c_str());
+	snprintf(buf, sizeof(buf), "%s %s (%s)"
+	    , _("Detected IP address:"), ipstr.c_str()
+	    , _("Download qqwry.dat to get IP location lookup"));
 
       m_pParentFrame->PushStatus("show ip", buf);
     }
