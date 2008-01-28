@@ -124,8 +124,9 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 	m_NeedDelayedUpdate = false;
 	m_DelayedUpdateTimeout = 0;
 	m_Sel = new CTermSelection(this);
-
+#ifdef USE_IPLOOKUP
 	regcomp( &m_RegIp, "([0-9]{1,3}\\.){3}([0-9]{1,3}|\\*)", REG_EXTENDED );
+#endif
 }
 
 // class destructor
@@ -143,7 +144,9 @@ CTermData::~CTermData()
 		delete []m_Screen;
 	}
 
+#ifdef USE_IPLOOKUP
 	regfree(&m_RegIp);
+#endif
 }
 
 
@@ -734,7 +737,9 @@ void CTermData::UpdateDisplay()
 {
 	DetectCharSets();
 	DetectHyperLinks();
+#ifdef USE_IPLOOKUP
 	DetectIpAddrs();
+#endif
 
  	if( m_pView && m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
@@ -930,6 +935,8 @@ void CTermData::DetectHyperLinks()
 	}
 }
 
+#ifdef USE_IPLOOKUP
+
 /* detect ipv4 addresses. */
 inline void DetectIpPatterns( const char *line, CTermCharAttr *attr, int len, const regex_t *regip)
 {
@@ -965,6 +972,8 @@ void CTermData::DetectIpAddrs()
 		DetectIpPatterns( line, attr, m_ColsPerPage, &m_RegIp );
 	}
 }
+
+#endif
 
 typedef struct {
 	CTermData* pTermData;

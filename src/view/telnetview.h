@@ -27,8 +27,8 @@
 
 #include "termview.h"
 
-#ifndef MOZ_PLUGIN
-#include "qqwryseeker.h"
+#if defined(USE_IPLOOKUP) && !defined(MOZ_PLUGIN)
+#include "qqwryseeker/qqwryseeker.h"
 #endif
 
 /**
@@ -74,7 +74,9 @@ protected:
 #if !defined(MOZ_PLUGIN)
 protected:
     static CMainFrame* m_pParentFrame;
+#if defined(USE_IPLOOKUP)
     QQWrySeeker *m_pIpSeeker;
+#endif
 #endif /* !defined(MOZ_PLUGIN) */
     static string m_WebBrowser;
     static string m_MailClient;

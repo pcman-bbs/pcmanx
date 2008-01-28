@@ -43,14 +43,14 @@ CMainFrame* CTelnetView::m_pParentFrame = NULL;
 CTelnetView::CTelnetView()
 	: CTermView()
 {
-#ifndef MOZ_PLUGIN
+#if defined(USE_IPLOOKUP) && !defined(MOZ_PLUGIN)
   m_pIpSeeker = seeker_new(AppConfig.GetConfigDirPath().append("/qqwry.dat").c_str());
 #endif
 }
 
 CTelnetView::~CTelnetView()
 {
-#ifndef MOZ_PLUGIN
+#if defined(USE_IPLOOKUP) && !defined(MOZ_PLUGIN)
   if (m_pIpSeeker) seeker_delete(m_pIpSeeker);
 #endif
 }
@@ -190,6 +190,7 @@ static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
 	*do_copy = true;
 }
 
+#if defined(USE_IPLOOKUP) && !defined(MOZ_PLUGIN)
 static inline unsigned int ipstr2int(const char *str)
 {
 	unsigned char ip[4];
@@ -198,7 +199,7 @@ static inline unsigned int ipstr2int(const char *str)
 		return 0;
 	return *((unsigned int*)ip);
 }
-
+#endif
 
 void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 {
@@ -231,110 +232,117 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 #endif
 	}
     }
-#if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
-  else if ( AppConfig.MouseSupport == true )
+#if !defined(MOZ_PLUGIN)
+  else
+  {
+    CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+
+#if defined(USE_IPLOOKUP)
+    // Update status bar for ip address lookup.
+    m_pParentFrame->PopStatus("show ip");
+    if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsIpAddr() )
     {
-      CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
-
-      // Update status bar for ip address lookup.
-      m_pParentFrame->PopStatus("show ip");
-      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsIpAddr() )
+      int ip_beg, ip_end;
+      for (ip_beg = x; ip_beg >= 0 && pattr[ip_beg].IsIpAddr(); ip_beg--);
+      ip_beg++;
+      for (ip_end = x; ip_end < m_pTermData->m_ColsPerPage && pattr[ip_end].IsIpAddr(); ip_end++);
+      string ipstr(m_pTermData->m_Screen[y] + ip_beg, ip_end - ip_beg);
+      string::iterator star = find(ipstr.begin(), ipstr.end(), '*');
+      while (star != ipstr.end())
       {
-	int ip_beg, ip_end;
-	for (ip_beg = x; ip_beg >= 0 && pattr[ip_beg].IsIpAddr(); ip_beg--);
-	ip_beg++;
-	for (ip_end = x; ip_end < m_pTermData->m_ColsPerPage && pattr[ip_end].IsIpAddr(); ip_end++);
-	string ipstr(m_pTermData->m_Screen[y] + ip_beg, ip_end - ip_beg);
-	string::iterator star = find(ipstr.begin(), ipstr.end(), '*');
-	while (star != ipstr.end())
-	{
-	  *star = '0';
-	  star = find(star + 1, ipstr.end(), '*');
-	}
-
-	char buf[255];
-	if (m_pIpSeeker)
-	{
-	  seeker_lookup(m_pIpSeeker, ipstr2int(ipstr.c_str()), buf, sizeof(buf));
-	  gchar *location = g_convert_with_fallback(buf, -1, "utf8", "gbk", "?", NULL, NULL, NULL);
-	  snprintf(buf, sizeof(buf), "Detected IP address: %s (%s)", ipstr.c_str(), location);
-	  g_free(location);
-	}
-	else
-	  snprintf(buf, sizeof(buf), "Detected IP address: %s "
-	      "(Download qqwry.dat under config directory to get IP location lookup!)", ipstr.c_str());
-
-	m_pParentFrame->PushStatus("show ip", buf);
+	*star = '0';
+	star = find(star + 1, ipstr.end(), '*');
       }
 
-      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
-	{gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
+      char buf[255];
+      if (m_pIpSeeker)
+      {
+	seeker_lookup(m_pIpSeeker, ipstr2int(ipstr.c_str()), buf, sizeof(buf));
+	gchar *location = g_convert_with_fallback(buf, -1, "utf8", "gbk", "?", NULL, NULL, NULL);
+	snprintf(buf, sizeof(buf), "Detected IP address: %s (%s)", ipstr.c_str(), location);
+	g_free(location);
+      }
       else
-	{
-	  switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
-	    {
-	    case -1: //NORMAL
-	      gdk_window_set_cursor(m_Widget->window, NULL);
-	      m_CursorState=0;
-	      break;
-	    case 1: //LIST
-	      if ( y>2 && y < m_pTermData->m_RowsPerPage-1 )
-		{
-		  if ( x <= 6 )
-		    {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
-		  else if ( x >= m_pTermData->m_ColsPerPage-16 )
-		    {
-		      if ( y > m_pTermData->m_RowsPerPage /2 )
-			{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
-		      else
-			{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
-		    }					
-		  else
-		    {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
-		}      
-	      else if ( y==1 || y==2 )
-		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
-	      else if ( y==0 ) 
-		{gdk_window_set_cursor(m_Widget->window, m_HomeCursor);m_CursorState=6;}
-	      else //if ( y = m_pTermData->m_RowsPerPage-1) 
-		{gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
-	      break;
-	    case 2: //READING
-	      if ( y == m_pTermData->m_RowsPerPage-1)
-		{gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
-	      else if ( x<7 )
-		{gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
-	      else if ( y < (m_pTermData->m_RowsPerPage-1)/2 )
-		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
-	      else
-		{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
-	      break;  
-	    case 0: //MENU
-	      if ( y>0 && y < m_pTermData->m_RowsPerPage-1 )
-		{
-		  if (x>7)
-		    {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
-		  else
-		    {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
-		}      
-	      else    
-		{gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
-	      break;
-	    default:
-	      break;
-	    }
-	}
+	snprintf(buf, sizeof(buf), "Detected IP address: %s "
+	    "(Download qqwry.dat under config directory to get IP location lookup!)", ipstr.c_str());
+
+      m_pParentFrame->PushStatus("show ip", buf);
     }
-  else
+#endif // defined(USE_IPLOOKUP)
+
+#if defined(USE_MOUSE)
+    if ( AppConfig.MouseSupport == true )
     {
-			CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
       if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
-				gdk_window_set_cursor(m_Widget->window, m_HandCursor);
+      {gdk_window_set_cursor(m_Widget->window, m_HandCursor);m_CursorState=-1;}
       else
-				gdk_window_set_cursor(m_Widget->window, NULL);;
-			m_CursorState=0;
-		}
-#endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
+      {
+	switch( ((CTelnetCon*)m_pTermData)->GetPageState() )
+	{
+	  case -1: //NORMAL
+	    gdk_window_set_cursor(m_Widget->window, NULL);
+	    m_CursorState=0;
+	    break;
+	  case 1: //LIST
+	    if ( y>2 && y < m_pTermData->m_RowsPerPage-1 )
+	    {
+	      if ( x <= 6 )
+	      {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+	      else if ( x >= m_pTermData->m_ColsPerPage-16 )
+	      {
+		if ( y > m_pTermData->m_RowsPerPage /2 )
+		{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
+		else
+		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+	      }					
+	      else
+	      {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
+	    }      
+	    else if ( y==1 || y==2 )
+	    {gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+	    else if ( y==0 ) 
+	    {gdk_window_set_cursor(m_Widget->window, m_HomeCursor);m_CursorState=6;}
+	    else //if ( y = m_pTermData->m_RowsPerPage-1) 
+	    {gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
+	    break;
+	  case 2: //READING
+	    if ( y == m_pTermData->m_RowsPerPage-1)
+	    {gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
+	    else if ( x<7 )
+	    {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+	    else if ( y < (m_pTermData->m_RowsPerPage-1)/2 )
+	    {gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
+	    else
+	    {gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
+	    break;  
+	  case 0: //MENU
+	    if ( y>0 && y < m_pTermData->m_RowsPerPage-1 )
+	    {
+	      if (x>7)
+	      {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
+	      else
+	      {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
+	    }      
+	    else    
+	    {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
+	    break;
+	  default:
+	    break;
+	}
+      }
+    }
+    else
+    {
+      CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+      if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
+	gdk_window_set_cursor(m_Widget->window, m_HandCursor);
+      else
+	gdk_window_set_cursor(m_Widget->window, NULL);;
+      m_CursorState=0;
+    }
+#endif // defined(USE_MOUSE)
+  }
+#endif // !defined(MOZ_PLUGIN)
 }
 
 #if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)

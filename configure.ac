@@ -71,6 +71,7 @@ AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_WGET], [#undef USE_WGET])
+AH_VERBATIM([USE_IPLOOKUP], [#undef USE_IPLOOKUP])
 AH_VERBATIM([USE_PROXY], [#undef USE_PROXY])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
@@ -152,6 +153,11 @@ AC_ARG_ENABLE([wget],
 	AS_HELP_STRING([--enable-wget],
 		[enable wget support (default: no)]),
 	wget=$enableval, wget="no")
+
+AC_ARG_ENABLE([iplookup],
+	AS_HELP_STRING([--enable-iplookup],
+		[enable IP location lookup. For Simplified Chinese users. Need qqwry.dat. (default: no)]),
+	iplookup=$enableval, iplookup="no")
 
 AC_ARG_ENABLE([proxy],
 	AS_HELP_STRING([--enable-proxy],
@@ -369,6 +375,17 @@ fi
 
 AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
 AC_SUBST(USE_WGET)
+
+dnl *********************************************************************
+dnl ** IP location lookup support ***********************************
+dnl *********************************************************************
+
+if test "$iplookup" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_IPLOOKUP, [1], [Enable IP location lookup])
+fi
+
+AM_CONDITIONAL(USE_IPLOOKUP, test "$iplookup" = "yes")
+AC_SUBST(USE_IPLOOKUP)
 
 dnl *********************************************************************
 dnl ** proxy support ***********************************
@@ -655,6 +672,7 @@ else
   echo "Mozilla/Firefox plugin support... : $plugin"
 fi
 echo wget support..................... : $wget
+echo iplookup support................. : $iplookup
 echo proxy support.................... : $proxy
 echo
 echo The binary will be installed in $prefix/bin

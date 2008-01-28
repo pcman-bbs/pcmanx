@@ -1,3 +1,15 @@
+2008-01-28  Jason Xia  <jasonxh@gmail.com>
+
+	* configure.ac, src/Makefile.am: Make IP location lookup a
+	configurable feature. Disabled by default.
+
+	* src/core/termdata.cpp (CTermData::CTermData) (CTermData::~CTermData)
+	(CTermData::UpdateDisplay) (DetectIpPatterns)
+	(CTermData::DetectIpAddrs), src/core/termdata.h,
+	src/view/telnetview.cpp (CTelnetView::CTelnetView)
+	(CTelnetView::~CTelnetView) (ipstr2int) (CTelnetView::OnMouseMove):
+	Respect configure options about iplookup.
+
 2008-01-28  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/proxy.c,

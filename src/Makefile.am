@@ -8,7 +8,6 @@ bin_PROGRAMS = pcmanx
 INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
-	-I$(top_srcdir)/src/qqwryseeker \
 	$(GUI_CFLAGS) \
 	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
@@ -72,8 +71,10 @@ VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
 	view/telnetview.cpp view/telnetview.h
 
+if USE_IPLOOKUP
 QQWRYSEEKER_SOURCES = \
 	qqwryseeker/qqwryseeker.c qqwryseeker/qqwryseeker.h
+endif
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
