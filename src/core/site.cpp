@@ -75,6 +75,12 @@ CSite::CSite(string Name)
 
 	// Detect double-byte characters by default
 	m_DetectDBChar = true;
+
+#ifdef USE_PROXY
+	// Disable proxy by default
+	m_ProxyType = 0;
+	m_ProxyPort = 0;
+#endif
 }
 
 CSite::~CSite()
@@ -137,6 +143,14 @@ void CSite::SaveToFile(FILE *fo)
 */
 		fprintf( fo, "Passwd=%s\n", m_Passwd.c_str() );
 	}
+
+#ifdef USE_PROXY
+	fprintf( fo, "ProxyType=%d\n", m_ProxyType );
+	fprintf( fo, "ProxyAddr=%s\n", m_ProxyAddr.c_str() );
+	fprintf( fo, "ProxyPort=%d\n", m_ProxyPort );
+	fprintf( fo, "ProxyUser=%s\n", m_ProxyUser.c_str() );
+	fprintf( fo, "ProxyPass=%s\n", m_ProxyPass.c_str() );
+#endif
 }
 
 

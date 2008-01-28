@@ -71,6 +71,7 @@ AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_WGET], [#undef USE_WGET])
+AH_VERBATIM([USE_PROXY], [#undef USE_PROXY])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -151,6 +152,11 @@ AC_ARG_ENABLE([wget],
 	AS_HELP_STRING([--enable-wget],
 		[enable wget support (default: no)]),
 	wget=$enableval, wget="no")
+
+AC_ARG_ENABLE([proxy],
+	AS_HELP_STRING([--enable-proxy],
+		[enable proxy support (default: no)]),
+	proxy=$enableval, proxy="no")
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -363,6 +369,17 @@ fi
 
 AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
 AC_SUBST(USE_WGET)
+
+dnl *********************************************************************
+dnl ** proxy support ***********************************
+dnl *********************************************************************
+
+if test "$proxy" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_PROXY, [1], [Enable proxy support])
+fi
+
+AM_CONDITIONAL(USE_PROXY, test "$proxy" = "yes")
+AC_SUBST(USE_PROXY)
 
 dnl *********************************************************************
 dnl ** Mozilla/Firefox Plugin support ***********************************
@@ -638,6 +655,7 @@ else
   echo "Mozilla/Firefox plugin support... : $plugin"
 fi
 echo wget support..................... : $wget
+echo proxy support.................... : $proxy
 echo
 echo The binary will be installed in $prefix/bin
 echo

@@ -74,6 +74,10 @@
 #include <libutil.h>
 #endif
 
+#ifdef USE_PROXY
+#include "proxy.h"
+#endif
+
 #define RECV_BUF_SIZE (4097)
 
 #if !defined(MOZ_PLUGIN)
@@ -901,25 +905,47 @@ gboolean CTelnetCon::OnConnectCB(GIOChannel *channel, GIOCondition type, CTelnet
 
 void CTelnetCon::ConnectAsync()
 {
+	int err;
 	sockaddr_in sock_addr;
 	sock_addr.sin_addr = m_InAddr;
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(m_Port);
 
-	m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
-	int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
-	fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
-	/* Disable the Nagle (TCP No Delay) algorithm
-	 * 
-	 * Nagle algorithm works well to minimize small packets by
-	 * concatenating them into larger ones. However, for telnet
-	 * application, the experience would be less than desirable
-	 * if the user were required to fill a segment with typed
-	 * characters before the packet was sent.
-	 */
-	setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
-	int err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
-	fcntl(m_SockFD, F_SETFL, sock_flags );
+#ifdef USE_PROXY
+	if ( m_Site.m_ProxyType == PROXY_NONE ) // don't use proxy server
+	{
+#endif
+		m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+		int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
+		fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
+		/* Disable the Nagle (TCP No Delay) algorithm
+		 * 
+		 * Nagle algorithm works well to minimize small packets by
+		 * concatenating them into larger ones. However, for telnet
+		 * application, the experience would be less than desirable
+		 * if the user were required to fill a segment with typed
+		 * characters before the packet was sent.
+		 */
+		setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
+		err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
+		fcntl(m_SockFD, F_SETFL, sock_flags );
+#ifdef USE_PROXY
+	}
+	else // use proxy server
+	{
+		sockaddr_in proxy_addr;
+		proxy_addr.sin_addr.s_addr = inet_addr( m_Site.m_ProxyAddr.c_str() );
+		proxy_addr.sin_family = AF_INET;
+		proxy_addr.sin_port = htons( m_Site.m_ProxyPort );
+
+		m_SockFD = proxy_connect( &sock_addr
+				, m_Site.m_ProxyType
+				, &proxy_addr
+				, m_Site.m_ProxyUser.c_str()
+				, m_Site.m_ProxyPass.c_str() );
+		err = m_SockFD == -1 ? -1:0;
+	}
+#endif
 
 	if( err == 0 )
 		OnConnect( 0 );

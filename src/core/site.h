@@ -89,6 +89,15 @@ public:
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
 
+#ifdef USE_PROXY
+	// Proxy settings
+	int    m_ProxyType;
+	string m_ProxyAddr;
+	int    m_ProxyPort;
+	string m_ProxyUser;
+	string m_ProxyPass;
+#endif
+
 	X_EXPORT CSite(string Name = "");
 	X_EXPORT ~CSite();
 

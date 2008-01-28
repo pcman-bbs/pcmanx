@@ -153,6 +153,13 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 			m_DefaultSite.m_UseExternalTelnet )
 #endif
 		CFG_INT  ( SocketTimeout )
+#ifdef USE_PROXY
+		_CFG_INT ( "ProxyType", m_DefaultSite.m_ProxyType )
+		_CFG_STR ( "ProxyAddr", m_DefaultSite.m_ProxyAddr )
+		_CFG_INT ( "ProxyPort", m_DefaultSite.m_ProxyPort )
+		_CFG_STR ( "ProxyUser", m_DefaultSite.m_ProxyUser )
+		_CFG_STR ( "ProxyPass", m_DefaultSite.m_ProxyPass )
+#endif
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_FILE( ConfigFile )
@@ -280,6 +287,18 @@ void CAppConfig::LoadFavorites()
 				else
 					pSite->SetPasswd( pval );
 */			}
+#ifdef USE_PROXY
+			else if ( 0 == strcmp( pname, "ProxyType" ) )
+				pSite->m_ProxyType = atoi(pval);
+			else if ( 0 == strcmp( pname, "ProxyAddr" ) )
+				pSite->m_ProxyAddr = pval;
+			else if ( 0 == strcmp( pname, "ProxyPort" ) )
+				pSite->m_ProxyPort = atoi(pval);
+			else if ( 0 == strcmp( pname, "ProxyUser" ) )
+				pSite->m_ProxyUser = pval;
+			else if ( 0 == strcmp( pname, "ProxyPass" ) )
+				pSite->m_ProxyPass = pval;
+#endif
 		}
 //		ReleaseBlowfish();
 		fclose(fi);
