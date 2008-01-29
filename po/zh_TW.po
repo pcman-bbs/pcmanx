@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-01-28 13:21-0500\n"
+"POT-Creation-Date: 2008-01-29 11:51+0800\n"
 "PO-Revision-Date: 2006-03-11 21:14+0800\n"
 "Last-Translator: Jim Huang <jserv.tw@gmail.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -466,11 +466,11 @@ msgstr "郵件程式："
 
 #: ../src/view/telnetview.cpp:263 ../src/view/telnetview.cpp:268
 msgid "Detected IP address:"
-msgstr ""
+msgstr "偵測到的 IP 位址："
 
 #: ../src/view/telnetview.cpp:269
 msgid "Download qqwry.dat to get IP location lookup"
-msgstr ""
+msgstr "下載 qqwry.dat 以取得 IP 位置查詢資訊"
 
 #: ../src/view/telnetview.cpp:472
 msgid "_Copy URL to Clipboard"

@@ -1,3 +1,7 @@
+2008-01-28  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW: Added translations for iplookup.
+
 2008-01-28  Jason Xia  <jasonxh@gmail.com>
 
 	* src/view/telnetview.cpp (CTelnetView::OnMouseMove): Use i18n for
