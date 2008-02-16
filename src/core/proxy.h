@@ -1,5 +1,5 @@
 /* -- vi: set ts=4 sw=4: --
- *                                                                                  
+ *
  * proxy.h - Simple implementation of SOCKS client
  *
  * Copyright (C) 2008 Jason Xia <jasonxh@gmail.com>

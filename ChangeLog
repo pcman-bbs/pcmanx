@@ -1,5 +1,19 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/qqwryseeker/qqwryseeker.c,
+	src/core/proxy.c,
+	src/core/proxy.h,
+	src/view/telnetcon.h,
+	src/view/telnetcon.cpp,
+	src/script/api.h,
+	src/script/script.cpp,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/botutil.h,
+	src/nancy_bot/nancybot.cpp: Use consistent GPL licensing terms.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/conn_xpm.xpm,
 	src/pcmanx_inverse_xpm.xpm,
 	src/pcmanx_xpm.xpm: Added "const" modifier to turn off annoying
