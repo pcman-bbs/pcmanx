@@ -1,5 +1,12 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::OnAbout): Mention Jason Xia.
+
+	* po/zh_TW.po,
+	po/zh_CN.po: Likewise.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* configure.ac: Added linker optimizations for GNU toolchain.
 
 2008-01-28  Jim Huang  <jserv.tw@gmail.com>

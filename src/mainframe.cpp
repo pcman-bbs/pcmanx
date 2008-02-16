@@ -705,7 +705,8 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
-			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
+			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>\n"
+			"Jason Xia (Developer) <jasonxh@gmail.com>"
 			);
 	char* translators = _( "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>" );
 

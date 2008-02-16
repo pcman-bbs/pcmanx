@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-01-29 11:51+0800\n"
+"POT-Creation-Date: 2008-02-16 22:37+0800\n"
 "PO-Revision-Date: 2006-03-11 21:14+0800\n"
 "Last-Translator: Jim Huang <jserv.tw@gmail.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -50,7 +50,7 @@ msgstr "新連線"
 msgid "_Reconnect"
 msgstr "重新連線 (_R)"
 
-#: ../src/mainframe.cpp:301 ../src/mainframe.cpp:984
+#: ../src/mainframe.cpp:301 ../src/mainframe.cpp:985
 msgid "Reconnect"
 msgstr "重新連線"
 
@@ -130,15 +130,15 @@ msgstr "個人偏好設定"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:1192
+#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:1193
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:985
+#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:986
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:317 ../src/mainframe.cpp:1200
+#: ../src/mainframe.cpp:317 ../src/mainframe.cpp:1201
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -222,7 +222,8 @@ msgid ""
 "Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 "Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 "Youchen Lee (Developer) <copyleft@utcr.org>\n"
-"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
+"Emfox Zhou (Developer) <emfoxzhou@gmail.com>\n"
+"Jason Xia (Developer) <jasonxh@gmail.com>"
 msgstr ""
 "洪任諭 Hong Jen Yee (主要開發者) <pcman.tw@gmail.com>\n"
 "黃敬群 Jim Huang (開發者) <jserv.tw@gmail.com>\n"
@@ -230,13 +231,14 @@ msgstr ""
 "吳佳一 Chia I Wu (開發者) <b90201047@ntu.edu.tw>\n"
 "李世元 Shih-Yuan Lee (開發者) <fourdollars@gmail.com>\n"
 "李宥辰 Youchen Lee (開發者) <copyleft@utcr.org>\n"
-"周  玮 Emfox Zhou (開發者) <emfoxzhou@gmail.com>"
+"周  玮 Emfox Zhou (開發者) <emfoxzhou@gmail.com>\n"
+"夏  昊 Jason Xia (開發者) <jasonxh@gmail.com>"
 
-#: ../src/mainframe.cpp:710
+#: ../src/mainframe.cpp:711
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "簡體中文 (zh_CN)：陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:715
+#: ../src/mainframe.cpp:716
 #, c-format
 msgid ""
 "<b>PCMan X %s</b>\n"
@@ -269,28 +271,28 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:782
+#: ../src/mainframe.cpp:783
 msgid "Update BBS List Success!"
 msgstr "BBS站台列表更新成功! *^^*"
 
-#: ../src/mainframe.cpp:783
+#: ../src/mainframe.cpp:784
 msgid "Update BBS List Fault."
 msgstr "BBS站台列表更新失敗... Orz"
 
-#: ../src/mainframe.cpp:816
+#: ../src/mainframe.cpp:817
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
 #. set menu items
-#: ../src/mainframe.cpp:983
+#: ../src/mainframe.cpp:984
 msgid "Close"
 msgstr "關閉"
 
-#: ../src/mainframe.cpp:1102
+#: ../src/mainframe.cpp:1103
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1114
+#: ../src/mainframe.cpp:1115
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -299,20 +301,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1126
+#: ../src/mainframe.cpp:1127
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1239
+#: ../src/mainframe.cpp:1240
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1447
+#: ../src/mainframe.cpp:1448
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1454
+#: ../src/mainframe.cpp:1455
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 
