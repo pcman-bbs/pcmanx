@@ -598,6 +598,28 @@ dnl Reduce C++ overhead
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
+dnl linker optimizations
+AC_MSG_CHECKING([whether $LD accepts --as-needed])
+case `$LD --as-needed -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,--as-needed"
+  AC_MSG_RESULT([yes])                                                              
+  ;;
+*)
+  AC_MSG_RESULT([no])
+  ;;
+esac
+AC_MSG_CHECKING([whether $LD accepts -O1])
+case `$LD -O1 -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,-O1"
+  AC_MSG_RESULT([yes])
+  ;;
+*)
+  AC_MSG_RESULT([no])
+  ;;
+esac
+
 dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
 AC_MSG_CHECKING([whether the compiler supports the visibility arg])
 dnl Check for gcc4 or greater
