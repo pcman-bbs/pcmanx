@@ -1,5 +1,9 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* Doxygen.in: Fixlet to PROJECT_NAME since we have renamed.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/mainframe.cpp (CMainFrame::OnAbout): Mention Jason Xia.
 
 	* po/zh_TW.po,
