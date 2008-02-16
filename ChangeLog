@@ -1,5 +1,17 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/caret.h,
+	src/core/stringutil.cpp,
+	src/core/site.cpp,
+	src/core/termdata.h,
+	src/core/font.cpp,
+	src/core/stringutil.h,
+	src/core/site.h: Use consistent GPL licensing terms.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/qqwryseeker/qqwryseeker.c,
 	src/core/proxy.c,
 	src/core/proxy.h,
