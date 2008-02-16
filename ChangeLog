@@ -1,5 +1,12 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/conn_xpm.xpm,
+	src/pcmanx_inverse_xpm.xpm,
+	src/pcmanx_xpm.xpm: Added "const" modifier to turn off annoying
+	warnings.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* Doxygen.in: Fixlet to PROJECT_NAME since we have renamed.
 
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>

@@ -1,5 +1,5 @@
 /* XPM */
-static char * pcmanx_inverse_xpm[] = {
+static const char * pcmanx_inverse_xpm[] = {
 "32 32 448 2",
 "  	c None",
 ". 	c #4B3316",
