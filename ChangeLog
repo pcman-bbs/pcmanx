@@ -1,5 +1,11 @@
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/core/stringutil.h,
+	src/core/stringutil.cpp (strncmpi): Removed.
+	Replaced with strncasecmp. (confirming to POSIX.1-2001)
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/core/caret.cpp,
 	src/core/termdata.cpp,
 	src/core/caret.h,

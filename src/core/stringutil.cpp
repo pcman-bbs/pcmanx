@@ -22,19 +22,6 @@
 #include <ctype.h>
 #include <stdio.h>
 
-int strncmpi(const char* str1, const char* str2, size_t len)
-{
-	size_t i = 0;	int r;
-	for( ; str1[i] && str2[i] && i < len; i++ )
-	{
-		r = toupper( (unsigned char)str1[i] ) - toupper( (unsigned char)str2[i] );
-		if( r )
-			return r;
-	}
-	return 0;
-}
-
-
 // Note by PCMan:
 // EscapeStr() & UnEscapeStr() :
 // Encode non-printable characters with '^' and '\\'

@@ -24,6 +24,7 @@
 #include "pcmanx_utils.h"
 
 #include <string>
+#include <strings.h>
 using namespace std;
 
 X_EXPORT
@@ -39,5 +40,5 @@ string ConvertFromCRLF(const char* pstr);
 string ConvertToCRLF(const char* pstr);
 inline void ConvertFromCRLF(string& str){ str = ConvertFromCRLF(str.c_str()); }
 inline void ConvertToCRLF(string& str){ str = ConvertToCRLF(str.c_str()); }
-X_EXPORT int strncmpi(const char* str1, const char* str2, size_t len);
+#define strncmpi(str1,str2,len)  strncasecmp(str1,str2,len)
 #endif
