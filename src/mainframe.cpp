@@ -299,9 +299,16 @@ GtkActionEntry CMainFrame::entries[] =
 #endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+    {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
+    {"close1", GTK_STOCK_CLOSE, _("_CloseConnection"), "<Ctrl>W", _("CloseConnection"), G_CALLBACK(CMainFrame::OnCloseCon)},
+    {"close2", GTK_STOCK_CLOSE, _("_CloseConnection"), "<Ctrl>Delete", _("CloseConnection"), G_CALLBACK(CMainFrame::OnCloseCon)},
     {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
+    {"next_con1", GTK_STOCK_GO_DOWN, _("NextPage"), "<Ctrl>Right", NULL, G_CALLBACK(CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
+    {"previous_con1", GTK_STOCK_GO_UP, _("PreviousPage"), "<Ctrl>Left", NULL, G_CALLBACK(CMainFrame::OnPrevCon)},
+    {"first_con",GTK_STOCK_GO_UP, _("FirstPage"),"<Ctrl>Home", NULL, G_CALLBACK(CMainFrame::OnFirstCon)},
+    {"last_con", GTK_STOCK_GO_UP, _("LastPage"), "<Ctrl>End", NULL, G_CALLBACK(CMainFrame::OnLastCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
     {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit")},
@@ -355,10 +362,17 @@ static const char *ui_info =
 #endif
   "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
+  " <menuitem action='reconnect1'/>"
   "      <menuitem action='close'/>"
+  " <menuitem action='close1'/>"
+  " <menuitem action='close2'/>"
   "      <separator/>"
   "      <menuitem action='next_con'/>"
+  " <menuitem action='next_con1'/>"
   "      <menuitem action='previous_con'/>"
+  " <menuitem action='previous_con1'/>"
+  " <menuitem action='first_con'/>"
+  " <menuitem action='last_con'/>"
   "      <menuitem action='jump'/>"
   "      <separator/>"
   "      <menuitem action='quit'/>"
@@ -861,6 +875,16 @@ void CMainFrame::OnNextCon(GtkMenuItem* mitem, CMainFrame* _this)
 	_this->GetNotebook()->SetCurPage( i < n ? i : 0 );
 }
 
+void CMainFrame::OnFirstCon(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	_this->GetNotebook()->SetCurPage( 0 );
+}
+
+void CMainFrame::OnLastCon(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	int n = _this->GetNotebook()->GetPageCount();
+	_this->GetNotebook()->SetCurPage( n - 1 );
+}
 
 void CMainFrame::OnPaste(GtkMenuItem* mitem, CMainFrame* _this)
 {

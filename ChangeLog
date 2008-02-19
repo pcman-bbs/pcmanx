@@ -1,3 +1,15 @@
+2008-02-20  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.h
+	(CMainFrame::OnFirstCon) (CMainFrame::OnLastCon): New member functions
+	as callbacks for first/last connections.
+
+	* src/mainframe.cpp
+	(CMainFrame::entries): Improve connection operations.
+	(MainFrame::OnFirstCon) (CMainFrame::OnLastCon): Likewise.
+	Taken from
+	http://into-wild.blogspot.com/2008/01/pcmanx-modification.html .
+
 2008-02-16  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/stringutil.h,

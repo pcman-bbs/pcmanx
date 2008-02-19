@@ -75,6 +75,8 @@ public:
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnNextCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnFirstCon(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnLastCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPaste(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPreference(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
