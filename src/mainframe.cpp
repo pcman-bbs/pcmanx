@@ -509,7 +509,7 @@ void CMainFrame::MakeUI()
   for(int i = 1; i < 11; i++)
     {
       char title[32], name[32];
-      sprintf(title, "%s _%d", page_str, i);
+      sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
       sprintf(name, "jumpto_%d", i);
       GtkAction *action = gtk_action_new(name, title, NULL, NULL);
       gtk_action_set_accel_group(action, accel_group);

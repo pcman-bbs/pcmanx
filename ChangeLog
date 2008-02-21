@@ -1,5 +1,10 @@
 2008-02-21  Jason Xia  <jasonxh@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::MakeUI): Fix wrong mnemonic for menu
+	item "Connect/Jump to/Page 10".
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
 	* src/mainframe.h, src/mainframe.cpp
 	(CMainFrame::m_JumpMenuItems) (CMainFrame::OnJumpToPage)
 	(CMainFrame::MakeUI): Fix unusable JumpToPage hotkeys(ALT+NUM) in
