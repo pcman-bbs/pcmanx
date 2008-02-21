@@ -1,5 +1,11 @@
 2008-02-21  Jason Xia  <jasonxh@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::entries) (ui_info): Remove duplicate
+	menu items while keeping the alternative accelerators. Remove Ctrl+W
+	due to conflict with BBS posting key combination.
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
 	* src/mainframe.cpp (CMainFrame::MakeUI): Fix wrong mnemonic for menu
 	item "Connect/Jump to/Page 10".
 
