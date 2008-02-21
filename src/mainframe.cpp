@@ -508,19 +508,19 @@ void CMainFrame::MakeUI()
   const char* page_str = _("Page");
   for(int i = 1; i < 11; i++)
     {
-      long keyval = (i == 10 ? GDK_0 : GDK_0 + +i);
-      char title[32];
+      char title[32], name[32];
       sprintf(title, "%s _%d", page_str, i);
-      
-      GtkWidget* jump_item = m_JumpMenuItems[i-1] = gtk_menu_item_new_with_mnemonic ( title );
-      gtk_widget_show (jump_item);
-      gtk_container_add (GTK_CONTAINER (jump_menu), jump_item);
-      gtk_widget_add_accelerator (jump_item, "activate", accel_group,
-				  keyval, (GdkModifierType) GDK_MOD1_MASK,
-				  GTK_ACCEL_VISIBLE);
-      g_signal_connect( G_OBJECT(jump_item), "activate",
-			G_CALLBACK (CMainFrame::OnJumpToPage),
-			this);
+      sprintf(name, "jumpto_%d", i);
+      GtkAction *action = gtk_action_new(name, title, NULL, NULL);
+      gtk_action_set_accel_group(action, accel_group);
+      g_signal_connect( G_OBJECT(action), "activate",
+                        G_CALLBACK (CMainFrame::OnJumpToPage),
+                        this);
+      sprintf(name, "<Alt>%d", i % 10);
+      gtk_action_group_add_action_with_accel(action_group, action, name);
+      gtk_container_add (GTK_CONTAINER (jump_menu),
+		      gtk_action_create_menu_item(action));
+      m_JumpTos[i-1] = G_OBJECT(action);
     }
 
   GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
@@ -935,11 +935,11 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnJumpToPage(GtkWidget* widget, CMainFrame* _this)
+void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, widget=%x, _this->m_JumpMenuItems[0]=%x\n", widget, _this->m_JumpMenuItems[0]);
+	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x\n", obj, _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
-		if( widget == _this->m_JumpMenuItems[i] )
+		if( obj == _this->m_JumpTos[i] )
 		{
 			_this->GetNotebook()->SetCurPage(i);
 			break;

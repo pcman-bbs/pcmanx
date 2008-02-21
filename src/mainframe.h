@@ -91,7 +91,7 @@ public:
 	static gboolean OnEverySecondTimer(CMainFrame* _this);
 	static gboolean OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this );
 	static gboolean OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this );
-	GtkWidget* m_JumpMenuItems[10];
+	GObject* m_JumpTos[10];
 	void OnDestroy();
 	virtual void OnCreate();
 	virtual bool CanClose();
@@ -146,7 +146,7 @@ protected:
 	static GtkToggleActionEntry fullscreen_mode_entries[];
 	void LoadIcons();
 	void LoadStartupSites();
-	static void OnJumpToPage(GtkWidget* widget, CMainFrame* _this);
+	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
 	void CloseCon(int idx, bool confirm = false);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
