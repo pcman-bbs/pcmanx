@@ -1,5 +1,11 @@
 2008-02-21  Jason Xia  <jasonxh@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::entries), po/zh_CN.po, po/zh_TW.po:
+	Fix some small problems with CMainFrame::entries (mnemonics,
+	stock_ids, tooltips) and update translations.
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
 	* src/mainframe.cpp (CMainFrame::entries) (ui_info): Remove duplicate
 	menu items while keeping the alternative accelerators. Remove Ctrl+W
 	due to conflict with BBS posting key combination.
