@@ -337,6 +337,11 @@ GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
     {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
 };
 
+GtkToggleActionEntry CMainFrame::simple_mode_entries[] =
+{
+    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false}
+};
+
 #ifdef USE_NANCY
 GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
   {
@@ -390,6 +395,7 @@ static const char *ui_info =
   "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
   "      <menuitem action='fullscreen' />"
+  "      <menuitem action='simple' />"
 #ifdef USE_NANCY
   "      <separator/>"
   "      <menu action='cur_bot_menu'>"
@@ -448,6 +454,9 @@ void CMainFrame::MakeUI()
 
   gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
 		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
+  
+  gtk_action_group_add_toggle_actions(action_group, simple_mode_entries,
+		  		      G_N_ELEMENTS(simple_mode_entries), this);
 
 #ifdef USE_NANCY
   gtk_action_group_add_radio_actions(action_group,
@@ -702,6 +711,24 @@ void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
 	else
 	{
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->ShowTabs();
+	}
+}
+
+void CMainFrame::OnSimpleMode(GtkToggleAction* action, CMainFrame* _this)
+{
+	if(gtk_toggle_action_get_active(action))
+	{
+		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->HideTabs();
+	}
+	else
+	{
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-02-21 15:17-0500\n"
+"POT-Creation-Date: 2008-02-29 22:42+0800\n"
 "PO-Revision-Date: 2006-03-11 21:14+0800\n"
 "Last-Translator: Jim Huang <jserv.tw@gmail.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -54,7 +54,7 @@ msgstr "新連線"
 msgid "_Reconnect"
 msgstr "重新連線 (_R)"
 
-#: ../src/mainframe.cpp:301 ../src/mainframe.cpp:302 ../src/mainframe.cpp:1008
+#: ../src/mainframe.cpp:301 ../src/mainframe.cpp:302 ../src/mainframe.cpp:1035
 msgid "Reconnect"
 msgstr "重新連線"
 
@@ -107,9 +107,8 @@ msgid "_Quit"
 msgstr "離開 (_Q)"
 
 #: ../src/mainframe.cpp:312
-#, fuzzy
 msgid "Quit"
-msgstr "離開 (_Q)"
+msgstr "離開"
 
 #: ../src/mainframe.cpp:313
 msgid "_Edit"
@@ -163,15 +162,15 @@ msgstr "個人偏好設定"
 msgid "F_avorites"
 msgstr "我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:322 ../src/mainframe.cpp:1216
+#: ../src/mainframe.cpp:322 ../src/mainframe.cpp:1243
 msgid "_Add to Favorites"
 msgstr "加入到我的最愛 (_A)"
 
-#: ../src/mainframe.cpp:322 ../src/mainframe.cpp:1009
+#: ../src/mainframe.cpp:322 ../src/mainframe.cpp:1036
 msgid "Add to Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:323 ../src/mainframe.cpp:1224
+#: ../src/mainframe.cpp:323 ../src/mainframe.cpp:1251
 msgid "_Edit Favorites"
 msgstr "編輯我的最愛 (_E)"
 
@@ -207,31 +206,35 @@ msgstr "關於"
 msgid "F_ullscreen Mode"
 msgstr "全螢幕模式 (_U)"
 
-#: ../src/mainframe.cpp:343 ../src/mainframe.cpp:349
+#: ../src/mainframe.cpp:342
+msgid "_Simple Mode"
+msgstr "精簡模式 (_S)"
+
+#: ../src/mainframe.cpp:348 ../src/mainframe.cpp:354
 msgid "Disable Bot"
 msgstr "不使用自動回訊機器人"
 
-#: ../src/mainframe.cpp:344 ../src/mainframe.cpp:350
+#: ../src/mainframe.cpp:349 ../src/mainframe.cpp:355
 msgid "Nancy Bot"
 msgstr "啟動 Nancy 機器人"
 
-#: ../src/mainframe.cpp:507
+#: ../src/mainframe.cpp:516
 msgid "Page"
 msgstr "分頁"
 
-#: ../src/mainframe.cpp:530
+#: ../src/mainframe.cpp:539
 msgid "A_ddress:"
 msgstr "位址 (_D)："
 
-#: ../src/mainframe.cpp:534
+#: ../src/mainframe.cpp:543
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此輸入位址，然後按下\"Enter\""
 
-#: ../src/mainframe.cpp:558
+#: ../src/mainframe.cpp:567
 msgid "Connect"
 msgstr "連線"
 
-#: ../src/mainframe.cpp:558
+#: ../src/mainframe.cpp:567
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -239,15 +242,15 @@ msgstr ""
 "主機 IP 位址:\n"
 "如果連接埠不是23, 請將連接埠號碼接在IP 後面, 並用冒號隔開."
 
-#: ../src/mainframe.cpp:590 ../src/mainframe.cpp:642
+#: ../src/mainframe.cpp:599 ../src/mainframe.cpp:651
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:595 ../src/mainframe.cpp:647
+#: ../src/mainframe.cpp:604 ../src/mainframe.cpp:656
 msgid "Apply to all opened pages"
 msgstr "套用到所有開啟中的連線"
 
-#: ../src/mainframe.cpp:715
+#: ../src/mainframe.cpp:742
 msgid ""
 "Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv.tw@gmail.com>\n"
@@ -267,11 +270,11 @@ msgstr ""
 "周  玮 Emfox Zhou (開發者) <emfoxzhou@gmail.com>\n"
 "夏  昊 Jason Xia (開發者) <jasonxh@gmail.com>"
 
-#: ../src/mainframe.cpp:724
+#: ../src/mainframe.cpp:751
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "簡體中文 (zh_CN)：陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:729
+#: ../src/mainframe.cpp:756
 #, c-format
 msgid ""
 "<b>PCMan X %s</b>\n"
@@ -304,28 +307,28 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:796
+#: ../src/mainframe.cpp:823
 msgid "Update BBS List Success!"
 msgstr "BBS站台列表更新成功! *^^*"
 
-#: ../src/mainframe.cpp:797
+#: ../src/mainframe.cpp:824
 msgid "Update BBS List Fault."
 msgstr "BBS站台列表更新失敗... Orz"
 
-#: ../src/mainframe.cpp:830
+#: ../src/mainframe.cpp:857
 msgid "Close Connection?"
 msgstr "確定關閉連線分頁?"
 
 #. set menu items
-#: ../src/mainframe.cpp:1007
+#: ../src/mainframe.cpp:1034
 msgid "Close"
 msgstr "關閉"
 
-#: ../src/mainframe.cpp:1126
+#: ../src/mainframe.cpp:1153
 msgid "Quit PCMan X ?"
 msgstr "離開 PCMan X ?"
 
-#: ../src/mainframe.cpp:1138
+#: ../src/mainframe.cpp:1165
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -334,20 +337,20 @@ msgstr ""
 "功能尚未實做！\n"
 "偵錯訊息： %s"
 
-#: ../src/mainframe.cpp:1150
+#: ../src/mainframe.cpp:1177
 msgid "Add To Favorites"
 msgstr "加入到我的最愛"
 
-#: ../src/mainframe.cpp:1263
+#: ../src/mainframe.cpp:1290
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "經過時間：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1471
+#: ../src/mainframe.cpp:1498
 msgid "Nancy Bot is enabled"
 msgstr "Nancy 機器人作用中"
 
-#: ../src/mainframe.cpp:1478
+#: ../src/mainframe.cpp:1505
 msgid "Nancy Bot is disabled"
 msgstr "不使用 Nancy 機器人"
 

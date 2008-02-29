@@ -143,7 +143,9 @@ protected:
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this);
+	static void OnSimpleMode(GtkToggleAction* action, CMainFrame* _this);
 	static GtkToggleActionEntry fullscreen_mode_entries[];
+	static GtkToggleActionEntry simple_mode_entries[];
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);

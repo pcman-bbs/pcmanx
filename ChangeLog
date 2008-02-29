@@ -1,3 +1,10 @@
+2008-03-01  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp,
+	src/mainframe.h: Add a hotkey and a menu item for Simple Mode.
+
 2008-02-21  Jason Xia  <jasonxh@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::entries), po/zh_CN.po, po/zh_TW.po:
