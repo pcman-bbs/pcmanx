@@ -64,15 +64,18 @@ void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button,
 	CMainFrame *_this)
 {
-	static bool hide_next_time = TRUE;
-	if (hide_next_time) {
-		_this->Hide();
-		hide_next_time = FALSE;
-	}
-	else {
+	GtkToggleAction *action = (GtkToggleAction*) gtk_action_group_get_action(
+				_this->m_ActionGroup, "showhide");
+	gtk_toggle_action_set_active(action,
+			! gtk_toggle_action_get_active(action));
+}
+
+void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	if (gtk_toggle_action_get_active(toggleaction))
 		_this->Show();
-		hide_next_time = TRUE;
-	}
+	else
+		_this->Hide();
 }
 
 /*
@@ -84,7 +87,15 @@ void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocati
 }
 */
 
-#if ! GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0)
+void CMainFrame::OnTray_Popup(GtkStatusIcon *status_icon
+		, guint button, guint activate_time, CMainFrame *_this)
+{
+	gtk_menu_popup((GtkMenu*)_this->m_TrayPopup, NULL, NULL, NULL, NULL
+			, button, activate_time);
+}
+
+#else
 void CMainFrame::set_tray_icon()
 {
         int panel_w;
@@ -151,36 +162,6 @@ CMainFrame::CMainFrame()
 #endif
 
 	LoadIcons();
-
-#ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
-	m_TrayIcon = gtk_status_icon_new();
-	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
-
-	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-#else
-	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
-
-	m_TrayButton = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
-	gtk_widget_show (m_TrayButton);
-
-	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-
-/*
-	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
-*/
-
-	m_TrayIcon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
-	gtk_widget_show (m_TrayIcon);
-	set_tray_icon();
-#endif
-#endif
 
 
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
@@ -290,7 +271,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	return pCon;
 }
 
-GtkActionEntry CMainFrame::entries[] =
+GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
     {"connect_menu", NULL, _("_Connect")},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
@@ -332,14 +313,18 @@ GtkActionEntry CMainFrame::entries[] =
     {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
   };
 
-GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
+GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
-    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
-};
+    // Fullscreen Mode
+    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
+    // Simple Mode
+    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
 
-GtkToggleActionEntry CMainFrame::simple_mode_entries[] =
-{
-    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false}
+#ifdef USE_DOCKLET
+    // Show/Hide Main Window
+    {"showhide", NULL, _("Show Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
+#endif
+
 };
 
 #ifdef USE_NANCY
@@ -394,6 +379,8 @@ static const char *ui_info =
   "    <menu action='view_menu'>"
   "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
+  "      <separator/>"
+  "      <menuitem action='showhide'/>"
   "      <menuitem action='fullscreen' />"
   "      <menuitem action='simple' />"
 #ifdef USE_NANCY
@@ -429,7 +416,7 @@ static const char *ui_info =
   "    <toolitem action='about'/>"
   "    <separator/>"
   "  </toolbar>"
-  "  <popup>"
+  "  <popup name='edit_popup'>"
   "    <menuitem action='copy'/>"
   "    <menuitem action='copy_with_ansi'/>"
   "    <menuitem action='paste'/>"
@@ -437,6 +424,15 @@ static const char *ui_info =
   "    <menuitem action='select_all'/>"
   "    <separator/>"
   "  </popup>"
+#if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
+  "  <popup name='tray_popup'>"
+  "    <menuitem action='showhide' />"
+  "    <separator />"
+  "    <menuitem action='quit'/>"
+  "  </popup>"
+#endif
+  " <accelerator action='showhide' />"
+
   // alternative accelerators
   " <accelerator action='close2'/>"
   " <accelerator action='reconnect1'/>"
@@ -446,26 +442,23 @@ static const char *ui_info =
 
 void CMainFrame::MakeUI()
 {
-  GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
+  m_ActionGroup = gtk_action_group_new("GlobalActions");
 
-  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+  gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
 
-  gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
+  gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
 
-  gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
-		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
+  gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
+		  		      G_N_ELEMENTS(m_ToggleActionEntries), this);
   
-  gtk_action_group_add_toggle_actions(action_group, simple_mode_entries,
-		  		      G_N_ELEMENTS(simple_mode_entries), this);
-
 #ifdef USE_NANCY
-  gtk_action_group_add_radio_actions(action_group,
+  gtk_action_group_add_radio_actions(m_ActionGroup,
 				     cur_bot_entries,
 				     G_N_ELEMENTS(cur_bot_entries),
 				     0,
 				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
 				     this);
-  gtk_action_group_add_radio_actions(action_group,
+  gtk_action_group_add_radio_actions(m_ActionGroup,
 				     all_bot_entries,
 				     G_N_ELEMENTS(all_bot_entries),
 				     0,
@@ -474,7 +467,7 @@ void CMainFrame::MakeUI()
 #endif
 
   m_UIManager = gtk_ui_manager_new();
-  gtk_ui_manager_insert_action_group(m_UIManager, action_group, 0);
+  gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
 
   GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
   gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
@@ -490,7 +483,7 @@ void CMainFrame::MakeUI()
   m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
   gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 
-  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
+  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
     
   m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
@@ -525,7 +518,7 @@ void CMainFrame::MakeUI()
                         G_CALLBACK (CMainFrame::OnJumpToPage),
                         this);
       sprintf(name, "<Alt>%d", i % 10);
-      gtk_action_group_add_action_with_accel(action_group, action, name);
+      gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
       gtk_container_add (GTK_CONTAINER (jump_menu),
 		      gtk_action_create_menu_item(action));
       m_JumpTos[i-1] = G_OBJECT(action);
@@ -560,6 +553,41 @@ void CMainFrame::MakeUI()
   
   CreateFavoritesMenu();
   
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	m_TrayIcon = gtk_status_icon_new();
+	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
+
+	// Setup popup menu
+	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
+	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
+			G_CALLBACK (CMainFrame::OnTray_Popup), this);
+
+	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+#else
+	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
+
+	m_TrayButton = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
+	gtk_widget_show (m_TrayButton);
+
+	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+
+/*
+	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+*/
+
+	m_TrayIcon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
+	gtk_widget_show (m_TrayIcon);
+	set_tray_icon();
+#endif
+#endif
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)

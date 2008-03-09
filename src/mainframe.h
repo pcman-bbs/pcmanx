@@ -50,10 +50,6 @@ class CSite;
 
 class CMainFrame : public CWidget
 {
-	static bool g_bIsUpateHandlerExisted;
-	static bool g_bUpdateingBBSList;
-	static CMainFrame* g_pMyself;
-	static GtkActionEntry entries[];
 public:
 	CMainFrame();
 
@@ -109,15 +105,11 @@ public:
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
 #if GTK_CHECK_VERSION(2,10,0)
-	void ShowTrayIcon() {
-		gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
-	void HideTrayIcon() {
-		gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
-	GtkStatusIcon *m_TrayIcon;
+	void ShowTrayIcon() { gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
+	void HideTrayIcon() { gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
 #else
 	void ShowTrayIcon(){ gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) ); };
 	void HideTrayIcon(){ gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) ); };
-	EggTrayIcon *m_TrayIcon_Instance;
 #endif
 #endif
 
@@ -144,8 +136,6 @@ protected:
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this);
 	static void OnSimpleMode(GtkToggleAction* action, CMainFrame* _this);
-	static GtkToggleActionEntry fullscreen_mode_entries[];
-	static GtkToggleActionEntry simple_mode_entries[];
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
@@ -167,11 +157,16 @@ protected:
 
 #ifdef USE_DOCKLET
 	static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
+	static void OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this);
 //	static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
-#if ! GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,10,0)
+	static void OnTray_Popup(GtkStatusIcon *status_icon, guint button, guint activate_time, CMainFrame *_this);
+	GtkStatusIcon *m_TrayIcon;
+#else
 	void set_tray_icon();
 	GtkWidget *m_TrayButton;
 	GtkWidget *m_TrayIcon;
+	EggTrayIcon *m_TrayIcon_Instance;
 #endif
 #endif
 
@@ -183,12 +178,12 @@ protected:
 	CTelnetView* m_pView;
 	CNotebook* m_pNotebook;
 	GtkUIManager* m_UIManager;
+	GtkActionGroup* m_ActionGroup;
 	GtkWidget* m_Toolbar;
 	GtkWidget* m_Menubar;
 	GtkWidget* m_EditMenu;
 	GtkWidget* m_Statusbar;
-
-	GtkAccelGroup* m_AccelGroup;
+	GtkWidget* m_TrayPopup;
 
 	guint m_BlinkTimer;
 	guint m_EverySecondTimer;
@@ -207,6 +202,12 @@ protected:
 	GtkRadioMenuItem* m_DisableAllBotRadio;
 	GtkRadioMenuItem* m_AllBotNancyRadio;
 #endif
+
+	static bool g_bIsUpateHandlerExisted;
+	static bool g_bUpdateingBBSList;
+	static CMainFrame* g_pMyself;
+	static GtkActionEntry m_ActionEntries[];
+	static GtkToggleActionEntry m_ToggleActionEntries[];
 };
 
 #endif

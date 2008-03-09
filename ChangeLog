@@ -1,3 +1,8 @@
+2008-03-09  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.h, src/mainframe.cpp: Add a menu item to show/hide
+	main window. Add a popup menu for tray icon.
+
 2008-03-01  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* po/zh_CN.po,
