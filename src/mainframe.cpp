@@ -322,7 +322,7 @@ GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 
 #ifdef USE_DOCKLET
     // Show/Hide Main Window
-    {"showhide", NULL, _("Show Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
+    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
 #endif
 
 };

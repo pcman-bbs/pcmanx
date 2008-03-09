@@ -1,5 +1,12 @@
 2008-03-09  Jason Xia  <jasonxh@gmail.com>
 
+	* src/mainframe.cpp (CMainFrame::m_ToggleActionEntries): Add mnemonic
+	for "Show Main Window".
+	* po/zh_CN.po, po/zh_TW.po: Update. Add translation for "Show Main
+	Window" in zh_CN. (Need zh_TW translation)
+
+2008-03-09  Jason Xia  <jasonxh@gmail.com>
+
 	* src/mainframe.h, src/mainframe.cpp: Add a menu item to show/hide
 	main window. Add a popup menu for tray icon.
 
