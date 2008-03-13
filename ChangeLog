@@ -1,5 +1,11 @@
 2008-03-13  Jason Xia  <jasonxh@gmail.com>
 
+	* src/core/termdata.cpp (CTermData::PutChar): Discard chars exceeding
+	the last column, rather than automatically insert a line feed. (Fix a
+	bug in the welcome page of bbs.zixia.net)
+
+2008-03-13  Jason Xia  <jasonxh@gmail.com>
+
 	* src/core/termdata.cpp (CTermData::EraseLine): Let EraseLine
 	propagate current attribute information till the end of the line. (Fix
 	a bug when showing some ascii arts)

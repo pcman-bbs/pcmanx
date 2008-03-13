@@ -328,8 +328,9 @@ void CTermData::PutChar(unsigned char ch)
 			{
 				if( m_CaretPos.x >= m_ColsPerPage )	// if we are at the bottom of screen
 				{
-					LineFeed();
-					CarriageReturn();	//	scroll up and move to a new line
+					//LineFeed();
+					//CarriageReturn();	//	scroll up and move to a new line
+					break;
 				}
 
 				m_Screen[m_CaretPos.y][m_CaretPos.x] = ch;
