@@ -1,3 +1,9 @@
+2008-03-13  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termdata.cpp (CTermData::EraseLine): Let EraseLine
+	propagate current attribute information till the end of the line. (Fix
+	a bug when showing some ascii arts)
+
 2008-03-13  Jim Huang  <jserv.tw@gmail.com>
 
 	* po/zh_TW.po: Added translated item for "Show Main Window".

@@ -663,7 +663,10 @@ void CTermData::EraseLine(int p)
 	{
 	case 0:		// Clear from current position to end of line.
 		memset(&pLine[m_CaretPos.x],' ',m_ColsPerPage-m_CaretPos.x);
-		memset16(&pAttr[m_CaretPos.x],CTermCharAttr::GetDefVal(),m_ColsPerPage-m_CaretPos.x);		SetLineUpdate(pLine, m_CaretPos.x, m_ColsPerPage );		break;
+		//memset16(&pAttr[m_CaretPos.x],CTermCharAttr::GetDefVal(),m_ColsPerPage-m_CaretPos.x);
+		memset16(&pAttr[m_CaretPos.x],*(short*)&m_CurAttr,m_ColsPerPage-m_CaretPos.x);
+		SetLineUpdate(pLine, m_CaretPos.x, m_ColsPerPage );
+		break;
 	case 1:	// Clear from head of line to current position.
 		memset(&pLine, ' ',m_CaretPos.x);
 		memset16(&pAttr ,CTermCharAttr::GetDefVal(),m_CaretPos.x);
