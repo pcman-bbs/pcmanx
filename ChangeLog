@@ -1,3 +1,7 @@
+2008-03-13  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW.po: Added translated item for "Show Main Window".
+
 2008-03-09  Jason Xia  <jasonxh@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::m_ToggleActionEntries): Add mnemonic
@@ -19,7 +23,8 @@
 
 2008-02-21  Jason Xia  <jasonxh@gmail.com>
 
-	* src/mainframe.cpp (CMainFrame::entries), po/zh_CN.po, po/zh_TW.po:
+	* src/mainframe.cpp (CMainFrame::entries),
+	po/zh_CN.po, po/zh_TW.po:
 	Fix some small problems with CMainFrame::entries (mnemonics,
 	stock_ids, tooltips) and update translations.
 
