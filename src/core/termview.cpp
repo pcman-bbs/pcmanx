@@ -622,6 +622,15 @@ static int DrawCharWrapper( int row, int col, void *data )
 	return tv->DrawChar( row, col );
 }
 
+void CTermView::ClearSelection()
+{
+	m_CancelSel = true;
+
+	m_Caret.Hide();
+	m_pTermData->m_Sel->Unselect( DrawCharWrapper, this );
+	m_Caret.Show( false );
+}
+
 void CTermView::ExtendSelection( int row, int col, bool left )
 {
 	row += m_pTermData->m_FirstLine;
@@ -704,13 +713,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 	{
 		// clear the old selection
 		if( !m_pTermData->m_Sel->Empty() )
-		{
-			m_CancelSel = true;
-
-			m_Caret.Hide();
-			m_pTermData->m_Sel->Unselect( DrawCharWrapper, this );
-			m_Caret.Show( false );
-		}
+			ClearSelection();
 
 		SetCapture();
 

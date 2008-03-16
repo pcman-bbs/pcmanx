@@ -96,28 +96,21 @@ static int DrawCharWrapper( int row, int col, void *data )
 
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
-	INFO("CTelnetView::OnKeyDown");
+	INFO("CTelnetView::OnKeyDown (keyval=0x%x, state=0x%x)", evt->keyval, evt->state);
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
-
-	// clear the old selection
-	// Workaround FIXME please
-	if (!m_pTermData->m_Sel->Empty())
-	{
-		GdkEventButton t_PseudoEvent;
-		t_PseudoEvent.x = 0;
-		t_PseudoEvent.y = 0;
-		t_PseudoEvent.type = GDK_BUTTON_PRESS; 
-		CTermView::OnLButtonDown(&t_PseudoEvent);
-		CTermView::OnLButtonUp(&t_PseudoEvent);
-	}
+	bool clear = true;
 
 	if( evt->keyval < 127 && GDK_MODIFIER_DOWN(evt->state, GDK_CONTROL_MASK))// Ctrl down
 	{
 		char ch = toupper(char(evt->keyval));
 		if( ch >= '@' && ch <= '_'	&& !isdigit(ch) )
 		{
+			// clear the old selection
+			if (!m_pTermData->m_Sel->Empty())
+				ClearSelection();
+
 			ch -= '@';
 			GetCon()->SendRawString(&ch,1);
 			return true;
@@ -181,7 +174,14 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	case GDK_Escape:
 		GetCon()->SendRawString("\x1b", 1);
 		break;
+	default:
+		clear = false;
 	}
+
+	// Only clear selection if we handled the key
+	if (clear)
+		ClearSelection();
+
 	return true;
 }
 

@@ -1,5 +1,19 @@
 2008-03-16  Jason Xia  <jasonxh@gmail.com>
 
+	* src/core/termview.h, src/core/termview.cpp
+	(CTermView::ClearSelection): Add ClearSelection method (using the code
+	segment in OnLButtonDown).
+
+	* src/core/termview.cpp (CTermView::OnLButtonDown),
+	src/view/telnetview.cpp (CTelnetView::OnKeyDown): Make use of
+	ClearSelection. 
+
+	* src/view/telnetview.cpp (CTelnetView::OnKeyDown): Only clear
+	selection if we handled the key event. (Fix the unusable hotkey Alt+O
+	for copy.)
+
+2008-03-16  Jason Xia  <jasonxh@gmail.com>
+
 	* src/core/pcmanx_utils.h, src/core/termview.cpp,
 	src/view/telnetview.cpp, src/view/telnetcon.cpp, src/mainframe.cpp,
 	src/notebook.cpp, src/sitelistdlg.cpp: Remove the obsolete INFO macro.
