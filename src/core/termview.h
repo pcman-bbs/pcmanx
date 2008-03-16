@@ -66,7 +66,7 @@ public:
     virtual void OnMButtonDown(GdkEventButton* evt);
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
-    void CopyToClipboard(bool primary, bool with_color, bool trim);
+    virtual void CopyToClipboard(bool primary, bool with_color, bool trim);
     void SetFont( string name, int pt_size, bool compact, bool anti_alias);
     void SetFontFamily(string name);
     void SetFont(CFont* font);

@@ -1,5 +1,10 @@
 2008-03-17  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/core/termview.h (CopyToClipboard): Declared as virtual function.
+	Prepared for advanced text processing.
+
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/core/termdata.cpp,
 	src/core/termdata.h: Use dos2unix to remove CRLF.
 
