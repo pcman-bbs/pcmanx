@@ -1,3 +1,8 @@
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h: Use dos2unix to remove CRLF.
+
 2008-03-16  Jason Xia  <jasonxh@gmail.com>
 
 	* src/core/termview.h, src/core/termview.cpp
