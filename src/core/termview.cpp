@@ -714,7 +714,7 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 
 		SetCapture();
 
-		INFO("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
+		INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
 		m_pTermData->m_Sel->NewStart( y, x, left,
 				(evt->state & (GDK_SHIFT_MASK|GDK_MOD1_MASK|GDK_CONTROL_MASK)) );

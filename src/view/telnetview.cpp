@@ -96,7 +96,7 @@ static int DrawCharWrapper( int row, int col, void *data )
 
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
-	INFO("CTelnetView::OnKeyDown\n");
+	INFO("CTelnetView::OnKeyDown");
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
@@ -210,7 +210,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
   int y = (int)evt->y;
   bool left;
   
-  INFO("x=%d, y=%d, grab=%d\n", x, y, HasCapture());
+  INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
   this->PointToLineCol( &x, &y, &left );
   if( HasCapture() )	//	Selecting text.

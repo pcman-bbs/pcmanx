@@ -229,7 +229,7 @@ void CSiteListDlg::OnConnect(GtkButton* btn, CSiteListDlg* _this)
 	{
 		gchar* text;
 		gtk_tree_model_get(GTK_TREE_MODEL(_this->m_Store), &it, COL_TEXT, &text, -1);
-		INFO_ON("%s", text);
+		INFO("%s", text);
 		char* url = strstr(text, ITEM_SEP);
 		if( url )
 		{

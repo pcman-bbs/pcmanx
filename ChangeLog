@@ -1,3 +1,11 @@
+2008-03-16  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/pcmanx_utils.h, src/core/termview.cpp,
+	src/view/telnetview.cpp, src/view/telnetcon.cpp, src/mainframe.cpp,
+	src/notebook.cpp, src/sitelistdlg.cpp: Remove the obsolete INFO macro.
+	Rename INFO_ON to INFO. Remove unnecessary trailing new lines in DEBUG
+	and INFO messages.
+
 2008-03-13  Jason Xia  <jasonxh@gmail.com>
 
 	* src/core/termdata.cpp (CTermData::PutChar): Discard chars exceeding

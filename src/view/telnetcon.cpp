@@ -186,7 +186,7 @@ CTelnetCon::~CTelnetCon()
 #endif /* !defined(MOZ_PLUGIN) */
 
 	Close();
-	INFO("CTelnetCon::~CTelnetCon\n");
+	INFO("CTelnetCon::~CTelnetCon");
 	list<CDNSRequest*>::iterator it;
 	if(m_DNSMutex)
 		g_mutex_lock(m_DNSMutex);
@@ -201,7 +201,7 @@ CTelnetCon::~CTelnetCon()
 			{
 				delete thread;
 				m_DNSQueue.erase(it);
-				INFO("thread obj deleted in CTelnet::~CTelnet()\n");
+				INFO("thread obj deleted in CTelnet::~CTelnet()");
 			}
 			break;
 		}
@@ -254,7 +254,7 @@ bool CTelnetCon::Connect()
 	// If this site has auto-login settings, activate auto-login
 	// and set it to stage 1, waiting for prelogin prompt or stage 2,
 	// waiting for login prompt.
-	INFO("login = %s\n", m_Site.GetLogin().c_str());
+	INFO("login = %s", m_Site.GetLogin().c_str());
 	if( !m_Site.GetLogin().empty() /*&& AppConfig.IsLoggedIn()*/ )
 		m_AutoLoginStage = m_Site.GetPreLogin().empty() ? ALS_LOGIN : ALS_PRELOGIN ;
 	else if ( !m_Site.GetPasswd().empty() ) /* in case we only need password (ssh) */
@@ -547,7 +547,7 @@ void CTelnetCon::OnTimer()
 	if( m_Site.m_AntiIdle == m_IdleTime )
 	{
 		//	2004.8.5 Added by PCMan.	Convert non-printable control characters.
-		INFO("AntiIdle: %s\n", m_Site.m_AntiIdleStr.c_str() );
+		INFO("AntiIdle: %s", m_Site.m_AntiIdleStr.c_str() );
 		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
 		SendRawString( aistr.c_str(), aistr.length() );
 	}
@@ -571,7 +571,7 @@ void CTelnetCon::Bell()
 
 bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 {
-	INFO("on bell timer\n");
+	INFO("on bell timer");
 	if( _this->m_IsLastLineModified )
 	{
 		char* line = _this->m_Screen[ _this->m_RowsPerPage-1 ];
@@ -598,7 +598,7 @@ void CTelnetCon::CheckAutoLogin(int row)
 {
 	if( m_AutoLoginStage > ALS_PASSWD )	// This shouldn't happen, but just in case.
 		return;
-	INFO("check auto login: %d\n", row);
+	INFO("check auto login: %d", row);
 
 	const char* prompts[] = {
 		NULL,	//	Just used to increase array indices by one.
@@ -744,7 +744,7 @@ void CTelnetCon::Close()
 			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
-			DEBUG("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
 	}
@@ -780,7 +780,7 @@ void CTelnetCon::OnLineModified(int row)
     /// @todo implement me
 	if( m_AutoLoginStage > ALS_OFF )
 		CheckAutoLogin(row);
-	INFO("line %d is modified\n", row);
+	INFO("line %d is modified", row);
 	if( row == (m_RowsPerPage-1) )	// If last line is modified
 		m_IsLastLineModified = true;
 }
@@ -791,7 +791,7 @@ void CTelnetCon::OnLineModified(int row)
 
 void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 {
-	INFO("popup clicked\n");
+	INFO("popup clicked");
 	CMainFrame* mainfrm = con->GetView()->GetParentFrame();
 	mainfrm->SwitchToCon(con);
 	gtk_widget_destroy( gtk_widget_get_parent(widget) );
@@ -894,7 +894,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 
 gboolean CTelnetCon::OnDNSLookupEnd(CTelnetCon* _this)
 {
-	INFO("CTelnetCon::OnDNSLookupEnd\n");
+	INFO("CTelnetCon::OnDNSLookupEnd");
 	g_mutex_lock(m_DNSMutex);
 	if( _this->m_InAddr.s_addr != INADDR_NONE )
 		_this->ConnectAsync();
@@ -971,7 +971,7 @@ void CTelnetCon::ConnectAsync()
 
 void CTelnetCon::ProcessDNSQueue(gpointer unused)
 {
-	INFO("begin run dns threads\n");
+	INFO("begin run dns threads");
 	g_mutex_lock(m_DNSMutex);
 	list<CDNSRequest*>::iterator it = m_DNSQueue.begin(), prev_it;
 	while( it != m_DNSQueue.end() )
@@ -989,11 +989,11 @@ void CTelnetCon::ProcessDNSQueue(gpointer unused)
 		++it;
 		m_DNSQueue.erase(prev_it);
 		delete *prev_it;
-		INFO("thread obj deleted in CTelnetCon::ProcessDNSQueue()\n");
+		INFO("thread obj deleted in CTelnetCon::ProcessDNSQueue()");
 	}
 	g_idle_add((GSourceFunc)&CTelnetCon::OnProcessDNSQueueExit, NULL);
 	g_mutex_unlock(m_DNSMutex);
-	INFO("CTelnetCon::ProcessDNSQueue() returns\n");
+	INFO("CTelnetCon::ProcessDNSQueue() returns");
 }
 
 bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
@@ -1004,13 +1004,13 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
 	m_DNSThread = NULL;
 	if( !m_DNSQueue.empty() )
 	{
-		INFO("A new thread has to be started\n");
+		INFO("A new thread has to be started");
 		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
 		// If some DNS requests are queued just before the thread exits, 
 		// we should start a new thread.
 	}
 	g_mutex_unlock(m_DNSMutex);
-	INFO("all threads end\n");
+	INFO("all threads end");
 	return false;
 }
 

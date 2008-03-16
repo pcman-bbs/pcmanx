@@ -141,8 +141,8 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFra
 	gtk_window_get_position( GTK_WINDOW(widget), &AppConfig.MainWndX, & AppConfig.MainWndY );
 	AppConfig.MainWndW = evt->width;
 	AppConfig.MainWndH = evt->height;
-	INFO("x=%d, y=%d, w=%d, h=%d\n", evt->x, evt->y, evt->width, evt->height );
-	INFO("get_pos: x=%d, y=%d\n", AppConfig.MainWndX, AppConfig.MainWndY );
+	INFO("x=%d, y=%d, w=%d, h=%d", evt->x, evt->y, evt->width, evt->height );
+	INFO("get_pos: x=%d, y=%d", AppConfig.MainWndX, AppConfig.MainWndY );
 	return false;
 }
 
@@ -838,7 +838,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 			stat_pid = wait(&stat_val);
 #ifdef USE_DEBUG
 			if (child_pid != stat_pid)
-				DEBUG("child_pid=%d stat_pid=%d stat_val=%d\n", child_pid, stat_pid, stat_val);
+				DEBUG("child_pid=%d stat_pid=%d stat_val=%d", child_pid, stat_pid, stat_val);
 #endif
 		}
 	}
@@ -991,7 +991,7 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem, CMainFrame* _this)
 
 void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x\n", obj, _this->m_JumpTos[0]);
+	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x", obj, _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
 		if( obj == _this->m_JumpTos[i] )
 		{
