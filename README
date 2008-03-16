@@ -34,6 +34,15 @@ and here are the latest options:
 
   --with-mozilla=DIR	Specify DIR as the Mozilla root directory for headers
 			and libraries.
+  --enable-libnotify	Enable the use of popup notifier support by libnotify.
+			[Default: Disabled]
+  --disable-mouse	Disable mouse click and wheel support
+			[Default: Enabled]
+  --enable-wget		Enable wget support [Default: Disable]
+  --enable-iplookup	Enable IP location lookup. Useful to China locations.
+			[Default: Disabled]
+  --enable-proxy	Enable proxy server support
+			[Default: Disabled]
 
 For example, if you are willing to create a special build dedicated to full-
 functional PCManX as standalone program and an independent plugin (no shared
@@ -44,3 +53,16 @@ libraries), you can invoke the script as following:
 	--enable-static \
 	--disable-shared \
 	--enable-plugin
+
+
+Runtime Options
+===============
+Passing "--help" argument to the command line would dump several options as
+following:
+
+Help Options:
+  -?, --help                  Show help options
+
+Application Options:
+  -m, --multiple-instance=N   Allow multiple instances
+

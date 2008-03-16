@@ -1,5 +1,9 @@
 2008-03-17  Jim Huang  <jserv.tw@gmail.com>
 
+	* README: Reflected recent modifications.
+
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/core/termview.h (CopyToClipboard): Declared as virtual function.
 	Prepared for advanced text processing.
 
