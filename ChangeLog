@@ -1,5 +1,10 @@
 2008-03-23  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage): Fixlet
+	to conditional USE_MOUSE.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/emoticondlg.cpp: Fix gcc-4.3 build.
 
 2008-03-23  Jim Huang  <jserv.tw@gmail.com>
