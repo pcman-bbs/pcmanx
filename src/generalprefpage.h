@@ -37,8 +37,12 @@ public:
 	GtkWidget *m_QueryOnCloseCon;
 	GtkWidget *m_QueryOnExit;
 	GtkWidget *m_CancelSelAfterCopy;
+#ifdef USE_MOUSE
 	GtkWidget *m_MouseSupport;
+#endif
+#ifdef USE_DOCKLET
 	GtkWidget *m_ShowTrayIcon;
+#endif
 	GtkWidget *m_ShowStatusBar;
 	GtkWidget *m_WebBrowser;
 	GtkWidget *m_MailClient;

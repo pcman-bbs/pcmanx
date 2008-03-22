@@ -58,9 +58,11 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_MouseSupport, FALSE, FALSE, 0);
 #endif
 
+#ifdef USE_DOCKLET
 	m_ShowTrayIcon = gtk_check_button_new_with_mnemonic (_("Show System Tray Icon (Docklet) (Take effect after restart)"));
 	gtk_widget_show (m_ShowTrayIcon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowTrayIcon, FALSE, FALSE, 0);
+#endif
 
 	m_ShowStatusBar = gtk_check_button_new_with_mnemonic (_("Show Status Bar on bottom"));
 	gtk_widget_show (m_ShowStatusBar);
@@ -122,7 +124,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 #ifdef USE_MOUSE
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_MouseSupport), AppConfig.MouseSupport);
 #endif
+#ifdef USE_DOCKLET
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
+#endif
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
 #ifdef USE_WGET
@@ -145,7 +149,9 @@ void CGeneralPrefPage::OnOK()
 #ifdef USE_MOUSE
 	AppConfig.MouseSupport = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport));
 #endif
+#ifdef USE_DOCKLET
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
+#endif
 	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
 #ifdef USE_WGET

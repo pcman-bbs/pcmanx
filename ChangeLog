@@ -1,5 +1,14 @@
 2008-03-23  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/appconfig.h,
+	src/generalprefpage.h,
+	src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault),
+	src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage): Properly
+	handled conditional USE_DOCKLET.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage): Fixlet
 	to conditional USE_MOUSE.
 

@@ -92,7 +92,9 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #ifdef USE_MOUSE
 		CFG_BOOL( MouseSupport )
 #endif
+#ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
+#endif
 		CFG_BOOL( ShowStatusBar )
 #ifdef USE_WGET
 		CFG_BOOL( UseWgetFiles )
@@ -366,7 +368,9 @@ void CAppConfig::SetToDefault()
 	VerticalCenterAlign = false;
 
 	MailClient = WebBrowser = "firefox %s";
+#ifdef USE_DOCKLET
 	ShowTrayIcon = true;
+#endif
 	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;
