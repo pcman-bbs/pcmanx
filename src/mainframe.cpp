@@ -77,6 +77,7 @@ void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
 	else
 		_this->Hide();
 }
+#endif
 
 /*
 void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
@@ -87,6 +88,7 @@ void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocati
 }
 */
 
+#ifdef USE_DOCKLET
 #if GTK_CHECK_VERSION(2,10,0)
 void CMainFrame::OnTray_Popup(GtkStatusIcon *status_icon
 		, guint button, guint activate_time, CMainFrame *_this)
@@ -380,7 +382,9 @@ static const char *ui_info =
   "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
   "      <separator/>"
+#ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
+#endif
   "      <menuitem action='fullscreen' />"
   "      <menuitem action='simple' />"
 #ifdef USE_NANCY
@@ -412,7 +416,9 @@ static const char *ui_info =
   "    <separator/>"
   "    <toolitem action='add_to_fav'/>"
   "    <toolitem action='preference'/>"
+#ifdef USE_WGET
   "    <toolitem action='update_bbs_list'/>"
+#endif
   "    <toolitem action='about'/>"
   "    <separator/>"
   "  </toolbar>"
@@ -430,8 +436,8 @@ static const char *ui_info =
   "    <separator />"
   "    <menuitem action='quit'/>"
   "  </popup>"
-#endif
   " <accelerator action='showhide' />"
+#endif
 
   // alternative accelerators
   " <accelerator action='close2'/>"

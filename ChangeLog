@@ -1,3 +1,11 @@
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnShowHide) (CMainFrame::OnTray_Popup): clear way to wrap
+	conditional USE_DOCKLET implementations.
+	(char *ui_info): Refine menuitem/toolitem actions reflecting
+	conditional USE_DOCKLET and USE_WGET.
+
 2008-03-17  Jim Huang  <jserv.tw@gmail.com>
 
 	* README: Reflected recent modifications.
