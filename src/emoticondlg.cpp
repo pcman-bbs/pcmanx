@@ -14,6 +14,7 @@
   #pragma implementation "emoticondlg.h"
 #endif
 
+#include <string.h>
 #include "emoticondlg.h"
 #include "inputdialog.h"
 #include "appconfig.h"
