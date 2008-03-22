@@ -1,5 +1,10 @@
 2008-03-23  Jim Huang  <jserv.tw@gmail.com>
 
+	* src/pcmanx_gtk2.cpp (main): Set env G_DEBUG=fatal_warnings to figure
+	out GObject runtime warnings while --enable-debug.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/mainframe.cpp
 	(CMainFrame::OnShowHide) (CMainFrame::OnTray_Popup): clear way to wrap
 	conditional USE_DOCKLET implementations.

@@ -70,6 +70,11 @@ int main(int argc, char *argv[])
 	textdomain(GETTEXT_PACKAGE);
 
 #ifdef USE_DEBUG
+	/* well-known tip to figure out GObject runtime warnings. */
+	setenv("G_DEBUG", "fatal_warnings", 1);
+#endif
+
+#ifdef USE_DEBUG
 	/* glib introduces its own memory management mechanism, which
          * confuses memory debuggers such as valgrind and disable their
          * malloc/free wrapper against the applications.
