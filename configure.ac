@@ -629,6 +629,16 @@ case `$LD -Bsymbolic-functions -v 2>&1 </dev/null` in
   AC_MSG_RESULT([no])
   ;;
 esac
+AC_MSG_CHECKING([whether $LD accepts --sort-common])
+case `$LD --sort-common -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,--sort-common"
+  AC_MSG_RESULT([yes])
+  ;;
+*)                                                                              
+  AC_MSG_RESULT([no])
+  ;;
+esac
 
 dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
 AC_MSG_CHECKING([whether the compiler supports the visibility arg])
