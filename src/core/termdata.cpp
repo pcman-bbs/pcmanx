@@ -1108,8 +1108,8 @@ static void read_line( int row, int col1, int col2, void* data )
 		if ( rs->lines == 1 && text->length() > 0 )
 		{
 			// the old code does this
-			if ( !td->m_Sel->m_BlockMode )
-				*text = text->substr( 0, text->length() - 1 );
+			//if ( !td->m_Sel->m_BlockMode )
+				//*text = text->substr( 0, text->length() - 1 );
 
 			size_t n = text->find_last_not_of( ' ' );
 			if ( n != text->npos )
