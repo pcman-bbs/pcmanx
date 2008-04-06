@@ -1,3 +1,9 @@
+2008-04-06  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (ui_info):
+	Added fullscreen switch in popup window.
+	Inspired by the idea of DreamerC <dreamerwolf.tw@gmail.com>.
+
 2008-04-05  Jason Xia  <jasonxh@gmail.com>
 
 	* src/core/termdata.cpp (read_line): Fix the bug of missing the last

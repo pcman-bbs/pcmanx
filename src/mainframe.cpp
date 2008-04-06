@@ -429,6 +429,7 @@ static const char *ui_info =
   "    <menuitem action='paste_from_clipboard'/>"
   "    <menuitem action='select_all'/>"
   "    <separator/>"
+  "    <menuitem action='fullscreen' />"
   "  </popup>"
 #if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
   "  <popup name='tray_popup'>"
