@@ -154,6 +154,7 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
+	m_Mode = NORMAL_MODE;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	PostCreate();
@@ -312,21 +313,19 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
 #endif
     {"help_menu", NULL, _("_Help")},
-    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
+    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
+    // Fullscreen Mode
+    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
+    // Simple Mode
+    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode)}
   };
 
 GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
-    // Fullscreen Mode
-    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
-    // Simple Mode
-    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
-
 #ifdef USE_DOCKLET
     // Show/Hide Main Window
-    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
+    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true}
 #endif
-
 };
 
 #ifdef USE_NANCY
@@ -430,6 +429,7 @@ static const char *ui_info =
   "    <menuitem action='select_all'/>"
   "    <separator/>"
   "    <menuitem action='fullscreen' />"
+  "    <menuitem action='simple' />"
   "  </popup>"
 #if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
   "  <popup name='tray_popup'>"
@@ -733,18 +733,17 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem, CMainFrame* _this)
 		gtk_widget_destroy(dlg);
 }
 
-void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
+void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this)
 {
-	if(gtk_toggle_action_get_active(action))
-	{
+	if (_this->m_Mode != FULLSCREEN_MODE) {
+		_this->m_Mode = FULLSCREEN_MODE;
 		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
-	}
-	else
-	{
+	} else {
+		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
@@ -753,17 +752,18 @@ void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
 	}
 }
 
-void CMainFrame::OnSimpleMode(GtkToggleAction* action, CMainFrame* _this)
+void CMainFrame::OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this)
 {
-	if(gtk_toggle_action_get_active(action))
-	{
+	if (_this->m_Mode != SIMPLE_MODE) {
+		_this->m_Mode = SIMPLE_MODE;
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
-	}
-	else
-	{
+	} else {
+		_this->m_Mode = NORMAL_MODE;
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
