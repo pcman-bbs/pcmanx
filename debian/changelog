@@ -1,3 +1,10 @@
+pcmanx-gtk2 (0.3.7-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * gcc_4.3.dpatch: Fix FTBFS with GCC 4.3 (Closes: #474821)
+
+ -- Chris Lamb <chris@chris-lamb.co.uk>  Sat, 12 Apr 2008 00:24:16 +0100
+
 pcmanx-gtk2 (0.3.7-2) unstable; urgency=low
 
   * watch file updated, upstream now using .bz2 instead of .gz.
