@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(pcmanx-gtk2, 0.3.7, http://groups.google.com/group/PCManX)
+AC_INIT([pcmanx-gtk2],[0.3.7],[http://groups.google.com/group/PCManX])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE
 #AM_MAINTAINER_MODE
@@ -26,7 +26,7 @@ AC_PROG_CXX
 AM_DISABLE_STATIC
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
-AC_PROG_INTLTOOL(, [no-xml])
+IT_PROG_INTLTOOL([],[no-xml])
 AC_PROG_INSTALL
 
 dnl define a new autoconf test, AC_CSRG_BASED, which will define
@@ -174,23 +174,27 @@ fi
 AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
 
 dnl *********************************************************************
+dnl ** GLIB *************************************************************
+dnl *********************************************************************
+
+AM_PATH_GLIB_2_0([2.4.0], [
+                  GUI_CFLAGS="$GUI_CFLAGS $GLIB_CFLAGS"
+                  GUI_LIBS="$GUI_LIBS $GLIB_LIBS"
+                  ], [AC_MSG_ERROR([Cannot find Glib 2.4 (or above version)!])], [gthread])
+
+dnl *********************************************************************
 dnl ** GTK **************************************************************
 dnl *********************************************************************
 
-AC_PATH_PROG(pkgconfigpath, pkg-config)
-AM_PATH_GTK_2_0(2.4.0, havegtk=yes, havegtk=no)
+AM_PATH_GTK_2_0([2.4.0], [
+                 GUI_CFLAGS="$GUI_CFLAGS $GTK_CFLAGS"
+                 GUI_LIBS="$GUI_LIBS $GTK_LIBS"
+                 ], [AC_MSG_ERROR([Cannot find GTK+/X11 2.4 (or above version)!])])
 
-if test "$havegtk" = no; then
-	echo
-	echo "Cannot find GTK+/X11 2.4 (or above version)!"
-	exit
-else
-	GUI_CFLAGS="`$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --cflags`"
-	GUI_LIBS="$GUI_LIBS `$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --libs`"
-fi
 dnl *********************************************************************
 dnl ** Freetype2 ********************************************************
 dnl *********************************************************************
+
 AC_CHECK_FT2()
 GUI_CFLAGS="$GUI_CFLAGS $FT2_CFLAGS"
 GUI_LIBS="$GUI_LIBS $FT2_LIBS"
@@ -199,20 +203,10 @@ dnl *********************************************************************
 dnl ** XFT **************************************************************
 dnl *********************************************************************
 
-AC_PATH_PROG(pkgconfigpath, pkg-config)
-AC_MSG_CHECKING([for Xft])
-if $pkgconfigpath xft --exists; then
-	GUI_CFLAGS="$GUI_CFLAGS `$pkgconfigpath xft --cflags`"
-	GUI_LIBS="$GUI_LIBS `$pkgconfigpath xft --libs`"
-
-	dnl Workaround for some *stupid* distributions.
-	if test -f /usr/include/X11/Xft/Xft.h; then
-		AC_MSG_RESULT([using workaround for Xft.])
-  		GUI_CLFAGS="$GUI_CFLAGS -I/usr/include/X11"
-	fi
-else
-	AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])
-fi
+PKG_CHECK_MODULES([LIBXFT], [xft], [
+                   GUI_CFLAGS="$GUI_CFLAGS $LIBXFT_CFLAGS"
+                   GUI_LIBS="$GUI_LIBS $LIBXFT_LIBS"
+                   ],[AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])]) 
 
 dnl *********************************************************************
 dnl ** IPv6 *************************************************************
@@ -550,16 +544,12 @@ dnl *********************************************************************
 AC_MSG_CHECKING(for modern sigaction)
 dnl libc5 on linux and FreeBSD 3.x doesn't have siginfo_t
 dnl and the sa_sigation field.
-AC_TRY_COMPILE(
-	[#include <signal.h>],
-	[struct sigaction act;
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <signal.h>]], [[struct sigaction act;
 	 siginfo_t *si;
-	 act.sa_sigaction = 0;],
-	[
+	 act.sa_sigaction = 0;]])],[
 		AC_MSG_RESULT(yes)
 		AC_DEFINE(USE_SIGACTION) 
-	],
-	AC_MSG_RESULT(no))
+	],[AC_MSG_RESULT(no)])
 
 dnl if we don't have this, use g_snprintf instead
 AC_CHECK_FUNCS(snprintf)
@@ -643,12 +633,12 @@ esac
 dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
 AC_MSG_CHECKING([whether the compiler supports the visibility arg])
 dnl Check for gcc4 or greater
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 void
 #if defined(__GNUC__) && (__GNUC__ >= 4)
 foo () {};                                                                                         
 #endif
-], [], [
+]], [[]])],[
   if test "$debug" = yes; then
 dnl It's important for collecting runtime information
     has_visibility=no
@@ -657,10 +647,10 @@ dnl It's important for collecting runtime information
     CFLAGS="$CFLAGS -fvisibility=hidden"
     CXXFLAGS="$CXXFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
   fi
-], [
+],[
   has_visibility=no
-]
-)
+
+])
 AC_MSG_RESULT($has_visibility)
 
 dnl make these visible to all Makefiles
