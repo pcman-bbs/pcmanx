@@ -8,7 +8,7 @@ Homepage: http://pcmanx.csie.net/
 
 Package: pcmanx-gtk2
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, libpcmanx-core0 (<< 0.3.8)
 Recommends: wget
 Suggests: mozilla-plugin-pcmanx
 Description: user-friendly telnet client mainly targets BBS users

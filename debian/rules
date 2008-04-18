@@ -77,7 +77,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_makeshlibs -V 'libpcmanx-core0 (= 0.3.7-2)' -Xiceweasel
+	dh_makeshlibs -V -Xiceweasel
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

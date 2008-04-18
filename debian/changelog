@@ -1,3 +1,10 @@
+pcmanx-gtk2 (0.3.7-3) unstable; urgency=low
+
+  * Ack NMU, thanks to Chris Lamb.
+  * Lessen lib dependency a little (installable now).
+
+ -- Emfox Zhou <emfox@debian.org>  Fri, 18 Apr 2008 23:11:52 +0800
+
 pcmanx-gtk2 (0.3.7-2.1) unstable; urgency=medium
 
   * Non-maintainer upload.
