@@ -1,3 +1,16 @@
+pcmanx-gtk2 (0.3.7-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * debian/patches/iceape-dev.dpatch: Allow to build against iceape.
+  * debian/patches/00list: Added iceape-dev.dpatch.
+  * debian/control: Build depend on iceape-dev >= 1.1.9-5 instead of
+    libxul-dev. (Closes: #480824)
+  * debian/mozilla-plugin-pcmanx.install, debian/rules: Temporary files
+    end up in debian/tmp/usr/lib/iceape instead of
+    debian/tmp/usr/lib/xulrunner.
+
+ -- Mike Hommey <glandium@debian.org>  Fri, 23 May 2008 21:24:44 +0200
+
 pcmanx-gtk2 (0.3.7-3) unstable; urgency=low
 
   * Ack NMU, thanks to Chris Lamb.

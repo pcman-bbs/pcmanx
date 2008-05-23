@@ -1,0 +1,30 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## iceape-dev.dpatch by  <glandium@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Allow to build against iceape-dev
+
+@DPATCH@
+
+--- pcmanx-gtk2-0.3.7.orig/configure.ac
++++ pcmanx-gtk2-0.3.7/configure.ac
+@@ -404,7 +404,7 @@
+ 
+   # Check Firefox-plugin
+   if test "x$enable_mozilla" = "xno"; then
+-    gecko_provider=firefox-plugin
++    gecko_provider=iceape
+     PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+ 	enable_mozilla=yes, enable_mozilla=no)
+   fi
+--- pcmanx-gtk2-0.3.7.orig/configure
++++ pcmanx-gtk2-0.3.7/configure
+@@ -26885,7 +26885,7 @@
+ 
+   # Check Firefox-plugin
+   if test "x$enable_mozilla" = "xno"; then
+-    gecko_provider=firefox-plugin
++    gecko_provider=iceape
+ 
+ pkg_failed=no
+ { echo "$as_me:$LINENO: checking for MOZILLA" >&5
