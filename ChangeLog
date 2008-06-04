@@ -1,11 +1,18 @@
-2008-04-18  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2008-06-04  Jim Huang  <jserv.tw@gmail.com>
 
-	* configure.ac: Make configure.ac more simple and clear.
+	* src/core/fileutil.c (copyfile): Assign file mode argument passed to
+	open(2).
+	Added GPL license claim.
 
-2008-04-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2008-04-18  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
-	* src/mainframe.cpp
-	src/mainframe.h: Polish the switch between normal/fullscreen/simple mode.
+	* configure.ac: Make configure.ac simpler and clear.
+
+2008-04-11  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp,
+	src/mainframe.h: Polish the switch between normal/fullscreen/simple
+	mode.
 
 2008-04-06  Jim Huang  <jserv.tw@gmail.com>
 
