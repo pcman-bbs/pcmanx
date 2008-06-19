@@ -40,6 +40,8 @@ and here are the latest options:
 			[Default: Enabled]
   --enable-wget		Enable wget support [Default: Disable]
   --enable-iplookup	Enable IP location lookup. Useful to China locations.
+			You also need to download qqwry.dat from the web and
+			place it at ~/.pcmanx/qqwry.dat (case sensitive).
 			[Default: Disabled]
   --enable-proxy	Enable proxy server support
 			[Default: Disabled]

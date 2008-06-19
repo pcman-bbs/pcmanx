@@ -1,3 +1,8 @@
+2008-06-19  Jason Xia  <jasonxh@gmail.com>
+
+	* README: Add more detailed information for the configure option
+	--enable-iplookup.
+
 2008-06-04  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/fileutil.c (copyfile): Assign file mode argument passed to
