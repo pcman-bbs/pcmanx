@@ -1,3 +1,8 @@
+2008-06-28  Jason Xia  <jasonxh@gmail.com>
+
+	* src/appconfig.cpp (CAppConfig::DoDataExchange): Fix the bug of
+	nonpersistent "DetectDBChar" preference.
+
 2008-06-19  Jason Xia  <jasonxh@gmail.com>
 
 	* README: Add more detailed information for the configure option

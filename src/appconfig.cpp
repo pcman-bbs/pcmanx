@@ -148,6 +148,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+		_CFG_INT ( "DetectDBChar", m_DefaultSite.m_DetectDBChar )
 #ifdef USE_EXTERNAL
 		_CFG_BOOL ( "UseExternalSSH",
 			m_DefaultSite.m_UseExternalSSH )
