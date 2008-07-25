@@ -47,6 +47,7 @@
 
 #include "pcmanx_interface.h"
 #include "nsIClassInfo.h"
+#include "nsIProgrammingLanguage.h"
 
 class nsPluginInstance;
 

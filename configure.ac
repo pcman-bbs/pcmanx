@@ -450,9 +450,15 @@ if test "$plugin" = "yes"; then
     dnl Note: with the infos from mozilla-plugin.pc
     dnl we got all includes and libraries for the C interface
     dnl to Mozilla, but not the XPCOM headers we also need.
-    MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
-    MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
-    MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+    if "$PKG_CONFIG" --exists "$gecko_provider-plugin >= 1.9"; then
+      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin`
+      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
+      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+    else
+      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
+      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
+      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+    fi
   else
     dnl Don't depend on pkg-config
     MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
@@ -481,8 +487,12 @@ if test "$plugin" = "yes"; then
   fi
 
   dnl Search for the idl include directory
+  dnl Works on Gecko 1.9
+  MOZILLA_IDLDIR=`$PKG_CONFIG --variable=idldir libxul`/`$PKG_CONFIG --variable=includetype libxul`
   dnl This only works on Gecko 1.8
-  MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+  if test "x$MOZILLA_IDLDIR" = "x"; then
+    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+  fi
   dnl Fallback for older versions
   if test "x$MOZILLA_IDLDIR" = "x"; then
     MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"

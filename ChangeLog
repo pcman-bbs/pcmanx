@@ -1,3 +1,8 @@
+2008-07-25  Jason Xia  <jasonxh@gmail.com>
+
+	* configure.ac, plugin/src/nsScriptablePeer.h: Add support for
+	xulrunner 1.9. (mozilla plugin)
+
 2008-06-28  Jason Xia  <jasonxh@gmail.com>
 
 	* src/appconfig.cpp (CAppConfig::DoDataExchange): Fix the bug of
