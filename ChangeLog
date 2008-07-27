@@ -1,3 +1,10 @@
+2008-07-27  Jason Xia  <jasonxh@gmail.com>
+
+	* plugin/src/plugin.cpp (NS_PluginInitialize) (NS_PluginShutdown)
+	(nsPluginInstance::init) (nsPluginInstance::shut): Wrong place for
+	initializing and cleaning up static members, which potentially leads
+	to segmentation fault when refreshing a telnet page.
+
 2008-07-26  Jason Xia  <jasonxh@gmail.com>
 
 	* configure.ac: Fix a compatibility bug introduced in r418 with
