@@ -137,6 +137,7 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 #ifdef USE_IPLOOKUP
 	regcomp( &m_RegIp, "([0-9]{1,3}\\.){3}([0-9]{1,3}|\\*)", REG_EXTENDED );
 #endif
+	m_LineCounter = 0;
 }
 
 // class destructor
@@ -250,6 +251,8 @@ void CTermData::LineFeed()
 		top = 0;
 		bottom = m_RowCount-1;
 	}
+	m_LineCounter++;
+
 	char* tmp = m_Screen[top];
 	InitNewLine(tmp, m_ColsPerPage);
 	for( int i = top; i < bottom; i++ )

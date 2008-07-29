@@ -338,6 +338,9 @@ public:
 	bool m_WaitUpdateDisplay;
 	bool m_NeedDelayedUpdate;
 	guint m_DelayedUpdateTimeout;
+
+	// Accumulative counter for the number of lines received
+	unsigned int m_LineCounter;
 private:
 #ifdef USE_IPLOOKUP
 	regex_t m_RegIp;

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-03-09 17:55-0400\n"
+"POT-Creation-Date: 2008-07-30 03:47+0800\n"
 "PO-Revision-Date: 2006-03-12 22:16+0800\n"
 "Last-Translator: Jason Xia <jasonxh@gmail.com>\n"
 "Language-Team: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:277
+#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:281
 msgid "Site List"
 msgstr "BBS 站点列表"
 
@@ -25,222 +25,230 @@ msgstr "连接(_O)"
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到关键字 \"%s\"！"
 
-#: ../src/mainframe.cpp:276
+#: ../src/mainframe.cpp:280
 msgid "_Connect"
 msgstr "连接(_C)"
 
-#: ../src/mainframe.cpp:277
+#: ../src/mainframe.cpp:281
 msgid "_Site List"
 msgstr "BBS 站点列表(_S)"
 
-#: ../src/mainframe.cpp:279
+#: ../src/mainframe.cpp:283
 msgid "_Update BBS List"
 msgstr "更新 BBS 列表(_U)"
 
-#: ../src/mainframe.cpp:279
+#: ../src/mainframe.cpp:283
 msgid "Update BBS List"
 msgstr "更新 BBS 列表"
 
-#: ../src/mainframe.cpp:281
+#: ../src/mainframe.cpp:285
 msgid "_New Connection"
 msgstr "开启新连接(_N)"
 
-#: ../src/mainframe.cpp:281
+#: ../src/mainframe.cpp:285
 msgid "New Connection"
 msgstr "新连接"
 
-#: ../src/mainframe.cpp:282 ../src/mainframe.cpp:283
+#: ../src/mainframe.cpp:286 ../src/mainframe.cpp:287
 msgid "_Reconnect"
 msgstr "重新连接(_R)"
 
-#: ../src/mainframe.cpp:282 ../src/mainframe.cpp:283 ../src/mainframe.cpp:1063
+#: ../src/mainframe.cpp:286 ../src/mainframe.cpp:287 ../src/mainframe.cpp:1085
 msgid "Reconnect"
 msgstr "重新连接"
 
-#: ../src/mainframe.cpp:284 ../src/mainframe.cpp:285
+#: ../src/mainframe.cpp:288 ../src/mainframe.cpp:289
 msgid "_Close Connection"
 msgstr "关闭连接分页(_C)"
 
-#: ../src/mainframe.cpp:284 ../src/mainframe.cpp:285
+#: ../src/mainframe.cpp:288 ../src/mainframe.cpp:289
 msgid "Close Connection"
 msgstr "关闭连接分页"
 
-#: ../src/mainframe.cpp:286 ../src/mainframe.cpp:287
+#: ../src/mainframe.cpp:290 ../src/mainframe.cpp:291
 msgid "Ne_xt Page"
 msgstr "切换到下一个分页(_X)"
 
-#: ../src/mainframe.cpp:286 ../src/mainframe.cpp:287
+#: ../src/mainframe.cpp:290 ../src/mainframe.cpp:291
 msgid "Next Page"
 msgstr "切换到下一个分页"
 
-#: ../src/mainframe.cpp:288 ../src/mainframe.cpp:289
+#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:293
 msgid "_Previous Page"
 msgstr "切换到上一个分页(_P)"
 
-#: ../src/mainframe.cpp:288 ../src/mainframe.cpp:289
+#: ../src/mainframe.cpp:292 ../src/mainframe.cpp:293
 msgid "Previous Page"
 msgstr "切换到上一个分页"
 
-#: ../src/mainframe.cpp:290
+#: ../src/mainframe.cpp:294
 msgid "_First Page"
 msgstr "切换到第一个分页(_F)"
 
-#: ../src/mainframe.cpp:290
+#: ../src/mainframe.cpp:294
 msgid "First Page"
 msgstr "切换到第一个分页"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:295
 msgid "_Last Page"
 msgstr "切换到最后一个分页(_L)"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:295
 msgid "Last Page"
 msgstr "切换到最后一个分页"
 
-#: ../src/mainframe.cpp:292
+#: ../src/mainframe.cpp:296
 msgid "_Jump to"
 msgstr "切换到(_J)"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:297
 msgid "_Quit"
 msgstr "离开(_Q)"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:297
 msgid "Quit"
 msgstr "离开"
 
-#: ../src/mainframe.cpp:294
+#: ../src/mainframe.cpp:298
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src/mainframe.cpp:295
+#: ../src/mainframe.cpp:299
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: ../src/mainframe.cpp:295
+#: ../src/mainframe.cpp:299
 msgid "Copy"
 msgstr "复制"
 
-#: ../src/mainframe.cpp:296
+#: ../src/mainframe.cpp:300
 msgid "Copy with A_NSI Color"
 msgstr "复制(包含ANSI彩色)(_N)"
 
-#: ../src/mainframe.cpp:296
+#: ../src/mainframe.cpp:300
 msgid "Copy with ANSI Color"
 msgstr "复制(包含ANSI彩色)"
 
-#: ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:301
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:301
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/mainframe.cpp:298
+#: ../src/mainframe.cpp:302
 msgid "Paste from Clipboard"
 msgstr "从剪切板粘贴"
 
-#: ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:303
+msgid "_Download Article"
+msgstr "全文下载(_D)"
+
+#: ../src/mainframe.cpp:303 ../src/downarticledlg.cpp:29
+msgid "Download Article"
+msgstr "全文下载"
+
+#: ../src/mainframe.cpp:304
 msgid "Select A_ll"
 msgstr "全部选取(_L)"
 
-#: ../src/mainframe.cpp:300
+#: ../src/mainframe.cpp:305
 msgid "_Emoticons"
 msgstr "表情符号(_E)"
 
-#: ../src/mainframe.cpp:301
+#: ../src/mainframe.cpp:306
 msgid "_Preference"
 msgstr "个人偏好设置(_P)"
 
-#: ../src/mainframe.cpp:301 ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:306 ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr "个人偏好设置"
 
-#: ../src/mainframe.cpp:302
+#: ../src/mainframe.cpp:307
 msgid "F_avorites"
 msgstr "收藏夹(_A)"
 
-#: ../src/mainframe.cpp:303 ../src/mainframe.cpp:1271
+#: ../src/mainframe.cpp:308 ../src/mainframe.cpp:1295
 msgid "_Add to Favorites"
 msgstr "加入到收藏夹(_A)"
 
-#: ../src/mainframe.cpp:303 ../src/mainframe.cpp:1064
+#: ../src/mainframe.cpp:308 ../src/mainframe.cpp:1086
 msgid "Add to Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:304 ../src/mainframe.cpp:1279
+#: ../src/mainframe.cpp:309 ../src/mainframe.cpp:1303
 msgid "_Edit Favorites"
 msgstr "编辑收藏夹(_E)"
 
-#: ../src/mainframe.cpp:305
+#: ../src/mainframe.cpp:310
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/mainframe.cpp:306
+#: ../src/mainframe.cpp:311
 msgid "_Font"
 msgstr "字型 (_F)"
 
-#: ../src/mainframe.cpp:307
+#: ../src/mainframe.cpp:312
 msgid "_ASCII Font"
 msgstr "ASCII 字型 (_A)"
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:314
 msgid "Bot (Current Connection)"
 msgstr "机器人(当前的连接)"
 
-#: ../src/mainframe.cpp:310
+#: ../src/mainframe.cpp:315
 msgid "Bot (All Opened Connections)"
 msgstr "机器人(所有打开的连接)"
 
-#: ../src/mainframe.cpp:312
+#: ../src/mainframe.cpp:317
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/mainframe.cpp:313
+#: ../src/mainframe.cpp:318
 msgid "About"
 msgstr "关于"
 
 #. Fullscreen Mode
-#: ../src/mainframe.cpp:319
+#: ../src/mainframe.cpp:320
 msgid "F_ullscreen Mode"
 msgstr "全屏模式(_U)"
 
 #. Simple Mode
-#: ../src/mainframe.cpp:321
+#: ../src/mainframe.cpp:322
 msgid "_Simple Mode"
 msgstr "简单模式 (_S)"
 
 #. Show/Hide Main Window
-#: ../src/mainframe.cpp:325
+#: ../src/mainframe.cpp:329
 msgid "Show _Main Window"
 msgstr "显示主窗口(_M)"
 
-#: ../src/mainframe.cpp:333 ../src/mainframe.cpp:339
+#: ../src/mainframe.cpp:336 ../src/mainframe.cpp:342
 msgid "Disable Bot"
 msgstr "禁用机器人"
 
-#: ../src/mainframe.cpp:334 ../src/mainframe.cpp:340
+#: ../src/mainframe.cpp:337 ../src/mainframe.cpp:343
 msgid "Nancy Bot"
 msgstr "机器人 Nancy"
 
-#: ../src/mainframe.cpp:509
+#: ../src/mainframe.cpp:520
 msgid "Page"
 msgstr "分页"
 
-#: ../src/mainframe.cpp:532
+#: ../src/mainframe.cpp:543
 msgid "A_ddress:"
 msgstr "地址(_D)："
 
-#: ../src/mainframe.cpp:536
+#: ../src/mainframe.cpp:547
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此输入地址，然后按下\"Enter\""
 
-#: ../src/mainframe.cpp:595
+#: ../src/mainframe.cpp:606
 msgid "Connect"
 msgstr "连接"
 
-#: ../src/mainframe.cpp:595
+#: ../src/mainframe.cpp:606
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -248,15 +256,15 @@ msgstr ""
 "主机 IP 地址：\n"
 "如果连接端口不是 23，请将连接端口号码接在 IP 后面, 并用冒号隔开。"
 
-#: ../src/mainframe.cpp:627 ../src/mainframe.cpp:679
+#: ../src/mainframe.cpp:638 ../src/mainframe.cpp:690
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:632 ../src/mainframe.cpp:684
+#: ../src/mainframe.cpp:643 ../src/mainframe.cpp:695
 msgid "Apply to all opened pages"
 msgstr "应用于所有打开的分页"
 
-#: ../src/mainframe.cpp:770
+#: ../src/mainframe.cpp:781
 msgid ""
 "Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv.tw@gmail.com>\n"
@@ -276,11 +284,11 @@ msgstr ""
 "周  玮 Emfox Zhou (开发者) <emfoxzhou@gmail.com>\n"
 "夏  昊 Jason Xia (开发者) <jasonxh@gmail.com>"
 
-#: ../src/mainframe.cpp:779
+#: ../src/mainframe.cpp:790
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "简体中文 (zh_CN)：陈海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:784
+#: ../src/mainframe.cpp:795
 #, c-format
 msgid ""
 "<b>PCMan X %s</b>\n"
@@ -313,28 +321,28 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:851
+#: ../src/mainframe.cpp:862
 msgid "Update BBS List Success!"
 msgstr "更新 BBS 列表成功！"
 
-#: ../src/mainframe.cpp:852
+#: ../src/mainframe.cpp:863
 msgid "Update BBS List Fault."
 msgstr "更新 BBS 列表失败。"
 
-#: ../src/mainframe.cpp:885
+#: ../src/mainframe.cpp:896
 msgid "Close Connection?"
 msgstr "确定关闭连接分页?"
 
 #. set menu items
-#: ../src/mainframe.cpp:1062
+#: ../src/mainframe.cpp:1084
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/mainframe.cpp:1181
+#: ../src/mainframe.cpp:1205
 msgid "Quit PCMan X ?"
 msgstr "离开 PCMan X ?"
 
-#: ../src/mainframe.cpp:1193
+#: ../src/mainframe.cpp:1217
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -343,20 +351,20 @@ msgstr ""
 "功能尚未完成！\n"
 "侦错讯息： %s"
 
-#: ../src/mainframe.cpp:1205
+#: ../src/mainframe.cpp:1229
 msgid "Add To Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:1318
+#: ../src/mainframe.cpp:1342
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "经过的时间：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1526
+#: ../src/mainframe.cpp:1550
 msgid "Nancy Bot is enabled"
 msgstr "机器人 Nancy 已经启动"
 
-#: ../src/mainframe.cpp:1533
+#: ../src/mainframe.cpp:1557
 msgid "Nancy Bot is disabled"
 msgstr "机器人 Nancy 已经禁用"
 
@@ -472,39 +480,39 @@ msgstr "结束程序前若还有连接中的连接先询问"
 msgid "Cancel selection after copying text"
 msgstr "复制完毕后自动取消选取"
 
-#: ../src/generalprefpage.cpp:55
+#: ../src/generalprefpage.cpp:56
 msgid "Enable Mouse Support"
 msgstr "打开鼠标支持"
 
-#: ../src/generalprefpage.cpp:59
+#: ../src/generalprefpage.cpp:62
 msgid "Show System Tray Icon (Docklet) (Take effect after restart)"
 msgstr "显示系统托盘图标 (Docklet) (重新启动程序后才有效)"
 
-#: ../src/generalprefpage.cpp:63
+#: ../src/generalprefpage.cpp:67
 msgid "Show Status Bar on bottom"
 msgstr "在底部显示状态栏"
 
-#: ../src/generalprefpage.cpp:67
+#: ../src/generalprefpage.cpp:71
 msgid "Use Anti-Aliasing Fonts (Take effect after restart)"
 msgstr "显示字型使用反锯齿 (重启程序后才有效)"
 
-#: ../src/generalprefpage.cpp:72
+#: ../src/generalprefpage.cpp:76
 msgid "Use \"wget\" to download files."
 msgstr "使用“wget”下载文件。"
 
-#: ../src/generalprefpage.cpp:81
+#: ../src/generalprefpage.cpp:85
 msgid "Display popup notifier for "
 msgstr "消息弹出提醒，显示"
 
-#: ../src/generalprefpage.cpp:90
+#: ../src/generalprefpage.cpp:94
 msgid "seconds"
 msgstr "秒"
 
-#: ../src/generalprefpage.cpp:98
+#: ../src/generalprefpage.cpp:102
 msgid "Web Browser: "
 msgstr "网页浏览器："
 
-#: ../src/generalprefpage.cpp:109
+#: ../src/generalprefpage.cpp:113
 msgid "Mail Client: "
 msgstr "邮件客户端："
 
@@ -524,23 +532,23 @@ msgstr "复制网址到剪贴板(_C)"
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: ../src/emoticondlg.cpp:26
+#: ../src/emoticondlg.cpp:27
 msgid "Emoticons"
 msgstr "表情符号"
 
-#: ../src/emoticondlg.cpp:28
+#: ../src/emoticondlg.cpp:29
 msgid "Send"
 msgstr "发送"
 
-#: ../src/emoticondlg.cpp:137
+#: ../src/emoticondlg.cpp:138
 msgid "New Emoticon"
 msgstr "新增表情符号"
 
-#: ../src/emoticondlg.cpp:137 ../src/emoticondlg.cpp:154
+#: ../src/emoticondlg.cpp:138 ../src/emoticondlg.cpp:155
 msgid "Input New Emoticon"
 msgstr "输入新的表情符号"
 
-#: ../src/emoticondlg.cpp:154
+#: ../src/emoticondlg.cpp:155
 msgid "Edit Emoticon"
 msgstr "编辑表情符号"
 
@@ -581,3 +589,16 @@ msgid ""
 msgstr ""
 "<big>警告：</big> 你的密码将已<u>明码形式</u>存储，并不会有任何加密处理，请小"
 "心使用。虽然类 UNIX 系统有权限的保护措施，但是不能保证你的密码不被别人得到。"
+
+#: ../src/downarticledlg.cpp:36
+msgid "Downloading ..."
+msgstr "下载中 ..."
+
+#: ../src/downarticledlg.cpp:163
+msgid "Save As"
+msgstr "另存为"
+
+#: ../src/downarticledlg.cpp:194
+#, c-format
+msgid "Can not open file %s to write."
+msgstr "无法打开文件 %s 进行写入."

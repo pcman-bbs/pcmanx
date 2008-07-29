@@ -39,6 +39,7 @@
 #include "appconfig.h"
 #include "sitelistdlg.h"
 #include "emoticondlg.h"
+#include "downarticledlg.h"
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -299,6 +300,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
     {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
+    {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
     {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
     {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
@@ -368,6 +370,7 @@ static const char *ui_info =
   "      <menuitem action='paste'/>"
   "      <menuitem action='paste_from_clipboard'/>"
   "      <menuitem action='select_all'/>"
+  "      <menuitem action='down_article'/>"
   "      <separator/>"
   "      <menuitem action='emoticon'/>"
   "      <menuitem action='preference'/>"
@@ -412,6 +415,7 @@ static const char *ui_info =
   "    <toolitem action='copy'/>"
   "    <toolitem action='copy_with_ansi'/>"
   "    <toolitem action='paste'/>"
+  "    <toolitem action='down_article'/>"
   "    <separator/>"
   "    <toolitem action='add_to_fav'/>"
   "    <toolitem action='preference'/>"
@@ -953,6 +957,17 @@ void CMainFrame::OnPaste(GtkMenuItem* mitem, CMainFrame* _this)
 		_this->GetCurView()->PasteFromClipboard(false);
 }
 
+void CMainFrame::OnDownArticle(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	CTelnetCon *con = _this->GetCurCon();
+	if (!con)
+		return;
+
+	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con);
+	//dlg->Show();
+	dlg->ShowModal();
+	dlg->Destroy();
+}
 
 void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 {
@@ -1159,7 +1174,9 @@ void CMainFrame::OnDestroy()
 #endif
 #endif
 
-	while( g_main_context_iteration(NULL, FALSE) );
+	//while( g_main_context_iteration(NULL, FALSE) );
+	while (gtk_events_pending())
+		gtk_main_iteration();
 
 	CWidget::OnDestroy();
 

@@ -1,3 +1,16 @@
+2008-07-30  Jason Xia  <jasonxh@gmail.com>
+
+	* src/Makefile.am, src/downarticledlg.cpp, src/downarticledlg.h,
+	src/mainframe.cpp, src/mainframe.h, src/core/termdata.cpp,
+	src/core/termdata.h: Initial effort to implement the "Download
+	Article" feature.
+
+	* src/pcmanx_gtk2.cpp (main), src/mainframe.cpp
+	(CMainFrame::OnDestroy): Ensure Gdk thread safty.
+
+	* po/POTFILES.in, po/zh_CN.po, po/zh_TW.po: Update translations. Need
+	translations for the new messages in zh_TW locale.
+
 2008-07-27  Jason Xia  <jasonxh@gmail.com>
 
 	* plugin/src/plugin.cpp (NS_PluginInitialize) (NS_PluginShutdown)

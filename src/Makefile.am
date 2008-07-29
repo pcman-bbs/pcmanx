@@ -98,4 +98,5 @@ pcmanx_SOURCES = \
 	mainframe.cpp mainframe.h \
 	sitedlg.cpp sitedlg.h \
 	emoticondlg.cpp emoticondlg.h \
-	autologinpage.cpp autologinpage.h
+	autologinpage.cpp autologinpage.h \
+	downarticledlg.cpp downarticledlg.h

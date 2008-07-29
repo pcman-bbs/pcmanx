@@ -74,6 +74,7 @@ public:
 	static void OnFirstCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnLastCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPaste(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnDownArticle(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPreference(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);

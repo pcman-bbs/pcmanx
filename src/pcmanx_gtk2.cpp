@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
+	gdk_threads_init();
 
 	/*--- Initialize Gtk+ ---*/
 	{
@@ -160,7 +161,9 @@ int main(int argc, char *argv[])
 	InitScriptInterface(".");
 #endif
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 
 #ifdef USE_LIBNOTIFY
 	notify_uninit();
