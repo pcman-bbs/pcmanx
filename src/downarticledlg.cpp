@@ -67,10 +67,17 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 	// Save the current screen
 	for (int i = 0; i < con->m_RowsPerPage - 1; i++)
 	{
-		char *buf = g_convert_with_fallback(con->m_Screen[i], -1, "UTF-8", 
-				con->m_Site.m_Encoding.c_str(), "?", NULL, NULL, NULL);
-		str.append(buf); str.append("\n");
-		g_free(buf);
+		char *buf = g_convert_with_fallback(
+				con->m_Screen[con->m_FirstLine + i], -1,
+				"UTF-8", con->m_Site.m_Encoding.c_str(),
+				"?", NULL, NULL, NULL
+				);
+		if (buf)
+		{
+			str.append(buf);
+			g_free(buf);
+		}
+		str.push_back('\n');
 	}
 
 	// Scroll down one line at a time until the end of article
@@ -90,14 +97,20 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 		}
 
 		char *buf = g_convert_with_fallback(
-				con->m_Screen[con->m_RowsPerPage - 2], -1, "UTF-8", 
-				con->m_Site.m_Encoding.c_str(), "?", NULL, NULL, NULL);
-		str.append(buf); str.append("\n");
-		g_free(buf);
+				con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 2], -1,
+				"UTF-8", con->m_Site.m_Encoding.c_str(), 
+				"?", NULL, NULL, NULL
+				);
+		if (buf)
+		{
+			str.append(buf);
+			g_free(buf);
+		}
+		str.push_back('\n');
 	}
 
 	gdk_threads_enter();
-	gtk_text_buffer_set_text(_this->m_textbuf, str.c_str(), str.length());
+	gtk_text_buffer_set_text(_this->m_textbuf, str.data(), str.size());
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btncopy), TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btnsave), TRUE);
 	gdk_threads_leave();

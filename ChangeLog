@@ -1,5 +1,10 @@
 2008-07-30  Jason Xia  <jasonxh@gmail.com>
 
+	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc): Fix a
+	potential segmentation fault when conversion fails.
+
+2008-07-30  Jason Xia  <jasonxh@gmail.com>
+
 	* src/Makefile.am, src/downarticledlg.cpp, src/downarticledlg.h,
 	src/mainframe.cpp, src/mainframe.h, src/core/termdata.cpp,
 	src/core/termdata.h: Initial effort to implement the "Download
