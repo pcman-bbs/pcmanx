@@ -18,6 +18,7 @@
 
 #include "downarticledlg.h"
 #include <fstream>
+#include <cerrno>
 
 #define CUSTOM_RESPONSE_COPY 1
 #define CUSTOM_RESPONSE_SAVE 2
@@ -41,16 +42,12 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
 			GTK_WIDGET(scroll));
 	gtk_widget_show_all(GTK_DIALOG(m_Widget)->vbox);
 
-	m_btncopy = (GtkButton*) gtk_button_new_from_stock(GTK_STOCK_COPY);
-	m_btnsave = (GtkButton*) gtk_button_new_from_stock(GTK_STOCK_SAVE_AS);
-	m_btncancel = (GtkButton*) gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_dialog_add_action_widget(GTK_DIALOG(m_Widget),
-			GTK_WIDGET(m_btncopy), CUSTOM_RESPONSE_COPY);
-	gtk_dialog_add_action_widget(GTK_DIALOG(m_Widget), 
-			GTK_WIDGET(m_btnsave), CUSTOM_RESPONSE_SAVE);
-	gtk_dialog_add_action_widget(GTK_DIALOG(m_Widget), 
-			GTK_WIDGET(m_btncancel), GTK_RESPONSE_CANCEL);
-	gtk_widget_show_all(GTK_DIALOG(m_Widget)->action_area);
+	m_btncopy = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
+			GTK_STOCK_COPY, CUSTOM_RESPONSE_COPY);
+	m_btncancel = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	m_btnsave = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
+			GTK_STOCK_SAVE_AS, CUSTOM_RESPONSE_SAVE);
 	gtk_widget_set_sensitive(GTK_WIDGET(m_btncopy), FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(m_btnsave), FALSE);
 
@@ -113,6 +110,7 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 	gtk_text_buffer_set_text(_this->m_textbuf, str.data(), str.size());
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btncopy), TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btnsave), TRUE);
+	gtk_widget_grab_default(GTK_WIDGET(_this->m_btnsave));
 	gdk_threads_leave();
 
 _exit:
@@ -175,8 +173,8 @@ bool CDownArticleDlg::SaveAs()
 	bool ret = false;
 	GtkDialog *dlg = (GtkDialog*) gtk_file_chooser_dialog_new(_("Save As"),
 			GTK_WINDOW(m_Widget), GTK_FILE_CHOOSER_ACTION_SAVE,
-			GTK_STOCK_SAVE_AS, GTK_RESPONSE_OK,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_SAVE, GTK_RESPONSE_OK,
 			NULL);
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dlg),
 			TRUE);
@@ -184,9 +182,12 @@ bool CDownArticleDlg::SaveAs()
 			getenv("HOME"));
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dlg), "untitled.txt");
 
-	if (gtk_dialog_run(dlg) == GTK_RESPONSE_OK)
+	int resp = gtk_dialog_run(dlg);
+	char *fname = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dlg));
+	gtk_widget_destroy(GTK_WIDGET(dlg));
+
+	if (resp == GTK_RESPONSE_OK)
 	{
-		char *fname = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dlg));
 		ofstream ofs(fname, ios_base::out | ios_base::trunc);
 		if (ofs)
 		{
@@ -197,20 +198,20 @@ bool CDownArticleDlg::SaveAs()
 					FALSE);
 			ofs << text;
 			g_free(text);
-			ret = true;
+			ret = ofs.good();
 		}
-		else
-		{ 
+		if (!ret)
+		{	// Something bad happened
 			GtkDialog *msgdlg = (GtkDialog*) gtk_message_dialog_new(
-					GTK_WINDOW(dlg), GTK_DIALOG_DESTROY_WITH_PARENT, 
-					GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
-					_("Can not open file %s to write."), fname);
+					GTK_WINDOW(m_Widget), GTK_DIALOG_DESTROY_WITH_PARENT, 
+					GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+					_("Error saving file '%s': %s"), 
+					fname, g_strerror(errno));
 			gtk_dialog_run(msgdlg);
 			gtk_widget_destroy(GTK_WIDGET(msgdlg));
 		}
-		g_free(fname);
 	}
-	gtk_widget_destroy(GTK_WIDGET(dlg));
+	g_free(fname);
 
 	return ret;
 }

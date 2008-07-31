@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-07-30 03:47+0800\n"
+"POT-Creation-Date: 2008-07-31 12:13+0800\n"
 "PO-Revision-Date: 2006-03-12 22:16+0800\n"
 "Last-Translator: Jason Xia <jasonxh@gmail.com>\n"
 "Language-Team: \n"
@@ -145,7 +145,7 @@ msgstr "从剪切板粘贴"
 msgid "_Download Article"
 msgstr "全文下载(_D)"
 
-#: ../src/mainframe.cpp:303 ../src/downarticledlg.cpp:29
+#: ../src/mainframe.cpp:303 ../src/downarticledlg.cpp:30
 msgid "Download Article"
 msgstr "全文下载"
 
@@ -590,15 +590,15 @@ msgstr ""
 "<big>警告：</big> 你的密码将已<u>明码形式</u>存储，并不会有任何加密处理，请小"
 "心使用。虽然类 UNIX 系统有权限的保护措施，但是不能保证你的密码不被别人得到。"
 
-#: ../src/downarticledlg.cpp:36
+#: ../src/downarticledlg.cpp:37
 msgid "Downloading ..."
 msgstr "下载中 ..."
 
-#: ../src/downarticledlg.cpp:163
+#: ../src/downarticledlg.cpp:174
 msgid "Save As"
 msgstr "另存为"
 
-#: ../src/downarticledlg.cpp:194
+#: ../src/downarticledlg.cpp:208
 #, c-format
-msgid "Can not open file %s to write."
-msgstr "无法打开文件 %s 进行写入."
+msgid "Error saving file '%s': %s"
+msgstr "保存文件'%s‘出错：%s"

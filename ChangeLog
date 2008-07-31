@@ -1,3 +1,11 @@
+2008-07-31  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::CDownArticleDlg)
+	(CDownArticleDlg::DownArticleFunc) (CDownArticleDlg::SaveAs): UI
+	tunings: rearrange button order, and others.
+
+	* po/zh_CN.po, po/zh_TW.po: Update translations.
+
 2008-07-30  Jason Xia  <jasonxh@gmail.com>
 
 	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc): Fix a
