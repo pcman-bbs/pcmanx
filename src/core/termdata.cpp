@@ -236,6 +236,9 @@ void CTermData::LineFeed()
 {
 	int top;
 	int bottom = m_FirstLine + m_ScrollRegionBottom;
+
+	m_LineCounter++;
+
 	if(m_CaretPos.y < bottom)
 	{
 		m_CaretPos.y++;
@@ -251,7 +254,6 @@ void CTermData::LineFeed()
 		top = 0;
 		bottom = m_RowCount-1;
 	}
-	m_LineCounter++;
 
 	char* tmp = m_Screen[top];
 	InitNewLine(tmp, m_ColsPerPage);

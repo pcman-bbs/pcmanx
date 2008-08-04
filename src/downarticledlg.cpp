@@ -77,16 +77,19 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 		str.push_back('\n');
 	}
 
-	// Scroll down one line at a time until the end of article
-	while (strchr(con->m_Screen[con->m_RowsPerPage - 1], '%'))
+	// Check if we are at the end
+	char *p;
+	while ((p = strchr(con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 1], '%'))
+			&& (*(--p) != '0' || *(--p) != '0' || *(--p) != '1'))
 	{
+		// Scroll down one line at a time until the end of article
 		unsigned int line = con->m_LineCounter;
 		con->SendRawString("\x1bOB",3); // Down
 
 		// Wait for the new line to be received in full
 		while (line == con->m_LineCounter 
-				|| con->m_CaretPos.y < con->m_RowsPerPage - 1 
-				|| con->m_CaretPos.x < 2)
+				|| con->m_CaretPos.y < con->m_FirstLine + con->m_RowsPerPage - 1 
+				|| con->m_CaretPos.x < 50)
 		{
 			if (_this->m_stop)  // We've been called off
 				goto _exit;
