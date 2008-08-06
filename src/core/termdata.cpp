@@ -674,8 +674,8 @@ void CTermData::EraseLine(int p)
 		SetLineUpdate(pLine, m_CaretPos.x, m_ColsPerPage );
 		break;
 	case 1:	// Clear from head of line to current position.
-		memset(&pLine, ' ',m_CaretPos.x);
-		memset16(&pAttr ,CTermCharAttr::GetDefVal(),m_CaretPos.x);
+		memset(pLine, ' ',m_CaretPos.x);
+		memset16(pAttr ,CTermCharAttr::GetDefVal(),m_CaretPos.x);
 		SetLineUpdate(pLine, 0, m_CaretPos.x+1);
 		break;
 	default:
