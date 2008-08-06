@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-07-31 12:13+0800\n"
-"PO-Revision-Date: 2006-03-13 11:21+0800\n"
+"POT-Creation-Date: 2008-08-06 11:02+0800\n"
+"PO-Revision-Date: 2008-08-06 11:21+0800\n"
 "Last-Translator: Jim Huang <jserv.tw@gmail.com>\n"
 "Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -143,11 +143,11 @@ msgstr "貼上剪貼簿內容"
 
 #: ../src/mainframe.cpp:303
 msgid "_Download Article"
-msgstr ""
+msgstr "下載文章 (_D)"
 
 #: ../src/mainframe.cpp:303 ../src/downarticledlg.cpp:30
 msgid "Download Article"
-msgstr ""
+msgstr "下載文章"
 
 #: ../src/mainframe.cpp:304
 msgid "Select A_ll"
@@ -593,13 +593,13 @@ msgstr ""
 
 #: ../src/downarticledlg.cpp:37
 msgid "Downloading ..."
-msgstr ""
+msgstr "下載中..."
 
-#: ../src/downarticledlg.cpp:174
+#: ../src/downarticledlg.cpp:177
 msgid "Save As"
-msgstr ""
+msgstr "另存新檔"
 
-#: ../src/downarticledlg.cpp:208
+#: ../src/downarticledlg.cpp:211
 #, c-format
 msgid "Error saving file '%s': %s"
-msgstr ""
+msgstr "當儲存為「%s」時發生錯誤： %s"
