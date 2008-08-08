@@ -1,5 +1,9 @@
 2008-08-08  Jim Huang  <jserv.tw@gmail.com>
 
+	* NEWS: updated to reflect recent changes.
+
+2008-08-08  Jim Huang  <jserv.tw@gmail.com>
+
 	* configure.ac: Introduced gcc attribute supports: const, noreturn,
 	packed, and unused.
 
@@ -144,7 +148,7 @@
 2008-04-11  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.cpp,
-	src/mainframe.h: Polish the switch between normal/fullscreen/simple
+	src/mainframe.h: Polish the switch among normal/fullscreen/simple
 	mode.
 
 2008-04-06  Jim Huang  <jserv.tw@gmail.com>
