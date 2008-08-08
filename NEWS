@@ -10,7 +10,7 @@ Version 0.3.8 - ?
 * Feature: Simply implement proxy client for SOCKSv4 and SOCKSv5.
 * Feature: Auto-login support.
 * Feature: Use GtkStatusIcon instead of deprecated and external EggTrayIcon
-           is-neededf gtk+ version >= 2.10.
+           if gtk+ version >= 2.10.
 * Feature: Several GNU toolchain tweaks: increasing efficiency layout,
            reducing relocations in the libraries, ld's "--as-needed" + "-Wl,-O1".
 * Bugfix: Unusable JumpToPage hotkeys.
