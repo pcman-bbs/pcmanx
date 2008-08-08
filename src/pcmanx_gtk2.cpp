@@ -60,7 +60,7 @@ static GOptionEntry entries[] = {
 	  G_OPTION_ARG_NONE, &multiple_instance, 
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
-	{ NULL }
+	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 };
 
 int main(int argc, char *argv[])
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 		/* GTK requires a program's argc and argv variables, and
 		 * requires that they be valid. Set it up. */
 		int fake_argc = 1;
-		char *_fake_argv[] = { "", NULL };
+		char *_fake_argv[] = { (char *) "", NULL };
 		char **fake_argv = _fake_argv;
 
 		gtk_init (&fake_argc, &fake_argv);

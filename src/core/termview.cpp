@@ -33,7 +33,7 @@
 
 using namespace std;
 
-static gboolean on_key_pressed(GtkWidget* wnd, GdkEventKey *evt, CTermView* _this)
+static gboolean on_key_pressed(GtkWidget* wnd UNUSED, GdkEventKey *evt, CTermView* _this)
 {
 	bool ret = gtk_im_context_filter_keypress(_this->m_IMContext, evt );
 	if( !_this->PreKeyDown(evt) && !ret )
@@ -41,12 +41,12 @@ static gboolean on_key_pressed(GtkWidget* wnd, GdkEventKey *evt, CTermView* _thi
 	return ret;
 }
 
-static void on_im_commit(GtkIMContext *im, gchar *arg, CTermView* _this)
+static void on_im_commit(GtkIMContext *im UNUSED, gchar *arg, CTermView* _this)
 {
 	_this->OnTextInput(arg);
 }
 
-static gboolean on_mouse_down(GtkWidget* widget, GdkEventButton* evt, CTermView* _this)
+static gboolean on_mouse_down(GtkWidget* widget UNUSED, GdkEventButton* evt, CTermView* _this)
 {
 	switch(evt->button)
 	{
@@ -62,7 +62,7 @@ static gboolean on_mouse_down(GtkWidget* widget, GdkEventButton* evt, CTermView*
 	return true;
 }
 
-static gboolean on_mouse_up(GtkWidget* widget, GdkEventButton* evt, CTermView* _this)
+static gboolean on_mouse_up(GtkWidget* widget UNUSED, GdkEventButton* evt, CTermView* _this)
 {
 	switch(evt->button)
 	{
@@ -75,7 +75,7 @@ static gboolean on_mouse_up(GtkWidget* widget, GdkEventButton* evt, CTermView* _
 	return true;
 }
 
-static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView* _this)
+static gboolean on_mouse_move(GtkWidget* widget UNUSED, GdkEventMotion* evt, CTermView* _this)
 {
 	if (evt->is_hint)
 	{
@@ -89,13 +89,13 @@ static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView*
 	return true;
 }
 
-static gboolean on_mouse_scroll(GtkWidget* widget, GdkEventScroll* evt, CTermView* _this)
+static gboolean on_mouse_scroll(GtkWidget* widget UNUSED, GdkEventScroll* evt, CTermView* _this)
 {
 	_this->OnMouseScroll(evt);
 	return true;
 }
 
-void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
+void CTermView::OnBeforeDestroy( GtkWidget* widget UNUSED, CTermView* _this)
 {
 	XftDrawDestroy( _this->m_XftDraw);
 	_this->m_XftDraw = NULL;
@@ -246,19 +246,19 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 
 }
 
-void CTermView::OnSetFocus(GdkEventFocus* evt)
+void CTermView::OnSetFocus(GdkEventFocus* evt UNUSED)
 {
 	gtk_im_context_focus_in(m_IMContext);
 }
 
 
-bool CTermView::OnKeyDown(GdkEventKey* evt)
+bool CTermView::OnKeyDown(GdkEventKey* evt UNUSED)
 {
 	return true;
 }
 
 
-void CTermView::OnTextInput(const gchar* string)
+void CTermView::OnTextInput(const gchar* string UNUSED)
 {
     // Override this function to process text input.
 }
@@ -340,7 +340,7 @@ static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 }
 #endif
 
-bool CTermView::DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr)
+bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip UNUSED, GdkColor* clr UNUSED)
 {
 	GdkDrawable* dc = m_Widget->window;
 	guchar* uchar = (guchar*)ch;
@@ -601,7 +601,7 @@ void CTermView::PointToLineCol(int *x, int *y, bool *left)
 	}
 }
 
-void CTermView::OnSize(GdkEventConfigure* evt)
+void CTermView::OnSize(GdkEventConfigure* evt UNUSED)
 {
 	if( !m_AutoFontSize || !m_pTermData )
 		return;
@@ -631,7 +631,7 @@ void CTermView::ClearSelection()
 	m_Caret.Show( false );
 }
 
-void CTermView::ExtendSelection( int row, int col, bool left )
+void CTermView::ExtendSelection( int row, int col, bool left UNUSED )
 {
 	row += m_pTermData->m_FirstLine;
 
@@ -725,18 +725,18 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 }
 
 
-void CTermView::OnMouseMove(GdkEventMotion* evt)
+void CTermView::OnMouseMove(GdkEventMotion* evt UNUSED)
 {
 
 }
 
 
-void CTermView::OnMouseScroll(GdkEventScroll* evt)
+void CTermView::OnMouseScroll(GdkEventScroll* evt UNUSED)
 {
 
 }
 
-void CTermView::OnRButtonDown(GdkEventButton* evt)
+void CTermView::OnRButtonDown(GdkEventButton* evt UNUSED)
 {
 
 }
@@ -771,18 +771,18 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 
 }
 
-void CTermView::OnRButtonUp(GdkEventButton* evt)
+void CTermView::OnRButtonUp(GdkEventButton* evt UNUSED)
 {
 }
 
-void CTermView::OnKillFocus(GdkEventFocus *evt)
+void CTermView::OnKillFocus(GdkEventFocus *evt UNUSED)
 {
 	gtk_im_context_focus_out(m_IMContext);
 }
 
 // Preview the GdkEventKey before it's sent to OnKeyDown
 // regardless of the returned value of im_context_filter_key_press.
-bool CTermView::PreKeyDown(GdkEventKey *evt)
+bool CTermView::PreKeyDown(GdkEventKey *evt UNUSED)
 {
 	return false;
 }
@@ -811,7 +811,7 @@ void CTermView::OnBlinkTimer()
 	m_Caret.Blink();
 }
 
-void CTermView::OnMButtonDown(GdkEventButton* evt)
+void CTermView::OnMButtonDown(GdkEventButton* evt UNUSED)
 {
 	PasteFromClipboard(true);
 }
@@ -838,7 +838,7 @@ void CTermView::PasteFromClipboard(bool primary)
 		DoPasteFromClipboard(m_s_ANSIColorStr, true);
 }
 
-void CTermView::DoPasteFromClipboard(string text, bool contain_ansi_color)
+void CTermView::DoPasteFromClipboard(string text UNUSED, bool contain_ansi_color UNUSED)
 {
 
 }
@@ -856,7 +856,7 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 
 	gsize wl = 0;
 	const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
-			"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
+			"utf-8", m_pTermData->m_Encoding.c_str(), (gchar *) "?", NULL, &wl, NULL);
 	if(!utext)
 		return;
 
@@ -1039,10 +1039,14 @@ bool CTermView::HyperLinkHitTest(int x, int y, int* start, int* end)
 	if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
 	{
 		int _start, _end;
-		for( _start = x-1; _start > 0 && pattr[_start].IsHyperLink(); _start-- );
+		for( _start = (x - 1); _start > 0 &&
+		                       pattr[_start].IsHyperLink(); _start-- )
+			;
 		if( !pattr[_start].IsHyperLink() )
 			_start++;
-		for( _end = x+1; _end < m_pTermData->m_ColsPerPage && pattr[_end].IsHyperLink(); _end++ );
+		for( _end = (x + 1); _end < m_pTermData->m_ColsPerPage &&
+		                     pattr[_end].IsHyperLink(); _end++ )
+			;
 		*start = _start;
 		*end = _end;
 		INFO("%d, %d : %d, %d", x, y, _start, _end);
@@ -1089,7 +1093,7 @@ void CTermView::RecalcCharDimension()
 	m_Caret.Show();
 }
 
-void CTermView::OnHyperlinkClicked(string url)	// Overriden in derived classes
+void CTermView::OnHyperlinkClicked(string url UNUSED)	// Overriden in derived classes
 {
 
 }

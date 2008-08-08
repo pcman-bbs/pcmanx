@@ -242,7 +242,7 @@ private:
 class CDNSRequest
 {
 public:
-	CDNSRequest(CTelnetCon* con, string address, int port) 
+	CDNSRequest(CTelnetCon* con, string address, int port UNUSED) 
 		: m_pCon(con), m_Address(address), m_Running(false)
 	{
 	}

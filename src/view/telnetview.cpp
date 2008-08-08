@@ -185,7 +185,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	return true;
 }
 
-static void on_hyperlink_copy(GtkMenuItem* item, bool *do_copy)
+static void on_hyperlink_copy(GtkMenuItem* item UNUSED, bool *do_copy)
 {
 	*do_copy = true;
 }
@@ -491,7 +491,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 				string url( (pline+start), (int)(end-start) );
 				gsize wl = 0;
 				const gchar* purl = g_convert_with_fallback( url.c_str(), url.length(),
-						"utf-8", m_pTermData->m_Encoding.c_str(), "?", NULL, &wl, NULL);
+						"utf-8", m_pTermData->m_Encoding.c_str(), (gchar *) "?", NULL, &wl, NULL);
 				if(purl)
 				{
 					m_s_ANSIColorStr = "";
@@ -522,7 +522,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 #endif
 }
 
-bool CTelnetView::PreKeyDown(GdkEventKey* evt)
+bool CTelnetView::PreKeyDown(GdkEventKey* evt UNUSED)
 {
 /*	if( GDK_MODIFIER_DOWN( evt->state, GDK_MOD1_MASK)
 			|| GDK_MODIFIER_DOWN( evt->state, GDK_CONTROL_MASK)

@@ -149,7 +149,7 @@ enum
 };
 
 
-void CSiteListDlg::OnSearch(GtkButton* btn, CSiteListDlg* _this)
+void CSiteListDlg::OnSearch(GtkButton* btn UNUSED, CSiteListDlg* _this)
 {
 	const gchar* keyword = gtk_entry_get_text( GTK_ENTRY(_this->m_Keyword) );
 	if( !*keyword )
@@ -219,7 +219,7 @@ keyword_not_found:
 	gtk_widget_destroy(dlg);
 }
 
-void CSiteListDlg::OnConnect(GtkButton* btn, CSiteListDlg* _this)
+void CSiteListDlg::OnConnect(GtkButton* btn UNUSED, CSiteListDlg* _this)
 {
 	GtkTreeView* tree_view = GTK_TREE_VIEW(_this->m_Tree);
 	GtkTreeSelection* sel = gtk_tree_view_get_selection(tree_view);
@@ -242,7 +242,7 @@ void CSiteListDlg::OnConnect(GtkButton* btn, CSiteListDlg* _this)
 	gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
 }
 
-void CSiteListDlg::OnClose(GtkButton* btn, CSiteListDlg* _this)
+void CSiteListDlg::OnClose(GtkButton* btn UNUSED, CSiteListDlg* _this)
 {
 	gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_CANCEL );
 }
@@ -337,13 +337,14 @@ void CSiteListDlg::LoadSiteList(GtkTreeIter *parent, FILE *file, char *line)
 }
 
 
-void CSiteListDlg::OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,  
-	GtkTreeViewColumn* col, CSiteListDlg* _this)
+void CSiteListDlg::OnRowActivated(GtkTreeView *tree_view UNUSED,
+                                  GtkTreePath* path UNUSED,
+				  GtkTreeViewColumn* col UNUSED, CSiteListDlg* _this)
 {
 	gtk_button_clicked( GTK_BUTTON(_this->m_ConnectBtn) );
 }
 
-void CSiteListDlg::OnKeywordActivate(GtkEntry* entry, CSiteListDlg* _this)
+void CSiteListDlg::OnKeywordActivate(GtkEntry* entry UNUSED, CSiteListDlg* _this)
 {
 	gtk_button_clicked( GTK_BUTTON(_this->m_SearchBtn) );
 }

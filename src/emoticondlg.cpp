@@ -120,7 +120,7 @@ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
 
 
 
-void CEmoticonDlg::OnDown(GtkWidget* btn, CEmoticonDlg* _this)
+void CEmoticonDlg::OnDown(GtkWidget* btn UNUSED, CEmoticonDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 && (sel+1) < _this->m_List->Count() )
@@ -131,7 +131,7 @@ void CEmoticonDlg::OnDown(GtkWidget* btn, CEmoticonDlg* _this)
 }
 
 
-void CEmoticonDlg::OnAdd(GtkWidget* btn, CEmoticonDlg* _this)
+void CEmoticonDlg::OnAdd(GtkWidget* btn UNUSED, CEmoticonDlg* _this)
 {
 	int i = _this->m_List->GetCurSel() + 1;
 
@@ -146,7 +146,7 @@ void CEmoticonDlg::OnAdd(GtkWidget* btn, CEmoticonDlg* _this)
 }
 
 
-void CEmoticonDlg::OnEdit(GtkWidget* btn, CEmoticonDlg* _this)
+void CEmoticonDlg::OnEdit(GtkWidget* btn UNUSED, CEmoticonDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 )
@@ -163,7 +163,7 @@ void CEmoticonDlg::OnEdit(GtkWidget* btn, CEmoticonDlg* _this)
 }
 
 
-void CEmoticonDlg::OnRemove(GtkWidget* btn, CEmoticonDlg* _this)
+void CEmoticonDlg::OnRemove(GtkWidget* btn UNUSED, CEmoticonDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel >= 0 )
@@ -177,7 +177,7 @@ void CEmoticonDlg::OnRemove(GtkWidget* btn, CEmoticonDlg* _this)
 }
 
 
-void CEmoticonDlg::OnUp(GtkWidget* btn, CEmoticonDlg* _this)
+void CEmoticonDlg::OnUp(GtkWidget* btn UNUSED, CEmoticonDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 && sel > 0 )
@@ -240,7 +240,9 @@ bool CEmoticonDlg::OnCancel()
 }
 
 
-gboolean CEmoticonDlg::SaveEmoticon(GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter, FILE* file)
+gboolean CEmoticonDlg::SaveEmoticon(GtkTreeModel* model,
+                                    GtkTreePath* path UNUSED,
+				    GtkTreeIter* iter, FILE* file)
 {
 	gchar* text = NULL;
 	gtk_tree_model_get( model, iter, 0, &text, -1 );
@@ -253,7 +255,10 @@ gboolean CEmoticonDlg::SaveEmoticon(GtkTreeModel* model, GtkTreePath* path, GtkT
 }
 
 
-void CEmoticonDlg::OnListRowActivated(GtkTreeView* view, GtkTreePath* path, GtkTreeViewColumn* cols, CEmoticonDlg* _this)
+void CEmoticonDlg::OnListRowActivated(GtkTreeView* view UNUSED,
+                                      GtkTreePath* path UNUSED,
+				      GtkTreeViewColumn* cols UNUSED,
+				      CEmoticonDlg* _this)
 {
 	gtk_dialog_response(GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK);
 }

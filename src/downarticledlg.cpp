@@ -67,7 +67,7 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 		char *buf = g_convert_with_fallback(
 				con->m_Screen[con->m_FirstLine + i], -1,
 				"UTF-8", con->m_Site.m_Encoding.c_str(),
-				"?", NULL, NULL, NULL
+				(gchar *) "?", NULL, NULL, NULL
 				);
 		if (buf)
 		{
@@ -99,7 +99,7 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 		char *buf = g_convert_with_fallback(
 				con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 2], -1,
 				"UTF-8", con->m_Site.m_Encoding.c_str(), 
-				"?", NULL, NULL, NULL
+				(gchar *) "?", NULL, NULL, NULL
 				);
 		if (buf)
 		{

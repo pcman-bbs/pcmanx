@@ -1,3 +1,67 @@
+2008-08-08  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Introduced gcc attribute supports: const, noreturn,
+	packed, and unused.
+
+	* src/emoticondlg.cpp (CEmoticonDlg::OnDown) (CEmoticonDlg::OnAdd)
+	(CEmoticonDlg::OnEdit) (CEmoticonDlg::OnRemove) (CEmoticonDlg::OnUp)
+	(CEmoticonDlg::SaveEmoticon) (CEmoticonDlg::OnListRowActivated),
+	src/core/termdata.cpp (CTermData::OnLineModified),
+	src/core/termview.cpp (on_key_pressed) (on_im_commit) (on_mouse_down)
+	(on_mouse_up) (on_mouse_move) (on_mouse_scroll)
+	(CTermView::OnBeforeDestroy) (CTermView::OnSetFocus)
+	(CTermView::OnKeyDown) (CTermView::OnTextInput)
+	(CTermView::DrawSpaceFillingChar) (CTermView::OnSize)
+	(CTermView::ExtendSelection) (CTermView::OnMouseMove)
+	(CTermView::OnMouseScroll) (CTermView::OnRButtonDown)
+	(CTermView::OnRButtonUp) (CTermView::OnKillFocus)
+	(CTermView::PreKeyDown) (CTermView::OnMButtonDown)
+	(CTermView::DoPasteFromClipboard) (CTermView::OnHyperlinkClicked),
+	src/core/view.cpp (on_expose) (on_configure) (on_focus_in)
+	(on_focus_out) (CView::OnSize) (CView::OnSetFocus)
+	(CView::OnKillFocus),
+	src/core/widget.cpp (on_create) (on_destroy),
+	src/editfavdlg.cpp (CEditFavDlg::OnAdd) (CEditFavDlg::OnEdit)
+	(CEditFavDlg::OnRemove) (CEditFavDlg::OnUp) (CEditFavDlg::OnDown)
+	(CEditFavDlg::OnRowActivated),
+	src/view/telnetcon.h (CDNSRequest),
+	src/view/telnetview.cpp (on_hyperlink_copy) (CTelnetView::PreKeyDown),
+	src/view/telnetcon.cpp (CTelnetCon::OnSocket)
+	(CTelnetCon::ProcessDNSQueue) (CTelnetCon::OnProcessDNSQueueExit),
+	src/mainframe.cpp (CMainFrame::OnTrayButton_Toggled)
+	(CMainFrame::OnTray_Popup) (CMainFrame::OnSize) (CMainFrame::OnNewCon)
+	(CMainFrame::OnQuit) (CMainFrame::OnFont) (CMainFrame::OnFontEn)
+	(CMainFrame::OnFullscreenMode) (CMainFrame::OnSimpleMode)
+	(CMainFrame::OnAbout) (CMainFrame::pasteFromClipboard)
+	(CMainFrame::OnCloseCon) (CMainFrame::OnCopy)
+	(CMainFrame::OnCopyWithColor) (CMainFrame::OnNextCon)
+	(CMainFrame::OnFirstCon) (CMainFrame::OnLastCon) (CMainFrame::OnPaste)
+	(CMainFrame::OnDownArticle) (CMainFrame::OnPreference)
+	(CMainFrame::OnPrevCon) (CMainFrame::OnSiteList)
+	(CMainFrame::OnNotebookChangeCurPage)
+	(CMainFrame::OnNotebookPopupMenu) (CMainFrame::CloseCon)
+	(CMainFrame::OnClose) (CMainFrame::OnAddToFavorites)
+	(CMainFrame::OnEditFavorites) (CMainFrame::OnSelectAll)
+	(CMainFrame::OnEmoticons) (CMainFrame::OnReconnect)
+	(CMainFrame::OnActivated) (CMainFrame::OnURLEntryKillFocus)
+	(CMainFrame::OnChangeCurrentBot) (CMainFrame::OnChangeAllBot),
+	src/dialog.cpp (CDialog::OnCommand),
+	src/sitelistdlg.cpp (CSiteListDlg::OnSearch) (CSiteListDlg::OnConnect)
+	(CSiteListDlg::OnClose) (CSiteListDlg::OnRowActivated)
+	(CSiteListDlg::OnKeywordActivate): Mark __attribute__(unused) in
+	parameters via "UNUSED" macro.  Due to current mechanisms binding Gtk+
+	into C++ programs, the above methods show that the parameter passing
+	is somehow aweful, and it would be helpful if we are going to
+	eliminate the complexity.
+
+	* src/core/termdata.cpp (struct ReadStatus) (GetChangedAttrStr),
+	src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc),
+	src/core/termview.cpp (CTermView::CopyToClipboard),
+	src/pcmanx_gtk2.cpp (GOptionEntry entries[]) (main),
+	src/view/telnetcon.cpp (CTelnetCon::Close),
+	src/mainframe.cpp (CMainFrame::m_ActionEntries[]): Sweep
+	casting warnings.
+
 2008-08-06  Jason Xia  <jasonxh@gmail.com>
 
 	* src/core/termdata.cpp (CTermData::EraseLine): Fix a segmentation

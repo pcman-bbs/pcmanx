@@ -22,14 +22,14 @@
 
 #include "view.h"
 
-static gboolean on_expose( GtkWidget* widget, GdkEventExpose *evt, CView* _this )
+static gboolean on_expose( GtkWidget* widget UNUSED, GdkEventExpose *evt, CView* _this )
 {
 	_this->OnPaint(evt);
 	return false;
 }
 
 
-static gboolean on_configure(GtkWidget *widget, GdkEventConfigure *evt, CView* _this)
+static gboolean on_configure(GtkWidget *widget UNUSED, GdkEventConfigure *evt, CView* _this)
 {
 	_this->OnSize(evt);
 	return false;
@@ -37,13 +37,13 @@ static gboolean on_configure(GtkWidget *widget, GdkEventConfigure *evt, CView* _
 
 
 
-static gboolean on_focus_in(GtkWidget *widget, GdkEventFocus *evt, CView* _this)
+static gboolean on_focus_in(GtkWidget *widget UNUSED, GdkEventFocus *evt, CView* _this)
 {
 	_this->OnSetFocus(evt);
 	return true;
 }
 
-static gboolean on_focus_out(GtkWidget *widget, GdkEventFocus *evt, CView* _this)
+static gboolean on_focus_out(GtkWidget *widget UNUSED, GdkEventFocus *evt, CView* _this)
 {
 	_this->OnKillFocus(evt);
 	return true;
@@ -69,17 +69,17 @@ CView::CView(): CWidget()
 }
 
 
-void CView::OnSize(GdkEventConfigure* evt)
+void CView::OnSize(GdkEventConfigure* evt UNUSED)
 {
     /// @todo implement me
 }
 
-void CView::OnSetFocus(GdkEventFocus *evt)
+void CView::OnSetFocus(GdkEventFocus *evt UNUSED)
 {
     /// @todo implement me
 }
 
-void CView::OnKillFocus(GdkEventFocus *evt)
+void CView::OnKillFocus(GdkEventFocus *evt UNUSED)
 {
     /// @todo implement me
 }

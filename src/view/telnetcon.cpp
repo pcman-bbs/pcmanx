@@ -229,7 +229,7 @@ char CTelnetCon::GetMenuChar(int y)
 }
 #endif
 
-gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
+gboolean CTelnetCon::OnSocket(GIOChannel *channel UNUSED, GIOCondition type, CTelnetCon* _this)
 {
 	bool ret = false;
 	if( type & G_IO_IN )
@@ -741,9 +741,9 @@ void CTelnetCon::Close()
 		{
 			/* FIXME: unnecessary again, since child has already
 			 * received SIGHUP when m_SockFD was closed. */
-			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
+			/*int kill_ret = */ kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
-			pid_t wait_ret = waitpid(m_Pid, &status, 0);
+			/*pid_t wait_ret = */ waitpid(m_Pid, &status, 0);
 			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
@@ -969,7 +969,7 @@ void CTelnetCon::ConnectAsync()
 		OnConnect(-1);
 }
 
-void CTelnetCon::ProcessDNSQueue(gpointer unused)
+void CTelnetCon::ProcessDNSQueue(gpointer unused UNUSED)
 {
 	INFO("begin run dns threads");
 	g_mutex_lock(m_DNSMutex);
@@ -996,7 +996,7 @@ void CTelnetCon::ProcessDNSQueue(gpointer unused)
 	INFO("CTelnetCon::ProcessDNSQueue() returns");
 }
 
-bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
+bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused UNUSED)
 {
 	g_mutex_lock(m_DNSMutex);
 	g_thread_join( m_DNSThread );

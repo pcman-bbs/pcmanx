@@ -998,7 +998,7 @@ typedef struct {
 	CTermData* pTermData;
 	string*    text;
 	int        lines;
-	char*      eol;
+	const char*      eol;
 } ReadStatus;
 
 string GetChangedAttrStr(CTermCharAttr oldattr, CTermCharAttr newattr)
@@ -1147,13 +1147,7 @@ string CTermData::GetText( CTermSelection* sel, bool trim, bool color )
 {
 	string text;
 	int endrow;
-	ReadStatus rs = { this, &text, 0 };
-
-#ifdef	__WXMSW__
-	rs.eol = "\r\n";
-#else
-	rs.eol = "\n";
-#endif
+	ReadStatus rs = { this, &text, 0, "\n" };
 
 	if ( trim )
 	{
@@ -1392,7 +1386,7 @@ bool CTermData::IsLineEmpty(int iLine)
 // This is a callback function called from CTermData::DoUpdateDisplay().
 // When new characters are written to a line in the screen buffer, 
 // this function will be called with the line number passed in 'row'.
-void CTermData::OnLineModified(int row)
+void CTermData::OnLineModified(int row UNUSED)
 {
     // This function can be overriden in derived class.
 }
