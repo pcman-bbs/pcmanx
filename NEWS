@@ -3,20 +3,19 @@ Version 0.3.8 - ?
 * Feature: Download BBS article.
 * Feature: Firefox 3 (xulrunner 1.9) support.
 * Feature; Switch among normal/fullscreen/simple modes.
-* Feature: Add an option to clear the selection buffer.
 * Feature: Add a menu item to show/hide main window and
                a popup menu for tray icon.
 * Feature: Add hotkeys for first/last connections.
-* Feature: Simply implement proxy client for SOCKSv4 and SOCKSv5.
-* Feature: Auto-login support.
+* Feature: Implement a simple proxy client for SOCKSv4 and SOCKSv5.
+* Feature: Auto-login support for external SSH connections.
 * Feature: Use GtkStatusIcon instead of deprecated and external EggTrayIcon
            if gtk+ version >= 2.10.
 * Feature: Several GNU toolchain tweaks: increasing efficiency layout,
            reducing relocations in the libraries, ld's "--as-needed" + "-Wl,-O1".
-* Bugfix: Unusable JumpToPage hotkeys.
-* Bugfix: Discard chars exceeding the last colum to confirm some BBS welcome
-          pages like bbs.zixia.net rendering well.
-* Bugfix: ASCII art renders incorrectly.
+* Bugfix: Unusable JumpToPage hotkeys in full-screen mode.
+* Bugfix: Some ASCII art renders incorrectly.
+* Bugfix: Unusable hotkey for "Copy".
+* Bugfix: Missing the last character of each line when copying multi-line contents.
 * Bugfix: SegFault while processing telnet escape sequence "*[1K".
 * Bugfix: Nonpersistent "DetectDBChar" preference.
 * Bugfix: gcc 4.3 and conditional configurations (docklet, mouse, nancy)
