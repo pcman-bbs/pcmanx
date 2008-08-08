@@ -1,7 +1,7 @@
 Version 0.3.8 - ?
 
 * Feature: Download BBS article.
-* Feature: Firefox 3 (xulrunner 1.9) support.
+* Feature: Firefox 3 (xulrunner 1.9) plugin support.
 * Feature; Switch among normal/fullscreen/simple modes.
 * Feature: Add a menu item to show/hide main window and
                a popup menu for tray icon.
@@ -25,7 +25,7 @@ Version 0.3.7 - January 2008
 
 * Feature: Let Firefox plugin use font config under ~/pcmanx/pcmanx
 * Feature: IP location lookup (need qqwry.dat and mouse support), which is
-           mainly for simpified chinese users.
+           mainly for Simpified Chinese users.
 * Bugfix: Blank BBS list if updating BBS list fails.
 * Bugfix: Firefox plugin cannot run.
 * Bugfix: Strip the leading nd trailing space of URL detection.
@@ -33,9 +33,9 @@ Version 0.3.7 - January 2008
 
 Version 0.3.6 - August 2007
 
-* Feature: ASCII art with programming support
-* Feature: Support libnotify
-* Bugfix: Screen center align
+* Feature: Improve ASCII art with programming support.
+* Feature: Support libnotify for popup BBS incoming messages.
+* Bugfix: Screen center alignment.
 
 
 Version 0.3.5 - August 2006
