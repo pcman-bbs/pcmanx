@@ -1,6 +1,9 @@
 2008-08-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* configure.ac: Bump to 0.3.8
+	* NEWS: Adjust 0.3.8 to August.
+	* po/POTFILES.in,
+	po/POTFILES.skip: Fix some error when make distcheck.
 
 2008-08-08  Jim Huang  <jserv.tw@gmail.com>
 
