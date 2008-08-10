@@ -2,6 +2,11 @@
 
 	* Makefile.am: Fix the release problem of `./configure --enable-plugin`
 	after `make dist-bzip2`.
+	* Makefile.am,
+	plugin/Makefile.am,
+	plugin/data/Makefile.am,
+	plugin/src/Makefile.am: Fix the release problem of `./configure
+	--enable-plugin` after `make dist-bzip2`.
 
 2008-08-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
