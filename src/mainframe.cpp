@@ -973,7 +973,9 @@ void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
-//	bool show_tray_icon = AppConfig.ShowTrayIcon;
+#ifdef USE_DOCKLET
+	bool show_tray_icon = AppConfig.ShowTrayIcon;
+#endif
 	CPrefDlg* dlg = new CPrefDlg(_this);
 	dlg->ShowModal();
 	dlg->Destroy();
@@ -987,13 +989,14 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 #if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
 #endif
-//	FIXME: Currently we cannot freely hide or show tray icon.
-/*	if( AppConfig.ShowTrayIcon != show_tray_icon )
+
+#ifdef USE_DOCKLET
+	if( AppConfig.ShowTrayIcon != show_tray_icon )
 		if(AppConfig.ShowTrayIcon)
 			_this->ShowTrayIcon();
 		else
 			_this->HideTrayIcon();
-*/
+#endif
 }
 
 
