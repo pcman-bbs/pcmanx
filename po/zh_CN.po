@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2008-08-11 22:31+0800\n"
+"POT-Creation-Date: 2008-08-11 22:40+0800\n"
 "PO-Revision-Date: 2006-03-12 22:16+0800\n"
 "Last-Translator: Jason Xia <jasonxh@gmail.com>\n"
 "Language-Team: \n"
@@ -602,11 +602,3 @@ msgstr "另存为"
 #, c-format
 msgid "Error saving file '%s': %s"
 msgstr "保存文件'%s‘出错：%s"
-
-#: ../src/docklet/eggtrayicon.c:138
-msgid "Orientation"
-msgstr ""
-
-#: ../src/docklet/eggtrayicon.c:139
-msgid "The orientation of the tray."
-msgstr ""

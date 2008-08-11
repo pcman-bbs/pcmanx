@@ -1,5 +1,13 @@
 2008-08-11  Jim Huang  <jserv.tw@gmail.com>
 
+	* po/POTFILES.in,
+	po/POTFILES.skip:  Translating the messages in source file
+	src/docklet/eggtrayicon.c is useless.  Ignored.
+
+	* po/zh_TW.po, po/zh_CN.po: Re-generated.
+
+2008-08-11  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/mainframe.cpp (CMainFrame::OnPreference): It should be able to
 	work while hiding or showing tray icon immediately.
 

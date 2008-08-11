@@ -9,4 +9,3 @@ src/view/telnetview.cpp
 src/emoticondlg.cpp
 src/autologinpage.cpp
 src/downarticledlg.cpp
-src/docklet/eggtrayicon.c
