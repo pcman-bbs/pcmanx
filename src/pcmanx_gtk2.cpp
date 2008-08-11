@@ -143,6 +143,8 @@ int main(int argc, char *argv[])
 #ifdef USE_DOCKLET
 	if( AppConfig.ShowTrayIcon )
 		main_frm->ShowTrayIcon();
+	else
+		main_frm->HideTrayIcon();
 #endif
 
 #ifdef USE_NOTIFIER

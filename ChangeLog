@@ -1,3 +1,8 @@
+2008-08-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/pcmanx_gtk2.cpp (main): Correctly hide tray icon according to
+	the settings.
+
 2008-08-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* Makefile.am: Fix the release problem of `./configure --enable-plugin`
