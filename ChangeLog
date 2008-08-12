@@ -1,5 +1,10 @@
 2008-08-12  Jim Huang  <jserv.tw@gmail.com>
 
+	* developers/make-new-release.sh: New file.  A simple and neat script
+	for developers to prepare new release more carefully.
+
+2008-08-12  Jim Huang  <jserv.tw@gmail.com>
+
 	* src/downarticledlg.cpp: Fix missing <string.h> inclusion with
 	older system headers.
 
