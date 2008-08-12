@@ -1,3 +1,8 @@
+2008-08-12  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/downarticledlg.cpp: Fix missing <string.h> inclusion with
+	older system headers.
+
 2008-08-11  Jim Huang  <jserv.tw@gmail.com>
 
 	* po/POTFILES.in,

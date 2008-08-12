@@ -19,6 +19,10 @@
 #include "downarticledlg.h"
 #include <fstream>
 #include <cerrno>
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#include <string.h>
 
 #define CUSTOM_RESPONSE_COPY 1
 #define CUSTOM_RESPONSE_SAVE 2
