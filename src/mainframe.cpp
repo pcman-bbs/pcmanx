@@ -39,6 +39,7 @@
 #include "appconfig.h"
 #include "sitelistdlg.h"
 #include "emoticondlg.h"
+#include "downarticledlg.h"
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -61,19 +62,23 @@
 #include "docklet/api.h"
 
 void CMainFrame::OnTrayButton_Toggled(
-	GtkToggleButton *button,
+	GtkToggleButton *button UNUSED,
 	CMainFrame *_this)
 {
-	static bool hide_next_time = TRUE;
-	if (hide_next_time) {
-		_this->Hide();
-		hide_next_time = FALSE;
-	}
-	else {
-		_this->Show();
-		hide_next_time = TRUE;
-	}
+	GtkToggleAction *action = (GtkToggleAction*) gtk_action_group_get_action(
+				_this->m_ActionGroup, "showhide");
+	gtk_toggle_action_set_active(action,
+			! gtk_toggle_action_get_active(action));
 }
+
+void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	if (gtk_toggle_action_get_active(toggleaction))
+		_this->Show();
+	else
+		_this->Hide();
+}
+#endif
 
 /*
 void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
@@ -84,6 +89,17 @@ void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocati
 }
 */
 
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+void CMainFrame::OnTray_Popup(GtkStatusIcon *status_icon UNUSED,
+                              guint button, guint activate_time,
+                              CMainFrame *_this)
+{
+	gtk_menu_popup((GtkMenu*)_this->m_TrayPopup, NULL, NULL, NULL, NULL
+			, button, activate_time);
+}
+
+#else
 void CMainFrame::set_tray_icon()
 {
         int panel_w;
@@ -116,6 +132,7 @@ void CMainFrame::set_tray_icon()
         g_object_unref (tray_icon_pixbuf);
 }
 #endif
+#endif
 
 #ifdef USE_WGET
 bool CMainFrame::g_bIsUpateHandlerExisted = false;
@@ -123,13 +140,14 @@ bool CMainFrame::g_bUpdateingBBSList = false;
 #endif
 CMainFrame* CMainFrame::g_pMyself = NULL;
 
-gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this )
+gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
+                             CMainFrame* _this UNUSED )
 {
 	gtk_window_get_position( GTK_WINDOW(widget), &AppConfig.MainWndX, & AppConfig.MainWndY );
 	AppConfig.MainWndW = evt->width;
 	AppConfig.MainWndH = evt->height;
-	INFO("x=%d, y=%d, w=%d, h=%d\n", evt->x, evt->y, evt->width, evt->height );
-	INFO("get_pos: x=%d, y=%d\n", AppConfig.MainWndX, AppConfig.MainWndY );
+	INFO("x=%d, y=%d, w=%d, h=%d", evt->x, evt->y, evt->width, evt->height );
+	INFO("get_pos: x=%d, y=%d", AppConfig.MainWndX, AppConfig.MainWndY );
 	return false;
 }
 
@@ -139,6 +157,7 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
+	m_Mode = NORMAL_MODE;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	PostCreate();
@@ -149,29 +168,6 @@ CMainFrame::CMainFrame()
 #endif
 
 	LoadIcons();
-
-#ifdef USE_DOCKLET
-	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
-
-	m_TrayButton = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
-	gtk_widget_show (m_TrayButton);
-
-	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-
-/*
-	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
-*/
-
-	m_TrayIcon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
-	gtk_widget_show (m_TrayIcon);
-
-	set_tray_icon();
-#endif
 
 
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
@@ -281,45 +277,59 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	return pCon;
 }
 
-GtkActionEntry CMainFrame::entries[] =
+GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
-    {"connect_menu", NULL, _("_Connect")},
-    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+    {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
+    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
 #ifdef USE_WGET
-    {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
+    {"update_bbs_list", GTK_STOCK_REFRESH, _("_Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
 #endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+    {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
-    {"next_con", GTK_STOCK_GO_DOWN, _("Next Page"), "<Alt>X", NULL, G_CALLBACK (CMainFrame::OnNextCon)},
-    {"previous_con", GTK_STOCK_GO_UP, _("Previous Page"), "<Alt>Z", NULL, G_CALLBACK (CMainFrame::OnPrevCon)},
-    {"jump", GTK_STOCK_JUMP_TO, _("_Jump to")},
-    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", NULL, G_CALLBACK (CMainFrame::OnQuit)},
-    {"edit_menu", NULL, _("_Edit")},
+    {"close2", GTK_STOCK_CLOSE, _("_Close Connection"), "<Ctrl>Delete", _("Close Connection"), G_CALLBACK(CMainFrame::OnCloseCon)},
+    {"next_con", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Alt>X", _("Next Page"), G_CALLBACK (CMainFrame::OnNextCon)},
+    {"next_con1", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Right", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
+    {"previous_con", GTK_STOCK_GO_UP, _("_Previous Page"), "<Alt>Z", _("Previous Page"), G_CALLBACK (CMainFrame::OnPrevCon)},
+    {"previous_con1", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Left", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
+    {"first_con",GTK_STOCK_GO_UP, _("_First Page"),"<Ctrl>Home", _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
+    {"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), "<Ctrl>End", _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
+    {"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
+    {"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
     {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
     {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
     {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
+    {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
     {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
     {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
-    {"favorites_menu", NULL, _("F_avorites")},
+    {"favorites_menu", NULL, _("F_avorites"), NULL, NULL, NULL},
     {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
-    {"view_menu", NULL, _("_View")},
+    {"view_menu", NULL, _("_View"), NULL, NULL, NULL},
     {"font", GTK_STOCK_SELECT_FONT,  _("_Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
     {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFontEn)},
 #ifdef USE_NANCY
-    {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)")},
-    {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)")},
+    {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
+    {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
 #endif
-    {"help_menu", NULL, _("_Help")},
-    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)}
+    {"help_menu", NULL, _("_Help"), NULL, NULL, NULL},
+    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
+    // Fullscreen Mode
+    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
+    // Simple Mode
+    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode)}
   };
 
-GtkToggleActionEntry CMainFrame::fullscreen_mode_entries[] =
+GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
-    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false}
+#ifdef USE_DOCKLET
+    // Show/Hide Main Window
+    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true}
+#endif
 };
 
 #ifdef USE_NANCY
@@ -350,6 +360,8 @@ static const char *ui_info =
   "      <separator/>"
   "      <menuitem action='next_con'/>"
   "      <menuitem action='previous_con'/>"
+  " <menuitem action='first_con'/>"
+  " <menuitem action='last_con'/>"
   "      <menuitem action='jump'/>"
   "      <separator/>"
   "      <menuitem action='quit'/>"
@@ -360,6 +372,7 @@ static const char *ui_info =
   "      <menuitem action='paste'/>"
   "      <menuitem action='paste_from_clipboard'/>"
   "      <menuitem action='select_all'/>"
+  "      <menuitem action='down_article'/>"
   "      <separator/>"
   "      <menuitem action='emoticon'/>"
   "      <menuitem action='preference'/>"
@@ -372,7 +385,12 @@ static const char *ui_info =
   "    <menu action='view_menu'>"
   "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
+  "      <separator/>"
+#ifdef USE_DOCKLET
+  "      <menuitem action='showhide'/>"
+#endif
   "      <menuitem action='fullscreen' />"
+  "      <menuitem action='simple' />"
 #ifdef USE_NANCY
   "      <separator/>"
   "      <menu action='cur_bot_menu'>"
@@ -399,42 +417,61 @@ static const char *ui_info =
   "    <toolitem action='copy'/>"
   "    <toolitem action='copy_with_ansi'/>"
   "    <toolitem action='paste'/>"
+  "    <toolitem action='down_article'/>"
   "    <separator/>"
   "    <toolitem action='add_to_fav'/>"
   "    <toolitem action='preference'/>"
+#ifdef USE_WGET
   "    <toolitem action='update_bbs_list'/>"
+#endif
   "    <toolitem action='about'/>"
   "    <separator/>"
   "  </toolbar>"
-  "  <popup>"
+  "  <popup name='edit_popup'>"
   "    <menuitem action='copy'/>"
   "    <menuitem action='copy_with_ansi'/>"
   "    <menuitem action='paste'/>"
   "    <menuitem action='paste_from_clipboard'/>"
   "    <menuitem action='select_all'/>"
   "    <separator/>"
+  "    <menuitem action='fullscreen' />"
+  "    <menuitem action='simple' />"
   "  </popup>"
+#if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
+  "  <popup name='tray_popup'>"
+  "    <menuitem action='showhide' />"
+  "    <separator />"
+  "    <menuitem action='quit'/>"
+  "  </popup>"
+  " <accelerator action='showhide' />"
+#endif
+
+  // alternative accelerators
+  " <accelerator action='close2'/>"
+  " <accelerator action='reconnect1'/>"
+  " <accelerator action='next_con1'/>"
+  " <accelerator action='previous_con1'/>"
   "</ui>";
 
 void CMainFrame::MakeUI()
 {
-  GtkActionGroup * action_group = gtk_action_group_new("GlobalActions");
+  m_ActionGroup = gtk_action_group_new("GlobalActions");
 
-  gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+  gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
 
-  gtk_action_group_add_actions(action_group, entries, G_N_ELEMENTS(entries), this);
+  gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
 
-  gtk_action_group_add_toggle_actions(action_group, fullscreen_mode_entries,
-		  		      G_N_ELEMENTS(fullscreen_mode_entries), this);
-
+  gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
+		  		      G_N_ELEMENTS(m_ToggleActionEntries), this);
+  
 #ifdef USE_NANCY
-  gtk_action_group_add_radio_actions(action_group,
+  gtk_action_group_add_radio_actions(m_ActionGroup,
 				     cur_bot_entries,
 				     G_N_ELEMENTS(cur_bot_entries),
 				     0,
 				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
 				     this);
-  gtk_action_group_add_radio_actions(action_group,
+  gtk_action_group_add_radio_actions(m_ActionGroup,
 				     all_bot_entries,
 				     G_N_ELEMENTS(all_bot_entries),
 				     0,
@@ -443,7 +480,7 @@ void CMainFrame::MakeUI()
 #endif
 
   m_UIManager = gtk_ui_manager_new();
-  gtk_ui_manager_insert_action_group(m_UIManager, action_group, 0);
+  gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
 
   GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
   gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
@@ -459,7 +496,7 @@ void CMainFrame::MakeUI()
   m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
   gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 
-  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/popup");
+  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
     
   m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
@@ -485,19 +522,19 @@ void CMainFrame::MakeUI()
   const char* page_str = _("Page");
   for(int i = 1; i < 11; i++)
     {
-      long keyval = (i == 10 ? GDK_0 : GDK_0 + +i);
-      char title[32];
-      sprintf(title, "%s _%d", page_str, i);
-      
-      GtkWidget* jump_item = m_JumpMenuItems[i-1] = gtk_menu_item_new_with_mnemonic ( title );
-      gtk_widget_show (jump_item);
-      gtk_container_add (GTK_CONTAINER (jump_menu), jump_item);
-      gtk_widget_add_accelerator (jump_item, "activate", accel_group,
-				  keyval, (GdkModifierType) GDK_MOD1_MASK,
-				  GTK_ACCEL_VISIBLE);
-      g_signal_connect( G_OBJECT(jump_item), "activate",
-			G_CALLBACK (CMainFrame::OnJumpToPage),
-			this);
+      char title[32], name[32];
+      sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
+      sprintf(name, "jumpto_%d", i);
+      GtkAction *action = gtk_action_new(name, title, NULL, NULL);
+      gtk_action_set_accel_group(action, accel_group);
+      g_signal_connect( G_OBJECT(action), "activate",
+                        G_CALLBACK (CMainFrame::OnJumpToPage),
+                        this);
+      sprintf(name, "<Alt>%d", i % 10);
+      gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
+      gtk_container_add (GTK_CONTAINER (jump_menu),
+		      gtk_action_create_menu_item(action));
+      m_JumpTos[i-1] = G_OBJECT(action);
     }
 
   GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
@@ -529,9 +566,44 @@ void CMainFrame::MakeUI()
   
   CreateFavoritesMenu();
   
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	m_TrayIcon = gtk_status_icon_new();
+	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
+
+	// Setup popup menu
+	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
+	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
+			G_CALLBACK (CMainFrame::OnTray_Popup), this);
+
+	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+#else
+	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
+
+	m_TrayButton = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
+	gtk_widget_show (m_TrayButton);
+
+	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+
+/*
+	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+*/
+
+	m_TrayIcon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
+	gtk_widget_show (m_TrayIcon);
+	set_tray_icon();
+#endif
+#endif
 }
 
-void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnNewCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), NULL, true );
 	if( dlg->ShowModal() == GTK_RESPONSE_OK && !dlg->GetText().empty() )
@@ -541,7 +613,7 @@ void CMainFrame::OnNewCon(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->Destroy();
 }
 
-void CMainFrame::OnQuit(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnQuit(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	if( _this->CanClose() )
 	{
@@ -563,7 +635,7 @@ void CMainFrame::LoadIcons()
 }
 
 
-void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
 	gtk_window_set_modal( (GtkWindow*)dlg, true);
@@ -615,7 +687,7 @@ void CMainFrame::OnFont(GtkMenuItem* mitem, CMainFrame* _this)
 		gtk_widget_destroy(dlg);
 }
 
-void CMainFrame::OnFontEn(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
 	gtk_window_set_modal( (GtkWindow*)dlg, true);
@@ -667,18 +739,17 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem, CMainFrame* _this)
 		gtk_widget_destroy(dlg);
 }
 
-void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
+void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
-	if(gtk_toggle_action_get_active(action))
-	{
+	if (_this->m_Mode != FULLSCREEN_MODE) {
+		_this->m_Mode = FULLSCREEN_MODE;
 		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
-	}
-	else
-	{
+	} else {
+		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
@@ -687,7 +758,26 @@ void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
 	}
 }
 
-void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+{
+	if (_this->m_Mode != SIMPLE_MODE) {
+		_this->m_Mode = SIMPLE_MODE;
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->HideTabs();
+	} else {
+		_this->m_Mode = NORMAL_MODE;
+		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		_this->m_pNotebook->ShowTabs();
+	}
+}
+
+void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	char* authors = _(
 			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
@@ -696,7 +786,8 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
-			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
+			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>\n"
+			"Jason Xia (Developer) <jasonxh@gmail.com>"
 			);
 	char* translators = _( "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>" );
 
@@ -760,7 +851,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 			stat_pid = wait(&stat_val);
 #ifdef USE_DEBUG
 			if (child_pid != stat_pid)
-				DEBUG("child_pid=%d stat_pid=%d stat_val=%d\n", child_pid, stat_pid, stat_val);
+				DEBUG("child_pid=%d stat_pid=%d stat_val=%d", child_pid, stat_pid, stat_val);
 #endif
 		}
 	}
@@ -790,14 +881,14 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 }
 #endif
 
-void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem, CMainFrame* pMainFrame)
+void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* pMainFrame)
 {
 	CTelnetView* t_pView = pMainFrame->GetCurView();
 	if (t_pView != NULL)
 		t_pView->PasteFromClipboard(true);
 }
 
-void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnCloseCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CTelnetCon* con = _this->GetCurCon();
 	if( !con )
@@ -816,7 +907,7 @@ void CMainFrame::OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnCopy(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	if( _this->GetCurView() )
 	{
@@ -830,7 +921,7 @@ void CMainFrame::OnCopy(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	if( _this->GetCurView() )
 	{
@@ -844,22 +935,43 @@ void CMainFrame::OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnNextCon(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnNextCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	int i = _this->GetNotebook()->GetCurPage() + 1;
 	int n = _this->GetNotebook()->GetPageCount();
 	_this->GetNotebook()->SetCurPage( i < n ? i : 0 );
 }
 
+void CMainFrame::OnFirstCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+{
+	_this->GetNotebook()->SetCurPage( 0 );
+}
 
-void CMainFrame::OnPaste(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnLastCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+{
+	int n = _this->GetNotebook()->GetPageCount();
+	_this->GetNotebook()->SetCurPage( n - 1 );
+}
+
+void CMainFrame::OnPaste(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	if(_this->GetCurView())
 		_this->GetCurView()->PasteFromClipboard(false);
 }
 
+void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+{
+	CTelnetCon *con = _this->GetCurCon();
+	if (!con)
+		return;
 
-void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
+	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con);
+	//dlg->Show();
+	dlg->ShowModal();
+	dlg->Destroy();
+}
+
+void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 //	bool show_tray_icon = AppConfig.ShowTrayIcon;
 	CPrefDlg* dlg = new CPrefDlg(_this);
@@ -885,7 +997,7 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnPrevCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	int i = _this->GetNotebook()->GetCurPage() - 1;
 	int n = _this->GetNotebook()->GetPageCount();
@@ -893,7 +1005,7 @@ void CMainFrame::OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this)
 
 }
 
-void CMainFrame::OnSiteList(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnSiteList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CSiteListDlg* dlg = new CSiteListDlg(_this);
 	dlg->ShowModal();
@@ -901,11 +1013,11 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem, CMainFrame* _this)
 }
 
 
-void CMainFrame::OnJumpToPage(GtkWidget* widget, CMainFrame* _this)
+void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, widget=%x, _this->m_JumpMenuItems[0]=%x\n", widget, _this->m_JumpMenuItems[0]);
+	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x", obj, _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
-		if( widget == _this->m_JumpMenuItems[i] )
+		if( obj == _this->m_JumpTos[i] )
 		{
 			_this->GetNotebook()->SetCurPage(i);
 			break;
@@ -961,12 +1073,17 @@ void CMainFrame::OnTelnetConRecv(CTelnetView* con)
 }
 
 
-void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this)
+void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget UNUSED,
+                                         GtkNotebookPage* page UNUSED,
+                                         gint page_num,
+                                         CMainFrame* _this)
 {
 	_this->SetCurView( _this->m_Views[page_num] );
 }
 
-gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget, GdkEventButton *event, gpointer p_mainframe)
+gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
+                                         GdkEventButton *event,
+                                         gpointer p_mainframe)
 {
        static GtkWidget *menu = NULL;
 
@@ -1019,7 +1136,7 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget, GdkEventButton *even
 }
 
 
-void CMainFrame::CloseCon(int idx, bool confirm)
+void CMainFrame::CloseCon(int idx, bool confirm UNUSED)
 {
 	m_pNotebook->RemovePage(idx);
 	m_Views.erase( m_Views.begin() + idx );
@@ -1044,7 +1161,9 @@ gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 }
 
 
-gboolean CMainFrame::OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this )
+gboolean CMainFrame::OnClose( GtkWidget* widget UNUSED,
+                              GdkEvent* evt UNUSED,
+                              CMainFrame* _this )
 {
 	return !_this->CanClose();
 }
@@ -1056,9 +1175,17 @@ void CMainFrame::OnDestroy()
 	g_source_remove( m_EverySecondTimer );
 
 	Hide();
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	g_object_unref( m_TrayIcon );
+#else
 	gtk_widget_destroy( GTK_WIDGET(m_TrayIcon_Instance) );
+#endif
+#endif
 
-	while( g_main_context_iteration(NULL, FALSE) );
+	//while( g_main_context_iteration(NULL, FALSE) );
+	while (gtk_events_pending())
+		gtk_main_iteration();
 
 	CWidget::OnDestroy();
 
@@ -1102,7 +1229,8 @@ void CMainFrame::NotImpl(const char* str)
 }
 
 
-void CMainFrame::OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this)
+void CMainFrame::OnAddToFavorites(GtkMenuItem* widget UNUSED,
+                                  CMainFrame* _this)
 {
 	if(_this->m_Views.empty() )
 		return;
@@ -1133,7 +1261,7 @@ void CMainFrame::OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this)
 	dlg->Destroy();
 }
 
-void CMainFrame::OnEditFavorites(GtkMenuItem* widget, CMainFrame* _this)
+void CMainFrame::OnEditFavorites(GtkMenuItem* widget UNUSED, CMainFrame* _this)
 {
 	CEditFavDlg* dlg = new CEditFavDlg(_this, AppConfig.Favorites);
 	dlg->ShowModal();
@@ -1261,7 +1389,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 
 }
 
-void CMainFrame::OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnSelectAll(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CTelnetCon* con = _this->GetCurCon();
 	if( con )
@@ -1302,7 +1430,7 @@ gboolean CMainFrame::OnEverySecondTimer(CMainFrame* _this)
 	return true;
 }
 
-void CMainFrame::OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnEmoticons(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CEmoticonDlg* dlg = new CEmoticonDlg(_this);
 	if( dlg->ShowModal() == GTK_RESPONSE_OK )
@@ -1314,7 +1442,7 @@ void CMainFrame::OnEmoticons(GtkMenuItem* mitem, CMainFrame* _this)
 	dlg->Destroy();
 }
 
-void CMainFrame::OnReconnect(GtkMenuItem* mitem, CMainFrame* _this)
+void CMainFrame::OnReconnect(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CTelnetCon* con = _this->GetCurCon();
 	if( !con )
@@ -1332,7 +1460,9 @@ void CMainFrame::FlashWindow( bool flash )
 }
 
 
-gboolean CMainFrame::OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this )
+gboolean CMainFrame::OnActivated( GtkWidget* widget UNUSED,
+                                  GdkEventFocus* evt UNUSED,
+                                  CMainFrame* _this )
 {
 	if( _this->m_IsFlashing )
 		_this->FlashWindow(false);
@@ -1363,7 +1493,9 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	return false;
 }
 
-gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this)
+gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry,
+                                         GdkEventFocus* evt UNUSED,
+                                         CMainFrame* _this)
 {
 	if( _this && _this->GetCurView() )
 	{
@@ -1394,7 +1526,9 @@ void CMainFrame::SwitchToCon(CTelnetCon* con)
 
 #ifdef USE_NANCY
 
-void CMainFrame::OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *current, CMainFrame* _this)
+void CMainFrame::OnChangeCurrentBot(GtkRadioAction *action UNUSED,
+                                    GtkRadioAction *current,
+                                    CMainFrame* _this)
 {
   CTelnetCon* con = _this->GetCurCon();
   if( !con ) return;
@@ -1406,7 +1540,9 @@ void CMainFrame::OnChangeCurrentBot(GtkRadioAction *action, GtkRadioAction *curr
   _this->UpdateBotStatus();
 }
 
-void CMainFrame::OnChangeAllBot(GtkRadioAction *action, GtkRadioAction *all, CMainFrame* _this)
+void CMainFrame::OnChangeAllBot(GtkRadioAction *action UNUSED,
+                                GtkRadioAction *all,
+                                CMainFrame* _this)
 {
   if( _this->m_Views.empty() ) return;
   gboolean use_nancy = ( gtk_radio_action_get_current_value(all) != 0 );

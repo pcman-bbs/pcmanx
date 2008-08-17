@@ -1,3 +1,473 @@
+2008-08-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* Makefile.am: Fix the release problem of `./configure --enable-plugin`
+	after `make dist-bzip2`.
+
+2008-08-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac: Bump to 0.3.8
+	* NEWS: Adjust 0.3.8 to August.
+	* po/POTFILES.in,
+	po/POTFILES.skip: Fix some error when make distcheck.
+
+2008-08-08  Jim Huang  <jserv.tw@gmail.com>
+
+	* NEWS: updated to reflect recent changes.
+
+2008-08-08  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Introduced gcc attribute supports: const, noreturn,
+	packed, and unused.
+
+	* src/emoticondlg.cpp (CEmoticonDlg::OnDown) (CEmoticonDlg::OnAdd)
+	(CEmoticonDlg::OnEdit) (CEmoticonDlg::OnRemove) (CEmoticonDlg::OnUp)
+	(CEmoticonDlg::SaveEmoticon) (CEmoticonDlg::OnListRowActivated),
+	src/core/termdata.cpp (CTermData::OnLineModified),
+	src/core/termview.cpp (on_key_pressed) (on_im_commit) (on_mouse_down)
+	(on_mouse_up) (on_mouse_move) (on_mouse_scroll)
+	(CTermView::OnBeforeDestroy) (CTermView::OnSetFocus)
+	(CTermView::OnKeyDown) (CTermView::OnTextInput)
+	(CTermView::DrawSpaceFillingChar) (CTermView::OnSize)
+	(CTermView::ExtendSelection) (CTermView::OnMouseMove)
+	(CTermView::OnMouseScroll) (CTermView::OnRButtonDown)
+	(CTermView::OnRButtonUp) (CTermView::OnKillFocus)
+	(CTermView::PreKeyDown) (CTermView::OnMButtonDown)
+	(CTermView::DoPasteFromClipboard) (CTermView::OnHyperlinkClicked),
+	src/core/view.cpp (on_expose) (on_configure) (on_focus_in)
+	(on_focus_out) (CView::OnSize) (CView::OnSetFocus)
+	(CView::OnKillFocus),
+	src/core/widget.cpp (on_create) (on_destroy),
+	src/editfavdlg.cpp (CEditFavDlg::OnAdd) (CEditFavDlg::OnEdit)
+	(CEditFavDlg::OnRemove) (CEditFavDlg::OnUp) (CEditFavDlg::OnDown)
+	(CEditFavDlg::OnRowActivated),
+	src/view/telnetcon.h (CDNSRequest),
+	src/view/telnetview.cpp (on_hyperlink_copy) (CTelnetView::PreKeyDown),
+	src/view/telnetcon.cpp (CTelnetCon::OnSocket)
+	(CTelnetCon::ProcessDNSQueue) (CTelnetCon::OnProcessDNSQueueExit),
+	src/mainframe.cpp (CMainFrame::OnTrayButton_Toggled)
+	(CMainFrame::OnTray_Popup) (CMainFrame::OnSize) (CMainFrame::OnNewCon)
+	(CMainFrame::OnQuit) (CMainFrame::OnFont) (CMainFrame::OnFontEn)
+	(CMainFrame::OnFullscreenMode) (CMainFrame::OnSimpleMode)
+	(CMainFrame::OnAbout) (CMainFrame::pasteFromClipboard)
+	(CMainFrame::OnCloseCon) (CMainFrame::OnCopy)
+	(CMainFrame::OnCopyWithColor) (CMainFrame::OnNextCon)
+	(CMainFrame::OnFirstCon) (CMainFrame::OnLastCon) (CMainFrame::OnPaste)
+	(CMainFrame::OnDownArticle) (CMainFrame::OnPreference)
+	(CMainFrame::OnPrevCon) (CMainFrame::OnSiteList)
+	(CMainFrame::OnNotebookChangeCurPage)
+	(CMainFrame::OnNotebookPopupMenu) (CMainFrame::CloseCon)
+	(CMainFrame::OnClose) (CMainFrame::OnAddToFavorites)
+	(CMainFrame::OnEditFavorites) (CMainFrame::OnSelectAll)
+	(CMainFrame::OnEmoticons) (CMainFrame::OnReconnect)
+	(CMainFrame::OnActivated) (CMainFrame::OnURLEntryKillFocus)
+	(CMainFrame::OnChangeCurrentBot) (CMainFrame::OnChangeAllBot),
+	src/dialog.cpp (CDialog::OnCommand),
+	src/sitelistdlg.cpp (CSiteListDlg::OnSearch) (CSiteListDlg::OnConnect)
+	(CSiteListDlg::OnClose) (CSiteListDlg::OnRowActivated)
+	(CSiteListDlg::OnKeywordActivate): Mark __attribute__(unused) in
+	parameters via "UNUSED" macro.  Due to current mechanisms binding Gtk+
+	into C++ programs, the above methods show that the parameter passing
+	is somehow aweful, and it would be helpful if we are going to
+	eliminate the complexity.
+
+	* src/core/termdata.cpp (struct ReadStatus) (GetChangedAttrStr),
+	src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc),
+	src/core/termview.cpp (CTermView::CopyToClipboard),
+	src/pcmanx_gtk2.cpp (GOptionEntry entries[]) (main),
+	src/view/telnetcon.cpp (CTelnetCon::Close),
+	src/mainframe.cpp (CMainFrame::m_ActionEntries[]): Sweep
+	casting warnings.
+
+2008-08-06  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termdata.cpp (CTermData::EraseLine): Fix a segmentation
+	fault when processing telnet escape sequence "*[1K".
+
+2008-08-06  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW.po: updated to reflects recent changes about "Download
+	Article".
+
+2008-08-04  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc)
+	src/core/termdata.cpp (CTermData::LineFeed): Fix "Download Article"
+	for PTT site.
+
+2008-07-31  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::CDownArticleDlg)
+	(CDownArticleDlg::DownArticleFunc) (CDownArticleDlg::SaveAs): UI
+	tunings: rearrange button order, and others.
+
+	* po/zh_CN.po, po/zh_TW.po: Update translations.
+
+2008-07-30  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc): Fix a
+	potential segmentation fault when conversion fails.
+
+2008-07-30  Jason Xia  <jasonxh@gmail.com>
+
+	* src/Makefile.am, src/downarticledlg.cpp, src/downarticledlg.h,
+	src/mainframe.cpp, src/mainframe.h, src/core/termdata.cpp,
+	src/core/termdata.h: Initial effort to implement the "Download
+	Article" feature.
+
+	* src/pcmanx_gtk2.cpp (main), src/mainframe.cpp
+	(CMainFrame::OnDestroy): Ensure Gdk thread safty.
+
+	* po/POTFILES.in, po/zh_CN.po, po/zh_TW.po: Update translations. Need
+	translations for the new messages in zh_TW locale.
+
+2008-07-27  Jason Xia  <jasonxh@gmail.com>
+
+	* plugin/src/plugin.cpp (NS_PluginInitialize) (NS_PluginShutdown)
+	(nsPluginInstance::init) (nsPluginInstance::shut): Wrong place for
+	initializing and cleaning up static members, which potentially leads
+	to segmentation fault when refreshing a telnet page.
+
+2008-07-26  Jason Xia  <jasonxh@gmail.com>
+
+	* configure.ac: Fix a compatibility bug introduced in r418 with
+	xulrunner older than 1.9. (mozilla plugin)
+
+2008-07-25  Jason Xia  <jasonxh@gmail.com>
+
+	* configure.ac, plugin/src/nsScriptablePeer.h: Add support for
+	xulrunner 1.9. (mozilla plugin)
+
+2008-06-28  Jason Xia  <jasonxh@gmail.com>
+
+	* src/appconfig.cpp (CAppConfig::DoDataExchange): Fix the bug of
+	nonpersistent "DetectDBChar" preference.
+
+2008-06-19  Jason Xia  <jasonxh@gmail.com>
+
+	* README: Add more detailed information for the configure option
+	--enable-iplookup.
+
+2008-06-04  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/fileutil.c (copyfile): Assign file mode argument passed to
+	open(2).
+	Added GPL license claim.
+
+2008-04-18  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac: Make configure.ac simpler and clear.
+
+2008-04-11  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp,
+	src/mainframe.h: Polish the switch among normal/fullscreen/simple
+	mode.
+
+2008-04-06  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (ui_info):
+	Added fullscreen switch in popup window.
+	Inspired by the idea of DreamerC <dreamerwolf.tw@gmail.com>.
+
+2008-04-05  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termdata.cpp (read_line): Fix the bug of missing the last
+	character of each line when copying multi-line contents.
+
+2008-03-30  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Applied linker optimizations: prevent gaps between
+	symbols due to alignment constraints, presumably increasing
+	efficiency layout.
+
+2008-03-28  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Reduce relocations in the libraries through extra
+	linker optimizations.  This needs GNU ld >= 2.18 .
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/appconfig.h,
+	src/generalprefpage.h,
+	src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault),
+	src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage): Properly
+	handled conditional USE_DOCKLET.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage): Fixlet
+	to conditional USE_MOUSE.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/emoticondlg.cpp: Fix gcc-4.3 build.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/pcmanx_gtk2.cpp (main): Set env G_DEBUG=fatal_warnings to figure
+	out GObject runtime warnings while --enable-debug.
+
+2008-03-23  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnShowHide) (CMainFrame::OnTray_Popup): clear way to wrap
+	conditional USE_DOCKLET implementations.
+	(char *ui_info): Refine menuitem/toolitem actions reflecting
+	conditional USE_DOCKLET and USE_WGET.
+
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
+	* README: Reflected recent modifications.
+
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/termview.h (CopyToClipboard): Declared as virtual function.
+	Prepared for advanced text processing.
+
+2008-03-17  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h: Use dos2unix to remove CRLF.
+
+2008-03-16  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termview.h, src/core/termview.cpp
+	(CTermView::ClearSelection): Add ClearSelection method (using the code
+	segment in OnLButtonDown).
+
+	* src/core/termview.cpp (CTermView::OnLButtonDown),
+	src/view/telnetview.cpp (CTelnetView::OnKeyDown): Make use of
+	ClearSelection. 
+
+	* src/view/telnetview.cpp (CTelnetView::OnKeyDown): Only clear
+	selection if we handled the key event. (Fix the unusable hotkey Alt+O
+	for copy.)
+
+2008-03-16  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/pcmanx_utils.h, src/core/termview.cpp,
+	src/view/telnetview.cpp, src/view/telnetcon.cpp, src/mainframe.cpp,
+	src/notebook.cpp, src/sitelistdlg.cpp: Remove the obsolete INFO macro.
+	Rename INFO_ON to INFO. Remove unnecessary trailing new lines in DEBUG
+	and INFO messages.
+
+2008-03-13  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termdata.cpp (CTermData::PutChar): Discard chars exceeding
+	the last column, rather than automatically insert a line feed. (Fix a
+	bug in the welcome page of bbs.zixia.net)
+
+2008-03-13  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/termdata.cpp (CTermData::EraseLine): Let EraseLine
+	propagate current attribute information till the end of the line. (Fix
+	a bug when showing some ascii arts)
+
+2008-03-13  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW.po: Added translated item for "Show Main Window".
+
+2008-03-09  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::m_ToggleActionEntries): Add mnemonic
+	for "Show Main Window".
+	* po/zh_CN.po, po/zh_TW.po: Update. Add translation for "Show Main
+	Window" in zh_CN. (Need zh_TW translation)
+
+2008-03-09  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.h, src/mainframe.cpp: Add a menu item to show/hide
+	main window. Add a popup menu for tray icon.
+
+2008-03-01  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp,
+	src/mainframe.h: Add a hotkey and a menu item for Simple Mode.
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::entries),
+	po/zh_CN.po, po/zh_TW.po:
+	Fix some small problems with CMainFrame::entries (mnemonics,
+	stock_ids, tooltips) and update translations.
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::entries) (ui_info): Remove duplicate
+	menu items while keeping the alternative accelerators. Remove Ctrl+W
+	due to conflict with BBS posting key combination.
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::MakeUI): Fix wrong mnemonic for menu
+	item "Connect/Jump to/Page 10".
+
+2008-02-21  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.h, src/mainframe.cpp
+	(CMainFrame::m_JumpMenuItems) (CMainFrame::OnJumpToPage)
+	(CMainFrame::MakeUI): Fix unusable JumpToPage hotkeys(ALT+NUM) in
+	full-screen mode.
+
+2008-02-20  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.h
+	(CMainFrame::OnFirstCon) (CMainFrame::OnLastCon): New member functions
+	as callbacks for first/last connections.
+
+	* src/mainframe.cpp
+	(CMainFrame::entries): Improve connection operations.
+	(MainFrame::OnFirstCon) (CMainFrame::OnLastCon): Likewise.
+	Taken from
+	http://into-wild.blogspot.com/2008/01/pcmanx-modification.html .
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/stringutil.h,
+	src/core/stringutil.cpp (strncmpi): Removed.
+	Replaced with strncasecmp. (confirming to POSIX.1-2001)
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/caret.h,
+	src/core/stringutil.cpp,
+	src/core/site.cpp,
+	src/core/termdata.h,
+	src/core/font.cpp,
+	src/core/stringutil.h,
+	src/core/site.h: Use consistent GPL licensing terms.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/qqwryseeker/qqwryseeker.c,
+	src/core/proxy.c,
+	src/core/proxy.h,
+	src/view/telnetcon.h,
+	src/view/telnetcon.cpp,
+	src/script/api.h,
+	src/script/script.cpp,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/botutil.h,
+	src/nancy_bot/nancybot.cpp: Use consistent GPL licensing terms.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/conn_xpm.xpm,
+	src/pcmanx_inverse_xpm.xpm,
+	src/pcmanx_xpm.xpm: Added "const" modifier to turn off annoying
+	warnings.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* Doxygen.in: Fixlet to PROJECT_NAME since we have renamed.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnAbout): Mention Jason Xia.
+
+	* po/zh_TW.po,
+	po/zh_CN.po: Likewise.
+
+2008-02-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Added linker optimizations for GNU toolchain.
+
+2008-01-28  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW: Added translations for iplookup.
+
+2008-01-28  Jason Xia  <jasonxh@gmail.com>
+
+	* src/view/telnetview.cpp (CTelnetView::OnMouseMove): Use i18n for
+	strings of iplookup.
+
+	* po/zh_CN.po, po/zh_TW: Update line numbers and add
+	translations(zh_CN) for strings of iplookup.
+
+2008-01-28  Jason Xia  <jasonxh@gmail.com>
+
+	* configure.ac, src/Makefile.am: Make IP location lookup a
+	configurable feature. Disabled by default.
+
+	* src/core/termdata.cpp (CTermData::CTermData) (CTermData::~CTermData)
+	(CTermData::UpdateDisplay) (DetectIpPatterns)
+	(CTermData::DetectIpAddrs), src/core/termdata.h,
+	src/view/telnetview.cpp (CTelnetView::CTelnetView)
+	(CTelnetView::~CTelnetView) (ipstr2int) (CTelnetView::OnMouseMove):
+	Respect configure options about iplookup.
+
+2008-01-28  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/proxy.c,
+	src/core/proxy.h:  Use consistent GPL licensing terms.
+
+2008-01-28  Jason Xia  <jasonxh@gmail.com>
+
+	* src/core/proxy.c, src/core/proxy.h: New files.
+	A simple proxy client implementation. Currently support SOCKSv4 and
+	SOCKSv5 proxy.
+
+	* configure.ac, src/core/Makefile.am: Configure option and build
+	instructions for proxy.
+
+	* src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::LoadFavorites),
+	src/core/site.cpp (CSite::CSite) (CSite::SaveToFile), src/core/site.h:
+	Load and save config items for site proxy.
+
+	* src/view/telnetcon.cpp (CTelnetCon::ConnectAsync): Handle site proxy
+	preferences. External connections (SSH or Telnet) are not influenced
+	by proxy preferences.
+
+2008-01-26  Jason Xia  <jasonxh@gmail.com>
+
+	* src/view/telnetcon.cpp (CTelnetCon::Connect): Add support for auto
+	login in case only password is needed. (e.g. SSH)
+
+2008-01-09  Emfox Zhou  <emfox@debian.org>
+
+	* src/sitepage.cpp, src/configfile.cpp, src/nancy_bot/msgdata.cpp:
+	directly include essential C++ headers (http://bugs.debian.org/420917)
+
+2008-01-09  Emfox Zhou  <emfox@debian.org>
+
+	* plugin/data/pcmanx.html: convert to unix format other than dos.
+
+2008-01-03  Jim Huang  <jserv@openmoko.org>
+
+	* AUTHORS: Mentioned the contributors of all refered codes.
+
+2008-01-03  Jim Huang  <jserv@openmoko.org>
+
+	* src/docklet/eggtrayicon.c: Disabled if gtk+ version >= 2.10.
+	EggTrayIcon is deprecated. Use GtkStatusIcon instead.
+
+	* src/mainframe.h (CMainFrame::ShowTrayIcon)
+	(CMainFrame::HideTrayIcon) (CMainFrame::m_TrayIcon): Use
+	GtkStatusIcon implementation.
+	(CMainFrame::set_tray_icon) (CMainFrame::m_TrayButton)
+	(CMainFrame::m_TrayIcon): Commented out if gtk+ version >= 2.10.
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Reimplement using
+	GtkStatusIcon.
+	(CMainFrame::OnDestroy) (CMainFrame::set_tray_icon): Likewise.
+
+2008-01-03  Shih-Yuan Lee  <fourdollars@gmail.com>
+
+	* AUTHORS,
+	configure.ac: Fix the compiling error on Gentoo Linux.
+	Patched by Chen Yung Chou <scsichen@gmail.com>.
+
+2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
+
+	* NEWS: Update the release news.
+
 2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
 
 	* src/mainframe.cpp,

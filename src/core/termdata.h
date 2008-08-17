@@ -1,15 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        termdata.h
-// Purpose:     Store terminal screen data and parse ANSI escape sequence
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      pcman.tw@gmail.com
-// Created:     2004.7.16
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by:
-//		Neversay 2005.1.8 (neversay.misher@gmail.com)
-/////////////////////////////////////////////////////////////////////////////
-
+/**
+ * termdata.h - Store terminal screen data and parse
+ *                ANSI escape sequence.
+ *
+ * Copyright (c) 2004-2005 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #ifndef TERMDATA_H
 #define TERMDATA_H
@@ -78,7 +86,9 @@ class CTermCharAttr
 	inline bool IsInverse(){return (m_Inverse==1?true:false);}
 	inline bool IsInvisible(){return (m_Invisible==1?true:false);}
 	inline bool IsHyperLink(){return (m_HyperLink==1?true:false);}
+#ifdef USE_IPLOOKUP
 	inline bool IsIpAddr(){return (m_IpAddr==1?true:false);}
+#endif
 	inline bool IsNeedUpdate(){return (m_NeedUpdate==1?true:false);}
 	inline short GetCharSet(){return (short)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
@@ -108,7 +118,9 @@ class CTermCharAttr
 	inline bool SetInverse(bool flag){m_Inverse = flag?1:0;return flag;}
 	inline bool SetInvisible(bool flag){m_Invisible = flag?1:0;return flag;}
 	inline bool SetHyperLink(bool flag){m_HyperLink = flag?1:0;return flag;}
+#ifdef USE_IPLOOKUP
 	inline bool SetIpAddr(bool flag){m_IpAddr = flag?1:0;return flag;}
+#endif
 	inline bool SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;return flag;}
 	inline bool SetCharSet(enum charset charset){
 		if(charset >= 0){
@@ -154,7 +166,9 @@ private:
 	unsigned char m_Inverse:BIT_NUMBER_OF_BOOL;	//Flag for exchanging color of background and foreground.
 	unsigned char m_Invisible:BIT_NUMBER_OF_BOOL;	// May be removed in the future
 	unsigned char m_HyperLink:BIT_NUMBER_OF_BOOL;	// For hyperlink detection
+#ifdef USE_IPLOOKUP
 	unsigned char m_IpAddr:BIT_NUMBER_OF_BOOL;	// For ip address detection
+#endif
 	unsigned char m_NeedUpdate:BIT_NUMBER_OF_BOOL;	// a flag indicate the need for re-drawing
 	unsigned char m_CharSet:BIT_NUMBER_OF_CHARSET;	// character set, = CS_ASCII, CS_MBCS1, or CS_MBCS2
 	//-------------- 1 byte ----------
@@ -215,7 +229,9 @@ public:
 	string GetLineWithColor( char* pLine, int start, int end );
 	void DetectCharSets();
 	void DetectHyperLinks();
+#ifdef USE_IPLOOKUP
 	void DetectIpAddrs();
+#endif
 	void UpdateDisplay();
 	void DoUpdateDisplay();
 	static void memset16( void* dest, short val, size_t n );
@@ -322,8 +338,13 @@ public:
 	bool m_WaitUpdateDisplay;
 	bool m_NeedDelayedUpdate;
 	guint m_DelayedUpdateTimeout;
+
+	// Accumulative counter for the number of lines received
+	unsigned int m_LineCounter;
 private:
+#ifdef USE_IPLOOKUP
 	regex_t m_RegIp;
+#endif
 };
 inline bool operator == (GdkPoint& pt1, GdkPoint& pt2)
 {	return (pt1.x == pt2.x && pt1.y == pt2.y);	}

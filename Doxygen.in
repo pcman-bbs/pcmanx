@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = pcmanx_gtk2
+PROJECT_NAME           = pcmanx-gtk2
 PROJECT_NUMBER         = @VERSION@
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO

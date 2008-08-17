@@ -130,7 +130,7 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 }
 
 
-void CEditFavDlg::OnAdd(GtkWidget* btn, CEditFavDlg* _this)
+void CEditFavDlg::OnAdd(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 {
 	int i = _this->m_List->GetCurSel() + 1;
 
@@ -147,7 +147,7 @@ void CEditFavDlg::OnAdd(GtkWidget* btn, CEditFavDlg* _this)
 }
 
 
-void CEditFavDlg::OnEdit(GtkWidget* btn, CEditFavDlg* _this)
+void CEditFavDlg::OnEdit(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 )
@@ -164,7 +164,7 @@ void CEditFavDlg::OnEdit(GtkWidget* btn, CEditFavDlg* _this)
 }
 
 
-void CEditFavDlg::OnRemove(GtkWidget* btn, CEditFavDlg* _this)
+void CEditFavDlg::OnRemove(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel >= 0 )
@@ -178,7 +178,7 @@ void CEditFavDlg::OnRemove(GtkWidget* btn, CEditFavDlg* _this)
 }
 
 
-void CEditFavDlg::OnUp(GtkWidget* btn, CEditFavDlg* _this)
+void CEditFavDlg::OnUp(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 && sel > 0 )
@@ -191,7 +191,7 @@ void CEditFavDlg::OnUp(GtkWidget* btn, CEditFavDlg* _this)
 }
 
 
-void CEditFavDlg::OnDown(GtkWidget* btn, CEditFavDlg* _this)
+void CEditFavDlg::OnDown(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 {
 	int sel = _this->m_List->GetCurSel();
 	if( sel != -1 && (sel+1) < _this->m_List->Count() )
@@ -204,8 +204,10 @@ void CEditFavDlg::OnDown(GtkWidget* btn, CEditFavDlg* _this)
 }
 
 
-void CEditFavDlg::OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,  
-	GtkTreeViewColumn* col, CEditFavDlg* _this)
+void CEditFavDlg::OnRowActivated(GtkTreeView *tree_view UNUSED,
+                                 GtkTreePath* path UNUSED,
+				 GtkTreeViewColumn* col UNUSED,
+				 CEditFavDlg* _this)
 {
 	gtk_button_clicked( GTK_BUTTON(_this->m_EditBtn) );
 }

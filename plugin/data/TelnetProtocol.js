@@ -93,7 +93,7 @@ Protocol.prototype =
     var ios = Components.classes[kIOSERVICE_CONTRACTID]
                         .getService(nsIIOService);
 
-    return ios.newChannel('file:///usr/lib/firefox/components/pcmanx.html', null, null);
+    return ios.newChannel('file://', null, null);
   },
 }
 

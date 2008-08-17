@@ -60,7 +60,7 @@ static GOptionEntry entries[] = {
 	  G_OPTION_ARG_NONE, &multiple_instance, 
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
-	{ NULL }
+	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 };
 
 int main(int argc, char *argv[])
@@ -68,6 +68,11 @@ int main(int argc, char *argv[])
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
+
+#ifdef USE_DEBUG
+	/* well-known tip to figure out GObject runtime warnings. */
+	setenv("G_DEBUG", "fatal_warnings", 1);
+#endif
 
 #ifdef USE_DEBUG
 	/* glib introduces its own memory management mechanism, which
@@ -85,13 +90,14 @@ int main(int argc, char *argv[])
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
+	gdk_threads_init();
 
 	/*--- Initialize Gtk+ ---*/
 	{
 		/* GTK requires a program's argc and argv variables, and
 		 * requires that they be valid. Set it up. */
 		int fake_argc = 1;
-		char *_fake_argv[] = { "", NULL };
+		char *_fake_argv[] = { (char *) "", NULL };
 		char **fake_argv = _fake_argv;
 
 		gtk_init (&fake_argc, &fake_argv);
@@ -155,7 +161,9 @@ int main(int argc, char *argv[])
 	InitScriptInterface(".");
 #endif
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 
 #ifdef USE_LIBNOTIFY
 	notify_uninit();

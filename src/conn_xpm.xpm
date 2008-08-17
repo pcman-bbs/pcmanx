@@ -1,5 +1,5 @@
 /* XPM */
-static char *conn_xpm[]={
+static const char *conn_xpm[]={
 "16 16 203 2",
 ".# c None",
 "Qt c None",

@@ -1,5 +1,5 @@
 /*
- * helper functions to lookup IP location information.                              
+ * helper functions to lookup IP location information.
  *
  * Copyright (C) 2007 Jason Xia <jasonxh@gmail.com>
  *

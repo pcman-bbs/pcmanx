@@ -9,6 +9,11 @@ INCLUDES = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
+if USE_PROXY
+PROXY_SOURCES = \
+	proxy.c proxy.h
+endif
+
 libpcmanx_core_la_LIBADD = $(GUI_LIBS)
 libpcmanx_core_la_LDFLAGS = \
 	-version-info @LIBTOOL_VERSION_INFO@ \
@@ -16,6 +21,7 @@ libpcmanx_core_la_LDFLAGS = \
 	@LIBTOOL_EXPORT_OPTIONS@ \
 	-rpath $(libdir)
 libpcmanx_core_la_SOURCES = \
+	$(PROXY_SOURCES) \
 	pcmanx_utils.h \
 	caret.cpp caret.h \
 	site.cpp site.h \

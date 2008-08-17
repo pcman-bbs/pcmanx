@@ -22,6 +22,11 @@
 #include <string.h>
 #include <libintl.h>
 
+#include <gtk/gtkversion.h>
+
+#if ! GTK_CHECK_VERSION(2,10,0)
+/* for Gtk+ version < 2.10, we need EggTrayIcon */
+
 #include "eggtrayicon.h"
 
 #include <gdkconfig.h>
@@ -557,3 +562,6 @@ egg_tray_icon_get_orientation (EggTrayIcon *icon)
 
   return icon->orientation;
 }
+
+#endif /* ! GTK_CHECK_VERSION(2,10,0) */
+

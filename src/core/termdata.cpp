@@ -1,14 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        termdata.cpp
-// Purpose:     Store terminal screen data and parse ANSI escape sequence
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      pcman.tw@gmail.com
-// Created:     2004.7.16
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by:
-//		Neversay 2005.1.8 (neversay.misher@gmail.com)
-/////////////////////////////////////////////////////////////////////////////
+/**                                                                             
+ * termdata.cpp - Store terminal screen data and parse
+ *                ANSI escape sequence.
+ *
+ * Copyright (c) 2004-2005 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 #ifdef __GNUG__
   #pragma implementation "termdata.h"
 #endif
@@ -124,8 +134,10 @@ CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
 	m_NeedDelayedUpdate = false;
 	m_DelayedUpdateTimeout = 0;
 	m_Sel = new CTermSelection(this);
-
+#ifdef USE_IPLOOKUP
 	regcomp( &m_RegIp, "([0-9]{1,3}\\.){3}([0-9]{1,3}|\\*)", REG_EXTENDED );
+#endif
+	m_LineCounter = 0;
 }
 
 // class destructor
@@ -143,7 +155,9 @@ CTermData::~CTermData()
 		delete []m_Screen;
 	}
 
+#ifdef USE_IPLOOKUP
 	regfree(&m_RegIp);
+#endif
 }
 
 
@@ -222,6 +236,9 @@ void CTermData::LineFeed()
 {
 	int top;
 	int bottom = m_FirstLine + m_ScrollRegionBottom;
+
+	m_LineCounter++;
+
 	if(m_CaretPos.y < bottom)
 	{
 		m_CaretPos.y++;
@@ -237,6 +254,7 @@ void CTermData::LineFeed()
 		top = 0;
 		bottom = m_RowCount-1;
 	}
+
 	char* tmp = m_Screen[top];
 	InitNewLine(tmp, m_ColsPerPage);
 	for( int i = top; i < bottom; i++ )
@@ -315,8 +333,9 @@ void CTermData::PutChar(unsigned char ch)
 			{
 				if( m_CaretPos.x >= m_ColsPerPage )	// if we are at the bottom of screen
 				{
-					LineFeed();
-					CarriageReturn();	//	scroll up and move to a new line
+					//LineFeed();
+					//CarriageReturn();	//	scroll up and move to a new line
+					break;
 				}
 
 				m_Screen[m_CaretPos.y][m_CaretPos.x] = ch;
@@ -650,10 +669,13 @@ void CTermData::EraseLine(int p)
 	{
 	case 0:		// Clear from current position to end of line.
 		memset(&pLine[m_CaretPos.x],' ',m_ColsPerPage-m_CaretPos.x);
-		memset16(&pAttr[m_CaretPos.x],CTermCharAttr::GetDefVal(),m_ColsPerPage-m_CaretPos.x);		SetLineUpdate(pLine, m_CaretPos.x, m_ColsPerPage );		break;
+		//memset16(&pAttr[m_CaretPos.x],CTermCharAttr::GetDefVal(),m_ColsPerPage-m_CaretPos.x);
+		memset16(&pAttr[m_CaretPos.x],*(short*)&m_CurAttr,m_ColsPerPage-m_CaretPos.x);
+		SetLineUpdate(pLine, m_CaretPos.x, m_ColsPerPage );
+		break;
 	case 1:	// Clear from head of line to current position.
-		memset(&pLine, ' ',m_CaretPos.x);
-		memset16(&pAttr ,CTermCharAttr::GetDefVal(),m_CaretPos.x);
+		memset(pLine, ' ',m_CaretPos.x);
+		memset16(pAttr ,CTermCharAttr::GetDefVal(),m_CaretPos.x);
 		SetLineUpdate(pLine, 0, m_CaretPos.x+1);
 		break;
 	default:
@@ -734,7 +756,9 @@ void CTermData::UpdateDisplay()
 {
 	DetectCharSets();
 	DetectHyperLinks();
+#ifdef USE_IPLOOKUP
 	DetectIpAddrs();
+#endif
 
  	if( m_pView && m_pView->IsVisible() && !m_WaitUpdateDisplay )
 	{
@@ -930,6 +954,8 @@ void CTermData::DetectHyperLinks()
 	}
 }
 
+#ifdef USE_IPLOOKUP
+
 /* detect ipv4 addresses. */
 inline void DetectIpPatterns( const char *line, CTermCharAttr *attr, int len, const regex_t *regip)
 {
@@ -966,11 +992,13 @@ void CTermData::DetectIpAddrs()
 	}
 }
 
+#endif
+
 typedef struct {
 	CTermData* pTermData;
 	string*    text;
 	int        lines;
-	char*      eol;
+	const char*      eol;
 } ReadStatus;
 
 string GetChangedAttrStr(CTermCharAttr oldattr, CTermCharAttr newattr)
@@ -1085,8 +1113,8 @@ static void read_line( int row, int col1, int col2, void* data )
 		if ( rs->lines == 1 && text->length() > 0 )
 		{
 			// the old code does this
-			if ( !td->m_Sel->m_BlockMode )
-				*text = text->substr( 0, text->length() - 1 );
+			//if ( !td->m_Sel->m_BlockMode )
+				//*text = text->substr( 0, text->length() - 1 );
 
 			size_t n = text->find_last_not_of( ' ' );
 			if ( n != text->npos )
@@ -1119,13 +1147,7 @@ string CTermData::GetText( CTermSelection* sel, bool trim, bool color )
 {
 	string text;
 	int endrow;
-	ReadStatus rs = { this, &text, 0 };
-
-#ifdef	__WXMSW__
-	rs.eol = "\r\n";
-#else
-	rs.eol = "\n";
-#endif
+	ReadStatus rs = { this, &text, 0, "\n" };
 
 	if ( trim )
 	{
@@ -1364,7 +1386,7 @@ bool CTermData::IsLineEmpty(int iLine)
 // This is a callback function called from CTermData::DoUpdateDisplay().
 // When new characters are written to a line in the screen buffer, 
 // this function will be called with the line number passed in 'row'.
-void CTermData::OnLineModified(int row)
+void CTermData::OnLineModified(int row UNUSED)
 {
     // This function can be overriden in derived class.
 }

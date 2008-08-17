@@ -1,3 +1,11 @@
+pcmanx-gtk2 (0.3.8-1) unstable; urgency=low
+
+  * New upstream release.
+  * Ack NMU.
+  * Policy updated to 3.8.0, no changes.
+
+ -- Emfox Zhou <emfox@debian.org>  Sun, 17 Aug 2008 15:30:36 +0800
+
 pcmanx-gtk2 (0.3.7-3.1) unstable; urgency=low
 
   * Non-maintainer upload.

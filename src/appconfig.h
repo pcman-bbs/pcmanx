@@ -93,7 +93,9 @@ public:
 #ifdef USE_MOUSE
 	bool MouseSupport;
 #endif
+#ifdef USE_DOCKLET
 	bool ShowTrayIcon;
+#endif
 	bool ShowStatusBar;
 	bool PopupNotifier;
 #ifdef USE_WGET

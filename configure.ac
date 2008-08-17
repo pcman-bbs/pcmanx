@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(pcmanx-gtk2, 0.3.7, http://groups.google.com/group/PCManX)
+AC_INIT([pcmanx-gtk2],[0.3.8],[http://groups.google.com/group/PCManX])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE
 #AM_MAINTAINER_MODE
@@ -26,7 +26,7 @@ AC_PROG_CXX
 AM_DISABLE_STATIC
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
-AC_PROG_INTLTOOL(, [no-xml])
+IT_PROG_INTLTOOL([],[no-xml])
 AC_PROG_INSTALL
 
 dnl define a new autoconf test, AC_CSRG_BASED, which will define
@@ -71,6 +71,8 @@ AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
 AH_VERBATIM([USE_WGET], [#undef USE_WGET])
+AH_VERBATIM([USE_IPLOOKUP], [#undef USE_IPLOOKUP])
+AH_VERBATIM([USE_PROXY], [#undef USE_PROXY])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -152,6 +154,16 @@ AC_ARG_ENABLE([wget],
 		[enable wget support (default: no)]),
 	wget=$enableval, wget="no")
 
+AC_ARG_ENABLE([iplookup],
+	AS_HELP_STRING([--enable-iplookup],
+		[enable IP location lookup. For Simplified Chinese users. Need qqwry.dat. (default: no)]),
+	iplookup=$enableval, iplookup="no")
+
+AC_ARG_ENABLE([proxy],
+	AS_HELP_STRING([--enable-proxy],
+		[enable proxy support (default: no)]),
+	proxy=$enableval, proxy="no")
+
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
 dnl *********************************************************************
@@ -162,23 +174,27 @@ fi
 AM_CONDITIONAL(ENABLE_DEBUG, test "$debug" = "yes")
 
 dnl *********************************************************************
+dnl ** GLIB *************************************************************
+dnl *********************************************************************
+
+AM_PATH_GLIB_2_0([2.4.0], [
+                  GUI_CFLAGS="$GUI_CFLAGS $GLIB_CFLAGS"
+                  GUI_LIBS="$GUI_LIBS $GLIB_LIBS"
+                  ], [AC_MSG_ERROR([Cannot find Glib 2.4 (or above version)!])], [gthread])
+
+dnl *********************************************************************
 dnl ** GTK **************************************************************
 dnl *********************************************************************
 
-AC_PATH_PROG(pkgconfigpath, pkg-config)
-AM_PATH_GTK_2_0(2.4.0, havegtk=yes, havegtk=no)
+AM_PATH_GTK_2_0([2.4.0], [
+                 GUI_CFLAGS="$GUI_CFLAGS $GTK_CFLAGS"
+                 GUI_LIBS="$GUI_LIBS $GTK_LIBS"
+                 ], [AC_MSG_ERROR([Cannot find GTK+/X11 2.4 (or above version)!])])
 
-if test "$havegtk" = no; then
-	echo
-	echo "Cannot find GTK+/X11 2.4 (or above version)!"
-	exit
-else
-	GUI_CFLAGS="`$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --cflags`"
-	GUI_LIBS="$GUI_LIBS `$pkgconfigpath gtk+-x11-2.0 gthread-2.0 --libs`"
-fi
 dnl *********************************************************************
 dnl ** Freetype2 ********************************************************
 dnl *********************************************************************
+
 AC_CHECK_FT2()
 GUI_CFLAGS="$GUI_CFLAGS $FT2_CFLAGS"
 GUI_LIBS="$GUI_LIBS $FT2_LIBS"
@@ -187,20 +203,10 @@ dnl *********************************************************************
 dnl ** XFT **************************************************************
 dnl *********************************************************************
 
-AC_PATH_PROG(pkgconfigpath, pkg-config)
-AC_MSG_CHECKING([for Xft])
-if $pkgconfigpath xft --exists; then
-	GUI_CFLAGS="$GUI_CFLAGS `$pkgconfigpath xft --cflags`"
-	GUI_LIBS="$GUI_LIBS `$pkgconfigpath xft --libs`"
-
-	dnl Workaround for some *stupid* distributions.
-	if test -f /usr/include/X11/Xft/Xft.h; then
-		AC_MSG_RESULT([using workaround for Xft.])
-  		GUI_CLFAGS="$GUI_CFLAGS -I/usr/include/X11"
-	fi
-else
-	AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])
-fi
+PKG_CHECK_MODULES([LIBXFT], [xft], [
+                   GUI_CFLAGS="$GUI_CFLAGS $LIBXFT_CFLAGS"
+                   GUI_LIBS="$GUI_LIBS $LIBXFT_LIBS"
+                   ],[AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])]) 
 
 dnl *********************************************************************
 dnl ** IPv6 *************************************************************
@@ -365,6 +371,28 @@ AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
 AC_SUBST(USE_WGET)
 
 dnl *********************************************************************
+dnl ** IP location lookup support ***********************************
+dnl *********************************************************************
+
+if test "$iplookup" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_IPLOOKUP, [1], [Enable IP location lookup])
+fi
+
+AM_CONDITIONAL(USE_IPLOOKUP, test "$iplookup" = "yes")
+AC_SUBST(USE_IPLOOKUP)
+
+dnl *********************************************************************
+dnl ** proxy support ***********************************
+dnl *********************************************************************
+
+if test "$proxy" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_PROXY, [1], [Enable proxy support])
+fi
+
+AM_CONDITIONAL(USE_PROXY, test "$proxy" = "yes")
+AC_SUBST(USE_PROXY)
+
+dnl *********************************************************************
 dnl ** Mozilla/Firefox Plugin support ***********************************
 dnl *********************************************************************
 
@@ -419,28 +447,33 @@ if test "$plugin" = "yes"; then
   MOZILLA_LIB_DIR_SEARCH=
   AC_MSG_RESULT([$gecko_provider found!])
   if test "$user_specified_mozilla" = "no"; then
-    dnl Note: with the infos from mozilla-plugin.pc
-    dnl we got all includes and libraries for the C interface
-    dnl to Mozilla, but not the XPCOM headers we also need.
-    MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin | awk '{print $1}' | sed "s/^-I//"`
-    MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
-    MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
-    MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+    if "$PKG_CONFIG" --exists "$gecko_provider-plugin >= 1.9"; then
+      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin`
+      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
+      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+      MOZILLA_IDLDIR=`$PKG_CONFIG --variable=idldir libxul`/`$PKG_CONFIG --variable=includetype libxul`
+    else
+      dnl Note: with the infos from mozilla-plugin.pc
+      dnl we got all includes and libraries for the C interface
+      dnl to Mozilla, but not the XPCOM headers we also need.
+      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
+      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
+      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
+    fi
   else
     dnl Don't depend on pkg-config
     MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
     MOZILLA_INCLUDE_ROOT="$INPUT_MOZILLA_ROOT/include"
-    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT \
--lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
+    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT -lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
     MOZILLA_CFLAGS=" \
--I$MOZILLA_INCLUDE_ROOT \
--I$MOZILLA_INCLUDE_ROOT/java \
--I$MOZILLA_INCLUDE_ROOT/plugin \
--I$MOZILLA_INCLUDE_ROOT/xpcom \
--I$MOZILLA_INCLUDE_ROOT/string \
--I$MOZILLA_INCLUDE_ROOT/nspr \
--I$MOZILLA_INCLUDE_ROOT/xpcom \
--I$MOZILLA_INCLUDE_ROOT/xpconnect"
+      -I$MOZILLA_INCLUDE_ROOT \
+      -I$MOZILLA_INCLUDE_ROOT/java \
+      -I$MOZILLA_INCLUDE_ROOT/plugin \
+      -I$MOZILLA_INCLUDE_ROOT/xpcom \
+      -I$MOZILLA_INCLUDE_ROOT/string \
+      -I$MOZILLA_INCLUDE_ROOT/nspr \
+      -I$MOZILLA_INCLUDE_ROOT/xpcom \
+      -I$MOZILLA_INCLUDE_ROOT/xpconnect"
   fi
 
   # Workaround
@@ -456,7 +489,9 @@ if test "$plugin" = "yes"; then
 
   dnl Search for the idl include directory
   dnl This only works on Gecko 1.8
-  MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+  if test "x$MOZILLA_IDLDIR" = "x"; then
+    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
+  fi
   dnl Fallback for older versions
   if test "x$MOZILLA_IDLDIR" = "x"; then
     MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
@@ -496,6 +531,105 @@ dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
 
+dnl CACHED_TRY_COMPILE(<description>,<cachevar>,<include>,<program>,<ifyes>,<ifno>)        
+AC_DEFUN([CACHED_TRY_COMPILE],[
+  AC_MSG_CHECKING($1)
+  AC_CACHE_VAL($2,[
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$3]], [[$4]])],[$2=yes],[$2=no])
+  ])
+  if test "x$$2" = xyes; then
+    true
+    $5
+  else
+    true
+    $6
+  fi
+])
+
+dnl GCC_ATTRIBUTE(<short-label>,<cachevar>,<func-params>,<attribute>,<HAVE>,<desc>,[<true-cmds>],[<false-cmds>])
+AC_DEFUN([GCC_ATTRIBUTE],[
+  CACHED_TRY_COMPILE(__attribute__(($1)),cv_c_gcc_attribute_$2,,
+   [extern int testfunction($3) __attribute__(($4))],
+   AC_MSG_RESULT(yes)
+   AC_DEFINE(HAVE_GNUC25_$5,,$6)
+   $7,
+   AC_MSG_RESULT(no)
+   $8)
+])
+
+AC_DEFUN([GCC_ATTRIBUTE_SUPPORTED],[
+ GCC_ATTRIBUTE([,,],supported,[int x],[,,],ATTRIB,[Define if function attributes a la GCC 2.5 and higher are available.])
+ AH_BOTTOM([/* GNU C attributes. */
+#ifndef FUNCATTR
+#ifdef HAVE_GNUC25_ATTRIB
+#define FUNCATTR(x) __attribute__(x)
+#else
+#define FUNCATTR(x)
+#endif
+#endif])
+
+])
+AC_DEFUN([GCC_ATTRIBUTE_CONST],[
+ AC_REQUIRE([GCC_ATTRIBUTE_SUPPORTED])
+ GCC_ATTRIBUTE(const,const,[int x],const,CONST,[Define if constant functions a la GCC 2.5 and higher are available.])
+ AH_BOTTOM([/* GNU C constant functions, or null. */
+#ifndef ATTRCONST
+#ifdef HAVE_GNUC25_CONST
+#define ATTRCONST const
+#else
+#define ATTRCONST
+#endif
+#endif
+#ifndef CONSTANT
+#define CONSTANT FUNCATTR((ATTRCONST))
+#endif])
+])
+AC_DEFUN([GCC_ATTRIBUTE_NORETURN],[
+ AC_REQUIRE([GCC_ATTRIBUTE_SUPPORTED])
+ GCC_ATTRIBUTE(noreturn,noreturn,[int x],noreturn,NORETURN,[Define if nonreturning functions a la GCC 2.5 and higher are available.])
+ AH_BOTTOM([/* GNU C nonreturning functions, or null. */
+#ifndef ATTRNORETURN
+#ifdef HAVE_GNUC25_NORETURN
+#define ATTRNORETURN noreturn
+#else /* ! HAVE_GNUC25_NORETURN */
+#define ATTRNORETURN
+#endif /* HAVE_GNUC25_NORETURN */
+#endif /* ATTRNORETURN */
+#ifndef NONRETURNING
+#define NONRETURNING FUNCATTR((ATTRNORETURN))
+#endif /* NONRETURNING */])
+])
+AC_DEFUN([GCC_ATTRIBUTE_UNUSED],[
+ AC_REQUIRE([GCC_ATTRIBUTE_SUPPORTED])
+ GCC_ATTRIBUTE(unused,unused,[int x],unused,UNUSED,[Define if unused variables la GCC 2.5 and higher are available.])
+ AH_BOTTOM([/* GNU C unused functions, or null. */
+#ifndef ATTRUNUSED
+#ifdef HAVE_GNUC25_UNUSED
+#define ATTRUNUSED unused
+#else
+#define ATTRUNUSED
+#endif
+#endif
+#ifndef UNUSED
+#define UNUSED FUNCATTR((ATTRUNUSED))
+#endif])
+])
+AC_DEFUN([GCC_ATTRIBUTE_PACKED],[
+  AC_REQUIRE([GCC_ATTRIBUTE_SUPPORTED])
+  GCC_ATTRIBUTE(packed,packed,[int x],packed,PACKED,[Define if packing of struct members a la GCC 2.5 and higher is available.])
+  AH_BOTTOM([/* GNU C constant functions, or null. */
+#ifndef ATTRPACKED
+#ifdef HAVE_GNUC25_PACKED
+#define ATTRPACKED packed
+#else
+#define ATTRPACKED
+#endif
+#endif
+#ifndef PACKED
+#define PACKED FUNCATTR((ATTRPACKED))
+#endif])
+])
+
 dnl Only use -Wall and -pipe if we have gcc
 if test "x$GCC" = "xyes"; then
 	if test -z "`echo "$CFLAGS" | grep "\-Wall" 2> /dev/null`" ; then
@@ -509,6 +643,11 @@ if test "x$GCC" = "xyes"; then
 	if test -z "`echo "$CFLAGS" | grep "\-g " 2> /dev/null`" ; then
 		CFLAGS="$CFLAGS -g"
 	fi
+
+	GCC_ATTRIBUTE_CONST
+	GCC_ATTRIBUTE_NORETURN
+	GCC_ATTRIBUTE_PACKED
+	GCC_ATTRIBUTE_UNUSED
 fi
 
 dnl *********************************************************************
@@ -518,16 +657,12 @@ dnl *********************************************************************
 AC_MSG_CHECKING(for modern sigaction)
 dnl libc5 on linux and FreeBSD 3.x doesn't have siginfo_t
 dnl and the sa_sigation field.
-AC_TRY_COMPILE(
-	[#include <signal.h>],
-	[struct sigaction act;
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <signal.h>]], [[struct sigaction act;
 	 siginfo_t *si;
-	 act.sa_sigaction = 0;],
-	[
+	 act.sa_sigaction = 0;]])],[
 		AC_MSG_RESULT(yes)
 		AC_DEFINE(USE_SIGACTION) 
-	],
-	AC_MSG_RESULT(no))
+	],[AC_MSG_RESULT(no)])
 
 dnl if we don't have this, use g_snprintf instead
 AC_CHECK_FUNCS(snprintf)
@@ -566,15 +701,57 @@ dnl Reduce C++ overhead
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
+dnl linker optimizations
+AC_MSG_CHECKING([whether $LD accepts --as-needed])
+case `$LD --as-needed -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,--as-needed"
+  AC_MSG_RESULT([yes])                                                              
+  ;;
+*)
+  AC_MSG_RESULT([no])
+  ;;
+esac
+AC_MSG_CHECKING([whether $LD accepts -O1])
+case `$LD -O1 -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,-O1"
+  AC_MSG_RESULT([yes])
+  ;;
+*)
+  AC_MSG_RESULT([no])
+  ;;
+esac
+AC_MSG_CHECKING([whether $LD accepts -Bsymbolic-functions])
+case `$LD -Bsymbolic-functions -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions"
+  AC_MSG_RESULT([yes])
+  ;;
+*)                                                                              
+  AC_MSG_RESULT([no])
+  ;;
+esac
+AC_MSG_CHECKING([whether $LD accepts --sort-common])
+case `$LD --sort-common -v 2>&1 </dev/null` in
+*GNU* | *'with BFD'*)
+  LDFLAGS="$LDFLAGS -Wl,--sort-common"
+  AC_MSG_RESULT([yes])
+  ;;
+*)                                                                              
+  AC_MSG_RESULT([no])
+  ;;
+esac
+
 dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
 AC_MSG_CHECKING([whether the compiler supports the visibility arg])
 dnl Check for gcc4 or greater
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 void
 #if defined(__GNUC__) && (__GNUC__ >= 4)
 foo () {};                                                                                         
 #endif
-], [], [
+]], [[]])],[
   if test "$debug" = yes; then
 dnl It's important for collecting runtime information
     has_visibility=no
@@ -583,10 +760,10 @@ dnl It's important for collecting runtime information
     CFLAGS="$CFLAGS -fvisibility=hidden"
     CXXFLAGS="$CXXFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
   fi
-], [
+],[
   has_visibility=no
-]
-)
+
+])
 AC_MSG_RESULT($has_visibility)
 
 dnl make these visible to all Makefiles
@@ -640,6 +817,8 @@ else
   echo "Mozilla/Firefox plugin support... : $plugin"
 fi
 echo wget support..................... : $wget
+echo iplookup support................. : $iplookup
+echo proxy support.................... : $proxy
 echo
 echo The binary will be installed in $prefix/bin
 echo
