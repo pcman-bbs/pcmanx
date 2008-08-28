@@ -2,7 +2,7 @@ Source: pcmanx-gtk2
 Section: x11
 Priority: optional
 Maintainer: Emfox Zhou <emfox@debian.org>
-Build-Depends: debhelper (>= 4.0.0), libxft-dev, libgtk2.0-dev, iceape-dev (>= 1.1.9-5), libx11-dev, libxt-dev, sharutils, dpatch (>= 2.0)
+Build-Depends: debhelper (>= 4.0.0), libxft-dev, libgtk2.0-dev, xulrunner-dev (>= 1.9.0.1), libx11-dev, libxt-dev, sharutils, dpatch (>= 2.0)
 Standards-Version: 3.8.0
 Homepage: http://pcmanx.csie.net/
 
