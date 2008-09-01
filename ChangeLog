@@ -1,3 +1,9 @@
+2008-09-01  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc)
+	(AppendLine): Trim trailing spaces of each line when downloading
+	articles.
+
 2008-08-12  Jim Huang  <jserv.tw@gmail.com>
 
 	* developers/make-new-release.sh: New file.  A simple and neat script
