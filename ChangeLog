@@ -1,3 +1,8 @@
+2008-09-02  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnURLEntryKeyDown): Enable [KP_Enter]
+	key in URL entry box.
+
 2008-09-01  Jason Xia  <jasonxh@gmail.com>
 
 	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc)

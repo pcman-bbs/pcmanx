@@ -1477,6 +1477,7 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	switch(evt->keyval)
 	{
 	case GDK_Return:
+	case GDK_KP_Enter:
 	{
 		string url = gtk_entry_get_text( GTK_ENTRY(widget) );
 		if( !url.empty() )
