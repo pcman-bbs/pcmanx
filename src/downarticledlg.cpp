@@ -62,7 +62,7 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
 
 static inline string& AppendLine(const char *line, const char *enc, string &str)
 {
-	unsigned int len;
+	gsize len;
 	char *buf = g_convert_with_fallback(line, -1, "UTF-8", enc, (gchar *) "?", 
 			NULL, &len, NULL);
 	if (buf)
