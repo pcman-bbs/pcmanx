@@ -1,3 +1,9 @@
+2008-09-13  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/notebook.cpp (CNotebook::SetPageTitle): Ignore the change of
+	tile if tab/CNotebook is not connected.  Avoid SegFault when closing
+	a disconnected tab.
+	
 2008-09-02  Jason Xia  <jasonxh@gmail.com>
 
 	* src/mainframe.cpp (CMainFrame::OnURLEntryKeyDown): Enable [KP_Enter]
@@ -22,7 +28,7 @@
 2008-08-11  Jim Huang  <jserv.tw@gmail.com>
 
 	* po/POTFILES.in,
-	po/POTFILES.skip:  Translating the messages in source file
+	po/POTFILES.skip: Translating the messages in source file
 	src/docklet/eggtrayicon.c is useless.  Ignored.
 
 	* po/zh_TW.po, po/zh_CN.po: Re-generated.

@@ -70,6 +70,10 @@ void CNotebook::SetPageTitle(CWidget* page, string title)
 {
 	GtkWidget* label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(m_Widget), page->m_Widget);
 
+	/* have been disconnected. */
+	if (!label)
+		return;
+
 	if( !GTK_IS_LABEL(label) )
 	{
 		GList *list = gtk_container_get_children(GTK_CONTAINER(label));
