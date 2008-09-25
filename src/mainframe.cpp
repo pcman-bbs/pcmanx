@@ -753,7 +753,8 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
 	}
 }
@@ -772,7 +773,8 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
 	}
 }
@@ -997,6 +999,11 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		else
 			_this->HideTrayIcon();
 #endif
+
+	if (AppConfig.ShowStatusBar)
+		gtk_widget_show_all(_this->m_Statusbar);
+	else
+		gtk_widget_hide_all(_this->m_Statusbar);
 }
 
 

@@ -1,3 +1,9 @@
+2008-09-25  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnFullscreenMode)
+	(CMainFrame::OnSimpleMode) (CMainFrame::OnPreference): Respect user
+	preference about show/hide status bar.
+
 2008-09-13  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/notebook.cpp (CNotebook::SetPageTitle): Ignore the change of
