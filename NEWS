@@ -21,6 +21,7 @@ Version 0.3.8 - August 2008
 * Bugfix: gcc 4.3 and conditional configurations (docklet, mouse, nancy)
           build failures.
 
+
 Version 0.3.7 - January 2008
 
 * Feature: Let Firefox plugin use font config under ~/pcmanx/pcmanx
@@ -51,7 +52,7 @@ Version 0.3.5 - August 2006
 
 Version 0.3.4 - March 2006
 
-* Rename from pcmanx-pure-gtk2 to pcmanx-gtk2.
-* The Menu and Toolbar moved to UIMananger.
+* Renamed from pcmanx-pure-gtk2 to pcmanx-gtk2.
+* Rewrite Menu and Toolbar with UIMananger.
 * Add Mouse Click support, works on most Firebird BBS and some of Maple BBS.
 * BBS connection performance improvement.
