@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <algorithm>
 
 #include "telnetview.h"
 #include "telnetcon.h"
