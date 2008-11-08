@@ -1,3 +1,9 @@
+pcmanx-gtk2 (0.3.8-3) unstable; urgency=low
+
+  * gcc_4.3_4.4_ftbfs.dpatch: Fix FTBFS with GCC 4.4 (Closes: #504886)
+
+ -- Emfox Zhou <emfox@debian.org>  Sat, 08 Nov 2008 11:21:28 +0800
+
 pcmanx-gtk2 (0.3.8-2) unstable; urgency=low
 
   * Change dependency from iceape-dev to xulrunner-dev. (Closes: #496816)

@@ -1,0 +1,40 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## gcc_4.3.dpatch by Chris Lamb <chris@chris-lamb.co.uk>
+
+## DP: Fix FTBFS with GCC 4.3
+
+@DPATCH@
+diff -urNad pcmanx-gtk2-0.3.8~/src/emoticondlg.cpp pcmanx-gtk2-0.3.8/src/emoticondlg.cpp
+--- pcmanx-gtk2-0.3.8~/src/emoticondlg.cpp	2008-08-10 15:06:30.000000000 +0800
++++ pcmanx-gtk2-0.3.8/src/emoticondlg.cpp	2008-11-08 11:18:32.000000000 +0800
+@@ -19,6 +19,8 @@
+ #include "inputdialog.h"
+ #include "appconfig.h"
+ 
++#include <cstring>
++
+ static const char emoticon_file_name[] = "emoticons";
+ 
+ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
+diff -urNad pcmanx-gtk2-0.3.8~/src/nancy_bot/msgdata.cpp pcmanx-gtk2-0.3.8/src/nancy_bot/msgdata.cpp
+--- pcmanx-gtk2-0.3.8~/src/nancy_bot/msgdata.cpp	2008-08-10 15:06:30.000000000 +0800
++++ pcmanx-gtk2-0.3.8/src/nancy_bot/msgdata.cpp	2008-11-08 11:19:20.000000000 +0800
+@@ -18,6 +18,7 @@
+  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
+ 
++#include <cstdio>
+ #include <cstdlib>
+ #include <unistd.h>
+ 
+diff -urNad pcmanx-gtk2-0.3.8~/src/view/telnetview.cpp pcmanx-gtk2-0.3.8/src/view/telnetview.cpp
+--- pcmanx-gtk2-0.3.8~/src/view/telnetview.cpp	2008-08-10 15:06:30.000000000 +0800
++++ pcmanx-gtk2-0.3.8/src/view/telnetview.cpp	2008-11-08 11:18:32.000000000 +0800
+@@ -23,6 +23,7 @@
+ #include <glib/gi18n.h>
+ 
+ #include <string.h>
++#include <algorithm>
+ 
+ #include <gdk/gdkkeysyms.h>
+ #include <ctype.h>
