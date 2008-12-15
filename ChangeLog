@@ -1,3 +1,8 @@
+2008-12-15  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/view/telnetcon.cpp (CTelnetCon::Close): Fix build with
+	debugging.
+
 2008-10-01  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/view/telnetview.cpp: Fix compilation errors with gcc 4.3.
