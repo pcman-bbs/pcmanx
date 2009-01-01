@@ -160,6 +160,8 @@ CMainFrame::CMainFrame()
 	m_Mode = NORMAL_MODE;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "PCManX", "pcmanx");
+
 	PostCreate();
 
 #if defined(USE_DOCKLET) || defined(USE_NOTIFIER)
