@@ -32,4 +32,5 @@ libpcmanx_core_la_SOURCES = \
 	widget.cpp widget.h \
 	termview.cpp termview.h \
 	termsel.cpp termsel.h \
-	fileutil.c fileutil.h
+	fileutil.c fileutil.h \
+	pkgver.c

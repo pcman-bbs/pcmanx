@@ -1,7 +1,18 @@
-2009-01-03  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2009-01-04  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/pkgver.c: New file.  Keep version information in
+	libpcmanx-core.
+
+	* src/core/Makefile.am: Ditto.
+
+	* src/pcmanx_gtk2.cpp (main): Perform insanity checks for libpcmanx.
+	If version mismatch between pcmanx-gtk2 and libpcmanx, alter window
+	will show up and soon close.
+
+2009-01-03  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/fileutil.c,
-	src/view/telnetview.cpp: Remove some warning messages.
+	src/view/telnetview.cpp: Remove some warnings.
 
 2009-01-01  Jim Huang  <jserv.tw@gmail.com>
 
