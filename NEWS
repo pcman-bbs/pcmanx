@@ -34,17 +34,17 @@ Version 0.3.7 - January 2008
 
 Version 0.3.6 - August 2007
 
-* Feature: Improve ASCII art with programming support.
+* Feature: Improve ASCII art representation during rendering.
 * Feature: Support libnotify for popup BBS incoming messages.
 * Bugfix: Screen center alignment.
 
 
 Version 0.3.5 - August 2006
 
-* Can change input method by right click.
+* Trigger input method changes by right click.
 * Some support of horizontal and vertical center align. (almost broken)
-* Cancel the selected region when any key event.
-* Support compiling with xulrunner.
+* Cancel the selected region when key event triggered.
+* Support build with xulrunner.
 * Support setting seprated English/ASCII font.
 * Swap OK and Cancel button to be compatible with GNOME.
 * Display hand cursor on hyperlinks when no mouse support.

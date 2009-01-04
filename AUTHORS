@@ -1,9 +1,6 @@
-Lead Developer
---------------
-PCMan <pcman.tw@gmail.com>
-
 Developers
 ----------
+PCMan <pcman.tw@gmail.com>
 Jim Huang <jserv.tw@gmail.com>
 Kanru Chen <koster@debian.org.tw>
 Shih-yuan Lee <fourdollars@gmail.com>
@@ -17,6 +14,9 @@ Contributors
 Neversay <neversay.misher@gmail.com>
 Chen Yung Chou <scsichen@gmail.com>
 Pav Lucistnik <pav@FreeBSD.org>
+
+Authors of External source
+--------------------------
 Elliot Lee <sopwith@redhat.com>
 Anders Carlsson <andersca@gnu.org>
 Gary Kramlich <grim@reaperworld.com>
