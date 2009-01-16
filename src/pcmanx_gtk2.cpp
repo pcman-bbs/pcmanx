@@ -116,6 +116,11 @@ int main(int argc, char *argv[])
 		g_option_context_parse (context, &argc, &argv, &error);
 	}
 
+	/*--- prevent GTK+ from catching F10  ---*/
+	GtkSettings *gtk_settings; 
+	gtk_settings = gtk_settings_get_for_screen(gdk_screen_get_default()); 
+	g_object_set(gtk_settings, "gtk-menu-bar-accel", NULL, NULL); 
+
 	/*--- Check if multiple-instance is allowed. ---*/
 	if (!multiple_instance) {
 #ifdef USE_DOCKLET

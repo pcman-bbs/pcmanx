@@ -175,6 +175,47 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	case GDK_Escape:
 		GetCon()->SendRawString("\x1b", 1);
 		break;
+// F1-F12 keys
+	case GDK_F1:
+	case GDK_KP_F1:
+		GetCon()->SendRawString("\x1bOP", 3);
+		break;
+	case GDK_F2:
+	case GDK_KP_F2:
+		GetCon()->SendRawString("\x1bOQ", 3);
+		break;
+	case GDK_F3:
+	case GDK_KP_F3:
+		GetCon()->SendRawString("\x1bOR", 3);
+		break;
+	case GDK_F4:
+	case GDK_KP_F4:
+		GetCon()->SendRawString("\x1bOS", 3);
+		break;
+	case GDK_F5:
+		GetCon()->SendRawString("\x1b[15~", 5);
+		break;
+	case GDK_F6:
+		GetCon()->SendRawString("\x1b[17~", 5);
+		break;
+	case GDK_F7:
+	    GetCon()->SendRawString("\x1b[18~", 5);
+		break;
+	case GDK_F8:
+		GetCon()->SendRawString("\x1b[19~", 5);
+		break;
+	case GDK_F9:
+		GetCon()->SendRawString("\x1b[20~", 5);
+		break;
+	case GDK_F10:
+		GetCon()->SendRawString("\x1b[21~", 5);
+		break;
+	case GDK_F11:
+		GetCon()->SendRawString("\x1b[23~", 5);
+		break;
+	case GDK_F12:
+		GetCon()->SendRawString("\x1b[24~", 5);
+		break;
 	default:
 		clear = false;
 	}
