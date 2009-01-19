@@ -7,7 +7,7 @@
 	src/view/telnetview.cpp (CTelnetView::DoPasteFromClipboard): Properly
 	handle the character set convertion during copy and paste from X
 	clipboard.
-	Patched by Darren <darren.hoo@gmail.com>.
+	Patched by Darren Hoo <darren.hoo@gmail.com> .
 
 2009-01-16  Jim Huang  <jserv.tw@gmail.com>
 
@@ -15,7 +15,7 @@
 
 	* src/view/telnetview.cpp (CTelnetView::OnKeyDown): Handle F1-F12
 	keys.
-	Patched by huyg@newsmth.net .
+	Patched by Darren Hoo <darren.hoo@gmail.com> .
 
 2009-01-04  Jim Huang  <jserv.tw@gmail.com>
 
