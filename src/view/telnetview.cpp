@@ -587,16 +587,40 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 		if( contain_ansi_color )
 		{
 			string esc = GetCon()->m_Site.GetEscapeChar();
-			const char* p = text.c_str();
-			while(*p)
+			if( m_s_CharSet != GetCon()->m_Site.m_Encoding.c_str() )
 			{
+			  INFO("Charset Conversion from %s to %s",m_s_CharSet.c_str(),GetCon()->m_Site.m_Encoding.c_str());
+
+			  gsize convl;
+			  gchar* locale_text = g_convert(text.c_str(), text.length(),GetCon()->m_Site.m_Encoding.c_str(),m_s_CharSet.c_str(), NULL, &convl, NULL);
+			  if( !locale_text )
+				return;
+
+			  const char* p = locale_text;
+			  while(*p)
+			  {
 				if(*p == '\x1b')
 					text2 += esc;
 				else
 					text2 += *p;
 				p++;
+			  }
+			  g_free(locale_text);
 			}
-			GetCon()->SendString(text2);
+			else
+			{
+				INFO("color text: %s",text.c_str());
+				const char* p = text.c_str();
+				while(*p)
+				{
+					if(*p == '\x1b')
+						text2 += esc;
+					else
+						text2 += *p;
+					p++;
+				}
+			}
+			GetCon()->SendRawString(text2.c_str(),text2.length());
 		}
 		else
 		{

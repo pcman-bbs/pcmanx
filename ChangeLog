@@ -1,3 +1,14 @@
+2009-01-19  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/termview.h (CTermView::m_s_CharSet): New data member to
+	indicate the character set in CTermView.
+
+	* src/core/termview.cpp (CTermView::PasteFromClipboard),
+	src/view/telnetview.cpp (CTelnetView::DoPasteFromClipboard): Properly
+	handle the character set convertion during copy and paste from X
+	clipboard.
+	Patched by Darren <darren.hoo@gmail.com>.
+
 2009-01-16  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/pcmanx_gtk2.cpp (main): Prevent GTK+ from catching F10.

@@ -124,6 +124,8 @@ protected:
     bool m_CancelSel;	// If selection is canceled in OnLButtonDown, this flag is set to true.
 
     static string m_s_ANSIColorStr;
+    static string m_s_CharSet;
+
     int m_FontSize;
     string m_FontFamily;
 
