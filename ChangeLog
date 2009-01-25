@@ -1,3 +1,14 @@
+2009-01-25  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/docklet/eggtrayicon.h,
+	src/docklet/eggtrayicon.c,
+	src/pcmanx_gtk2.cpp: GNOME Goal - Clean up GLib and GTK+ includes.
+	GTK+ is moving toward a model where it is only allowed to include the
+	'toplevel' headers. Only <glib.h>, <gdk/gdk.h>,
+	<gdk-pixbuf/gdk-pixbuf.h> and <gtk/gtk.h> can be directly included.
+	The goal is to make all GNOME modules comply with this. 
+	Ref: http://live.gnome.org/GnomeGoals/CleanupGTKIncludes
+
 2009-01-19  Jim Huang  <jserv.tw@gmail.com>
 
 	* src/core/termview.h (CTermView::m_s_CharSet): New data member to

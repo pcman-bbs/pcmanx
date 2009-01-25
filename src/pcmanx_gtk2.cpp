@@ -30,7 +30,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
-#include <glib/goption.h>
+#include <glib.h>
 #include <string.h>
 
 #include "mainframe.h"
