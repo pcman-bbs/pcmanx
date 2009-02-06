@@ -46,6 +46,10 @@
 #include <unistd.h>
 #include <signal.h>
 
+#if ! GTK_CHECK_VERSION (2, 10, 0)
+#define GTK_STOCK_SELECT_ALL "gtk-index"
+#endif
+
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
 #include <libnotify/notify.h>
