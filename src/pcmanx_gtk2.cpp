@@ -53,7 +53,7 @@
 #include "script/api.h"
 #endif
 
-#if (GTK_MAJOR_VERSION < 2 || GTK_MINOR_VERSION < 14)
+#if !GTK_CHECK_VERSION(2,14,0)
 #  define gtk_dialog_get_content_area(x) ((x)->vbox)
 #endif
 

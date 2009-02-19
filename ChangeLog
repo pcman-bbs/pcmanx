@@ -1,3 +1,8 @@
+2009-02-18  Jason Xia  <jasonxh@gmail.com>
+
+	* po/POTFILES.in, po/zh_CN.po, po/zh_TW.po: Update po files. Fix
+	Simplified Chinese translation of "Line" and "Col".
+
 2009-02-07  Youchen Lee  <copyleft@utcr.org>
 
 	* src/mainframe.cpp: For availability to build under (gtk+ < 2.10),
