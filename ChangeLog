@@ -1,5 +1,13 @@
 2009-05-16  Jim Huang  <jserv@0xlab.org>
 
+	* src/mainframe.cpp
+	(CMainFrame::OnPreference): Fix dangling else.
+	(CMainFrame::OnJumpToPage): Proper casting for INFO.
+
+	* src/notebook.cpp (CNotebook::AddPage): Ditto.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
 	* src/mainframe.cpp (CMainFrame::OnCloseCon): Use CNotebook wrapper
 	interface rather than explicitly casting.
 	Patched by Chih-Min Chao <cmchao@gmail.com>.

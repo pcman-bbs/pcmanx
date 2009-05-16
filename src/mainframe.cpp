@@ -998,11 +998,12 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 #endif
 
 #ifdef USE_DOCKLET
-	if( AppConfig.ShowTrayIcon != show_tray_icon )
-		if(AppConfig.ShowTrayIcon)
+	if (AppConfig.ShowTrayIcon != show_tray_icon) {
+		if (AppConfig.ShowTrayIcon)
 			_this->ShowTrayIcon();
 		else
 			_this->HideTrayIcon();
+	}
 #endif
 
 	if (AppConfig.ShowStatusBar)
@@ -1030,7 +1031,8 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x", obj, _this->m_JumpTos[0]);
+	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x",
+		(unsigned int) obj, (unsigned int) _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
 		if( obj == _this->m_JumpTos[i] )
 		{
