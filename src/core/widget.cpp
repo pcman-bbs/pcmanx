@@ -69,6 +69,11 @@ void CWidget::OnCreate()
 
 void CWidget::Refresh()
 {
+	/* Do not call gdk_window_invalidate_rect on
+	 * a non-realized GtkWidget. */
+	if (! GTK_WIDGET_REALIZED(m_Widget))
+			return;
+
 	GdkRectangle t_Rect;
 	t_Rect.x = t_Rect.y = 0;
 	t_Rect.width = m_Widget->allocation.width;
