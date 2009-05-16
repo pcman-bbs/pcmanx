@@ -910,8 +910,7 @@ void CMainFrame::OnCloseCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 			return;
 	}
 
-	GtkNotebook* nb = GTK_NOTEBOOK(_this->m_pNotebook->m_Widget);
-	_this->CloseCon(gtk_notebook_get_current_page(nb), true);
+	_this->CloseCon(_this->m_pNotebook->GetCurPage(), true);
 }
 
 
