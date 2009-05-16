@@ -1101,54 +1101,65 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
                                          GdkEventButton *event,
                                          gpointer p_mainframe)
 {
+	/* initialized once */
        static GtkWidget *menu = NULL;
 
-       // set menu items
-       GtkWidget *menu_item_close = gtk_image_menu_item_new_with_label( _("Close") );
-       GtkWidget *menu_item_reconnect = gtk_image_menu_item_new_with_label( _("Reconnect") );
-       GtkWidget *menu_item_add2fav = gtk_image_menu_item_new_with_label( _("Add to Favorites") );
-       // set images
-       GtkWidget *image_close = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-       GtkWidget *image_reconnect = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
-       GtkWidget *image_add2fav = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_close, image_close);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_reconnect, image_reconnect);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_add2fav, image_add2fav);
+	if (menu == NULL) {
+		// set menu items
+		GtkWidget *menu_item_close =
+			gtk_image_menu_item_new_with_label( _("Close") );
+		GtkWidget *menu_item_reconnect =
+			gtk_image_menu_item_new_with_label( _("Reconnect") );
+		GtkWidget *menu_item_add2fav =
+			gtk_image_menu_item_new_with_label( _("Add to Favorites") );
 
-       // if not right check the mouse
-       if (event->type != GDK_BUTTON_PRESS || event->button != 3)
-               return FALSE;
+		// set images
+		GtkWidget *image_close =
+			gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+		GtkWidget *image_reconnect =
+			gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+		GtkWidget *image_add2fav =
+			gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
 
-       // if menu exists
-       if (menu != NULL)
-               gtk_widget_destroy(menu);
-       menu = gtk_menu_new();
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_close, image_close);
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_reconnect, image_reconnect);
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_add2fav, image_add2fav);
 
-       // widgets show
-       gtk_widget_show (menu_item_reconnect);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_reconnect);
+		menu = gtk_menu_new();
 
-       gtk_widget_show (menu_item_close);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_close);
+		// widgets show
+		gtk_widget_show (menu_item_reconnect);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_reconnect);
 
-       gtk_widget_show (menu_item_add2fav);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_add2fav);
+		gtk_widget_show (menu_item_close);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_close);
 
-       // signals
-       g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
-                       G_CALLBACK (CMainFrame::OnReconnect),
-                       p_mainframe);
-       g_signal_connect ( G_OBJECT(menu_item_close), "activate",
-                       G_CALLBACK (CMainFrame::OnCloseCon),
-                       p_mainframe);
-       g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
-                       G_CALLBACK (CMainFrame::OnAddToFavorites),
-                       p_mainframe);
+		gtk_widget_show (menu_item_add2fav);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_add2fav);
 
-       // popup
-       gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
-       return TRUE;
+		// signals
+		g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
+		                G_CALLBACK (CMainFrame::OnReconnect),
+		                p_mainframe);
+		g_signal_connect ( G_OBJECT(menu_item_close), "activate",
+		                G_CALLBACK (CMainFrame::OnCloseCon),
+		                p_mainframe);
+		g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
+		                G_CALLBACK (CMainFrame::OnAddToFavorites),
+		                p_mainframe);
+	}
 
+	// if not right check the mouse
+	if (event->type != GDK_BUTTON_PRESS || event->button != 3)
+	        return FALSE;
+
+	// popup
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
+		event->button, event->time);
+	return TRUE;
 }
 
 
