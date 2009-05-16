@@ -1,3 +1,14 @@
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/nancy_bot/msgdata.cpp: Fix inclusion to make g++ 4.4 happy.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp (CMainFrame::OnNotebookPopupMenu): Avoid memory
+	leak when event is not mouse right-click and  unnecessary resource
+	re-allocation.
+	Patched by Chih-Min Chao <cmchao@gmail.com>.
+
 2009-02-18  Jason Xia  <jasonxh@gmail.com>
 
 	* po/POTFILES.in, po/zh_CN.po, po/zh_TW.po: Update po files. Fix
