@@ -26,12 +26,12 @@
 
 CGeneralPrefPage::CGeneralPrefPage()
  : CWidget()
-{	
+{
 	m_Widget = gtk_vbox_new (FALSE, 2);
 	gtk_widget_show (m_Widget);
 
 	PostCreate();
-  
+
 	GtkWidget *hbox19;
 	GtkWidget *label27;
 	GtkWidget *hbox20;
@@ -43,11 +43,11 @@ CGeneralPrefPage::CGeneralPrefPage()
 	m_QueryOnCloseCon = gtk_check_button_new_with_mnemonic (_("Confirm before closing connected connections"));
 	gtk_widget_show (m_QueryOnCloseCon);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_QueryOnCloseCon, FALSE, FALSE, 0);
-	
+
 	m_QueryOnExit = gtk_check_button_new_with_mnemonic (_("Confirm before exiting the program if there are still connections"));
 	gtk_widget_show (m_QueryOnExit);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_QueryOnExit, FALSE, FALSE, 0);
-	
+
 	m_CancelSelAfterCopy = gtk_check_button_new_with_mnemonic (_("Cancel selection after copying text"));
 	gtk_widget_show (m_CancelSelAfterCopy);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_CancelSelAfterCopy, FALSE, FALSE, 0);
@@ -86,11 +86,11 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_PopupNotifier);
 	gtk_box_pack_start (GTK_BOX (hbox20), m_PopupNotifier, FALSE, FALSE, 0);
 
-	m_PopupTimeout_adj = gtk_adjustment_new (0, 0, 100, 1, 10, 10);
+	m_PopupTimeout_adj = gtk_adjustment_new (0, 0, 100, 1, 0, 0);
 	m_PopupTimeout = gtk_spin_button_new (GTK_ADJUSTMENT (m_PopupTimeout_adj), 1, 0);
 	gtk_widget_show (m_PopupTimeout);
 	gtk_box_pack_start (GTK_BOX (hbox20), m_PopupTimeout, FALSE, TRUE, 0);
-	
+
 	label29 = gtk_label_new (_("seconds"));
 	gtk_widget_show (label29);
 	gtk_box_pack_start (GTK_BOX (hbox20), label29, FALSE, FALSE, 2);
