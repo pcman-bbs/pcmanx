@@ -1,11 +1,18 @@
-2009-05-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2009-05-29  Jim Huang  <jserv@0xlab.org>
+
+	* src/view/telnetview.cpp (CTelnetView::OnHyperlinkClicked): Fix gcc
+	4.4 compilation error.
+	Reported by: devilreg <devilreg@gmail.com>.
+
+2009-05-29  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/generalprefpage.cpp,
 	src/sitepage.cpp: Fix the deprecated GtkAdjustment of GtkSpinButton.
 
-2009-05-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2009-05-28  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
-	* src/core/site.cpp: Let vertical and horizontal align center by default.
+	* src/core/site.cpp: Let vertical and horizontal align center properly
+	set by default.
 
 2009-05-16  Jim Huang  <jserv@0xlab.org>
 

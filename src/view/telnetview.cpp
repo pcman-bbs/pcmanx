@@ -708,7 +708,7 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 #ifdef USE_WGET
 	if (m_bWgetFiles == true) {
 		const char* t_pcURL = sURL.c_str();
-		char* t_pcDot = strrchr(t_pcURL, '.') + 1;
+		const char* t_pcDot = strrchr(t_pcURL, '.') + 1;
 		char t_cFileType = strlen(t_pcURL) - (t_pcDot -t_pcURL);
 		if (t_cFileType == 3) {
 			if (strncmp(t_pcDot, "rar", 3) == 0 ||
