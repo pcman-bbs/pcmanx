@@ -60,8 +60,8 @@
 static int multiple_instance = 0;
 
 static GOptionEntry entries[] = {
-	{ (const gchar *) "multiple-instance", (gchar) 'm', 0, 
-	  G_OPTION_ARG_NONE, &multiple_instance, 
+	{ (const gchar *) "multiple-instance", (gchar) 'm', 0,
+	  G_OPTION_ARG_NONE, &multiple_instance,
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
 	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
@@ -71,6 +71,25 @@ static char pkgver[] = PACKAGE_VERSION;
 extern "C" char pkgver_in_libpcmanx[];	/* exported from libpcmanx,
 					   used for insanity checks */
 
+/**
+ * @mainpage PCManX GTK+ Documentation
+ *
+ * @section intro_sec Introduction
+ *
+ * PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
+ * It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
+ * Some handy functions like tabbed-browsing, auto-login and a built-in ANSI editor enabling colored text editing are also provided.
+ *
+ * - Website
+ *   - http://pcmanx.csie.net
+ * - Mailing List &amp; Forum
+ *   - http://groups.google.com/group/PCManX
+ * - WebSVN
+ *   - http://svn.csie.net/listing.php?repname=pcmanx
+ * - Repository
+ *   - https://svn.csie.net/pcmanx/
+ *
+ */
 int main(int argc, char *argv[])
 {
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -121,9 +140,9 @@ int main(int argc, char *argv[])
 	}
 
 	/*--- prevent GTK+ from catching F10  ---*/
-	GtkSettings *gtk_settings; 
-	gtk_settings = gtk_settings_get_for_screen(gdk_screen_get_default()); 
-	g_object_set(gtk_settings, "gtk-menu-bar-accel", NULL, NULL); 
+	GtkSettings *gtk_settings;
+	gtk_settings = gtk_settings_get_for_screen(gdk_screen_get_default());
+	g_object_set(gtk_settings, "gtk-menu-bar-accel", NULL, NULL);
 
 	/*--- Check if multiple-instance is allowed. ---*/
 	if (!multiple_instance) {
@@ -210,7 +229,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_LIBNOTIFY
 	notify_uninit();
-#endif	
+#endif
 	CTelnetCon::Cleanup();
 
 	AppConfig.SaveFavorites();
