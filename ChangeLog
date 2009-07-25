@@ -1,4 +1,13 @@
-2009-05-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2009-07-26  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/termdata.cpp (CTermData::memset16): Rewritten.  Use C99
+	uint16_t instead of "short int".  It should prevent compilers from
+	being over-optimizing with -ftree-vectorize.
+	Note: the usage of memset16 is somehow ambiguous for sake of the last
+	function parameter (size_t n), which is regarded as divided by 2 in
+	advance.
+
+2009-05-29  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/pcmanx_gtk2.cpp: Add an introduction mainpage of Doxygen.
 
