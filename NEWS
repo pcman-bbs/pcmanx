@@ -1,3 +1,27 @@
+Version 0.3.9 - ?
+
+* Feature: Middle mouse click as tab close (similar behavior under Firefox).
+* Feature: GNOME Goal - Clean up GLib and GTK+ includes.  It is known to be
+           easier to migrate to future gtk+ version.
+* Feature: Keep version information in libpcmanx-core and perform insanity
+           checks for libpcmanx.
+* Feature: Enable [KP_Enter] key in URL entry box.
+* Feature: Improved vertical and horizontal center alignment.
+* Bugfix: Prevent compilers from over-optimizing with -ftree-vectorize.
+* Bugfix: gcc 4.4 and gtk+ < 2.10 build failures.
+* Bugfix: Do not call gdk_window_invalidate_rect on a non-realized GtkWidget
+          to avoid Segfault.
+* Bugfix: Avoid memory leak when event is not mouse right-click and
+          unnecessary resource re-allocation.
+* Bugfix: Fix Simplified Chinese translation of "Line" and "Col".
+* Bugfix: Properly handle the character set convertion during copy and paste
+          from X clipboard.
+* Bugfix: Prevent GTK+ from catching F10 and Handle F1-F12 keys.
+* Bugfix: Provide WM_CLASS property for several X window managers.
+* Bugfix: Respect user preference about showing/hiding status bar.
+* Bugfix: Avoid SegFault when closing a disconnected tab.
+* Bugfix: Trim trailing spaces of each line when downloading articles.
+
 Version 0.3.8 - August 2008
 
 * Feature: Download BBS article.
