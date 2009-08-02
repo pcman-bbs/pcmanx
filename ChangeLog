@@ -1,3 +1,13 @@
+2009-08-03  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/pcmanx_utils.h: Introduced typedef word_t for 32-bit/64-bit
+	representation.
+
+	* src/mainframe.cpp (CMainFrame::OnJumpToPage)
+	(CMainFrame::GetViewIndex)
+	src/notebook.cpp (CNotebook::AddPage): Make use of word_t in INFO.
+	Reported by Kovich Ian <kovich.ian@gmail.com>.
+
 2009-07-26  Jim Huang  <jserv@0xlab.org>
 
 	* src/core/termdata.cpp (CTermData::memset16): Rewritten.  Use C99
