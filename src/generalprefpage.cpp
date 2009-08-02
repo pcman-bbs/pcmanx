@@ -95,6 +95,10 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (label29);
 	gtk_box_pack_start (GTK_BOX (hbox20), label29, FALSE, FALSE, 2);
 
+	m_MidClickAsClose = gtk_check_button_new_with_mnemonic (_("Middle mouse click as tab close (similar to Firefox)"));
+	gtk_widget_show (m_MidClickAsClose);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_MidClickAsClose, FALSE, FALSE, 0);
+
 	hbox19 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox19);
 	gtk_box_pack_start (GTK_BOX (m_Widget), hbox19, FALSE, FALSE, 0);
@@ -136,6 +140,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(m_PopupTimeout), AppConfig.PopupTimeout);
 
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_MidClickAsClose),
+	                             AppConfig.MidClickAsClose);
+
 	gtk_entry_set_text(GTK_ENTRY(m_WebBrowser), AppConfig.WebBrowser.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_MailClient), AppConfig.MailClient.c_str());
 }
@@ -159,6 +166,8 @@ void CGeneralPrefPage::OnOK()
 #endif
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
 	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_PopupTimeout));
+	AppConfig.MidClickAsClose = gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(m_MidClickAsClose));
 	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
 	AppConfig.MailClient = gtk_entry_get_text(GTK_ENTRY(m_MailClient));
 }

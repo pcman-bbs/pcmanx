@@ -1100,10 +1100,11 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget UNUSED,
 
 gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
                                          GdkEventButton *event,
-                                         gpointer p_mainframe)
+                                         CMainFrame* _this)
 {
 	/* initialized once */
-       static GtkWidget *menu = NULL;
+	static GtkWidget *menu = NULL;
+	static GtkWidget *menu_item_close = NULL;
 
 	if (menu == NULL) {
 		// set menu items
@@ -1144,13 +1145,21 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
 		// signals
 		g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
 		                G_CALLBACK (CMainFrame::OnReconnect),
-		                p_mainframe);
+		                _this);
 		g_signal_connect ( G_OBJECT(menu_item_close), "activate",
 		                G_CALLBACK (CMainFrame::OnCloseCon),
-		                p_mainframe);
+		                _this);
 		g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
 		                G_CALLBACK (CMainFrame::OnAddToFavorites),
-		                p_mainframe);
+		                _this);
+	}
+
+	// Feature: let mouse middle click be able to close tab
+	// similar to the behavior under Firefox
+	if (AppConfig.MidClickAsClose &&
+	    event->type == GDK_BUTTON_PRESS && event->button == 2) {
+		_this->OnCloseCon(GTK_MENU_ITEM(menu_item_close), _this);
+		return TRUE;
 	}
 
 	// if not right check the mouse

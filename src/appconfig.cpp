@@ -103,6 +103,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
 		CFG_INT ( PopupTimeout )
+		CFG_BOOL ( MidClickAsClose )
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_SECT(Display)
@@ -349,6 +350,7 @@ void CAppConfig::SetToDefault()
 #endif
 	PopupNotifier = true;
 	PopupTimeout = 6;
+	MidClickAsClose = true;
 #ifdef USE_WGET
 	UseWgetFiles = false;
 #endif

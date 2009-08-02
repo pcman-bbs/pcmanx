@@ -1,3 +1,19 @@
+2009-08-03  Chih-Min Chao <cmchao@gmail.com>
+	    Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.h (OnNotebookPopupMenu)
+	src/mainframe.cpp (CMainFrame::OnNotebookPopupMenu): Introduced new
+	feature: let mouse middle click be able to close tab.  It is similar
+	to the behavior under Firefox.
+
+	* src/appconfig.h (MidClickAsClose)
+	src/generalprefpage.h (m_MidClickAsClose)
+	src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault)
+	src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage)
+	(CGeneralPrefPage::OnOK): Required modifications to configure this
+	feature.
+
 2009-08-03  Jim Huang  <jserv@0xlab.org>
 
 	* src/core/pcmanx_utils.h: Introduced typedef word_t for 32-bit/64-bit
