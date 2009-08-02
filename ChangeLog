@@ -1,3 +1,9 @@
+2009-08-03  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp (CMainFrame::OnFont) (CMainFrame::OnFontEn):
+	Fix mistaken font size got from font dialog.
+	Merged from http://code.google.com/p/gemanx/source/detail?r=26 .
+
 2009-08-03  Chih-Min Chao <cmchao@gmail.com>
 	    Jim Huang  <jserv@0xlab.org>
 

@@ -671,7 +671,8 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
 		AppConfig.FontFamily = family;
-		AppConfig.FontSize = pango_font_description_get_size(desc);
+		AppConfig.FontSize =
+			pango_font_description_get_size(desc) / PANGO_SCALE;
 		pango_font_description_free(desc);
 
 		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
@@ -723,7 +724,8 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
 		AppConfig.FontFamilyEn = family;
-		AppConfig.FontSizeEn = pango_font_description_get_size(desc);
+		AppConfig.FontSizeEn =
+			pango_font_description_get_size(desc) / PANGO_SCALE;
 		pango_font_description_free(desc);
 
 		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
