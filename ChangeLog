@@ -3,6 +3,7 @@
 	* configure.ac: Bump to 0.3.9
 	* developers/make-new-release.sh: Add more build test case.
 	* NEWS: Adjust 0.3.9 to August 2009.
+	* developers/make-new-release.sh: Log during build test case.
 
 2009-08-03  Jim Huang  <jserv@0xlab.org>
 

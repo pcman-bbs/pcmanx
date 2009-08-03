@@ -22,7 +22,7 @@ for ((i=0; i<${#features[@]}; i++)); do
     echo "Attempting to build ${features[$i]} support..."
     tar jxf pcmanx-gtk2-${VERSION}.tar.bz2
     pushd pcmanx-gtk2-${VERSION}
-    if ./configure --enable-${features[$i]} >/dev/null && make >/dev/null 2>/dev/null; then
+    if ./configure --enable-${features[$i]} > build.log && make >> build.log 2>&1; then
         echo -e "\033[44;37mPassed!\033[m"
     else
         abort "feature '${features[$i]}' build fails."
