@@ -1,4 +1,4 @@
-Version 0.3.9 - ?
+Version 0.3.9 - August 2009
 
 * Feature: Middle mouse click as tab close (similar behavior under Firefox).
 * Feature: GNOME Goal - Clean up GLib and GTK+ includes.  It is known to be
