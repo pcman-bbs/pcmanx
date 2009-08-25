@@ -81,13 +81,11 @@ extern "C" char pkgver_in_libpcmanx[];	/* exported from libpcmanx,
  * Some handy functions like tabbed-browsing, auto-login and a built-in ANSI editor enabling colored text editing are also provided.
  *
  * - Website
- *   - http://pcmanx.csie.net
+ *   - http://code.google.com/p/pcmanx-gtk2/
  * - Mailing List &amp; Forum
  *   - http://groups.google.com/group/PCManX
- * - WebSVN
- *   - http://svn.csie.net/listing.php?repname=pcmanx
  * - Repository
- *   - https://svn.csie.net/pcmanx/
+ *   - http://pcmanx-gtk2.googlecode.com/svn
  *
  */
 int main(int argc, char *argv[])

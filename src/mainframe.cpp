@@ -177,10 +177,10 @@ CMainFrame::CMainFrame()
 
 
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
-	
+
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
-	g_signal_connect( G_OBJECT(m_pNotebook->m_Widget), "button_press_event", 
+	g_signal_connect( G_OBJECT(m_pNotebook->m_Widget), "button_press_event",
 			G_CALLBACK(CMainFrame::OnNotebookPopupMenu), this );
 
 	MakeUI();
@@ -227,7 +227,7 @@ CMainFrame::CMainFrame()
 	if (AppConfig.ShowStatusBar) {
 		gtk_widget_show_all(m_Statusbar);
 	}
-	
+
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
 	m_EverySecondTimer = g_timeout_add(1000, (GSourceFunc)CMainFrame::OnEverySecondTimer, this );
 
@@ -273,7 +273,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	pCon->m_Encoding = pCon->m_Site.m_Encoding;
 
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
-	
+
 	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
 	m_pNotebook->SetCurPage(idx);
 	m_pView->SetFocus();
@@ -352,7 +352,7 @@ GtkRadioActionEntry CMainFrame::all_bot_entries[] =
   };
 #endif
 
-static const char *ui_info = 
+static const char *ui_info =
   "<ui>"
   "  <menubar>"
   "    <menu action='connect_menu'>"
@@ -469,7 +469,7 @@ void CMainFrame::MakeUI()
 
   gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
 		  		      G_N_ELEMENTS(m_ToggleActionEntries), this);
-  
+
 #ifdef USE_NANCY
   gtk_action_group_add_radio_actions(m_ActionGroup,
 				     cur_bot_entries,
@@ -490,7 +490,7 @@ void CMainFrame::MakeUI()
 
   GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
   gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
-	
+
   GError * error = NULL;
   if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
     {
@@ -503,7 +503,7 @@ void CMainFrame::MakeUI()
   gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 
   m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
-    
+
   m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
 
 #ifdef USE_NANCY
@@ -512,7 +512,7 @@ void CMainFrame::MakeUI()
 			 "/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
   m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
 		       "/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
-  
+
   m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
        			 "/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
   m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
@@ -521,10 +521,10 @@ void CMainFrame::MakeUI()
 #endif
 
   GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
-  
+
   GtkWidget* jump_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
-  
+
   const char* page_str = _("Page");
   for(int i = 1; i < 11; i++)
     {
@@ -556,22 +556,22 @@ void CMainFrame::MakeUI()
   gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
   gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
   gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
-  
+
   GtkToolItem* url_bar_item = gtk_tool_item_new();
   gtk_tool_item_set_expand(url_bar_item, true);
   gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
   gtk_widget_show_all ( (GtkWidget*)url_bar_item);
   gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
-  
+
   g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
 		    G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
 		    this);
   g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
 		    G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
 		    this);
-  
+
   CreateFavoritesMenu();
-  
+
 #ifdef USE_DOCKLET
 #if GTK_CHECK_VERSION(2,10,0)
 	m_TrayIcon = gtk_status_icon_new();
@@ -807,7 +807,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
 						"Copyright (c) 2005-2008\n"
 						"License: GNU Genral Public License\n"
-						"Project Homepage: http://pcmanx.csie.net\n"
+						"Project Homepage: http://code.google.com/p/pcmanx-gtk2/\n"
 						"Bug Report: %s\n\n"
 						"<b>Authors</b>:\n%s\n\n"
 						"<b>Translators</b>:\n%s\n\n"), PACKAGE_VERSION, PACKAGE_BUGREPORT, authors, translators );
@@ -816,7 +816,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 /*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
 						_("Copyright (C) 2005\n"
 						"License: GNU Genral Public License\n"
-						"Project Homepage: http://pcmanx.csie.net/\n\n"
+						"Project Homepage: http://code.google.com/p/pcmanx-gtk2/\n\n"
 						"Authors:\n%s\n")
 						, authors	);
 */
@@ -838,7 +838,7 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 		sigaction(SIGUSR2, &sa, NULL);
 		g_bIsUpateHandlerExisted = true;
 	}
-	
+
 	if (g_bUpdateingBBSList == false) {
 		pid_t child_pid = 0, parent_pid = getpid();
 
@@ -1081,7 +1081,7 @@ void CMainFrame::OnTelnetConRecv(CTelnetView* con)
 	if( !con )
 		return;
 
-	// If the text color of the label is red which indicate 
+	// If the text color of the label is red which indicate
 	// there is new incoming message, we should return.
 //	if(  )
 //		return;
@@ -1283,7 +1283,7 @@ void CMainFrame::OnAddToFavorites(GtkMenuItem* widget UNUSED,
 
 		GtkWidget* fav_item = gtk_image_menu_item_new_with_label( newsite.m_Name.c_str() );
 		gtk_widget_show (fav_item);
-		gtk_menu_shell_insert( GTK_MENU_SHELL(_this->m_FavoritesMenu), fav_item, 
+		gtk_menu_shell_insert( GTK_MENU_SHELL(_this->m_FavoritesMenu), fav_item,
 			AppConfig.Favorites.size()>0 ? (AppConfig.Favorites.size()-1) : 0 );
 
 		GtkWidget* image = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
@@ -1350,7 +1350,7 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image347);
 
 	GtkWidget* edit_fav_menu = gtk_image_menu_item_new_with_mnemonic (_("_Edit Favorites"));
-	
+
 	gtk_widget_show (edit_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
 
@@ -1591,12 +1591,12 @@ void CMainFrame::OnChangeAllBot(GtkRadioAction *action UNUSED,
   vector<CTelnetView*>::iterator it = _this->m_Views.begin();
   for( ; it != _this->m_Views.end() ; ++it )
     (*it)->GetCon()->set__UseNancy(use_nancy);
-  
+
   if( use_nancy )
     gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_CurBotNancyRadio, true );
   else
     gtk_check_menu_item_set_active( (GtkCheckMenuItem*)_this->m_DisableCurBotRadio, true );
-  
+
   _this->UpdateBotStatus();
 }
 

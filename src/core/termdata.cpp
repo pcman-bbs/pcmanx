@@ -1,4 +1,4 @@
-/**                                                                             
+/**
  * termdata.cpp - Store terminal screen data and parse
  *                ANSI escape sequence.
  *
@@ -37,7 +37,7 @@
 
 //GdkColor = (red, green, blue)
 
-GdkColor 
+GdkColor
 CTermCharAttr::m_DefaultColorTable[SIZE_OF_COLOR_TABLE] = {
 	//Darker color
 	{0,0,0,0}, 		//0;30m		Black
@@ -63,7 +63,7 @@ CTermCharAttr::m_DefaultColorTable[SIZE_OF_COLOR_TABLE] = {
 //e.g., when [flags] = STA_FG | STA_BRIGHT, the old attribute updates
 //attributes Foreground and Bright only.
 //After updating, set Need Update flag as true.
-void 
+void
 CTermCharAttr::SetTextAttr( CTermCharAttr attr, int flags )
 {
 	if( flags & STA_FG )
@@ -83,9 +83,9 @@ CTermCharAttr::SetTextAttr( CTermCharAttr attr, int flags )
 	m_NeedUpdate = 1;
 }
 
-// I don't know whether assign an 'short' to this 'object' directly will cause 
+// I don't know whether assign an 'short' to this 'object' directly will cause
 // problems or not hence preventing using it.  Otherwise I can return 7 directly;
-short 
+short
 CTermCharAttr::GetDefVal(){
 	CTermCharAttr attr;
 	*(short*)&attr=0;
@@ -94,11 +94,11 @@ CTermCharAttr::GetDefVal(){
 }
 
 
-void 
+void
 CTermCharAttr::SetToDefault(){ *(short*)this = 0;	m_Fg=7;}
 // We cannot use == to compare two CTermCharAttr directly because of some special flags,
 //so us use this function to compare.
-bool 
+bool
 CTermCharAttr::IsSameAttr(short val2)
 {
 		CTermCharAttr* pAttr = (CTermCharAttr*)&val2;
@@ -206,7 +206,7 @@ void CTermData::SetRowCount(int RowCount)
     }
     delete []m_Screen;
     m_Screen = NewScreen;
-    m_RowCount = RowCount;       
+    m_RowCount = RowCount;
 }
 
 // Allocate screen buffer.
@@ -328,7 +328,7 @@ void CTermData::PutChar(unsigned char ch)
 	{
 		switch( m_CmdLine[0] )
 		{
-		// m_CmdLine[0] == '\0' means "not in control sequence," and *m_pBuf 
+		// m_CmdLine[0] == '\0' means "not in control sequence," and *m_pBuf
 		// is normal text, write to screen buffer directly.
 		case '\0':
 			{
@@ -429,7 +429,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end+i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );	
+		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end+i]);
 	}
 }
@@ -454,7 +454,7 @@ void CTermData::ScrollDown(int n /*=1*/)
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end-i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );	
+		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end-i]);
 	}
 }
@@ -627,7 +627,7 @@ void CTermData::ClearScreen(int p)
 		tmp = m_Screen[m_CaretPos.y];
 		if( m_CaretPos.x < m_ColsPerPage && m_CaretPos.y > m_RowsPerPage )
 		{
-			memcpy( &tmp[m_CaretPos.x], 
+			memcpy( &tmp[m_CaretPos.x],
 				&m_Screen[m_CaretPos.y-m_RowsPerPage][m_CaretPos.x],
 				m_ColsPerPage-m_CaretPos.x);
 			memcpy( &GetLineAttr(tmp)[m_CaretPos.x],
@@ -848,7 +848,7 @@ void CTermData::DetectCharSets()
 inline bool isurl(int ch)
 {	return isalnum(ch) || strchr("!$&'*+,-./:;=?@_|~%#", ch);	}
 // Though '(' ,')', '<', and '>' are legal characters in URLs, I ignore them because
-// they are frequently used to enclose URLs. ex: (http://pcmanx.csie.net/)
+// they are frequently used to enclose URLs. ex: (http://code.google.com/p/pcmanx-gtk2/)
 inline bool isurlscheme(int ch)
 {	return isalnum(ch) || strchr("+-.", ch);	}
 
@@ -1198,7 +1198,7 @@ string CTermData::GetSelectedTextWithColor(bool trim)
 }
 
 // 2004/08/03  Modified by PCMan
-// If line[col] is a character in a hyperlink, return the start index of whole hyperlink, 
+// If line[col] is a character in a hyperlink, return the start index of whole hyperlink,
 // and store its length in 'len' which is optional and can be NULL.
 // If there is no hyperlink found at specified index 'col', the return value will be -1.
 int CTermData::HyperLinkHitTest(const char *line, int col, int *len/*= NULL*/ )
@@ -1357,20 +1357,20 @@ void CTermData::SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkP
 		{
 			pattr = GetLineAttr( m_Screen[iline]);
 			for( int col = 0; col < m_ColsPerPage; col++ )
-				pattr[col].SetTextAttr(attr, flags);	
+				pattr[col].SetTextAttr(attr, flags);
 		}
 		if( start.y != end.y )
 		{
 			pattr = GetLineAttr( m_Screen[end.y]);
 			for( int col = 0; col < end.x; col++ )
-				pattr[col].SetTextAttr(attr, flags);			
+				pattr[col].SetTextAttr(attr, flags);
 		}
 	}
 }
 
 
-//If the specified line on screen has a non space and 
-//a non '\0' character or its background is not color 0 
+//If the specified line on screen has a non space and
+//a non '\0' character or its background is not color 0
 //(usually black), return false.
 //Question: how about selected block which color is inversed?
 bool CTermData::IsLineEmpty(int iLine)
@@ -1384,7 +1384,7 @@ bool CTermData::IsLineEmpty(int iLine)
 }
 
 // This is a callback function called from CTermData::DoUpdateDisplay().
-// When new characters are written to a line in the screen buffer, 
+// When new characters are written to a line in the screen buffer,
 // this function will be called with the line number passed in 'row'.
 void CTermData::OnLineModified(int row UNUSED)
 {
