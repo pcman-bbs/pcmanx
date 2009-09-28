@@ -45,6 +45,8 @@ class X_EXPORT CTermView : public CView
 {
 friend class CTermData;
 public:
+    enum {FONT_START = 0, FONT_DEFAULT = 0, FONT_EN, FONT_END};
+
     CTermView();
 
     virtual bool PreKeyDown(GdkEventKey *evt);
@@ -67,15 +69,11 @@ public:
     void PasteFromClipboard(bool primary);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     virtual void CopyToClipboard(bool primary, bool with_color, bool trim);
-    void SetFont( string name, int pt_size, bool compact, bool anti_alias);
-    void SetFontFamily(string name);
-    void SetFont(CFont* font);
-    void SetFontEn( string name, int pt_size, bool compact, bool anti_alias);
-    void SetFontFamilyEn(string name);
-    void SetFontEn(CFont* font);
-	void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
-    CFont* GetFont(){	return m_Font;	}
-    CFont* GetFontEn(){	return m_FontEn;	}
+    void SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type);
+    void SetFontFamily(string name, int font_type);
+    void SetFont(CFont* font, int font_type);
+    void SetHyperLinkColor( GdkColor* clr ){	m_pHyperLinkColor = clr;	}
+    CFont* GetFont(int font_type){	return m_Font[font_type];	}
     void SetHorizontalCenterAlign( bool is_hcenter );
     void SetVerticalCenterAlign( bool is_vcenter );
     void SetTermData(CTermData* data){	m_pTermData = data;	}
@@ -90,7 +88,7 @@ protected:
     void UpdateCaretPos();
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
     void OnDestroy();
-    void RecalcCharDimension();
+    void RecalcCharDimension(int font_type);
     void GetCellSize( int &w, int &h );
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );
@@ -100,8 +98,7 @@ protected:
 	CTermData* m_pTermData;
 
     XftDraw* m_XftDraw;
-    CFont* m_Font;
-    CFont* m_FontEn;
+    CFont* m_Font[FONT_END];
 
 	int m_CharW;
 	int m_CharH;

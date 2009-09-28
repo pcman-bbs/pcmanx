@@ -260,8 +260,8 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
-	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
-	m_pView->SetFontEn(AppConfig.FontFamilyEn, AppConfig.FontSizeEn, AppConfig.CompactLayout, AppConfig.AntiAliasFont);
+	m_pView->SetFont(AppConfig.FontFamily, AppConfig.FontSize, AppConfig.CompactLayout, AppConfig.AntiAliasFont, CTermView::FONT_DEFAULT);
+	m_pView->SetFont(AppConfig.FontFamilyEn, AppConfig.FontSizeEn, AppConfig.CompactLayout, AppConfig.AntiAliasFont, CTermView::FONT_EN);
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 	m_pView->SetHorizontalCenterAlign( site->m_bHorizontalCenterAlign );
 	m_pView->SetVerticalCenterAlign( site->m_bVerticalCenterAlign );
@@ -679,11 +679,11 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		{
 			vector<CTelnetView*>::iterator it;
 			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
-				(*it)->SetFontFamily(AppConfig.FontFamily);
+				(*it)->SetFontFamily(AppConfig.FontFamily, CTermView::FONT_DEFAULT);
 			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
 		}
 		else if( _this->GetCurView() )
-			_this->GetCurView()->SetFontFamily(AppConfig.FontFamily);
+			_this->GetCurView()->SetFontFamily(AppConfig.FontFamily, CTermView::FONT_DEFAULT);
 
 		gtk_widget_destroy(dlg);
 
@@ -732,11 +732,11 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		{
 			vector<CTelnetView*>::iterator it;
 			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
-				(*it)->SetFontFamilyEn(AppConfig.FontFamilyEn);
+				(*it)->SetFontFamily(AppConfig.FontFamilyEn, CTermView::FONT_EN);
 			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
 		}
 		else if( _this->GetCurView() )
-			_this->GetCurView()->SetFontFamilyEn(AppConfig.FontFamilyEn);
+			_this->GetCurView()->SetFontFamily(AppConfig.FontFamilyEn, CTermView::FONT_EN);
 
 		gtk_widget_destroy(dlg);
 
