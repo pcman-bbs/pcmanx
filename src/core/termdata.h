@@ -59,6 +59,7 @@ using namespace std;
 class CTermCharAttr
 {
     public:
+	typedef short AttrType;
 	X_EXPORT static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
 
 	enum charset {CS_ASCII=0, CS_MBCS1=1, CS_MBCS2=2};	// MBCS : multi-byte character set
@@ -78,8 +79,8 @@ class CTermCharAttr
 		return NULL;
 	}
 	static GdkColor* GetDefaultColorTable(){return m_DefaultColorTable;}
-	short GetForeground(){ return (short)m_Fg;}
-	short GetBackground(){return (short)m_Bg;}
+	AttrType GetForeground(){ return (AttrType)m_Fg;}
+	AttrType GetBackground(){return (AttrType)m_Bg;}
 	bool IsBright(){return (m_Bright==1);}
 	bool IsBlink(){return (m_Blink==1);}
 	bool IsUnderLine(){return (m_UnderLine==1);}
@@ -90,7 +91,7 @@ class CTermCharAttr
 	bool IsIpAddr(){return (m_IpAddr==1);}
 #endif
 	bool IsNeedUpdate(){return (m_NeedUpdate==1);}
-	short GetCharSet(){return (short)m_CharSet;}
+	AttrType GetCharSet(){return (AttrType)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
 	static void SetDefaultColorTable(int index, GdkColor* newColor){
 		if(index >= 0 && index < SIZE_OF_COLOR_TABLE){
@@ -123,11 +124,11 @@ class CTermCharAttr
 		}
 	}
 
-	//Transform the CTermCharAttr into short value.
-	short AsShort(){	return *(short*)this;	}
+	//Transform the CTermCharAttr into AttrType value.
+	AttrType AsType(){	return *(AttrType*)this;	}
 
 	//Get default setting of CTermCharAttr.
-	static short GetDefVal();
+	static AttrType GetDefVal();
 	//Set this to default value.
 	void SetToDefault();
 
@@ -140,7 +141,7 @@ class CTermCharAttr
 		return &pColorTable[( m_Inverse ? m_Fg : m_Bg )];
 	}
 
-	bool IsSameAttr(short val2);
+	bool IsSameAttr(AttrType val2);
 
 	// Overloaded operator ==
 	bool operator==(CTermCharAttr& attr);
@@ -282,7 +283,7 @@ public:
 		// Neversay:The structure is show below:
 		// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr ]
 		// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr)
-		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( short ) ) ];
+		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( CTermCharAttr::AttrType ) ) ];
 
 		InitNewLine( NewLine, ColsPerPage );
 		return NewLine;

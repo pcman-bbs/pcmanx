@@ -85,30 +85,30 @@ CTermCharAttr::SetTextAttr( CTermCharAttr attr, int flags )
 
 // I don't know whether assign an 'short' to this 'object' directly will cause
 // problems or not hence preventing using it.  Otherwise I can return 7 directly;
-short
+CTermCharAttr::AttrType
 CTermCharAttr::GetDefVal(){
 	CTermCharAttr attr;
-	*(short*)&attr=0;
+	*(AttrType*)&attr=0;
 	attr.m_Fg = 7;
-	return *(short*)&attr;
+	return *(AttrType*)&attr;
 }
 
 
 void
-CTermCharAttr::SetToDefault(){ *(short*)this = 0;	m_Fg=7;}
+CTermCharAttr::SetToDefault(){ *(AttrType*)this = 0;	m_Fg=7;}
 // We cannot use == to compare two CTermCharAttr directly because of some special flags,
 //so us use this function to compare.
 bool
-CTermCharAttr::IsSameAttr(short val2)
+CTermCharAttr::IsSameAttr(AttrType val2)
 {
 		CTermCharAttr* pAttr = (CTermCharAttr*)&val2;
 		pAttr->m_CharSet = m_CharSet;
 		pAttr->m_NeedUpdate = m_NeedUpdate;
-		return val2 == this->AsShort();
+		return val2 == this->AsType();
 }
 bool
 CTermCharAttr::operator==(CTermCharAttr& attr){
-	if(IsSameAttr(attr.AsShort()))
+	if(IsSameAttr(attr.AsType()))
 		return true;
 	return false;
 }
@@ -176,7 +176,7 @@ void CTermData::SetScreenSize( int RowCount, unsigned short RowsPerPage,
             unsigned short Cols = (ColsPerPage < m_ColsPerPage)?ColsPerPage:m_ColsPerPage;
             //Copy context of old into new one.
             memcpy(NewLine, m_Screen[i], Cols);
-            memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(short)*Cols);
+            memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(CTermCharAttr::AttrType)*Cols);
             delete []m_Screen[i];
             m_Screen[i] = NewLine;
         }
@@ -229,7 +229,7 @@ void CTermData::InitNewLine(char* NewLine, const int ColsPerPage){
 		memset( NewLine, ' ', ColsPerPage);
 		NewLine[ColsPerPage] = '\0';
 		CTermCharAttr DefAttr;	DefAttr.SetToDefault();	DefAttr.SetNeedUpdate(true);
-		memset16( GetLineAttr(NewLine, ColsPerPage), DefAttr.AsShort(), ColsPerPage);
+		memset16( GetLineAttr(NewLine, ColsPerPage), DefAttr.AsType(), ColsPerPage);
 }
 
 // LF handler
@@ -429,7 +429,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end+i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );
+		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end+i]);
 	}
 }
@@ -454,7 +454,7 @@ void CTermData::ScrollDown(int n /*=1*/)
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end-i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );
+		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end-i]);
 	}
 }
@@ -1077,7 +1077,7 @@ static void read_line_with_color( int row, int col1, int col2, void* data )
 		string line;
 		for ( int i = col1; i < col2; i++ )
 		{
-			if( !attr.IsSameAttr( pAttr[i].AsShort() ) )
+			if( !attr.IsSameAttr( pAttr[i].AsType() ) )
 			{
 				// Here we've got a characters with different attributes.
 				line += GetChangedAttrStr( attr, pAttr[i] );

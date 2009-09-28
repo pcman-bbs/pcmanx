@@ -548,7 +548,7 @@ int CTermView::DrawChar(int row, int col)
 		}
 
 		// two cells have the same attributes
-		if( i == 0 && pAttr[0].IsSameAttr( pAttr[1].AsShort() ) && bSel[0] == bSel[1] )
+		if( i == 0 && pAttr[0].IsSameAttr( pAttr[1].AsType() ) && bSel[0] == bSel[1] )
 			break;
 	}
 	gdk_gc_set_clip_rectangle( m_GC, NULL );
