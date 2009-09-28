@@ -80,16 +80,16 @@ class CTermCharAttr
 	inline static GdkColor* GetDefaultColorTable(){return m_DefaultColorTable;}
 	inline short GetForeground(){ return (short)m_Fg;}
 	inline short GetBackground(){return (short)m_Bg;}
-	inline bool IsBright(){return (m_Bright==1?true:false);}
-	inline bool IsBlink(){return (m_Blink==1?true:false);}
-	inline bool IsUnderLine(){return (m_UnderLine==1?true:false);}
-	inline bool IsInverse(){return (m_Inverse==1?true:false);}
-	inline bool IsInvisible(){return (m_Invisible==1?true:false);}
-	inline bool IsHyperLink(){return (m_HyperLink==1?true:false);}
+	inline bool IsBright(){return (m_Bright==1);}
+	inline bool IsBlink(){return (m_Blink==1);}
+	inline bool IsUnderLine(){return (m_UnderLine==1);}
+	inline bool IsInverse(){return (m_Inverse==1);}
+	inline bool IsInvisible(){return (m_Invisible==1);}
+	inline bool IsHyperLink(){return (m_HyperLink==1);}
 #ifdef USE_IPLOOKUP
-	inline bool IsIpAddr(){return (m_IpAddr==1?true:false);}
+	inline bool IsIpAddr(){return (m_IpAddr==1);}
 #endif
-	inline bool IsNeedUpdate(){return (m_NeedUpdate==1?true:false);}
+	inline bool IsNeedUpdate(){return (m_NeedUpdate==1);}
 	inline short GetCharSet(){return (short)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
 	inline static bool SetDefaultColorTable(int index, GdkColor* newColor){
