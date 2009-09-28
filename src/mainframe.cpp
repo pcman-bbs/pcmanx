@@ -317,7 +317,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View"), NULL, NULL, NULL},
     {"font", GTK_STOCK_SELECT_FONT,  _("_Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
-    {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFontEn)},
+    {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
 #ifdef USE_NANCY
     {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
@@ -640,7 +640,6 @@ void CMainFrame::LoadIcons()
 	m_ConnIcon = gdk_pixbuf_new_from_xpm_data((const char**)conn_xpm);
 }
 
-
 void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
@@ -661,60 +660,25 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	gtk_widget_set_sensitive(fontsel->face_list, false);
 
 	char pango_font_name[32];
-	sprintf( pango_font_name, "%s %d", AppConfig.FontFamily.c_str(), (AppConfig.FontSize > 6 && AppConfig.FontSize <= 72) ? AppConfig.FontSize : 12 );
-	gtk_font_selection_dialog_set_font_name(fsdlg, pango_font_name);
-
-	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
-	{
-		gchar* name = gtk_font_selection_dialog_get_font_name( fsdlg );
-		PangoFontDescription* desc = pango_font_description_from_string( name );
-		g_free( name );
-		const char* family = pango_font_description_get_family(desc);
-		AppConfig.FontFamily = family;
-		AppConfig.FontSize =
-			pango_font_description_get_size(desc) / PANGO_SCALE;
-		pango_font_description_free(desc);
-
-		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
-		{
-			vector<CTelnetView*>::iterator it;
-			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
-				(*it)->SetFontFamily(AppConfig.FontFamily, CTermView::FONT_DEFAULT);
-			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
-		}
-		else if( _this->GetCurView() )
-			_this->GetCurView()->SetFontFamily(AppConfig.FontFamily, CTermView::FONT_DEFAULT);
-
-		gtk_widget_destroy(dlg);
-
-		if( _this->GetCurView() )
-			_this->GetCurView()->Refresh();
+	int *font_size;
+	string *font_family;
+	int font_type;
+	const char *font_action =gtk_action_get_label(GTK_ACTION(mitem));
+	if (!strcmp(font_action, "_Font")) {
+		font_size = &AppConfig.FontSize;
+		font_family = &AppConfig.FontFamily;
+		font_type = CTermView::FONT_DEFAULT;
+        }
+	else if (!strcmp(font_action, "_ASCII Font")) {
+		font_size = &AppConfig.FontSizeEn;
+		font_family = &AppConfig.FontFamilyEn;
+		font_type = CTermView::FONT_EN;
 	}
-	else
-		gtk_widget_destroy(dlg);
-}
+	else {
+		g_assert_not_reached();
+	}
 
-void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
-{
-	GtkWidget* dlg = gtk_font_selection_dialog_new(_("Font"));
-	gtk_window_set_modal( (GtkWindow*)dlg, true);
-	gtk_window_set_transient_for( (GtkWindow*)dlg, (GtkWindow*)_this->m_Widget);
-
-	GtkFontSelectionDialog* fsdlg = (GtkFontSelectionDialog*)dlg;
-	GtkWidget* apply_to_all = gtk_check_button_new_with_label( _("Apply to all opened pages") );
-	gtk_widget_show(apply_to_all);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(apply_to_all), true);
-	gtk_box_pack_start( GTK_BOX(fsdlg->action_area), apply_to_all, true, true, 4);
-	gtk_box_reorder_child( GTK_BOX(fsdlg->action_area), apply_to_all, 0 );
-	gtk_box_set_homogeneous(GTK_BOX(fsdlg->action_area), false);
-
-	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
-	// But we need this functionality.
-	GtkFontSelection* fontsel = GTK_FONT_SELECTION(fsdlg->fontsel);
-	gtk_widget_set_sensitive(fontsel->face_list, false);
-
-	char pango_font_name[32];
-	sprintf( pango_font_name, "%s %d", AppConfig.FontFamilyEn.c_str(), (AppConfig.FontSizeEn > 6 && AppConfig.FontSizeEn <= 72) ? AppConfig.FontSizeEn : 12 );
+	sprintf( pango_font_name, "%s %d", (*font_family).c_str(), (*font_size > 6 && *font_size <= 72) ? *font_size : 12 );
 	gtk_font_selection_dialog_set_font_name(fsdlg, pango_font_name);
 
 	if( gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK )
@@ -723,20 +687,19 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		PangoFontDescription* desc = pango_font_description_from_string( name );
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
-		AppConfig.FontFamilyEn = family;
-		AppConfig.FontSizeEn =
-			pango_font_description_get_size(desc) / PANGO_SCALE;
+		*font_family = family;
+		*font_size = pango_font_description_get_size(desc) / PANGO_SCALE;
 		pango_font_description_free(desc);
 
 		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
 		{
 			vector<CTelnetView*>::iterator it;
 			for( it = _this->m_Views.begin(); it != _this->m_Views.end(); ++it )
-				(*it)->SetFontFamily(AppConfig.FontFamilyEn, CTermView::FONT_EN);
+				(*it)->SetFontFamily(*font_family, font_type);
 			/// FIXME: Poor design! Different connection must be allowed to use different fonts in the future.
 		}
 		else if( _this->GetCurView() )
-			_this->GetCurView()->SetFontFamily(AppConfig.FontFamilyEn, CTermView::FONT_EN);
+			_this->GetCurView()->SetFontFamily(*font_family, font_type);
 
 		gtk_widget_destroy(dlg);
 
