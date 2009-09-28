@@ -92,41 +92,35 @@ class CTermCharAttr
 	inline bool IsNeedUpdate(){return (m_NeedUpdate==1);}
 	inline short GetCharSet(){return (short)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
-	inline static bool SetDefaultColorTable(int index, GdkColor* newColor){
+	inline static void SetDefaultColorTable(int index, GdkColor* newColor){
 		if(index >= 0 && index < SIZE_OF_COLOR_TABLE){
 			m_DefaultColorTable[index] = *newColor;
-			return true;
-		}return false;
+		}
 	}
-	inline bool SetForeground(int foreground){ 
+	inline void SetForeground(int foreground){
 		if((foreground >=0) && (foreground < 1<<BIT_NUMBER_OF_COLOR)){
 			m_Fg = foreground;
-			return true;
 		}
-		return false;
 	}
-	inline bool SetBackground(int background){ 
+	inline void SetBackground(int background){
 		if((background >=0) && (background < 1<<BIT_NUMBER_OF_COLOR)){
 			m_Bg = background;
-			return true;
 		}
-		return false;
 	}
-	inline bool SetBright(bool flag){m_Bright = flag?1:0;return flag;}
-	inline bool SetBlink(bool flag){m_Blink = flag?1:0;return flag;}
-	inline bool SetUnderLine(bool flag){m_UnderLine = flag?1:0;return flag;}
-	inline bool SetInverse(bool flag){m_Inverse = flag?1:0;return flag;}
-	inline bool SetInvisible(bool flag){m_Invisible = flag?1:0;return flag;}
-	inline bool SetHyperLink(bool flag){m_HyperLink = flag?1:0;return flag;}
+	inline void SetBright(bool flag){m_Bright = flag?1:0;}
+	inline void SetBlink(bool flag){m_Blink = flag?1:0;}
+	inline void SetUnderLine(bool flag){m_UnderLine = flag?1:0;}
+	inline void SetInverse(bool flag){m_Inverse = flag?1:0;}
+	inline void SetInvisible(bool flag){m_Invisible = flag?1:0;}
+	inline void SetHyperLink(bool flag){m_HyperLink = flag?1:0;}
 #ifdef USE_IPLOOKUP
-	inline bool SetIpAddr(bool flag){m_IpAddr = flag?1:0;return flag;}
+	inline void SetIpAddr(bool flag){m_IpAddr = flag?1:0;}
 #endif
-	inline bool SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;return flag;}
-	inline bool SetCharSet(enum charset charset){
+	inline void SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;}
+	inline void SetCharSet(enum charset charset){
 		if(charset >= 0){
 			m_CharSet = charset;
-			return true;
-		}return false;
+		}
 	}
 
 	//Transform the CTermCharAttr into short value.

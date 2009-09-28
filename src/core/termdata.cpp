@@ -828,8 +828,10 @@ void CTermData::DetectCharSets()
 		{
 			if( ((unsigned char)line[col]) > 128 && (col+1)< m_ColsPerPage)
 			{
-				if( attr[col].IsNeedUpdate() != attr[col+1].IsNeedUpdate() )
-					attr[col].SetNeedUpdate(attr[col+1].SetNeedUpdate(true));
+				if( attr[col].IsNeedUpdate() != attr[col+1].IsNeedUpdate() ) {
+					attr[col].SetNeedUpdate(true);
+					attr[col+1].SetNeedUpdate(true);
+				}
 
 				attr[col].SetCharSet(CTermCharAttr::CS_MBCS1);
 				col++;
