@@ -340,8 +340,7 @@ GOT_VALUE:
 				
 				if( MT.find(len) == MT.end() )
 				{
-					VS_map *vsm = new VS_map;
-					MT[len] = *vsm;
+					MT[len];
 				}
 				continue;
 			}
@@ -416,9 +415,7 @@ MsgData::learning(string &key, string &msg_to_remember)
 	// save to memory
 	if( MT.find(len) == MT.end())
 	{
-		VS_map *vsm = new VS_map;
-		(*vsm)[key].push_back(msg_to_remember);
-		MT[len] = *vsm;
+		MT[len][key].push_back(msg_to_remember);
 	}
 	else
 	{
