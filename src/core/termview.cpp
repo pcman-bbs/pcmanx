@@ -453,10 +453,18 @@ int CTermView::DrawChar(int row, int col)
 	pLine += col;
 	pAttr += col;
 
+	int loop_times = w;
 	bool bSel[2];
 	bSel[0] = m_pTermData->m_Sel->Has( row, col );
 	if ( w > 1 )
+	{
 		bSel[1] = m_pTermData->m_Sel->Has( row, col + 1 );
+		// two cells have the same attributes
+		if(col < (m_pTermData->m_ColsPerPage - 1) &&
+			pAttr[0].IsSameAttr( pAttr[1].AsType() ) &&
+			bSel[0] == bSel[1] )
+			loop_times = 1;
+	}
 
 	int left = m_CharW * col + m_LeftMargin;
 	int top = m_CharH * row + m_TopMargin;
@@ -464,7 +472,7 @@ int CTermView::DrawChar(int row, int col)
 
 	GdkColor iFg, iBg;
 
-	for( int i = 0; i < w; i++ )	//	do the drawing
+	for( int i = 0; i < loop_times; i++ )	//	do the drawing
 	{
 		GdkColor* Fg = pAttr[i].GetFgColor( m_pColorTable );
 		GdkColor* Bg = pAttr[i].GetBgColor( m_pColorTable );
@@ -547,9 +555,6 @@ int CTermView::DrawChar(int row, int col)
 			gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
 		}
 
-		// two cells have the same attributes
-		if( w == 2 && i == 0 && pAttr[0].IsSameAttr( pAttr[1].AsType() ) && bSel[0] == bSel[1] )
-			break;
 	}
 	gdk_gc_set_clip_rectangle( m_GC, NULL );
 	XftDrawSetClip( m_XftDraw, NULL );
