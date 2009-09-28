@@ -45,6 +45,8 @@
 
 
 CConfigFile::CConfigFile( string AppName, int LineBufSize )
+	: m_pCurSect(NULL),
+	  m_pRootMap(NULL)
 {
 	m_AppName = AppName;
 	m_LineBufSize = LineBufSize;
