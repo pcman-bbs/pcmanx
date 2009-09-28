@@ -973,7 +973,7 @@ void CTelnetCon::ProcessDNSQueue(gpointer unused UNUSED)
 {
 	INFO("begin run dns threads");
 	g_mutex_lock(m_DNSMutex);
-	list<CDNSRequest*>::iterator it = m_DNSQueue.begin(), prev_it;
+	list<CDNSRequest*>::iterator it = m_DNSQueue.begin();
 	while( it != m_DNSQueue.end() )
 	{
 		CDNSRequest* data = *it;
@@ -985,10 +985,8 @@ void CTelnetCon::ProcessDNSQueue(gpointer unused UNUSED)
 			g_mutex_lock(m_DNSMutex);
 			data->m_Running = false;
 		}
-		prev_it = it;
-		++it;
-		m_DNSQueue.erase(prev_it);
-		delete *prev_it;
+		delete *it;
+		it = m_DNSQueue.erase(it);
 		INFO("thread obj deleted in CTelnetCon::ProcessDNSQueue()");
 	}
 	g_idle_add((GSourceFunc)&CTelnetCon::OnProcessDNSQueueExit, NULL);
