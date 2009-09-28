@@ -42,15 +42,15 @@ public:
 	CCaret();
 	X_EXPORT ~CCaret();
 	//Getter by neversay Jan/18/2005
-	inline bool IsShow(){return m_IsShow;}
-	inline bool IsVisible(){return m_IsVisible;}
-	inline int GetPositionX(){return m_Pos.x;}
-	inline int GetPositionY(){return m_Pos.y;}
-	inline int GetWidth(){return m_Width;}
-	inline int GetHeight(){return m_Height;}
+	bool IsShow(){return m_IsShow;}
+	bool IsVisible(){return m_IsVisible;}
+	int GetPositionX(){return m_Pos.x;}
+	int GetPositionY(){return m_Pos.y;}
+	int GetWidth(){return m_Width;}
+	int GetHeight(){return m_Height;}
 	//Setter by neversay Jan/18/2005
-	inline void SetShow(bool flag){m_IsShow = flag;}
-	inline void SetVisible(bool flag){m_IsVisible = flag;}
+	void SetShow(bool flag){m_IsShow = flag;}
+	void SetVisible(bool flag){m_IsVisible = flag;}
 	void Move( int x, int y );
 	void SetSize( int Width, int Height );
 	void Create(CWidget* pParent, GdkGC* gc)

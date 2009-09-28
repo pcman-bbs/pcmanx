@@ -95,7 +95,7 @@ protected:
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );
     bool DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr);
-    inline bool IsSpaceFillingChar( const char* ch, int len ) {	return bool( len >= 3 && *(guchar*)ch == 0xe2 );	}
+    bool IsSpaceFillingChar( const char* ch, int len ) {	return bool( len >= 3 && *(guchar*)ch == 0xe2 );	}
 protected:
 	CTermData* m_pTermData;
 

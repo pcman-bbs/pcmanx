@@ -120,7 +120,7 @@ public:
 	void ParseReceivedData();
 
 	// Parse telnet command.
-	inline void ParseTelnetCommand();
+	void ParseTelnetCommand();
 
 	void SendRawString(const char* pdata, int len)	{	Send( (void*)pdata, len);	}
 	void SendUnEscapedString(string str);
@@ -166,7 +166,7 @@ public:
 #endif /* !defined(MOZ_PLUGIN) */
 
 #ifdef USE_MOUSE
-    inline int GetPageState() {return m_nPageState;}
+    int GetPageState() {return m_nPageState;}
     char GetMenuChar(int y);
 #endif
 

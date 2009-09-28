@@ -119,13 +119,13 @@ public:
 #endif
 
 	// Statusbar control.
-	inline unsigned PushStatus(const char *context_desc, const char *text)
+	unsigned PushStatus(const char *context_desc, const char *text)
 	{
 	  unsigned context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(m_Statusbar), context_desc);
 	  return gtk_statusbar_push(GTK_STATUSBAR(m_Statusbar), context_id, text);
 	}
 
-	inline void PopStatus(const char *context_desc)
+	void PopStatus(const char *context_desc)
 	{
 	  unsigned context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(m_Statusbar), context_desc);
 	  return gtk_statusbar_pop(GTK_STATUSBAR(m_Statusbar), context_id);
