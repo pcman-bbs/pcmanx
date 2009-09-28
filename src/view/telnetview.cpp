@@ -102,6 +102,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
 	bool clear = true;
+	bool reconnect = false;
 
 	if( evt->keyval < 127 && GDK_MODIFIER_DOWN(evt->state, GDK_CONTROL_MASK))// Ctrl down
 	{
@@ -141,6 +142,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
+		reconnect = GetCon()->IsClosed();
 		GetCon()->SendRawString("\r",1);
 		break;
 	case GDK_Delete:
@@ -223,6 +225,9 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	// Only clear selection if we handled the key
 	if (clear)
 		ClearSelection();
+
+	if (reconnect)
+		GetCon()->Reconnect();
 
 	return true;
 }
