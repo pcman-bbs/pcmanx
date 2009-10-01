@@ -663,13 +663,13 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	int *font_size;
 	string *font_family;
 	int font_type;
-	const char *font_action =gtk_action_get_label(GTK_ACTION(mitem));
-	if (!strcmp(font_action, "_Font")) {
+	const char *font_action = gtk_action_get_name(GTK_ACTION(mitem));
+	if (!strcmp(font_action, "font")) {
 		font_size = &AppConfig.FontSize;
 		font_family = &AppConfig.FontFamily;
 		font_type = CTermView::FONT_DEFAULT;
         }
-	else if (!strcmp(font_action, "_ASCII Font")) {
+	else if (!strcmp(font_action, "ascii_font")) {
 		font_size = &AppConfig.FontSizeEn;
 		font_family = &AppConfig.FontFamilyEn;
 		font_type = CTermView::FONT_EN;
