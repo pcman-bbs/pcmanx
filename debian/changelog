@@ -1,3 +1,13 @@
+pcmanx-gtk2 (0.3.9-1) unstable; urgency=low
+
+  * New upstream release (Closes: #548462)
+  * gcc_4.3_4.4_ftbfs.dpatch: Dropped, intergrated upstream.
+  * Remove strict libpcmanx-core dependency, #460161 has gone now.
+  * Apply xulrunner 1.9 patches (npupp.h moved to npfunctions.h).
+  * Update homepage URL.
+
+ -- Emfox Zhou <emfox@debian.org>  Tue, 13 Oct 2009 18:58:04 +0800
+
 pcmanx-gtk2 (0.3.8-3) unstable; urgency=low
 
   * gcc_4.3_4.4_ftbfs.dpatch: Fix FTBFS with GCC 4.4 (Closes: #504886)

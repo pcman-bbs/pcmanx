@@ -38,11 +38,11 @@
 CSite::CSite(string Name)
 {
 	m_Name = Name;
-	// Time duration in seconds during which should we reconnect 
+	// Time duration in seconds during which should we reconnect
 	// automatically when disconnected from server, and 0 means disabled.
 	m_AutoReconnect = 20;
 
-	// We send this string, m_AntiIdleStr, to the server every 'm_AntiIdle' 
+	// We send this string, m_AntiIdleStr, to the server every 'm_AntiIdle'
 	// seconds to prevent being kicked by the server.
 	m_AntiIdleStr = "^[OB";	// empty string means '\0'
 	m_AntiIdle = 180;	// 0 means disabled
@@ -56,7 +56,7 @@ CSite::CSite(string Name)
 	// Cols per page
 	m_ColsPerPage = 80;
 
-	// When pasting long articles, especially those from webpages, wrap lines 
+	// When pasting long articles, especially those from webpages, wrap lines
 	// automatically when there are more than 'm_AutoWrapOnPaste' characters per line.
 	m_AutoWrapOnPaste = 78;	// 0 means disabled.
 
@@ -77,8 +77,8 @@ CSite::CSite(string Name)
 	m_UseExternalTelnet = false;
 #endif
 
-	m_bHorizontalCenterAlign = false;
-	m_bVerticalCenterAlign = false;
+	m_bHorizontalCenterAlign = true;
+	m_bVerticalCenterAlign = true;
 
 	m_MenuItem = NULL;
 

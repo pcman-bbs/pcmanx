@@ -5,10 +5,32 @@
 ## DP: Fix path of pcmanx.html in generated TelnetProtocol.js
 
 @DPATCH@
-diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
---- pcmanx-gtk2-0.3.5~/configure.ac	2007-05-13 09:42:07.000000000 +0800
-+++ pcmanx-gtk2-0.3.5/configure.ac	2007-05-13 09:42:07.000000000 +0800
-@@ -476,7 +476,7 @@
+diff -urNad pcmanx-gtk2-0.3.9~/aclocal.m4 pcmanx-gtk2-0.3.9/aclocal.m4
+--- pcmanx-gtk2-0.3.9~/aclocal.m4	2009-10-13 21:47:50.000000000 +0800
++++ pcmanx-gtk2-0.3.9/aclocal.m4	2009-10-13 21:48:39.000000000 +0800
+@@ -1,5 +1,5 @@
+ # generated automatically by aclocal 1.10.2 -*- Autoconf -*-
+-
++# Touch to not regen ./configure
+ # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+ # 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+ # This file is free software; the Free Software Foundation
+diff -urNad pcmanx-gtk2-0.3.9~/configure pcmanx-gtk2-0.3.9/configure
+--- pcmanx-gtk2-0.3.9~/configure	2009-10-13 21:47:50.000000000 +0800
++++ pcmanx-gtk2-0.3.9/configure	2009-10-13 21:48:09.000000000 +0800
+@@ -19827,7 +19827,7 @@
+ -I$ADDITIONAL_IDLDIR \
+ -I/usr/lib/mozilla/include/idl"
+ 
+-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
++  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
+ 
+ 
+ 
+diff -urNad pcmanx-gtk2-0.3.9~/configure.ac pcmanx-gtk2-0.3.9/configure.ac
+--- pcmanx-gtk2-0.3.9~/configure.ac	2009-10-13 21:47:50.000000000 +0800
++++ pcmanx-gtk2-0.3.9/configure.ac	2009-10-13 21:48:09.000000000 +0800
+@@ -511,7 +511,7 @@
  -I$ADDITIONAL_IDLDIR \
  -I/usr/lib/mozilla/include/idl"
  
@@ -17,25 +39,3 @@ diff -urNad pcmanx-gtk2-0.3.5~/configure.ac pcmanx-gtk2-0.3.5/configure.ac
  
    AC_SUBST(PATH_OF_PCMANX_HTML)
    AC_SUBST(XPIDL)
-diff -urNad pcmanx-gtk2-0.3.5~/aclocal.m4 pcmanx-gtk2-0.3.5/aclocal.m4
---- pcmanx-gtk2-0.3.5~/aclocal.m4	2006-08-20 21:15:06.000000000 +0800
-+++ pcmanx-gtk2-0.3.5/aclocal.m4	2007-05-13 09:42:32.000000000 +0800
-@@ -1,5 +1,5 @@
- # generated automatically by aclocal 1.10.1 -*- Autoconf -*-
--
-+# touch it to not regen ./configure
- # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
- # 2005, 2006  Free Software Foundation, Inc.
- # This file is free software; the Free Software Foundation
-diff -urNad pcmanx-gtk2-0.3.5~/configure pcmanx-gtk2-0.3.5/configure
---- pcmanx-gtk2-0.3.5~/configure	2007-05-13 09:42:07.000000000 +0800
-+++ pcmanx-gtk2-0.3.5/configure	2007-05-13 09:42:07.000000000 +0800
-@@ -27088,7 +27088,7 @@
- -I$ADDITIONAL_IDLDIR \
- -I/usr/lib/mozilla/include/idl"
- 
--  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
-+  PATH_OF_PCMANX_HTML="/usr/lib/pcmanx-gtk2/components/pcmanx.html"
- 
- 
- 

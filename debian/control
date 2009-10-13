@@ -2,13 +2,13 @@ Source: pcmanx-gtk2
 Section: x11
 Priority: optional
 Maintainer: Emfox Zhou <emfox@debian.org>
-Build-Depends: debhelper (>= 4.0.0), libxft-dev, libgtk2.0-dev, xulrunner-dev (>= 1.9.0.1), libx11-dev, libxt-dev, sharutils, dpatch (>= 2.0)
-Standards-Version: 3.8.0
-Homepage: http://pcmanx.csie.net/
+Build-Depends: debhelper (>= 5.0.0), libxft-dev, libgtk2.0-dev, xulrunner-dev (>= 1.9.0.1), libx11-dev, libxt-dev, sharutils, dpatch (>= 2.0)
+Standards-Version: 3.8.3
+Homepage: http://code.google.com/p/pcmanx-gtk2/
 
 Package: pcmanx-gtk2
 Architecture: any
-Depends: ${shlibs:Depends}, libpcmanx-core0 (<< 0.3.9)
+Depends: ${shlibs:Depends}
 Recommends: wget
 Suggests: mozilla-plugin-pcmanx
 Description: user-friendly telnet client mainly targets BBS users

@@ -1,5 +1,4 @@
 remove_image_file_in_usr_lib.dpatch
 change_default_en_font_to_mono.dpatch
 telnet_protocol.dpatch
-gcc_4.3_4.4_ftbfs.dpatch
 iceape-dev.dpatch

@@ -22,7 +22,7 @@
 #include <string.h>
 #include <libintl.h>
 
-#include <gtk/gtkversion.h>
+#include <gtk/gtk.h>
 
 #if ! GTK_CHECK_VERSION(2,10,0)
 /* for Gtk+ version < 2.10, we need EggTrayIcon */

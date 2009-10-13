@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <algorithm>
 
 #include "telnetview.h"
 #include "telnetcon.h"
@@ -79,7 +80,7 @@ void CTelnetView::OnTextInput(const gchar* text)
 		GdkEventButton t_PseudoEvent;
 		t_PseudoEvent.x = 0;
 		t_PseudoEvent.y = 0;
-		t_PseudoEvent.type = GDK_BUTTON_PRESS; 
+		t_PseudoEvent.type = GDK_BUTTON_PRESS;
 		CTermView::OnLButtonDown(&t_PseudoEvent);
 		CTermView::OnLButtonUp(&t_PseudoEvent);
 	}
@@ -174,6 +175,47 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	case GDK_Escape:
 		GetCon()->SendRawString("\x1b", 1);
 		break;
+// F1-F12 keys
+	case GDK_F1:
+	case GDK_KP_F1:
+		GetCon()->SendRawString("\x1bOP", 3);
+		break;
+	case GDK_F2:
+	case GDK_KP_F2:
+		GetCon()->SendRawString("\x1bOQ", 3);
+		break;
+	case GDK_F3:
+	case GDK_KP_F3:
+		GetCon()->SendRawString("\x1bOR", 3);
+		break;
+	case GDK_F4:
+	case GDK_KP_F4:
+		GetCon()->SendRawString("\x1bOS", 3);
+		break;
+	case GDK_F5:
+		GetCon()->SendRawString("\x1b[15~", 5);
+		break;
+	case GDK_F6:
+		GetCon()->SendRawString("\x1b[17~", 5);
+		break;
+	case GDK_F7:
+	    GetCon()->SendRawString("\x1b[18~", 5);
+		break;
+	case GDK_F8:
+		GetCon()->SendRawString("\x1b[19~", 5);
+		break;
+	case GDK_F9:
+		GetCon()->SendRawString("\x1b[20~", 5);
+		break;
+	case GDK_F10:
+		GetCon()->SendRawString("\x1b[21~", 5);
+		break;
+	case GDK_F11:
+		GetCon()->SendRawString("\x1b[23~", 5);
+		break;
+	case GDK_F12:
+		GetCon()->SendRawString("\x1b[24~", 5);
+		break;
 	default:
 		clear = false;
 	}
@@ -205,11 +247,11 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 {
   if( !m_pTermData )
     return;
-  
+
   int x = (int)evt->x;
   int y = (int)evt->y;
   bool left;
-  
+
   INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
 
   this->PointToLineCol( &x, &y, &left );
@@ -223,12 +265,12 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	  m_Caret.Hide();
 
 	  m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
-	  
+
 	  // Show the caret again but only set its visibility without
 	  // display it immediatly.
 	  m_Caret.Show( false );
 #ifdef USE_MOUSE
-	  {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}	  
+	  {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
 #endif
 	}
     }
@@ -296,15 +338,15 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 		{gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
 		else
 		{gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
-	      }					
+	      }
 	      else
 	      {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
-	    }      
+	    }
 	    else if ( y==1 || y==2 )
 	    {gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
-	    else if ( y==0 ) 
+	    else if ( y==0 )
 	    {gdk_window_set_cursor(m_Widget->window, m_HomeCursor);m_CursorState=6;}
-	    else //if ( y = m_pTermData->m_RowsPerPage-1) 
+	    else //if ( y = m_pTermData->m_RowsPerPage-1)
 	    {gdk_window_set_cursor(m_Widget->window, m_EndCursor);m_CursorState=5;}
 	    break;
 	  case 2: //READING
@@ -316,7 +358,7 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	    {gdk_window_set_cursor(m_Widget->window, m_PageUpCursor);m_CursorState=4;}
 	    else
 	    {gdk_window_set_cursor(m_Widget->window, m_PageDownCursor);m_CursorState=3;}
-	    break;  
+	    break;
 	  case 0: //MENU
 	    if ( y>0 && y < m_pTermData->m_RowsPerPage-1 )
 	    {
@@ -324,8 +366,8 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 	      {gdk_window_set_cursor(m_Widget->window, m_BullsEyeCursor);m_CursorState=2;}
 	      else
 	      {gdk_window_set_cursor(m_Widget->window, m_ExitCursor);m_CursorState=1;}
-	    }      
-	    else    
+	    }
+	    else
 	    {gdk_window_set_cursor(m_Widget->window, NULL);m_CursorState=0;}
 	    break;
 	  default:
@@ -366,7 +408,7 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 {
 	CTermView::OnLButtonUp(evt);
-    
+
 	if( !m_pTermData )
 		return;
 
@@ -395,14 +437,14 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 
 	int cur = m_CursorState;
 	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
-    
+
 	if ( cur == 2 ) // mouse on entering mode
 	  {
 	    switch (ps)
 	      {
 	      case 1: // list
-		{        
-		  int n = y - m_pTermData->m_CaretPos.y; 
+		{
+		  int n = y - m_pTermData->m_CaretPos.y;
 		  if ( n>0 )
 		    while(n)
 		      {
@@ -411,13 +453,13 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 		      }
 		  if ( n<0 )
 		    {
-		      n=-n;   
+		      n=-n;
 		      while(n)
 			{
-			  GetCon()->SendRawString("\x1bOA",3); 
+			  GetCon()->SendRawString("\x1bOA",3);
 			  n--;
 			}
-		    }                                      
+		    }
 		  GetCon()->SendRawString("\r",1); //return key
 		  break;
 		}
@@ -425,15 +467,15 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 		{
 		  char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
 		  GetCon()->SendRawString( &cMenu, 1 );
-		  GetCon()->SendRawString( "\r", 1 );    
-		  break;      
-		} 
+		  GetCon()->SendRawString( "\r", 1 );
+		  break;
+		}
 	      case -1: // normal
-		GetCon()->SendRawString( "\r", 1 );   
-		break;                       
+		GetCon()->SendRawString( "\r", 1 );
+		break;
 	      default:
-		break;      
-	      }     
+		break;
+	      }
 	  }
 	else if (cur == 1)
 	  GetCon()->SendRawString("\x1bOD",3); //exiting mode
@@ -446,7 +488,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	else if (cur == 3)
 	  GetCon()->SendRawString("\x1b[6~",4); //pagedown
 	else
-	  GetCon()->SendRawString( "\r", 1 );                                        
+	  GetCon()->SendRawString( "\r", 1 );
 }
 #endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 
@@ -472,12 +514,12 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 			GtkWidget* item = gtk_image_menu_item_new_with_mnemonic( _("_Copy URL to Clipboard") );
 			GtkWidget* icon = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
 			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
-			g_signal_connect( G_OBJECT(item), "activate", 
+			g_signal_connect( G_OBJECT(item), "activate",
 							G_CALLBACK(on_hyperlink_copy), &do_copy);
 
 			gtk_menu_shell_append  ((GtkMenuShell *)popup, item );
 			gtk_widget_show_all(popup);
-			g_signal_connect( G_OBJECT(popup), "deactivate", 
+			g_signal_connect( G_OBJECT(popup), "deactivate",
 							G_CALLBACK(gtk_main_quit), this);
 			gtk_menu_popup( (GtkMenu*)popup, NULL, NULL, NULL, NULL, evt->button, evt->time );
 			gtk_main();		// Don't return until the menu is closed.
@@ -485,7 +527,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 			if( do_copy )
 			{
 				// Note by Hong Jen Yee (PCMan):
-				// Theoratically, there is no non-ASCII characters in standard URL, 
+				// Theoratically, there is no non-ASCII characters in standard URL,
 				// so we don't need to do UTF-8 conversion at all.
 				// However, users are always right.
 				string url( (pline+start), (int)(end-start) );
@@ -545,20 +587,44 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 		if( contain_ansi_color )
 		{
 			string esc = GetCon()->m_Site.GetEscapeChar();
-			const char* p = text.c_str();
-			while(*p)
+			if( m_s_CharSet != GetCon()->m_Site.m_Encoding.c_str() )
 			{
+			  INFO("Charset Conversion from %s to %s",m_s_CharSet.c_str(),GetCon()->m_Site.m_Encoding.c_str());
+
+			  gsize convl;
+			  gchar* locale_text = g_convert(text.c_str(), text.length(),GetCon()->m_Site.m_Encoding.c_str(),m_s_CharSet.c_str(), NULL, &convl, NULL);
+			  if( !locale_text )
+				return;
+
+			  const char* p = locale_text;
+			  while(*p)
+			  {
 				if(*p == '\x1b')
 					text2 += esc;
 				else
 					text2 += *p;
 				p++;
+			  }
+			  g_free(locale_text);
 			}
-			GetCon()->SendString(text2);
+			else
+			{
+				INFO("color text: %s",text.c_str());
+				const char* p = text.c_str();
+				while(*p)
+				{
+					if(*p == '\x1b')
+						text2 += esc;
+					else
+						text2 += *p;
+					p++;
+				}
+			}
+			GetCon()->SendRawString(text2.c_str(),text2.length());
 		}
 		else
 		{
-			// Only when no control character is in this string can 
+			// Only when no control character is in this string can
 			// autowrap be enabled
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
 			gsize convl;
@@ -642,7 +708,7 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 #ifdef USE_WGET
 	if (m_bWgetFiles == true) {
 		const char* t_pcURL = sURL.c_str();
-		char* t_pcDot = strrchr(t_pcURL, '.') + 1;
+		const char* t_pcDot = strrchr(t_pcURL, '.') + 1;
 		char t_cFileType = strlen(t_pcURL) - (t_pcDot -t_pcURL);
 		if (t_cFileType == 3) {
 			if (strncmp(t_pcDot, "rar", 3) == 0 ||
@@ -700,7 +766,10 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 		memcpy( &cmdline[app.length() + 1], sURL.c_str(), sURL.length() + 1);
 	}
 	strcat(cmdline, " &");	// launch the browser in background.
-	system(cmdline);	// Is this portable?
+	if (system(cmdline) == -1)	// Is this portable?
+	{
+		g_print("Run `%s` failed.\n", cmdline);
+	}
 	delete []cmdline;
 }
 

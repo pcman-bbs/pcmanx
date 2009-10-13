@@ -28,6 +28,7 @@
 #include "termview.h" // class's header file
 #include "termsel.h" // class's header file
 #include <string.h>
+#include <stdint.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.
@@ -736,10 +737,9 @@ void CTermData::ParseAnsiColor(const char *pParam)
 
 void CTermData::memset16(void *dest, short val, size_t n)
 {
-	short* dest16 = (short*)dest;
-	short* end = dest16 + n;
-	for( ; dest16 < end; dest16++ )
-		*dest16 = val;
+	uint16_t *dest16 = (uint16_t *) dest;
+	while (n--)
+		*dest16++ = val;
 }
 
 

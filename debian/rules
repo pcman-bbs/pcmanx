@@ -48,7 +48,7 @@ clean1:
 	rm -f build-stamp 
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) distclean
+	[ ! -f Makefile ] || $(MAKE) distclean
 
 	dh_clean
 
@@ -61,7 +61,7 @@ install: build
 	# Add here commands to install the package into debian/pcmanx-gtk2.
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	install -m 644 debian/pcmanx.xpm $(CURDIR)/debian/tmp/usr/share/pixmaps/
-	rm $(CURDIR)/debian/tmp/usr/lib/xulrunner-devel-1.9/bin/components/pcmanx.png
+	rm $(CURDIR)/debian/tmp/usr/lib/xulrunner-devel-1.9.1/bin/components/pcmanx.png
 
 binary-indep: build install
 

@@ -102,7 +102,9 @@ public:
 	bool UseWgetFiles;
 #endif
 	int PopupTimeout;
-	
+
+	bool MidClickAsClose;
+
 //	Terminal Settings
 	int RowsPerPage;
 	int ColsPerPage;

@@ -1,0 +1,4 @@
+PcManx-GTK2 in Debian use dpatch to manage patches.
+
+'debian/rules patch' to apply all the patches, and
+'debian/rules unpatch' to deapply them.

@@ -818,6 +818,7 @@ void CTermView::OnMButtonDown(GdkEventButton* evt UNUSED)
 
 
 string CTermView::m_s_ANSIColorStr;
+string CTermView::m_s_CharSet;
 
 void CTermView::PasteFromClipboard(bool primary)
 {
@@ -849,26 +850,27 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 	if(!m_pTermData)
 		return;
 	m_s_ANSIColorStr = "";
-	if( with_color )
+	if( with_color ) {
 		text = m_pTermData->GetSelectedTextWithColor(trim);
-	else
+		m_s_ANSIColorStr = text;
+		m_s_CharSet = m_pTermData->m_Encoding;
+		INFO("copy(with color): %s", text.c_str());
+	}
+	else {
 		text = m_pTermData->GetSelectedText(trim);
+		gsize wl = 0;
+		const gchar* utext = g_convert_with_fallback(
+				text.c_str(), text.length(),
+				"utf-8", m_pTermData->m_Encoding.c_str(),
+				(gchar *) "?", NULL, &wl, NULL);
+		if(!utext)
+			return;
 
-	gsize wl = 0;
-	const gchar* utext = g_convert_with_fallback( text.c_str(), text.length(),
-			"utf-8", m_pTermData->m_Encoding.c_str(), (gchar *) "?", NULL, &wl, NULL);
-	if(!utext)
-		return;
-
-	if( with_color )
-		m_s_ANSIColorStr = string(utext);
-	else
-	{
 		GtkClipboard* clipboard = gtk_clipboard_get(  primary ? GDK_SELECTION_PRIMARY : GDK_NONE );
 		gtk_clipboard_set_text(clipboard, utext, wl );
+		INFO("copy(without color): %s", utext);
+		g_free((void*)utext);
 	}
-	INFO("select: %s", utext);
-	g_free((void*)utext);
 }
 
 void CTermView::GetCellSize( int &w, int &h )
