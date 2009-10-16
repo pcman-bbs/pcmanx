@@ -1,3 +1,9 @@
+pcmanx-gtk2 (0.3.9-2) unstable; urgency=low
+
+  * Build depend on intltool.
+
+ -- Emfox Zhou <emfox@debian.org>  Fri, 16 Oct 2009 21:56:28 +0800
+
 pcmanx-gtk2 (0.3.9-1) unstable; urgency=low
 
   * New upstream release (Closes: #548462)
