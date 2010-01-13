@@ -21,15 +21,17 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "nancy_bot/msgdata.h"
 #include "nancy_bot/botutil.h"
 #include "fileutil.h"
 
+extern int error;
 int MsgData::errorHandler(int level, const string &flag)
 {
 	if( level <= 0 ){
-		perror(flag.c_str());
+		if (errno != ENOENT ) perror(flag.c_str());
 		return 1; // error
 	}
 	else return 0;

@@ -1,3 +1,8 @@
+2010-01-13  Youchen Lee  <copyleft@utcr.org>
+
+	* src/nancy_bot/msg_data.cpp: 
+	Ignore "File not found" messages of NancyBot.
+
 2009-08-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* data/nancy_bot/default_msg.data,
