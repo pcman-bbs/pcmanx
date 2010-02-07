@@ -1,3 +1,11 @@
+2010-02-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* developers/make-new-release.sh: Move to another folder and adjust the
+	way to get version number.
+	* configure.ac: Fix the warnings caused by AC_CACHE_VAL of Autoconf Macro,
+	and change bug report to http://code.google.com/p/pcmanx-gtk2/issues/list.
+	* plugin/src/plugin.cpp: Fix the compilation error and strip warnings.
+
 2010-01-13  Youchen Lee  <copyleft@utcr.org>
 
 	* src/nancy_bot/msg_data.cpp: 

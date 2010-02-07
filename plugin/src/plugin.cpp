@@ -72,7 +72,7 @@ static int strcmp_ci( register const char* str1, register const char* str2)
 
 char* NPP_GetMIMEDescription(void)
 {
-    return(MIME_TYPES_DESCRIPTION);
+    return (char*) (MIME_TYPES_DESCRIPTION);
 }
 
 //////////////////////////////////////
@@ -99,10 +99,10 @@ NPError NS_PluginGetValue(NPPVariable aVariable, void *aValue)
   NPError err = NPERR_NO_ERROR;
   switch (aVariable) {
     case NPPVpluginNameString:
-      *((char **)aValue) = PLUGIN_NAME;
+      *((const char **)aValue) = PLUGIN_NAME;
       break;
     case NPPVpluginDescriptionString:
-      *((char **)aValue) = PLUGIN_DESCRIPTION;
+      *((const char **)aValue) = PLUGIN_DESCRIPTION;
       break;
     default:
       err = NPERR_INVALID_PARAM;
@@ -165,7 +165,7 @@ nsPluginInstance::nsPluginInstance(nsPluginCreateData * aCreateDataStruct) : nsP
 
 nsPluginInstance::~nsPluginInstance()
 {
-  // mScriptablePeer may be also held by the browser 
+  // mScriptablePeer may be also held by the browser
   // so releasing it here does not guarantee that it is over
   // we should take precaution in case it will be called later
   // and zero its mPlugin member
@@ -204,7 +204,7 @@ NPError nsPluginInstance::SetWindow(NPWindow* aWindow)
     NPSetWindowCallbackStruct *ws_info = (NPSetWindowCallbackStruct *)aWindow->ws_info;
 
 	printf("set window\n");
-	
+
 	m_GtkWidget = gtk_window_new(GTK_WINDOW_POPUP);
 	gtk_widget_realize(m_GtkWidget);
 	gdk_flush();
@@ -216,7 +216,7 @@ NPError nsPluginInstance::SetWindow(NPWindow* aWindow)
 
 	gdk_flush();
 
-    printf("all setup and ready to reparent and map, m_GtkWidget = %x\n", m_GtkWidget);
+    printf("all setup and ready to reparent and map, m_GtkWidget = %p\n", m_GtkWidget);
  	gtk_widget_show_all(m_GtkWidget);
 
 	XReparentWindow(GDK_WINDOW_XDISPLAY(m_GtkWidget->window),
@@ -271,8 +271,8 @@ void nsPluginInstance::NewCon()
 
 	m_pView->SetTermData( m_pCon );
 //	m_pView->SetContextMenu(m_EditMenu);
-	m_pView->SetFont(m_FontFace, 12, true, true);
-	m_pView->SetFontEn(m_FontFaceEn, 12, true, true);
+	m_pView->SetFont(m_FontFace, 12, true, true, CTermView::FONT_DEFAULT);
+	m_pView->SetFont(m_FontFaceEn, 12, true, true, CTermView::FONT_EN);
 	static GdkColor HyperLinkColor;
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536*102/256;
@@ -334,7 +334,7 @@ bool nsPluginInstance::queryOnExit()
 // ==============================
 //
 // here the plugin is asked by Mozilla to tell if it is scriptable
-// we should return a valid interface id and a pointer to 
+// we should return a valid interface id and a pointer to
 // nsScriptablePeer interface which we should have implemented
 // and which should be defined in the corressponding *.xpt file
 // in the bin/components folder
