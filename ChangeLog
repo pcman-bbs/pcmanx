@@ -1,3 +1,11 @@
+2010-02-08  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh,
+	build/snapshot-deb.sh: Add a script to rapidly generate debian package.
+	* configure.ac,
+	plugin/src/Makefile.am,
+	src/view/telnetcon.cpp: Fix the compilation error when enable plugin.
+
 2010-02-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* developers/make-new-release.sh: Move to another folder and adjust the

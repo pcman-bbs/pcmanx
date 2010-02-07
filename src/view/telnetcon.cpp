@@ -19,6 +19,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef __GNUG__
   #pragma implementation "telnetcon.h"
 #endif
@@ -133,14 +137,14 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	// Cache the sockaddr_in which can be used to reconnect.
 	m_InAddr.s_addr = INADDR_NONE;
 	m_Port = 0;
-	
+
 	gchar* locale_str;
 	gsize l;
 	if( !m_Site.GetPreLoginPrompt().empty() )
 	{
-		if( (locale_str = g_convert(m_Site.GetPreLoginPrompt().c_str(), 
-									m_Site.GetPreLoginPrompt().length(), 
-									m_Site.m_Encoding.c_str(), 
+		if( (locale_str = g_convert(m_Site.GetPreLoginPrompt().c_str(),
+									m_Site.GetPreLoginPrompt().length(),
+									m_Site.m_Encoding.c_str(),
 									"UTF-8", NULL, &l, NULL)) )
 		{
 			m_PreLoginPrompt = locale_str;
@@ -149,9 +153,9 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	}
 	if( !m_Site.GetLoginPrompt().empty() )
 	{
-		if( (locale_str = g_convert(m_Site.GetLoginPrompt().c_str(), 
-									m_Site.GetLoginPrompt().length(), 
-									m_Site.m_Encoding.c_str(), 
+		if( (locale_str = g_convert(m_Site.GetLoginPrompt().c_str(),
+									m_Site.GetLoginPrompt().length(),
+									m_Site.m_Encoding.c_str(),
 									"UTF-8", NULL, &l, NULL)) )
 		{
 			m_LoginPrompt = locale_str;
@@ -160,9 +164,9 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	}
 	if( !m_Site.GetPasswdPrompt().empty() )
 	{
-		if( (locale_str = g_convert(m_Site.GetPasswdPrompt().c_str(), 
-									m_Site.GetPasswdPrompt().length(), 
-									m_Site.m_Encoding.c_str(), 
+		if( (locale_str = g_convert(m_Site.GetPasswdPrompt().c_str(),
+									m_Site.GetPasswdPrompt().length(),
+									m_Site.m_Encoding.c_str(),
 									"UTF-8", NULL, &l, NULL)) )
 		{
 			m_PasswdPrompt = locale_str;
@@ -215,7 +219,7 @@ CTelnetCon::~CTelnetCon()
 
 #ifdef USE_MOUSE
 char CTelnetCon::GetMenuChar(int y)
-{ 
+{
 	gchar* str = m_Screen[y];
 	for (int i = 0; ; i++)
 	{
@@ -290,7 +294,7 @@ bool CTelnetCon::Connect()
 				flags | FD_CLOEXEC); /* make m_SockFD
 							auto close on exec */
 		}
-		OnConnect(0);				  
+		OnConnect(0);
 	}
 	/* external ssh */
 	else if ( m_Port == 22 && m_Site.m_UseExternalSSH )
@@ -381,7 +385,7 @@ void CTelnetCon::OnConnect(int code)
 		((CTelnetView*)m_pView)->GetParentFrame()->OnTelnetConConnect((CTelnetView*)m_pView);
 #endif
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
-		m_IOChannelID = g_io_add_watch( m_IOChannel, 
+		m_IOChannelID = g_io_add_watch( m_IOChannel,
 		GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_IN), (GIOFunc)CTelnetCon::OnSocket, this );
 		g_io_channel_set_encoding(m_IOChannel, NULL, NULL);
 		g_io_channel_set_buffered(m_IOChannel, false);
@@ -418,7 +422,7 @@ void CTelnetCon::OnClose()
 }
 
 /*
- * Parse received data, process telnet command 
+ * Parse received data, process telnet command
  * and ANSI escape sequence.
  */
 void CTelnetCon::ParseReceivedData()
@@ -432,7 +436,7 @@ void CTelnetCon::ParseReceivedData()
 				ParseTelnetCommand();
 				continue;
 			}
-	
+
 			if( *m_pBuf == TC_IAC )    // IAC, in telnet command mode.
 			{
 				m_CmdLine[0] = TC_IAC;
@@ -539,7 +543,7 @@ void CTelnetCon::OnTimer()
 	m_IdleTime++;
 //	Note by PCMan:
 //	Here is a little trick.
-//	Since we have increased m_IdleTime by 1, it's impossible for 
+//	Since we have increased m_IdleTime by 1, it's impossible for
 //	m_IdleTime to equal zero.
 //	When 'Anti Idle' is disabled, m_Site.m_AntiIdle must = 0.
 //	So m_Site.m_AntiIdle != m_IdleTimeand, and the following SendRawString() won't be called.
@@ -578,8 +582,8 @@ bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 		// Convert received message to UTF-8
 		gsize l;
 		gchar *utf8_text = g_convert(
-			line, strlen(line), 
-			"UTF-8", _this->m_Site.m_Encoding.c_str(), 
+			line, strlen(line),
+			"UTF-8", _this->m_Site.m_Encoding.c_str(),
 			NULL, &l, NULL);
 
 		if(utf8_text)
@@ -803,7 +807,7 @@ void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 
 #endif /* !defined(MOZ_PLUGIN) */
 
-// When new incoming message is detected, this function gets called with the 
+// When new incoming message is detected, this function gets called with the
 // received message encoded in UTF-8 passed in 'char* line'.
 void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF-8 string.
 {
@@ -813,22 +817,22 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	{
 		if ( !*line )
 			return;
-	
+
 		string sub;
 		string sub2;
 		string str(line);
-	
+
 		unsigned int n = str.find_first_of("  ");  // cut userid and spaces at head
 		if( n != string::npos) // found
 			sub = str.substr(n+1);
 
 		while(sub[0] == ' ')
 			sub = sub.substr(1);
-	
+
 		int m = sub.find_last_not_of(" ");  // cut spaces at tail
 		if( n != string::npos)
 			sub2 = sub.erase(m+1);
-		string str_to_send = "\022" + bot->askNancy(sub2) 
+		string str_to_send = "\022" + bot->askNancy(sub2)
 			+ "\015y\015\033[A\033[B";
 		SendString( str_to_send.c_str() );
 	} // end if
@@ -838,7 +842,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	if ( !AppConfig.PopupNotifier || !*line )
 		return;
 
-	/* 
+	/*
 	   We don't need to convert the incoming message into UTF-8 encoding here.
 	   This is already done before CTelnetCon::OnNewIncomingMessage is called.
 	 */
@@ -882,8 +886,8 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 			m_Site.m_Name.c_str(),
 			g_strchomp(column[0])),
 		g_strchomp(column[1]),
-		m_pView->m_Widget, 
-		G_CALLBACK(popup_win_clicked), 
+		m_pView->m_Widget,
+		G_CALLBACK(popup_win_clicked),
 		this);
 #endif
 	g_strfreev(column);
@@ -929,7 +933,7 @@ void CTelnetCon::ConnectAsync()
 		int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
 		fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
 		/* Disable the Nagle (TCP No Delay) algorithm
-		 * 
+		 *
 		 * Nagle algorithm works well to minimize small packets by
 		 * concatenating them into larger ones. However, for telnet
 		 * application, the experience would be less than desirable
@@ -962,7 +966,7 @@ void CTelnetCon::ConnectAsync()
 	else if( errno == EINPROGRESS )
 	{
 		m_IOChannel = g_io_channel_unix_new(m_SockFD);
-		m_IOChannelID = g_io_add_watch( m_IOChannel, 
+		m_IOChannelID = g_io_add_watch( m_IOChannel,
 			GIOCondition(G_IO_ERR|G_IO_HUP|G_IO_OUT|G_IO_IN|G_IO_NVAL), (GIOFunc)CTelnetCon::OnConnectCB, this );
 	}
 	else
@@ -1004,7 +1008,7 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused UNUSED)
 	{
 		INFO("A new thread has to be started");
 		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
-		// If some DNS requests are queued just before the thread exits, 
+		// If some DNS requests are queued just before the thread exits,
 		// we should start a new thread.
 	}
 	g_mutex_unlock(m_DNSMutex);
@@ -1048,9 +1052,9 @@ bool CTelnetCon::IsUnicolor(char* pLine, int start, int end)
 		if (clr1 != clr || clr1 == CTermCharAttr::GetDefaultColorTable(0))
 		{
 			return false;
-		}       
+		}
 	}
 
 	return true;
-}     
+}
 #endif

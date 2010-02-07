@@ -93,6 +93,8 @@ else
 	fi
 fi
 
+AM_CONDITIONAL([USING_LINUX], test "x$system" = "xLinux")
+
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
 
 dnl *********************************************************************

@@ -14,7 +14,7 @@ VERSION=
 clear
 echo "Preparing new release, please stand by..."
 if make dist-bzip2 >/dev/null; then
-    VERSION=$(../configure --help | head -n1 | awk '{ print $4 }')
+    VERSION="$(../configure --version | head -n1 | awk '{ print $3 }')"
 else
     abort Tarball generation fails.
 fi

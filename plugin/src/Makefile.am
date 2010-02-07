@@ -19,12 +19,12 @@ INCLUDES = \
 AM_CXXFLAGS = -fPIC
 
 noinst_LIBRARIES = $(noinst_LIBRARIES_mozilla)
-	                                     
+
 MOSTLYCLEANFILES = \
 	$(LIBRARIES_mozilla) \
 	pcmanx_interface.xpt \
 	pcmanx_interface.h
-	
+
 BUILT_SOURCES = $(BUILT_SOURCES_mozilla)
 
 SOURCES_view = \
@@ -65,14 +65,17 @@ if CSRG_BASED
 LIBUTIL = -lutil
 endif
 
+if USING_LINUX
+LIBUTIL = -lutil -lX11
+endif
+
 # We MUST make sure plugin was built as -shared, and we must use some tricky
 # approaches to hanle libtool issues.
 $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)
-	$(CXX) $(LDFLAGS) $(LIBUTIL) \
+	$(CXX) $(LDFLAGS) -L$(top_builddir)/src/core/.libs \
 	  -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
-	  -shared \
-	$(GUI_LIBS) \
-	-L$(top_builddir)/src/core/.libs -lpcmanx_core
+	  -shared $(GUI_LIBS) \
+	-lpcmanx_core $(LIBUTIL)
 
 pcmanx_interface_xpt_DATA = pcmanx_interface.xpt
 pcmanx_interface_xptdir = $(MOZILLA_LIB_DIR_SEARCH)/components
