@@ -1,3 +1,8 @@
+2010-02-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/snapshot-deb.sh: Adjust the script for debian package.
+	* configure.ac: Add pkg-config for libx11-dev.
+
 2010-02-08  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/make-new-release.sh,

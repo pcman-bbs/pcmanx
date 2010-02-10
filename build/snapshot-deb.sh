@@ -33,14 +33,14 @@ cat > debian/control <<ENDLINE
 Source: pcmanx-gtk2
 Section: universe/x11
 Priority: optional
-Maintainer: Shih-yuan Lee (FourDollars) <fourdollars@gmail.com>
-Build-Depends: debhelper (>= 7), autotools-dev, libgtk2.0-dev
+Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
+Build-Depends: debhelper (>= 7), autotools-dev, libgtk2.0-dev, libnotify-dev, xulrunner-1.9-dev, libx11-dev
 Standards-Version: 3.8.0
 Homepage: http://code.google.com/p/pcmanx-gtk2/
 
 Package: pcmanx-gtk2
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libglib2.0-0 (>= 2.16.0), libgtk2.0-0 (>= 2.14.1), libpango1.0-0 (>= 1.21.6), libstdc++6 (>= 4.1.1), libx11-6
+Depends: ${shlibs:Depends}, ${misc:Depends}, libglib2.0-0, libgtk2.0-0, libpango1.0-0, libstdc++6, libx11-6
 Description: user-friendly telnet client mainly targets BBS users
  PCMan X is a newly developed GPL'd version of PCMan, a full-featured
  famous BBS client. It aimed to be an easy-to-use yet full-featured telnet
@@ -52,7 +52,7 @@ Description: user-friendly telnet client mainly targets BBS users
  dependency.
 ENDLINE
 cat > debian/changelog <<ENDLINE
-pcmanx-gtk2 (${VER}-r${REV}) unstable; urgency=low
+pcmanx-gtk2 (${VER}-svn${REV}) unstable; urgency=low
 
   * Initial release (Revision Number: ${REV})
 
