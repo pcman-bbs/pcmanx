@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
 [ -z "${DEBFULLNAME}" ] && read -p "DEBFULLNAME: " DEBFULLNAME && export DEBFULLNAME
 [ -z "${DEBEMAIL}" ] && read -p "DEBEMAIL: " DEBEMAIL && export DEBEMAIL
@@ -11,7 +11,7 @@ case "${SCM}" in
     REV="$(LANG=C svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
     ;;
     ('git')
-    REV="$(LANG=C git-svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
+    REV="$(LANG=C git svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
     ;;
 esac
 
@@ -34,7 +34,7 @@ Source: pcmanx-gtk2
 Section: universe/x11
 Priority: optional
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
-Build-Depends: debhelper (>= 7), autotools-dev, libgtk2.0-dev, libnotify-dev, xulrunner-1.9-dev, libx11-dev
+Build-Depends: debhelper (>= 7), autotools-dev, libgtk2.0-dev, libnotify-dev, xulrunner-1.9-dev | xulrunner-1.9.1-dev, libx11-dev
 Standards-Version: 3.8.0
 Homepage: http://code.google.com/p/pcmanx-gtk2/
 
@@ -58,7 +58,7 @@ pcmanx-gtk2 (${VER}-svn${REV}) unstable; urgency=low
 
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(LANG=C date -R)
 ENDLINE
-sed -i "s,./configure \(.*\)$,./configure --enable-debug --enable-plugin --enable-iplookup --enable-proxy --enable-wget --enable-libnotify \1," debian/rules
+sed -i "s,./configure \(.*\)$,./configure --enable-debug --disable-plugin --enable-iplookup --enable-proxy --enable-wget --enable-libnotify \1," debian/rules
 debuild -S
 debuild -b
 popd

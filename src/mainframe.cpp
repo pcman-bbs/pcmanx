@@ -996,8 +996,8 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x",
-	     (word_t) obj, (word_t) _this->m_JumpTos[0]);
+	INFO("On jump to, obj=%p, _this->m_JumpTos[0]=%p",
+	     obj, _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
 		if( obj == _this->m_JumpTos[i] )
 		{
@@ -1511,10 +1511,10 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry,
 
 int CMainFrame::GetViewIndex(CTermView* view)
 {
-	DEBUG( "get view index, view = %x", (word_t) view );
+	DEBUG( "get view index, view = %p", view );
 	if( !view )
 		return -1;
-	DEBUG( "view->m_Widget = %x", (unsigned int) view->m_Widget );
+	DEBUG( "view->m_Widget = %p", view->m_Widget );
 	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
 }
 

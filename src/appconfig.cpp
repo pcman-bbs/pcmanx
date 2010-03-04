@@ -370,7 +370,7 @@ void CAppConfig::SetToDefault()
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
 
-	MailClient "xdg-email %s";
+	MailClient = "xdg-email %s";
 	WebBrowser = "xdg-open %s";
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;

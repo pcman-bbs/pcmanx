@@ -1,3 +1,10 @@
+2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* autogen.sh: Change to automake 1.11
+	* build/snapshot-deb.sh: popd/pushd is built-in function of bash.
+	* src/appconfig.cpp: Fix compilation error.
+	* src/mainframe.cpp: Clean some warnings.
+
 2010-03-04  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/appconfig.cpp: Use 'xdg-email' as mail client and 'xdg-open' as web
