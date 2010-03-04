@@ -62,10 +62,10 @@ CAppConfig::~CAppConfig()
 
 //	Author: PCMan (HZY) 2004/07/22	07:51 AM
 //	I finally came up with a really smart way to maintain ini file.
-//	Every time I add a variable to CAppConfig, all I need to do is 
+//	Every time I add a variable to CAppConfig, all I need to do is
 //	adding the variable in my "Config Table," and all the data will
-//	be load and save automatically.  This is not the most efficient way. 
-//	In my first version I use some more efficient method, but at last I change 
+//	be load and save automatically.  This is not the most efficient way.
+//	In my first version I use some more efficient method, but at last I change
 //	my code to what it is now.  Because I think in a program not time-critical,
 //	easy-maintaining is much more important.
 bool CAppConfig::DoDataExchange(bool bLoad)
@@ -118,7 +118,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
-	
+
 	BEGIN_CONFIG_SECT(Color)
 		_CFG_CLR( "Black", CTermCharAttr::m_DefaultColorTable[0] )
 		_CFG_CLR( "DarkRed", CTermCharAttr::m_DefaultColorTable[1] )
@@ -370,7 +370,8 @@ void CAppConfig::SetToDefault()
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
 
-	MailClient = WebBrowser = "firefox %s";
+	MailClient "xdg-email %s";
+	WebBrowser = "xdg-open %s";
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;
 #endif

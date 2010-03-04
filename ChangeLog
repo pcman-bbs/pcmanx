@@ -1,3 +1,8 @@
+2010-03-04  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/appconfig.cpp: Use 'xdg-email' as mail client and 'xdg-open' as web
+	browser.
+
 2010-02-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/snapshot-deb.sh: Adjust the script for debian package.
