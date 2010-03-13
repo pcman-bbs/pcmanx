@@ -61,14 +61,6 @@ $(SOURCES_mozilla): pcmanx_interface.h
 plugin_DATA = $(LIBRARIES_mozilla)
 plugindir = $(MOZILLA_LIB_DIR_SEARCH)/plugins
 
-if CSRG_BASED
-LIBUTIL = -lutil
-endif
-
-if USING_LINUX
-LIBUTIL = -lutil -lX11
-endif
-
 # We MUST make sure plugin was built as -shared, and we must use some tricky
 # approaches to hanle libtool issues.
 $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)

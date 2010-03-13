@@ -13,11 +13,7 @@ INCLUDES = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS)
-
-if CSRG_BASED
-pcmanx_LDADD += -lutil
-endif
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \

@@ -29,6 +29,17 @@ AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([],[no-xml])
 AC_PROG_INSTALL
 
+dnl define varible by OS
+case "$host" in
+  *solaris*)
+    LIBUTIL=""
+    ;;
+  *)
+    LIBUTIL="-lutil"
+    ;;
+esac
+AC_SUBST(LIBUTIL)
+
 dnl define a new autoconf test, AC_CSRG_BASED, which will define
 dnl CSRG_BASED for BSD systems in config.h.
 AC_DEFUN([AC_CSRG_BASED],
@@ -363,8 +374,8 @@ dnl *********************************************************************
 
 if test "$external" = "yes"; then
     AC_DEFINE_UNQUOTED(USE_EXTERNAL, [1], [Enable external SSH/Telnet support])
-    dnl We need tty utility functions from libutil
-    LIBS="$LIBS -lutil"
+    dnl We need tty utility functions from libutil on Linux
+    LIBS="$LIBS $LIBUTIL"
 fi
 
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
