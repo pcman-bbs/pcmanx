@@ -20,6 +20,9 @@
 	src/Makefile.am: -lutil not available on OpenSolaris
 	Reported by Halton Huo <halton.huo@sun.com>
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=4
+	* src/notifier/notifier-impl.c: array initlization cause build error with suncc
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=5
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

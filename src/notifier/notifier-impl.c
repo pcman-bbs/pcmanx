@@ -34,7 +34,7 @@
 #define TIMEOUT     6000
 
 static int width, height, max_slots;
-static int slots[MAX_SLOTS] = {[0 ... (MAX_SLOTS - 1)] = -1 };
+static int slots[MAX_SLOTS] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 static int notifier_initialized = 0;
 static int popup_timeout = TIMEOUT;
 static GdkPixbuf *icon_pixbuf;
