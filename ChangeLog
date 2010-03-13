@@ -34,6 +34,7 @@
 	src/core/Makefile.am: ld error on OpenSolaris
 	Reported by Halton Huo <halton.huo@sun.com>
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=7
+	* developers: Remove empty folder.
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
