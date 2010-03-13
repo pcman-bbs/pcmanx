@@ -35,6 +35,7 @@
 	Reported by Halton Huo <halton.huo@sun.com>
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=7
 	* developers: Remove empty folder.
+	* build/snapshot-deb.sh: Fix the problem to fetch revision.
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

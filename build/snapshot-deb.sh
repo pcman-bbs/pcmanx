@@ -8,10 +8,10 @@
 
 case "${SCM}" in
     ('svn')
-    REV="$(LANG=C svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
+    REV="$(LANG=C svn info .. | grep 'Last Changed Rev' | awk '{ print $4 }')"
     ;;
     ('git')
-    REV="$(LANG=C git svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
+    REV="$(LANG=C cd .. && git svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
     ;;
 esac
 
