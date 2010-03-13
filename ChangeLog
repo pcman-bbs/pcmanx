@@ -7,6 +7,10 @@
 	plugin/src/npupp.h: Fix the compilation error of '--enable-plugin'.
 	* build/snapshot-deb.sh: Add '--enable-plugin' to build Debian package.
 	* plugin/src/Makefile.am: Fix the missing header file of automake.
+	* AUTHORS,
+	configure.ac: xpidl not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=2
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

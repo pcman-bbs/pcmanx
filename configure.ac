@@ -460,7 +460,14 @@ if test "$plugin" = "yes"; then
   if test "$user_specified_mozilla" = "no"; then
     if "$PKG_CONFIG" --exists "$gecko_provider-plugin >= 1.9"; then
       MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin`
-      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
+        case "$host" in
+          *solaris*)
+            MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
+           ;;
+          *)
+            MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
+esac
+
       MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
       MOZILLA_IDLDIR=`$PKG_CONFIG --variable=idldir libxul`/`$PKG_CONFIG --variable=includetype libxul`
     else
