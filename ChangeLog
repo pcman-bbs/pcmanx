@@ -1,3 +1,7 @@
+2010-03-13  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh: Adjust the script for release test.
+
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* autogen.sh: Change to automake 1.11
