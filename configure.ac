@@ -756,7 +756,9 @@ LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
 
 dnl Reduce C++ overhead
+if test "x$GCC" = "xyes"; then
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
+fi
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
 dnl linker optimizations
