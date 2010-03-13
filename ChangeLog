@@ -5,6 +5,8 @@
 	plugin/src/npn_gate.cpp,
 	plugin/src/npplat.h,
 	plugin/src/npupp.h: Fix the compilation error of '--enable-plugin'.
+	* build/snapshot-deb.sh: Add '--enable-plugin' to build Debian package.
+	* plugin/src/Makefile.am: Fix the missing header file of automake.
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

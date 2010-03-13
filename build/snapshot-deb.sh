@@ -58,7 +58,7 @@ pcmanx-gtk2 (${VER}-svn${REV}) unstable; urgency=low
 
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(LANG=C date -R)
 ENDLINE
-sed -i "s,./configure \(.*\)$,./configure --enable-debug --disable-plugin --enable-iplookup --enable-proxy --enable-wget --enable-libnotify \1," debian/rules
+sed -i "s,./configure \(.*\)$,./configure --enable-debug --enable-plugin --enable-iplookup --enable-proxy --enable-wget --enable-libnotify \1," debian/rules
 debuild -S
 debuild -b
 popd

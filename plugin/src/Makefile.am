@@ -44,7 +44,7 @@ SOURCES_mozilla = \
 	npn_gate.cpp \
 	npp_gate.cpp \
 	nsScriptablePeer.cpp nsScriptablePeer.h \
-	plugin.cpp plugin.h pluginbase.h npplat.h
+	plugin.cpp plugin.h pluginbase.h npplat.h npupp.h
 
 LIBRARIES_mozilla = pcmanx-plugin.so
 
