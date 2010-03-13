@@ -23,6 +23,13 @@
 	* src/notifier/notifier-impl.c: array initlization cause build error with suncc
 	Reported by Halton Huo <halton.huo@sun.com>
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=5
+	* configure.ac,
+	src/Makefile.am,
+	src/view/forkpty.c,
+	src/view/forkpty.h,
+	src/view/telnetcon.cpp: forkpty() not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=6
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

@@ -108,6 +108,35 @@ AM_CONDITIONAL([USING_LINUX], test "x$system" = "xLinux")
 
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
 
+dnl
+dnl checking for forkpty()
+dnl
+AC_CHECK_FUNCS(forkpty,, AC_CHECK_LIB(util,forkpty, [AC_DEFINE(HAVE_FORKPTY)] [LIBS="$LIBS -lutil"]))
+
+dnl -----  pseudo terminal handling
+dnl -----  os        pty master      streams modules
+dnl -----  aix       /dev/ptc        - (loads ldterm by default)
+dnl -----  hpux      /dev/ptmx       ldterm ptem
+dnl -----  solaris   /dev/ptmx       ldterm ptem ttcompat
+
+dnl -----  aix loads module ldterm by default and wants no ptem
+dnl -----  ptmx takes precedence
+AC_MSG_CHECKING([for master pty])
+if test -r /dev/ptc ; then
+  if test -r /dev/ptmx ; then
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+    AC_MSG_RESULT(ptmx)
+  else
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptc", [aix style pty master])
+    AC_MSG_RESULT(ptc)
+  fi
+elif test -r /dev/ptmx ; then
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+  AC_MSG_RESULT(ptmx)
+else
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/null", [lets see what happens])
+fi
+
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
 dnl *********************************************************************

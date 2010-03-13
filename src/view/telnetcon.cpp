@@ -92,6 +92,12 @@
 #include "proxy.h"
 #endif
 
+#ifndef HAVE_FORKPTY 
+extern "C" {
+#include "forkpty.h" 
+}
+#endif
+
 #define RECV_BUF_SIZE (4097)
 
 #if !defined(MOZ_PLUGIN)
