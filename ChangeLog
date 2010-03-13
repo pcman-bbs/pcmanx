@@ -11,6 +11,10 @@
 	configure.ac: xpidl not found on OpenSolaris
 	Reported by Halton Huo <halton.huo@sun.com>
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=2
+	* src/core/pcmanx_utils.h,
+	src/notebook.cpp: <bits/wordsize.h> not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=3
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
