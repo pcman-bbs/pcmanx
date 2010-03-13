@@ -88,7 +88,7 @@ NPError NPN_PostURL(NPP instance, const char* url, const char* window, uint32 le
 {
   NPError rv = CallNPN_PostURLProc(NPNFuncs.posturl, instance, url, window, len, buf, file);
   return rv;
-} 
+}
 
 NPError NPN_RequestRead(NPStream* stream, NPByteRange* rangeList)
 {
@@ -175,14 +175,14 @@ void NPN_ReloadPlugins(NPBool reloadPages)
 JRIEnv* NPN_GetJavaEnv(void)
 {
   JRIEnv * rv = NULL;
-	rv = CallNPN_GetJavaEnvProc(NPNFuncs.getJavaEnv);
+	rv = (JRIEnv*) CallNPN_GetJavaEnvProc(NPNFuncs.getJavaEnv);
   return rv;
 }
 
 jref NPN_GetJavaPeer(NPP instance)
 {
   jref rv;
-  rv = CallNPN_GetJavaPeerProc(NPNFuncs.getJavaPeer, instance);
+  rv = (jref) CallNPN_GetJavaPeerProc(NPNFuncs.getJavaPeer, instance);
   return rv;
 }
 #endif

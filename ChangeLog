@@ -1,6 +1,10 @@
 2010-03-13  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/make-new-release.sh: Adjust the script for release test.
+	* plugin/src/np_entry.cpp,
+	plugin/src/npn_gate.cpp,
+	plugin/src/npplat.h,
+	plugin/src/npupp.h: Fix the compilation error of '--enable-plugin'.
 
 2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
