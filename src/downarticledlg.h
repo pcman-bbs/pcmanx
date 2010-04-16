@@ -41,7 +41,7 @@ private:
 	GtkTextView		*m_textview;
 	GtkButton		*m_btncopy;
 	GtkButton		*m_btnsave;
-	GtkButton		*m_btncancel;
+	GtkButton		*m_btnstop;
 
 	CTelnetCon		*m_connection;
 	GThread			*m_thread;

@@ -1,3 +1,13 @@
+2010-04-15  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.h, src/downarticledlg.cpp: Fix article download
+	issue with bdwm.net. Also change the 'Cancel' button into a 'Stop'
+	button so that if download gets stuck again, one can click 'Stop' to
+	abort waiting while still being able save what has been downloaded.
+	Previous 'Cancel' behavior can be achieved by pressing Esc or closing
+	the download window.
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=11
+
 2010-03-13  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/make-new-release.sh: Adjust the script for release test.

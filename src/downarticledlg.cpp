@@ -26,8 +26,10 @@
 
 #define CUSTOM_RESPONSE_COPY 1
 #define CUSTOM_RESPONSE_SAVE 2
+#define CUSTOM_RESPONSE_STOP 3
 
 #define DOWN_ARTICLE_POLL_DELAY 100000  // in microsecond
+#define CUTOFF_COLUMN 40  // Progress indicator should come before this column
 
 
 CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
@@ -48,10 +50,10 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
 
 	m_btncopy = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
 			GTK_STOCK_COPY, CUSTOM_RESPONSE_COPY);
-	m_btncancel = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	m_btnsave = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
 			GTK_STOCK_SAVE_AS, CUSTOM_RESPONSE_SAVE);
+	m_btnstop = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
+			GTK_STOCK_STOP, CUSTOM_RESPONSE_STOP);
 	gtk_widget_set_sensitive(GTK_WIDGET(m_btncopy), FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(m_btnsave), FALSE);
 
@@ -100,7 +102,7 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 		// Wait for the new line to be received in full
 		while (line == con->m_LineCounter 
 				|| con->m_CaretPos.y < con->m_FirstLine + con->m_RowsPerPage - 1 
-				|| con->m_CaretPos.x < 50)
+				|| con->m_CaretPos.x < CUTOFF_COLUMN)
 		{
 			if (_this->m_stop)  // We've been called off
 				goto _exit;
@@ -111,14 +113,15 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 				con->m_Site.m_Encoding.c_str(), str);
 	}
 
+_exit:
 	gdk_threads_enter();
 	gtk_text_buffer_set_text(_this->m_textbuf, str.data(), str.size());
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btncopy), TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btnsave), TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(_this->m_btnstop), FALSE);
 	gtk_widget_grab_default(GTK_WIDGET(_this->m_btnsave));
 	gdk_threads_leave();
 
-_exit:
 	return;
 }
 
@@ -144,6 +147,11 @@ void CDownArticleDlg::OnCommand(int id)
 			if (!SaveAs())
 				g_signal_stop_emission_by_name(m_Widget, "response");
 			break;
+
+		case CUSTOM_RESPONSE_STOP: // Stop fetching new lines
+			m_stop = true;
+			g_signal_stop_emission_by_name(m_Widget, "response");
+			break;
 	}
 }
 
@@ -153,7 +161,13 @@ void CDownArticleDlg::OnDestroy()
 	if (m_thread)
 	{
 		m_stop = true;
+		
+		// Release the GDK global lock so that we don't deadlock with the
+		// worker. Will re-grab it afterwards.
+		gdk_threads_leave();
 		g_thread_join(m_thread);
+		gdk_threads_enter();
+
 		m_thread = NULL;
 	}
 
