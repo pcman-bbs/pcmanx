@@ -201,6 +201,14 @@ CMainFrame::CMainFrame()
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
 
+	// Tab key to quick switch keyboard focus to m_URLEntry
+	GList *focus_chain = NULL;
+	focus_chain = g_list_append(focus_chain, m_Toolbar);
+	focus_chain = g_list_append(focus_chain, m_URLEntry);
+	gtk_container_set_focus_chain(GTK_CONTAINER(vbox), focus_chain);
+	g_list_free(focus_chain);
+
+
 //	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
 //	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);

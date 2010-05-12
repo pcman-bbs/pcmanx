@@ -1,3 +1,8 @@
+2010-05-12  Youchen Lee  <copyleft@utcr.org>
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Set the focus chain 
+	for quick switching keyboard focus to the URL entry by Tab key.
+
 2010-04-15  Jason Xia  <jasonxh@gmail.com>
 
 	* src/downarticledlg.h, src/downarticledlg.cpp: Fix article download
