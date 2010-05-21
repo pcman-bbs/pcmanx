@@ -668,8 +668,8 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	gtk_widget_set_sensitive(fontsel->face_list, false);
 
 	char pango_font_name[32];
-	int *font_size;
-	string *font_family;
+	int *font_size = NULL;
+	string *font_family = NULL;
 	int font_type;
 	const char *font_action = gtk_action_get_name(GTK_ACTION(mitem));
 	if (!strcmp(font_action, "font")) {
