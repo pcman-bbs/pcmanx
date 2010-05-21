@@ -72,7 +72,6 @@ dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
-AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_LIBNOTIFY],[#undef USE_LIBNOTIFY])
@@ -145,11 +144,6 @@ AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug],
 		[enable Debug (default: no)]),
         debug=$enableval, debug="no")
-
-AC_ARG_ENABLE([mmx],
-	AS_HELP_STRING([--disable-mmx],
-		[disable MMX optimizations (default: yes)]),
-        mmx=$enableval, mmx="yes")
 
 AC_ARG_ENABLE([docklet],
 	AS_HELP_STRING([--disable-docklet],
@@ -284,33 +278,6 @@ if test "$ipv6" = yes; then
 		AC_MSG_RESULT(no)
 	fi
 fi
-
-dnl *********************************************************************
-dnl ** MMX **************************************************************
-dnl *********************************************************************
-
-dnl we don't need mmx on *this* machine, just i386, because
-dnl it's checked at runtime.
-if test "$mmx" = "yes"; then
-	case $host_cpu in
-    i386|i486|i586|i686|i786|k6|k7|c3|c3_2|x86_64)
-    mmx=yes
-        ;;
-     *)
-    mmx=no
-	esac
-	if test "$system" = "OpenBSD"; then
-		dnl openbsd fails because mmx_cmod doesn't prefix its symbols with underscore.
-		dnl xtext.o: Undefined symbol `_shade_ximage_15_mmx' referenced from text segment
-		mmx=no
-	fi
-	if test "$mmx" = "yes"; then
-		AC_DEFINE(USE_MMX)
-	fi
-fi
-
-AM_CONDITIONAL(USE_MMX, test "$mmx" = "yes")
-
 
 dnl *********************************************************************
 dnl ** Docklet **********************************************************
@@ -859,7 +826,6 @@ echo pcmanx_gtk2 ..................... : Version $VERSION
 echo
 echo Prefix........................... : $prefix
 echo Debug support ................... : $debug
-echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo Libnotify support................ : $libnotify

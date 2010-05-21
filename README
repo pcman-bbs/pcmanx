@@ -19,7 +19,6 @@ and here are the latest options:
   --prefix=DIR		Specify the prefix directory to DIR. Usually, we woild
 			like to use /usr as the manner defined in LSB (Linux
 			Standard Base).
-  --disable-mmx		Disable Intel MMX optimizations. [Default: Enabled]
   --disable-docklet	Disable the docklet / system tray support.
 			[Default: Enabled]
   --disable-notifier	Disable the popup notification support for incoming
