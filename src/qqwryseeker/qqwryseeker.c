@@ -74,18 +74,17 @@ static inline int read_str(FILE *fp, char buf[], int buf_size, char exaust)
 /* read a 3-byte int */
 static inline int read_int3(FILE *fp)
 {
-	char buf[4];
-	buf[3] = 0;
-	fread(buf, 3, 1, fp);
-	return *((int*)buf);
+	int buf = 0;
+	fread(&buf, 3, 1, fp);
+	return buf;
 }
 
 /* read a 4-byte int */
 static inline int read_int4(FILE *fp)
 {
-	char buf[4];
-	fread(buf, 4, 1, fp);
-	return *((int*)buf);
+	int buf;
+	fread(&buf, 4, 1, fp);
+	return buf;
 }
 
 /* read a location piece: country or area.
