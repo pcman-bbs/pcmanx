@@ -31,7 +31,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <glib.h>
-#include <string.h>
+#include <cstring>
 
 #include "mainframe.h"
 #include "appconfig.h"

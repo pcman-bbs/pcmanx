@@ -29,7 +29,7 @@
 
 #include <gtk/gtk.h>
 
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 #include "stringutil.h"

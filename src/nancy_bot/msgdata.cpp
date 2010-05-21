@@ -20,8 +20,8 @@
 
 #include <cstdlib>
 #include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
+#include <cstdio>
+#include <cerrno>
 
 #include "nancy_bot/msgdata.h"
 #include "nancy_bot/botutil.h"
@@ -190,7 +190,7 @@ int
 MsgData::initSpecialMsg(string flag)
 {
 	FILE *fptr = fopen(filename_conf.c_str(), "r");
-	vector<string> *pVMsg;
+	vector<string> *pVMsg = NULL;
 	if(!fptr){
 		return 0;
 	

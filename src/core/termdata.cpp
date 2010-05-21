@@ -27,7 +27,7 @@
 #include "termdata.h" // class's header file
 #include "termview.h" // class's header file
 #include "termsel.h" // class's header file
-#include <string.h>
+#include <cstring>
 #include <stdint.h>
 
 #include <algorithm>

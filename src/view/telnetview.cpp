@@ -22,12 +22,12 @@
 
 #include <glib/gi18n.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <gdk/gdkkeysyms.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstring>
+#include <cstdlib>
 #include <algorithm>
 
 #include "telnetview.h"

@@ -24,8 +24,8 @@
 #endif
 
 #include "site.h"
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 //	#include "appconfig.h"
 

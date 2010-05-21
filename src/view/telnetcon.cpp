@@ -47,8 +47,8 @@
 
 #endif /* !defined(MOZ_PLUGIN) */
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include <glib/gi18n.h>
 
 #include "stringutil.h"

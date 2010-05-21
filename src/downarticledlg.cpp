@@ -22,7 +22,7 @@
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
-#include <string.h>
+#include <cstring>
 
 #define CUSTOM_RESPONSE_COPY 1
 #define CUSTOM_RESPONSE_SAVE 2

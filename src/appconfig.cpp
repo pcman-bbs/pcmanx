@@ -28,7 +28,7 @@
 #include "mainframe.h"
 #include "stringutil.h"
 #include "inputdialog.h"
-#include <stdio.h>
+#include <cstdio>
 
 #include <sys/types.h>
 #include <sys/stat.h>

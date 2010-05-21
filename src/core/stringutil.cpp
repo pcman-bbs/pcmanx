@@ -19,8 +19,8 @@
  */
 
 #include "stringutil.h"
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 
 // Note by PCMan:
 // EscapeStr() & UnEscapeStr() :

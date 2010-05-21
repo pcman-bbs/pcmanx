@@ -23,7 +23,7 @@
 #include "inputdialog.h"
 
 #include <gdk/gdkkeysyms.h>
-#include <string.h>
+#include <cstring>
 
 #if 0
 static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _this)
