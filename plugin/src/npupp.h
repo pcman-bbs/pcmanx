@@ -210,7 +210,7 @@ typedef NPError(*NP_LOADDS NPN_GetURLNotifyUPP) (NPP instance, const char *url, 
 
 /* NPN_PostUrlNotify */
 typedef NPError(*NP_LOADDS NPN_PostURLNotifyUPP) (NPP instance, const char *url, const char *window,
-                                                  uint32 len, const char *buf, NPBool file,
+                                                  uint32_t len, const char *buf, NPBool file,
                                                   void *notifyData);
 #define NewNPN_PostURLNotifyProc(FUNC)		\
 		((NPN_PostURLNotifyUPP) (FUNC))
@@ -226,7 +226,7 @@ typedef NPError(*NP_LOADDS NPN_GetURLUPP) (NPP instance, const char *url, const 
 
 /* NPN_PostUrl */
 typedef NPError(*NP_LOADDS NPN_PostURLUPP) (NPP instance, const char *url, const char *window,
-                                            uint32 len, const char *buf, NPBool file);
+                                            uint32_t len, const char *buf, NPBool file);
 #define NewNPN_PostURLProc(FUNC)		\
 		((NPN_PostURLUPP) (FUNC))
 #define CallNPN_PostURLProc(FUNC, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6) \
@@ -276,7 +276,7 @@ typedef const char *(*NP_LOADDS NPN_UserAgentUPP) (NPP instance);
                 (*(FUNC))((ARG1))
 
 /* NPN_MemAlloc */
-typedef void *(*NP_LOADDS NPN_MemAllocUPP) (uint32 size);
+typedef void *(*NP_LOADDS NPN_MemAllocUPP) (uint32_t size);
 #define NewNPN_MemAllocProc(FUNC)		\
 		((NPN_MemAllocUPP) (FUNC))
 #define CallNPN_MemAllocProc(FUNC, ARG1)		\
@@ -290,7 +290,7 @@ typedef void (*NP_LOADDS NPN_MemFreeUPP) (void *ptr);
 		(*(FUNC))((ARG1))
 
 /* NPN_MemFlush */
-typedef uint32(*NP_LOADDS NPN_MemFlushUPP) (uint32 size);
+typedef uint32(*NP_LOADDS NPN_MemFlushUPP) (uint32_t size);
 #define NewNPN_MemFlushProc(FUNC)		\
 		((NPN_MemFlushUPP) (FUNC))
 #define CallNPN_MemFlushProc(FUNC, ARG1)		\

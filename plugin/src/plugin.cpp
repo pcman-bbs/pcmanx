@@ -56,6 +56,7 @@
 #include "font.h"
 #include "telnetview.h"
 #include "telnetcon.h"
+#include "pcmanx_utils.h"
 
 #include "appconfig.h"
 
@@ -72,7 +73,7 @@ static int strcmp_ci( register const char* str1, register const char* str2)
 
 char* NPP_GetMIMEDescription(void)
 {
-    return (char*) (MIME_TYPES_DESCRIPTION);
+    return const_cast<char*>(MIME_TYPES_DESCRIPTION);
 }
 
 //////////////////////////////////////
@@ -99,10 +100,10 @@ NPError NS_PluginGetValue(NPPVariable aVariable, void *aValue)
   NPError err = NPERR_NO_ERROR;
   switch (aVariable) {
     case NPPVpluginNameString:
-      *((const char **)aValue) = PLUGIN_NAME;
+      *((char **)aValue) = const_cast<char*>(PLUGIN_NAME);
       break;
     case NPPVpluginDescriptionString:
-      *((const char **)aValue) = PLUGIN_DESCRIPTION;
+      *((char **)aValue) = const_cast<char*>(PLUGIN_DESCRIPTION);
       break;
     default:
       err = NPERR_INVALID_PARAM;
@@ -216,7 +217,7 @@ NPError nsPluginInstance::SetWindow(NPWindow* aWindow)
 
 	gdk_flush();
 
-    printf("all setup and ready to reparent and map, m_GtkWidget = %p\n", m_GtkWidget);
+	printf("all setup and ready to reparent and map, m_GtkWidget = %x\n", (word_t)m_GtkWidget);
  	gtk_widget_show_all(m_GtkWidget);
 
 	XReparentWindow(GDK_WINDOW_XDISPLAY(m_GtkWidget->window),

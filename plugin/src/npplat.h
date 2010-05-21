@@ -38,9 +38,9 @@
 #ifndef _NPPLAT_H_
 #define _NPPLAT_H_
 
-#include <npapi.h>
-#include <npfunctions.h>
-#include "npupp.h"
+#include "npapi.h"
+#include "npfunctions.h"
+
 /**************************************************/
 /*                                                */
 /*                   Windows                      */

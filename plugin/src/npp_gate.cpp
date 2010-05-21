@@ -45,7 +45,7 @@
 // here the plugin creates a plugin instance object which 
 // will be associated with this newly created NPP instance and 
 // will do all the necessary job
-NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc, char* argn[], char* argv[], NPSavedData* saved)
+NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc, char* argn[], char* argv[], NPSavedData* saved)
 {   
   if(instance == NULL)
     return NPERR_INVALID_INSTANCE_ERROR;
@@ -130,7 +130,7 @@ NPError NPP_SetWindow (NPP instance, NPWindow* pNPWindow)
   return rv;
 }
 
-NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16* stype)
+NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16_t* stype)
 {
   if(instance == NULL)
     return NPERR_INVALID_INSTANCE_ERROR;
@@ -143,7 +143,7 @@ NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBool se
   return rv;
 }
 
-int32 NPP_WriteReady (NPP instance, NPStream *stream)
+int32_t NPP_WriteReady (NPP instance, NPStream *stream)
 {
   if(instance == NULL)
     return 0x0fffffff;
@@ -152,11 +152,11 @@ int32 NPP_WriteReady (NPP instance, NPStream *stream)
   if(plugin == NULL) 
     return 0x0fffffff;
 
-  int32 rv = plugin->WriteReady(stream);
+  int32_t rv = plugin->WriteReady(stream);
   return rv;
 }
 
-int32 NPP_Write (NPP instance, NPStream *stream, int32 offset, int32 len, void *buffer)
+int32_t NPP_Write (NPP instance, NPStream *stream, int32_t offset, int32_t len, void *buffer)
 {   
   if(instance == NULL)
     return len;
@@ -165,7 +165,7 @@ int32 NPP_Write (NPP instance, NPStream *stream, int32 offset, int32 len, void *
   if(plugin == NULL) 
     return len;
 
-  int32 rv = plugin->Write(stream, offset, len, buffer);
+  int32_t rv = plugin->Write(stream, offset, len, buffer);
   return rv;
 }
 
@@ -244,7 +244,7 @@ NPError NPP_SetValue(NPP instance, NPNVariable variable, void *value)
   return rv;
 }
 
-int16	NPP_HandleEvent(NPP instance, void* event)
+int16_t	NPP_HandleEvent(NPP instance, void* event)
 {
   if(instance == NULL)
     return 0;
@@ -253,7 +253,7 @@ int16	NPP_HandleEvent(NPP instance, void* event)
   if(plugin == NULL) 
     return 0;
 
-  uint16 rv = plugin->HandleEvent(event);
+  uint16_t rv = plugin->HandleEvent(event);
   return rv;
 }
 
@@ -274,7 +274,7 @@ jref NPP_GetJavaClass (void)
 
 #ifdef XP_MAC
 
-NPError	Private_New(NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc, char* argn[], char* argv[], NPSavedData* saved)
+NPError	Private_New(NPMIMEType pluginType, NPP instance, uint16_t mode, int16_t argc, char* argn[], char* argv[], NPSavedData* saved)
 {
   NPError rv = NPP_New(pluginType, instance, mode, argc, argn, argv, saved);
   return rv;	
@@ -298,15 +298,15 @@ NPError Private_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBoo
   return rv;
 }
 
-int32 Private_WriteReady(NPP instance, NPStream* stream)
+int32_t Private_WriteReady(NPP instance, NPStream* stream)
 {
-  int32 rv = NPP_WriteReady(instance, stream);
+  int32_t rv = NPP_WriteReady(instance, stream);
   return rv;
 }
 
-int32 Private_Write(NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer)
+int32_t Private_Write(NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer)
 {
-  int32 rv = NPP_Write(instance, stream, offset, len, buffer);
+  int32_t rv = NPP_Write(instance, stream, offset, len, buffer);
   return rv;
 }
 
@@ -322,9 +322,9 @@ NPError Private_DestroyStream(NPP instance, NPStream* stream, NPError reason)
   return rv;
 }
 
-int16 Private_HandleEvent(NPP instance, void* event)
+int16_t Private_HandleEvent(NPP instance, void* event)
 {
-  int16 rv = NPP_HandleEvent(instance, event);
+  int16_t rv = NPP_HandleEvent(instance, event);
   return rv;
 }
 
