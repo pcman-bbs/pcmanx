@@ -370,7 +370,7 @@ inline void CTermSelection::GetEnd( int& row, int& col )
 		row = m_End.row;
 		col = m_End.col - 1;
 	}
-	else if ( m_Start.row > 0 )
+	else if ( m_End.row > 0 )
 	{
 		row = m_End.row - 1;
 		col = m_pTermData->m_ColsPerPage - 1;
