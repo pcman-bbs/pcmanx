@@ -30,6 +30,10 @@
 #include <string.h>
 #include <stdint.h>
 
+#include <algorithm>
+
+using std::swap;
+
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.
 //
@@ -404,11 +408,6 @@ void CTermData::InsertNewLine(int y, int count)
 	m_ScrollRegionTop = tmp;
 }
 
-/*
-inline void swap(char*& x, char*& y)
-{	char* t=x;	x=y;	y=t;	}
-*/
-
 void CTermData::ScrollUp(int n /*=1*/)
 {
 	int maxn = m_ScrollRegionBottom - m_ScrollRegionTop +1;
@@ -421,9 +420,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 	for( i = start; i <= end; i++ )
 	{
 		// Swap two lines to prevent memmory reallocation.
-		char* tmp = m_Screen[i];
-		m_Screen[i] = m_Screen[i+n];
-		m_Screen[i+n] = tmp;
+		swap(m_Screen[i], m_Screen[i + n]);
 		SetWholeLineUpdate(m_Screen[i]);
 	}
 	for( i = 1; i <= n; i++ )
@@ -446,9 +443,7 @@ void CTermData::ScrollDown(int n /*=1*/)
 	for( i = start; i >= end; i-- )
 	{
 		// Swap two lines to prevent memmory reallocation.
-		char* tmp = m_Screen[i];
-		m_Screen[i] = m_Screen[i-n];
-		m_Screen[i-n] = tmp;
+		swap(m_Screen[i], m_Screen[i - n]);
 		SetWholeLineUpdate(m_Screen[i]);
 	}
 	for( i = 1; i <= n; i++ )
@@ -611,10 +606,8 @@ void CTermData::ClearScreen(int p)
 	char* tmp;
 	for( i = 0; i < bottom; i++ )
 	{
-		tmp = m_Screen[i];
 		int src = i+m_RowsPerPage;
-		m_Screen[i] = m_Screen[src];
-		m_Screen[src] = tmp;
+		swap(m_Screen[i], m_Screen[src]);
 	}
 	for( i = bottom; i< m_RowCount; i++ )
 		InitNewLine( m_Screen[i], m_ColsPerPage);
@@ -1342,7 +1335,9 @@ void CTermData::SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkP
 {
 	if( block || start.y == end.y )
 	{
-		if( end.x < start.x ){int tmp=end.y; end.y=end.x; end.x=tmp;	}
+		if( end.x < start.x )
+		    swap(end.y, end.x);
+
 		for( int iline = start.y; iline <= end.y; iline++ )
 		{
 			CTermCharAttr* pattr = GetLineAttr( m_Screen[iline]);

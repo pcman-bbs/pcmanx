@@ -21,8 +21,14 @@
   #pragma implementation "termsel.h"
 #endif
 
+#include <algorithm>
+
 #include "termsel.h" // class's header file
 #include "termdata.h" // class's header file
+
+using std::swap;
+using std::max;
+using std::min;
 
 void CTermSelection::NewStart( int row, int col, bool left, bool block )
 {
@@ -32,11 +38,18 @@ void CTermSelection::NewStart( int row, int col, bool left, bool block )
 	m_BlockMode = block;
 }
 
-#define iMAX(x,y) ((x)>(y)?(x):(y))
-#define iMIN(x,y) ((x)>(y)?(y):(x))
-#define MAX3(x,y,z) iMAX(iMAX(x,y),z)
-#define MIN3(x,y,z) iMIN(iMIN(x,y),z)
-#define SWAP(x,y) do { tmp = (x); (x) = (y); (y) = tmp; } while ( 0 )
+template <class T>
+static inline const T& max3(const T& a, const T& b, const T& c)
+{
+    return max(max(a, b), c);
+}
+
+template <class T>
+static inline const T& min3(const T& a, const T& b, const T& c)
+{
+    return min(min(a, b), c);
+}
+
 void CTermSelection::ChangeEnd( int row2, int col2, bool left2, foreach_func ff, void* data )
 {
 	int tmp;
@@ -54,12 +67,12 @@ void CTermSelection::ChangeEnd( int row2, int col2, bool left2, foreach_func ff,
 	{
 		if ( col1 == col2 && !left1 && left2 )
 		{
-			SWAP( left1, left2 );
+			swap( left1, left2 );
 		}
 		else if ( col1 > col2 )
 		{
-			SWAP( col1, col2 );
-			SWAP( left1, left2 );
+			swap( col1, col2 );
+			swap( left1, left2 );
 		}
 
 		if ( m_BlockMode )
@@ -87,12 +100,12 @@ void CTermSelection::ChangeEnd( int row2, int col2, bool left2, foreach_func ff,
 	// this can be optimized
 	else if ( m_BlockMode )
 	{
-		tmp  = MIN3( m_Start.row, row1, row2 );
-		row2 = MAX3( m_Start.row, row1, row2 );
+		tmp  = min3( m_Start.row, row1, row2 );
+		row2 = max3( m_Start.row, row1, row2 );
 		row1 = tmp;
 
-		tmp  = MIN3( m_Start.col, col1, col2 );
-		col2 = MAX3( m_Start.col, col1, col2 );
+		tmp  = min3( m_Start.col, col1, col2 );
+		col2 = max3( m_Start.col, col1, col2 );
 		col1 = tmp;
 
 		for ( int row = row1; row <= row2; row++ )
@@ -103,9 +116,9 @@ void CTermSelection::ChangeEnd( int row2, int col2, bool left2, foreach_func ff,
 	{
 		if ( row1 > row2 )
 		{
-			SWAP( col1, col2 );
-			SWAP( row1, row2 );
-			SWAP( left1, left2 );
+			swap( col1, col2 );
+			swap( row1, row2 );
+			swap( left1, left2 );
 		}
 
 		if ( !left1 )
@@ -123,11 +136,6 @@ void CTermSelection::ChangeEnd( int row2, int col2, bool left2, foreach_func ff,
 			col += ff( row2, col, data );
 	}
 }
-#undef SWAP
-#undef MAX3
-#undef MIN3
-#undef iMIN
-#undef iMAX
 
 inline void CTermSelection::PageBound( int& row, int& col, bool& left )
 {
@@ -171,24 +179,21 @@ inline void CTermSelection::Bound( int& row, int& col, bool& left )
 	}
 }
 
-#define SWAP(x,y) do { tmp = (x); (x) = (y); (y) = tmp; } while ( 0 )
 void CTermSelection::Canonicalize()
 {
-	int tmp;
-
 	if ( m_Start.row > m_End.row )
 	{
-		SWAP( m_Start.row, m_End.row );
-		SWAP( m_Start.col, m_End.col );
-		SWAP( m_Start.left, m_End.left );
+		swap( m_Start.row, m_End.row );
+		swap( m_Start.col, m_End.col );
+		swap( m_Start.left, m_End.left );
 	}
 
 	if (( m_Start.row == m_End.row || m_BlockMode ) && m_Start.col >= m_End.col )
 	{
 		if ( m_Start.col > m_End.col )
 		{
-			SWAP( m_Start.col, m_End.col );
-			SWAP( m_Start.left, m_End.left );
+			swap( m_Start.col, m_End.col );
+			swap( m_Start.left, m_End.left );
 		}
 		// start on right half, end on left half
 		else if ( !m_Start.left && m_End.left )
@@ -198,7 +203,6 @@ void CTermSelection::Canonicalize()
 		}
 	}
 }
-#undef SWAP
 
 void CTermSelection::SelectPage( foreach_func ff, void* data )
 {
