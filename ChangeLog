@@ -1,3 +1,8 @@
+2010-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh: Polish script.
+	* build/snapshot-deb.sh: Fix some dependency problem.
+
 2010-06-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/snapshot-deb.sh: Update Debian packaging script.

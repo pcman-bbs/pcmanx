@@ -9,6 +9,7 @@ features=('debug' 'plugin' 'iplookup' 'proxy' 'wget' 'libnotify')
 
 VERSION=
 
+[ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
 [ ! -f 'Makefile' ] && ../configure
 
 clear

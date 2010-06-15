@@ -15,9 +15,16 @@ case "${SCM}" in
     ;;
 esac
 
-VER="$(../configure --version | head -n1 | awk '{ print $3 }')"
+if grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
+    REV='1'
+else
+    REV="svn${REV}"
+fi
 
+[ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
 [ ! -f 'Makefile' ] && ../configure
+
+VER="$(../configure --version | head -n1 | awk '{ print $3 }')"
 
 if make dist-bzip2 > /dev/null; then
     [ -d "pcmanx-gtk2-${VER}" ] && rm -fr "pcmanx-gtk2-${VER}"
@@ -28,7 +35,7 @@ else
 fi
 
 pushd "pcmanx-gtk2-${VER}"
-dh_make -s -c gpl -f ../"pcmanx-gtk2-${VER}.tar.bz2"
+dh_make --multi --quilt --copyright gpl2 --file ../"pcmanx-gtk2-${VER}.tar.bz2"
 cd debian && rm -f *.ex *.EX && cd ..
 mkdir debian/source && echo "3.0 (quilt)" > debian/source/format
 cat > debian/control <<ENDLINE
@@ -36,7 +43,7 @@ Source: pcmanx-gtk2
 Section: x11
 Priority: optional
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
-Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libgtk2.0-dev, libnotify-dev, xulrunner-1.9.2-dev, libx11-dev
+Build-Depends: debhelper (>= 7.0.50~), quilt (>= 0.46-7~), intltool, autotools-dev, libgtk2.0-dev, libnotify-dev, xulrunner-1.9.2-dev, libx11-dev
 Standards-Version: 3.8.4
 Homepage: http://code.google.com/p/pcmanx-gtk2/
 
@@ -107,9 +114,9 @@ usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/xulrunner-addons/components/p
 usr/lib/pcmanx-gtk2/components/pcmanx.png usr/lib/xulrunner-addons/components/pcmanx.png
 ENDLINE
 cat > debian/changelog <<ENDLINE
-pcmanx-gtk2 (${VER}-svn${REV}) experimental; urgency=low
+pcmanx-gtk2 (${VER}-${REV}) experimental; urgency=low
 
-  * Initial release (Revision Number: ${REV})
+  * Developement release.
 
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(LANG=C date -R)
 ENDLINE
