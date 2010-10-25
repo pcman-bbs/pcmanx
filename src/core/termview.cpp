@@ -461,7 +461,7 @@ int CTermView::DrawChar(int row, int col)
 		bSel[1] = m_pTermData->m_Sel->Has( row, col + 1 );
 		// two cells have the same attributes
 		if(col < (m_pTermData->m_ColsPerPage - 1) &&
-			pAttr[0].IsSameAttr( pAttr[1].AsType() ) &&
+			pAttr[0] == pAttr[1] &&
 			bSel[0] == bSel[1] )
 			loop_times = 1;
 	}

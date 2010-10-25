@@ -100,21 +100,15 @@ CTermCharAttr::GetDefVal(){
 
 void
 CTermCharAttr::SetToDefault(){ *(AttrType*)this = 0;	m_Fg=7;}
-// We cannot use == to compare two CTermCharAttr directly because of some special flags,
-//so us use this function to compare.
-bool
-CTermCharAttr::IsSameAttr(AttrType val2)
-{
-		CTermCharAttr* pAttr = (CTermCharAttr*)&val2;
-		pAttr->m_CharSet = m_CharSet;
-		pAttr->m_NeedUpdate = m_NeedUpdate;
-		return val2 == this->AsType();
-}
 bool
 CTermCharAttr::operator==(CTermCharAttr& attr){
-	if(IsSameAttr(attr.AsType()))
-		return true;
-	return false;
+	return ((m_Fg == attr.m_Fg) &&
+			(m_Bg == attr.m_Bg) &&
+			(m_Bright == attr.m_Bright) &&
+			(m_Blink == attr.m_Blink) &&
+			(m_UnderLine == attr.m_UnderLine) &&
+			(m_Inverse == attr.m_Inverse) &&
+			(m_Invisible == attr.m_Invisible));
 }
 
 
@@ -1073,7 +1067,7 @@ static void read_line_with_color( int row, int col1, int col2, void* data )
 		string line;
 		for ( int i = col1; i < col2; i++ )
 		{
-			if( !attr.IsSameAttr( pAttr[i].AsType() ) )
+			if( !(attr == pAttr[i]) )
 			{
 				// Here we've got a characters with different attributes.
 				line += GetChangedAttrStr( attr, pAttr[i] );

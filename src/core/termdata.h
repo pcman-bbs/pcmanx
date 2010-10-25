@@ -141,8 +141,6 @@ class CTermCharAttr
 		return &pColorTable[( m_Inverse ? m_Fg : m_Bg )];
 	}
 
-	bool IsSameAttr(AttrType val2);
-
 	// Overloaded operator ==
 	bool operator==(CTermCharAttr& attr);
 
