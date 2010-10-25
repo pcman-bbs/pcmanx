@@ -616,10 +616,13 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			{
 				INFO("color text: %s",text.c_str());
 				const char* p = text.c_str();
+				const char* crlf = GetCon()->m_Site.GetCRLF();
 				while(*p)
 				{
 					if(*p == '\x1b')
 						text2 += esc;
+					else if( *p == '\n' )
+						text2 += crlf;
 					else
 						text2 += *p;
 					p++;

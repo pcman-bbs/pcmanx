@@ -5,6 +5,8 @@
 	src/core/termview.cpp: Using AttrType (short) to cast CTernCharAttr will
 	cause a problem in copy-text-with-color with DBCS words.
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=20 by hrs113355
+	* src/view/telnetview.cpp: Check crlf in pasting lines with color.
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=21 by hrs113355
 
 2010-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
