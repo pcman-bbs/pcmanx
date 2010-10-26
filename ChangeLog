@@ -7,6 +7,15 @@
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=20 by hrs113355
 	* src/view/telnetview.cpp: Check crlf in pasting lines with color.
 	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=21 by hrs113355
+	* debian/compat,
+	debian/control,
+	debian/copyright,
+	debian/docs,
+	debian/libpcmanx-core0.install,
+	debian/mozilla-plugin-pcmanx.install,
+	debian/mozilla-plugin-pcmanx.links,
+	debian/pcmanx-gtk2.install,
+	debian/rules: Add a rough debian folder.
 
 2010-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

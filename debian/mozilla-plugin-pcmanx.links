@@ -1,0 +1,10 @@
+usr/lib/pcmanx-gtk2/plugins/pcmanx-plugin.so usr/lib/mozilla/plugins/pcmanx-plugin.so
+usr/lib/pcmanx-gtk2/components/TelnetProtocol.js usr/lib/mozilla/components/TelnetProtocol.js
+usr/lib/pcmanx-gtk2/components/pcmanx_interface.xpt usr/lib/mozilla/components/pcmanx_interface.xpt
+usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/mozilla/components/pcmanx.html
+usr/lib/pcmanx-gtk2/components/pcmanx.png usr/lib/mozilla/components/pcmanx.png
+usr/lib/pcmanx-gtk2/plugins/pcmanx-plugin.so usr/lib/xulrunner-addons/plugins/pcmanx-plugin.so
+usr/lib/pcmanx-gtk2/components/TelnetProtocol.js usr/lib/xulrunner-addons/components/TelnetProtocol.js
+usr/lib/pcmanx-gtk2/components/pcmanx_interface.xpt usr/lib/xulrunner-addons/components/pcmanx_interface.xpt
+usr/lib/pcmanx-gtk2/components/pcmanx.html usr/lib/xulrunner-addons/components/pcmanx.html
+usr/lib/pcmanx-gtk2/components/pcmanx.png usr/lib/xulrunner-addons/components/pcmanx.png
