@@ -2,6 +2,7 @@
  * telnetcon.cpp - Class dealing with telnet connections,
  *                 parsing telnet commands.
  *
+ * Copyright (c) 2011 Kan-Ru Chen <kanru@kanru.info>
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -141,7 +142,8 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	m_IsLastLineModified = false;
 
 	// Cache the sockaddr_in which can be used to reconnect.
-	m_InAddr.s_addr = INADDR_NONE;
+	memset(&m_SockAddr, 0, sizeof(m_SockAddr));
+	m_SockAddr.ss_family = AF_UNSPEC;
 	m_Port = 0;
 
 	gchar* locale_str;
@@ -334,8 +336,22 @@ bool CTelnetCon::Connect()
 	else	// Use built-in telnet command handler
 #endif
 	{
-		if( m_InAddr.s_addr != INADDR_NONE || inet_aton(address.c_str(), &m_InAddr) )
+		sockaddr_in *sin = (struct sockaddr_in *) &m_SockAddr;
+		sockaddr_in6 *sin6 = (struct sockaddr_in6 *) &m_SockAddr;
+		if( m_SockAddr.ss_family != AF_UNSPEC )
 			ConnectAsync();
+		else if ( inet_pton(AF_INET, address.c_str(), &sin->sin_addr) )
+		{
+			sin->sin_family = AF_INET;
+			sin->sin_port = htons(m_Port);
+			ConnectAsync();
+		}
+		else if ( inet_pton(AF_INET6, address.c_str(), &sin6->sin6_addr) )
+		{
+			sin6->sin6_family = AF_INET6;
+			sin6->sin6_port = htons(m_Port);
+			ConnectAsync();
+		}
 		else	// It's a domain name, DNS lookup needed.
 		{
 			g_mutex_lock(m_DNSMutex);
@@ -677,14 +693,28 @@ void CTelnetCon::PreConnect(string& address, unsigned short& port)
 	m_IdleTime = 0;
 	m_State = TS_CONNECTING;
 
-	int p = m_Site.m_URL.find(':',true);
-	if( p >=0 )		// use port other then 23;
+	string::size_type lbracket = m_Site.m_URL.find_first_of('[');
+	string::size_type rbracket = m_Site.m_URL.find_last_of(']');
+	// IPv6 address literal, see RFC 3986 3.2.2
+	// We do not do any validation though.
+	if ( lbracket != string::npos && rbracket != string::npos )
 	{
-		port = (unsigned short)atoi(m_Site.m_URL.c_str()+p+1);
-		address = m_Site.m_URL.substr(0, p);
+		address = m_Site.m_URL.substr(lbracket+1, rbracket-lbracket-1 );
+		string::size_type p = m_Site.m_URL.find_first_of(':', rbracket+1);
+		if( p != string::npos )		// use port other then 23;
+			port = (unsigned short)atoi(m_Site.m_URL.c_str()+p+1);
 	}
 	else
-		address = m_Site.m_URL;
+	{
+		string::size_type p = m_Site.m_URL.find_last_of(':');
+		if( p != string::npos )		// use port other then 23;
+		{
+			port = (unsigned short)atoi(m_Site.m_URL.c_str()+p+1);
+			address = m_Site.m_URL.substr(0, p);
+		}
+		else
+			address = m_Site.m_URL;
+	}
 }
 
 int CTelnetCon::Send(void *buf, int len)
@@ -706,23 +736,31 @@ list<CDNSRequest*> CTelnetCon::m_DNSQueue;
 
 void CTelnetCon::DoDNSLookup( CDNSRequest* data )
 {
-	in_addr addr;
-	addr.s_addr = INADDR_NONE;
+	struct addrinfo *res = NULL;
 
 //  Because of the usage of thread pool, all DNS requests are queued
 //  and be executed one by one.  So no mutex lock is needed anymore.
-	if( ! inet_aton(data->m_Address.c_str(), &addr) )
-	{
-//  gethostbyname is not a thread-safe socket API.
-		hostent* host = gethostbyname(data->m_Address.c_str());
-		if( host )
-			addr = *(in_addr*)host->h_addr_list[0];
-	}
+	int ret = getaddrinfo(data->m_Address.c_str(), NULL, NULL, &res);
 
 	g_mutex_lock(m_DNSMutex);
 	if( data && data->m_pCon)
 	{
-		data->m_pCon->m_InAddr = addr;
+		if ( !ret )
+		{
+			if ( res->ai_family == AF_INET )
+			{
+				struct sockaddr_in* sin = (struct sockaddr_in*) &data->m_pCon->m_SockAddr;
+				memcpy(sin, res->ai_addr, sizeof(struct sockaddr_in));
+				sin->sin_port = htons(data->m_pCon->m_Port);
+			}
+			else if ( res->ai_family == AF_INET6 )
+			{
+				struct sockaddr_in6 *sin6 = (struct sockaddr_in6*) &data->m_pCon->m_SockAddr;
+				memcpy(sin6, res->ai_addr, sizeof(struct sockaddr_in6));
+				sin6->sin6_port = htons(data->m_pCon->m_Port);
+			}
+			freeaddrinfo(res);
+		}
 		g_idle_add((GSourceFunc)OnDNSLookupEnd, data->m_pCon);
 	}
 	g_mutex_unlock(m_DNSMutex);
@@ -906,7 +944,7 @@ gboolean CTelnetCon::OnDNSLookupEnd(CTelnetCon* _this)
 {
 	INFO("CTelnetCon::OnDNSLookupEnd");
 	g_mutex_lock(m_DNSMutex);
-	if( _this->m_InAddr.s_addr != INADDR_NONE )
+	if( _this->m_SockAddr.ss_family != AF_UNSPEC )
 		_this->ConnectAsync();
 	g_mutex_unlock(m_DNSMutex);
 	return false;
@@ -926,16 +964,12 @@ gboolean CTelnetCon::OnConnectCB(GIOChannel *channel, GIOCondition type, CTelnet
 void CTelnetCon::ConnectAsync()
 {
 	int err;
-	sockaddr_in sock_addr;
-	sock_addr.sin_addr = m_InAddr;
-	sock_addr.sin_family = AF_INET;
-	sock_addr.sin_port = htons(m_Port);
 
 #ifdef USE_PROXY
 	if ( m_Site.m_ProxyType == PROXY_NONE ) // don't use proxy server
 	{
 #endif
-		m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+		m_SockFD = socket(m_SockAddr.ss_family, SOCK_STREAM, 0);
 		int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
 		fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
 		/* Disable the Nagle (TCP No Delay) algorithm
@@ -947,7 +981,10 @@ void CTelnetCon::ConnectAsync()
 		 * characters before the packet was sent.
 		 */
 		setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
-		err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
+		if ( m_SockAddr.ss_family == AF_INET )
+			err = connect( m_SockFD, (sockaddr*)&m_SockAddr, sizeof(sockaddr_in) );
+		else
+			err = connect( m_SockFD, (sockaddr*)&m_SockAddr, sizeof(sockaddr_in6) );
 		fcntl(m_SockFD, F_SETFL, sock_flags );
 #ifdef USE_PROXY
 	}

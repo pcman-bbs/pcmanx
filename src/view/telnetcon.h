@@ -2,6 +2,7 @@
  * telnetcon.h - Class dealing with telnet connections,
  *               parsing telnet commands.
  *
+ * Copyright (c) 2011 Kan-Ru Chen <kanru@kanru.info>
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -46,7 +47,7 @@
 #include <list>
 
 #include <sys/types.h>
-#include <netinet/in.h>
+#include <sys/socket.h>
 
 using namespace std;
 
@@ -221,7 +222,7 @@ protected:
     string m_LoginPrompt;
     string m_PasswdPrompt;
     static int m_SocketTimeout;
-    in_addr m_InAddr;
+    struct sockaddr_storage m_SockAddr;
 	unsigned short m_Port;
 	void PreConnect(string& address, unsigned short& port);
     void CheckAutoLogin(int row);
