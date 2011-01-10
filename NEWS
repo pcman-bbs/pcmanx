@@ -1,3 +1,7 @@
+Version x.x.x - xxx 2011
+
+* Feature: Support IPv6 connection.
+
 Version 0.3.9 - August 2009
 
 * Feature: Middle mouse click as tab close (similar behavior under Firefox).
