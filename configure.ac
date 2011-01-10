@@ -12,10 +12,10 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([gethostbyname isascii memset mkdir setenv socket strchr strrchr strstr])
+AC_CHECK_FUNCS([dup2 isascii memset mkdir regcomp setenv socket strchr strrchr strstr])
 AC_HEADER_STDBOOL
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
 AC_PATH_X
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
