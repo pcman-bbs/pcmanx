@@ -1,3 +1,12 @@
+2011-01-10  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp, src/view/telnetcon.h: Add IPv6
+	support. Use getaddrinfo to resolve both AF_INET and AF_INET6
+	addresses. Also support IPv6 address literal specified in RFC 3986
+	section 3.2.2.
+	* configure.ac: Add new checks.
+	* NEWS: Document new features.
+
 2010-10-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/core/termdata.cpp,
