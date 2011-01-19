@@ -100,7 +100,7 @@ public:
 	// Proxy settings
 	int    m_ProxyType;
 	string m_ProxyAddr;
-	int    m_ProxyPort;
+	string m_ProxyPort;
 	string m_ProxyUser;
 	string m_ProxyPass;
 #endif

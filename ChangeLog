@@ -1,3 +1,15 @@
+2011-01-19  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp (DoDNSLookup): Only lookup IPv4 addresses
+	when using proxy.
+	(ConnectAsync): Use getaddrinfo to lookup IP addresses.
+
+	* src/core/proxy.c, src/core/proxy.h: serv_addr is now a
+	sockaddr_storage wrapped sockaddr_in.
+
+	* src/appconfig.cpp, src/core/site.cpp, src/core/site.h: Change
+	ProxyPort to string type.
+
 2011-01-10  Kan-Ru Chen  <kanru@kanru.info>
 
 	* src/view/telnetcon.cpp, src/view/telnetcon.h: Add IPv6

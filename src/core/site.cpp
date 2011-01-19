@@ -88,7 +88,7 @@ CSite::CSite(string Name)
 #ifdef USE_PROXY
 	// Disable proxy by default
 	m_ProxyType = 0;
-	m_ProxyPort = 0;
+	m_ProxyPort = "";
 #endif
 }
 
@@ -156,7 +156,7 @@ void CSite::SaveToFile(FILE *fo)
 #ifdef USE_PROXY
 	fprintf( fo, "ProxyType=%d\n", m_ProxyType );
 	fprintf( fo, "ProxyAddr=%s\n", m_ProxyAddr.c_str() );
-	fprintf( fo, "ProxyPort=%d\n", m_ProxyPort );
+	fprintf( fo, "ProxyPort=%s\n", m_ProxyPort.c_str() );
 	fprintf( fo, "ProxyUser=%s\n", m_ProxyUser.c_str() );
 	fprintf( fo, "ProxyPass=%s\n", m_ProxyPass.c_str() );
 #endif

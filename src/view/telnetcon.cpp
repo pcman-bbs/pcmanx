@@ -737,10 +737,19 @@ list<CDNSRequest*> CTelnetCon::m_DNSQueue;
 void CTelnetCon::DoDNSLookup( CDNSRequest* data )
 {
 	struct addrinfo *res = NULL;
+	struct addrinfo hints;
 
+	memset( &hints, 0, sizeof(struct addrinfo) );
+#ifdef USE_PROXY
+	if ( &data->m_pCon->m_Site.m_ProxyType != PROXY_NONE ) // use proxy server
+	{
+// TODO: Socks5 accepts IPv6, but we only use IPv4 for now
+		hints.ai_family = AF_INET;
+	}
+#endif
 //  Because of the usage of thread pool, all DNS requests are queued
 //  and be executed one by one.  So no mutex lock is needed anymore.
-	int ret = getaddrinfo(data->m_Address.c_str(), NULL, NULL, &res);
+	int ret = getaddrinfo(data->m_Address.c_str(), NULL, &hints, &res);
 
 	g_mutex_lock(m_DNSMutex);
 	if( data && data->m_pCon)
@@ -990,17 +999,27 @@ void CTelnetCon::ConnectAsync()
 	}
 	else // use proxy server
 	{
-		sockaddr_in proxy_addr;
-		proxy_addr.sin_addr.s_addr = inet_addr( m_Site.m_ProxyAddr.c_str() );
-		proxy_addr.sin_family = AF_INET;
-		proxy_addr.sin_port = htons( m_Site.m_ProxyPort );
-
-		m_SockFD = proxy_connect( &sock_addr
-				, m_Site.m_ProxyType
-				, &proxy_addr
-				, m_Site.m_ProxyUser.c_str()
-				, m_Site.m_ProxyPass.c_str() );
-		err = m_SockFD == -1 ? -1:0;
+		struct addrinfo *res = NULL;
+		struct addrinfo hints;
+		struct sockaddr_in proxy_addr;
+		memset( &hints, 0, sizeof(struct addrinfo) );
+		// TODO: Socks5 accepts IPv6, but we only use IPv4 for now
+		hints.ai_family = AF_INET;
+		err = getaddrinfo( m_Site.m_ProxyAddr.c_str()
+				   , m_Site.m_ProxyPort.c_str()
+				   , &hints
+				   , &res );
+		if ( !err )
+		{
+			memcpy( &proxy_addr, res->ai_addr, res->ai_addrlen );
+			m_SockFD = proxy_connect( &m_SockAddr
+						  , m_Site.m_ProxyType
+						  , &proxy_addr
+						  , m_Site.m_ProxyUser.c_str()
+						  , m_Site.m_ProxyPass.c_str() );
+			err = m_SockFD == -1 ? -1:0;
+			freeaddrinfo( res );
+		}
 	}
 #endif
 

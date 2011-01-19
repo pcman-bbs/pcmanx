@@ -55,7 +55,7 @@ static int connect_socks5(int sockfd, const struct sockaddr_in *serv_addr);
  *       Return:  Socket to communicate with server. -1 for error.
  * ===========================================================================
  */
-int proxy_connect(const struct sockaddr_in *serv_addr
+int proxy_connect(const struct sockaddr_storage *serv_addr
 		, int proxy_type, const struct sockaddr_in *proxy_addr
 		, const char *user, const char *pass)
 {
@@ -75,7 +75,7 @@ int proxy_connect(const struct sockaddr_in *serv_addr
 			if (hs_socks4(sockfd, user, pass) != 0)
 				goto release;
 			/* initiate connect request */
-			if (connect_socks4(sockfd, serv_addr, user) != 0)
+			if (connect_socks4(sockfd, (struct sockaddr_in *)serv_addr, user) != 0)
 				goto release;
 			break;
 		case PROXY_SOCKS5:
@@ -83,7 +83,7 @@ int proxy_connect(const struct sockaddr_in *serv_addr
 			if (hs_socks5(sockfd, user, pass) != 0)
 				goto release;
 			/* initiate connect request */
-			if (connect_socks5(sockfd, serv_addr) != 0)
+			if (connect_socks5(sockfd, (struct sockaddr_in*)serv_addr) != 0)
 				goto release;
 			break;
 		default:
