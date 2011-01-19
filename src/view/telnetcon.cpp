@@ -144,7 +144,7 @@ CTelnetCon::CTelnetCon(CTermView* pView, CSite& SiteInfo)
 	// Cache the sockaddr_in which can be used to reconnect.
 	memset(&m_SockAddr, 0, sizeof(m_SockAddr));
 	m_SockAddr.ss_family = AF_UNSPEC;
-	m_Port = 0;
+	m_Port = "23";
 
 	gchar* locale_str;
 	gsize l;
@@ -260,7 +260,7 @@ bool CTelnetCon::Connect()
 	m_State = TS_CONNECTING;
 
 	string address;
-	m_Port = 23;
+	m_Port = "23";
 	PreConnect( address, m_Port );
 
 	// If this site has auto-login settings, activate auto-login
@@ -278,7 +278,7 @@ bool CTelnetCon::Connect()
 	// Run external program to handle connection.
 
 	/* external telnet */
-	if ( m_Port == 23 && m_Site.m_UseExternalTelnet )
+	if ( m_Port == "23" && m_Site.m_UseExternalTelnet )
 	{
 		// Suggestion from kyl <kylinx@gmail.com>
 		// Call forkpty() to use pseudo terminal and run an external program.
@@ -305,7 +305,7 @@ bool CTelnetCon::Connect()
 		OnConnect(0);
 	}
 	/* external ssh */
-	else if ( m_Port == 22 && m_Site.m_UseExternalSSH )
+	else if ( m_Port == "22" && m_Site.m_UseExternalSSH )
 	{
 		// Suggestion from kyl <kylinx@gmail.com>
 		// Call forkpty() to use pseudo terminal and run
@@ -336,23 +336,9 @@ bool CTelnetCon::Connect()
 	else	// Use built-in telnet command handler
 #endif
 	{
-		sockaddr_in *sin = (struct sockaddr_in *) &m_SockAddr;
-		sockaddr_in6 *sin6 = (struct sockaddr_in6 *) &m_SockAddr;
 		if( m_SockAddr.ss_family != AF_UNSPEC )
 			ConnectAsync();
-		else if ( inet_pton(AF_INET, address.c_str(), &sin->sin_addr) )
-		{
-			sin->sin_family = AF_INET;
-			sin->sin_port = htons(m_Port);
-			ConnectAsync();
-		}
-		else if ( inet_pton(AF_INET6, address.c_str(), &sin6->sin6_addr) )
-		{
-			sin6->sin6_family = AF_INET6;
-			sin6->sin6_port = htons(m_Port);
-			ConnectAsync();
-		}
-		else	// It's a domain name, DNS lookup needed.
+		else	// Lookup DNS first.
 		{
 			g_mutex_lock(m_DNSMutex);
 			CDNSRequest* dns_request = new CDNSRequest(this, address, m_Port);
@@ -687,7 +673,7 @@ void CTelnetCon::SendString(string str)
 }
 
 
-void CTelnetCon::PreConnect(string& address, unsigned short& port)
+void CTelnetCon::PreConnect(string& address, string& port)
 {
 	m_Duration = 0;
 	m_IdleTime = 0;
@@ -702,14 +688,14 @@ void CTelnetCon::PreConnect(string& address, unsigned short& port)
 		address = m_Site.m_URL.substr(lbracket+1, rbracket-lbracket-1 );
 		string::size_type p = m_Site.m_URL.find_first_of(':', rbracket+1);
 		if( p != string::npos )		// use port other then 23;
-			port = (unsigned short)atoi(m_Site.m_URL.c_str()+p+1);
+			port = m_Site.m_URL.substr(p+1);
 	}
 	else
 	{
 		string::size_type p = m_Site.m_URL.find_last_of(':');
 		if( p != string::npos )		// use port other then 23;
 		{
-			port = (unsigned short)atoi(m_Site.m_URL.c_str()+p+1);
+			port = m_Site.m_URL.substr(p+1);
 			address = m_Site.m_URL.substr(0, p);
 		}
 		else
@@ -749,25 +735,17 @@ void CTelnetCon::DoDNSLookup( CDNSRequest* data )
 #endif
 //  Because of the usage of thread pool, all DNS requests are queued
 //  and be executed one by one.  So no mutex lock is needed anymore.
-	int ret = getaddrinfo(data->m_Address.c_str(), NULL, &hints, &res);
+	int ret = getaddrinfo(data->m_Address.c_str()
+			      , data->m_pCon->m_Port.c_str()
+			      , &hints
+			      , &res);
 
 	g_mutex_lock(m_DNSMutex);
 	if( data && data->m_pCon)
 	{
 		if ( !ret )
 		{
-			if ( res->ai_family == AF_INET )
-			{
-				struct sockaddr_in* sin = (struct sockaddr_in*) &data->m_pCon->m_SockAddr;
-				memcpy(sin, res->ai_addr, sizeof(struct sockaddr_in));
-				sin->sin_port = htons(data->m_pCon->m_Port);
-			}
-			else if ( res->ai_family == AF_INET6 )
-			{
-				struct sockaddr_in6 *sin6 = (struct sockaddr_in6*) &data->m_pCon->m_SockAddr;
-				memcpy(sin6, res->ai_addr, sizeof(struct sockaddr_in6));
-				sin6->sin6_port = htons(data->m_pCon->m_Port);
-			}
+			memcpy(&data->m_pCon->m_SockAddr, res->ai_addr, res->ai_addrlen);
 			freeaddrinfo(res);
 		}
 		g_idle_add((GSourceFunc)OnDNSLookupEnd, data->m_pCon);

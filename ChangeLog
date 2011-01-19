@@ -1,5 +1,13 @@
 2011-01-19  Kan-Ru Chen  <kanru@kanru.info>
 
+	* src/view/telnetcon.cpp (CTelnetCon): m_Port is a string now.
+	(Connect): ditto. Always uses getaddrinfo to resolve addresses.
+	(PreConnect): ditto.
+	(DoDNSLookup): Simplify DNS lookup.
+
+	* src/view/telnetcon.h (CTermData): m_Port is a string now.
+	(CDNSRequest): ditto.
+
 	* src/view/telnetcon.cpp (DoDNSLookup): Only lookup IPv4 addresses
 	when using proxy.
 	(ConnectAsync): Use getaddrinfo to lookup IP addresses.

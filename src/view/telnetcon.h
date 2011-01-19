@@ -223,8 +223,8 @@ protected:
     string m_PasswdPrompt;
     static int m_SocketTimeout;
     struct sockaddr_storage m_SockAddr;
-	unsigned short m_Port;
-	void PreConnect(string& address, unsigned short& port);
+    string m_Port;
+    void PreConnect(string& address, string& port);
     void CheckAutoLogin(int row);
     void SendStringAsync(string str);
     static void DoDNSLookup( CDNSRequest* data );
@@ -243,7 +243,7 @@ private:
 class CDNSRequest
 {
 public:
-	CDNSRequest(CTelnetCon* con, string address, int port UNUSED) 
+	CDNSRequest(CTelnetCon* con, string address, string port UNUSED)
 		: m_pCon(con), m_Address(address), m_Running(false)
 	{
 	}
