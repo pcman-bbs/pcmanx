@@ -18,33 +18,3 @@ Description: user-friendly telnet client mainly targets BBS users
  .
  This version is developed with pure gtk2 and xft, thus has much low
  dependency.
-
-Package: mozilla-plugin-pcmanx
-Section: web
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: iceweasel | iceape-browser | firefox | abrowser | seamonkey-browser
-Description: pcmanx plugin for Mozilla based browser
- This plugin adds support for telnet:// protocol to your Mozilla based
- browser. The protocol engine is done by PCManX and the output window
- is embedded in a webpage in the browser window.
- .
- PCMan X is a newly developed GPL'd version of PCMan, a full-featured
- famous BBS client. It aimed to be an easy-to-use yet full-featured telnet
- client facilitating BBS browsing with the ability to process double-byte
- characters. Some handy functions like tabbed-browsing, auto-login and
- a built-in ANSI editor enabling colored text editing are also provided.
-
-Package: libpcmanx-core0
-Section: libs
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: core rendering library of pcmanx
- This package contains the core rendering function of pcmanx in dynamic
- linked library format.
- .
- PCMan X is a newly developed GPL'd version of PCMan, a full-featured
- famous BBS client. It aimed to be an easy-to-use yet full-featured telnet
- client facilitating BBS browsing with the ability to process double-byte
- characters. Some handy functions like tabbed-browsing, auto-login and
- a built-in ANSI editor enabling colored text editing are also provided.

@@ -76,7 +76,6 @@ AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_LIBNOTIFY],[#undef USE_LIBNOTIFY])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
-AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
@@ -411,148 +410,6 @@ AM_CONDITIONAL(USE_PROXY, test "$proxy" = "yes")
 AC_SUBST(USE_PROXY)
 
 dnl *********************************************************************
-dnl ** Mozilla/Firefox Plugin support ***********************************
-dnl *********************************************************************
-
-AC_ARG_WITH([mozilla],
-  AS_HELP_STRING([--with-mozilla=DIR],
-  [Specify Mozilla root directory]),
-  [ INPUT_MOZILLA_ROOT="$withval" ])
-
-if test "$plugin" = "yes"; then
-  AC_MSG_CHECKING([for Mozilla support])
-  gecko_provider=mozilla
-  user_specified_mozilla=no
-
-  if test ! -z "$INPUT_MOZILLA_ROOT"; then
-    real_mozilla_root="`cd ${INPUT_MOZILLA_ROOT} 2>/dev/null && pwd`"
-    if test ! -z "${real_mozilla_root}"; then
-      INPUT_MOZILLA_ROOT="$real_mozilla_root"
-      user_specified_mozilla=yes
-      enable_mozilla=yes
-    fi
-  fi
-
-  dnl Detect via pkg-config
-
-  # Check Mozilla
-  if test "$user_specified_mozilla" = "no"; then
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check Firefox
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=firefox
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check Firefox-plugin
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=firefox-plugin
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check XULRunner
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=xulrunner
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  MOZILLA_LIB_DIR_SEARCH=
-  AC_MSG_RESULT([$gecko_provider found!])
-  if test "$user_specified_mozilla" = "no"; then
-    if "$PKG_CONFIG" --exists "$gecko_provider-plugin >= 1.9"; then
-      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin`
-        case "$host" in
-          *solaris*)
-            MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
-           ;;
-          *)
-            MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
-esac
-
-      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
-      MOZILLA_IDLDIR=`$PKG_CONFIG --variable=idldir libxul`/`$PKG_CONFIG --variable=includetype libxul`
-    else
-      dnl Note: with the infos from mozilla-plugin.pc
-      dnl we got all includes and libraries for the C interface
-      dnl to Mozilla, but not the XPCOM headers we also need.
-      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
-      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
-      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
-    fi
-  else
-    dnl Don't depend on pkg-config
-    MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
-    MOZILLA_INCLUDE_ROOT="$INPUT_MOZILLA_ROOT/include"
-    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT -lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
-    MOZILLA_CFLAGS=" \
-      -I$MOZILLA_INCLUDE_ROOT \
-      -I$MOZILLA_INCLUDE_ROOT/java \
-      -I$MOZILLA_INCLUDE_ROOT/plugin \
-      -I$MOZILLA_INCLUDE_ROOT/xpcom \
-      -I$MOZILLA_INCLUDE_ROOT/string \
-      -I$MOZILLA_INCLUDE_ROOT/nspr \
-      -I$MOZILLA_INCLUDE_ROOT/xpcom \
-      -I$MOZILLA_INCLUDE_ROOT/xpconnect"
-  fi
-
-  # Workaround
-  MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$MOZILLA_INCLUDE_ROOT"
-
-  dnl See if xpidl is found.
-  XPIDL="$MOZILLA_LIB_ROOT/xpidl"
-  if test ! -x "$XPIDL"; then
-    echo "ERROR:"
-    echo "The utility $XPIDL was not found. Please check your development packages."
-    AC_MSG_ERROR([Fatal Error: no xpidl detected.])
-  fi
-
-  dnl Search for the idl include directory
-  dnl This only works on Gecko 1.8
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
-  fi
-  dnl Fallback for older versions
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
-  fi
-  dnl Gentoo has it in unusual places
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="$MOZILLA_INCLUDE_ROOT/idl"
-  fi
-  dnl Debian/Ubuntu have it in unusual places, too.
-  ADDITIONAL_IDLDIR=/usr/share/idl
-  if test "x$gecko_provider" = "xfirefox"; then
-    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla-firefox
-  else
-    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
-  fi
-  XPIDL_INCL="-I$MOZILLA_IDLDIR \
--I$ADDITIONAL_IDLDIR \
--I/usr/lib/mozilla/include/idl"
-
-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
-
-  AC_SUBST(PATH_OF_PCMANX_HTML)
-  AC_SUBST(XPIDL)
-  AC_SUBST([XPIDL_INCL])
-  AC_SUBST(MOZILLA_CFLAGS)
-  AC_SUBST(MOZILLA_LIBS)
-  AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
-fi
-
-if test "x$enable_mozilla" = "xno"; then
-  plugin="no"
-fi
-
-AM_CONDITIONAL(USE_PLUGIN, test "$plugin" = "yes")
-
-dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
 
@@ -796,8 +653,6 @@ AC_MSG_RESULT($has_visibility)
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
-LIBTOOL_VERSION_INFO=`echo $PACKAGE_VERSION | awk -F. '{ printf "%d:%d:%d", $1+$2, $3, $2 }'`
-AC_SUBST(LIBTOOL_VERSION_INFO)
 LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
@@ -809,14 +664,6 @@ AC_CONFIG_FILES([
 	pcmanx.desktop
 	pcmanx-gtk2.spec
 	Doxygen
-])
-
-dnl Extra files needed by plugin
-AC_CONFIG_FILES([
-	plugin/Makefile
-	plugin/src/Makefile
-	plugin/data/Makefile
-	plugin/data/TelnetProtocol.js
 ])
 
 AC_OUTPUT
@@ -837,11 +684,6 @@ dnl else
 dnl   echo "Python script support............ : $script"
 dnl fi
 echo External SSH/Telnet support...... : $external
-if test "x$enable_mozilla" = "xyes"; then
-  echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
-else
-  echo "Mozilla/Firefox plugin support... : $plugin"
-fi
 echo wget support..................... : $wget
 echo iplookup support................. : $iplookup
 echo proxy support.................... : $proxy

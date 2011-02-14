@@ -5,7 +5,7 @@ abort() {
     exit 1
 }
 
-features=('debug' 'plugin' 'iplookup' 'proxy' 'wget' 'libnotify')
+features=('debug' 'iplookup' 'proxy' 'wget' 'libnotify')
 
 VERSION=
 

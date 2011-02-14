@@ -1,3 +1,33 @@
+2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* Makefile.am,
+	build/make-new-release.sh,
+	configure.ac,
+	debian/control,
+	debian/libpcmanx-core0.install,
+	debian/mozilla-plugin-pcmanx.install,
+	debian/mozilla-plugin-pcmanx.links,
+	debian/rules,
+	plugin/Makefile.am,
+	plugin/data/Makefile.am,
+	plugin/data/TelnetProtocol.js.in,
+	plugin/data/pcmanx.html,
+	plugin/data/pcmanx.png,
+	plugin/src/Makefile.am,
+	plugin/src/np_entry.cpp,
+	plugin/src/npn_gate.cpp,
+	plugin/src/npp_gate.cpp,
+	plugin/src/npplat.h,
+	plugin/src/npupp.h,
+	plugin/src/nsScriptablePeer.cpp,
+	plugin/src/nsScriptablePeer.h,
+	plugin/src/pcmanx_interface.idl,
+	plugin/src/plugin.cpp,
+	plugin/src/plugin.h,
+	plugin/src/pluginbase.h,
+	src/core/Makefile.am: Remove deprecated firefox plugin, and not install
+	libpcmanx.
+
 2011-01-19  Kan-Ru Chen  <kanru@kanru.info>
 
 	* src/view/telnetcon.cpp (CTelnetCon): m_Port is a string now.

@@ -21,4 +21,4 @@ export DH_OPTIONS
 	dh  $@
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-debug --enable-plugin --enable-iplookup --enable-proxy --enable-wget --enable-libnotify
+	dh_auto_configure -- --enable-debug --enable-iplookup --enable-proxy --enable-wget --enable-libnotify
