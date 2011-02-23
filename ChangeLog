@@ -3,6 +3,8 @@
 	* build/snapshot-deb.sh,
 	debian/pcmanx-gtk2.install: Polish test script for deb and remove
 	unneeded file.
+	* data/Makefile.am,
+	data/pcmanx.1: Add man page for pcmanx.
 
 2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
