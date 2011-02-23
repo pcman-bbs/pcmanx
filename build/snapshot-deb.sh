@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -e -x
+
 [ -z "${DEBFULLNAME}" ] && export DEBFULLNAME="PCManX Development Group"
 [ -z "${DEBEMAIL}" ] && export DEBEMAIL="pcmanx@googlegroups.com"
 
