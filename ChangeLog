@@ -8,6 +8,7 @@
 	* debian/control,
 	debian/copyright,
 	debian/rules: Add Vcs info.
+	* pcmanx_gtk2.cpp: There is no need to check sanity of libpcmanx.
 
 2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
