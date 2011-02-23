@@ -5,6 +5,9 @@
 	unneeded file.
 	* data/Makefile.am,
 	data/pcmanx.1: Add man page for pcmanx.
+	* debian/control,
+	debian/copyright,
+	debian/rules: Add Vcs info.
 
 2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
