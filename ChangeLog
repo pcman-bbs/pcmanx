@@ -10,6 +10,9 @@
 	debian/rules: Add Vcs info.
 	* pcmanx_gtk2.cpp: There is no need to check sanity of libpcmanx.
 	* pcmanx_gtk2.cpp: Prevent from program crash (Fixes issue 28).
+	* src/appconfig.cpp,
+	src/core/termview.cpp: Change default font family to 'WenQuanYi Micro Hei
+	Mono'.
 
 2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

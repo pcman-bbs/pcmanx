@@ -126,7 +126,7 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_bHorizontalCenterAlign = false;
 	m_bVerticalCenterAlign = false;
-	
+
 	m_CancelSel = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
@@ -278,7 +278,7 @@ void CTermView::OnCreate()
 
 	for (int i = FONT_START; i != FONT_END; ++i) {
 	    if (!m_Font[i])
-		m_Font[i] = new CFont("Sans", 16);
+		m_Font[i] = new CFont("WenQuanYi Micro Hei Mono", 16);
 	}
 
 	m_GC = gdk_gc_new(m_Widget->window);
@@ -295,7 +295,7 @@ void CTermView::OnCreate()
 #define	HAVE_GDK_DRAW_TRAPEZOIDS_BUG
 
 // This is the correct implementation of gdk_draw_trapezoids taken from gtk+ 2.10.14
-static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable, 
+static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 						GdkGC *gc, GdkTrapezoid   *trapezoids,
 						gint n_trapezoids, GdkColor* color, GdkRectangle* clip_rect )
 {
@@ -327,7 +327,7 @@ static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 
       cairo_clip (cr);
     }
- 
+
   for (i = 0; i < n_trapezoids; i++)
     {
       cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
@@ -543,7 +543,7 @@ int CTermView::DrawChar(int row, int col)
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
-		if( pAttr[i].IsHyperLink() ) 
+		if( pAttr[i].IsHyperLink() )
 		{
 //			dc.SetPen(wxPen(m_HyperLinkColor, 1, wxSOLID));
 //			int bottom = top + m_CharH - 1;

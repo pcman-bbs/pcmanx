@@ -362,9 +362,9 @@ void CAppConfig::SetToDefault()
 	BeepOnBell = true;
 
 	FontSize = 14;
-	FontFamily = "Sans";
+	FontFamily = "WenQuanYi Micro Hei Mono";
 	FontSizeEn = 14;
-	FontFamilyEn = "Sans";
+	FontFamilyEn = "WenQuanYi Micro Hei Mono";
 	AntiAliasFont = true;
 	CompactLayout = false;
 	HorizontalCenterAlign = false;
