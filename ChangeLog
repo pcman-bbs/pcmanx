@@ -1,3 +1,10 @@
+2011-02-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac,
+	po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp: Update project information.
+
 2011-02-23  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/snapshot-deb.sh,

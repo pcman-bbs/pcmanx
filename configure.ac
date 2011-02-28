@@ -68,6 +68,10 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext domain])
 AM_GLIB_GNU_GETTEXT
 
+# Project Information
+AC_DEFINE(PROJECT_SITE, "http://code.google.com/p/pcmanx-gtk2/", "Project Site")
+AC_DEFINE(PROJECT_FORUM, "http://groups.google.com/d/forum/pcmanx", "Project Forum")
+
 dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])

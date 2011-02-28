@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: http://groups.google.com/group/PCManX\n"
-"POT-Creation-Date: 2009-02-18 21:49-0800\n"
+"POT-Creation-Date: 2011-02-28 14:23+0800\n"
 "PO-Revision-Date: 2006-03-12 22:16+0800\n"
 "Last-Translator: Jason Xia <jasonxh@gmail.com>\n"
 "Language-Team: \n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:289
+#: ../src/sitelistdlg.cpp:33 ../src/mainframe.cpp:297
 msgid "Site List"
 msgstr "BBS 站点列表"
 
@@ -25,230 +25,230 @@ msgstr "连接(_O)"
 msgid "Keyword \"%s\" not found!"
 msgstr "找不到关键字 \"%s\"！"
 
-#: ../src/mainframe.cpp:288
+#: ../src/mainframe.cpp:296
 msgid "_Connect"
 msgstr "连接(_C)"
 
-#: ../src/mainframe.cpp:289
+#: ../src/mainframe.cpp:297
 msgid "_Site List"
 msgstr "BBS 站点列表(_S)"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:299
 msgid "_Update BBS List"
 msgstr "更新 BBS 列表(_U)"
 
-#: ../src/mainframe.cpp:291
+#: ../src/mainframe.cpp:299
 msgid "Update BBS List"
 msgstr "更新 BBS 列表"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:301
 msgid "_New Connection"
 msgstr "开启新连接(_N)"
 
-#: ../src/mainframe.cpp:293
+#: ../src/mainframe.cpp:301
 msgid "New Connection"
 msgstr "新连接"
 
-#: ../src/mainframe.cpp:294 ../src/mainframe.cpp:295
+#: ../src/mainframe.cpp:302 ../src/mainframe.cpp:303
 msgid "_Reconnect"
 msgstr "重新连接(_R)"
 
-#: ../src/mainframe.cpp:294 ../src/mainframe.cpp:295 ../src/mainframe.cpp:1108
+#: ../src/mainframe.cpp:302 ../src/mainframe.cpp:303 ../src/mainframe.cpp:1089
 msgid "Reconnect"
 msgstr "重新连接"
 
-#: ../src/mainframe.cpp:296 ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:304 ../src/mainframe.cpp:305
 msgid "_Close Connection"
 msgstr "关闭连接分页(_C)"
 
-#: ../src/mainframe.cpp:296 ../src/mainframe.cpp:297
+#: ../src/mainframe.cpp:304 ../src/mainframe.cpp:305
 msgid "Close Connection"
 msgstr "关闭连接分页"
 
-#: ../src/mainframe.cpp:298 ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:306 ../src/mainframe.cpp:307
 msgid "Ne_xt Page"
 msgstr "切换到下一个分页(_X)"
 
-#: ../src/mainframe.cpp:298 ../src/mainframe.cpp:299
+#: ../src/mainframe.cpp:306 ../src/mainframe.cpp:307
 msgid "Next Page"
 msgstr "切换到下一个分页"
 
-#: ../src/mainframe.cpp:300 ../src/mainframe.cpp:301
+#: ../src/mainframe.cpp:308 ../src/mainframe.cpp:309
 msgid "_Previous Page"
 msgstr "切换到上一个分页(_P)"
 
-#: ../src/mainframe.cpp:300 ../src/mainframe.cpp:301
+#: ../src/mainframe.cpp:308 ../src/mainframe.cpp:309
 msgid "Previous Page"
 msgstr "切换到上一个分页"
 
-#: ../src/mainframe.cpp:302
+#: ../src/mainframe.cpp:310
 msgid "_First Page"
 msgstr "切换到第一个分页(_F)"
 
-#: ../src/mainframe.cpp:302
+#: ../src/mainframe.cpp:310
 msgid "First Page"
 msgstr "切换到第一个分页"
 
-#: ../src/mainframe.cpp:303
+#: ../src/mainframe.cpp:311
 msgid "_Last Page"
 msgstr "切换到最后一个分页(_L)"
 
-#: ../src/mainframe.cpp:303
+#: ../src/mainframe.cpp:311
 msgid "Last Page"
 msgstr "切换到最后一个分页"
 
-#: ../src/mainframe.cpp:304
+#: ../src/mainframe.cpp:312
 msgid "_Jump to"
 msgstr "切换到(_J)"
 
-#: ../src/mainframe.cpp:305
+#: ../src/mainframe.cpp:313
 msgid "_Quit"
 msgstr "离开(_Q)"
 
-#: ../src/mainframe.cpp:305
+#: ../src/mainframe.cpp:313
 msgid "Quit"
 msgstr "离开"
 
-#: ../src/mainframe.cpp:306
+#: ../src/mainframe.cpp:314
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src/mainframe.cpp:307
+#: ../src/mainframe.cpp:315
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: ../src/mainframe.cpp:307
+#: ../src/mainframe.cpp:315
 msgid "Copy"
 msgstr "复制"
 
-#: ../src/mainframe.cpp:308
+#: ../src/mainframe.cpp:316
 msgid "Copy with A_NSI Color"
 msgstr "复制(包含ANSI彩色)(_N)"
 
-#: ../src/mainframe.cpp:308
+#: ../src/mainframe.cpp:316
 msgid "Copy with ANSI Color"
 msgstr "复制(包含ANSI彩色)"
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:317
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: ../src/mainframe.cpp:309
+#: ../src/mainframe.cpp:317
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/mainframe.cpp:310
+#: ../src/mainframe.cpp:318
 msgid "Paste from Clipboard"
 msgstr "从剪切板粘贴"
 
-#: ../src/mainframe.cpp:311
+#: ../src/mainframe.cpp:319
 msgid "_Download Article"
 msgstr "全文下载(_D)"
 
-#: ../src/mainframe.cpp:311 ../src/downarticledlg.cpp:34
+#: ../src/mainframe.cpp:319 ../src/downarticledlg.cpp:36
 msgid "Download Article"
 msgstr "全文下载"
 
-#: ../src/mainframe.cpp:312
+#: ../src/mainframe.cpp:320
 msgid "Select A_ll"
 msgstr "全部选取(_L)"
 
-#: ../src/mainframe.cpp:313
+#: ../src/mainframe.cpp:321
 msgid "_Emoticons"
 msgstr "表情符号(_E)"
 
-#: ../src/mainframe.cpp:314
+#: ../src/mainframe.cpp:322
 msgid "_Preference"
 msgstr "个人偏好设置(_P)"
 
-#: ../src/mainframe.cpp:314 ../src/prefdlg.cpp:30
+#: ../src/mainframe.cpp:322 ../src/prefdlg.cpp:30
 msgid "Preference"
 msgstr "个人偏好设置"
 
-#: ../src/mainframe.cpp:315
+#: ../src/mainframe.cpp:323
 msgid "F_avorites"
 msgstr "收藏夹(_A)"
 
-#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:1321
+#: ../src/mainframe.cpp:324 ../src/mainframe.cpp:1317
 msgid "_Add to Favorites"
 msgstr "加入到收藏夹(_A)"
 
-#: ../src/mainframe.cpp:316 ../src/mainframe.cpp:1109
+#: ../src/mainframe.cpp:324 ../src/mainframe.cpp:1091
 msgid "Add to Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:317 ../src/mainframe.cpp:1329
+#: ../src/mainframe.cpp:325 ../src/mainframe.cpp:1325
 msgid "_Edit Favorites"
 msgstr "编辑收藏夹(_E)"
 
-#: ../src/mainframe.cpp:318
+#: ../src/mainframe.cpp:326
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/mainframe.cpp:319
+#: ../src/mainframe.cpp:327
 msgid "_Font"
 msgstr "字型 (_F)"
 
-#: ../src/mainframe.cpp:320
+#: ../src/mainframe.cpp:328
 msgid "_ASCII Font"
 msgstr "ASCII 字型 (_A)"
 
-#: ../src/mainframe.cpp:322
+#: ../src/mainframe.cpp:330
 msgid "Bot (Current Connection)"
 msgstr "机器人(当前的连接)"
 
-#: ../src/mainframe.cpp:323
+#: ../src/mainframe.cpp:331
 msgid "Bot (All Opened Connections)"
 msgstr "机器人(所有打开的连接)"
 
-#: ../src/mainframe.cpp:325
+#: ../src/mainframe.cpp:333
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/mainframe.cpp:326
+#: ../src/mainframe.cpp:334
 msgid "About"
 msgstr "关于"
 
 #. Fullscreen Mode
-#: ../src/mainframe.cpp:328
+#: ../src/mainframe.cpp:336
 msgid "F_ullscreen Mode"
 msgstr "全屏模式(_U)"
 
 #. Simple Mode
-#: ../src/mainframe.cpp:330
+#: ../src/mainframe.cpp:338
 msgid "_Simple Mode"
 msgstr "简单模式 (_S)"
 
 #. Show/Hide Main Window
-#: ../src/mainframe.cpp:337
+#: ../src/mainframe.cpp:345
 msgid "Show _Main Window"
 msgstr "显示主窗口(_M)"
 
-#: ../src/mainframe.cpp:344 ../src/mainframe.cpp:350
+#: ../src/mainframe.cpp:352 ../src/mainframe.cpp:358
 msgid "Disable Bot"
 msgstr "禁用机器人"
 
-#: ../src/mainframe.cpp:345 ../src/mainframe.cpp:351
+#: ../src/mainframe.cpp:353 ../src/mainframe.cpp:359
 msgid "Nancy Bot"
 msgstr "机器人 Nancy"
 
-#: ../src/mainframe.cpp:528
+#: ../src/mainframe.cpp:536
 msgid "Page"
 msgstr "分页"
 
-#: ../src/mainframe.cpp:551
+#: ../src/mainframe.cpp:559
 msgid "A_ddress:"
 msgstr "地址(_D)："
 
-#: ../src/mainframe.cpp:555
+#: ../src/mainframe.cpp:563
 msgid "Type URL here, then hit \"Enter\""
 msgstr "在此输入地址，然后按下\"Enter\""
 
-#: ../src/mainframe.cpp:614
+#: ../src/mainframe.cpp:622
 msgid "Connect"
 msgstr "连接"
 
-#: ../src/mainframe.cpp:614
+#: ../src/mainframe.cpp:622
 msgid ""
 "Host IP Address:\n"
 "Append port number to IP with a separating colon if it's not 23."
@@ -256,15 +256,15 @@ msgstr ""
 "主机 IP 地址：\n"
 "如果连接端口不是 23，请将连接端口号码接在 IP 后面, 并用冒号隔开。"
 
-#: ../src/mainframe.cpp:646 ../src/mainframe.cpp:698
+#: ../src/mainframe.cpp:653
 msgid "Font"
 msgstr "字型"
 
-#: ../src/mainframe.cpp:651 ../src/mainframe.cpp:703
+#: ../src/mainframe.cpp:658
 msgid "Apply to all opened pages"
 msgstr "应用于所有打开的分页"
 
-#: ../src/mainframe.cpp:791
+#: ../src/mainframe.cpp:764
 msgid ""
 "Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 "Jim Huang (Developer) <jserv.tw@gmail.com>\n"
@@ -284,20 +284,21 @@ msgstr ""
 "周  玮 Emfox Zhou (开发者) <emfoxzhou@gmail.com>\n"
 "夏  昊 Jason Xia (开发者) <jasonxh@gmail.com>"
 
-#: ../src/mainframe.cpp:800
+#: ../src/mainframe.cpp:773
 msgid "Chinese Simplified (zh_CN): Haifeng Chen <optical.dlz@gmail.com>"
 msgstr "简体中文 (zh_CN)：陈海峰 Haifeng Chen <optical.dlz@gmail.com>"
 
-#: ../src/mainframe.cpp:805
+#: ../src/mainframe.cpp:778
 #, c-format
 msgid ""
 "<b>PCMan X %s</b>\n"
 "A free BBS client developed with GTK+ 2.x\n"
 "\n"
-"Copyright (c) 2005-2008\n"
+"Copyright © 2005-2011\n"
 "License: GNU Genral Public License\n"
-"Project Homepage: http://code.google.com/p/pcmanx-gtk2/\n"
-"Bug Report: %s\n"
+"Project: <a href=\"%s\">%s</a>\n"
+"Mailing List: <a href=\"%s\">%s</a>\n"
+"Bug Report: <a href=\"%s\">%s</a>\n"
 "\n"
 "<b>Authors</b>:\n"
 "%s\n"
@@ -309,10 +310,11 @@ msgstr ""
 "<b>PCMan X %s</b>\n"
 "用 GTK+ 2.x 开发的自由 BBS 连接软件\n"
 "\n"
-"Copyright (C) 2005-2008\n"
+"Copyright © 2005-2011\n"
 "授权方式：GNU Genral Public License\n"
-"项目首页：http://code.google.com/p/pcmanx-gtk2/\n"
-"问题回报: %s\n"
+"项目首页：<a href=\"%s\">%s</a>\n"
+"邮件列表：<a href=\"%s\">%s</a>\n"
+"错误报告：<a href=\"%s\">%s</a>\n"
 "\n"
 "<b>软件作者</b>：\n"
 "%s\n"
@@ -321,28 +323,27 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/mainframe.cpp:872
+#: ../src/mainframe.cpp:847
 msgid "Update BBS List Success!"
 msgstr "更新 BBS 列表成功！"
 
-#: ../src/mainframe.cpp:873
+#: ../src/mainframe.cpp:848
 msgid "Update BBS List Fault."
 msgstr "更新 BBS 列表失败。"
 
-#: ../src/mainframe.cpp:906
+#: ../src/mainframe.cpp:881
 msgid "Close Connection?"
 msgstr "确定关闭连接分页?"
 
-#. set menu items
-#: ../src/mainframe.cpp:1107
+#: ../src/mainframe.cpp:1087
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/mainframe.cpp:1230
+#: ../src/mainframe.cpp:1226
 msgid "Quit PCMan X ?"
 msgstr "离开 PCMan X ?"
 
-#: ../src/mainframe.cpp:1242
+#: ../src/mainframe.cpp:1238
 #, c-format
 msgid ""
 "Function not implemented yet!\n"
@@ -351,20 +352,20 @@ msgstr ""
 "功能尚未完成！\n"
 "侦错讯息： %s"
 
-#: ../src/mainframe.cpp:1255
+#: ../src/mainframe.cpp:1251
 msgid "Add To Favorites"
 msgstr "加入到收藏夹"
 
-#: ../src/mainframe.cpp:1368
+#: ../src/mainframe.cpp:1364
 #, c-format
 msgid "Time Elapsed : %02d : %02d : %02d"
 msgstr "经过的时间：%02d : %02d : %02d"
 
-#: ../src/mainframe.cpp:1585
+#: ../src/mainframe.cpp:1581
 msgid "Nancy Bot is enabled"
 msgstr "机器人 Nancy 已经启动"
 
-#: ../src/mainframe.cpp:1592
+#: ../src/mainframe.cpp:1588
 msgid "Nancy Bot is disabled"
 msgstr "机器人 Nancy 已经禁用"
 
@@ -376,19 +377,19 @@ msgstr "站点设置"
 msgid "Auto Login"
 msgstr "自动登录"
 
-#: ../src/editfavdlg.cpp:32
+#: ../src/editfavdlg.cpp:35
 msgid "Edit Favorites"
 msgstr "编辑收藏夹"
 
-#: ../src/editfavdlg.cpp:137
+#: ../src/editfavdlg.cpp:140
 msgid "New Site"
 msgstr "新站点"
 
-#: ../src/editfavdlg.cpp:138
+#: ../src/editfavdlg.cpp:141
 msgid "Add New Site Settings"
 msgstr "新增站点设置"
 
-#: ../src/editfavdlg.cpp:155
+#: ../src/editfavdlg.cpp:158
 msgid "Edit Site Settings"
 msgstr "编辑站点设置"
 
@@ -508,27 +509,31 @@ msgstr "消息弹出提醒，显示"
 msgid "seconds"
 msgstr "秒"
 
-#: ../src/generalprefpage.cpp:102
+#: ../src/generalprefpage.cpp:98
+msgid "Middle mouse click as tab close (similar to Firefox)"
+msgstr "使用滑鼠中间键点击关闭分页（类似火狐）"
+
+#: ../src/generalprefpage.cpp:106
 msgid "Web Browser: "
 msgstr "网页浏览器："
 
-#: ../src/generalprefpage.cpp:113
+#: ../src/generalprefpage.cpp:117
 msgid "Mail Client: "
 msgstr "邮件客户端："
 
-#: ../src/view/telnetview.cpp:305 ../src/view/telnetview.cpp:310
+#: ../src/view/telnetview.cpp:310 ../src/view/telnetview.cpp:315
 msgid "Detected IP address:"
 msgstr "检测到的IP地址："
 
-#: ../src/view/telnetview.cpp:311
+#: ../src/view/telnetview.cpp:316
 msgid "Download qqwry.dat to get IP location lookup"
 msgstr "请下载qqwry.dat以使用IP地址查询"
 
-#: ../src/view/telnetview.cpp:514
+#: ../src/view/telnetview.cpp:519
 msgid "_Copy URL to Clipboard"
 msgstr "复制网址到剪贴板(_C)"
 
-#: ../src/view/telnetview.cpp:554
+#: ../src/view/telnetview.cpp:559
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
@@ -590,25 +595,24 @@ msgstr ""
 "<big>警告：</big> 你的密码将已<u>明码形式</u>存储，并不会有任何加密处理，请小"
 "心使用。虽然类 UNIX 系统有权限的保护措施，但是不能保证你的密码不被别人得到。"
 
-#: ../src/downarticledlg.cpp:41
+#: ../src/downarticledlg.cpp:43
 msgid "Downloading ..."
 msgstr "下载中 ..."
 
-#: ../src/downarticledlg.cpp:179
+#: ../src/downarticledlg.cpp:193
 msgid "Save As"
 msgstr "另存为"
 
-#: ../src/downarticledlg.cpp:213
+#: ../src/downarticledlg.cpp:227
 #, c-format
 msgid "Error saving file '%s': %s"
 msgstr "保存文件'%s‘出错：%s"
 
-#: ../src/pcmanx_gtk2.cpp:156
-msgid ""
-"Version mismatch between pcmanx and libpcmanx-core.\n"
-"\n"
-"Please check your installation."
-msgstr ""
-"pcmanx 与 libpcmanx-core 版本不匹配。\n"
-"\n"
-"请检查你的安装。"
+#~ msgid ""
+#~ "Version mismatch between pcmanx and libpcmanx-core.\n"
+#~ "\n"
+#~ "Please check your installation."
+#~ msgstr ""
+#~ "pcmanx 与 libpcmanx-core 版本不匹配。\n"
+#~ "\n"
+#~ "请检查你的安装。"

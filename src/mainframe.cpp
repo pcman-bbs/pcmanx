@@ -776,12 +776,14 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
-						"Copyright (c) 2005-2008\n"
+						"Copyright © 2005-2011\n"
 						"License: GNU Genral Public License\n"
-						"Project Homepage: http://code.google.com/p/pcmanx-gtk2/\n"
-						"Bug Report: %s\n\n"
+						"Project: <a href=\"%s\">%s</a>\n"
+						"Mailing List: <a href=\"%s\">%s</a>\n"
+						"Bug Report: <a href=\"%s\">%s</a>\n\n"
 						"<b>Authors</b>:\n%s\n\n"
-						"<b>Translators</b>:\n%s\n\n"), PACKAGE_VERSION, PACKAGE_BUGREPORT, authors, translators );
+						"<b>Translators</b>:\n%s\n\n"), PACKAGE_VERSION, PROJECT_SITE, PROJECT_SITE,
+                        PROJECT_FORUM, PROJECT_FORUM, PACKAGE_BUGREPORT, PACKAGE_BUGREPORT, authors, translators );
 
 // GTK+ supports this API since ver 2.6.
 /*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
