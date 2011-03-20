@@ -1,3 +1,7 @@
+2011-03-20  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* debian/watch: Add debian/watch.
+
 2011-02-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* configure.ac,
