@@ -1,3 +1,8 @@
+2011-03-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac: Disable dist-gzip, enable silent-rules and
+	maintainer mode.
+
 2011-03-20  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* debian/watch: Add debian/watch.
