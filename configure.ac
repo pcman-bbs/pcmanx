@@ -5,7 +5,7 @@ AC_INIT([pcmanx-gtk2],[0.3.9],[http://code.google.com/p/pcmanx-gtk2/issues/list]
 AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip silent-rules])
-AM_SILENT_RULES
+AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE
 AC_C_CONST
 AC_C_INLINE

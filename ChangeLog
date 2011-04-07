@@ -1,3 +1,7 @@
+2011-04-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac: Enable silent rules by default.
+
 2011-03-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* configure.ac: Disable dist-gzip, enable silent-rules and
