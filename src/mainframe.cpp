@@ -77,10 +77,19 @@ void CMainFrame::OnTrayButton_Toggled(
 
 void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
 {
-	if (gtk_toggle_action_get_active(toggleaction))
-		_this->Show();
+	bool show_tray_icon = AppConfig.ShowTrayIcon;
+
+	if (show_tray_icon)
+	{
+		if (gtk_toggle_action_get_active(toggleaction))
+			_this->Show();
+		else
+			_this->Hide();
+	}
 	else
-		_this->Hide();
+	{
+		gtk_window_iconify((GtkWindow*)_this->m_Widget);
+	}
 }
 #endif
 

@@ -1,3 +1,8 @@
+2011-04-13  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/mainframe.cpp (OnShowHide): Now Alt+M only iconify the main
+	window when tray icon is disabled.
+
 2011-04-12  Kan-Ru Chen  <kanru@kanru.info>
 
 	* src/view/telnetcon.cpp (OnNewIncomingMessage): Fix libnotify
