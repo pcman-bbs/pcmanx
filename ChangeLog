@@ -1,3 +1,8 @@
+2011-04-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/site.h: Fix compilation error of CStie. (Fixes issue 26 by
+	chingpang)
+
 2011-04-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* configure.ac: Enable silent rules by default.

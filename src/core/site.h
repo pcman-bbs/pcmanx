@@ -108,26 +108,26 @@ public:
 	X_EXPORT CSite(string Name = "");
 	X_EXPORT ~CSite();
 
-    string& GetPasswd(){	return m_Passwd;	}
-    void SetPasswd( string passwd ){	m_Passwd = passwd;	}
+	X_EXPORT string& GetPasswd(){	return m_Passwd;	}
+	X_EXPORT void SetPasswd( string passwd ){	m_Passwd = passwd;	}
 
-    string& GetPasswdPrompt(){	return m_PasswdPrompt;	}
-    void SetPasswdPrompt( string passwd_prompt ){	m_PasswdPrompt = passwd_prompt;	}
+	X_EXPORT string& GetPasswdPrompt(){	return m_PasswdPrompt;	}
+	X_EXPORT void SetPasswdPrompt( string passwd_prompt ){	m_PasswdPrompt = passwd_prompt;	}
 
-	string& GetLogin(){	return m_Login;	}
-    void SetLogin( string login ){	m_Login = login;	}
+	X_EXPORT string& GetLogin(){	return m_Login;	}
+	X_EXPORT void SetLogin( string login ){	m_Login = login;	}
 
-	string& GetLoginPrompt(){	return m_LoginPrompt;	}
-    void SetLoginPrompt( string login_prompt ){	m_LoginPrompt = login_prompt;	}
+	X_EXPORT string& GetLoginPrompt(){	return m_LoginPrompt;	}
+	X_EXPORT void SetLoginPrompt( string login_prompt ){	m_LoginPrompt = login_prompt;	}
 
-    string& GetPreLogin(){	return m_PreLogin;	}
-    void SetPreLogin(string prelogin){	m_PreLogin = prelogin;	}
+	X_EXPORT string& GetPreLogin(){	return m_PreLogin;	}
+	X_EXPORT void SetPreLogin(string prelogin){	m_PreLogin = prelogin;	}
 
-	string& GetPreLoginPrompt(){	return m_PreLoginPrompt;	}
-    void SetPreLoginPrompt( string prelogin_prompt ){	m_PreLoginPrompt = prelogin_prompt;	}
+	X_EXPORT string& GetPreLoginPrompt(){	return m_PreLoginPrompt;	}
+	X_EXPORT void SetPreLoginPrompt( string prelogin_prompt ){	m_PreLoginPrompt = prelogin_prompt;	}
 
-	string& GetPostLogin(){	return m_PostLogin;	}
-    void SetPostLogin(string postlogin){	m_PostLogin = postlogin;	}
+	X_EXPORT string& GetPostLogin(){	return m_PostLogin;	}
+	X_EXPORT void SetPostLogin(string postlogin){	m_PostLogin = postlogin;	}
 
 protected:
     string m_Passwd;
