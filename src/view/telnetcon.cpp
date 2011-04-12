@@ -902,7 +902,9 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	  notify_notification_new(
 				  summary,
 				  body,
+#if !NOTIFY_CHECK_VERSION(0,7,0)
 				  NULL,
+#endif
 				  NULL);
 	notify_notification_set_timeout(notification,
 					AppConfig.PopupTimeout*1000);

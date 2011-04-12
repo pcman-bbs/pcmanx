@@ -1,3 +1,8 @@
+2011-04-12  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp (OnNewIncomingMessage): Fix libnotify
+	0.7.0 API compatibility.
+
 2011-04-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/core/site.h: Fix compilation error of CStie. (Fixes issue 26 by
