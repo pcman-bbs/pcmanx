@@ -184,11 +184,6 @@ AC_ARG_ENABLE([external],
 		[disable external SSH/Telnet support (default: yes)]),
 	external=$enableval, external="yes")
 
-AC_ARG_ENABLE([plugin],
-	AS_HELP_STRING([--enable-plugin],
-		[enable Mozilla/Firefox plugin support (default: no)]),
-	plugin=$enableval, plugin="no")
-
 AC_ARG_ENABLE([wget],
 	AS_HELP_STRING([--enable-wget],
 		[enable wget support (default: no)]),

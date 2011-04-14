@@ -1,3 +1,8 @@
+2011-04-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac,
+	TODO: Remove firefox plugin option.
+
 2011-04-13  Kan-Ru Chen  <kanru@kanru.info>
 
 	* src/mainframe.cpp (OnShowHide): Now Alt+M only iconify the main
