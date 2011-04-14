@@ -1,6 +1,11 @@
-Version x.x.x - xxx 2011
+Version 1.0 - April 2011
 
 * Feature: Support IPv6 connection.
+* Feature: Change default font family to 'WenQuanYi Micro Hei Mono'.
+* Bugfix: Fix libnotify 0.7.0 API compatibility.
+* Bugfix: Fix compilation error of CStie.
+* Bugfix: Fix ASCII art painting issue.
+* Bugfix: Remove deprecated firefox plugin.
 
 Version 0.3.9 - August 2009
 

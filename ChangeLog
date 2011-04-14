@@ -2,6 +2,8 @@
 
 	* configure.ac,
 	TODO: Remove firefox plugin option.
+	* NEWS,
+	configure.ac: Bump to 1.0
 
 2011-04-13  Kan-Ru Chen  <kanru@kanru.info>
 

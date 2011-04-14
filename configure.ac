@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[0.3.9],[http://code.google.com/p/pcmanx-gtk2/issues/list])
+AC_INIT([pcmanx-gtk2],[1.0],[http://code.google.com/p/pcmanx-gtk2/issues/list])
 
 AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
