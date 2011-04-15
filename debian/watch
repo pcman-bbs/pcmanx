@@ -1,3 +1,6 @@
 # watch control file for uscan
 version=3
-http://pcmanx-gtk2.googlecode.com/svn/website/release/pcmanx-gtk2-([\d\.]+).tar.bz2
+opts=downloadurlmangle=s#.*(pcmanx-gtk2-(.*)\.tar\.bz2).*#http://pcmanx-gtk2.googlecode.com/files/$1#,\
+filenamemangle=s#.*(pcmanx-gtk2-(.*)\.tar\.bz2).*#$1# \
+http://code.google.com/p/pcmanx-gtk2/downloads/list \
+.*detail\?name=pcmanx-gtk2-(.*)\.tar\.bz2.*

@@ -1,3 +1,7 @@
+2011-04-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* debian/watch: Update watch control file for uscan.
+
 2011-04-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* configure.ac,
