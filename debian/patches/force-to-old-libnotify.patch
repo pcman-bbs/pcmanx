@@ -1,0 +1,21 @@
+Description: Old libnotify workaround
+ force use old libnotify if we cannot determine which is using.
+Forwarded: http://code.google.com/p/pcmanx-gtk2/issues/detail?id=32
+Author: ckanru
+Applied-Upstream: r555, http://code.google.com/p/pcmanx-gtk2/source/detail?r=555
+Last-Update: 2011-04-19
+
+Index: src/view/telnetcon.cpp
+===================================================================
+--- pcmanx-gtk2-1.0.orig/src/view/telnetcon.cpp	2011-04-19 23:52:34.429385819 +0800
++++ pcmanx-gtk2-1.0/src/view/telnetcon.cpp	2011-04-19 23:53:36.177692000 +0800
+@@ -37,6 +37,9 @@
+ #ifdef USE_NOTIFIER
+ #ifdef USE_LIBNOTIFY
+ #include <libnotify/notify.h>
++#ifndef NOTIFY_CHECK_VERSION
++#define NOTIFY_CHECK_VERSION(x,y,z) 0
++#endif
+ #else
+ #include "notifier/api.h"
+ #endif

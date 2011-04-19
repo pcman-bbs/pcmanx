@@ -117,8 +117,8 @@ CTermView::CTermView()
 	m_pTermData = NULL;
 	m_GC = NULL;
 	m_ShowBlink = false;
-	m_Font = NULL;
-	m_FontEn = NULL;
+	for (int i = FONT_START; i != FONT_END; ++i)
+	    m_Font[i] = NULL;
 	m_XftDraw = NULL;
 	m_CharW = 18;
 	m_CharH = 18;
@@ -126,7 +126,7 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_bHorizontalCenterAlign = false;
 	m_bVerticalCenterAlign = false;
-	
+
 	m_CancelSel = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
@@ -275,10 +275,11 @@ void CTermView::OnCreate()
 		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(m_Widget->window)));
 	XftDrawSetSubwindowMode(m_XftDraw, IncludeInferiors);
 
-	if( !m_Font )
-		m_Font = new CFont("Sans", 16);
-	if( !m_FontEn )
-		m_FontEn = new CFont("Sans", 16);
+
+	for (int i = FONT_START; i != FONT_END; ++i) {
+	    if (!m_Font[i])
+		m_Font[i] = new CFont("WenQuanYi Micro Hei Mono", 16);
+	}
 
 	m_GC = gdk_gc_new(m_Widget->window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
@@ -294,7 +295,7 @@ void CTermView::OnCreate()
 #define	HAVE_GDK_DRAW_TRAPEZOIDS_BUG
 
 // This is the correct implementation of gdk_draw_trapezoids taken from gtk+ 2.10.14
-static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable, 
+static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 						GdkGC *gc, GdkTrapezoid   *trapezoids,
 						gint n_trapezoids, GdkColor* color, GdkRectangle* clip_rect )
 {
@@ -326,7 +327,7 @@ static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
 
       cairo_clip (cr);
     }
- 
+
   for (i = 0; i < n_trapezoids; i++)
     {
       cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
@@ -452,10 +453,18 @@ int CTermView::DrawChar(int row, int col)
 	pLine += col;
 	pAttr += col;
 
+	int loop_times = w;
 	bool bSel[2];
 	bSel[0] = m_pTermData->m_Sel->Has( row, col );
 	if ( w > 1 )
+	{
 		bSel[1] = m_pTermData->m_Sel->Has( row, col + 1 );
+		// two cells have the same attributes
+		if(col < (m_pTermData->m_ColsPerPage - 1) &&
+			pAttr[0] == pAttr[1] &&
+			bSel[0] == bSel[1] )
+			loop_times = 1;
+	}
 
 	int left = m_CharW * col + m_LeftMargin;
 	int top = m_CharH * row + m_TopMargin;
@@ -463,7 +472,7 @@ int CTermView::DrawChar(int row, int col)
 
 	GdkColor iFg, iBg;
 
-	for( int i = 0; i < w; i++ )	//	do the drawing
+	for( int i = 0; i < loop_times; i++ )	//	do the drawing
 	{
 		GdkColor* Fg = pAttr[i].GetFgColor( m_pColorTable );
 		GdkColor* Bg = pAttr[i].GetBgColor( m_pColorTable );
@@ -517,9 +526,9 @@ int CTermView::DrawChar(int row, int col)
 				{
 					XftFont* font;
 					if (isascii (utf8_ch[0])) {
-						font = m_FontEn->GetXftFont();
+						font = m_Font[FONT_EN]->GetXftFont();
 					} else {
-						font = m_Font->GetXftFont();
+						font = m_Font[FONT_DEFAULT]->GetXftFont();
 					}
 
 					if( !IsSpaceFillingChar(utf8_ch, wl) || !DrawSpaceFillingChar( utf8_ch, wl, left, top, &rect, Fg ) )
@@ -534,7 +543,7 @@ int CTermView::DrawChar(int row, int col)
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
-		if( pAttr[i].IsHyperLink() ) 
+		if( pAttr[i].IsHyperLink() )
 		{
 //			dc.SetPen(wxPen(m_HyperLinkColor, 1, wxSOLID));
 //			int bottom = top + m_CharH - 1;
@@ -546,9 +555,6 @@ int CTermView::DrawChar(int row, int col)
 			gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
 		}
 
-		// two cells have the same attributes
-		if( i == 0 && pAttr[0].IsSameAttr( pAttr[1].AsShort() ) && bSel[0] == bSel[1] )
-			break;
 	}
 	gdk_gc_set_clip_rectangle( m_GC, NULL );
 	XftDrawSetClip( m_XftDraw, NULL );
@@ -609,10 +615,11 @@ void CTermView::OnSize(GdkEventConfigure* evt UNUSED)
 	int w, h;
 	GetCellSize( w, h );
 
-	m_Font->SetFont( m_Font->GetName(), w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
-	m_FontEn->SetFont( m_FontEn->GetName(), w, h, m_FontEn->GetCompact(), m_FontEn->GetAntiAlias() );
+	for (int i = FONT_START; i != FONT_END; ++i) {
+	    m_Font[i]->SetFont( m_Font[i]->GetName(), w, h, m_Font[i]->GetCompact(), m_Font[i]->GetAntiAlias());
+	    RecalcCharDimension(i);
+	}
 
-	RecalcCharDimension();
 }
 
 static int DrawCharWrapper( int row, int col, void *data )
@@ -887,106 +894,59 @@ void CTermView::GetCellSize( int &w, int &h )
 	h = ( m_Widget->allocation.height / m_pTermData->m_RowsPerPage ) - m_CharPaddingY;
 }
 
-void CTermView::SetFont( CFont* font )
+void CTermView::SetFont( CFont* font, int font_type )
 {
-	if( !font || m_AutoFontSize )
+	g_assert(font_type < FONT_END && font_type >= FONT_DEFAULT);
+	if( !font || m_AutoFontSize)
 		return;
 
-	if( m_Font )
-		delete m_Font;
+	if( m_Font[font_type] )
+		delete m_Font[font_type];
 
 	if( m_AutoFontSize )
 	{
 		int w, h;
 		GetCellSize( w, h );
-		m_Font = new CFont( font->GetName(), w, h, font->GetCompact(), font->GetAntiAlias() );
+		m_Font[font_type] = new CFont( font->GetName(), w, h, font->GetCompact(), font->GetAntiAlias() );
 		delete font;
 	}
 	else
-		m_Font = font;
+		m_Font[font_type] = font;
 
-	RecalcCharDimension();
+	RecalcCharDimension(font_type);
 }
 
-void CTermView::SetFontEn( CFont* font )
+void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type)
 {
-	if( !font || m_AutoFontSize )
-		return;
-
-	if( m_FontEn )
-		delete m_FontEn;
+	g_assert(font_type < FONT_END && font_type >= FONT_START);
+	if( m_Font[font_type] )
+		delete m_Font[font_type];
 
 	if( m_AutoFontSize )
 	{
 		int w, h;
 		GetCellSize( w, h );
-		m_FontEn = new CFont( font->GetName(), w, h, font->GetCompact(), font->GetAntiAlias() );
-		delete font;
+		m_Font[font_type] = new CFont( name, w, h, compact, anti_alias );
 	}
 	else
-		m_FontEn = font;
+		m_Font[font_type] = new CFont( name, pt_size, compact, anti_alias );
 
-	RecalcCharDimension();
+	RecalcCharDimension(font_type);
 }
 
-void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias )
+void CTermView::SetFontFamily( string name, int font_type )
 {
-	if( m_Font )
-		delete m_Font;
+	g_assert(font_type < FONT_END && font_type >= FONT_START);
 	if( m_AutoFontSize )
 	{
 		int w, h;
 		GetCellSize( w, h );
-		m_Font = new CFont( name, w, h, compact, anti_alias );
+		m_Font[font_type]->SetFont( name, w, h, m_Font[font_type]->GetCompact(), m_Font[font_type]->GetAntiAlias() );
 	}
 	else
-		m_Font = new CFont( name, pt_size, compact, anti_alias );
+		m_Font[font_type]->SetFontFamily( name );
 
-	RecalcCharDimension();
-}
-
-void CTermView::SetFontEn( string name, int pt_size, bool compact, bool anti_alias )
-{
-	if( m_FontEn )
-		delete m_FontEn;
-	if( m_AutoFontSize )
-	{
-		int w, h;
-		GetCellSize( w, h );
-		m_FontEn = new CFont( name, w, h, compact, anti_alias );
-	}
-	else
-		m_FontEn = new CFont( name, pt_size, compact, anti_alias );
-
-	RecalcCharDimension();
-}
-
-void CTermView::SetFontFamily( string name )
-{
-	if( m_AutoFontSize )
-	{
-		int w, h;
-		GetCellSize( w, h );
-		m_Font->SetFont( name, w, h, m_Font->GetCompact(), m_Font->GetAntiAlias() );
-	}
-	else
-		m_Font->SetFontFamily( name );
-
-	RecalcCharDimension();
-}
-
-void CTermView::SetFontFamilyEn( string name )
-{
-	if( m_AutoFontSize )
-	{
-		int w, h;
-		GetCellSize( w, h );
-		m_FontEn->SetFont( name, w, h, m_FontEn->GetCompact(), m_FontEn->GetAntiAlias() );
-	}
-	else
-		m_FontEn->SetFontFamily( name );
-
-	RecalcCharDimension();
+	RecalcCharDimension(font_type);
 }
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
@@ -1060,10 +1020,9 @@ bool CTermView::HyperLinkHitTest(int x, int y, int* start, int* end)
 
 void CTermView::OnDestroy()
 {
-	if( m_Font )
-		delete m_Font;
-	if( m_FontEn )
-		delete m_FontEn;
+	for (int i = FONT_START; i != FONT_END; ++i)
+	    delete m_Font[i];
+
 	if( m_pTermData )
 		m_pTermData->m_pView = NULL;
 
@@ -1075,10 +1034,10 @@ void CTermView::OnDestroy()
 	CView::OnDestroy();	// Remember to destruct parent
 }
 
-void CTermView::RecalcCharDimension()
+void CTermView::RecalcCharDimension(int font_type)
 {
-	m_CharW = m_Font->GetWidth() + m_CharPaddingX;
-	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
+	m_CharW = m_Font[font_type]->GetWidth() + m_CharPaddingX;
+	m_CharH = m_Font[font_type]->GetHeight() + m_CharPaddingY;
 
 	if( m_bHorizontalCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;

@@ -5,7 +5,6 @@
 #include <config.h>
 #endif
 
-#include <bits/wordsize.h>
 #if __WORDSIZE == 64
 typedef unsigned long int word_t;
 #else

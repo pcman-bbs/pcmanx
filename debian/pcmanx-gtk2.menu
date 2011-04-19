@@ -1,4 +1,0 @@
-?package(pcmanx-gtk2):needs="X11" \
-	section="Applications/Network/Communication" \
-	title="pcmanx-gtk2" command="/usr/bin/pcmanx" \
-	icon="/usr/share/pixmaps/pcmanx.xpm"

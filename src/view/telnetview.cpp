@@ -22,12 +22,12 @@
 
 #include <glib/gi18n.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <gdk/gdkkeysyms.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstring>
+#include <cstdlib>
 #include <algorithm>
 
 #include "telnetview.h"
@@ -102,6 +102,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
 	bool clear = true;
+	bool reconnect = false;
 
 	if( evt->keyval < 127 && GDK_MODIFIER_DOWN(evt->state, GDK_CONTROL_MASK))// Ctrl down
 	{
@@ -141,6 +142,7 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
+		reconnect = GetCon()->IsClosed();
 		GetCon()->SendRawString("\r",1);
 		break;
 	case GDK_Delete:
@@ -223,6 +225,9 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	// Only clear selection if we handled the key
 	if (clear)
 		ClearSelection();
+
+	if (reconnect)
+		GetCon()->Reconnect();
 
 	return true;
 }
@@ -611,10 +616,13 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			{
 				INFO("color text: %s",text.c_str());
 				const char* p = text.c_str();
+				const char* crlf = GetCon()->m_Site.GetCRLF();
 				while(*p)
 				{
 					if(*p == '\x1b')
 						text2 += esc;
+					else if( *p == '\n' )
+						text2 += crlf;
 					else
 						text2 += *p;
 					p++;

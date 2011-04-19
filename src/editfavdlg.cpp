@@ -20,12 +20,15 @@
   #pragma implementation "editfavdlg.h"
 #endif
 
+#include <algorithm>
 
 #include "editfavdlg.h"
 #include "site.h"
 #include "listbox.h"
 
 #include "sitedlg.h"
+
+using std::swap;
 
 CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 {
@@ -184,9 +187,7 @@ void CEditFavDlg::OnUp(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 	if( sel != -1 && sel > 0 )
 	{
 		_this->m_List->MoveUp(sel);
-		CSite tmp = _this->m_Sites[sel];
-		_this->m_Sites[sel] = _this->m_Sites[sel-1];
-		_this->m_Sites[sel-1] = tmp;
+		swap(_this->m_Sites[sel], _this->m_Sites[sel - 1]);
 	}
 }
 
@@ -197,9 +198,7 @@ void CEditFavDlg::OnDown(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 	if( sel != -1 && (sel+1) < _this->m_List->Count() )
 	{
 		_this->m_List->MoveDown(sel);
-		CSite tmp = _this->m_Sites[sel];
-		_this->m_Sites[sel] = _this->m_Sites[sel+1];
-		_this->m_Sites[sel+1] = tmp;
+		swap(_this->m_Sites[sel], _this->m_Sites[sel + 1]);
 	}
 }
 

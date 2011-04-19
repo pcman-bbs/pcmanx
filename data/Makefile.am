@@ -19,6 +19,8 @@ pcmanx_DATA = \
 	sitelist \
 	emoticons
 
+dist_man_MANS = pcmanx.1
+
 pcmanxdir = $(datadir)/pcmanx
 
 pcmanx_script_DATA = $(SCRIPT_FILES)

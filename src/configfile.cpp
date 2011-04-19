@@ -27,9 +27,9 @@
 //	easy-maintaining is much more important.
 
 #include "configfile.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -45,6 +45,8 @@
 
 
 CConfigFile::CConfigFile( string AppName, int LineBufSize )
+	: m_pCurSect(NULL),
+	  m_pRootMap(NULL)
 {
 	m_AppName = AppName;
 	m_LineBufSize = LineBufSize;

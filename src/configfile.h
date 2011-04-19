@@ -60,7 +60,7 @@ public:
 	CConfigFile( string AppName, int LineBufSize = 4096);
 	virtual bool DoDataExchange( bool bLoad );
 	virtual ~CConfigFile();
-	inline void SetRoot(CConfigEntry* pRootMap){	m_pCurSect = m_pRootMap = pRootMap;	}
+	void SetRoot(CConfigEntry* pRootMap){	m_pCurSect = m_pRootMap = pRootMap;	}
 protected:
 	bool DoSave();
 	bool DoLoad();

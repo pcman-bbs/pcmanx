@@ -1,21 +1,22 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[0.3.9],[http://groups.google.com/group/PCManX])
+AC_INIT([pcmanx-gtk2],[1.0],[http://code.google.com/p/pcmanx-gtk2/issues/list])
 
 AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE([dist-bzip2])
-#AM_MAINTAINER_MODE
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip silent-rules])
+AM_SILENT_RULES([yes])
+AM_MAINTAINER_MODE
 AC_C_CONST
 AC_C_INLINE
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([gethostbyname isascii memset mkdir setenv socket strchr strrchr strstr])
+AC_CHECK_FUNCS([dup2 isascii memset mkdir regcomp setenv socket strchr strrchr strstr])
 AC_HEADER_STDBOOL
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
 AC_PATH_X
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -28,6 +29,17 @@ AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([],[no-xml])
 AC_PROG_INSTALL
+
+dnl define varible by OS
+case "$host" in
+  *solaris*)
+    LIBUTIL=""
+    ;;
+  *)
+    LIBUTIL="-lutil"
+    ;;
+esac
+AC_SUBST(LIBUTIL)
 
 dnl define a new autoconf test, AC_CSRG_BASED, which will define
 dnl CSRG_BASED for BSD systems in config.h.
@@ -57,16 +69,18 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext domain])
 AM_GLIB_GNU_GETTEXT
 
+# Project Information
+AC_DEFINE(PROJECT_SITE, "http://code.google.com/p/pcmanx-gtk2/", "Project Site")
+AC_DEFINE(PROJECT_FORUM, "http://groups.google.com/d/forum/pcmanx", "Project Forum")
+
 dnl displaced from acconfig.h
 AH_VERBATIM([PREFIX],[#undef PREFIX])
 AH_VERBATIM([USE_DEBUG],[#undef USE_DEBUG])
 AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
-AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
 AH_VERBATIM([USE_LIBNOTIFY],[#undef USE_LIBNOTIFY])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
-AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
@@ -93,7 +107,38 @@ else
 	fi
 fi
 
+AM_CONDITIONAL([USING_LINUX], test "x$system" = "xLinux")
+
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
+
+dnl
+dnl checking for forkpty()
+dnl
+AC_CHECK_FUNCS(forkpty,, AC_CHECK_LIB(util,forkpty, [AC_DEFINE(HAVE_FORKPTY)] [LIBS="$LIBS -lutil"]))
+
+dnl -----  pseudo terminal handling
+dnl -----  os        pty master      streams modules
+dnl -----  aix       /dev/ptc        - (loads ldterm by default)
+dnl -----  hpux      /dev/ptmx       ldterm ptem
+dnl -----  solaris   /dev/ptmx       ldterm ptem ttcompat
+
+dnl -----  aix loads module ldterm by default and wants no ptem
+dnl -----  ptmx takes precedence
+AC_MSG_CHECKING([for master pty])
+if test -r /dev/ptc ; then
+  if test -r /dev/ptmx ; then
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+    AC_MSG_RESULT(ptmx)
+  else
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptc", [aix style pty master])
+    AC_MSG_RESULT(ptc)
+  fi
+elif test -r /dev/ptmx ; then
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+  AC_MSG_RESULT(ptmx)
+else
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/null", [lets see what happens])
+fi
 
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
@@ -103,11 +148,6 @@ AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug],
 		[enable Debug (default: no)]),
         debug=$enableval, debug="no")
-
-AC_ARG_ENABLE([mmx],
-	AS_HELP_STRING([--disable-mmx],
-		[disable MMX optimizations (default: yes)]),
-        mmx=$enableval, mmx="yes")
 
 AC_ARG_ENABLE([docklet],
 	AS_HELP_STRING([--disable-docklet],
@@ -143,11 +183,6 @@ AC_ARG_ENABLE([external],
 	AS_HELP_STRING([--disable-external],
 		[disable external SSH/Telnet support (default: yes)]),
 	external=$enableval, external="yes")
-
-AC_ARG_ENABLE([plugin],
-	AS_HELP_STRING([--enable-plugin],
-		[enable Mozilla/Firefox plugin support (default: no)]),
-	plugin=$enableval, plugin="no")
 
 AC_ARG_ENABLE([wget],
 	AS_HELP_STRING([--enable-wget],
@@ -209,6 +244,15 @@ PKG_CHECK_MODULES([LIBXFT], [xft], [
                    ],[AC_MSG_ERROR([pcmanx_gtk2 depends on Xft!])]) 
 
 dnl *********************************************************************
+dnl ** X11 **************************************************************
+dnl *********************************************************************
+
+PKG_CHECK_MODULES([LIBX11], [x11], [
+                   GUI_CFLAGS="$GUI_CFLAGS $LIBX11_CFLAGS"
+                   GUI_LIBS="$GUI_LIBS $LIBX11_LIBS"
+                   ],[AC_MSG_ERROR([pcmanx_gtk2 depends on libx11-dev])])
+
+dnl *********************************************************************
 dnl ** IPv6 *************************************************************
 dnl *********************************************************************
 
@@ -233,33 +277,6 @@ if test "$ipv6" = yes; then
 		AC_MSG_RESULT(no)
 	fi
 fi
-
-dnl *********************************************************************
-dnl ** MMX **************************************************************
-dnl *********************************************************************
-
-dnl we don't need mmx on *this* machine, just i386, because
-dnl it's checked at runtime.
-if test "$mmx" = "yes"; then
-	case $host_cpu in
-    i386|i486|i586|i686|i786|k6|k7|c3|c3_2|x86_64)
-    mmx=yes
-        ;;
-     *)
-    mmx=no
-	esac
-	if test "$system" = "OpenBSD"; then
-		dnl openbsd fails because mmx_cmod doesn't prefix its symbols with underscore.
-		dnl xtext.o: Undefined symbol `_shade_ximage_15_mmx' referenced from text segment
-		mmx=no
-	fi
-	if test "$mmx" = "yes"; then
-		AC_DEFINE(USE_MMX)
-	fi
-fi
-
-AM_CONDITIONAL(USE_MMX, test "$mmx" = "yes")
-
 
 dnl *********************************************************************
 dnl ** Docklet **********************************************************
@@ -352,8 +369,8 @@ dnl *********************************************************************
 
 if test "$external" = "yes"; then
     AC_DEFINE_UNQUOTED(USE_EXTERNAL, [1], [Enable external SSH/Telnet support])
-    dnl We need tty utility functions from libutil
-    LIBS="$LIBS -lutil"
+    dnl We need tty utility functions from libutil on Linux
+    LIBS="$LIBS $LIBUTIL"
 fi
 
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
@@ -393,141 +410,6 @@ AM_CONDITIONAL(USE_PROXY, test "$proxy" = "yes")
 AC_SUBST(USE_PROXY)
 
 dnl *********************************************************************
-dnl ** Mozilla/Firefox Plugin support ***********************************
-dnl *********************************************************************
-
-AC_ARG_WITH([mozilla],
-  AS_HELP_STRING([--with-mozilla=DIR],
-  [Specify Mozilla root directory]),
-  [ INPUT_MOZILLA_ROOT="$withval" ])
-
-if test "$plugin" = "yes"; then
-  AC_MSG_CHECKING([for Mozilla support])
-  gecko_provider=mozilla
-  user_specified_mozilla=no
-
-  if test ! -z "$INPUT_MOZILLA_ROOT"; then
-    real_mozilla_root="`cd ${INPUT_MOZILLA_ROOT} 2>/dev/null && pwd`"
-    if test ! -z "${real_mozilla_root}"; then
-      INPUT_MOZILLA_ROOT="$real_mozilla_root"
-      user_specified_mozilla=yes
-      enable_mozilla=yes
-    fi
-  fi
-
-  dnl Detect via pkg-config
-
-  # Check Mozilla
-  if test "$user_specified_mozilla" = "no"; then
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check Firefox
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=firefox
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check Firefox-plugin
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=firefox-plugin
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  # Check XULRunner
-  if test "x$enable_mozilla" = "xno"; then
-    gecko_provider=xulrunner
-    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
-	enable_mozilla=yes, enable_mozilla=no)
-  fi
-
-  MOZILLA_LIB_DIR_SEARCH=
-  AC_MSG_RESULT([$gecko_provider found!])
-  if test "$user_specified_mozilla" = "no"; then
-    if "$PKG_CONFIG" --exists "$gecko_provider-plugin >= 1.9"; then
-      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin`
-      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=sdkdir $gecko_provider-plugin`/bin
-      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
-      MOZILLA_IDLDIR=`$PKG_CONFIG --variable=idldir libxul`/`$PKG_CONFIG --variable=includetype libxul`
-    else
-      dnl Note: with the infos from mozilla-plugin.pc
-      dnl we got all includes and libraries for the C interface
-      dnl to Mozilla, but not the XPCOM headers we also need.
-      MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin $gecko_provider-xpcom`
-      MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
-      MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
-    fi
-  else
-    dnl Don't depend on pkg-config
-    MOZILLA_LIB_ROOT="$INPUT_MOZILLA_ROOT"
-    MOZILLA_INCLUDE_ROOT="$INPUT_MOZILLA_ROOT/include"
-    MOZILLA_LIBS="-L$INPUT_MOZILLA_ROOT -lxpcom -lplds4 -lplc4 -lnspr4 -lpthread -ldl"
-    MOZILLA_CFLAGS=" \
-      -I$MOZILLA_INCLUDE_ROOT \
-      -I$MOZILLA_INCLUDE_ROOT/java \
-      -I$MOZILLA_INCLUDE_ROOT/plugin \
-      -I$MOZILLA_INCLUDE_ROOT/xpcom \
-      -I$MOZILLA_INCLUDE_ROOT/string \
-      -I$MOZILLA_INCLUDE_ROOT/nspr \
-      -I$MOZILLA_INCLUDE_ROOT/xpcom \
-      -I$MOZILLA_INCLUDE_ROOT/xpconnect"
-  fi
-
-  # Workaround
-  MOZILLA_CFLAGS="$MOZILLA_CFLAGS -I$MOZILLA_INCLUDE_ROOT"
-
-  dnl See if xpidl is found.
-  XPIDL="$MOZILLA_LIB_ROOT/xpidl"
-  if test ! -x "$XPIDL"; then
-    echo "ERROR:"
-    echo "The utility $XPIDL was not found. Please check your development packages."
-    AC_MSG_ERROR([Fatal Error: no xpidl detected.])
-  fi
-
-  dnl Search for the idl include directory
-  dnl This only works on Gecko 1.8
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="`$PKG_CONFIG --variable=idldir $gecko_provider-xpcom`"
-  fi
-  dnl Fallback for older versions
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="`echo $MOZILLA_LIB_ROOT | sed -e s!lib!share/idl!`"
-  fi
-  dnl Gentoo has it in unusual places
-  if test "x$MOZILLA_IDLDIR" = "x"; then
-    MOZILLA_IDLDIR="$MOZILLA_INCLUDE_ROOT/idl"
-  fi
-  dnl Debian/Ubuntu have it in unusual places, too.
-  ADDITIONAL_IDLDIR=/usr/share/idl
-  if test "x$gecko_provider" = "xfirefox"; then
-    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla-firefox
-  else
-    ADDITIONAL_IDLDIR=$ADDITIONAL_IDLDIR/mozilla
-  fi
-  XPIDL_INCL="-I$MOZILLA_IDLDIR \
--I$ADDITIONAL_IDLDIR \
--I/usr/lib/mozilla/include/idl"
-
-  PATH_OF_PCMANX_HTML="$MOZILLA_LIB_DIR_SEARCH/components/pcmanx.html"
-
-  AC_SUBST(PATH_OF_PCMANX_HTML)
-  AC_SUBST(XPIDL)
-  AC_SUBST([XPIDL_INCL])
-  AC_SUBST(MOZILLA_CFLAGS)
-  AC_SUBST(MOZILLA_LIBS)
-  AC_SUBST(MOZILLA_LIB_DIR_SEARCH)
-fi
-
-if test "x$enable_mozilla" = "xno"; then
-  plugin="no"
-fi
-
-AM_CONDITIONAL(USE_PLUGIN, test "$plugin" = "yes")
-
-dnl *********************************************************************
 dnl ** GCC FLAGS ********************************************************
 dnl *********************************************************************
 
@@ -548,7 +430,7 @@ AC_DEFUN([CACHED_TRY_COMPILE],[
 
 dnl GCC_ATTRIBUTE(<short-label>,<cachevar>,<func-params>,<attribute>,<HAVE>,<desc>,[<true-cmds>],[<false-cmds>])
 AC_DEFUN([GCC_ATTRIBUTE],[
-  CACHED_TRY_COMPILE(__attribute__(($1)),cv_c_gcc_attribute_$2,,
+  CACHED_TRY_COMPILE(__attribute__(($1)),ac_cv_c_gcc_attribute_$2,,
    [extern int testfunction($3) __attribute__(($4))],
    AC_MSG_RESULT(yes)
    AC_DEFINE(HAVE_GNUC25_$5,,$6)
@@ -698,7 +580,9 @@ LIBS="$LIBS $INTLLIBS"
 CFLAGS="$CFLAGS $CPPFLAGS"
 
 dnl Reduce C++ overhead
+if test "x$GCC" = "xyes"; then
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
+fi
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
 dnl linker optimizations
@@ -769,8 +653,6 @@ AC_MSG_RESULT($has_visibility)
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
-LIBTOOL_VERSION_INFO=`echo $PACKAGE_VERSION | awk -F. '{ printf "%d:%d:%d", $1+$2, $3, $2 }'`
-AC_SUBST(LIBTOOL_VERSION_INFO)
 LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
@@ -784,14 +666,6 @@ AC_CONFIG_FILES([
 	Doxygen
 ])
 
-dnl Extra files needed by plugin
-AC_CONFIG_FILES([
-	plugin/Makefile
-	plugin/src/Makefile
-	plugin/data/Makefile
-	plugin/data/TelnetProtocol.js
-])
-
 AC_OUTPUT
 
 echo
@@ -799,7 +673,6 @@ echo pcmanx_gtk2 ..................... : Version $VERSION
 echo
 echo Prefix........................... : $prefix
 echo Debug support ................... : $debug
-echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
 echo Libnotify support................ : $libnotify
@@ -811,11 +684,6 @@ dnl else
 dnl   echo "Python script support............ : $script"
 dnl fi
 echo External SSH/Telnet support...... : $external
-if test "x$enable_mozilla" = "xyes"; then
-  echo "Build Mozilla/Firefox plugin..... : $enable_mozilla (Using $gecko_provider)"
-else
-  echo "Mozilla/Firefox plugin support... : $plugin"
-fi
 echo wget support..................... : $wget
 echo iplookup support................. : $iplookup
 echo proxy support.................... : $proxy

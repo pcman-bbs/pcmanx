@@ -19,7 +19,7 @@
 #include "dialog.h"
 #include "listbox.h"
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace std;
 

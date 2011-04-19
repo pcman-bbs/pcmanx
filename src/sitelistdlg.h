@@ -24,7 +24,7 @@
 #endif
 
 #include "dialog.h"
-#include <stdio.h>
+#include <cstdio>
 
 /**
 @author PCMan

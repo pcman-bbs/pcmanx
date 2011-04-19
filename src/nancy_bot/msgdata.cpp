@@ -20,16 +20,18 @@
 
 #include <cstdlib>
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cerrno>
 
 #include "nancy_bot/msgdata.h"
 #include "nancy_bot/botutil.h"
 #include "fileutil.h"
 
+extern int error;
 int MsgData::errorHandler(int level, const string &flag)
 {
 	if( level <= 0 ){
-		perror(flag.c_str());
+		if (errno != ENOENT ) perror(flag.c_str());
 		return 1; // error
 	}
 	else return 0;
@@ -188,7 +190,7 @@ int
 MsgData::initSpecialMsg(string flag)
 {
 	FILE *fptr = fopen(filename_conf.c_str(), "r");
-	vector<string> *pVMsg;
+	vector<string> *pVMsg = NULL;
 	if(!fptr){
 		return 0;
 	
@@ -340,8 +342,7 @@ GOT_VALUE:
 				
 				if( MT.find(len) == MT.end() )
 				{
-					VS_map *vsm = new VS_map;
-					MT[len] = *vsm;
+					MT[len];
 				}
 				continue;
 			}
@@ -416,9 +417,7 @@ MsgData::learning(string &key, string &msg_to_remember)
 	// save to memory
 	if( MT.find(len) == MT.end())
 	{
-		VS_map *vsm = new VS_map;
-		(*vsm)[key].push_back(msg_to_remember);
-		MT[len] = *vsm;
+		MT[len][key].push_back(msg_to_remember);
 	}
 	else
 	{

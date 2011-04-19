@@ -28,7 +28,7 @@
 #include "mainframe.h"
 #include "stringutil.h"
 #include "inputdialog.h"
-#include <stdio.h>
+#include <cstdio>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -62,10 +62,10 @@ CAppConfig::~CAppConfig()
 
 //	Author: PCMan (HZY) 2004/07/22	07:51 AM
 //	I finally came up with a really smart way to maintain ini file.
-//	Every time I add a variable to CAppConfig, all I need to do is 
+//	Every time I add a variable to CAppConfig, all I need to do is
 //	adding the variable in my "Config Table," and all the data will
-//	be load and save automatically.  This is not the most efficient way. 
-//	In my first version I use some more efficient method, but at last I change 
+//	be load and save automatically.  This is not the most efficient way.
+//	In my first version I use some more efficient method, but at last I change
 //	my code to what it is now.  Because I think in a program not time-critical,
 //	easy-maintaining is much more important.
 bool CAppConfig::DoDataExchange(bool bLoad)
@@ -118,7 +118,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
-	
+
 	BEGIN_CONFIG_SECT(Color)
 		_CFG_CLR( "Black", CTermCharAttr::m_DefaultColorTable[0] )
 		_CFG_CLR( "DarkRed", CTermCharAttr::m_DefaultColorTable[1] )
@@ -160,7 +160,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #ifdef USE_PROXY
 		_CFG_INT ( "ProxyType", m_DefaultSite.m_ProxyType )
 		_CFG_STR ( "ProxyAddr", m_DefaultSite.m_ProxyAddr )
-		_CFG_INT ( "ProxyPort", m_DefaultSite.m_ProxyPort )
+		_CFG_STR ( "ProxyPort", m_DefaultSite.m_ProxyPort )
 		_CFG_STR ( "ProxyUser", m_DefaultSite.m_ProxyUser )
 		_CFG_STR ( "ProxyPass", m_DefaultSite.m_ProxyPass )
 #endif
@@ -297,7 +297,7 @@ void CAppConfig::LoadFavorites()
 			else if ( 0 == strcmp( pname, "ProxyAddr" ) )
 				pSite->m_ProxyAddr = pval;
 			else if ( 0 == strcmp( pname, "ProxyPort" ) )
-				pSite->m_ProxyPort = atoi(pval);
+				pSite->m_ProxyPort = pval;
 			else if ( 0 == strcmp( pname, "ProxyUser" ) )
 				pSite->m_ProxyUser = pval;
 			else if ( 0 == strcmp( pname, "ProxyPass" ) )
@@ -362,15 +362,16 @@ void CAppConfig::SetToDefault()
 	BeepOnBell = true;
 
 	FontSize = 14;
-	FontFamily = "Sans";
+	FontFamily = "WenQuanYi Micro Hei Mono";
 	FontSizeEn = 14;
-	FontFamilyEn = "Sans";
+	FontFamilyEn = "WenQuanYi Micro Hei Mono";
 	AntiAliasFont = true;
 	CompactLayout = false;
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
 
-	MailClient = WebBrowser = "firefox %s";
+	MailClient = "xdg-email %s";
+	WebBrowser = "xdg-open %s";
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;
 #endif

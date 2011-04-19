@@ -1,3 +1,16 @@
+pcmanx-gtk2 (1.0-1) unstable; urgency=low
+
+  * New upstream release (Closes: #623105)
+    - Binary package libpcmanx-core and mozilla-plugin-pcmanx has been
+      removed, refer to pcmanfx project to use mozilla/firefox plugin.
+  * Use debian rule files from project svn repos, thanks to the pcmanx
+    maintainer team.
+  * Workaround for old libnotify (version < 0.7), sync from svn, thanks
+    to ckanru.
+  * Switch to dpkg-source 3.0 (quilt) format.
+
+ -- Emfox Zhou <emfox@debian.org>  Tue, 19 Apr 2011 23:31:06 +0800
+
 pcmanx-gtk2 (0.3.9-2) unstable; urgency=low
 
   * Build depend on intltool.

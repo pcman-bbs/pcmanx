@@ -59,6 +59,7 @@ using namespace std;
 class CTermCharAttr
 {
     public:
+	typedef short AttrType;
 	X_EXPORT static GdkColor m_DefaultColorTable[SIZE_OF_COLOR_TABLE];
 
 	enum charset {CS_ASCII=0, CS_MBCS1=1, CS_MBCS2=2};	// MBCS : multi-byte character set
@@ -72,81 +73,73 @@ class CTermCharAttr
 	~CTermCharAttr(){}
 
 	//Public getter:Neversay 15/Jan/2005
-	inline static GdkColor* GetDefaultColorTable(int index){
-		if(index >= 0 && index < SIZE_OF_COLOR_TABLE) 
+	static GdkColor* GetDefaultColorTable(int index){
+		if(index >= 0 && index < SIZE_OF_COLOR_TABLE)
 			return &m_DefaultColorTable[index];
 		return NULL;
 	}
-	inline static GdkColor* GetDefaultColorTable(){return m_DefaultColorTable;}
-	inline short GetForeground(){ return (short)m_Fg;}
-	inline short GetBackground(){return (short)m_Bg;}
-	inline bool IsBright(){return (m_Bright==1?true:false);}
-	inline bool IsBlink(){return (m_Blink==1?true:false);}
-	inline bool IsUnderLine(){return (m_UnderLine==1?true:false);}
-	inline bool IsInverse(){return (m_Inverse==1?true:false);}
-	inline bool IsInvisible(){return (m_Invisible==1?true:false);}
-	inline bool IsHyperLink(){return (m_HyperLink==1?true:false);}
+	static GdkColor* GetDefaultColorTable(){return m_DefaultColorTable;}
+	AttrType GetForeground(){ return (AttrType)m_Fg;}
+	AttrType GetBackground(){return (AttrType)m_Bg;}
+	bool IsBright(){return (m_Bright==1);}
+	bool IsBlink(){return (m_Blink==1);}
+	bool IsUnderLine(){return (m_UnderLine==1);}
+	bool IsInverse(){return (m_Inverse==1);}
+	bool IsInvisible(){return (m_Invisible==1);}
+	bool IsHyperLink(){return (m_HyperLink==1);}
 #ifdef USE_IPLOOKUP
-	inline bool IsIpAddr(){return (m_IpAddr==1?true:false);}
+	bool IsIpAddr(){return (m_IpAddr==1);}
 #endif
-	inline bool IsNeedUpdate(){return (m_NeedUpdate==1?true:false);}
-	inline short GetCharSet(){return (short)m_CharSet;}
+	bool IsNeedUpdate(){return (m_NeedUpdate==1);}
+	AttrType GetCharSet(){return (AttrType)m_CharSet;}
 	//Public setter:Neversay 15/Jan/2005
-	inline static bool SetDefaultColorTable(int index, GdkColor* newColor){
+	static void SetDefaultColorTable(int index, GdkColor* newColor){
 		if(index >= 0 && index < SIZE_OF_COLOR_TABLE){
 			m_DefaultColorTable[index] = *newColor;
-			return true;
-		}return false;
+		}
 	}
-	inline bool SetForeground(int foreground){ 
+	void SetForeground(int foreground){
 		if((foreground >=0) && (foreground < 1<<BIT_NUMBER_OF_COLOR)){
 			m_Fg = foreground;
-			return true;
 		}
-		return false;
 	}
-	inline bool SetBackground(int background){ 
+	void SetBackground(int background){
 		if((background >=0) && (background < 1<<BIT_NUMBER_OF_COLOR)){
 			m_Bg = background;
-			return true;
 		}
-		return false;
 	}
-	inline bool SetBright(bool flag){m_Bright = flag?1:0;return flag;}
-	inline bool SetBlink(bool flag){m_Blink = flag?1:0;return flag;}
-	inline bool SetUnderLine(bool flag){m_UnderLine = flag?1:0;return flag;}
-	inline bool SetInverse(bool flag){m_Inverse = flag?1:0;return flag;}
-	inline bool SetInvisible(bool flag){m_Invisible = flag?1:0;return flag;}
-	inline bool SetHyperLink(bool flag){m_HyperLink = flag?1:0;return flag;}
+	void SetBright(bool flag){m_Bright = flag?1:0;}
+	void SetBlink(bool flag){m_Blink = flag?1:0;}
+	void SetUnderLine(bool flag){m_UnderLine = flag?1:0;}
+	void SetInverse(bool flag){m_Inverse = flag?1:0;}
+	void SetInvisible(bool flag){m_Invisible = flag?1:0;}
+	void SetHyperLink(bool flag){m_HyperLink = flag?1:0;}
 #ifdef USE_IPLOOKUP
-	inline bool SetIpAddr(bool flag){m_IpAddr = flag?1:0;return flag;}
+	void SetIpAddr(bool flag){m_IpAddr = flag?1:0;}
 #endif
-	inline bool SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;return flag;}
-	inline bool SetCharSet(enum charset charset){
+	void SetNeedUpdate(bool flag){m_NeedUpdate = flag?1:0;}
+	void SetCharSet(enum charset charset){
 		if(charset >= 0){
 			m_CharSet = charset;
-			return true;
-		}return false;
+		}
 	}
 
-	//Transform the CTermCharAttr into short value.
-	inline short AsShort(){	return *(short*)this;	}
+	//Transform the CTermCharAttr into AttrType value.
+	AttrType AsType(){	return *(AttrType*)this;	}
 
 	//Get default setting of CTermCharAttr.
-	static short GetDefVal();
+	static AttrType GetDefVal();
 	//Set this to default value.
 	void SetToDefault();
 
 	//Get the color of foreground attribute.
-	inline GdkColor* GetFgColor(GdkColor* pColorTable ){
+	GdkColor* GetFgColor(GdkColor* pColorTable ){
 		return &pColorTable[ m_Bright ? (( m_Inverse ? m_Bg : m_Fg )+8):( m_Inverse ? m_Bg : m_Fg ) ];
 	}
 	//Get the color of background attribute.
-	inline GdkColor* GetBgColor(GdkColor* pColorTable ){
+	GdkColor* GetBgColor(GdkColor* pColorTable ){
 		return &pColorTable[( m_Inverse ? m_Fg : m_Bg )];
 	}
-
-	bool IsSameAttr(short val2);
 
 	// Overloaded operator ==
 	bool operator==(CTermCharAttr& attr);
@@ -200,25 +193,25 @@ public:
 	string GetText( CTermSelection* sel, bool trim, bool color );
 
 	// Get text attributes of the line.
-	inline CTermCharAttr* GetLineAttr( const char* pLine, const int ColsPerPage )
+	CTermCharAttr* GetLineAttr( const char* pLine, const int ColsPerPage )
 	{
 		return ( CTermCharAttr* ) ( pLine + ColsPerPage + 1 );
 	}
-	inline CTermCharAttr* GetLineAttr( const char* pLine )
+	CTermCharAttr* GetLineAttr( const char* pLine )
 	{
 		return ( CTermCharAttr* ) ( pLine + m_ColsPerPage + 1 );
 	}
 
 	//Get all text from (0,0) to (maxX, maxY), if trim is true, it return text
 	//without tail black spaces.
-	inline string GetAllText( bool trim = true )
+	string GetAllText( bool trim = true )
 	{
 		CTermSelection sel( this );
 		sel.SelectAll();
 		return GetText( &sel, trim, false );
 	}
 	//The same as GetAllText but get color too.
-	inline string GetAllTextWithColor( bool trim = true )
+	string GetAllTextWithColor( bool trim = true )
 	{
 		CTermSelection sel( this );
 		sel.SelectAll();
@@ -235,14 +228,14 @@ public:
 	void UpdateDisplay();
 	void DoUpdateDisplay();
 	static void memset16( void* dest, short val, size_t n );
-	inline void ParseAnsiColor( const char* pParam );
-	inline void EraseLine( int p );
+	void ParseAnsiColor( const char* pParam );
+	void EraseLine( int p );
 	void ClearScreen( int p );
-	inline void GoToXY( int x, int y );
-	inline void ScrollUp( int n = 1 );
-	inline void ScrollDown( int n = 1 );
+	void GoToXY( int x, int y );
+	void ScrollUp( int n = 1 );
+	void ScrollDown( int n = 1 );
 	void InsertNewLine( int y, int count = 1 );
-	inline void SetLineUpdate( char* pLine, short start, short end )
+	void SetLineUpdate( char* pLine, short start, short end )
 	{
 		CTermCharAttr * pAttr = GetLineAttr( pLine );
 		for ( ; start < end; start++ )
@@ -250,15 +243,15 @@ public:
 	}
 
 	// Set update region of lines.  Whole line will be marked as invalid.
-	inline void SetWholeLineUpdate( char* pLine )
+	void SetWholeLineUpdate( char* pLine )
 	{
 		SetLineUpdate( pLine, 0, m_ColsPerPage );
 	}
 
 	// Put characters on the terminal screen.
 	void PutChar( unsigned char ch );
-	inline void Tab();
-	inline void CarriageReturn();
+	void Tab();
+	void CarriageReturn();
 
 	//Call virtual function in dirived class to determine
 	//whether to beep or show a visual indication instead.
@@ -267,7 +260,7 @@ public:
 	void Back();
 	void LineFeed();
 	// Parse ANSI escape sequence
-	inline void ParseAnsiEscapeSequence( const char* CmdLine, char type );
+	void ParseAnsiEscapeSequence( const char* CmdLine, char type );
 	// class constructor
 	CTermData( CTermView* pView );
 	// class destructor
@@ -282,13 +275,13 @@ public:
 	void InitNewLine( char* NewLine, const int ColsPerPage );
 
 	// Allocate new lines
-	inline char* AllocNewLine( const int ColsPerPage )
+	char* AllocNewLine( const int ColsPerPage )
 	{
 		// struct{ char[ColsPerPage], char='\0', CTermCharAttr[ColsPerPage]}
 		// Neversay:The structure is show below:
 		// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr ]
 		// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr)
-		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( short ) ) ];
+		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( CTermCharAttr::AttrType ) ) ];
 
 		InitNewLine( NewLine, ColsPerPage );
 		return NewLine;
