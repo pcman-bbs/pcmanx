@@ -88,7 +88,7 @@ protected:
     void UpdateCaretPos();
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
     void OnDestroy();
-    void RecalcCharDimension(int font_type);
+    void RecalcCharDimension();
     void GetCellSize( int &w, int &h );
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );

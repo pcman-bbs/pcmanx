@@ -1,3 +1,12 @@
+2011-04-24  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/core/termview.cpp (RecalcCharDimension): Always calculate
+	character dimension based on Chinese font.
+	(OnSize): Update.
+	(SetFont*): Update.
+
+	* src/core/termview.h (CView): Update signature.
+
 2011-04-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* debian/watch: Update watch control file for uscan.

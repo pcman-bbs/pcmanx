@@ -617,9 +617,8 @@ void CTermView::OnSize(GdkEventConfigure* evt UNUSED)
 
 	for (int i = FONT_START; i != FONT_END; ++i) {
 	    m_Font[i]->SetFont( m_Font[i]->GetName(), w, h, m_Font[i]->GetCompact(), m_Font[i]->GetAntiAlias());
-	    RecalcCharDimension(i);
 	}
-
+	RecalcCharDimension();
 }
 
 static int DrawCharWrapper( int row, int col, void *data )
@@ -913,7 +912,7 @@ void CTermView::SetFont( CFont* font, int font_type )
 	else
 		m_Font[font_type] = font;
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type)
@@ -931,7 +930,7 @@ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias
 	else
 		m_Font[font_type] = new CFont( name, pt_size, compact, anti_alias );
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetFontFamily( string name, int font_type )
@@ -946,7 +945,7 @@ void CTermView::SetFontFamily( string name, int font_type )
 	else
 		m_Font[font_type]->SetFontFamily( name );
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
@@ -1034,10 +1033,10 @@ void CTermView::OnDestroy()
 	CView::OnDestroy();	// Remember to destruct parent
 }
 
-void CTermView::RecalcCharDimension(int font_type)
+void CTermView::RecalcCharDimension()
 {
-	m_CharW = m_Font[font_type]->GetWidth() + m_CharPaddingX;
-	m_CharH = m_Font[font_type]->GetHeight() + m_CharPaddingY;
+	m_CharW = m_Font[FONT_DEFAULT]->GetWidth() + m_CharPaddingX;
+	m_CharH = m_Font[FONT_DEFAULT]->GetHeight() + m_CharPaddingY;
 
 	if( m_bHorizontalCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
