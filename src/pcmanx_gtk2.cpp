@@ -64,7 +64,7 @@ static GOptionEntry entries[] = {
 	  G_OPTION_ARG_NONE, &multiple_instance,
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
-	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+	{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 };
 
 /**
