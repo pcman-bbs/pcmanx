@@ -28,4 +28,6 @@ libpcmanx_core_la_SOURCES = \
 	termview.cpp termview.h \
 	termsel.cpp termsel.h \
 	fileutil.c fileutil.h \
+	uao241.c uao241.h \
+	uao250.c uao250.h \
 	pkgver.c

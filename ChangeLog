@@ -1,3 +1,14 @@
+2011-06-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/uao.pl,
+	build/uao241-b2u.txt,
+	build/uao250-b2u.txt,
+	src/core/Makefile.am,
+	src/core/uao241.c,
+	src/core/uao241.h,
+	src/core/uao250.c.
+	src/core/uao250.h: Add UAO utilities.
+
 2011-04-24  Kan-Ru Chen  <kanru@kanru.info>
 
 	* src/pcmanx_gtk2.cpp: Fix compilation warning.
