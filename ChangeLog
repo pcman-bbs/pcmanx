@@ -12,6 +12,7 @@
 	src/sitepage.cpp,
 	src/sitepage.h,
 	NEWS: Implement UAO functionality.
+	* debian/control: Remove unneeded dependency.
 
 2011-06-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
