@@ -13,6 +13,8 @@
 	src/sitepage.h,
 	NEWS: Implement UAO functionality.
 	* debian/control: Remove unneeded dependency.
+	* po/zh_CN.po,
+	po/zh_TW.po: Update translation of UAO.
 
 2011-06-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
