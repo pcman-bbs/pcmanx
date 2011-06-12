@@ -115,6 +115,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CompactLayout )
 		_CFG_BOOL ( "HorizontalCenterAlign", m_DefaultSite.m_bHorizontalCenterAlign )
 		_CFG_BOOL ( "VerticalCenterAlign", m_DefaultSite.m_bVerticalCenterAlign )
+		_CFG_INT ( "UAO", m_DefaultSite.m_UAO )
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
@@ -251,6 +252,8 @@ void CAppConfig::LoadFavorites()
 				pSite->m_bHorizontalCenterAlign = (bool)atoi(pval);
 			else if( 0 == strcmp( pname, "VerticalCenterAlign" ) )
 				pSite->m_bVerticalCenterAlign = (bool)atoi(pval);
+			else if( 0 == strcmp( pname, "UAO" ) )
+				pSite->m_UAO = atoi(pval);
 			else if( 0 == strcmp( pname, "PreLoginPrompt" ) )
 				pSite->SetPreLoginPrompt( pval );
 			else if( 0 == strcmp( pname, "PreLogin" ) )
@@ -369,6 +372,7 @@ void CAppConfig::SetToDefault()
 	CompactLayout = false;
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
+    UAO = 0;
 
 	MailClient = "xdg-email %s";
 	WebBrowser = "xdg-open %s";

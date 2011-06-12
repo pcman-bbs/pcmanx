@@ -2,6 +2,16 @@
 
 	* src/sitepage.cpp,
 	src/sitepage.h: Add UAO user interface.
+	* src/appconfig.cpp,
+	src/appconfig.h,
+	src/core/site.cpp,
+	src/core/site.h,
+	src/core/termview.cpp,
+	src/core/termview.h,
+	src/mainframe.cpp,
+	src/sitepage.cpp,
+	src/sitepage.h,
+	NEWS: Implement UAO functionality.
 
 2011-06-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 

@@ -9,7 +9,7 @@
 // Created:     2004.7.20
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by: 
+// Modified by:
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -117,6 +117,7 @@ public:
 	int CharPaddingY;
 	bool HorizontalCenterAlign;
 	bool VerticalCenterAlign;
+    int UAO;
 
 //	bool TwoDiffFonts;
     int FontSize;

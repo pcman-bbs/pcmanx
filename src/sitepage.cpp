@@ -255,18 +255,18 @@ CSitePage::CSitePage(CSite& site)
 	gtk_tree_store_set (store, &iter, 0, _("2.41"), -1);
 	gtk_tree_store_append (store, &iter, NULL);
 	gtk_tree_store_set (store, &iter, 0, _("2.50"), -1);
-	GtkTreeModel* model = GTK_TREE_MODEL(store);
-	m_UAO = gtk_combo_box_new_with_model (model);
-	gtk_box_pack_start(GTK_BOX(uao_box), m_UAO, FALSE, FALSE, 0);
+	m_UAOModel = GTK_TREE_MODEL(store);
+	m_UAOBox = gtk_combo_box_new_with_model (m_UAOModel);
+	gtk_box_pack_start(GTK_BOX(uao_box), m_UAOBox, FALSE, FALSE, 0);
 	GtkCellRenderer* renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (m_UAO), renderer, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (m_UAO), renderer, "text", 0, NULL);
-	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (m_UAO), renderer, NULL, NULL, NULL);
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (m_UAOBox), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (m_UAOBox), renderer, "text", 0, NULL);
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (m_UAOBox), renderer, NULL, NULL, NULL);
 
-	GtkTreePath* path = gtk_tree_path_new_from_indices (0, -1);
-	gtk_tree_model_get_iter (model, &iter, path);
+	GtkTreePath* path = gtk_tree_path_new_from_indices (m_Site.m_UAO, -1);
+	gtk_tree_model_get_iter (m_UAOModel, &iter, path);
 	gtk_tree_path_free (path);
-	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (m_UAO), &iter);
+	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (m_UAOBox), &iter);
 
 	gtk_box_pack_start (GTK_BOX (m_Widget), uao_box, FALSE, FALSE, 0);
     gtk_widget_show_all (uao_box);
@@ -341,6 +341,13 @@ bool CSitePage::OnOK()
 
 	m_Site.m_bVerticalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pVerticalCenterAlign));
 	m_Site.m_bHorizontalCenterAlign = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pHorizontalCenterAlign));
+
+    GtkTreeIter iter;
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (m_UAOBox), &iter)) {
+        gchar* idx = gtk_tree_model_get_string_from_iter (m_UAOModel, &iter);
+        m_Site.m_UAO = atoi(idx);
+        g_free(idx);
+    }
 
 	return true;
 }

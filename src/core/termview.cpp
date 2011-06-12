@@ -24,6 +24,8 @@
 #include "termview.h"
 #include "termdata.h"
 #include "termsel.h"
+#include "uao241.h"
+#include "uao250.h"
 
 #include <string>
 
@@ -126,6 +128,7 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_bHorizontalCenterAlign = false;
 	m_bVerticalCenterAlign = false;
+    m_UAO = 0;
 
 	m_CancelSel = false;
 
@@ -521,19 +524,40 @@ int CTermView::DrawChar(int row, int col)
 			if( ' ' != *pLine && '\0' != *pLine )
 			{
 				gsize wl;
-				gchar *utf8_ch = g_convert( pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
-				if( utf8_ch )
-				{
-					XftFont* font;
-					if (isascii (utf8_ch[0])) {
+                gchar* utf8 = NULL;
+
+                switch (m_UAO) {
+                    case 2:
+                        utf8 = uao250(pLine, &wl);
+                        if (utf8 == NULL) {
+                            utf8 = g_strndup(pLine, 1);
+                            wl = 1;
+                        }
+                        break;
+                    case 1:
+                        utf8 = uao241(pLine, &wl);
+                        if (utf8 == NULL) {
+                            utf8 = g_strndup(pLine, 1);
+                            wl = 1;
+                        }
+                        break;
+                    default:
+                        utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
+                        break;
+                }
+
+				if (utf8 != NULL) {
+					XftFont* font = NULL;
+
+					if (isascii (utf8[0])) {
 						font = m_Font[FONT_EN]->GetXftFont();
 					} else {
 						font = m_Font[FONT_DEFAULT]->GetXftFont();
 					}
 
-					if( !IsSpaceFillingChar(utf8_ch, wl) || !DrawSpaceFillingChar( utf8_ch, wl, left, top, &rect, Fg ) )
-						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
-					g_free(utf8_ch);
+					if( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( utf8, wl, left, top, &rect, Fg ) )
+						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
+					g_free(utf8);
 				}
 			}
 			if( pAttr[i].IsUnderLine() )
@@ -976,6 +1000,11 @@ void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 	if( IsVisible() )
 		Refresh();
 	UpdateCaretPos();
+}
+
+void CTermView::SetUAO( gint idx )
+{
+    m_UAO = idx;
 }
 
 void CTermView::UpdateCaretPos()

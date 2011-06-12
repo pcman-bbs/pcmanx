@@ -282,6 +282,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->SetHyperLinkColor( &AppConfig.HyperLinkColor );
 	m_pView->SetHorizontalCenterAlign( site->m_bHorizontalCenterAlign );
 	m_pView->SetVerticalCenterAlign( site->m_bVerticalCenterAlign );
+	m_pView->SetUAO( site->m_UAO );
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
