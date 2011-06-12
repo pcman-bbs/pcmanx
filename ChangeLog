@@ -1,3 +1,8 @@
+2011-06-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/sitepage.cpp,
+	src/sitepage.h: Add UAO user interface.
+
 2011-06-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/uao.pl,

@@ -243,6 +243,34 @@ CSitePage::CSitePage(CSite& site)
 	gtk_widget_show(m_pHorizontalCenterAlign);
 	gtk_box_pack_start(GTK_BOX(t_pScreenAlignBox), m_pHorizontalCenterAlign, FALSE, FALSE, 0);
 
+	/* UAO user interface */
+    GtkWidget* uao_box = gtk_hbox_new (FALSE, 10);
+	gtk_box_pack_start(GTK_BOX(uao_box), gtk_label_new (_("Unicode-at-on (UAO)")), FALSE, FALSE, 0);
+
+    GtkTreeStore* store = gtk_tree_store_new (1, G_TYPE_STRING);
+	GtkTreeIter iter;
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, _("Disable"), -1);
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, _("2.41"), -1);
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, _("2.50"), -1);
+	GtkTreeModel* model = GTK_TREE_MODEL(store);
+	m_UAO = gtk_combo_box_new_with_model (model);
+	gtk_box_pack_start(GTK_BOX(uao_box), m_UAO, FALSE, FALSE, 0);
+	GtkCellRenderer* renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (m_UAO), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (m_UAO), renderer, "text", 0, NULL);
+	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (m_UAO), renderer, NULL, NULL, NULL);
+
+	GtkTreePath* path = gtk_tree_path_new_from_indices (0, -1);
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_path_free (path);
+	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (m_UAO), &iter);
+
+	gtk_box_pack_start (GTK_BOX (m_Widget), uao_box, FALSE, FALSE, 0);
+    gtk_widget_show_all (uao_box);
+
 	if( m_Site.m_Name.empty() )
 	{
 		gtk_widget_hide(hbox1);

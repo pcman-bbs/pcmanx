@@ -53,6 +53,7 @@ public:
 	GtkWidget *m_DetectDBChar;
 	GtkWidget *m_pVerticalCenterAlign;
 	GtkWidget *m_pHorizontalCenterAlign;
+	GtkWidget *m_UAO;
     CSite&  m_Site;
 };
 
