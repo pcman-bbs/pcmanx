@@ -1,0 +1,75 @@
+Description: Always calculate character dimension based on Chinese font
+ Always calculate character dimension based on Chinese font.
+Forwarded: http://code.google.com/p/pcmanx-gtk2/issues/detail?id=31
+Author: ckanru
+Applied-Upstream: r556, http://code.google.com/p/pcmanx-gtk2/source/detail?r=556
+Last-Update: 2011-06-13
+
+Index: pcmanx-gtk2-1.0/src/core/termview.cpp
+===================================================================
+--- pcmanx-gtk2-1.0.orig/src/core/termview.cpp	2011-06-13 13:43:44.402031169 +0800
++++ pcmanx-gtk2-1.0/src/core/termview.cpp	2011-06-13 13:44:53.434373478 +0800
+@@ -617,8 +617,8 @@
+ 
+ 	for (int i = FONT_START; i != FONT_END; ++i) {
+ 	    m_Font[i]->SetFont( m_Font[i]->GetName(), w, h, m_Font[i]->GetCompact(), m_Font[i]->GetAntiAlias());
+-	    RecalcCharDimension(i);
+ 	}
++	RecalcCharDimension();
+ 
+ }
+ 
+@@ -913,7 +913,7 @@
+ 	else
+ 		m_Font[font_type] = font;
+ 
+-	RecalcCharDimension(font_type);
++	RecalcCharDimension();
+ }
+ 
+ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type)
+@@ -931,7 +931,7 @@
+ 	else
+ 		m_Font[font_type] = new CFont( name, pt_size, compact, anti_alias );
+ 
+-	RecalcCharDimension(font_type);
++	RecalcCharDimension();
+ }
+ 
+ void CTermView::SetFontFamily( string name, int font_type )
+@@ -946,7 +946,7 @@
+ 	else
+ 		m_Font[font_type]->SetFontFamily( name );
+ 
+-	RecalcCharDimension(font_type);
++	RecalcCharDimension();
+ }
+ 
+ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
+@@ -1034,10 +1034,10 @@
+ 	CView::OnDestroy();	// Remember to destruct parent
+ }
+ 
+-void CTermView::RecalcCharDimension(int font_type)
++void CTermView::RecalcCharDimension()
+ {
+-	m_CharW = m_Font[font_type]->GetWidth() + m_CharPaddingX;
+-	m_CharH = m_Font[font_type]->GetHeight() + m_CharPaddingY;
++	m_CharW = m_Font[FONT_DEFAULT]->GetWidth() + m_CharPaddingX;
++	m_CharH = m_Font[FONT_DEFAULT]->GetHeight() + m_CharPaddingY;
+ 
+ 	if( m_bHorizontalCenterAlign )
+ 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
+Index: pcmanx-gtk2-1.0/src/core/termview.h
+===================================================================
+--- pcmanx-gtk2-1.0.orig/src/core/termview.h	2011-06-13 13:43:44.382031069 +0800
++++ pcmanx-gtk2-1.0/src/core/termview.h	2011-06-13 13:43:53.930078434 +0800
+@@ -88,7 +88,7 @@
+     void UpdateCaretPos();
+     bool HyperLinkHitTest(int x, int y, int* start, int* end);
+     void OnDestroy();
+-    void RecalcCharDimension(int font_type);
++    void RecalcCharDimension();
+     void GetCellSize( int &w, int &h );
+     void ClearSelection();
+     void ExtendSelection( int row, int col, bool left );
