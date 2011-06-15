@@ -19,7 +19,7 @@ esac
 
 ## change version number ##
 if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
-    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2.\3-svn${REV}]/" ../configure.ac
+    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2-svn${REV}]/" ../configure.ac
 fi
 
 [ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
@@ -37,7 +37,7 @@ else
 fi
 
 ## rollback version number ##
-sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)-svn\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2.\3]/" ../configure.ac
+sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)-svn\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
 
 pushd "pcmanx-gtk2-${VER}"
 cp -a ../../debian .
