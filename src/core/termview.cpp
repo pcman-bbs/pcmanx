@@ -1004,7 +1004,11 @@ void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 
 void CTermView::SetUAO( gint idx )
 {
-    m_UAO = idx;
+	const char* encoding = m_pTermData->m_Encoding.c_str();
+	if (strncasecmp (encoding, "BIG5", 4) == 0 ||
+		strncasecmp (encoding, "BIG-5", 5) == 0) {
+		m_UAO = idx;
+	}
 }
 
 void CTermView::UpdateCaretPos()

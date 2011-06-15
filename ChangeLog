@@ -2,6 +2,8 @@
 
 	* src/core/site.cpp: Set GB2312 as default encoding for zh_CN users.
 	* build/snapshot-deb.sh: Fix syntax error for version number.
+	* src/core/termview.cpp,
+	src/mainframe.cpp: Restrict UAO to only work for BIG5 encoding.
 
 2011-06-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
