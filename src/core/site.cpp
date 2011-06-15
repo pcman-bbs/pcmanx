@@ -25,6 +25,7 @@
 
 #include "site.h"
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 //	#include "appconfig.h"
@@ -48,7 +49,11 @@ CSite::CSite(string Name)
 	m_AntiIdle = 180;	// 0 means disabled
 
 	// Site Encoding
-	m_Encoding = "Big5";
+	if (strncmp("zh_CN", getenv("LANG"), 5) == 0) {
+		m_Encoding = "GB2312";
+	} else {
+		m_Encoding = "BIG5";
+	}
 
 	// Terminal settings
 	// Rows per page

@@ -1,3 +1,7 @@
+2011-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/site.cpp: Set GB2312 as default encoding for zh_CN users.
+
 2011-06-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
