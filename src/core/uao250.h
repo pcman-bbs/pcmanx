@@ -20,7 +20,18 @@ extern "C"
      * @return UTF-8 encoding sequence.
      * @retval NULL If input doesn't exist at UAO 2.50
      */
-    extern gchar* uao250(const gchar* input, gsize* size);
+    extern gchar* uao250_b2u(const gchar* input, gsize* size);
+
+    /** 
+     * @brief Convert UTF-8 to BIG-5.
+     * 
+     * @param input UTF-8 encoding sequence.
+     * @param size The size of BIG-5 encoding sequence.
+     * 
+     * @return BIG-5 encoding sequence.
+     * @retval NULL If input doesn't exist at UAO 2.50
+     */
+    extern gchar* uao250_u2b(const gchar* input, gsize* size);
 
 #ifdef __cplusplus
 }

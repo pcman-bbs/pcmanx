@@ -1,3 +1,14 @@
+2011-06-23  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/Makefile.am,
+	src/core/termview.cpp,
+	src/core/uao.c,
+	src/core/uao.h,
+	src/core/uao241.c,
+	src/core/uao241.h,
+	src/core/uao250.c,
+	src/core/uao250.h: Polish UAO utilities.
+
 2011-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/core/site.cpp: Set GB2312 as default encoding for zh_CN users.

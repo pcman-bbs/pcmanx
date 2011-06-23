@@ -528,14 +528,14 @@ int CTermView::DrawChar(int row, int col)
 
                 switch (m_UAO) {
                     case 2:
-                        utf8 = uao250(pLine, &wl);
+                        utf8 = uao250_b2u(pLine, &wl);
                         if (utf8 == NULL) {
                             utf8 = g_strndup(pLine, 1);
                             wl = 1;
                         }
                         break;
                     case 1:
-                        utf8 = uao241(pLine, &wl);
+                        utf8 = uao241_b2u(pLine, &wl);
                         if (utf8 == NULL) {
                             utf8 = g_strndup(pLine, 1);
                             wl = 1;

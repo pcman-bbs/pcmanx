@@ -4,6 +4,8 @@
 /* http://moztw.org/docs/big5/table/uao241-b2u.txt */
 
 #include <glib.h>
+
+#include "uao.h"
 #include "uao241.h"
 
 static const gint uao_table_size = 19782;
@@ -39578,21 +39580,12 @@ static const gunichar2 utf16[] = {
 	0x8288, 0x0,
 };
 
-gchar* uao241(const gchar* input, gsize* size)
+gchar* uao241_b2u(const gchar* input, gsize* size)
 {
-    gint i = 0;
+    return uao_b2u(big5, utf16, uao_table_size, input, size);
+}
 
-    if ((*input & 0x80) != 0x80) {
-        return NULL;
-    }
-
-    for (i = 0; i < uao_table_size; i++) {
-        gchar high = input[0] & 0xFF;
-        gchar low = input[1] & 0xFF;
-        if (big5[2*i] == high && big5[2*i + 1] == low) {
-            return g_utf16_to_utf8(utf16 + 2*i, -1, NULL, (glong*) size, NULL);
-        }
-    }
-
-    return NULL;
+gchar* uao241_u2b(const gchar* input, gsize* size)
+{
+    return uao_u2b(utf16, big5, uao_table_size, input, size);
 }
