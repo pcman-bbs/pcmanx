@@ -32,6 +32,7 @@
 #include <gdk/gdkx.h>
 #include <pango/pangoxft.h>
 #include "font.h"
+#include "cfontconfig.h"
 
 using namespace std;
 
@@ -128,7 +129,7 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_bHorizontalCenterAlign = false;
 	m_bVerticalCenterAlign = false;
-    m_UAO = 0;
+	m_UAO = 0;
 
 	m_CancelSel = false;
 
@@ -524,29 +525,30 @@ int CTermView::DrawChar(int row, int col)
 			if( ' ' != *pLine && '\0' != *pLine )
 			{
 				gsize wl;
-                gchar* utf8 = NULL;
+				gchar* utf8 = NULL;
 
-                switch (m_UAO) {
-                    case 2:
-                        utf8 = uao250_b2u(pLine, &wl);
-                        if (utf8 == NULL) {
-                            utf8 = g_strndup(pLine, 1);
-                            wl = 1;
-                        }
-                        break;
-                    case 1:
-                        utf8 = uao241_b2u(pLine, &wl);
-                        if (utf8 == NULL) {
-                            utf8 = g_strndup(pLine, 1);
-                            wl = 1;
-                        }
-                        break;
-                    default:
-                        utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
-                        break;
-                }
+				switch (m_UAO) {
+					case 2:
+						utf8 = uao250_b2u(pLine, &wl);
+						if (utf8 == NULL) {
+							utf8 = g_strndup(pLine, 1);
+							wl = 1;
+						}
+						break;
+					case 1:
+						utf8 = uao241_b2u(pLine, &wl);
+						if (utf8 == NULL) {
+							utf8 = g_strndup(pLine, 1);
+							wl = 1;
+						}
+						break;
+					default:
+						utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
+						break;
+				}
 
 				if (utf8 != NULL) {
+					gunichar* ucs4 = NULL;
 					XftFont* font = NULL;
 
 					if (isascii (utf8[0])) {
@@ -555,8 +557,20 @@ int CTermView::DrawChar(int row, int col)
 						font = m_Font[FONT_DEFAULT]->GetXftFont();
 					}
 
-					if( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( utf8, wl, left, top, &rect, Fg ) )
+					ucs4 = g_utf8_to_ucs4_fast(utf8, -1, NULL);
+
+					if (ucs4 != NULL && XftCharExists(gdk_x11_get_default_xdisplay(), font, (FcChar32) *ucs4) == FcFalse) {
+						XftFont* fallback = CFontConfig::Instance()->SearchFontFor((FcChar32) *ucs4);
+						if (fallback != NULL) {
+							XftDrawStringUtf8( m_XftDraw, &xftclr, fallback, left, top + fallback->ascent, (FcChar8*)utf8, wl );
+						} else {
+							XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
+						}
+					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( utf8, wl, left, top, &rect, Fg ) ) {
 						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
+					}
+
+					g_free(ucs4);
 					g_free(utf8);
 				}
 			}
@@ -920,6 +934,7 @@ void CTermView::GetCellSize( int &w, int &h )
 void CTermView::SetFont( CFont* font, int font_type )
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_DEFAULT);
+
 	if( !font || m_AutoFontSize)
 		return;
 
@@ -942,6 +957,7 @@ void CTermView::SetFont( CFont* font, int font_type )
 void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type)
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_START);
+
 	if( m_Font[font_type] )
 		delete m_Font[font_type];
 
@@ -960,6 +976,7 @@ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias
 void CTermView::SetFontFamily( string name, int font_type )
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_START);
+
 	if( m_AutoFontSize )
 	{
 		int w, h;

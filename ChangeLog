@@ -1,3 +1,11 @@
+2011-06-27  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/Makefile.am,
+	src/core/cfontconfig.cpp,
+	src/core/cfontconfig.h,
+	src/core/font.cpp,
+	src/core/termview.cpp: Add fontconfig fallback font support.
+
 2011-06-23  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/core/Makefile.am,

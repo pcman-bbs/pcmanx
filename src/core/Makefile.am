@@ -23,6 +23,7 @@ libpcmanx_core_la_SOURCES = \
 	termdata.cpp termdata.h \
 	view.cpp view.h \
 	font.cpp font.h \
+	cfontconfig.cpp cfontconfig.h \
 	stringutil.cpp stringutil.h \
 	widget.cpp widget.h \
 	termview.cpp termview.h \
