@@ -1,14 +1,16 @@
 Version 1.1 - ???
 * Feature: UAO support.
 
+
 Version 1.0 - April 2011
 
 * Feature: Support IPv6 connection.
 * Feature: Change default font family to 'WenQuanYi Micro Hei Mono'.
+* Feature: Remove deprecated Mozilla/Firefox plugin.
 * Bugfix: Fix libnotify 0.7.0 API compatibility.
 * Bugfix: Fix compilation error of CStie.
 * Bugfix: Fix ASCII art painting issue.
-* Bugfix: Remove deprecated firefox plugin.
+
 
 Version 0.3.9 - August 2009
 
@@ -33,6 +35,7 @@ Version 0.3.9 - August 2009
 * Bugfix: Respect user preference about showing/hiding status bar.
 * Bugfix: Avoid SegFault when closing a disconnected tab.
 * Bugfix: Trim trailing spaces of each line when downloading articles.
+
 
 Version 0.3.8 - August 2008
 

@@ -1,5 +1,11 @@
 2011-06-28  Jim Huang  <jserv@0xlab.org>
 
+	* NEWS,
+	README: Mozilla/Firefox Plugin support was removed, and the
+	documentation should be reflected as well.
+
+2011-06-28  Jim Huang  <jserv@0xlab.org>
+
 	* src/core/uao250.c,
 	src/core/uao250.h,
 	src/core/uao241.c,

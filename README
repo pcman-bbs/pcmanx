@@ -9,10 +9,6 @@ and here are the latest options:
 
   --enable-static	Enable static build.
   --disable-shared	Disabled dynamic build. [Default: Dynamic]
-			If dynamic build enabled (default), the build results
-			in libpcmanx_core.so as the shared library for the 
-			standalone program and the plugin (if enabled). You
-			can avoid this via the combination of the two options.
   --enable-debug	Enable debugging support or not [Default: Disabled]
 			It will cause PCManX to dump more detail informations.
 
@@ -25,9 +21,6 @@ and here are the latest options:
 			messages. [Default: Enabled]
   --disable-external	Disable the using of external SSH and Telnet program.
 			[Default: Enabled]
-  --enable-plugin	Enable the build of Mozilla/Firefox plugin for PCManX.
-			You should install the development packages of Mozilla
-			/ Firefox. [Default: Disabled]
   --disable-nancy	Disable NancyBot. ( Disable auto-reply waterballs )
 			[Default: Enabled]
 
@@ -44,16 +37,6 @@ and here are the latest options:
 			[Default: Disabled]
   --enable-proxy	Enable proxy server support
 			[Default: Disabled]
-
-For example, if you are willing to create a special build dedicated to full-
-functional PCManX as standalone program and an independent plugin (no shared
-libraries), you can invoke the script as following:
-
-  # ./configure \
-	--prefix=/usr \
-	--enable-static \
-	--disable-shared \
-	--enable-plugin
 
 
 Runtime Options
