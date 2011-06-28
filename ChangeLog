@@ -1,3 +1,10 @@
+2011-06-29  Jim Huang  <jserv@0xlab.org>
+
+	* src/pcmanx_gtk2.cpp (main): Set program name to make gnome-shell
+	happy, which seems to obtain the name from argv[0] instead of Gtk+
+	properties.
+	Close issue #41
+
 2011-06-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* NEWS: fontconfig fallback font support.

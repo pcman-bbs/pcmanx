@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 		/* GTK requires a program's argc and argv variables, and
 		 * requires that they be valid. Set it up. */
 		int fake_argc = 1;
-		char *_fake_argv[] = { (char *) "", NULL };
+		char *_fake_argv[] = { (char *) "pcmanx", NULL };
 		char **fake_argv = _fake_argv;
 
 		gtk_init (&fake_argc, &fake_argv);
