@@ -1,5 +1,6 @@
 Version 1.1 - ???
 * Feature: UAO support.
+* Feature: fontconfig fallback font support.
 
 
 Version 1.0 - April 2011
