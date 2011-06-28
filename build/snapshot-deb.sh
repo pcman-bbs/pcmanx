@@ -41,6 +41,8 @@ sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)-svn\([0-9]*\)\]/AC_IN
 
 pushd "pcmanx-gtk2-${VER}"
 cp -a ../../debian .
+mkdir -p debian/source
+echo "3.0 (quilt)" > debian/source/format
 cat > debian/changelog <<ENDLINE
 pcmanx-gtk2 (${VER}-1) experimental; urgency=low
 
