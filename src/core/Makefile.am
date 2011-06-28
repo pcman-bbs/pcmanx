@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libpcmanx_core.la
 INCLUDES = \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/charset \
 	$(GUI_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
@@ -14,7 +15,9 @@ PROXY_SOURCES = \
 	proxy.c proxy.h
 endif
 
-libpcmanx_core_la_LIBADD = $(GUI_LIBS)
+libpcmanx_core_la_LIBADD = \
+	$(top_builddir)/src/charset/libpcmanx_charset.la \
+	$(GUI_LIBS)
 libpcmanx_core_la_SOURCES = \
 	$(PROXY_SOURCES) \
 	pcmanx_utils.h \
@@ -29,7 +32,4 @@ libpcmanx_core_la_SOURCES = \
 	termview.cpp termview.h \
 	termsel.cpp termsel.h \
 	fileutil.c fileutil.h \
-	uao.c uao.h \
-	uao241.c uao241.h \
-	uao250.c uao250.h \
 	pkgver.c

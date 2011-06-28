@@ -1,4 +1,4 @@
-SUBDIRS = core
+SUBDIRS = charset core
 
 localedir = $(datadir)/locale
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la

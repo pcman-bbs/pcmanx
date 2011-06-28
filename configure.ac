@@ -658,6 +658,7 @@ AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
+	src/charset/Makefile
 	src/core/Makefile
 	po/Makefile.in
 	data/Makefile

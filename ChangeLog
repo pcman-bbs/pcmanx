@@ -1,3 +1,18 @@
+2011-06-28  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/uao250.c,
+	src/core/uao250.h,
+	src/core/uao241.c,
+	src/core/uao241.h,
+	src/core/uao.c,
+	src/core/uao.h: Move to src/charset to simplify libpcmanx_core
+
+	* src/charset: Implement UAO routines.
+
+	* src/core/Makefile.am,
+	src/Makefile.am,
+	configure.ac: Ditto.
+
 2011-06-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* build/snapshot-deb.sh: Use "3.0 (quilt)" as the package source format.
