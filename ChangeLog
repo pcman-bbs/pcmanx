@@ -10,6 +10,7 @@
 	* NEWS: fontconfig fallback font support.
 	* src/core/cfontconfig.cpp,
 	src/core/cfontconfig.h: Improve the algorithm of fontconfig fallback font.
+	* src/core/cfontconfig.cpp: Avoid memory leak.
 
 2011-06-28  Jim Huang  <jserv@0xlab.org>
 

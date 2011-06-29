@@ -85,6 +85,7 @@ CFontConfig::~CFontConfig(void)
 
         XftFontClose(display, (*it)->font);
         g_free((*it)->name);
+        delete *it;
     }
 
     FcFini();
