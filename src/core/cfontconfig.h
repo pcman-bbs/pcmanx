@@ -30,10 +30,12 @@
 
 using namespace std; 
 
+struct CFontPack;
+
 class CFontConfig {
     private:
         CFontConfig(void);
-        vector<XftFont*> fonts;
+        vector<CFontPack*> fonts;
     public:
         ~CFontConfig(void);
         static CFontConfig* Instance(void);

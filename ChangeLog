@@ -8,6 +8,8 @@
 2011-06-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* NEWS: fontconfig fallback font support.
+	* src/core/cfontconfig.cpp,
+	src/core/cfontconfig.h: Improve the algorithm of fontconfig fallback font.
 
 2011-06-28  Jim Huang  <jserv@0xlab.org>
 

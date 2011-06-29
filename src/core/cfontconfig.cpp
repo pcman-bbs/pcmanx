@@ -28,6 +28,12 @@
 
 #include "cfontconfig.h"
 
+struct CFontPack {
+    gchar*   name;
+    XftFont* font;
+    bool     check;
+};
+
 CFontConfig::CFontConfig(void)
 {
     FcInit();
@@ -40,7 +46,9 @@ CFontConfig::CFontConfig(void)
     FcFontSet* patterns = FcFontSort(0, pattern, FcTrue, 0, NULL);
 
     for (int i = 0; i < patterns->nfont; i++) {
+
         FcPattern* font_pattern = FcFontRenderPrepare(NULL, pattern, patterns->fonts[i]);
+
         if (font_pattern) {
             FcFontSetAdd(font_set, font_pattern);
         }
@@ -49,24 +57,20 @@ CFontConfig::CFontConfig(void)
     FcFontSetSortDestroy(patterns);
     FcPatternDestroy(pattern);
 
-    Display *display = gdk_x11_get_default_xdisplay();
-    gint screen = gdk_x11_get_default_screen();
-
     for (int i = 0; i < font_set->nfont; i++) {
+
         FcPattern* font = FcPatternFilter(font_set->fonts[i], NULL);
         FcChar8* family = NULL;
+
         if (FcPatternGetString(font, FC_FAMILY, 0, &family) == FcResultMatch) {
-            XftFont* xft_font = XftFontOpen(display, screen,
-                    FC_FAMILY, FcTypeString, family,
-                    FC_SIZE, FcTypeDouble, (double) 16,
-                    FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
-                    FC_ANTIALIAS, FcTypeBool, FcTrue,
-                    XFT_CORE, FcTypeBool, FcFalse,
-                    NULL);
-            if (xft_font) {
-                fonts.push_back(xft_font);
-            }
+
+            CFontPack* pack = new CFontPack();
+            pack->name = g_strdup((gchar*)family);
+            pack->font = NULL;
+            pack->check = false;
+            fonts.push_back(pack);
         }
+
         FcPatternDestroy(font);
     }
 
@@ -76,9 +80,13 @@ CFontConfig::CFontConfig(void)
 CFontConfig::~CFontConfig(void)
 {
     Display *display = gdk_x11_get_default_xdisplay();
-    for (vector<XftFont*>::iterator it = fonts.begin(); it != fonts.end(); it++) {
-        XftFontClose(display, *it);
+
+    for (vector<CFontPack*>::iterator it = fonts.begin(); it != fonts.end(); it++) {
+
+        XftFontClose(display, (*it)->font);
+        g_free((*it)->name);
     }
+
     FcFini();
 }
 
@@ -91,9 +99,24 @@ CFontConfig* CFontConfig::Instance(void)
 XftFont* CFontConfig::SearchFontFor(FcChar32 ucs4)
 {
     Display *display = gdk_x11_get_default_xdisplay();
-    for (vector<XftFont*>::iterator it = fonts.begin(); it != fonts.end(); it++) {
-        if (XftCharExists(display, *it, ucs4) == FcTrue) {
-            return *it;
+    gint screen = gdk_x11_get_default_screen();
+
+    for (vector<CFontPack*>::iterator it = fonts.begin(); it != fonts.end(); it++) {
+
+        if ((*it)->check == false) {
+
+            (*it)->font = XftFontOpen(display, screen,
+                    FC_FAMILY, FcTypeString, (*it)->name,
+                    FC_SIZE, FcTypeDouble, (double) 16,
+                    FC_WEIGHT, FcTypeInteger, FC_WEIGHT_MEDIUM,
+                    FC_ANTIALIAS, FcTypeBool, FcTrue,
+                    XFT_CORE, FcTypeBool, FcFalse,
+                    NULL);
+            (*it)->check = true;
+        }
+
+        if (XftCharExists(display, (*it)->font, ucs4) == FcTrue) {
+            return (*it)->font;
         }
     }
     return NULL;
