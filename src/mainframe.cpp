@@ -654,9 +654,9 @@ void CMainFrame::OnQuit(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::LoadIcons()
 {
-	m_MainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_xpm);
-	m_InverseMainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_inverse_xpm);
-	m_ConnIcon = gdk_pixbuf_new_from_xpm_data((const char**)conn_xpm);
+	m_MainIcon = gdk_pixbuf_new_from_xpm_data(pcmanx_xpm);
+	m_InverseMainIcon = gdk_pixbuf_new_from_xpm_data(pcmanx_inverse_xpm);
+	m_ConnIcon = gdk_pixbuf_new_from_xpm_data(conn_xpm);
 }
 
 void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)

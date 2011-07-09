@@ -7,6 +7,10 @@
 	* NEWS,
 	src/pcmanx_inverse_xpm.xpm,
 	src/pcmanx_xpm.xpm: Adopting new icon design. (Fixes issue 33)
+	* src/conn_xpm.xpm,
+	src/mainframe.cpp,
+	src/pcmanx_inverse_xpm.xpm,
+	src/pcmanx_xpm.xpm: Fix compilation error.
 
 2011-06-29  Jim Huang  <jserv@0xlab.org>
 
