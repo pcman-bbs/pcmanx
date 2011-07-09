@@ -4,6 +4,9 @@
 	data/Makefile.am,
 	data/pcmanx.png,
 	data/pcmanx.svg: Adopting new icon design. (Fixes issue 33)
+	* NEWS,
+	src/pcmanx_inverse_xpm.xpm,
+	src/pcmanx_xpm.xpm: Adopting new icon design. (Fixes issue 33)
 
 2011-06-29  Jim Huang  <jserv@0xlab.org>
 
