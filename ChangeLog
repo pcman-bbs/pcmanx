@@ -1,3 +1,10 @@
+2011-07-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* Makefile.am,
+	data/Makefile.am,
+	data/pcmanx.png,
+	data/pcmanx.svg: Adopting new icon design. (Fixes issue 33)
+
 2011-06-29  Jim Huang  <jserv@0xlab.org>
 
 	* src/pcmanx_gtk2.cpp (main): Set program name to make gnome-shell

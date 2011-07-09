@@ -35,4 +35,6 @@ desktopdir = $(datadir)/applications
 desktop_DATA = pcmanx.desktop
 
 icondir = $(datadir)/pixmaps
-icon_DATA = data/pcmanx.png
+icon_DATA = \
+			data/pcmanx.png \
+			data/pcmanx.svg
