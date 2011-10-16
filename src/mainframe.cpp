@@ -309,8 +309,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
 #ifdef USE_WGET
     {"update_bbs_list", GTK_STOCK_REFRESH, _("_Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
 #endif
-    {"new_con1", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
-    {"new_con2", GTK_STOCK_NETWORK, _("_New Connection"), "<Ctrl>N", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
@@ -322,14 +321,14 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"first_con",GTK_STOCK_GO_UP, _("_First Page"),"<Ctrl>Home", _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
     {"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), "<Ctrl>End", _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
-    {"quit", GTK_STOCK_QUIT, _("_Quit"), "<Ctrl>Q", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
     {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
     {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
     {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
     {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
-    {"select_all", NULL, _("Select A_ll"), "<Ctrl>A", NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
+    {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
     {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
     {"favorites_menu", NULL, _("F_avorites"), NULL, NULL, NULL},
@@ -380,7 +379,7 @@ static const char *ui_info =
 #ifdef USE_WGET
   "      <menuitem action='update_bbs_list'/>"
 #endif
-  "      <menuitem action='new_con1'/>"
+  "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
   "      <menuitem action='close'/>"
   "      <separator/>"
@@ -436,7 +435,7 @@ static const char *ui_info =
   "  <toolbar>"
   "    <separator/>"
   "    <toolitem action='site_list'/>"
-  "    <toolitem action='new_con1'/>"
+  "    <toolitem action='new_con'/>"
   "    <toolitem action='reconnect'/>"
   "    <toolitem action='close'/>"
   "    <separator/>"
@@ -473,7 +472,6 @@ static const char *ui_info =
 #endif
 
   // alternative accelerators
-  " <accelerator action='new_con2'/>"
   " <accelerator action='close2'/>"
   " <accelerator action='reconnect1'/>"
   " <accelerator action='next_con1'/>"
