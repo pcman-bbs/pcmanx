@@ -335,8 +335,8 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View"), NULL, NULL, NULL},
-    {"font", GTK_STOCK_SELECT_FONT,  _("_Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
     {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"non_ascii_font", GTK_STOCK_SELECT_FONT,  _("Non-ASCII _Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
 #ifdef USE_NANCY
     {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
@@ -408,8 +408,8 @@ static const char *ui_info =
   "      <menuitem action='edit_fav'/>"
   "    </menu>"
   "    <menu action='view_menu'>"
-  "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
+  "      <menuitem action='non_ascii_font'/>"
   "      <separator/>"
 #ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
@@ -683,7 +683,7 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	string *font_family = NULL;
 	int font_type;
 	const char *font_action = gtk_action_get_name(GTK_ACTION(mitem));
-	if (!strcmp(font_action, "font")) {
+	if (!strcmp(font_action, "non_ascii_font")) {
 		font_size = &AppConfig.FontSize;
 		font_family = &AppConfig.FontFamily;
 		font_type = CTermView::FONT_DEFAULT;

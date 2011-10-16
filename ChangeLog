@@ -2,6 +2,9 @@
 
 	* src/mainframe.cpp: Adjust simple mode's behavior not to hide menu
 	bar.
+	* src/mainframe.cpp,
+	po/zh_TW.po,
+	po/zh_CN.po: Polish string and translation of font settings.
 
 2011-07-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
