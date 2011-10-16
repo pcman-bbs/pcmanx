@@ -321,7 +321,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"first_con",GTK_STOCK_GO_UP, _("_First Page"),"<Ctrl>Home", _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
     {"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), "<Ctrl>End", _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
-    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
+    {"quit", GTK_STOCK_QUIT, _("_Quit"), "<Ctrl>Q", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
     {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
     {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},

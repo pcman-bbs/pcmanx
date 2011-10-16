@@ -2,6 +2,7 @@
 
 	* src/mainframe.cpp: Adjust simple mode's behavior not to hide menu
 	bar.
+	* src/mainframe.cpp: Add <Ctrl>Q as hotkey to quit program.
 
 2011-07-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
