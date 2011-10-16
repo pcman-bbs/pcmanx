@@ -329,7 +329,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
     {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
-    {"select_all", NULL, _("Select A_ll"), "", NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
+    {"select_all", NULL, _("Select A_ll"), "<Ctrl>A", NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
     {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
     {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
     {"favorites_menu", NULL, _("F_avorites"), NULL, NULL, NULL},

@@ -4,6 +4,7 @@
 	bar.
 	* src/mainframe.cpp: Add <Ctrl>Q as hotkey to quit program.
 	* src/mainframe.cpp: Add <Ctrl>N as hotkey to open new connection.
+	* src/mainframe.cpp: Add <Ctrl>A as hotkey to select all.
 
 2011-07-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
