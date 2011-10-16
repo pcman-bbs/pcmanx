@@ -754,14 +754,12 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if (_this->m_Mode != SIMPLE_MODE) {
 		_this->m_Mode = SIMPLE_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
 	} else {
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);

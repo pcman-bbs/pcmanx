@@ -1,3 +1,8 @@
+2011-10-16  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/mainframe.cpp: Adjust simple mode's behavior not to hide menu
+	bar.
+
 2011-07-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* Makefile.am,
