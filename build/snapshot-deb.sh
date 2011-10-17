@@ -37,7 +37,7 @@ else
 fi
 
 ## rollback version number ##
-sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)-svn\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
+sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)+svn\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
 
 pushd "pcmanx-gtk2-${VER}"
 cp -a ../../debian .
