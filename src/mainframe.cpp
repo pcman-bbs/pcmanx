@@ -25,6 +25,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 
 #include "mainframe.h"
 
@@ -166,11 +167,18 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 
 CMainFrame::CMainFrame()
 {
+	char* desktop = getenv("XDG_CURRENT_DESKTOP");
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+
+	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
+	    m_Unity = true;
+	} else {
+	    m_Unity = false;
+	}
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "PCManX", "pcmanx");
@@ -754,12 +762,18 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if (_this->m_Mode != SIMPLE_MODE) {
 		_this->m_Mode = SIMPLE_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		if (_this->m_Unity == false) {
+		    gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		}
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
 	} else {
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
+		if (_this->m_Unity == false) {
+		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		}
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);

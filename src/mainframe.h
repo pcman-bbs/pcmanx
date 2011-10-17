@@ -211,6 +211,7 @@ protected:
 
 private:
 	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
+	bool m_Unity;
 };
 
 #endif

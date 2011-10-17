@@ -1,3 +1,8 @@
+2011-10-17  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/mainframe.cpp,
+	src/mainframe.h: Only showing menu bar in Unity, and hiding it in others.
+
 2011-10-16  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/mainframe.cpp: Adjust simple mode's behavior not to hide menu
