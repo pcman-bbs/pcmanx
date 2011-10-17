@@ -3,7 +3,7 @@ Section: x11
 Priority: extra
 Maintainer: PCManX Development Group <pcmanx@googlegroups.com>
 Build-Depends: debhelper (>= 7.0.50~), autotools-dev, intltool, libgtk2.0-dev, libnotify-dev, libx11-dev
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: http://code.google.com/p/pcmanx-gtk2/
 Vcs-Browser: http://code.google.com/p/pcmanx-gtk2/source/browse/
 Vcs-Svn: http://pcmanx-gtk2.googlecode.com/svn/
