@@ -19,7 +19,7 @@ esac
 
 ## change version number ##
 if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
-    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2-svn${REV}]/" ../configure.ac
+    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+svn${REV}]/" ../configure.ac
 fi
 
 [ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
@@ -44,7 +44,7 @@ cp -a ../../debian .
 mkdir -p debian/source
 echo "3.0 (quilt)" > debian/source/format
 cat > debian/changelog <<ENDLINE
-pcmanx-gtk2 (${VER}-1) experimental; urgency=low
+pcmanx-gtk2 (${VER}-1) UNRELEASED; urgency=low
 
   * Development release.
 

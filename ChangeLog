@@ -5,6 +5,7 @@
 	* pcmanx.desktop.in: Encoding field is deprecated according to
 	http://standards.freedesktop.org/desktop-entry-spec/1.0/apc.html
 	* debian/control: Update Debian policy version to 3.9.2
+	* build/snapshot-deb.sh: Polish script to generate Debian package.
 
 2011-10-16  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
