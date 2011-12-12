@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7.0.50~), autotools-dev, intltool, libgtk2.0-dev, l
 Standards-Version: 3.9.2
 Homepage: http://code.google.com/p/pcmanx-gtk2/
 Vcs-Browser: http://code.google.com/p/pcmanx-gtk2/source/browse/
-Vcs-Svn: http://pcmanx-gtk2.googlecode.com/svn/
+Vcs-Git: http://code.google.com/p/pcmanx-gtk2/
 
 Package: pcmanx-gtk2
 Architecture: any
