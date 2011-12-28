@@ -29,22 +29,71 @@ gchar* uao_u2b(const gunichar2* utf16, const gchar* big5, const gint table_size,
     gint i = 0;
 
     gunichar2* pattern = g_utf8_to_utf16(input, -1, NULL, NULL, NULL);
+    gunichar2* ptr = pattern;
+    gchar* result = NULL;
+    gsize counter = 0;
 
     if (pattern == NULL) {
         return NULL;
     }
 
-    for (i = 0; i < table_size; i++) {
-        if (utf16[2*i] == *pattern) {
-            if (size != NULL) {
-                *size = 2;
+    do {
+        gchar* word = NULL;
+        for (i = 0; i < table_size; i++) {
+            if (utf16[2*i] == *ptr) {
+                word = g_strndup(big5 + 2*i, 2);
+                break;
             }
-            g_free(pattern);
-            return g_strndup(big5 + 2*i, 2);
         }
-    }
+        /* In UAO table */
+        if (word != NULL) {
+            gchar* tmp = NULL;
+            if (result == NULL) {
+                tmp = g_strconcat(word, NULL);
+            }
+            else {
+                tmp = g_strconcat(result, word, NULL);
+                g_free(result);
+            }
+            counter += 2;
+            result = tmp;
+        }
+        /* Not in UAO table */
+        else {
+            gunichar2 str[2] = {0, 0};
+            gchar* utf8 = NULL;
+            gchar* tmp = NULL;
+
+            str[0] = *ptr;
+            utf8 = g_utf16_to_utf8(str, -1, NULL, NULL, NULL);
+
+            /* Not in ASCII table */
+            if ((*utf8 & 0xFF) > 0x7E && *(utf8+1) != 0) {
+                g_free(utf8);
+                utf8 = g_strndup("\x9C\xD1", 2);
+                counter += 2;
+            } else {
+                counter += 1;
+            }
+
+            if (result == NULL) {
+                tmp = g_strconcat(utf8, NULL);
+            }
+            else {
+                tmp = g_strconcat(result, utf8, NULL);
+                g_free(result);
+            }
+            g_free(utf8);
+            result = tmp;
+        }
+        ptr++;
+    } while (*ptr != 0);
 
     g_free(pattern);
 
-    return NULL;
+    if (size != NULL) {
+        *size = counter;
+    }
+
+    return result;
 }

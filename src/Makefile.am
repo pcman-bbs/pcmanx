@@ -8,6 +8,7 @@ bin_PROGRAMS = pcmanx
 INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/charset \
 	$(GUI_CFLAGS) \
 	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \

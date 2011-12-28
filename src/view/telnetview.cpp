@@ -32,6 +32,8 @@
 
 #include "telnetview.h"
 #include "telnetcon.h"
+#include "uao241.h"
+#include "uao250.h"
 
 #if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
@@ -635,8 +637,21 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			// Only when no control character is in this string can
 			// autowrap be enabled
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
-			gsize convl;
-			gchar* locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
+			gsize convl = 0;
+			gchar* locale_text = NULL;
+			INFO("%s %s", __func__, text.c_str());
+			/* UAO input support */
+			switch (m_UAO) {
+				case 2:
+					locale_text = uao250_u2b(text.c_str(), &convl);
+					break;
+				case 1:
+					locale_text = uao241_u2b(text.c_str(), &convl);
+					break;
+				default:
+					locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
+					break;
+			}
 			if( !locale_text )
 				return;
 			// FIXME: Convert UTF-8 string to locale string.to prevent invalid UTF-8 string
