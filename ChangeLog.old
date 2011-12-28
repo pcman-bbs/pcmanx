@@ -1,3 +1,5 @@
+Generate ChangeLog from git commit messages after this.
+
 2011-10-17  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* src/mainframe.cpp,
