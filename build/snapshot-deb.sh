@@ -5,22 +5,16 @@ set -e -x
 [ -z "${DEBFULLNAME}" ] && export DEBFULLNAME="PCManX Development Group"
 [ -z "${DEBEMAIL}" ] && export DEBEMAIL="pcmanx@googlegroups.com"
 
-[ -d '.svn' ] && SCM='svn'
-[ -d '../.git' ] && SCM='git'
-
-case "${SCM}" in
-    ('svn')
-    REV="$(LANG=C svn info .. | grep 'Last Changed Rev' | awk '{ print $4 }')"
-    ;;
-    ('git')
-    REV="$(LANG=C cd .. && git svn info | grep 'Last Changed Rev' | awk '{ print $4 }')"
-    ;;
-esac
+DATE=$(date -d"$(git show -s --format=%ci HEAD)" +%Y%m%d)
+TIME=$(date -d"$(git show -s --format=%ci HEAD)" +%H%M%S)
+HASH=$(git show -s --format=%h HEAD)
 
 ## change version number ##
 if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
-    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+svn${REV}]/" ../configure.ac
+    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}]/" ../configure.ac
 fi
+
+[ ! -e ../ChangeLog ] && ./changelog.sh > ../ChangeLog
 
 [ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
 [ ! -f 'Makefile' ] && ../configure
@@ -37,14 +31,14 @@ else
 fi
 
 ## rollback version number ##
-sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)+svn\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
+sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)+\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
 
 pushd "pcmanx-gtk2-${VER}"
 cp -a ../../debian .
 mkdir -p debian/source
 echo "3.0 (quilt)" > debian/source/format
 cat > debian/changelog <<ENDLINE
-pcmanx-gtk2 (${VER}-1) UNRELEASED; urgency=low
+pcmanx-gtk2 (${VER}-0~${TIME}+git${HASH}) UNRELEASED; urgency=low
 
   * Development release.
 
