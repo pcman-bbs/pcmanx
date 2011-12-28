@@ -16,6 +16,7 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in \
 	ChangeLog \
+	ChangeLog.old \
 	Doxygen.in \
 	pcmanx.desktop.in \
 	pcmanx-gtk2.spec.in
