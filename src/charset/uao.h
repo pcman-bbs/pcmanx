@@ -18,12 +18,13 @@ extern "C"
      * @param utf16 UTF16 list.
      * @param list_size List size.
      * @param input BIG-5 encoding sequence.
+     * @param limit The maximum of transcoding size.
      * @param size The size of UTF-8 encoding sequence.
      *
      * @return UTF-8 encoding sequence.
      * @retval NULL If input doesn't exist at UAO.
      */
-    extern gchar* uao_b2u(const gchar* big5, const gunichar2* utf16, const gint list_size, const gchar* input, gsize* size);
+    extern gchar* uao_b2u(const gchar* big5, const gunichar2* utf16, const gint list_size, const gchar* input, gsize limit, gsize* size);
 
     /** 
      * @brief Convert UTF-8 to BIG-5.
@@ -32,12 +33,13 @@ extern "C"
      * @param big5 BIG5 list.
      * @param list_size List size.
      * @param input UTF-8 encoding sequence.
+     * @param limit The maximum of transcoding size.
      * @param size The size of BIG-5 encoding sequence.
      * 
      * @return BIG-5 encoding sequence.
      * @retval NULL If input doesn't exist at UAO.
      */
-    extern gchar* uao_u2b(const gunichar2* utf16, const gchar* big5, const gint list_size, const gchar* input, gsize* size);
+    extern gchar* uao_u2b(const gunichar2* utf16, const gchar* big5, const gint list_size, const gchar* input, gsize limit, gsize* size);
 
 #ifdef __cplusplus
 }

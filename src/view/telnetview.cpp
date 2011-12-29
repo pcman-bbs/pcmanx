@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -69,7 +70,19 @@ static GtkWidget* input_menu_item = NULL;
 void CTelnetView::OnTextInput(const gchar* text)
 {
 	gsize l;
-	gchar* _text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
+	gchar* _text = NULL;
+	/* UAO input support */
+	switch (m_UAO) {
+		case 2:
+			_text = uao250_u2b(text, strlen(text), &l);
+			break;
+		case 1:
+			_text = uao241_u2b(text, strlen(text), &l);
+			break;
+		default:
+			_text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
+			break;
+	}
 	if( _text )
 	{
 		((CTelnetCon*)m_pTermData)->Send(_text, l);
@@ -639,14 +652,14 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
 			gsize convl = 0;
 			gchar* locale_text = NULL;
-			INFO("%s %s", __func__, text.c_str());
-			/* UAO input support */
+
+			/* UAO paste support */
 			switch (m_UAO) {
 				case 2:
-					locale_text = uao250_u2b(text.c_str(), &convl);
+					locale_text = uao250_u2b(text.c_str(), 0, &convl);
 					break;
 				case 1:
-					locale_text = uao241_u2b(text.c_str(), &convl);
+					locale_text = uao241_u2b(text.c_str(), 0, &convl);
 					break;
 				default:
 					locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
@@ -795,4 +808,4 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	}
 	delete []cmdline;
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

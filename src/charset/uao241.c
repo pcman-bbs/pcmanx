@@ -1,6 +1,4 @@
 /* -*- coding: utf-8; indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*- */
-/* vim:set fileencodings=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
-
 /* http://moztw.org/docs/big5/table/uao241-b2u.txt */
 
 #include <glib.h>
@@ -39580,12 +39578,13 @@ static const gunichar2 utf16[] = {
 	0x8288, 0x0,
 };
 
-gchar* uao241_b2u(const gchar* input, gsize* size)
+gchar* uao241_b2u(const gchar* input, gsize limit, gsize* size)
 {
-    return uao_b2u(big5, utf16, uao_table_size, input, size);
+    return uao_b2u(big5, utf16, uao_table_size, input, limit, size);
 }
 
-gchar* uao241_u2b(const gchar* input, gsize* size)
+gchar* uao241_u2b(const gchar* input, gsize limit, gsize* size)
 {
-    return uao_u2b(utf16, big5, uao_table_size, input, size);
+    return uao_u2b(utf16, big5, uao_table_size, input, limit, size);
 }
+/* vim: set fileencodings=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4: */

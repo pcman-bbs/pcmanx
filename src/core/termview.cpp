@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -524,23 +525,16 @@ int CTermView::DrawChar(int row, int col)
 		{
 			if( ' ' != *pLine && '\0' != *pLine )
 			{
-				gsize wl;
+				gsize wl = 0;
 				gchar* utf8 = NULL;
 
+				/* UAO display support */
 				switch (m_UAO) {
 					case 2:
-						utf8 = uao250_b2u(pLine, &wl);
-						if (utf8 == NULL) {
-							utf8 = g_strndup(pLine, 1);
-							wl = 1;
-						}
+						utf8 = uao250_b2u(pLine, w, &wl);
 						break;
 					case 1:
-						utf8 = uao241_b2u(pLine, &wl);
-						if (utf8 == NULL) {
-							utf8 = g_strndup(pLine, 1);
-							wl = 1;
-						}
+						utf8 = uao241_b2u(pLine, w, &wl);
 						break;
 					default:
 						utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
@@ -903,10 +897,22 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 	else {
 		text = m_pTermData->GetSelectedText(trim);
 		gsize wl = 0;
-		const gchar* utext = g_convert_with_fallback(
-				text.c_str(), text.length(),
-				"utf-8", m_pTermData->m_Encoding.c_str(),
-				(gchar *) "?", NULL, &wl, NULL);
+		const gchar* utext = NULL;
+		/* UAO copy support */
+		switch (m_UAO) {
+			case 2:
+				utext = uao250_b2u(text.c_str(), text.length(), &wl);
+				break;
+			case 1:
+				utext = uao241_b2u(text.c_str(), text.length(), &wl);
+				break;
+			default:
+				utext = g_convert_with_fallback(
+						text.c_str(), text.length(),
+						"utf-8", m_pTermData->m_Encoding.c_str(),
+						(gchar *) "?", NULL, &wl, NULL);
+				break;
+		}
 		if(!utext)
 			return;
 
@@ -1107,4 +1113,4 @@ void CTermView::OnHyperlinkClicked(string url UNUSED)	// Overriden in derived cl
 {
 
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */
