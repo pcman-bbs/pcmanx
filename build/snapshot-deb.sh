@@ -13,8 +13,6 @@ if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/nu
     sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}~git${HASH}]/" ../configure.ac
 fi
 
-[ ! -e ../ChangeLog ] && ./changelog.sh > ../ChangeLog
-
 [ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
 [ ! -f 'Makefile' ] && ../configure
 
