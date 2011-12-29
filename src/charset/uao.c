@@ -70,7 +70,7 @@ gchar* uao_u2b(const gunichar2* utf16, const gchar* big5, const gint table_size,
             /* Not in ASCII table */
             if ((*utf8 & 0xFF) > 0x7E && *(utf8+1) != 0) {
                 g_free(utf8);
-                utf8 = g_strndup("\x9C\xD1", 2);
+                utf8 = g_strndup("\xA1\xBC", 2);
                 counter += 2;
             } else {
                 counter += 1;
