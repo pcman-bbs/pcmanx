@@ -966,11 +966,14 @@ void CMainFrame::OnPaste(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
+  int uao = 0;
 	CTelnetCon *con = _this->GetCurCon();
 	if (!con)
 		return;
+	if(_this->GetCurView())
+    uao = _this->GetCurView()->m_UAO;
 
-	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con);
+	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con, uao);
 	//dlg->Show();
 	dlg->ShowModal();
 	dlg->Destroy();
