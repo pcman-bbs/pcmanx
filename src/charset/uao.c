@@ -122,6 +122,10 @@ gchar* uao_u2b(const gunichar2* utf16, const gchar* big5, const gint table_size,
         /* In UAO table */
         if (word != NULL) {
             gchar* tmp = NULL;
+            if ((*word & 0xFF) == 0xFF && (*(word+1) & 0xFF) == 0xFD) {
+                *word = 0xA1;
+                *(word+1) = 0xBC;
+            }
             if (result == NULL) {
                 tmp = g_strconcat(word, NULL);
             }
