@@ -1,10 +1,10 @@
 /* -*- coding: utf-8; indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*- */
-/* http://moztw.org/docs/big5/table/uao250-b2u.txt */
+/* http://moztw.org/docs/big5/table/uao241-b2u.txt */
 
 #include <glib.h>
 
 #include "uao.h"
-#include "uao250.h"
+#include "uao241.h"
 
 static const gint uao_table_size = 19782;
 
@@ -23406,16 +23406,16 @@ static const gunichar2 utf16[] = {
 	0xE931, 0x0,
 	0xE932, 0x0,
 	0x9C76, 0x0,
-	0x2776, 0x0,
-	0x2777, 0x0,
-	0x2778, 0x0,
-	0x2779, 0x0,
-	0x277A, 0x0,
-	0x277B, 0x0,
-	0x277C, 0x0,
-	0x277D, 0x0,
-	0x277E, 0x0,
-	0x277F, 0x0,
+	0x278A, 0x0,
+	0x278B, 0x0,
+	0x278C, 0x0,
+	0x278D, 0x0,
+	0x278E, 0x0,
+	0x278F, 0x0,
+	0x2790, 0x0,
+	0x2791, 0x0,
+	0x2792, 0x0,
+	0x2793, 0x0,
 	0x9C85, 0x0,
 	0x9C86, 0x0,
 	0x9C87, 0x0,
@@ -39578,13 +39578,8 @@ static const gunichar2 utf16[] = {
 	0x8288, 0x0,
 };
 
-gchar* uao250_b2u(const gchar* input, gsize limit, gsize* size)
+gchar* uao241_b2u(const gchar* input, gsize limit, gsize* size)
 {
     return uao_b2u(big5, utf16, uao_table_size, input, limit, size);
-}
-
-gchar* uao250_u2b(const gchar* input, gsize limit, gsize* size)
-{
-    return uao_u2b(utf16, big5, uao_table_size, input, limit, size);
 }
 /* vim: set fileencodings=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
