@@ -35,11 +35,29 @@ cp -a ../../debian .
 mkdir -p debian/source
 echo "3.0 (quilt)" > debian/source/format
 cat > debian/changelog <<ENDLINE
-pcmanx-gtk2 (${VER}-0) UNRELEASED; urgency=low
+pcmanx-gtk2 (${VER}-0~UNRELEASED1) UNRELEASED; urgency=low
 
   * Development release.
 
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(LANG=C date -R)
 ENDLINE
-debuild -uc -us
+case "$(lsb_release -s -i)" in
+    (Ubuntu)
+	for series in lucid maverick natty oneiric precise; do
+	    sed -i "s/UNRELEASED/$series/g" debian/changelog
+	    dpkg-buildpackage -uc -us -S
+	    sed -i "s/$series/UNRELEASED/g" debian/changelog
+	done
+	;;
+    (Debian)
+	for series in oldstable stable testing unstable; do
+	    sed -i "s/UNRELEASED/$series/g" debian/changelog
+	    dpkg-buildpackage -uc -us -S
+	    sed -i "s/$series/UNRELEASED/g" debian/changelog
+	done
+	;;
+    (*)
+	debuild -us -uc
+	;;
+esac
 popd
