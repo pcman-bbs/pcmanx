@@ -61,9 +61,6 @@ CTelnetView::~CTelnetView()
 
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
-#ifdef USE_WGET
-bool CTelnetView::m_bWgetFiles = false;
-#endif
 
 static GtkWidget* input_menu_item = NULL;
 
@@ -741,27 +738,6 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string sURL)
 {
-#ifdef USE_WGET
-	if (m_bWgetFiles == true) {
-		const char* t_pcURL = sURL.c_str();
-		const char* t_pcDot = strrchr(t_pcURL, '.') + 1;
-		char t_cFileType = strlen(t_pcURL) - (t_pcDot -t_pcURL);
-		if (t_cFileType == 3) {
-			if (strncmp(t_pcDot, "rar", 3) == 0 ||
-				strncmp(t_pcDot, "zip", 3) == 0 ||
-				strncmp(t_pcDot, "tgz", 3) == 0 ||
-				strncmp(t_pcDot, "tbz", 3) == 0)
-			{
-				string t_sURL = sURL;
-				t_sURL.insert(0, "wget ");
-				t_sURL.append(" &");
-				system(t_sURL.c_str());
-				return;
-			}
-		}
-	}
-#endif
-
 #if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )
 	{

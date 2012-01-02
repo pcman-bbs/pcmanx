@@ -84,7 +84,6 @@ AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
-AH_VERBATIM([USE_WGET], [#undef USE_WGET])
 AH_VERBATIM([USE_IPLOOKUP], [#undef USE_IPLOOKUP])
 AH_VERBATIM([USE_PROXY], [#undef USE_PROXY])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
@@ -183,11 +182,6 @@ AC_ARG_ENABLE([external],
 	AS_HELP_STRING([--disable-external],
 		[disable external SSH/Telnet support (default: yes)]),
 	external=$enableval, external="yes")
-
-AC_ARG_ENABLE([wget],
-	AS_HELP_STRING([--enable-wget],
-		[enable wget support (default: no)]),
-	wget=$enableval, wget="no")
 
 AC_ARG_ENABLE([iplookup],
 	AS_HELP_STRING([--enable-iplookup],
@@ -375,17 +369,6 @@ fi
 
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
 AC_SUBST(USE_EXTERNAL)
-
-dnl *********************************************************************
-dnl ** wget support ***********************************
-dnl *********************************************************************
-
-if test "$wget" = "yes"; then
-    AC_DEFINE_UNQUOTED(USE_WGET, [1], [Enable wget support])
-fi
-
-AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
-AC_SUBST(USE_WGET)
 
 dnl *********************************************************************
 dnl ** IP location lookup support ***********************************
@@ -685,7 +668,6 @@ dnl else
 dnl   echo "Python script support............ : $script"
 dnl fi
 echo External SSH/Telnet support...... : $external
-echo wget support..................... : $wget
 echo iplookup support................. : $iplookup
 echo proxy support.................... : $proxy
 echo

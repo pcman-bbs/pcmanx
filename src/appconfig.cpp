@@ -96,9 +96,6 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( ShowTrayIcon )
 #endif
 		CFG_BOOL( ShowStatusBar )
-#ifdef USE_WGET
-		CFG_BOOL( UseWgetFiles )
-#endif
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -354,9 +351,6 @@ void CAppConfig::SetToDefault()
 	PopupNotifier = true;
 	PopupTimeout = 6;
 	MidClickAsClose = true;
-#ifdef USE_WGET
-	UseWgetFiles = false;
-#endif
 
 	CharPaddingX = 0;
 	CharPaddingY = 0;

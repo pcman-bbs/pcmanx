@@ -54,9 +54,6 @@ public:
 
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
 	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
-#ifdef USE_WGET
-	static void setWgetFiles(const bool bBool){ m_bWgetFiles = bBool; }
-#endif
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -80,9 +77,6 @@ protected:
 #endif /* !defined(MOZ_PLUGIN) */
     static string m_WebBrowser;
     static string m_MailClient;
-#ifdef USE_WGET
-	static bool m_bWgetFiles;
-#endif
 };
 
 #endif

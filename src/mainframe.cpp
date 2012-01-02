@@ -149,10 +149,6 @@ void CMainFrame::set_tray_icon()
 #endif
 #endif
 
-#ifdef USE_WGET
-bool CMainFrame::g_bIsUpateHandlerExisted = false;
-bool CMainFrame::g_bUpdateingBBSList = false;
-#endif
 CMainFrame* CMainFrame::g_pMyself = NULL;
 
 gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
@@ -260,9 +256,6 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
-#ifdef USE_WGET
-	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
-#endif
 }
 
 
@@ -315,9 +308,6 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
     {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
-#ifdef USE_WGET
-    {"update_bbs_list", GTK_STOCK_REFRESH, _("_Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
-#endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
@@ -385,9 +375,6 @@ static const char *ui_info =
   "  <menubar>"
   "    <menu action='connect_menu'>"
   "      <menuitem action='site_list'/>"
-#ifdef USE_WGET
-  "      <menuitem action='update_bbs_list'/>"
-#endif
   "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
   "      <menuitem action='close'/>"
@@ -455,9 +442,6 @@ static const char *ui_info =
   "    <separator/>"
   "    <toolitem action='add_to_fav'/>"
   "    <toolitem action='preference'/>"
-#ifdef USE_WGET
-  "    <toolitem action='update_bbs_list'/>"
-#endif
   "    <toolitem action='about'/>"
   "    <separator/>"
   "  </toolbar>"
@@ -838,71 +822,6 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 }
 
-#ifdef USE_WGET
-void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
-{
-	if (g_bIsUpateHandlerExisted == false) {
-		struct sigaction sa;
-		memset(&sa, 0, sizeof(sa));
-		sa.sa_handler = &CMainFrame::updateBBSListHandler;
-		g_pMyself = pThis;
-		sigaction(SIGUSR1, &sa, NULL);
-		sigaction(SIGUSR2, &sa, NULL);
-		g_bIsUpateHandlerExisted = true;
-	}
-
-	if (g_bUpdateingBBSList == false) {
-		pid_t child_pid = 0, parent_pid = getpid();
-
-		g_bUpdateingBBSList = true;
-
-		child_pid = fork();
-		if (child_pid == 0) {
-			int t_nRet = system("wget -O ~/.pcmanx/sitelist.tmp "
-				"http://free.ym.edu.tw/pcman/site_list.utf8 && "
-				"mv -f ~/.pcmanx/sitelist.tmp ~/.pcmanx/sitelist");
-			if (t_nRet == 0)
-				kill(parent_pid, SIGUSR1);
-			else
-				kill(parent_pid, SIGUSR2);
-			exit(0);
-		} else {
-			int stat_val = 0;
-			pid_t stat_pid = 0;
-			sleep(1);
-			stat_pid = wait(&stat_val);
-#ifdef USE_DEBUG
-			if (child_pid != stat_pid)
-				DEBUG("child_pid=%d stat_pid=%d stat_val=%d", child_pid, stat_pid, stat_val);
-#endif
-		}
-	}
-}
-
-void CMainFrame::updateBBSListHandler(int nSignalNumber)
-{
-	if (nSignalNumber == SIGUSR1 || nSignalNumber == SIGUSR2)
-	{
-		char* t_pcSuccess = _( "Update BBS List Success!");
-		char* t_pcFault = _( "Update BBS List Fault.");
-		char* t_pcMessage = NULL;
-
-		if (nSignalNumber == SIGUSR1)
-			t_pcMessage = t_pcSuccess;
-		else
-			t_pcMessage = t_pcFault;
-
-		GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
-			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", t_pcMessage);
-
-		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
-		gtk_dialog_run((GtkDialog*) t_pDialog); // == GTK_RESPONSE_OK)
-		gtk_widget_destroy(t_pDialog);
-		g_bUpdateingBBSList = false;
-	}
-}
-#endif
-
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* pMainFrame)
 {
 	CTelnetView* t_pView = pMainFrame->GetCurView();
@@ -1006,9 +925,6 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
-#ifdef USE_WGET
-	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
-#endif
 
 #if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );

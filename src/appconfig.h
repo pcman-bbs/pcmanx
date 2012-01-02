@@ -98,9 +98,6 @@ public:
 #endif
 	bool ShowStatusBar;
 	bool PopupNotifier;
-#ifdef USE_WGET
-	bool UseWgetFiles;
-#endif
 	int PopupTimeout;
 
 	bool MidClickAsClose;
