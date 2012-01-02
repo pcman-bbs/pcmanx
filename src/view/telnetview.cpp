@@ -532,7 +532,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 			// Show the "Copy Hyperlink" menu.
 			GtkWidget* popup = gtk_menu_new();
 			GtkWidget* item = gtk_image_menu_item_new_with_mnemonic( _("_Copy URL to Clipboard") );
-			GtkWidget* icon = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
+			GtkWidget* icon = gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
 			g_signal_connect( G_OBJECT(item), "activate",
 							G_CALLBACK(on_hyperlink_copy), &do_copy);

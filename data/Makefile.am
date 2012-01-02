@@ -33,5 +33,4 @@ EXTRA_DIST = \
 	$(pcmanx_DATA) \
 	$(pcmanx_script_DATA) \
 	$(pcmanx_nancy_DATA) \
-	pcmanx.png \
 	pcmanx.svg

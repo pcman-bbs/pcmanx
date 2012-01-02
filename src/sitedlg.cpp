@@ -35,8 +35,8 @@ CSiteDlg::CSiteDlg(CWidget* parent, const char* title, CSite& site)
 	m_pSitePage = new CSitePage(m_Site);
 	m_pAutoLoginPage = new CAutoLoginPage(m_Site);
 
-	m_pNotebook->AddPage( m_pSitePage, _("Site Settings"), NULL);
-	m_pNotebook->AddPage( m_pAutoLoginPage, _("Auto Login"), NULL);
+	m_pNotebook->AddPage( m_pSitePage, _("Site Settings") );
+	m_pNotebook->AddPage( m_pAutoLoginPage, _("Auto Login") );
 
 	gtk_box_pack_start( GTK_BOX (dlg->vbox), m_pNotebook->m_Widget, FALSE, FALSE, 4);
 

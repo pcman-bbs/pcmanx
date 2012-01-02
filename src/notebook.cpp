@@ -43,19 +43,20 @@ void CNotebook::InsertPage(int pos, CWidget* page, string title)
 }
 */
 
-int CNotebook::AddPage( CWidget* page, string title, GdkPixbuf* icon)
+int CNotebook::AddPage( CWidget* page, string title, bool icon)
 {
 	GtkWidget* text_label = gtk_label_new(NULL);
 	gtk_widget_show(text_label);
 	gtk_label_set_markup (GTK_LABEL(text_label), title.c_str());
 	INFO("label = %p", text_label);
 	GtkWidget* label = text_label;
-	if(icon)
+
+	if (icon == true)
 	{
 		GtkWidget* hbox = gtk_hbox_new(false, 4);
 		gtk_widget_show(hbox);
 //		g_object_ref(icon);
-		GtkWidget* image = gtk_image_new_from_pixbuf(icon);
+		GtkWidget* image = gtk_image_new_from_icon_name ("terminal", GTK_ICON_SIZE_MENU);
 		gtk_widget_show(image);
 		gtk_box_pack_start(GTK_BOX(hbox), image, false, false, 4);
 		gtk_box_pack_start(GTK_BOX(hbox), text_label, false, false, 4);

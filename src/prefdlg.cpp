@@ -36,8 +36,8 @@ CPrefDlg::CPrefDlg(CWidget* parent)
 	m_pGeneralPrefPage = new CGeneralPrefPage();
 	m_pSitePage = new CSitePage( AppConfig.m_DefaultSite );
 
-	m_pNotebook->AddPage( m_pGeneralPrefPage, _("General"), NULL);
-	m_pNotebook->AddPage( m_pSitePage, _("Site Settings"), NULL);
+	m_pNotebook->AddPage( m_pGeneralPrefPage, _("General") );
+	m_pNotebook->AddPage( m_pSitePage, _("Site Settings") );
 
 	gtk_box_pack_start( GTK_BOX (dlg->vbox), m_pNotebook->m_Widget, FALSE, FALSE, 4);
 

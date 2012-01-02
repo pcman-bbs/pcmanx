@@ -40,9 +40,6 @@ OPTIONAL_NANCY = \
 	nancy_bot/botutil.h
 
 EXTRA_DIST = \
-	conn_xpm.xpm \
-	pcmanx_xpm.xpm \
-	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET) \
 	$(OPTIONAL_NOTIFIER) \
 	$(OPTIONAL_SCRIPT) \

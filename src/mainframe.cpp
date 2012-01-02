@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -301,7 +302,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
 
-	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
+	int idx = m_pNotebook->AddPage( m_pView, title, true );
 	m_pNotebook->SetCurPage(idx);
 	m_pView->SetFocus();
 
@@ -655,16 +656,31 @@ void CMainFrame::OnQuit(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 }
 
-
-#include "pcmanx_xpm.xpm"
-#include "pcmanx_inverse_xpm.xpm"
-#include "conn_xpm.xpm"
+static void inverse_pixbuf(GdkPixbuf* pixbuf)
+{
+	int x = 0, y = 0;
+	int channels = gdk_pixbuf_get_n_channels(pixbuf);
+	int rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	int width = gdk_pixbuf_get_width(pixbuf);
+	int height = gdk_pixbuf_get_height(pixbuf);
+	guchar *pixels = gdk_pixbuf_get_pixels(pixbuf);
+	for (x = 0; x < width; x++) {
+		for (y = 0; y < height; y++) {
+			guchar *ptr = pixels + y * rowstride + x * channels;
+			ptr[0] ^= 0xFF; //red
+			ptr[1] ^= 0xFF; //green
+			ptr[2] ^= 0xFF; //blue
+		}
+	}
+	return;
+}
 
 void CMainFrame::LoadIcons()
 {
-	m_MainIcon = gdk_pixbuf_new_from_xpm_data(pcmanx_xpm);
-	m_InverseMainIcon = gdk_pixbuf_new_from_xpm_data(pcmanx_inverse_xpm);
-	m_ConnIcon = gdk_pixbuf_new_from_xpm_data(conn_xpm);
+	GtkImage* image = GTK_IMAGE(gtk_image_new_from_file(DATADIR "/pixmaps/pcmanx.svg"));
+	m_MainIcon = gtk_image_get_pixbuf(image);
+	m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
+	inverse_pixbuf(m_InverseMainIcon);
 }
 
 void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -1118,11 +1134,11 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
 
 		// set images
 		GtkWidget *image_close =
-			gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 		GtkWidget *image_reconnect =
-			gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_MENU);
 		GtkWidget *image_add2fav =
-			gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
 
 		gtk_image_menu_item_set_image (
 			(GtkImageMenuItem *) menu_item_close, image_close);
@@ -1285,7 +1301,7 @@ void CMainFrame::OnAddToFavorites(GtkMenuItem* widget UNUSED,
 		gtk_menu_shell_insert( GTK_MENU_SHELL(_this->m_FavoritesMenu), fav_item,
 			AppConfig.Favorites.size()>0 ? (AppConfig.Favorites.size()-1) : 0 );
 
-		GtkWidget* image = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
+		GtkWidget* image = gtk_image_new_from_stock (GTK_STOCK_NETWORK, GTK_ICON_SIZE_MENU);
 
 		gtk_widget_show (image);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (fav_item), image);
@@ -1323,8 +1339,7 @@ void CMainFrame::CreateFavoritesMenu()
 		gtk_widget_show (fav_item);
 		gtk_container_add (GTK_CONTAINER (favorites_menu), fav_item);
 
-		GtkWidget* image = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
-//		GtkWidget* image = gtk_image_new_from_pixbuf(m_ConnIcon);
+		GtkWidget* image = gtk_image_new_from_stock (GTK_STOCK_NETWORK, GTK_ICON_SIZE_MENU);
 		gtk_widget_show (image);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (fav_item), image);
 
@@ -1344,7 +1359,7 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_widget_show (add_to_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
 
-	GtkWidget* image347 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+	GtkWidget* image347 = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image347);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image347);
 
@@ -1353,7 +1368,7 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_widget_show (edit_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
 
-	GtkWidget* image348 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
+	GtkWidget* image348 = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image348);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image348);
 
@@ -1618,4 +1633,4 @@ void CMainFrame::UpdateBotStatus()
 }
 
 #endif	//	#ifdef USE_NANCY
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */
