@@ -1,5 +1,7 @@
 SUBDIRS = charset core
 
+AM_CPPFLAGS = $(LTDLINCL)
+
 localedir = $(datadir)/locale
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
 
@@ -14,7 +16,8 @@ INCLUDES = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL) $(LIBLTDL)
+pcmanx_DEPENDENCIES = $(LTDLDEPS)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \

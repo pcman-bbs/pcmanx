@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -32,6 +33,7 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <cstring>
+#include <ltdl.h>
 
 #include "mainframe.h"
 #include "appconfig.h"
@@ -86,6 +88,7 @@ static GOptionEntry entries[] = {
  */
 int main(int argc, char *argv[])
 {
+	lt_dlinit();
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
@@ -195,6 +198,8 @@ int main(int argc, char *argv[])
 	AppConfig.SaveFavorites();
 	AppConfig.Save();
 
+	lt_dlexit();
+
 	return 0;
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

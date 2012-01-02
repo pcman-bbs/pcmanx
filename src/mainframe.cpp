@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <ltdl.h>
 
 #include "mainframe.h"
 
@@ -172,9 +173,11 @@ CMainFrame::CMainFrame()
 	m_Mode = NORMAL_MODE;
 
 	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
-	    m_Unity = true;
+		m_Unity = true;
+		m_dlhandle = lt_dlopenext("libappindicator");
 	} else {
-	    m_Unity = false;
+		m_Unity = false;
+		m_dlhandle = NULL;
 	}
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -473,152 +476,117 @@ static const char *ui_info =
 
 void CMainFrame::MakeUI()
 {
-  m_ActionGroup = gtk_action_group_new("GlobalActions");
+	m_ActionGroup = gtk_action_group_new("GlobalActions");
 
-  gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
+	gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
 
-  gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
+	gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
 
-  gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
-		  		      G_N_ELEMENTS(m_ToggleActionEntries), this);
-
-#ifdef USE_NANCY
-  gtk_action_group_add_radio_actions(m_ActionGroup,
-				     cur_bot_entries,
-				     G_N_ELEMENTS(cur_bot_entries),
-				     0,
-				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
-				     this);
-  gtk_action_group_add_radio_actions(m_ActionGroup,
-				     all_bot_entries,
-				     G_N_ELEMENTS(all_bot_entries),
-				     0,
-				     G_CALLBACK (CMainFrame::OnChangeAllBot),
-				     this);
-#endif
-
-  m_UIManager = gtk_ui_manager_new();
-  gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
-
-  GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
-  gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
-
-  GError * error = NULL;
-  if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
-    {
-      g_message("Building menu failed : %s", error->message);
-      g_error_free(error); exit(EXIT_FAILURE);
-    }
-
-  m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
-  m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
-  gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
-
-  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
-
-  m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
+			G_N_ELEMENTS(m_ToggleActionEntries), this);
 
 #ifdef USE_NANCY
+	gtk_action_group_add_radio_actions(m_ActionGroup,
+			cur_bot_entries,
+			G_N_ELEMENTS(cur_bot_entries),
+			0,
+			G_CALLBACK (CMainFrame::OnChangeCurrentBot),
+			this);
+	gtk_action_group_add_radio_actions(m_ActionGroup,
+			all_bot_entries,
+			G_N_ELEMENTS(all_bot_entries),
+			0,
+			G_CALLBACK (CMainFrame::OnChangeAllBot),
+			this);
+#endif
 
-  m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-			 "/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
-  m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-		       "/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+	m_UIManager = gtk_ui_manager_new();
+	gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
 
-  m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-       			 "/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
-  m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
-		       "/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
+	GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
+	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
+
+	GError * error = NULL;
+	if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
+	{
+		g_message("Building menu failed : %s", error->message);
+		g_error_free(error); exit(EXIT_FAILURE);
+	}
+
+	m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+	m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+	gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
+
+	m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
+
+	m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+
+#ifdef USE_NANCY
+
+	m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
+	m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+
+	m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
+	m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
+				"/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
 
 #endif
 
-  GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
+	GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
 
-  GtkWidget* jump_menu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
+	GtkWidget* jump_menu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
 
-  const char* page_str = _("Page");
-  for(int i = 1; i < 11; i++)
-    {
-      char title[32], name[32];
-      sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
-      sprintf(name, "jumpto_%d", i);
-      GtkAction *action = gtk_action_new(name, title, NULL, NULL);
-      gtk_action_set_accel_group(action, accel_group);
-      g_signal_connect( G_OBJECT(action), "activate",
-                        G_CALLBACK (CMainFrame::OnJumpToPage),
-                        this);
-      sprintf(name, "<Alt>%d", i % 10);
-      gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
-      gtk_container_add (GTK_CONTAINER (jump_menu),
-		      gtk_action_create_menu_item(action));
-      m_JumpTos[i-1] = G_OBJECT(action);
-    }
+	const char* page_str = _("Page");
+	for(int i = 1; i < 11; i++)
+	{
+		char title[32], name[32];
+		sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
+		sprintf(name, "jumpto_%d", i);
+		GtkAction *action = gtk_action_new(name, title, NULL, NULL);
+		gtk_action_set_accel_group(action, accel_group);
+		g_signal_connect( G_OBJECT(action), "activate",
+				G_CALLBACK (CMainFrame::OnJumpToPage),
+				this);
+		sprintf(name, "<Alt>%d", i % 10);
+		gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
+		gtk_container_add (GTK_CONTAINER (jump_menu),
+				gtk_action_create_menu_item(action));
+		m_JumpTos[i-1] = G_OBJECT(action);
+	}
 
-  GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
-  gtk_widget_show(sep);
-  gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
-  // Create the URL address bar
-  GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
-  GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
-  m_URLEntry = (GtkWidget*) gtk_entry_new();
-  gtk_widget_set_size_request(m_URLEntry, 0, -1);
-  GtkTooltips* tooltips = gtk_tooltips_new();
-  gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
-  gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
-  gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
-  gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
+	GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
+	gtk_widget_show(sep);
+	gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
+	// Create the URL address bar
+	GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
+	GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
+	m_URLEntry = (GtkWidget*) gtk_entry_new();
+	gtk_widget_set_size_request(m_URLEntry, 0, -1);
+	GtkTooltips* tooltips = gtk_tooltips_new();
+	gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
+	gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
+	gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
 
-  GtkToolItem* url_bar_item = gtk_tool_item_new();
-  gtk_tool_item_set_expand(url_bar_item, true);
-  gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
-  gtk_widget_show_all ( (GtkWidget*)url_bar_item);
-  gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
+	GtkToolItem* url_bar_item = gtk_tool_item_new();
+	gtk_tool_item_set_expand(url_bar_item, true);
+	gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
+	gtk_widget_show_all ( (GtkWidget*)url_bar_item);
+	gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
 
-  g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
-		    G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
-		    this);
-  g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
-		    G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
-		    this);
+	g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
+			G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
+			this);
+	g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
+			G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
+			this);
 
-  CreateFavoritesMenu();
-
-#ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
-	m_TrayIcon = gtk_status_icon_new();
-	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
-	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
-
-	// Setup popup menu
-	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
-	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
-			G_CALLBACK (CMainFrame::OnTray_Popup), this);
-
-	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-#else
-	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
-
-	m_TrayButton = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
-	gtk_widget_show (m_TrayButton);
-
-	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-
-/*
-	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
-*/
-
-	m_TrayIcon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
-	gtk_widget_show (m_TrayIcon);
-	set_tray_icon();
-#endif
-#endif
+	CreateFavoritesMenu();
+	CreateTrayIcon();
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -1164,6 +1132,12 @@ void CMainFrame::OnDestroy()
 #endif
 
 	gtk_main_quit();
+
+	if (m_dlhandle != NULL) {
+		lt_dlclose(m_dlhandle);
+		m_dlhandle = NULL;
+	    m_Unity = false;
+	}
 }
 
 
@@ -1300,6 +1274,48 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_menu_item_set_submenu( GTK_MENU_ITEM(m_FavoritesMenuItem), favorites_menu);
 }
 
+void CMainFrame::CreateTrayIcon()
+{
+	if (m_Unity == true && m_dlhandle != NULL) {
+		void*(*indicator)(gchar*, gchar*, gint) = (void*(*)(gchar*, gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
+		fprintf(stderr, "%p\n", indicator);
+	}
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	m_TrayIcon = gtk_status_icon_new();
+	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
+
+	// Setup popup menu
+	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
+	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
+			G_CALLBACK (CMainFrame::OnTray_Popup), this);
+
+	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+#else
+	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
+
+	m_TrayButton = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
+	gtk_widget_show (m_TrayButton);
+
+	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+
+	/*
+	   g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
+	   G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+	   */
+
+	m_TrayIcon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
+	gtk_widget_show (m_TrayIcon);
+	set_tray_icon();
+#endif
+#endif
+}
 
 void CMainFrame::OnFavorite(GtkMenuItem* item, CMainFrame* _this)
 {

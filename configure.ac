@@ -1,34 +1,19 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT([pcmanx-gtk2],[1.0],[http://code.google.com/p/pcmanx-gtk2/issues/list])
-
 AC_CONFIG_HEADERS([config.h])
-#AC_PREFIX_DEFAULT(/usr)
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip silent-rules])
+
+LT_PREREQ([2.2.6])
+LT_CONFIG_LTDL_DIR([libltdl])
+LT_INIT([dlopen])
+LTDL_INIT([installable])
+
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE
-AC_C_CONST
-AC_C_INLINE
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_STAT
-AC_CHECK_FUNCS([dup2 isascii memset mkdir regcomp setenv socket strchr strrchr strstr])
-AC_HEADER_STDBOOL
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
-AC_PATH_X
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_PROG_CC
-AC_PROG_CPP
-AM_PROG_AS
+
 AC_PROG_CXX
-AM_DISABLE_STATIC
-AC_PROG_RANLIB
-AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([],[no-xml])
-AC_PROG_INSTALL
 
 dnl define varible by OS
 case "$host" in

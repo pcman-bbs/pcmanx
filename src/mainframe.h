@@ -33,6 +33,7 @@
 
 #include <string>
 #include <vector>
+#include <ltdl.h>
 
 using namespace std;
 
@@ -138,6 +139,7 @@ protected:
 	void CloseCon(int idx, bool confirm = false);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
+	void CreateTrayIcon();
 	static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 	void FlashWindow( bool flash );
@@ -208,6 +210,7 @@ protected:
 private:
 	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
 	bool m_Unity;
+	lt_dlhandle m_dlhandle;
 };
 
 #endif
