@@ -171,10 +171,11 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+	m_TrayIcon = NULL;
 
 	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
 		m_Unity = true;
-		m_dlhandle = lt_dlopenext("libappindicator");
+		m_dlhandle = lt_dlopen("libappindicator.so.1");
 	} else {
 		m_Unity = false;
 		m_dlhandle = NULL;
@@ -900,10 +901,24 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 #ifdef USE_DOCKLET
 	if (AppConfig.ShowTrayIcon != show_tray_icon) {
-		if (AppConfig.ShowTrayIcon)
-			_this->ShowTrayIcon();
-		else
-			_this->HideTrayIcon();
+		if (_this->m_Unity == true && _this->m_dlhandle != NULL) {
+			void (*app_indicator_set_status)(void*, gint) =
+				(void (*)(void*, gint)) lt_dlsym(_this->m_dlhandle, "app_indicator_set_status");
+			if (AppConfig.ShowTrayIcon) {
+				app_indicator_set_status(_this->m_indicator, 1);
+			}
+			else {
+				app_indicator_set_status(_this->m_indicator, 0);
+			}
+		}
+		else {
+			if (AppConfig.ShowTrayIcon) {
+				_this->ShowTrayIcon();
+			}
+			else {
+				_this->HideTrayIcon();
+			}
+		}
 	}
 #endif
 
@@ -1276,23 +1291,37 @@ void CMainFrame::CreateFavoritesMenu()
 
 void CMainFrame::CreateTrayIcon()
 {
-	if (m_Unity == true && m_dlhandle != NULL) {
-		void*(*indicator)(gchar*, gchar*, gint) = (void*(*)(gchar*, gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
-		fprintf(stderr, "%p\n", indicator);
-	}
 #ifdef USE_DOCKLET
 #if GTK_CHECK_VERSION(2,10,0)
-	m_TrayIcon = gtk_status_icon_new();
-	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
-	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
-
 	// Setup popup menu
 	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
-	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
-			G_CALLBACK (CMainFrame::OnTray_Popup), this);
+	if (m_Unity == true && m_dlhandle != NULL) {
+		void*(*app_indicator_new)(const gchar*, const gchar*, gint) =
+			(void*(*)(const gchar*, const gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
+		void (*app_indicator_set_menu)(void*, GtkMenu *) =
+			(void (*)(void*, GtkMenu *)) lt_dlsym(m_dlhandle, "app_indicator_set_menu");
+		void (*app_indicator_set_status)(void*, gint) =
+			(void (*)(void*, gint)) lt_dlsym(m_dlhandle, "app_indicator_set_status");
+		m_indicator = app_indicator_new("PCMan X", DATADIR "/pixmaps/pcmanx.svg", 0);
+		app_indicator_set_menu(m_indicator, GTK_MENU(m_TrayPopup));
+		if (AppConfig.ShowTrayIcon) {
+			app_indicator_set_status(m_indicator, 1);
+		}
+		else {
+			app_indicator_set_status(m_indicator, 0);
+		}
+	}
+	else {
+		m_TrayIcon = gtk_status_icon_new();
+		gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+		gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
 
-	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+		g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
+				G_CALLBACK (CMainFrame::OnTray_Popup), this);
+
+		g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+				G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+	}
 #else
 	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
 
