@@ -7,7 +7,7 @@ AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip silent-rules])
 LT_PREREQ([2.2.6])
 LT_CONFIG_LTDL_DIR([libltdl])
 LT_INIT([dlopen])
-LTDL_INIT([installable])
+LTDL_INIT
 
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE
