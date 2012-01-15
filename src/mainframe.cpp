@@ -768,7 +768,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
-						"Copyright © 2005-2011\n"
+						"Copyright © 2005-2012\n"
 						"License: GNU Genral Public License\n"
 						"Project: <a href=\"%s\">%s</a>\n"
 						"Mailing List: <a href=\"%s\">%s</a>\n"
@@ -785,10 +785,11 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						"Authors:\n%s\n")
 						, authors	);
 */
-	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
+	GdkPixbuf* icon = gdk_pixbuf_scale_simple(_this->m_MainIcon, 64, 64, GDK_INTERP_BILINEAR);
+	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, icon);
 	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
-
+	g_object_unref(icon);
 }
 
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* pMainFrame)
