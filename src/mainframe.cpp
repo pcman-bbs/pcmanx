@@ -631,9 +631,11 @@ static void inverse_pixbuf(GdkPixbuf* pixbuf)
 void CMainFrame::LoadIcons()
 {
 	GtkImage* image = GTK_IMAGE(gtk_image_new_from_file(DATADIR "/pixmaps/pcmanx.svg"));
-	m_MainIcon = gtk_image_get_pixbuf(image);
+	GdkPixbuf* icon = gtk_image_get_pixbuf(image);
+	m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
 	m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
 	inverse_pixbuf(m_InverseMainIcon);
+	g_object_unref(icon);
 }
 
 void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -785,11 +787,9 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						"Authors:\n%s\n")
 						, authors	);
 */
-	GdkPixbuf* icon = gdk_pixbuf_scale_simple(_this->m_MainIcon, 64, 64, GDK_INTERP_BILINEAR);
-	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, icon);
+	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
-	g_object_unref(icon);
 }
 
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* pMainFrame)
