@@ -11,6 +11,7 @@ Vcs-Git: http://code.google.com/p/pcmanx-gtk2/
 Package: pcmanx-gtk2
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: ttf-wqy-microhei
 Description: user-friendly telnet client mainly targets BBS users
  PCMan X is a newly developed GPL'd version of PCMan, a full-featured
  famous BBS client. It aimed to be an easy-to-use yet full-featured telnet
