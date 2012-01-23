@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
 	if (!notify_is_initted()) {
-		notify_init("pcmanx-gtk2");
+		notify_init("pcmanx");
 	}
 #else
 	popup_notifier_init(main_frm->GetMainIcon());
