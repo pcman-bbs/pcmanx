@@ -15,8 +15,11 @@ BuildRoot:        %{_tmppath}/%{name}-%{version}-root
 BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool
 %if 0%{?suse_version}
 BuildRequires:    xz, gcc-c++, update-desktop-files
+Requires:         lbltdl7
+%else
+Requires:         libtool-ltdl
 %endif
-Requires:         gtk2, libtool-ltdl, wqy-microhei-fonts
+Requires:         gtk2, wqy-microhei-fonts
 Requires(post):   desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -51,10 +54,14 @@ make %{?_smp_mflags} V=1
 %endif
 
 %post
+%if 0%{?suse_version}
 %desktop_database_post
+%endif
 
 %postun
+%if 0%{?suse_version}
 %desktop_database_postun
+%endif
 
 %files -f pcmanx.lang
 %defattr(-,root,root)
