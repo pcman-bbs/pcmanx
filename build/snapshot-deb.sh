@@ -18,11 +18,11 @@ fi
 
 VER="$(../configure --version | head -n1 | awk '{ print $3 }')"
 
-if make dist-gzip > /dev/null; then
+if make dist > /dev/null; then
     [ -d "pcmanx-gtk2-${VER}" ] && rm -fr "pcmanx-gtk2-${VER}"
-    [ -f "pcmanx-gtk2_${VER}.orig.tar.gz" ] && rm -f "pcmanx-gtk2_${VER}.orig.tar.gz"
-    mv "pcmanx-gtk2-${VER}.tar.gz" "pcmanx-gtk2_${VER}.orig.tar.gz"
-    tar xf "pcmanx-gtk2_${VER}.orig.tar.gz"
+    [ -f "pcmanx-gtk2_${VER}.orig.tar.xz" ] && rm -f "pcmanx-gtk2_${VER}.orig.tar.xz"
+    mv "pcmanx-gtk2-${VER}.tar.xz" "pcmanx-gtk2_${VER}.orig.tar.xz"
+    tar xf "pcmanx-gtk2_${VER}.orig.tar.xz"
 else
     exit 1
 fi
