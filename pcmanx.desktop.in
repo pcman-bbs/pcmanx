@@ -13,3 +13,4 @@ GenericName[zh_CN]=PCMan X BBS 连线软件
 Comment=PCMan X BBS Client
 Comment[zh_TW]=PCMan X BBS 用 GTK+ 2.x 開發的自由 BBS 連線軟體
 Comment[zh_CN]=PCMan X BBS 用 GTK+ 2.x 开发的自由 BBS 连接软件
+StartupNotify=true
