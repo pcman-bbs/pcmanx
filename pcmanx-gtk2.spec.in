@@ -50,8 +50,8 @@ make %{?_smp_mflags} V=1
 %makeinstall
 %if 0%{?suse_version}
 %suse_update_desktop_file pcmanx GTK Network News Chat InstantMessaging
-%find_lang pcmanx
 %endif
+%find_lang pcmanx
 
 %post
 %if 0%{?suse_version}
