@@ -7,15 +7,15 @@ Release:   %{rel}%{?dist}
 Summary:   user-friendly telnet client designed for BBS browsing.
 
 Group:     Applications/Internet
-License:   GPL
+License:   GPLv2+
 Url:       http://code.google.com/p/pcmanx-gtk2/
-Source:    http://pcmanx-gtk2.googlecode.com/svn/website/release/%{name}-%{version}.tar.gz
+Source:    http://pcmanx-gtk2.googlecode.com/files/%{name}-%{version}.tar.bz2
 Vendor:    PCMan X GTK+ 2 project
 Packager:  PCMan X <PCManX@googlegroups.com>
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:    gettext, pkgconfig, gtk2-devel >= 2.4.0, desktop-file-utils
-Requires:         gtk2
+BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool
+Requires:         gtk2, libnotify, libtool-ltdl, wqy-microhei-fonts, desktop-file-utils
 Requires(post):   desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -35,7 +35,7 @@ process double-byte characters.
 %setup -q
 
 %build
-%configure \
+%configure --enable-iplookup --enable-proxy --enable-libnotify \
 %if %{DEBUGINFO}
 	--enable-debug \
 %endif
@@ -44,7 +44,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%makeinstall
+make install DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -53,10 +53,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc ABOUT-NLS AUTHORS COPYING INSTALL NEWS README TODO
 %{_bindir}/pcmanx
-%{_libdir}/libpcmanx*
 %{_datadir}/applications/pcmanx.desktop
-%{_datadir}/pcmanx/
-%{_datadir}/pixmaps/pcmanx.png
 %{_datadir}/locale/
+%{_datadir}/man/
+%{_datadir}/pcmanx/
+%{_datadir}/pixmaps/pcmanx.svg
 
 %changelog
