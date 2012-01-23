@@ -90,5 +90,6 @@ fi
 ## Build RPM source package ##
 if [ $RPM = 1 ]; then
     cp -av pcmanx-gtk2_${VER}.orig.tar.xz $HOME/rpmbuild/SOURCES/pcmanx-gtk2-${VER}.tar.xz
-    rpmbuild -bs pcmanx-gtk2.spec
+    cp -av pcmanx-gtk2.spec $HOME/rpmbuild/SPECS/
+    rpmbuild -bs $HOME/rpmbuild/SPECS/pcmanx-gtk2.spec
 fi
