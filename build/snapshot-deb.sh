@@ -10,7 +10,7 @@ HASH=$(git show -s --format=%h HEAD)
 
 ## change version number ##
 if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
-    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}~git${HASH}]/" ../configure.ac
+    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}+${HASH}]/" ../configure.ac
 fi
 
 [ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
@@ -28,7 +28,7 @@ else
 fi
 
 ## rollback version number ##
-sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)+\([0-9]*~git[0-9a-f]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
+sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)+\([0-9]*+[0-9a-f]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2]/" ../configure.ac
 
 pushd "pcmanx-gtk2-${VER}"
 cp -a ../../debian .
