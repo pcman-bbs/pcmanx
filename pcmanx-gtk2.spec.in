@@ -4,18 +4,19 @@
 Name:      pcmanx-gtk2
 Version:   %{ver}
 Release:   %{rel}%{?dist}
-Summary:   user-friendly telnet client designed for BBS browsing.
+Summary:   User-friendly telnet client designed for BBS browsing
 
-Group:     Applications/Internet
+Group:     Productivity/Networking/Other
 License:   GPLv2+
 Url:       http://code.google.com/p/pcmanx-gtk2/
-Source:    http://pcmanx-gtk2.googlecode.com/files/%{name}-%{version}.tar.xz
-Vendor:    PCMan X GTK+ 2 project
-Packager:  PCMan X <PCManX@googlegroups.com>
+Source:    %{name}-%{version}.tar.xz
 
-BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:        %{_tmppath}/%{name}-%{version}-root
 BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool
-Requires:         gtk2, libnotify, libtool-ltdl, wqy-microhei-fonts, desktop-file-utils
+%if 0%{?suse_version}
+BuildRequires:    xz, gcc-c++, update-desktop-files
+%endif
+Requires:         gtk2, libtool-ltdl, wqy-microhei-fonts
 Requires(post):   desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -40,23 +41,37 @@ process double-byte characters.
 	--enable-debug \
 %endif
 ;
-make %{?_smp_mflags}
+make %{?_smp_mflags} V=1
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%makeinstall
+%if 0%{?suse_version}
+%suse_update_desktop_file pcmanx GTK Network News Chat InstantMessaging
+%find_lang pcmanx
+%endif
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+%post
+%desktop_database_post
 
-%files
-%defattr(-,root,root,-)
-%doc ABOUT-NLS AUTHORS COPYING INSTALL NEWS README TODO
+%postun
+%desktop_database_postun
+
+%files -f pcmanx.lang
+%defattr(-,root,root)
+%doc AUTHORS COPYING NEWS README TODO
+%dir %{_datadir}/pcmanx/
+%dir %{_datadir}/pcmanx/nancy_bot/
 %{_bindir}/pcmanx
 %{_datadir}/applications/pcmanx.desktop
-%{_datadir}/locale/
-%{_datadir}/man/
-%{_datadir}/pcmanx/
+%{_datadir}/pcmanx/emoticons
+%{_datadir}/pcmanx/sitelist
+%{_datadir}/pcmanx/nancy_bot/default.conf
+%{_datadir}/pcmanx/nancy_bot/default_msg.data
+%{_datadir}/pcmanx/nancy_bot/example_msg.data
+%{_datadir}/pcmanx/nancy_bot/example_usages.data
+%{_datadir}/pcmanx/nancy_bot/example.conf
+%{_datadir}/pcmanx/nancy_bot/default_usages.data
 %{_datadir}/pixmaps/pcmanx.svg
+%{_mandir}/man1/pcmanx.1*
 
 %changelog
