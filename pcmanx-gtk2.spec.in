@@ -15,7 +15,7 @@ BuildRoot:        %{_tmppath}/%{name}-%{version}-root
 BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool
 %if 0%{?suse_version}
 BuildRequires:    xz, gcc-c++, update-desktop-files
-Requires:         lbltdl7
+Requires:         libltdl7
 %else
 Requires:         libtool-ltdl
 %endif
