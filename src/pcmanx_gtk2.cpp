@@ -74,7 +74,7 @@ static GOptionEntry entries[] = {
  *
  * @section intro_sec Introduction
  *
- * PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
+ * PCManX is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
  * It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
  * Some handy functions like tabbed-browsing, auto-login and a built-in ANSI editor enabling colored text editing are also provided.
  *

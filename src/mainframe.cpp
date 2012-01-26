@@ -194,7 +194,7 @@ CMainFrame::CMainFrame()
 	LoadIcons();
 
 
-	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
+	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCManX "VERSION );
 
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
@@ -769,7 +769,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
+						_("<b>PCManX %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
 						"Copyright © 2005-2012\n"
 						"License: GNU Genral Public License\n"
 						"Project: <a href=\"%s\">%s</a>\n"
@@ -1171,7 +1171,7 @@ bool CMainFrame::CanClose()
 	GtkWidget* dlg = gtk_message_dialog_new( (GtkWindow*)m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
-						_("Quit PCMan X ?"));
+						_("Quit PCManX ?"));
 	bool close = gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
 	gtk_widget_destroy(dlg);
 	return close;
@@ -1303,7 +1303,7 @@ void CMainFrame::CreateTrayIcon()
 			(void (*)(void*, GtkMenu *)) lt_dlsym(m_dlhandle, "app_indicator_set_menu");
 		void (*app_indicator_set_status)(void*, gint) =
 			(void (*)(void*, gint)) lt_dlsym(m_dlhandle, "app_indicator_set_status");
-		m_indicator = app_indicator_new("PCMan X", DATADIR "/pixmaps/pcmanx.svg", 0);
+		m_indicator = app_indicator_new("PCManX", DATADIR "/pixmaps/pcmanx.svg", 0);
 		app_indicator_set_menu(m_indicator, GTK_MENU(m_TrayPopup));
 		if (AppConfig.ShowTrayIcon) {
 			app_indicator_set_status(m_indicator, 1);
@@ -1315,7 +1315,7 @@ void CMainFrame::CreateTrayIcon()
 	else {
 		m_TrayIcon = gtk_status_icon_new();
 		gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
-		gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
+		gtk_status_icon_set_tooltip(m_TrayIcon, "PCManX");
 
 		g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
 				G_CALLBACK (CMainFrame::OnTray_Popup), this);
@@ -1378,7 +1378,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	m_pView = view;
 	if( !m_pView || !m_pView->GetCon() )
 	{
-		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
+		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCManX "VERSION );
 		gtk_entry_set_text( GTK_ENTRY(m_URLEntry), "");
 		return;
 	}
@@ -1391,7 +1391,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	if( ! con->IsClosed() )
 		m_pNotebook->SetPageTitle( m_pView, title );
 
-	title += " - PCMan X "VERSION;
+	title += " - PCManX "VERSION;
 	gtk_window_set_title (GTK_WINDOW (m_Widget), title.c_str() );
 
 	char time_str[100];

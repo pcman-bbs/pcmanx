@@ -13,7 +13,7 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: ttf-wqy-microhei
 Description: user-friendly telnet client mainly targets BBS users
- PCMan X is a newly developed GPL'd version of PCMan, a full-featured
+ PCManX is a newly developed GPL'd version of PCMan, a full-featured
  famous BBS client. It aimed to be an easy-to-use yet full-featured telnet
  client facilitating BBS browsing with the ability to process double-byte
  characters. Some handy functions like tabbed-browsing, auto-login and

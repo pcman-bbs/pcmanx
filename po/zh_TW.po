@@ -284,7 +284,7 @@ msgstr "簡體中文 (zh_CN)：陳海峰 Haifeng Chen <optical.dlz@gmail.com>"
 #: ../src/mainframe.cpp:770
 #, c-format
 msgid ""
-"<b>PCMan X %s</b>\n"
+"<b>PCManX %s</b>\n"
 "A free BBS client developed with GTK+ 2.x\n"
 "\n"
 "Copyright © 2005-2012\n"
@@ -300,7 +300,7 @@ msgid ""
 "%s\n"
 "\n"
 msgstr ""
-"<b>PCMan X %s</b>\n"
+"<b>PCManX %s</b>\n"
 "用 GTK+ 2.x 開發的自由 BBS 連線軟體\n"
 "\n"
 "Copyright © 2005-2012\n"
@@ -325,8 +325,8 @@ msgid "Close"
 msgstr "關閉"
 
 #: ../src/mainframe.cpp:1174
-msgid "Quit PCMan X ?"
-msgstr "離開 PCMan X ?"
+msgid "Quit PCManX ?"
+msgstr "離開 PCManX ?"
 
 #: ../src/mainframe.cpp:1186
 #, c-format
