@@ -1,8 +1,17 @@
-Version 1.1 - ???
-* Feature: UAO support.
-* Feature: fontconfig fallback font support.
+Version 1.1 - January 2012
+* Feature: Complete UAO support for copy/paste/input/download.
+* Feature: Add fontconfig fallback font support.
 * Feature: New icon design.
+* Feature: Improve Unity libappindicator integration.
+* Feature: Update RPM spec file for Fedora 16 and openSUSE 12.1
+* Feature: Switch source code management to Git.
+* Feature: Switch release tarball to xz compression format.
 * Bugfix: Program name doesn't show on notificaiton bar of GNOME Shell
+* Bugfix: The notificaition lack of program name in GNOME Shell
+* Bugfix: Weird display name and tooltip covered under notification area in GNOME Shell
+* Bugfix: Remove forkpty for OpenSolaris because of license incompatible issue.
+* Bugfix: Supporting GNOME3 Startup Notification.
+
 
 Version 1.0 - April 2011
 
