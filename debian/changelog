@@ -1,3 +1,14 @@
+pcmanx-gtk2 (1.1-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #658364)
+    - Complete UAO support for copy/paste/input/download.
+    - Add fontconfig fallback font support.
+    - New icon design.
+    - Improve Unity libappindicator integration. 
+  * All patches removed, intergrated upstream.
+
+ -- Emfox Zhou <emfox@debian.org>  Thu, 02 Feb 2012 22:53:10 +0800
+
 pcmanx-gtk2 (1.0-2) unstable; urgency=low
 
   * Apply r556 from svn: To always calculate character dimension based

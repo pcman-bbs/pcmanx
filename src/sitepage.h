@@ -53,6 +53,8 @@ public:
 	GtkWidget *m_DetectDBChar;
 	GtkWidget *m_pVerticalCenterAlign;
 	GtkWidget *m_pHorizontalCenterAlign;
+	GtkWidget *m_UAOBox;
+	GtkTreeModel *m_UAOModel;
     CSite&  m_Site;
 };
 

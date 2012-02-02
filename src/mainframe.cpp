@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -25,6 +26,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
+#include <ltdl.h>
 
 #include "mainframe.h"
 
@@ -147,10 +150,6 @@ void CMainFrame::set_tray_icon()
 #endif
 #endif
 
-#ifdef USE_WGET
-bool CMainFrame::g_bIsUpateHandlerExisted = false;
-bool CMainFrame::g_bUpdateingBBSList = false;
-#endif
 CMainFrame* CMainFrame::g_pMyself = NULL;
 
 gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
@@ -166,14 +165,24 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 
 CMainFrame::CMainFrame()
 {
+	char* desktop = getenv("XDG_CURRENT_DESKTOP");
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+	m_TrayIcon = NULL;
+
+	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
+		m_Unity = true;
+		m_dlhandle = lt_dlopen("libappindicator.so.1");
+	} else {
+		m_Unity = false;
+		m_dlhandle = NULL;
+	}
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "PCManX", "pcmanx");
+	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "pcmanx", "PCManX");
 
 	PostCreate();
 
@@ -185,7 +194,7 @@ CMainFrame::CMainFrame()
 	LoadIcons();
 
 
-	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
+	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCManX "VERSION );
 
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
@@ -251,9 +260,6 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
-#ifdef USE_WGET
-	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
-#endif
 }
 
 
@@ -289,9 +295,11 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	pCon->m_Site.m_URL = url;
 	pCon->m_Encoding = pCon->m_Site.m_Encoding;
 
+	m_pView->SetUAO( site->m_UAO );
+
 	pCon->AllocScreenBuf( site->m_RowsPerPage, site->m_RowsPerPage, site->m_ColsPerPage );
 
-	int idx = m_pNotebook->AddPage( m_pView, title, m_ConnIcon );
+	int idx = m_pNotebook->AddPage( m_pView, title, true );
 	m_pNotebook->SetCurPage(idx);
 	m_pView->SetFocus();
 
@@ -304,9 +312,6 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
     {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
-#ifdef USE_WGET
-    {"update_bbs_list", GTK_STOCK_REFRESH, _("_Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
-#endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
@@ -333,8 +338,8 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
     {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
     {"view_menu", NULL, _("_View"), NULL, NULL, NULL},
-    {"font", GTK_STOCK_SELECT_FONT,  _("_Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
     {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+    {"non_ascii_font", GTK_STOCK_SELECT_FONT,  _("Non-ASCII _Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
 #ifdef USE_NANCY
     {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
@@ -374,9 +379,6 @@ static const char *ui_info =
   "  <menubar>"
   "    <menu action='connect_menu'>"
   "      <menuitem action='site_list'/>"
-#ifdef USE_WGET
-  "      <menuitem action='update_bbs_list'/>"
-#endif
   "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
   "      <menuitem action='close'/>"
@@ -406,8 +408,8 @@ static const char *ui_info =
   "      <menuitem action='edit_fav'/>"
   "    </menu>"
   "    <menu action='view_menu'>"
-  "      <menuitem action='font'/>"
   "      <menuitem action='ascii_font'/>"
+  "      <menuitem action='non_ascii_font'/>"
   "      <separator/>"
 #ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
@@ -444,9 +446,6 @@ static const char *ui_info =
   "    <separator/>"
   "    <toolitem action='add_to_fav'/>"
   "    <toolitem action='preference'/>"
-#ifdef USE_WGET
-  "    <toolitem action='update_bbs_list'/>"
-#endif
   "    <toolitem action='about'/>"
   "    <separator/>"
   "  </toolbar>"
@@ -478,152 +477,117 @@ static const char *ui_info =
 
 void CMainFrame::MakeUI()
 {
-  m_ActionGroup = gtk_action_group_new("GlobalActions");
+	m_ActionGroup = gtk_action_group_new("GlobalActions");
 
-  gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
+	gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
 
-  gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
+	gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
 
-  gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
-		  		      G_N_ELEMENTS(m_ToggleActionEntries), this);
-
-#ifdef USE_NANCY
-  gtk_action_group_add_radio_actions(m_ActionGroup,
-				     cur_bot_entries,
-				     G_N_ELEMENTS(cur_bot_entries),
-				     0,
-				     G_CALLBACK (CMainFrame::OnChangeCurrentBot),
-				     this);
-  gtk_action_group_add_radio_actions(m_ActionGroup,
-				     all_bot_entries,
-				     G_N_ELEMENTS(all_bot_entries),
-				     0,
-				     G_CALLBACK (CMainFrame::OnChangeAllBot),
-				     this);
-#endif
-
-  m_UIManager = gtk_ui_manager_new();
-  gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
-
-  GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
-  gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
-
-  GError * error = NULL;
-  if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
-    {
-      g_message("Building menu failed : %s", error->message);
-      g_error_free(error); exit(EXIT_FAILURE);
-    }
-
-  m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
-  m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
-  gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
-
-  m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
-
-  m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
+			G_N_ELEMENTS(m_ToggleActionEntries), this);
 
 #ifdef USE_NANCY
+	gtk_action_group_add_radio_actions(m_ActionGroup,
+			cur_bot_entries,
+			G_N_ELEMENTS(cur_bot_entries),
+			0,
+			G_CALLBACK (CMainFrame::OnChangeCurrentBot),
+			this);
+	gtk_action_group_add_radio_actions(m_ActionGroup,
+			all_bot_entries,
+			G_N_ELEMENTS(all_bot_entries),
+			0,
+			G_CALLBACK (CMainFrame::OnChangeAllBot),
+			this);
+#endif
 
-  m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-			 "/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
-  m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-		       "/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+	m_UIManager = gtk_ui_manager_new();
+	gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
 
-  m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-       			 "/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
-  m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
-		       "/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
+	GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
+	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
+
+	GError * error = NULL;
+	if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
+	{
+		g_message("Building menu failed : %s", error->message);
+		g_error_free(error); exit(EXIT_FAILURE);
+	}
+
+	m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+	m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+	gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
+
+	m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
+
+	m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+
+#ifdef USE_NANCY
+
+	m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
+	m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+
+	m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
+			"/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
+	m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
+				"/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
 
 #endif
 
-  GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
+	GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
 
-  GtkWidget* jump_menu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
+	GtkWidget* jump_menu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
 
-  const char* page_str = _("Page");
-  for(int i = 1; i < 11; i++)
-    {
-      char title[32], name[32];
-      sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
-      sprintf(name, "jumpto_%d", i);
-      GtkAction *action = gtk_action_new(name, title, NULL, NULL);
-      gtk_action_set_accel_group(action, accel_group);
-      g_signal_connect( G_OBJECT(action), "activate",
-                        G_CALLBACK (CMainFrame::OnJumpToPage),
-                        this);
-      sprintf(name, "<Alt>%d", i % 10);
-      gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
-      gtk_container_add (GTK_CONTAINER (jump_menu),
-		      gtk_action_create_menu_item(action));
-      m_JumpTos[i-1] = G_OBJECT(action);
-    }
+	const char* page_str = _("Page");
+	for(int i = 1; i < 11; i++)
+	{
+		char title[32], name[32];
+		sprintf(title, "%s %d_%d", page_str, i / 10, i % 10);
+		sprintf(name, "jumpto_%d", i);
+		GtkAction *action = gtk_action_new(name, title, NULL, NULL);
+		gtk_action_set_accel_group(action, accel_group);
+		g_signal_connect( G_OBJECT(action), "activate",
+				G_CALLBACK (CMainFrame::OnJumpToPage),
+				this);
+		sprintf(name, "<Alt>%d", i % 10);
+		gtk_action_group_add_action_with_accel(m_ActionGroup, action, name);
+		gtk_container_add (GTK_CONTAINER (jump_menu),
+				gtk_action_create_menu_item(action));
+		m_JumpTos[i-1] = G_OBJECT(action);
+	}
 
-  GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
-  gtk_widget_show(sep);
-  gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
-  // Create the URL address bar
-  GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
-  GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
-  m_URLEntry = (GtkWidget*) gtk_entry_new();
-  gtk_widget_set_size_request(m_URLEntry, 0, -1);
-  GtkTooltips* tooltips = gtk_tooltips_new();
-  gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
-  gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
-  gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
-  gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
+	GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
+	gtk_widget_show(sep);
+	gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
+	// Create the URL address bar
+	GtkWidget* url_bar = gtk_hbox_new (FALSE, 0);
+	GtkWidget* url_label = (GtkWidget*) gtk_label_new_with_mnemonic(_("A_ddress:"));
+	m_URLEntry = (GtkWidget*) gtk_entry_new();
+	gtk_widget_set_size_request(m_URLEntry, 0, -1);
+	GtkTooltips* tooltips = gtk_tooltips_new();
+	gtk_tooltips_set_tip(tooltips, m_URLEntry, _("Type URL here, then hit \"Enter\""), NULL);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(url_label), m_URLEntry);
+	gtk_box_pack_start( GTK_BOX(url_bar), url_label, FALSE, FALSE, 4);
+	gtk_box_pack_start( GTK_BOX(url_bar), m_URLEntry, TRUE, TRUE, 4);
 
-  GtkToolItem* url_bar_item = gtk_tool_item_new();
-  gtk_tool_item_set_expand(url_bar_item, true);
-  gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
-  gtk_widget_show_all ( (GtkWidget*)url_bar_item);
-  gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
+	GtkToolItem* url_bar_item = gtk_tool_item_new();
+	gtk_tool_item_set_expand(url_bar_item, true);
+	gtk_container_add (GTK_CONTAINER (url_bar_item), url_bar);
+	gtk_widget_show_all ( (GtkWidget*)url_bar_item);
+	gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), url_bar_item, -1);
 
-  g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
-		    G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
-		    this);
-  g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
-		    G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
-		    this);
+	g_signal_connect ((gpointer) m_URLEntry, "key-press-event",
+			G_CALLBACK (CMainFrame::OnURLEntryKeyDown),
+			this);
+	g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
+			G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
+			this);
 
-  CreateFavoritesMenu();
-
-#ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
-	m_TrayIcon = gtk_status_icon_new();
-	gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
-	gtk_status_icon_set_tooltip(m_TrayIcon, "PCMan X");
-
-	// Setup popup menu
-	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
-	g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
-			G_CALLBACK (CMainFrame::OnTray_Popup), this);
-
-	g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-#else
-	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
-
-	m_TrayButton = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
-	gtk_widget_show (m_TrayButton);
-
-	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-
-/*
-	g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
-			G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
-*/
-
-	m_TrayIcon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
-	gtk_widget_show (m_TrayIcon);
-	set_tray_icon();
-#endif
-#endif
+	CreateFavoritesMenu();
+	CreateTrayIcon();
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -645,16 +609,33 @@ void CMainFrame::OnQuit(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 }
 
-
-#include "pcmanx_xpm.xpm"
-#include "pcmanx_inverse_xpm.xpm"
-#include "conn_xpm.xpm"
+static void inverse_pixbuf(GdkPixbuf* pixbuf)
+{
+	int x = 0, y = 0;
+	int channels = gdk_pixbuf_get_n_channels(pixbuf);
+	int rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+	int width = gdk_pixbuf_get_width(pixbuf);
+	int height = gdk_pixbuf_get_height(pixbuf);
+	guchar *pixels = gdk_pixbuf_get_pixels(pixbuf);
+	for (x = 0; x < width; x++) {
+		for (y = 0; y < height; y++) {
+			guchar *ptr = pixels + y * rowstride + x * channels;
+			ptr[0] ^= 0xFF; //red
+			ptr[1] ^= 0xFF; //green
+			ptr[2] ^= 0xFF; //blue
+		}
+	}
+	return;
+}
 
 void CMainFrame::LoadIcons()
 {
-	m_MainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_xpm);
-	m_InverseMainIcon = gdk_pixbuf_new_from_xpm_data((const char**)pcmanx_inverse_xpm);
-	m_ConnIcon = gdk_pixbuf_new_from_xpm_data((const char**)conn_xpm);
+	GtkImage* image = GTK_IMAGE(gtk_image_new_from_file(DATADIR "/pixmaps/pcmanx.svg"));
+	GdkPixbuf* icon = gtk_image_get_pixbuf(image);
+	m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
+	m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
+	inverse_pixbuf(m_InverseMainIcon);
+	g_object_unref(icon);
 }
 
 void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -681,7 +662,7 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	string *font_family = NULL;
 	int font_type;
 	const char *font_action = gtk_action_get_name(GTK_ACTION(mitem));
-	if (!strcmp(font_action, "font")) {
+	if (!strcmp(font_action, "non_ascii_font")) {
 		font_size = &AppConfig.FontSize;
 		font_family = &AppConfig.FontFamily;
 		font_type = CTermView::FONT_DEFAULT;
@@ -752,14 +733,18 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if (_this->m_Mode != SIMPLE_MODE) {
 		_this->m_Mode = SIMPLE_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		if (_this->m_Unity == false) {
+		    gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+		}
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
 		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->HideTabs();
 	} else {
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		if (_this->m_Unity == false) {
+		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+		}
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
@@ -784,8 +769,8 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
-						"Copyright © 2005-2011\n"
+						_("<b>PCManX %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
+						"Copyright © 2005-2012\n"
 						"License: GNU Genral Public License\n"
 						"Project: <a href=\"%s\">%s</a>\n"
 						"Mailing List: <a href=\"%s\">%s</a>\n"
@@ -805,73 +790,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
-
 }
-
-#ifdef USE_WGET
-void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
-{
-	if (g_bIsUpateHandlerExisted == false) {
-		struct sigaction sa;
-		memset(&sa, 0, sizeof(sa));
-		sa.sa_handler = &CMainFrame::updateBBSListHandler;
-		g_pMyself = pThis;
-		sigaction(SIGUSR1, &sa, NULL);
-		sigaction(SIGUSR2, &sa, NULL);
-		g_bIsUpateHandlerExisted = true;
-	}
-
-	if (g_bUpdateingBBSList == false) {
-		pid_t child_pid = 0, parent_pid = getpid();
-
-		g_bUpdateingBBSList = true;
-
-		child_pid = fork();
-		if (child_pid == 0) {
-			int t_nRet = system("wget -O ~/.pcmanx/sitelist.tmp "
-				"http://free.ym.edu.tw/pcman/site_list.utf8 && "
-				"mv -f ~/.pcmanx/sitelist.tmp ~/.pcmanx/sitelist");
-			if (t_nRet == 0)
-				kill(parent_pid, SIGUSR1);
-			else
-				kill(parent_pid, SIGUSR2);
-			exit(0);
-		} else {
-			int stat_val = 0;
-			pid_t stat_pid = 0;
-			sleep(1);
-			stat_pid = wait(&stat_val);
-#ifdef USE_DEBUG
-			if (child_pid != stat_pid)
-				DEBUG("child_pid=%d stat_pid=%d stat_val=%d", child_pid, stat_pid, stat_val);
-#endif
-		}
-	}
-}
-
-void CMainFrame::updateBBSListHandler(int nSignalNumber)
-{
-	if (nSignalNumber == SIGUSR1 || nSignalNumber == SIGUSR2)
-	{
-		char* t_pcSuccess = _( "Update BBS List Success!");
-		char* t_pcFault = _( "Update BBS List Fault.");
-		char* t_pcMessage = NULL;
-
-		if (nSignalNumber == SIGUSR1)
-			t_pcMessage = t_pcSuccess;
-		else
-			t_pcMessage = t_pcFault;
-
-		GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
-			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", t_pcMessage);
-
-		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
-		gtk_dialog_run((GtkDialog*) t_pDialog); // == GTK_RESPONSE_OK)
-		gtk_widget_destroy(t_pDialog);
-		g_bUpdateingBBSList = false;
-	}
-}
-#endif
 
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* pMainFrame)
 {
@@ -952,11 +871,14 @@ void CMainFrame::OnPaste(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
+  int uao = 0;
 	CTelnetCon *con = _this->GetCurCon();
 	if (!con)
 		return;
+	if(_this->GetCurView())
+    uao = _this->GetCurView()->m_UAO;
 
-	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con);
+	CDownArticleDlg *dlg = new CDownArticleDlg(_this, con, uao);
 	//dlg->Show();
 	dlg->ShowModal();
 	dlg->Destroy();
@@ -973,9 +895,6 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
-#ifdef USE_WGET
-	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
-#endif
 
 #if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
@@ -983,10 +902,24 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 #ifdef USE_DOCKLET
 	if (AppConfig.ShowTrayIcon != show_tray_icon) {
-		if (AppConfig.ShowTrayIcon)
-			_this->ShowTrayIcon();
-		else
-			_this->HideTrayIcon();
+		if (_this->m_Unity == true && _this->m_dlhandle != NULL) {
+			void (*app_indicator_set_status)(void*, gint) =
+				(void (*)(void*, gint)) lt_dlsym(_this->m_dlhandle, "app_indicator_set_status");
+			if (AppConfig.ShowTrayIcon) {
+				app_indicator_set_status(_this->m_indicator, 1);
+			}
+			else {
+				app_indicator_set_status(_this->m_indicator, 0);
+			}
+		}
+		else {
+			if (AppConfig.ShowTrayIcon) {
+				_this->ShowTrayIcon();
+			}
+			else {
+				_this->HideTrayIcon();
+			}
+		}
 	}
 #endif
 
@@ -1101,11 +1034,11 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
 
 		// set images
 		GtkWidget *image_close =
-			gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 		GtkWidget *image_reconnect =
-			gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_MENU);
 		GtkWidget *image_add2fav =
-			gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+			gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
 
 		gtk_image_menu_item_set_image (
 			(GtkImageMenuItem *) menu_item_close, image_close);
@@ -1215,6 +1148,12 @@ void CMainFrame::OnDestroy()
 #endif
 
 	gtk_main_quit();
+
+	if (m_dlhandle != NULL) {
+		lt_dlclose(m_dlhandle);
+		m_dlhandle = NULL;
+	    m_Unity = false;
+	}
 }
 
 
@@ -1232,7 +1171,7 @@ bool CMainFrame::CanClose()
 	GtkWidget* dlg = gtk_message_dialog_new( (GtkWindow*)m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL,
-						_("Quit PCMan X ?"));
+						_("Quit PCManX ?"));
 	bool close = gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
 	gtk_widget_destroy(dlg);
 	return close;
@@ -1268,7 +1207,7 @@ void CMainFrame::OnAddToFavorites(GtkMenuItem* widget UNUSED,
 		gtk_menu_shell_insert( GTK_MENU_SHELL(_this->m_FavoritesMenu), fav_item,
 			AppConfig.Favorites.size()>0 ? (AppConfig.Favorites.size()-1) : 0 );
 
-		GtkWidget* image = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
+		GtkWidget* image = gtk_image_new_from_stock (GTK_STOCK_NETWORK, GTK_ICON_SIZE_MENU);
 
 		gtk_widget_show (image);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (fav_item), image);
@@ -1306,8 +1245,7 @@ void CMainFrame::CreateFavoritesMenu()
 		gtk_widget_show (fav_item);
 		gtk_container_add (GTK_CONTAINER (favorites_menu), fav_item);
 
-		GtkWidget* image = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_MENU);
-//		GtkWidget* image = gtk_image_new_from_pixbuf(m_ConnIcon);
+		GtkWidget* image = gtk_image_new_from_stock (GTK_STOCK_NETWORK, GTK_ICON_SIZE_MENU);
 		gtk_widget_show (image);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (fav_item), image);
 
@@ -1327,7 +1265,7 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_widget_show (add_to_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), add_to_fav_menu);
 
-	GtkWidget* image347 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+	GtkWidget* image347 = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image347);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_to_fav_menu), image347);
 
@@ -1336,7 +1274,7 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_widget_show (edit_fav_menu);
 	gtk_container_add (GTK_CONTAINER (favorites_menu), edit_fav_menu);
 
-	GtkWidget* image348 = gtk_image_new_from_stock ("gtk-edit", GTK_ICON_SIZE_MENU);
+	GtkWidget* image348 = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image348);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (edit_fav_menu), image348);
 
@@ -1352,6 +1290,62 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_menu_item_set_submenu( GTK_MENU_ITEM(m_FavoritesMenuItem), favorites_menu);
 }
 
+void CMainFrame::CreateTrayIcon()
+{
+#ifdef USE_DOCKLET
+#if GTK_CHECK_VERSION(2,10,0)
+	// Setup popup menu
+	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
+	if (m_Unity == true && m_dlhandle != NULL) {
+		void*(*app_indicator_new)(const gchar*, const gchar*, gint) =
+			(void*(*)(const gchar*, const gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
+		void (*app_indicator_set_menu)(void*, GtkMenu *) =
+			(void (*)(void*, GtkMenu *)) lt_dlsym(m_dlhandle, "app_indicator_set_menu");
+		void (*app_indicator_set_status)(void*, gint) =
+			(void (*)(void*, gint)) lt_dlsym(m_dlhandle, "app_indicator_set_status");
+		m_indicator = app_indicator_new("PCManX", DATADIR "/pixmaps/pcmanx.svg", 0);
+		app_indicator_set_menu(m_indicator, GTK_MENU(m_TrayPopup));
+		if (AppConfig.ShowTrayIcon) {
+			app_indicator_set_status(m_indicator, 1);
+		}
+		else {
+			app_indicator_set_status(m_indicator, 0);
+		}
+	}
+	else {
+		m_TrayIcon = gtk_status_icon_new();
+		gtk_status_icon_set_from_pixbuf(m_TrayIcon, m_MainIcon);
+		gtk_status_icon_set_tooltip(m_TrayIcon, "PCManX");
+
+		g_signal_connect (G_OBJECT (m_TrayIcon), "popup-menu",
+				G_CALLBACK (CMainFrame::OnTray_Popup), this);
+
+		g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
+				G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+	}
+#else
+	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
+
+	m_TrayButton = gtk_toggle_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
+	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
+	gtk_widget_show (m_TrayButton);
+
+	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
+			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
+
+	/*
+	   g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
+	   G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
+	   */
+
+	m_TrayIcon = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
+	gtk_widget_show (m_TrayIcon);
+	set_tray_icon();
+#endif
+#endif
+}
 
 void CMainFrame::OnFavorite(GtkMenuItem* item, CMainFrame* _this)
 {
@@ -1384,7 +1378,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	m_pView = view;
 	if( !m_pView || !m_pView->GetCon() )
 	{
-		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCMan X "VERSION );
+		gtk_window_set_title (GTK_WINDOW (m_Widget), "PCManX "VERSION );
 		gtk_entry_set_text( GTK_ENTRY(m_URLEntry), "");
 		return;
 	}
@@ -1397,7 +1391,7 @@ void CMainFrame::SetCurView(CTelnetView* view)
 	if( ! con->IsClosed() )
 		m_pNotebook->SetPageTitle( m_pView, title );
 
-	title += " - PCMan X "VERSION;
+	title += " - PCManX "VERSION;
 	gtk_window_set_title (GTK_WINDOW (m_Widget), title.c_str() );
 
 	char time_str[100];
@@ -1601,4 +1595,4 @@ void CMainFrame::UpdateBotStatus()
 }
 
 #endif	//	#ifdef USE_NANCY
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

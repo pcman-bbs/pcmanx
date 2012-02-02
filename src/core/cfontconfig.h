@@ -1,7 +1,7 @@
+/* -*- coding: utf-8; indent-tabs-mode: nil; tab-width: 4; c-basic-offset: 4; -*- */
+/* vim:set fileencodings=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4: */
 /**
- * forkpty.h - copied from rootsh project from sourceforge.net
- *
- * Copyright (c) 2009 Halton.Huo@Sun.COM
+ * Copyright (c) 2011 PCManX Development Group <pcmanx@googlegroups.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,28 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FORKPTY_H
-#define FORKPTY_H
+#ifndef C_FONT_CONFIG_H
+#define C_FONT_CONFIG_H
 
-#ifndef HAVE_FORKPTY
-pid_t forkpty(int *, char *, struct termios *, struct winsize *);
+#ifdef __GNUG__
+  #pragma interface "cfontconfig.h"
 #endif
+
+#include <X11/Xft/Xft.h>
+#include <vector>
+
+using namespace std; 
+
+struct CFontPack;
+
+class CFontConfig {
+    private:
+        CFontConfig(void);
+        vector<CFontPack*> fonts;
+    public:
+        ~CFontConfig(void);
+        static CFontConfig* Instance(void);
+        XftFont* SearchFontFor(FcChar32 ucs4);
+};
 
 #endif

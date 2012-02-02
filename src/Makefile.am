@@ -1,4 +1,6 @@
-SUBDIRS = core
+SUBDIRS = charset core
+
+AM_CPPFLAGS = $(LTDLINCL)
 
 localedir = $(datadir)/locale
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
@@ -8,12 +10,14 @@ bin_PROGRAMS = pcmanx
 INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/charset \
 	$(GUI_CFLAGS) \
 	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL) $(LIBLTDL)
+pcmanx_DEPENDENCIES = $(LTDLDEPS)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \
@@ -39,9 +43,6 @@ OPTIONAL_NANCY = \
 	nancy_bot/botutil.h
 
 EXTRA_DIST = \
-	conn_xpm.xpm \
-	pcmanx_xpm.xpm \
-	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET) \
 	$(OPTIONAL_NOTIFIER) \
 	$(OPTIONAL_SCRIPT) \
@@ -65,8 +66,7 @@ endif
 
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h \
-	view/forkpty.c view/forkpty.h
+	view/telnetview.cpp view/telnetview.h
 
 if USE_IPLOOKUP
 QQWRYSEEKER_SOURCES = \

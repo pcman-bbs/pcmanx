@@ -99,7 +99,7 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	gtk_widget_show (hbox18);
 	gtk_container_add (GTK_CONTAINER (alignment1), hbox18);
 	
-	image349 = gtk_image_new_from_stock ("gtk-network", GTK_ICON_SIZE_BUTTON);
+	image349 = gtk_image_new_from_stock (GTK_STOCK_NETWORK, GTK_ICON_SIZE_BUTTON);
 	gtk_widget_show (image349);
 	gtk_box_pack_start (GTK_BOX (hbox18), image349, FALSE, FALSE, 0);
 	

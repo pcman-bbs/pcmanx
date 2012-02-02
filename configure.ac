@@ -1,34 +1,19 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[1.0],[http://code.google.com/p/pcmanx-gtk2/issues/list])
-
+AC_INIT([pcmanx-gtk2],[1.1],[http://code.google.com/p/pcmanx-gtk2/issues/list])
 AC_CONFIG_HEADERS([config.h])
-#AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip silent-rules])
+AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules])
+
+LT_PREREQ([2.2.6])
+LT_CONFIG_LTDL_DIR([libltdl])
+LT_INIT([dlopen])
+LTDL_INIT
+
 AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE
-AC_C_CONST
-AC_C_INLINE
-AC_FUNC_ERROR_AT_LINE
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_STAT
-AC_CHECK_FUNCS([dup2 isascii memset mkdir regcomp setenv socket strchr strrchr strstr])
-AC_HEADER_STDBOOL
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
-AC_PATH_X
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_PROG_CC
-AC_PROG_CPP
-AM_PROG_AS
+
 AC_PROG_CXX
-AM_DISABLE_STATIC
-AC_PROG_RANLIB
-AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([],[no-xml])
-AC_PROG_INSTALL
 
 dnl define varible by OS
 case "$host" in
@@ -84,7 +69,6 @@ AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
-AH_VERBATIM([USE_WGET], [#undef USE_WGET])
 AH_VERBATIM([USE_IPLOOKUP], [#undef USE_IPLOOKUP])
 AH_VERBATIM([USE_PROXY], [#undef USE_PROXY])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
@@ -110,35 +94,6 @@ fi
 AM_CONDITIONAL([USING_LINUX], test "x$system" = "xLinux")
 
 AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [The version of pcmanx_gtk2])
-
-dnl
-dnl checking for forkpty()
-dnl
-AC_CHECK_FUNCS(forkpty,, AC_CHECK_LIB(util,forkpty, [AC_DEFINE(HAVE_FORKPTY)] [LIBS="$LIBS -lutil"]))
-
-dnl -----  pseudo terminal handling
-dnl -----  os        pty master      streams modules
-dnl -----  aix       /dev/ptc        - (loads ldterm by default)
-dnl -----  hpux      /dev/ptmx       ldterm ptem
-dnl -----  solaris   /dev/ptmx       ldterm ptem ttcompat
-
-dnl -----  aix loads module ldterm by default and wants no ptem
-dnl -----  ptmx takes precedence
-AC_MSG_CHECKING([for master pty])
-if test -r /dev/ptc ; then
-  if test -r /dev/ptmx ; then
-    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
-    AC_MSG_RESULT(ptmx)
-  else
-    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptc", [aix style pty master])
-    AC_MSG_RESULT(ptc)
-  fi
-elif test -r /dev/ptmx ; then
-  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
-  AC_MSG_RESULT(ptmx)
-else
-  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/null", [lets see what happens])
-fi
 
 dnl *********************************************************************
 dnl ** configure switches ***********************************************
@@ -183,11 +138,6 @@ AC_ARG_ENABLE([external],
 	AS_HELP_STRING([--disable-external],
 		[disable external SSH/Telnet support (default: yes)]),
 	external=$enableval, external="yes")
-
-AC_ARG_ENABLE([wget],
-	AS_HELP_STRING([--enable-wget],
-		[enable wget support (default: no)]),
-	wget=$enableval, wget="no")
 
 AC_ARG_ENABLE([iplookup],
 	AS_HELP_STRING([--enable-iplookup],
@@ -375,17 +325,6 @@ fi
 
 AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
 AC_SUBST(USE_EXTERNAL)
-
-dnl *********************************************************************
-dnl ** wget support ***********************************
-dnl *********************************************************************
-
-if test "$wget" = "yes"; then
-    AC_DEFINE_UNQUOTED(USE_WGET, [1], [Enable wget support])
-fi
-
-AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
-AC_SUBST(USE_WGET)
 
 dnl *********************************************************************
 dnl ** IP location lookup support ***********************************
@@ -658,6 +597,7 @@ AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
+	src/charset/Makefile
 	src/core/Makefile
 	po/Makefile.in
 	data/Makefile
@@ -684,7 +624,6 @@ dnl else
 dnl   echo "Python script support............ : $script"
 dnl fi
 echo External SSH/Telnet support...... : $external
-echo wget support..................... : $wget
 echo iplookup support................. : $iplookup
 echo proxy support.................... : $proxy
 echo

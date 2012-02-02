@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -32,6 +33,8 @@
 
 #include "telnetview.h"
 #include "telnetcon.h"
+#include "uao241.h"
+#include "uao250.h"
 
 #if !defined(MOZ_PLUGIN)
 #include "mainframe.h"
@@ -58,16 +61,25 @@ CTelnetView::~CTelnetView()
 
 string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
-#ifdef USE_WGET
-bool CTelnetView::m_bWgetFiles = false;
-#endif
 
 static GtkWidget* input_menu_item = NULL;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
 	gsize l;
-	gchar* _text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
+	gchar* _text = NULL;
+	/* UAO input support */
+	switch (m_UAO) {
+		case 2:
+			_text = uao250_u2b(text, strlen(text), &l);
+			break;
+		case 1:
+			_text = uao241_u2b(text, strlen(text), &l);
+			break;
+		default:
+			_text = g_convert(text, strlen(text), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &l, NULL);
+			break;
+	}
 	if( _text )
 	{
 		((CTelnetCon*)m_pTermData)->Send(_text, l);
@@ -517,7 +529,7 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 			// Show the "Copy Hyperlink" menu.
 			GtkWidget* popup = gtk_menu_new();
 			GtkWidget* item = gtk_image_menu_item_new_with_mnemonic( _("_Copy URL to Clipboard") );
-			GtkWidget* icon = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
+			GtkWidget* icon = gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
 			gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), icon);
 			g_signal_connect( G_OBJECT(item), "activate",
 							G_CALLBACK(on_hyperlink_copy), &do_copy);
@@ -635,8 +647,21 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			// Only when no control character is in this string can
 			// autowrap be enabled
 			unsigned int len = 0, max_len = GetCon()->m_Site.m_AutoWrapOnPaste;
-			gsize convl;
-			gchar* locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
+			gsize convl = 0;
+			gchar* locale_text = NULL;
+
+			/* UAO paste support */
+			switch (m_UAO) {
+				case 2:
+					locale_text = uao250_u2b(text.c_str(), 0, &convl);
+					break;
+				case 1:
+					locale_text = uao241_u2b(text.c_str(), 0, &convl);
+					break;
+				default:
+					locale_text = g_convert(text.c_str(), text.length(), GetCon()->m_Site.m_Encoding.c_str(), "UTF-8", NULL, &convl, NULL);
+					break;
+			}
 			if( !locale_text )
 				return;
 			// FIXME: Convert UTF-8 string to locale string.to prevent invalid UTF-8 string
@@ -713,27 +738,6 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string sURL)
 {
-#ifdef USE_WGET
-	if (m_bWgetFiles == true) {
-		const char* t_pcURL = sURL.c_str();
-		const char* t_pcDot = strrchr(t_pcURL, '.') + 1;
-		char t_cFileType = strlen(t_pcURL) - (t_pcDot -t_pcURL);
-		if (t_cFileType == 3) {
-			if (strncmp(t_pcDot, "rar", 3) == 0 ||
-				strncmp(t_pcDot, "zip", 3) == 0 ||
-				strncmp(t_pcDot, "tgz", 3) == 0 ||
-				strncmp(t_pcDot, "tbz", 3) == 0)
-			{
-				string t_sURL = sURL;
-				t_sURL.insert(0, "wget ");
-				t_sURL.append(" &");
-				system(t_sURL.c_str());
-				return;
-			}
-		}
-	}
-#endif
-
 #if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )
 	{
@@ -780,4 +784,4 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	}
 	delete []cmdline;
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

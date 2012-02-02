@@ -33,7 +33,7 @@ gf_display_get_workarea(GdkRectangle *rect) {
 	Atom xa_desktops, xa_current, xa_workarea, xa_type;
 	Display *x_display;
 	Window x_root;
-	guint32 desktops = 0, current = 0;
+	guint32 current = 0;
 	gulong *workareas, len, fill;
 	guchar *data;
 	gint format;
@@ -81,7 +81,6 @@ gf_display_get_workarea(GdkRectangle *rect) {
 	if(!data)
 		return FALSE;
 
-	desktops = *(guint32 *)data;
 	XFree(data);
 
 	/* find the _NET_CURRENT_DESKTOP atom */

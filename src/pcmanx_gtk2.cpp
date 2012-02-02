@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -32,6 +33,7 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <cstring>
+#include <ltdl.h>
 
 #include "mainframe.h"
 #include "appconfig.h"
@@ -64,7 +66,7 @@ static GOptionEntry entries[] = {
 	  G_OPTION_ARG_NONE, &multiple_instance,
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
-	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+	{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 };
 
 /**
@@ -72,7 +74,7 @@ static GOptionEntry entries[] = {
  *
  * @section intro_sec Introduction
  *
- * PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
+ * PCManX is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
  * It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
  * Some handy functions like tabbed-browsing, auto-login and a built-in ANSI editor enabling colored text editing are also provided.
  *
@@ -86,6 +88,7 @@ static GOptionEntry entries[] = {
  */
 int main(int argc, char *argv[])
 {
+	lt_dlinit();
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
@@ -113,7 +116,7 @@ int main(int argc, char *argv[])
 		/* GTK requires a program's argc and argv variables, and
 		 * requires that they be valid. Set it up. */
 		int fake_argc = 1;
-		char *_fake_argv[] = { (char *) "", NULL };
+		char *_fake_argv[] = { (char *) "pcmanx", NULL };
 		char **fake_argv = _fake_argv;
 
 		gtk_init (&fake_argc, &fake_argv);
@@ -171,7 +174,7 @@ int main(int argc, char *argv[])
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
 	if (!notify_is_initted()) {
-		notify_init("pcmanx-gtk2");
+		notify_init("pcmanx");
 	}
 #else
 	popup_notifier_init(main_frm->GetMainIcon());
@@ -195,6 +198,8 @@ int main(int argc, char *argv[])
 	AppConfig.SaveFavorites();
 	AppConfig.Save();
 
+	lt_dlexit();
+
 	return 0;
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

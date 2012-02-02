@@ -1,6 +1,6 @@
 /**
  * site.h - interface for the CSite class.
- *                                                                              
+ *
  * Copyright (c) 2004-2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,14 +61,14 @@ public:
 
 	// Detect Double-byte characters?
 	bool m_DetectDBChar;
-	
+
 	// Terminal settings
 	// Rows per page
 	unsigned int m_RowsPerPage;
 	// Cols per page
 	unsigned int m_ColsPerPage;
 
-	// When pasting long articles, especially those from webpages, wrap lines 
+	// When pasting long articles, especially those from webpages, wrap lines
 	// automatically when there are more than 'm_AutoWrapOnPaste' characters per line.
 	unsigned int m_AutoWrapOnPaste;	// 0 means disabled.
 
@@ -95,6 +95,8 @@ public:
 #endif
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
+
+    int m_UAO;
 
 #ifdef USE_PROXY
 	// Proxy settings

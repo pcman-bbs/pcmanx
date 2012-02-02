@@ -102,7 +102,7 @@ void CFont::CloseXftFont( XftFont* font )
 XftFont* CFont::CreateXftFont( string name, int size, bool anti_alias )
 {
 	Display *display = gdk_x11_get_default_xdisplay();
-	int screen = DefaultScreen (display);
+	int screen = gdk_x11_get_default_screen();
 
 	XftFont* font = XftFontOpen (display, screen,
 					FC_FAMILY, FcTypeString, name.c_str(),
@@ -157,7 +157,7 @@ void CFont::RecalculateMetrics( XftFont* font )
 XftFont* CFont::CreateXftFont( string name, int width, int height, bool anti_alias )
 {
 	Display *display = gdk_x11_get_default_xdisplay();
-	int screen = DefaultScreen (display);
+	int screen = gdk_x11_get_default_screen();
 	int size = height;
 
 	FcPattern* pattern = FcPatternBuild( NULL,
