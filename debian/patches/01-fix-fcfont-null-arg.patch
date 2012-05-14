@@ -1,0 +1,14 @@
+Index: pcmanx-gtk2-1.1/src/core/cfontconfig.cpp
+===================================================================
+--- pcmanx-gtk2-1.1.orig/src/core/cfontconfig.cpp	2011-12-28 19:59:03.000000000 +0800
++++ pcmanx-gtk2-1.1/src/core/cfontconfig.cpp	2012-05-14 19:50:51.266858130 +0800
+@@ -43,7 +43,8 @@
+     FcDefaultSubstitute(pattern);
+ 
+     FcFontSet* font_set = FcFontSetCreate();
+-    FcFontSet* patterns = FcFontSort(0, pattern, FcTrue, 0, NULL);
++    FcResult result;
++    FcFontSet* patterns = FcFontSort(0, pattern, FcTrue, 0, &result);
+ 
+     for (int i = 0; i < patterns->nfont; i++) {
+ 

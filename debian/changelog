@@ -1,3 +1,9 @@
+pcmanx-gtk2 (1.1-2) unstable; urgency=low
+
+  * Apply FcFontSet arg fix from upstream to prevent from crashing.
+
+ -- Emfox Zhou <emfox@debian.org>  Mon, 14 May 2012 21:00:03 +0800
+
 pcmanx-gtk2 (1.1-1) unstable; urgency=low
 
   * New upstream release. (Closes: #658364)
