@@ -310,6 +310,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
+    {"web_search", NULL, _("_Web Search"), NULL, NULL, G_CALLBACK (CMainFrame::OnWebSearch)},
     {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
@@ -458,6 +459,8 @@ static const char *ui_info =
   "    <separator/>"
   "    <menuitem action='fullscreen' />"
   "    <menuitem action='simple' />"
+  "    <separator/>"
+  "   <menuitem action='web_search' />"
   "  </popup>"
 #if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
   "  <popup name='tray_popup'>"
@@ -1412,6 +1415,12 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		con->m_Sel->SelectPage();
 		_this->GetCurView()->Refresh();
 	}
+}
+
+void CMainFrame::OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this)
+{
+       CTelnetView* pCurView = _this->GetCurView();
+       pCurView->OnWebSearchSelected();
 }
 
 void CMainFrame::LoadStartupSites()

@@ -784,4 +784,52 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	   }
 	}
 }
+
+#define  SEARCH_URL ("http://www.google.com.tw/search?&ie=UTF-8&q=")
+void CTelnetView::OnWebSearchSelected()
+{
+	string selectedText = CTermView::m_pTermData->GetSelectedText(false);
+
+	// Convert to utf8
+    // FIXME: Search keyword (Big5-UAO) may not be converted to UTF8 correctly
+	gsize wl = 0;
+	gchar* selectedTextUTF8 = g_convert_with_fallback(
+				   selectedText.c_str(), selectedText.length(),
+				   "utf-8", m_pTermData->m_Encoding.c_str(),
+				   (gchar *) "?", NULL, &wl, NULL);
+
+	if (selectedTextUTF8 == NULL)
+	{
+		   return;
+	}
+
+	INFO("Try to OnWebSearchSelected: %s (%d)", selectedTextUTF8, (int) g_utf8_strlen(selectedTextUTF8, -1) );
+
+	//compose URL
+	string searchURL;
+	searchURL.append(SEARCH_URL);
+	searchURL.append(selectedTextUTF8);
+
+	INFO("Seach App with URL: %s %s", m_WebBrowser.c_str(), searchURL.c_str());
+
+	pid_t pid = fork();
+
+	if (pid == -1)
+	{
+		g_print("can not fork %s: %s\n", m_WebBrowser.c_str(), strerror(errno));
+	}
+	else if (pid == 0)
+	{
+	   // Child Process;
+	   int rval = execlp(m_WebBrowser.c_str(), m_WebBrowser.c_str(), searchURL.c_str(), NULL);
+	   if (rval == -1)
+	   {
+		   g_print("fail to run %s: %s\n",  m_WebBrowser.c_str(), strerror(errno));
+	   }
+	}
+
+	g_free((void*)selectedTextUTF8);
+}
+
+
 /* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */
