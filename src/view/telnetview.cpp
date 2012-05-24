@@ -21,6 +21,9 @@
   #pragma implementation "telnetview.h"
 #endif
 
+#include <unistd.h>
+#include <errno.h>
+
 #include <glib/gi18n.h>
 
 #include <cstring>
@@ -754,10 +757,6 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	}
 #endif /* !defined(MOZ_PLUGIN) */
 
-	// In URL, the char "&" will be read as "background execution" when run the browser command without " "
-	sURL.insert(0,"\"");
-	sURL.append("\"");
-
 	string app;
 	if( !strstr( sURL.c_str(), "://") && strchr(sURL.c_str(), '@'))
 	{
@@ -768,20 +767,21 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	else
 		app = m_WebBrowser;
 
-	char *cmdline = new char[ app.length() + sURL.length() + 10 ];
-	if( strstr(app.c_str(), "%s") )
-		sprintf( cmdline, app.c_str(), sURL.c_str() );
-	else
+	pid_t pid = fork();
+
+	if (pid == -1)
 	{
-		memcpy(cmdline, app.c_str(), app.length());
-		cmdline[app.length()] = ' ';
-		memcpy( &cmdline[app.length() + 1], sURL.c_str(), sURL.length() + 1);
+		g_print("can not fork %s: %s\n", app.c_str(), strerror(errno));
 	}
-	strcat(cmdline, " &");	// launch the browser in background.
-	if (system(cmdline) == -1)	// Is this portable?
+	else if (pid == 0)
 	{
-		g_print("Run `%s` failed.\n", cmdline);
+	   // Child Process;
+	   INFO("Start APP with: %s %s",  app.c_str(), sURL.c_str());
+	   int rval = execlp(app.c_str(), app.c_str(), sURL.c_str(), NULL);
+	   if (rval == -1)
+	   {
+		   g_print("fail to run %s: %s\n",   app.c_str(), strerror(errno));
+	   }
 	}
-	delete []cmdline;
 }
 /* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

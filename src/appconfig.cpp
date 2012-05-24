@@ -368,8 +368,8 @@ void CAppConfig::SetToDefault()
 	VerticalCenterAlign = false;
     UAO = 0;
 
-	MailClient = "xdg-email %s";
-	WebBrowser = "xdg-open %s";
+	MailClient = "xdg-email";
+	WebBrowser = "xdg-open";
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;
 #endif
@@ -385,11 +385,6 @@ void CAppConfig::SetToDefault()
 
 void CAppConfig::AfterLoad()
 {
-	if(	!WebBrowser.empty() && !strstr( WebBrowser.c_str(), " %s") )
-		WebBrowser += " %s";
-	if(	!MailClient.empty() && !strstr( MailClient.c_str(), " %s") )
-		MailClient += " %s";
-
 /*	if( 0 == Shadow.length() )
 		return;
 
