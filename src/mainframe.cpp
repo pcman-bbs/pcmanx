@@ -926,10 +926,12 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 #endif
 
-	if (AppConfig.ShowStatusBar)
-		gtk_widget_show_all(_this->m_Statusbar);
-	else
-		gtk_widget_hide_all(_this->m_Statusbar);
+	if (_this->m_Mode == NORMAL_MODE) {
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all(_this->m_Statusbar);
+		else
+			gtk_widget_hide_all(_this->m_Statusbar);
+	}
 }
 
 
