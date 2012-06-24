@@ -165,7 +165,6 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 
 CMainFrame::CMainFrame()
 {
-	char* desktop = getenv("XDG_CURRENT_DESKTOP");
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
@@ -173,13 +172,7 @@ CMainFrame::CMainFrame()
 	m_Mode = NORMAL_MODE;
 	m_TrayIcon = NULL;
 
-	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
-		m_Unity = true;
-		m_dlhandle = lt_dlopen("libappindicator.so.1");
-	} else {
-		m_Unity = false;
-		m_dlhandle = NULL;
-	}
+	m_dlhandle = lt_dlopen("libappindicator.so.1");
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "pcmanx", "PCManX");
@@ -736,7 +729,7 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if (_this->m_Mode != SIMPLE_MODE) {
 		_this->m_Mode = SIMPLE_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		if (_this->m_Unity == false) {
+		if (_this->m_indicator != NULL) {
 		    gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
 		}
 		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
@@ -745,7 +738,7 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	} else {
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		if (_this->m_Unity == false) {
+		if (_this->m_indicator != NULL) {
 		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		}
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
@@ -905,7 +898,7 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 #ifdef USE_DOCKLET
 	if (AppConfig.ShowTrayIcon != show_tray_icon) {
-		if (_this->m_Unity == true && _this->m_dlhandle != NULL) {
+		if (_this->m_dlhandle != NULL) {
 			void (*app_indicator_set_status)(void*, gint) =
 				(void (*)(void*, gint)) lt_dlsym(_this->m_dlhandle, "app_indicator_set_status");
 			if (AppConfig.ShowTrayIcon) {
@@ -1157,7 +1150,6 @@ void CMainFrame::OnDestroy()
 	if (m_dlhandle != NULL) {
 		lt_dlclose(m_dlhandle);
 		m_dlhandle = NULL;
-	    m_Unity = false;
 	}
 }
 
@@ -1301,7 +1293,7 @@ void CMainFrame::CreateTrayIcon()
 #if GTK_CHECK_VERSION(2,10,0)
 	// Setup popup menu
 	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
-	if (m_Unity == true && m_dlhandle != NULL) {
+	if (m_dlhandle != NULL) {
 		void*(*app_indicator_new)(const gchar*, const gchar*, gint) =
 			(void*(*)(const gchar*, const gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
 		void (*app_indicator_set_menu)(void*, GtkMenu *) =
