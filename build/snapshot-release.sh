@@ -29,11 +29,9 @@ DATE=$(date -d"$(git show -s --format=%ci HEAD)" +%Y%m%d%H%M%S)
 HASH=$(git show -s --format=%h HEAD)
 
 ## change version number ##
-if ! grep AC_INIT ../configure.ac | cut -d ',' -f 2 | grep "svn${REV}" > /dev/null; then
-    sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}+${HASH}]/" ../configure.ac
-fi
+sed -i "s/AC_INIT(\[pcmanx-gtk2\],\[\([0-9]*\)\.\([0-9]*\)\]/AC_INIT([pcmanx-gtk2],[\1.\2+${DATE}+${HASH}]/" ../configure.ac
 
-[ ! -f '../configure' ] && cd .. && ./autogen.sh && cd build
+[ ! -f '../configure' ] && cd .. && ./autogen.sh && cd -
 [ ! -f 'Makefile' ] && ../configure
 
 VER="$(../configure --version | head -n1 | awk '{ print $3 }')"
