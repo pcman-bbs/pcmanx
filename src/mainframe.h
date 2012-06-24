@@ -212,6 +212,7 @@ private:
 	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
+	bool m_Unity;
 };
 
 #endif
