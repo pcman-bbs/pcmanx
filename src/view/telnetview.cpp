@@ -775,13 +775,23 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	}
 	else if (pid == 0)
 	{
-	   // Child Process;
-	   INFO("Start APP with: %s %s",  app.c_str(), sURL.c_str());
-	   int rval = execlp(app.c_str(), app.c_str(), sURL.c_str(), NULL);
-	   if (rval == -1)
-	   {
-		   g_print("fail to run %s: %s\n",   app.c_str(), strerror(errno));
-	   }
+		// Child Process;
+		// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
+		size_t legacyAppSymOffset = string::npos;
+
+		legacyAppSymOffset = app.find(" %s");
+		if ( legacyAppSymOffset != string::npos)
+		{
+			app.erase(legacyAppSymOffset, 3);
+		}
+
+		INFO("Start APP with: %s %s",  app.c_str(), sURL.c_str());
+
+		int rval = execlp(app.c_str(), app.c_str(), sURL.c_str(), NULL);
+		if (rval == -1)
+		{
+			g_print("fail to run %s: %s\n",   app.c_str(), strerror(errno));
+		}
 	}
 }
 
@@ -820,12 +830,22 @@ void CTelnetView::OnWebSearchSelected()
 	}
 	else if (pid == 0)
 	{
-	   // Child Process;
-	   int rval = execlp(m_WebBrowser.c_str(), m_WebBrowser.c_str(), searchURL.c_str(), NULL);
-	   if (rval == -1)
-	   {
-		   g_print("fail to run %s: %s\n",  m_WebBrowser.c_str(), strerror(errno));
-	   }
+		// Child Process;
+		// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
+		size_t legacyAppSymOffset = string::npos;
+
+		legacyAppSymOffset = m_WebBrowser.find(" %s");
+		if ( legacyAppSymOffset != string::npos)
+		{
+			// copy on write, will not pollute parent m_WebBrowser
+			m_WebBrowser.erase(legacyAppSymOffset, 3);
+		}
+
+		int rval = execlp(m_WebBrowser.c_str(), m_WebBrowser.c_str(), searchURL.c_str(), NULL);
+		if (rval == -1)
+		{
+			g_print("fail to run %s: %s\n",  m_WebBrowser.c_str(), strerror(errno));
+		}
 	}
 
 	g_free((void*)selectedTextUTF8);
