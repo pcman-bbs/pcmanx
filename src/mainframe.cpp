@@ -172,7 +172,9 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+#ifdef USE_DOCKLET
 	m_TrayIcon = NULL;
+#endif
 
 	/* Detecting Unity desktop environment */
 	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
