@@ -741,6 +741,9 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string sURL)
 {
+	gchar *cmdAndURL[3] = {0, 0, 0};
+	GError *err = NULL;
+
 #if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )
 	{
@@ -767,37 +770,32 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	else
 		app = m_WebBrowser;
 
-	pid_t pid = fork();
+	// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
+	size_t legacyAppSymOffset = string::npos;
 
-	if (pid == -1)
+	legacyAppSymOffset = app.find(" %s");
+	if ( legacyAppSymOffset != string::npos)
 	{
-		g_print("can not fork %s: %s\n", app.c_str(), strerror(errno));
+		app.erase(legacyAppSymOffset, 3);
 	}
-	else if (pid == 0)
+
+	// Launch app
+	INFO("Launch app with URL: %s %s", app.c_str(), sURL.c_str());
+	cmdAndURL[0] = (gchar *) app.c_str();
+	cmdAndURL[1] = (gchar *) sURL.c_str();
+
+	bool rval = g_spawn_async(NULL, cmdAndURL, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &err);
+	if (!rval)
 	{
-		// Child Process;
-		// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
-		size_t legacyAppSymOffset = string::npos;
-
-		legacyAppSymOffset = app.find(" %s");
-		if ( legacyAppSymOffset != string::npos)
-		{
-			app.erase(legacyAppSymOffset, 3);
-		}
-
-		INFO("Start APP with: %s %s",  app.c_str(), sURL.c_str());
-
-		int rval = execlp(app.c_str(), app.c_str(), sURL.c_str(), NULL);
-		if (rval == -1)
-		{
-			g_print("fail to run %s: %s\n",   app.c_str(), strerror(errno));
-		}
+		g_print("can not run %s: %s\n", app.c_str(), err->message);
 	}
 }
 
 #define  SEARCH_URL ("http://www.google.com.tw/search?&ie=UTF-8&q=")
 void CTelnetView::OnWebSearchSelected()
 {
+	gchar *cmdAndURL[3] = {0, 0, 0};
+	GError *err = NULL;
 	string selectedText = CTermView::m_pTermData->GetSelectedText(false);
 
 	// Convert to utf8
@@ -815,37 +813,34 @@ void CTelnetView::OnWebSearchSelected()
 
 	INFO("Try to OnWebSearchSelected: %s (%d)", selectedTextUTF8, (int) g_utf8_strlen(selectedTextUTF8, -1) );
 
-	//compose URL
+	// Compose URL
 	string searchURL;
 	searchURL.append(SEARCH_URL);
 	searchURL.append(selectedTextUTF8);
 
-	INFO("Seach App with URL: %s %s", m_WebBrowser.c_str(), searchURL.c_str());
+	string app = m_WebBrowser;
 
-	pid_t pid = fork();
+	// Remove %s for backward compatibility.
+	// the legacy setting is "xdg-open %s"
+	size_t legacyAppSymOffset = string::npos;
 
-	if (pid == -1)
+	legacyAppSymOffset = app.find(" %s");
+	if ( legacyAppSymOffset != string::npos)
 	{
-		g_print("can not fork %s: %s\n", m_WebBrowser.c_str(), strerror(errno));
+		// copy on write, will not pollute parent m_WebBrowser
+		app.erase(legacyAppSymOffset, 3);
 	}
-	else if (pid == 0)
+
+	INFO("Seach App with URL: %s %s", app.c_str(), searchURL.c_str());
+
+	// Launch browser
+	cmdAndURL[0] = (gchar *) app.c_str();
+	cmdAndURL[1] = (gchar *) searchURL.c_str();
+
+	bool rval = g_spawn_async(NULL, cmdAndURL, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &err);
+	if (!rval)
 	{
-		// Child Process;
-		// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
-		size_t legacyAppSymOffset = string::npos;
-
-		legacyAppSymOffset = m_WebBrowser.find(" %s");
-		if ( legacyAppSymOffset != string::npos)
-		{
-			// copy on write, will not pollute parent m_WebBrowser
-			m_WebBrowser.erase(legacyAppSymOffset, 3);
-		}
-
-		int rval = execlp(m_WebBrowser.c_str(), m_WebBrowser.c_str(), searchURL.c_str(), NULL);
-		if (rval == -1)
-		{
-			g_print("fail to run %s: %s\n",  m_WebBrowser.c_str(), strerror(errno));
-		}
+		g_print("can not run %s: %s\n", app.c_str(), err->message);
 	}
 
 	g_free((void*)selectedTextUTF8);
