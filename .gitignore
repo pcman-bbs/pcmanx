@@ -1,0 +1,46 @@
+# autotools generated
+Doxyfile
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+autotools/
+config.log
+config.status
+configure
+libtool
+m4
+ChangeLog
+Doxygen
+config.guess
+config.h
+config.h.in
+config.sub
+depcomp
+install-sh
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
+libltdl/
+ltmain.sh
+missing
+mkinstalldirs
+pcmanx-gtk2.spec
+pcmanx.desktop
+src/pcmanx
+stamp-h1
+
+# compiling output
+*.dat
+*.la
+*.lo
+*.o
+.deps
+.libs
+
+# L10N
+po/Makefile.in.in
+po/POTFILES
+po/stamp-it
+*.gmo
