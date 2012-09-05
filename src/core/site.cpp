@@ -42,14 +42,16 @@ CSite::CSite(string Name)
 	// Time duration in seconds during which should we reconnect
 	// automatically when disconnected from server, and 0 means disabled.
 	m_AutoReconnect = 20;
+	char *env_lang;
 
 	// We send this string, m_AntiIdleStr, to the server every 'm_AntiIdle'
 	// seconds to prevent being kicked by the server.
 	m_AntiIdleStr = "^[OB";	// empty string means '\0'
 	m_AntiIdle = 180;	// 0 means disabled
 
+	env_lang = getenv("LANG");
 	// Site Encoding
-	if (strncmp("zh_CN", getenv("LANG"), 5) == 0) {
+	if (env_lang && strncmp("zh_CN", env_lang, 5) == 0) {
 		m_Encoding = "GB2312";
 	} else {
 		m_Encoding = "BIG5";
