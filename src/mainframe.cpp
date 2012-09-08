@@ -764,7 +764,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	char* authors = _(
 			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 			"Jim Huang (Developer) <jserv.tw@gmail.com>\n"
-			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
+			"Kan-Ru Chen (Developer) <kanru@kanru.info>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
