@@ -356,7 +356,7 @@ bool CTelnetCon::OnRecv()
 		return false;
 
 	gsize rlen = 0;
-	g_io_channel_read(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen);
+	g_io_channel_read_chars(m_IOChannel, (char*)m_pRecvBuf, (RECV_BUF_SIZE - 1), &rlen, NULL);
 	if(rlen == 0 && !(m_State & TS_CLOSED) )
 	{
 		OnClose();
@@ -702,7 +702,7 @@ int CTelnetCon::Send(void *buf, int len)
 	if( m_IOChannel && m_State & TS_CONNECTED )
 	{
 		gsize wlen = 0;
-		g_io_channel_write(m_IOChannel, (char*)buf, len, &wlen);
+		g_io_channel_write_chars(m_IOChannel, (char*)buf, len, &wlen, NULL);
 
 		if( wlen > 0 )
 			m_IdleTime = 0;	// Since data has been sent, we are not idle.
