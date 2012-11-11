@@ -2,7 +2,7 @@
 AM_VERSION=-1.11
 AC_VERSION=
 
-set -x
+set -e -x
 
 if [ ! -e ChangeLog -a -e ./build/changelog.sh ]; then
   ./build/changelog.sh > ChangeLog
