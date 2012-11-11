@@ -65,7 +65,7 @@ pcmanx-gtk2 (${VER}-0~UNRELEASED1) UNRELEASED; urgency=low
 ENDLINE
     case "$(lsb_release -s -i)" in
 	(Ubuntu)
-	    for series in lucid maverick natty oneiric precise quantal; do
+	    for series in lucid maverick natty oneiric precise quantal raring; do
 		sed -i "s/UNRELEASED/$series/g" debian/changelog
 		dpkg-buildpackage -uc -us -S
 		sed -i "s/$series/UNRELEASED/g" debian/changelog
