@@ -3,6 +3,7 @@ Version ?
 * Feature: Allow users to search selected text through Web search engine
 * Feature: Handle malformed URL properly
 * Feature: Usability enhancement for Unity desktop envionment
+* Feature: Add new interface to show and hide toolbar
 * Bugfix:  SegFault when $LANG is not set
 * Bugfix:  Replace system() with execlp() for sake of security
 * Bugfix:  Use g_spawn_async() instead of fork()/execlp() to prevent crash
@@ -11,6 +12,7 @@ Version ?
 * Bugfix:  FcFontSort() should no longer use `NULL' as the value of `result'
 * Bugfix:  Change "class" and "name" hints for a window.
 * Bugfix:  Add "StartupNotify=true"
+* Bugfix:  Fix the invisible cursor issue
 
 
 Version 1.1 - January 2012
