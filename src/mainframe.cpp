@@ -219,6 +219,11 @@ CMainFrame::CMainFrame()
 
 	gtk_box_pack_start (GTK_BOX (vbox), m_Menubar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Toolbar, FALSE, FALSE, 0);
+	if (AppConfig.ShowToolbar) {
+		gtk_widget_show_all(m_Toolbar);
+	} else {
+		gtk_widget_hide_all(m_Toolbar);
+	}
 	gtk_box_pack_start (GTK_BOX (vbox), m_pNotebook->m_Widget, TRUE, TRUE, 0);
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
@@ -256,6 +261,8 @@ CMainFrame::CMainFrame()
 	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
 	if (AppConfig.ShowStatusBar) {
 		gtk_widget_show_all(m_Statusbar);
+	} else {
+		gtk_widget_hide_all(m_Statusbar);
 	}
 
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
@@ -728,7 +735,8 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
@@ -752,7 +760,8 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		if (_this->m_Unity == false) {
 		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		}
-		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
@@ -931,6 +940,10 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 #endif
 
 	if (_this->m_Mode == NORMAL_MODE) {
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all(_this->m_Toolbar);
+		else
+			gtk_widget_hide_all(_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all(_this->m_Statusbar);
 		else

@@ -96,6 +96,7 @@ public:
 #ifdef USE_DOCKLET
 	bool ShowTrayIcon;
 #endif
+        bool ShowToolbar;
 	bool ShowStatusBar;
 	bool PopupNotifier;
 	int PopupTimeout;

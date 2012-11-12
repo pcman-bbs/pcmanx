@@ -95,6 +95,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
 #endif
+		CFG_BOOL( ShowToolbar )
 		CFG_BOOL( ShowStatusBar )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
@@ -373,6 +374,7 @@ void CAppConfig::SetToDefault()
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;
 #endif
+	ShowToolbar = true;
 	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;
