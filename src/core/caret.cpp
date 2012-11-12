@@ -103,11 +103,18 @@ void CCaret::DrawInverse()
 		return;
 	}
 
+#if GTK_CHECK_VERSION(2,24,0)
 	cairo_t* cr = gdk_cairo_create(m_pParent->window);
 	cairo_set_source_rgb(cr, 1, 1, 1);
 	cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
 	cairo_rectangle(cr, m_Pos.x, m_Pos.y, m_Width, m_Height);
 	cairo_fill(cr);
 	cairo_destroy(cr);
+#else
+	gdk_gc_set_function(m_GC, GDK_INVERT);
+	gdk_draw_drawable(m_pParent->window, m_GC, m_pParent->window,
+		m_Pos.x, m_Pos.y, m_Pos.x, m_Pos.y, m_Width, m_Height);
+	gdk_gc_set_function(m_GC, GDK_COPY);
+#endif
 }
 
