@@ -4,6 +4,7 @@ Version ?
 * Feature: Handle malformed URL properly
 * Feature: Usability enhancement for Unity desktop envionment
 * Feature: Add new interface to show and hide toolbar
+* Feature: Remember maximized state
 * Bugfix:  SegFault when $LANG is not set
 * Bugfix:  Replace system() with execlp() for sake of security
 * Bugfix:  Use g_spawn_async() instead of fork()/execlp() to prevent crash

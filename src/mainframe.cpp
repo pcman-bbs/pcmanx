@@ -239,6 +239,8 @@ CMainFrame::CMainFrame()
 //	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
 //	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
+//
+	g_signal_connect(G_OBJECT(m_Widget), "window-state-event", G_CALLBACK(CMainFrame::OnWindowStateEvent), this);
 
 	g_signal_connect(G_OBJECT(m_Widget), "delete-event", G_CALLBACK(CMainFrame::OnClose), this);
 
@@ -271,6 +273,12 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+
+	if (AppConfig.Maximized) {
+		gtk_window_maximize((GtkWindow*) m_Widget);
+	} else {
+		gtk_window_unmaximize((GtkWindow*) m_Widget);
+	}
 }
 
 
@@ -1136,6 +1144,19 @@ gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 	return true;
 }
 
+gboolean CMainFrame::OnWindowStateEvent(GtkWindow* window,
+										GdkEventWindowState* event,
+										CMainFrame* _this)
+{
+	if ((event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED) == GDK_WINDOW_STATE_MAXIMIZED) {
+		if ((event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == GDK_WINDOW_STATE_MAXIMIZED) {
+			AppConfig.Maximized = true;
+		} else {
+			AppConfig.Maximized = false;
+		}
+	}
+	return true;
+}
 
 gboolean CMainFrame::OnClose( GtkWidget* widget UNUSED,
                               GdkEvent* evt UNUSED,

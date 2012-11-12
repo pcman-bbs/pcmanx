@@ -111,6 +111,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSizeEn )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
+		CFG_BOOL( Maximized )
 		_CFG_BOOL ( "HorizontalCenterAlign", m_DefaultSite.m_bHorizontalCenterAlign )
 		_CFG_BOOL ( "VerticalCenterAlign", m_DefaultSite.m_bVerticalCenterAlign )
 		_CFG_INT ( "UAO", m_DefaultSite.m_UAO )
@@ -365,6 +366,7 @@ void CAppConfig::SetToDefault()
 	FontFamilyEn = "WenQuanYi Micro Hei Mono";
 	AntiAliasFont = true;
 	CompactLayout = false;
+        Maximized = false;
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
     UAO = 0;
