@@ -86,6 +86,9 @@ private:
 	int m_Height;
 	//The parent widget compoment.
 	GtkWidget* m_pParent;
+#if GTK_CHECK_VERSION(2,22,0)
+	cairo_t* m_Cairo;
+#endif
 	GdkGC* m_GC;
 };
 
