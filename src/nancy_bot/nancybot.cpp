@@ -138,7 +138,7 @@ NancyBot::askNancy(string msg_input)
 	string msg_out = "PCManX-NancyBot";  // init msg_out
 	if( (BOT_RUN_LEVEL & USE_TEACH )&& (BOT_RUN_LEVEL & USE_AUTO_LEARN))
 	{
-		unsigned int get_here;
+		size_t get_here;
 		if( (get_here = msg_input.find_first_of('=')) != string::npos ) // found
 		{
 			string str_first = msg_input.substr(0,get_here);
@@ -154,7 +154,7 @@ NancyBot::askNancy(string msg_input)
 	}
 	if (BOT_RUN_LEVEL & USE_USER_DEFINED_USAGES)
 	{
-		unsigned int get_here;
+		size_t get_here;
 		if( (get_here = msg_input.find_first_of('|')) != string::npos ) // found
 		{
 			string str_first = msg_input.substr(0,get_here);

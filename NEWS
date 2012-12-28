@@ -15,6 +15,7 @@ Version ?
 * Bugfix:  Change "class" and "name" hints for a window.
 * Bugfix:  Add "StartupNotify=true"
 * Bugfix:  Fix the invisible cursor issue
+* Bugfix:  Fix a bug that NancyBot incorrect parsing the input string on 64bit OS.
 
 
 Version 1.1 - January 2012
