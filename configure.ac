@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[1.1],[http://code.google.com/p/pcmanx-gtk2/issues/list])
+AC_INIT([pcmanx-gtk2],[1.2],[http://code.google.com/p/pcmanx-gtk2/issues/list])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules])
 
