@@ -114,8 +114,6 @@ void CCaret::DrawInverse()
 #if GTK_CHECK_VERSION(2,22,0)
 	if (m_Cairo == NULL) {
 		m_Cairo = gdk_cairo_create(m_pParent->window);
-		cairo_destroy(m_Cairo);
-		m_Cairo = gdk_cairo_create(m_pParent->window);
 	}
 	cairo_set_source_rgb(m_Cairo, 1, 1, 1);
 	cairo_set_operator(m_Cairo, CAIRO_OPERATOR_DIFFERENCE);
