@@ -2,7 +2,7 @@
  * src/clipboard.c - X clipboard hack to detect if X application is running
  *
  * Copyright (c) 2005
- *	Jim Huang <jserv@kaffe.org>
+ *	Jim Huang <jserv.tw@gmail.com>
  *
  * Copyright (c) 1999
  *	Elliot Lee <sopwith@redhat.com>, Red Hat, Inc.
