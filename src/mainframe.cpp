@@ -333,22 +333,27 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+    {"new_con_gnome_term_sty", GTK_STOCK_NETWORK, _("_New Connection"), "<Ctrl><Shift>T", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
     {"close2", GTK_STOCK_CLOSE, _("_Close Connection"), "<Ctrl>Delete", _("Close Connection"), G_CALLBACK(CMainFrame::OnCloseCon)},
     {"next_con", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Alt>X", _("Next Page"), G_CALLBACK (CMainFrame::OnNextCon)},
     {"next_con1", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Right", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
+    {"next_con_gnome_term_sty", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Page_Down", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
     {"previous_con", GTK_STOCK_GO_UP, _("_Previous Page"), "<Alt>Z", _("Previous Page"), G_CALLBACK (CMainFrame::OnPrevCon)},
     {"previous_con1", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Left", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
+    {"previous_con_gnome_term_sty", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Page_Up", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
     {"first_con",GTK_STOCK_GO_UP, _("_First Page"),"<Ctrl>Home", _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
     {"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), "<Ctrl>End", _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
     {"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
     {"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
     {"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
     {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+    {"copy_gnome_term_sty", GTK_STOCK_COPY, _("_Copy"), "<Ctrl><Shift>C", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
     {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
     {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
+    {"paste_gnome_term_sty", GTK_STOCK_PASTE, _("_Paste"), "<Ctrl><Shift>V", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
     {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
     {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
     {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
@@ -495,6 +500,11 @@ static const char *ui_info =
   " <accelerator action='reconnect1'/>"
   " <accelerator action='next_con1'/>"
   " <accelerator action='previous_con1'/>"
+  " <accelerator action='new_con_gnome_term_sty'/>"
+  " <accelerator action='next_con_gnome_term_sty'/>"
+  " <accelerator action='previous_con_gnome_term_sty'/>"
+  " <accelerator action='copy_gnome_term_sty'/>"
+  " <accelerator action='paste_gnome_term_sty'/>"
   "</ui>";
 
 void CMainFrame::MakeUI()
