@@ -370,6 +370,7 @@ GtkActionEntry CMainFrame::m_ActionEntries[] =
     {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
 #endif
     {"help_menu", NULL, _("_Help"), NULL, NULL, NULL},
+    {"shortcut_list", GTK_STOCK_DIALOG_INFO,  _("_Shortcut List"), NULL, NULL, G_CALLBACK (CMainFrame::OnShortcutList)},
     {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
     // Fullscreen Mode
     {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
@@ -454,6 +455,7 @@ static const char *ui_info =
 #endif
   "    </menu>"
   "    <menu action='help_menu'>"
+  "      <menuitem action='shortcut_list'/>"
   "      <menuitem action='about'/>"
   "    </menu>"
   "  </menubar>"
@@ -784,6 +786,53 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
 	}
+}
+
+void CMainFrame::OnShortcutList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+{
+	char* connect_shortcuts= _(
+			"Site List	Alt+S\n\n"
+			"New Connection	Alt+Q\n"
+			"New Connection	Ctrl+Shift+T\n\n"
+			"Reconnection	Alt+R\n"
+			"Reconnection   Ctrl+Ins\n\n"
+			"Close		Alt+W\n"
+			"Close		Ctrl+Del\n\n"
+			"Next Page	Alt+X\n"
+			"Next Page	Alt+?\n"
+			"Next Page	Ctrl+Shift+PgDn\n\n"
+			"Previous Page	Alt+Z\n"
+			"Previous Page	Alt+?\n"
+			"Previous Page	Ctrl+Shift+PgUp\n\n"
+			"First Page	Ctrl+Home\n"
+			"Last Page	Ctrl+End");
+
+	char* edit_shortcuts= _(
+			"Copy		Alt+O\n"
+			"Copy		Ctrl+Shift+C\n\n"
+			"Paste		Alt+P\n"
+			"Paste		Ctrl+Shift+V\n\n"
+			"Paste from Clipboard	Shift+Ins\n\n"
+			"Emotions		Ctrl+Enter");
+
+	char* view_shortcuts= _(
+			"Full Screen Mode	Alt+Enter\n"
+			"Simple Mode		Shift+Enter\n"
+#ifdef USE_DOCKLET
+			"Show Main Window	Alt+M"
+#endif
+			);
+	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
+						GTK_DIALOG_DESTROY_WITH_PARENT,
+						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+						_("<b>Connect Shortcuts</b>\n%s\n\n"
+						  "<b>Edit Shortcuts</b>\n%s\n\n"
+						  "<b>View Shortcuts</b>\n%s\n\n"),
+						   connect_shortcuts, edit_shortcuts, view_shortcuts );
+
+	gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
+	gtk_dialog_run((GtkDialog*) dlg); // == GTK_RESPONSE_OK
+	gtk_widget_destroy(dlg);
 }
 
 void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)

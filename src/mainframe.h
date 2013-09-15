@@ -62,6 +62,7 @@ public:
 	void OnTelnetConRecv(CTelnetView* con);
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnShortcutList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);

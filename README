@@ -49,3 +49,44 @@ Help Options:
 Application Options:
   -m, --multiple-instance=N   Allow multiple instances
 
+
+Keyboard Shortcut List
+======================
+[ Connect Shortcuts ]
+Site List		Alt+S
+
+New Connection		Alt+Q
+New Connection		Ctrl+Shift+T
+
+Reconnection		ALT+R
+Reconnection		Ctrl+Ins
+
+Close			Alt+W
+Close			Ctrl+Del
+
+Next Page		Alt+X
+Next Page		Alt+?
+Next Page		Ctrl+Shift+PgDn
+
+Previous Page		Alt+Z
+Previous Page		Alt+?
+Previous Page		Ctrl+Shift+PgUp
+
+First Page		Ctrl+Home
+Last Page		Ctrl+End
+
+[ Edit Shortcuts ]
+Copy			Alt+O
+Copy			Ctrl+Shift+C
+
+Paste			Alt+P
+Paste			Ctrl+Shift+V
+
+Paste from Clipboard	Shift+Ins
+
+Emotions		Ctrl+Enter
+
+[ View Shortcuts ]
+Full Screen Mode	Alt+Enter
+Simple Mode		Shift+Enter
+Show Main Window	Alt+M
