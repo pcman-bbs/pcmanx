@@ -43,7 +43,8 @@ CFontConfig::CFontConfig(void)
     FcDefaultSubstitute(pattern);
 
     FcFontSet* font_set = FcFontSetCreate();
-    FcFontSet* patterns = FcFontSort(0, pattern, FcTrue, 0, NULL);
+    FcResult result;
+    FcFontSet* patterns = FcFontSort(0, pattern, FcTrue, 0, &result);
 
     for (int i = 0; i < patterns->nfont; i++) {
 

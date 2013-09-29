@@ -21,6 +21,9 @@
   #pragma implementation "telnetview.h"
 #endif
 
+#include <unistd.h>
+#include <errno.h>
+
 #include <glib/gi18n.h>
 
 #include <cstring>
@@ -738,6 +741,9 @@ void CTelnetView::OnDestroy()
 
 void CTelnetView::OnHyperlinkClicked(string sURL)
 {
+	gchar *cmdAndURL[3] = {0, 0, 0};
+	GError *err = NULL;
+
 #if !defined(MOZ_PLUGIN)
 	if( 0 == strncmpi( sURL.c_str(), "telnet:", 7) )
 	{
@@ -754,10 +760,6 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	}
 #endif /* !defined(MOZ_PLUGIN) */
 
-	// In URL, the char "&" will be read as "background execution" when run the browser command without " "
-	sURL.insert(0,"\"");
-	sURL.append("\"");
-
 	string app;
 	if( !strstr( sURL.c_str(), "://") && strchr(sURL.c_str(), '@'))
 	{
@@ -768,20 +770,81 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	else
 		app = m_WebBrowser;
 
-	char *cmdline = new char[ app.length() + sURL.length() + 10 ];
-	if( strstr(app.c_str(), "%s") )
-		sprintf( cmdline, app.c_str(), sURL.c_str() );
-	else
+	// Remove %s for backward compatibility, the legacy setting is "xdg-open %s"
+	size_t legacyAppSymOffset = string::npos;
+
+	legacyAppSymOffset = app.find(" %s");
+	if ( legacyAppSymOffset != string::npos)
 	{
-		memcpy(cmdline, app.c_str(), app.length());
-		cmdline[app.length()] = ' ';
-		memcpy( &cmdline[app.length() + 1], sURL.c_str(), sURL.length() + 1);
+		app.erase(legacyAppSymOffset, 3);
 	}
-	strcat(cmdline, " &");	// launch the browser in background.
-	if (system(cmdline) == -1)	// Is this portable?
+
+	// Launch app
+	INFO("Launch app with URL: %s %s", app.c_str(), sURL.c_str());
+	cmdAndURL[0] = (gchar *) app.c_str();
+	cmdAndURL[1] = (gchar *) sURL.c_str();
+
+	bool rval = g_spawn_async(NULL, cmdAndURL, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &err);
+	if (!rval)
 	{
-		g_print("Run `%s` failed.\n", cmdline);
+		g_print("can not run %s: %s\n", app.c_str(), err->message);
 	}
-	delete []cmdline;
 }
+
+#define  SEARCH_URL ("http://www.google.com.tw/search?&ie=UTF-8&q=")
+void CTelnetView::OnWebSearchSelected()
+{
+	gchar *cmdAndURL[3] = {0, 0, 0};
+	GError *err = NULL;
+	string selectedText = CTermView::m_pTermData->GetSelectedText(false);
+
+	// Convert to utf8
+    // FIXME: Search keyword (Big5-UAO) may not be converted to UTF8 correctly
+	gsize wl = 0;
+	gchar* selectedTextUTF8 = g_convert_with_fallback(
+				   selectedText.c_str(), selectedText.length(),
+				   "utf-8", m_pTermData->m_Encoding.c_str(),
+				   (gchar *) "?", NULL, &wl, NULL);
+
+	if (selectedTextUTF8 == NULL)
+	{
+		   return;
+	}
+
+	INFO("Try to OnWebSearchSelected: %s (%d)", selectedTextUTF8, (int) g_utf8_strlen(selectedTextUTF8, -1) );
+
+	// Compose URL
+	string searchURL;
+	searchURL.append(SEARCH_URL);
+	searchURL.append(selectedTextUTF8);
+
+	string app = m_WebBrowser;
+
+	// Remove %s for backward compatibility.
+	// the legacy setting is "xdg-open %s"
+	size_t legacyAppSymOffset = string::npos;
+
+	legacyAppSymOffset = app.find(" %s");
+	if ( legacyAppSymOffset != string::npos)
+	{
+		// copy on write, will not pollute parent m_WebBrowser
+		app.erase(legacyAppSymOffset, 3);
+	}
+
+	INFO("Seach App with URL: %s %s", app.c_str(), searchURL.c_str());
+
+	// Launch browser
+	cmdAndURL[0] = (gchar *) app.c_str();
+	cmdAndURL[1] = (gchar *) searchURL.c_str();
+
+	bool rval = g_spawn_async(NULL, cmdAndURL, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &err);
+	if (!rval)
+	{
+		g_print("can not run %s: %s\n", app.c_str(), err->message);
+	}
+
+	g_free((void*)selectedTextUTF8);
+}
+
+
 /* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

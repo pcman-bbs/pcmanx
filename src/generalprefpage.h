@@ -43,6 +43,7 @@ public:
 #ifdef USE_DOCKLET
 	GtkWidget *m_ShowTrayIcon;
 #endif
+	GtkWidget *m_ShowToolbar;
 	GtkWidget *m_ShowStatusBar;
 	GtkWidget *m_WebBrowser;
 	GtkWidget *m_MailClient;

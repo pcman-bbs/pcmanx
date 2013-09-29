@@ -1,3 +1,12 @@
+pcmanx-gtk2 (1.2-1) unstable; urgency=low
+
+  * New upstream release. (Close: #719949)
+  * FcFontSet arg fix removed.
+  * Policy updated to 3.9.4.
+  * Bump compat level to 9, to use dpkg-buildflags by default.
+
+ -- Emfox Zhou <emfox@debian.org>  Sun, 29 Sep 2013 09:21:00 +0800
+
 pcmanx-gtk2 (1.1-2) unstable; urgency=low
 
   * Apply FcFontSet arg fix from upstream to prevent from crashing.

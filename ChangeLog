@@ -1,4 +1,203 @@
 
+2013-02-21  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Bump to 1.2 release.
+
+2013-02-21  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Try to workaround the cairo caret invisible issue.
+
+2012-12-28  Youchen Lee <copyleft@utcr.org>
+
+	Fix a bug that NancyBot incorrect parsing the input string on 64bit OS.
+
+2012-11-25  Jim Huang <jserv@0xlab.org>
+
+	trivial update for further release
+
+2012-11-13  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Improve the performance of cairo caret.
+
+2012-11-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Remember maximized state.
+
+2012-11-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Update NEWS for preparing new release.
+
+2012-11-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Add new interface to show and hide toolbar. (Fixes issue 55)
+
+2012-11-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Keep using GDK's GDK_INVERT for older GTK+ compatibility.
+
+2012-11-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Stop when any error occurs. (Fixes issue 63)
+
+2012-11-11  Shih-Yuan Lee (FourDollars) <sylee@canonical.com>
+
+	Add Ubuntu raring.
+
+2012-11-11  Shih-Yuan Lee (FourDollars) <sylee@canonical.com>
+
+	Use Cairo's CAIRO_OPERATOR_DIFFERENCE to replace GDK's GDK_INVERT. (Fixes issue 50)
+
+2012-09-18  Shih-Yuan Lee (FourDollars) <sylee@canonical.com>
+
+	Fix the use of deprecated API of GIO.
+
+2012-09-08  Jim Huang <jserv@0xlab.org>
+
+	update kanru's contact info
+
+2012-09-05  Jim Huang <jserv@0xlab.org>
+
+	update contributor list
+
+2012-09-05  Jim Huang <jserv@0xlab.org>
+
+	update NEWS for preparing new release
+
+2012-09-05  Gary Ching-Pang Lin <chingpang@gmail.com>
+
+	Check the string from getenv() to avoid segfault
+	
+	In src/core/site.cpp, the returned string of getenv(LANG) was used in
+	strncmp() without checking if the string was valid or not. A SegFault
+	could happen if $LANG wasn't set.
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-08-29  Jim Huang <jserv@0xlab.org>
+
+	Add .gitignore
+
+2012-08-29  Wen Liao <zzz00072@gmail.com>
+
+	Use g_spawn_async() instead of fork()/execlp() to prevent crash
+	
+	pcmanx terminates unexpectedly because of running child commands
+	specified by setting web browser or mail client.  This patch
+	reimplements execution methods by using g_spawn_async() instead of
+	fork()/execlp().
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-07-04  Wen Liao <zzz00072@gmail.com>
+
+	Remove %s string before launching external programs for backward compatibility
+	
+	The legacy setting is "xdg-open %s". Thus, pcmanx will run 'xdg-open %s' when
+	users click a URL or a mail link. Due to 'xdg-open %s' command does not exist,
+	pcmanx gets a signal SIGABRT and being terminated unexpectedly.
+	
+	Signed-off-by: Wen Liao <zzz00072@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-08-10  Jim Huang <jserv@0xlab.org>
+
+	Fix commit about SVN since it is no longer used
+
+2012-08-10  Jim Huang <jserv@0xlab.org>
+
+	Fix build failure when configured as --disable-docklet
+	Reported and patched by pptpb
+
+2012-07-04  Jim Huang <jserv@0xlab.org>
+
+	Handle malformed URL properly
+	
+	The old DetectCommonURLs checks if a string is a valid URL by validing given
+	string which has [0-9][a-z][A-Z][+-.] and "://".  That is incorrect because
+	the string "aaa://test.host" would be accepted as a valid one.
+	
+	A helper function is added to perform further checking if the string has protocol
+	http://, https://, telnet://, and ftp:// or not.
+	
+	Based on the original work of Wen Liao <zzz00072@gmail.com>
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Don't hide the menu bar in Unity desktop envionment.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Update translations for zh_CN and zh_TW.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Fix the error of build/snapshot-release.sh.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Please don't add .gitignore. It will affect the execution of build/snapshot-release.sh.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Add Ubuntu quantal.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Use appindicator instead of gtk_status_icon when detecting libappindicator.so.1 on the system.
+
+2012-06-24  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Fix the problem that status bar will show up in simple mode.
+
+2012-05-25  Jim Huang <jserv@0xlab.org>
+
+	Add .gitignore
+
+2012-05-24  Wen Liao <zzz00072@gmail.com>
+
+	Allow users to search selected text through Web search engine
+	
+	NOTE: If the keyword is encoded in Big5-UAO, it may not be able to be
+	converted to UTF-8 correctly, which results in incomplete search
+	requests.
+	
+	Signed-off-by: Wen Liao <zzz00072@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-05-24  Wen Liao <zzz00072@gmail.com>
+
+	Replace system() with execlp() for sake of security
+	
+	When launching web browser and email client, the original implementation
+	makes use of system(), which is expected to cause further security
+	issues.
+	
+	Signed-off-by: Wen Liao <zzz00072@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-05-01  Jim Huang <jserv@0xlab.org>
+
+	FcFontSort() should no longer use `NULL' as the value of `result'
+	
+	After a recent commit[1] in the fontconfig code, FcFontSort() no longer
+	accepts NULL as the `result' argument.
+	Therefore, the code in src/core/cfontconfig.cpp should be updated
+	accordingly.
+	Attached is a patch to fix this issue.
+	
+	[1] http://cgit.freedesktop.org/fontconfig/commit/?id=a18ca17b6211f62fbd1d893811b94b8c83db4cc0
+	
+	Patched by: CasperVector@gmail.com
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2012-01-31  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* pcmanx.desktop.in: Add semi-colon. (Fixes issue 49)
+
+2012-01-30  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh: Modify for xz compressing format.
+
 2012-01-30  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	* NEWS: Update release news.

@@ -166,20 +166,24 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 CMainFrame::CMainFrame()
 {
 	char* desktop = getenv("XDG_CURRENT_DESKTOP");
+
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+#ifdef USE_DOCKLET
 	m_TrayIcon = NULL;
+#endif
 
+	/* Detecting Unity desktop environment */
 	if (desktop != NULL && strcmp("Unity", desktop) == 0) {
 		m_Unity = true;
-		m_dlhandle = lt_dlopen("libappindicator.so.1");
 	} else {
 		m_Unity = false;
-		m_dlhandle = NULL;
 	}
+
+	m_dlhandle = lt_dlopen("libappindicator.so.1");
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "pcmanx", "PCManX");
@@ -215,6 +219,11 @@ CMainFrame::CMainFrame()
 
 	gtk_box_pack_start (GTK_BOX (vbox), m_Menubar, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Toolbar, FALSE, FALSE, 0);
+	if (AppConfig.ShowToolbar) {
+		gtk_widget_show_all(m_Toolbar);
+	} else {
+		gtk_widget_hide_all(m_Toolbar);
+	}
 	gtk_box_pack_start (GTK_BOX (vbox), m_pNotebook->m_Widget, TRUE, TRUE, 0);
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
@@ -230,6 +239,8 @@ CMainFrame::CMainFrame()
 //	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
 //	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
+//
+	g_signal_connect(G_OBJECT(m_Widget), "window-state-event", G_CALLBACK(CMainFrame::OnWindowStateEvent), this);
 
 	g_signal_connect(G_OBJECT(m_Widget), "delete-event", G_CALLBACK(CMainFrame::OnClose), this);
 
@@ -252,6 +263,8 @@ CMainFrame::CMainFrame()
 	gtk_box_pack_start (GTK_BOX (m_Statusbar), (GtkWidget*)m_StatusBarTime, FALSE, FALSE, 2);
 	if (AppConfig.ShowStatusBar) {
 		gtk_widget_show_all(m_Statusbar);
+	} else {
+		gtk_widget_hide_all(m_Statusbar);
 	}
 
 	m_BlinkTimer = g_timeout_add(600, (GSourceFunc)CMainFrame::OnBlinkTimer, this );
@@ -260,6 +273,12 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+
+	if (AppConfig.Maximized) {
+		gtk_window_maximize((GtkWindow*) m_Widget);
+	} else {
+		gtk_window_unmaximize((GtkWindow*) m_Widget);
+	}
 }
 
 
@@ -310,6 +329,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 GtkActionEntry CMainFrame::m_ActionEntries[] =
   {
+    {"web_search", NULL, _("_Web Search"), NULL, NULL, G_CALLBACK (CMainFrame::OnWebSearch)},
     {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
@@ -458,6 +478,8 @@ static const char *ui_info =
   "    <separator/>"
   "    <menuitem action='fullscreen' />"
   "    <menuitem action='simple' />"
+  "    <separator/>"
+  "   <menuitem action='web_search' />"
   "  </popup>"
 #if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
   "  <popup name='tray_popup'>"
@@ -721,7 +743,8 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
@@ -745,7 +768,8 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		if (_this->m_Unity == false) {
 		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		}
-		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
 		if (AppConfig.ShowStatusBar)
 			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
@@ -757,7 +781,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	char* authors = _(
 			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
 			"Jim Huang (Developer) <jserv.tw@gmail.com>\n"
-			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
+			"Kan-Ru Chen (Developer) <kanru@kanru.info>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
 			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
@@ -902,7 +926,7 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 #ifdef USE_DOCKLET
 	if (AppConfig.ShowTrayIcon != show_tray_icon) {
-		if (_this->m_Unity == true && _this->m_dlhandle != NULL) {
+		if (_this->m_dlhandle != NULL) {
 			void (*app_indicator_set_status)(void*, gint) =
 				(void (*)(void*, gint)) lt_dlsym(_this->m_dlhandle, "app_indicator_set_status");
 			if (AppConfig.ShowTrayIcon) {
@@ -923,10 +947,16 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 #endif
 
-	if (AppConfig.ShowStatusBar)
-		gtk_widget_show_all(_this->m_Statusbar);
-	else
-		gtk_widget_hide_all(_this->m_Statusbar);
+	if (_this->m_Mode == NORMAL_MODE) {
+		if (AppConfig.ShowToolbar)
+			gtk_widget_show_all(_this->m_Toolbar);
+		else
+			gtk_widget_hide_all(_this->m_Toolbar);
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all(_this->m_Statusbar);
+		else
+			gtk_widget_hide_all(_this->m_Statusbar);
+	}
 }
 
 
@@ -1114,6 +1144,19 @@ gboolean CMainFrame::OnBlinkTimer(CMainFrame* _this)
 	return true;
 }
 
+gboolean CMainFrame::OnWindowStateEvent(GtkWindow* window,
+										GdkEventWindowState* event,
+										CMainFrame* _this)
+{
+	if ((event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED) == GDK_WINDOW_STATE_MAXIMIZED) {
+		if ((event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) == GDK_WINDOW_STATE_MAXIMIZED) {
+			AppConfig.Maximized = true;
+		} else {
+			AppConfig.Maximized = false;
+		}
+	}
+	return true;
+}
 
 gboolean CMainFrame::OnClose( GtkWidget* widget UNUSED,
                               GdkEvent* evt UNUSED,
@@ -1152,7 +1195,6 @@ void CMainFrame::OnDestroy()
 	if (m_dlhandle != NULL) {
 		lt_dlclose(m_dlhandle);
 		m_dlhandle = NULL;
-	    m_Unity = false;
 	}
 }
 
@@ -1296,7 +1338,7 @@ void CMainFrame::CreateTrayIcon()
 #if GTK_CHECK_VERSION(2,10,0)
 	// Setup popup menu
 	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
-	if (m_Unity == true && m_dlhandle != NULL) {
+	if (m_dlhandle != NULL) {
 		void*(*app_indicator_new)(const gchar*, const gchar*, gint) =
 			(void*(*)(const gchar*, const gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");
 		void (*app_indicator_set_menu)(void*, GtkMenu *) =
@@ -1412,6 +1454,12 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		con->m_Sel->SelectPage();
 		_this->GetCurView()->Refresh();
 	}
+}
+
+void CMainFrame::OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this)
+{
+       CTelnetView* pCurView = _this->GetCurView();
+       pCurView->OnWebSearchSelected();
 }
 
 void CMainFrame::LoadStartupSites()

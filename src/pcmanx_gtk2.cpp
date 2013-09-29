@@ -83,7 +83,7 @@ static GOptionEntry entries[] = {
  * - Mailing List &amp; Forum
  *   - http://groups.google.com/group/PCManX
  * - Repository
- *   - http://pcmanx-gtk2.googlecode.com/svn
+ *   - http://code.google.com/p/pcmanx-gtk2/source/
  *
  */
 int main(int argc, char *argv[])
