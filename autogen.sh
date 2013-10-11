@@ -1,5 +1,5 @@
 #! /bin/sh
-AM_VERSION=-1.11
+AM_VERSION=
 AC_VERSION=
 
 set -e -x
@@ -18,8 +18,5 @@ AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake
 AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} intltoolize -c --automake --force
 ${AUTOMAKE:-automake$AM_VERSION} --add-missing --copy --include-deps
 ${AUTOCONF:-autoconf$AC_VERSION}
-
-# mkinstalldirs was not correctly installed in some cases.
-cp -f /usr/share/automake${AM_VERSION}/mkinstalldirs .
 
 rm -rf autom4te.cache

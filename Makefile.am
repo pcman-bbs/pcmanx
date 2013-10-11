@@ -10,7 +10,6 @@ AUX_DIST = \
 	$(ac_aux_dir)/depcomp
 
 EXTRA_DIST = \
-	mkinstalldirs \
 	autogen.sh \
 	intltool-extract.in \
 	intltool-merge.in \
