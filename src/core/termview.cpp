@@ -203,7 +203,7 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	// Hide the caret to prevent drawing problems.
 	m_Caret.Hide();
 
-	GdkDrawable* dc = m_Widget->window;
+	GdkDrawable* dc = gtk_widget_get_window(m_Widget);
 	if(!GDK_IS_DRAWABLE(dc))
 	{
 		DEBUG("WARNNING! Draw on DELETED widget!");
@@ -271,13 +271,14 @@ void CTermView::OnTextInput(const gchar* string UNUSED)
 void CTermView::OnCreate()
 {
 	CWidget::OnCreate();
-	gtk_im_context_set_client_window(m_IMContext, m_Widget->window);
+	GdkWindow *window = gtk_widget_get_window(m_Widget);
+	gtk_im_context_set_client_window(m_IMContext, window);
 
 	m_XftDraw = XftDrawCreate(
-		GDK_WINDOW_XDISPLAY(m_Widget->window),
-		GDK_WINDOW_XWINDOW(m_Widget->window),
-		GDK_VISUAL_XVISUAL(gdk_drawable_get_visual(m_Widget->window)),
-		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(m_Widget->window)));
+		GDK_WINDOW_XDISPLAY(window),
+		GDK_WINDOW_XWINDOW(window),
+		GDK_VISUAL_XVISUAL(gdk_drawable_get_visual(window)),
+		GDK_COLORMAP_XCOLORMAP (gdk_drawable_get_colormap(window)));
 	XftDrawSetSubwindowMode(m_XftDraw, IncludeInferiors);
 
 
@@ -286,7 +287,7 @@ void CTermView::OnCreate()
 		m_Font[i] = new CFont("WenQuanYi Micro Hei Mono", 16);
 	}
 
-	m_GC = gdk_gc_new(m_Widget->window);
+	m_GC = gdk_gc_new(window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
 
 	m_Caret.Create(this);
@@ -295,7 +296,7 @@ void CTermView::OnCreate()
 
 bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip UNUSED, GdkColor* clr UNUSED)
 {
-	GdkDrawable* dc = m_Widget->window;
+	GdkDrawable* dc = gtk_widget_get_window(m_Widget);
 	guchar* uchar = (guchar*)ch;
 // NOTE: Omit this check to increase performance.
 // IsSpaceFillingChar should be called prior to calling this method.
@@ -371,7 +372,7 @@ bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int 
 
 int CTermView::DrawChar(int row, int col)
 {
-	GdkDrawable* dc = m_Widget->window;
+	GdkDrawable* dc = gtk_widget_get_window(m_Widget);
 	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
 	{
 //		g_warning("Draw on DELETED widget!\n");
@@ -1025,8 +1026,6 @@ void CTermView::OnDestroy()
 
 	if( m_HandCursor )
 		gdk_cursor_unref(m_HandCursor);
-	if( m_HandCursor->ref_count <= 0 )
-		m_HandCursor = NULL;
 
 	CView::OnDestroy();	// Remember to destruct parent
 }

@@ -100,14 +100,14 @@ void CCaret::DrawInverse()
 {
 	if( !m_pParent )
 		return;
-	if( !GDK_IS_DRAWABLE(m_pParent->window))
-	{
-//		g_warning("Warring! Draw on DELETED widget!\n");
+
+    GdkWindow *window = gtk_widget_get_window(m_pParent);
+	if( !GDK_IS_DRAWABLE(window)) {
 		return;
 	}
 
 	if (m_Cairo == NULL) {
-		m_Cairo = gdk_cairo_create(m_pParent->window);
+		m_Cairo = gdk_cairo_create(window);
 	}
 	cairo_set_source_rgb(m_Cairo, 1, 1, 1);
 	cairo_set_operator(m_Cairo, CAIRO_OPERATOR_DIFFERENCE);
