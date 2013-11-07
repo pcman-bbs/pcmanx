@@ -136,101 +136,101 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 
 	switch(evt->keyval)
 	{
-	case GDK_Left:
-	case GDK_KP_Left:
+	case GDK_KEY_Left:
+	case GDK_KEY_KP_Left:
 		GetCon()->SendRawString("\x1bOD\x1bOD",( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
 		break;
-	case GDK_Right:
-	case GDK_KP_Right:
+	case GDK_KEY_Right:
+	case GDK_KEY_KP_Right:
 		GetCon()->SendRawString("\x1bOC\x1bOC",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
 		break;
-	case GDK_Up:
-	case GDK_KP_Up:
+	case GDK_KEY_Up:
+	case GDK_KEY_KP_Up:
 		GetCon()->SendRawString("\x1bOA",3);
 		break;
-	case GDK_Down:
-	case GDK_KP_Down:
+	case GDK_KEY_Down:
+	case GDK_KEY_KP_Down:
  		GetCon()->SendRawString("\x1bOB",3);
 		break;
-	case GDK_BackSpace:
+	case GDK_KEY_BackSpace:
 		GetCon()->SendRawString("\b\b", ( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
 		break;
-	case GDK_Return:
-	case GDK_KP_Enter:
+	case GDK_KEY_Return:
+	case GDK_KEY_KP_Enter:
 		reconnect = GetCon()->IsClosed();
 		GetCon()->SendRawString("\r",1);
 		break;
-	case GDK_Delete:
-	case GDK_KP_Delete:
+	case GDK_KEY_Delete:
+	case GDK_KEY_KP_Delete:
 		GetCon()->SendRawString("\x1b[3~\x1b[3~",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
 		break;
-	case GDK_Insert:
-	case GDK_KP_Insert:
+	case GDK_KEY_Insert:
+	case GDK_KEY_KP_Insert:
 		GetCon()->SendRawString("\x1b[2~",4);
 		break;
-	case GDK_Home:
-	case GDK_KP_Home:
+	case GDK_KEY_Home:
+	case GDK_KEY_KP_Home:
 		GetCon()->SendRawString("\x1b[1~",4);
 		break;
-	case GDK_End:
-	case GDK_KP_End:
+	case GDK_KEY_End:
+	case GDK_KEY_KP_End:
 		GetCon()->SendRawString("\x1b[4~",4);
 		break;
-//	case GDK_Prior:
-	case GDK_Page_Up:
-	case GDK_KP_Page_Up:
+//	case GDK_KEY_Prior:
+	case GDK_KEY_Page_Up:
+	case GDK_KEY_KP_Page_Up:
 		GetCon()->SendRawString("\x1b[5~",4);
 		break;
-//	case GDK_Next:
-	case GDK_Page_Down:
-	case GDK_KP_Page_Down:
+//	case GDK_KEY_Next:
+	case GDK_KEY_Page_Down:
+	case GDK_KEY_KP_Page_Down:
 		GetCon()->SendRawString("\x1b[6~",4);
 		break;
-	case GDK_Tab:
+	case GDK_KEY_Tab:
 		GetCon()->SendRawString("\t", 1);
 		break;
-	case GDK_Escape:
+	case GDK_KEY_Escape:
 		GetCon()->SendRawString("\x1b", 1);
 		break;
 // F1-F12 keys
-	case GDK_F1:
-	case GDK_KP_F1:
+	case GDK_KEY_F1:
+	case GDK_KEY_KP_F1:
 		GetCon()->SendRawString("\x1bOP", 3);
 		break;
-	case GDK_F2:
-	case GDK_KP_F2:
+	case GDK_KEY_F2:
+	case GDK_KEY_KP_F2:
 		GetCon()->SendRawString("\x1bOQ", 3);
 		break;
-	case GDK_F3:
-	case GDK_KP_F3:
+	case GDK_KEY_F3:
+	case GDK_KEY_KP_F3:
 		GetCon()->SendRawString("\x1bOR", 3);
 		break;
-	case GDK_F4:
-	case GDK_KP_F4:
+	case GDK_KEY_F4:
+	case GDK_KEY_KP_F4:
 		GetCon()->SendRawString("\x1bOS", 3);
 		break;
-	case GDK_F5:
+	case GDK_KEY_F5:
 		GetCon()->SendRawString("\x1b[15~", 5);
 		break;
-	case GDK_F6:
+	case GDK_KEY_F6:
 		GetCon()->SendRawString("\x1b[17~", 5);
 		break;
-	case GDK_F7:
+	case GDK_KEY_F7:
 	    GetCon()->SendRawString("\x1b[18~", 5);
 		break;
-	case GDK_F8:
+	case GDK_KEY_F8:
 		GetCon()->SendRawString("\x1b[19~", 5);
 		break;
-	case GDK_F9:
+	case GDK_KEY_F9:
 		GetCon()->SendRawString("\x1b[20~", 5);
 		break;
-	case GDK_F10:
+	case GDK_KEY_F10:
 		GetCon()->SendRawString("\x1b[21~", 5);
 		break;
-	case GDK_F11:
+	case GDK_KEY_F11:
 		GetCon()->SendRawString("\x1b[23~", 5);
 		break;
-	case GDK_F12:
+	case GDK_KEY_F12:
 		GetCon()->SendRawString("\x1b[24~", 5);
 		break;
 	default:
@@ -588,11 +588,11 @@ bool CTelnetView::PreKeyDown(GdkEventKey* evt UNUSED)
 {
 /*	if( GDK_MODIFIER_DOWN( evt->state, GDK_MOD1_MASK)
 			|| GDK_MODIFIER_DOWN( evt->state, GDK_CONTROL_MASK)
-			&& ((evt->keyval > GDK_0 && evt->keyval > GDK_9)
-				 || (evt->keyval > GDK_KP_0 && evt->keyval > GDK_KP_9) )
+			&& ((evt->keyval > GDK_KEY_0 && evt->keyval > GDK_KEY_9)
+				 || (evt->keyval > GDK_KEY_KP_0 && evt->keyval > GDK_KEY_KP_9) )
 			)
 	{
-		int i = evt->keyval > GDK_KP_0 ? (evt->keyval - GDK_KP_0):(evt->keyval - GDK_0);
+		int i = evt->keyval > GDK_KEY_KP_0 ? (evt->keyval - GDK_KEY_KP_0):(evt->keyval - GDK_KEY_0);
 		m_pParentFrame->SwitchToTab(i);
 		return true;
 	}
