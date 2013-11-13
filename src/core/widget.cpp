@@ -74,11 +74,12 @@ void CWidget::Refresh()
 	if (!gtk_widget_get_realized(m_Widget))
 			return;
 
-	GdkRectangle t_Rect;
-	t_Rect.x = t_Rect.y = 0;
-	t_Rect.width = m_Widget->allocation.width;
-	t_Rect.height = m_Widget->allocation.height;
-	gdk_window_invalidate_rect(gtk_widget_get_window(m_Widget), &t_Rect, true);
+	GtkAllocation rect;
+
+	gtk_widget_get_allocation(m_Widget, &rect);
+	rect.x = rect.y = 0;
+
+	gdk_window_invalidate_rect(gtk_widget_get_window(m_Widget), &rect, true);
 }
 
 void CWidget::Destroy()

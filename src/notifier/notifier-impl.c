@@ -79,18 +79,22 @@ static int slow_hide_win(gpointer data)
 	Win *win = (Win *) data;
 	int x_diff;
 	int x, y;
+	GtkAllocation rect;
 
 	if (win->size == 0) {
 		gtk_widget_destroy(win->win);
 		return FALSE;
 	}
 
+
 	gtk_window_get_position(GTK_WINDOW(win->win), &x, &y);
+	gtk_widget_get_allocation(win->win, &rect);
 	y += STEPS;
 	win->size -= STEPS;
-	x_diff = width - win->win->allocation.width;
+	x_diff = width - rect.width;
 	if (x_diff < 0)
 		x_diff = 0;
+
 	gtk_window_move(GTK_WINDOW(win->win), x_diff, y);
 	return TRUE;
 }
@@ -136,6 +140,7 @@ static int slow_show_win(gpointer data)
 	Win *win = (Win *) data;
 	int x_diff;
 	int x, y;
+	GtkAllocation rect;
 
 	if (win->size == NHEIGHT) {
 		win->handlerid =
@@ -150,12 +155,15 @@ static int slow_show_win(gpointer data)
 		return FALSE;
 	}
 
+
 	gtk_window_get_position(GTK_WINDOW(win->win), &x, &y);
+	gtk_widget_get_allocation(win->win, &rect);
 	y -= STEPS;
 	win->size += STEPS;
-	x_diff = width - win->win->allocation.width;
+	x_diff = width - rect.width;
 	if (x_diff < 0)
 		x_diff = 0;
+
 	gtk_window_move(GTK_WINDOW(win->win), x_diff, y);
 	return TRUE;
 }
@@ -164,6 +172,7 @@ static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 {
 	int slot, begin;
 	Win *w;
+	GtkAllocation rect;
 
 	update_working_area();
 
@@ -177,9 +186,8 @@ static Win* begin_animation(GtkWidget * win, GtkWidget * context)
 	w->size = 0;
 
 	gtk_widget_realize(win);
-	gtk_window_move(
-		GTK_WINDOW(win), 
-		working_area.x + width - win->allocation.width, begin);
+	gtk_widget_get_allocation(win, &rect);
+	gtk_window_move( GTK_WINDOW(win), working_area.x + width - rect.width, begin);
 	gtk_widget_show_all(win);
 
 	w->ani_timer_id = gtk_timeout_add(SPEED, slow_show_win, w);
@@ -224,6 +232,7 @@ static GtkWidget* notify_new(
 	GtkWidget *labelNotify;
 	GtkWidget *labelCaption;
 	GtkWidget *button;
+	GtkAllocation rect;
 	Win *w;
 
 	body = gtk_vbox_new(FALSE, 2);
@@ -264,7 +273,8 @@ static GtkWidget* notify_new(
 	gtk_container_set_border_width(GTK_CONTAINER(frame),0);
 	gtk_container_add(GTK_CONTAINER(button), frame);
 
-	gtk_window_set_default_size(GTK_WINDOW(win), win->allocation.width, NHEIGHT);
+	gtk_widget_get_allocation(win, &rect);
+	gtk_window_set_default_size(GTK_WINDOW(win), rect.width, NHEIGHT);
 	gtk_container_add(GTK_CONTAINER(frame), body);
 
 	if (click_cb)

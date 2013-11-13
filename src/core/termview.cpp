@@ -210,7 +210,10 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 		return;
 	}
 
-	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
+	GtkAllocation rect;
+	gtk_widget_get_allocation(m_Widget, &rect);
+	const int w = rect.width;
+	const int h = rect.height;
 
 	if( m_pTermData )
 	{
@@ -876,8 +879,12 @@ void CTermView::GetCellSize( int &w, int &h )
 		return;
 	}
 
-	w = ( m_Widget->allocation.width / m_pTermData->m_ColsPerPage ) - m_CharPaddingX;
-	h = ( m_Widget->allocation.height / m_pTermData->m_RowsPerPage ) - m_CharPaddingY;
+
+	GtkAllocation rect;
+	gtk_widget_get_allocation(m_Widget, &rect);
+
+	w = ( rect.width / m_pTermData->m_ColsPerPage ) - m_CharPaddingX;
+	h = ( rect.height / m_pTermData->m_RowsPerPage ) - m_CharPaddingY;
 }
 
 void CTermView::SetFont( CFont* font, int font_type )
@@ -943,13 +950,17 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 	if( m_bHorizontalCenterAlign == is_hcenter || !m_pTermData )
 		return;
 
-	if( (m_bHorizontalCenterAlign = is_hcenter) && gtk_widget_get_realized(m_Widget) )
-		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
-	else
+	if( (m_bHorizontalCenterAlign = is_hcenter) && gtk_widget_get_realized(m_Widget) ) {
+		GtkAllocation rect;
+		gtk_widget_get_allocation(m_Widget, &rect);
+		m_LeftMargin = (rect.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
+	} else {
 		m_LeftMargin = 0;
+	}
 
 	if( IsVisible() )
 		Refresh();
+
 	UpdateCaretPos();
 }
 
@@ -958,13 +969,17 @@ void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 	if( m_bVerticalCenterAlign == is_vcenter || !m_pTermData )
 		return;
 
-	if( (m_bVerticalCenterAlign = is_vcenter) && gtk_widget_get_realized(m_Widget) )
-		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
-	else
+	if( (m_bVerticalCenterAlign = is_vcenter) && gtk_widget_get_realized(m_Widget) ) {
+		GtkAllocation rect;
+		gtk_widget_get_allocation(m_Widget, &rect);
+		m_TopMargin = (rect.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
+	} else {
 		m_TopMargin = 0;
+	}
 
 	if( IsVisible() )
 		Refresh();
+
 	UpdateCaretPos();
 }
 
@@ -1035,13 +1050,15 @@ void CTermView::RecalcCharDimension()
 	m_CharW = m_Font[FONT_DEFAULT]->GetWidth() + m_CharPaddingX;
 	m_CharH = m_Font[FONT_DEFAULT]->GetHeight() + m_CharPaddingY;
 
+	GtkAllocation rect;
+	gtk_widget_get_allocation(m_Widget, &rect);
 	if( m_bHorizontalCenterAlign )
-		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
+		m_LeftMargin = (rect.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
 	else
 		m_LeftMargin = 0;
 
 	if( m_bVerticalCenterAlign )
-		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2;
+		m_TopMargin = (rect.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2;
 	else
 		m_TopMargin = 0;
 
