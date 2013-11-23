@@ -289,7 +289,7 @@ void CTermView::OnCreate()
 	m_GC = gdk_gc_new(m_Widget->window);
 	gdk_gc_copy(m_GC, m_Widget->style->black_gc);
 
-	m_Caret.Create(this, m_GC);
+	m_Caret.Create(this);
 	m_Caret.Show();
 }
 

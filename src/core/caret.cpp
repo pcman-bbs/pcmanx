@@ -35,20 +35,15 @@ CCaret::CCaret()
 	m_Pos.x = m_Pos.y = 0;
 	m_Width = m_Height = 0;
 	m_IsVisible = m_IsShow = false;
-#if GTK_CHECK_VERSION(2,22,0)
 	m_Cairo = NULL;
-#endif
-	m_GC = (GdkGC *)NULL;
 }
 
 CCaret::~CCaret()
 {
-#if GTK_CHECK_VERSION(2,22,0)
 	if (m_Cairo) {
 		cairo_destroy(m_Cairo);
 		m_Cairo = NULL;
 	}
-#endif
 }
 
 //Inverse the color of caret when it sets visible flag.
@@ -111,7 +106,6 @@ void CCaret::DrawInverse()
 		return;
 	}
 
-#if GTK_CHECK_VERSION(2,22,0)
 	if (m_Cairo == NULL) {
 		m_Cairo = gdk_cairo_create(m_pParent->window);
 	}
@@ -119,11 +113,5 @@ void CCaret::DrawInverse()
 	cairo_set_operator(m_Cairo, CAIRO_OPERATOR_DIFFERENCE);
 	cairo_rectangle(m_Cairo, m_Pos.x, m_Pos.y, m_Width, m_Height);
 	cairo_fill(m_Cairo);
-#else
-	gdk_gc_set_function(m_GC, GDK_INVERT);
-	gdk_draw_drawable(m_pParent->window, m_GC, m_pParent->window,
-		m_Pos.x, m_Pos.y, m_Pos.x, m_Pos.y, m_Width, m_Height);
-	gdk_gc_set_function(m_GC, GDK_COPY);
-#endif
 }
 
