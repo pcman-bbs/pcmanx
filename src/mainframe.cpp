@@ -49,10 +49,6 @@
 #include <unistd.h>
 #include <signal.h>
 
-#if ! GTK_CHECK_VERSION (2, 10, 0)
-#define GTK_STOCK_SELECT_ALL "gtk-index"
-#endif
-
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -108,7 +104,6 @@ void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocati
 */
 
 #ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
 void CMainFrame::OnTray_Popup(GtkStatusIcon *status_icon UNUSED,
                               guint button, guint activate_time,
                               CMainFrame *_this)
@@ -116,40 +111,6 @@ void CMainFrame::OnTray_Popup(GtkStatusIcon *status_icon UNUSED,
 	gtk_menu_popup((GtkMenu*)_this->m_TrayPopup, NULL, NULL, NULL, NULL
 			, button, activate_time);
 }
-
-#else
-void CMainFrame::set_tray_icon()
-{
-        int panel_w;
-        int panel_h;
-        gtk_window_get_size (GTK_WINDOW(gtk_widget_get_toplevel(m_TrayButton)),
-                        &panel_w, &panel_h);
-
-        int icon_size = (panel_h < 30) ? 16 : 24;
-        GdkPixbuf *tray_icon_pixbuf = gdk_pixbuf_copy (m_MainIcon);
-
-        /*
-         * Scale the icon rather than clip it if our allocation just isn't
-         * what we want it to be.
-         */
-        int ori_icon_size = gdk_pixbuf_get_height(tray_icon_pixbuf);
-		if( ori_icon_size > icon_size )
-        {
-                int new_size = icon_size;
-                GdkPixbuf *new_pixbuf;
-
-                new_pixbuf = gdk_pixbuf_scale_simple (tray_icon_pixbuf,
-                                new_size, new_size,
-                                GDK_INTERP_BILINEAR);
-
-                g_object_unref (tray_icon_pixbuf);
-                tray_icon_pixbuf = new_pixbuf;
-        }
-
-        gtk_image_set_from_pixbuf(GTK_IMAGE (m_TrayIcon), tray_icon_pixbuf);
-        g_object_unref (tray_icon_pixbuf);
-}
-#endif
 #endif
 
 CMainFrame* CMainFrame::g_pMyself = NULL;
@@ -445,7 +406,7 @@ static const char *ui_info =
   "    <separator/>"
   "   <menuitem action='web_search' />"
   "  </popup>"
-#if defined(USE_DOCKLET) && GTK_CHECK_VERSION(2,10,0)
+#if defined(USE_DOCKLET)
   "  <popup name='tray_popup'>"
   "    <menuitem action='showhide' />"
   "    <separator />"
@@ -1320,11 +1281,7 @@ void CMainFrame::OnDestroy()
 
 	Hide();
 #ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
 	g_object_unref( m_TrayIcon );
-#else
-	gtk_widget_destroy( GTK_WIDGET(m_TrayIcon_Instance) );
-#endif
 #endif
 
 	//while( g_main_context_iteration(NULL, FALSE) );
@@ -1482,7 +1439,6 @@ void CMainFrame::CreateFavoritesMenu()
 void CMainFrame::CreateTrayIcon()
 {
 #ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
 	// Setup popup menu
 	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
 	if (m_dlhandle != NULL) {
@@ -1512,27 +1468,6 @@ void CMainFrame::CreateTrayIcon()
 		g_signal_connect (G_OBJECT (m_TrayIcon), "activate",
 				G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
 	}
-#else
-	m_TrayIcon_Instance = egg_tray_icon_new ("applet");
-
-	m_TrayButton = gtk_toggle_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (m_TrayButton), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (m_TrayIcon_Instance), m_TrayButton);
-	gtk_widget_show (m_TrayButton);
-
-	g_signal_connect (G_OBJECT (m_TrayButton), "toggled",
-			G_CALLBACK (CMainFrame::OnTrayButton_Toggled), this);
-
-	/*
-	   g_signal_connect (G_OBJECT (m_TrayButton), "size-allocate",
-	   G_CALLBACK (CMainFrame::OnTrayButton_Changed), this);
-	   */
-
-	m_TrayIcon = gtk_image_new ();
-	gtk_container_add (GTK_CONTAINER (m_TrayButton), m_TrayIcon);
-	gtk_widget_show (m_TrayIcon);
-	set_tray_icon();
-#endif
 #endif
 }
 

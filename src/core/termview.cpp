@@ -293,59 +293,6 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
-// gtk+ 2.8.0 to 2.10.13 all have serious bug in gdk_draw_trapezoids()
-// So version check is needed here.
-#if GTK_CHECK_VERSION( 2, 10, 13 ) ||  ! GTK_CHECK_VERSION( 2, 8, 0 )
-#else
-#define	HAVE_GDK_DRAW_TRAPEZOIDS_BUG
-
-// This is the correct implementation of gdk_draw_trapezoids taken from gtk+ 2.10.14
-static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable,
-						GdkGC *gc, GdkTrapezoid   *trapezoids,
-						gint n_trapezoids, GdkColor* color, GdkRectangle* clip_rect )
-{
-  cairo_t *cr;
-  int i;
-
-  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
-
-  cr = gdk_cairo_create (drawable);
-
-  // color
-  gdk_cairo_set_source_color (cr, color);
-
-  //clip
-  cairo_reset_clip (cr);
-  if (clip_rect)
-    {
-      cairo_save (cr);
-
-      cairo_identity_matrix (cr);
-      cairo_translate (cr, gc->clip_x_origin, gc->clip_y_origin);
-
-      cairo_new_path (cr);
-      gdk_cairo_rectangle (cr, clip_rect);
-
-      cairo_restore (cr);
-
-      cairo_clip (cr);
-    }
-
-  for (i = 0; i < n_trapezoids; i++)
-    {
-      cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
-      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
-      cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
-      cairo_line_to (cr, trapezoids[i].x12, trapezoids[i].y2);
-      cairo_close_path (cr);
-    }
-  cairo_fill (cr);
-  cairo_destroy (cr);
-}
-#endif
-
 bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip UNUSED, GdkColor* clr UNUSED)
 {
 	GdkDrawable* dc = m_Widget->window;
@@ -414,12 +361,7 @@ bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int 
 					return false;
 				}
 
-// workarounds for serious bug in gtk+ 2.8.0 to 2.10.12
-#ifdef HAVE_GDK_DRAW_TRAPEZOIDS_BUG
-				fixed_gdk_draw_trapezoids( dc, m_GC, &tz, 1, clr, clip );
-#else
 				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
-#endif
 				return true;
 			}
 		}
