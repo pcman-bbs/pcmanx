@@ -55,10 +55,6 @@
 #include "script/api.h"
 #endif
 
-#if !GTK_CHECK_VERSION(2,14,0)
-#  define gtk_dialog_get_content_area(x) ((x)->vbox)
-#endif
-
 static int multiple_instance = 0;
 
 static GOptionEntry entries[] = {
