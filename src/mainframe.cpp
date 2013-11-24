@@ -802,7 +802,7 @@ void CMainFrame::OnShortcutList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						  "<b>View Shortcuts</b>\n%s\n\n"),
 						   connect_shortcuts, edit_shortcuts, view_shortcuts );
 
-	gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
+	gtk_image_set_from_pixbuf((GtkImage*)gtk_message_dialog_get_image((GtkMessageDialog*)dlg), _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*) dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
 }
@@ -843,7 +843,7 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 						"Authors:\n%s\n")
 						, authors	);
 */
-	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
+	gtk_image_set_from_pixbuf((GtkImage*)gtk_message_dialog_get_image((GtkMessageDialog*)dlg), _this->m_MainIcon);
 	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
 }
