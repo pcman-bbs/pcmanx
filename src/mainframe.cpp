@@ -949,20 +949,10 @@ void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMain
 	int page_idx_before_close = gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook));
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), number_of_closet_tab);
 	_this->SetCurView( _this->m_Views[number_of_closet_tab] );
-	CTelnetCon* con = _this->GetCurCon();
-	if( !con )
-		return;
-	if( AppConfig.QueryOnCloseCon && !con->IsClosed() )
+
+	if ( !(_this->QueryOnCloseCon(_this)) )
 	{
-		GtkWidget* dlg = gtk_message_dialog_new(GTK_WINDOW(_this->m_Widget),
-			GTK_DIALOG_MODAL,
-			GTK_MESSAGE_QUESTION,
-			GTK_BUTTONS_OK_CANCEL,
-			_("Close Connection?"));
-		bool can_close = ( gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK );
-		gtk_widget_destroy(dlg);
-		if( !can_close )
-			return;
+		return;
 	}
 
 	int page_idx_after_close = 0;
@@ -974,21 +964,32 @@ void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMain
 
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
-	CTelnetCon* con = _this->GetCurCon();
-	if( !con )
-		return;
-	if( AppConfig.QueryOnCloseCon && !con->IsClosed() )
+	if ( !(_this->QueryOnCloseCon(_this)) )
 	{
-		GtkWidget* dlg = gtk_message_dialog_new(GTK_WINDOW(_this->m_Widget), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_OK_CANCEL, _("Close Connection?"));
-		bool can_close = ( gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK );
-		gtk_widget_destroy(dlg);
-		if( !can_close )
-			return;
+		return;
 	}
-
 	_this->CloseCon(_this->m_pNotebook->GetCurPage(), true);
 }
 
+bool CMainFrame::QueryOnCloseCon(CMainFrame* _this)
+{
+	CTelnetCon* con = _this->GetCurCon();
+	if( !con )
+		return false;
+	if( AppConfig.QueryOnCloseCon && !con->IsClosed() )
+	{
+		GtkWidget* dlg = gtk_message_dialog_new(GTK_WINDOW(_this->m_Widget),
+			GTK_DIALOG_MODAL,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_OK_CANCEL,
+			_("Close Connection?"));
+		bool can_close = ( gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK );
+		gtk_widget_destroy(dlg);
+		if ( !can_close )
+			return false;
+	}
+	return true;
+}
 
 void CMainFrame::OnCopy(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {

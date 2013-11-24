@@ -142,6 +142,7 @@ protected:
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
 	void CloseConAndPageSwitch(int idx, bool confirm UNUSED, GtkWidget *notebook, int page_idx);
 	void CloseCon(int idx, bool confirm = false);
+	static bool QueryOnCloseCon(CMainFrame* _this);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
 	void CreateTrayIcon();
