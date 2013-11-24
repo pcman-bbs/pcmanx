@@ -143,7 +143,7 @@ CTermView::CTermView()
 		 | GDK_POINTER_MOTION_HINT_MASK
 		 | GDK_ALL_EVENTS_MASK);
 
-	GTK_WIDGET_SET_FLAGS(m_Widget, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(m_Widget, TRUE);
 	gtk_widget_set_double_buffered(m_Widget, false);
 
 	g_signal_connect(G_OBJECT(m_Widget), "unrealize", G_CALLBACK(CTermView::OnBeforeDestroy), this);

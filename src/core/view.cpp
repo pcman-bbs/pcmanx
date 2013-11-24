@@ -63,7 +63,7 @@ CView::CView(): CWidget()
 	g_signal_connect(G_OBJECT(m_Widget), "focus_in_event", G_CALLBACK(on_focus_in), this);
 	g_signal_connect(G_OBJECT(m_Widget), "focus_out_event", G_CALLBACK(on_focus_out), this);
 
-	GTK_WIDGET_SET_FLAGS(m_Widget, GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(m_Widget, TRUE);
 
 	Show();
 }

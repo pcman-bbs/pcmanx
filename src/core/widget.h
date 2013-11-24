@@ -43,7 +43,7 @@ public:
 	void Destroy();
 	void SetFocus()
 	{
-		if(!GTK_WIDGET_HAS_FOCUS(m_Widget))
+		if(!gtk_widget_has_focus(m_Widget))
 			 gtk_widget_grab_focus(m_Widget);
 	}
 	void SetCapture(){	if(!HasCapture())	gtk_grab_add(m_Widget);	}
