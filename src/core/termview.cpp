@@ -942,7 +942,7 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 	if( m_bHorizontalCenterAlign == is_hcenter || !m_pTermData )
 		return;
 
-	if( (m_bHorizontalCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bHorizontalCenterAlign = is_hcenter) && gtk_widget_get_realized(m_Widget) )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
 	else
 		m_LeftMargin = 0;
@@ -957,7 +957,7 @@ void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 	if( m_bVerticalCenterAlign == is_vcenter || !m_pTermData )
 		return;
 
-	if( (m_bVerticalCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bVerticalCenterAlign = is_vcenter) && gtk_widget_get_realized(m_Widget) )
 		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
 	else
 		m_TopMargin = 0;

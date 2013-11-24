@@ -71,7 +71,7 @@ void CWidget::Refresh()
 {
 	/* Do not call gdk_window_invalidate_rect on
 	 * a non-realized GtkWidget. */
-	if (! GTK_WIDGET_REALIZED(m_Widget))
+	if (!gtk_widget_get_realized(m_Widget))
 			return;
 
 	GdkRectangle t_Rect;
