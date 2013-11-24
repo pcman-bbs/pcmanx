@@ -654,9 +654,9 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	GtkWidget* apply_to_all = gtk_check_button_new_with_label( _("Apply to all opened pages") );
 	gtk_widget_show(apply_to_all);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(apply_to_all), true);
-	gtk_box_pack_start( GTK_BOX(fsdlg->action_area), apply_to_all, true, true, 4);
-	gtk_box_reorder_child( GTK_BOX(fsdlg->action_area), apply_to_all, 0 );
-	gtk_box_set_homogeneous(GTK_BOX(fsdlg->action_area), false);
+	gtk_box_pack_start( GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(fsdlg))), apply_to_all, true, true, 4);
+	gtk_box_reorder_child( GTK_BOX(gtk_dialog_get_action_area (GTK_DIALOG(fsdlg))), apply_to_all, 0 );
+	gtk_box_set_homogeneous(GTK_BOX(gtk_dialog_get_action_area (GTK_DIALOG(fsdlg))), false);
 
 	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
 	// But we need this functionality.
