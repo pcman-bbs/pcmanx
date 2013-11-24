@@ -89,7 +89,8 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	connect_btn = gtk_button_new ();
 	gtk_widget_show (connect_btn);
 	gtk_container_add (GTK_CONTAINER (vbuttonbox1), connect_btn);
-	GTK_WIDGET_SET_FLAGS (connect_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default (connect_btn, TRUE);
+
 	
 	alignment1 = gtk_alignment_new (0.5, 0.5, 0, 0);
 	gtk_widget_show (alignment1);
@@ -110,7 +111,7 @@ CSiteListDlg::CSiteListDlg(CWidget* parent)
 	close_btn = gtk_button_new_from_stock ("gtk-close");
 	gtk_widget_show (close_btn);
 	gtk_container_add (GTK_CONTAINER (vbuttonbox1), close_btn);
-	GTK_WIDGET_SET_FLAGS (close_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default (close_btn, TRUE);
 
 	g_signal_connect ((gpointer) m_SearchBtn, "clicked",
 					G_CALLBACK (&CSiteListDlg::OnSearch),

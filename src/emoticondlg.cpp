@@ -66,27 +66,27 @@ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
 	add_btn = gtk_button_new_from_stock ("gtk-add");
 	gtk_widget_show (add_btn);
 	gtk_container_add (GTK_CONTAINER (vbtn_box), add_btn);
-	GTK_WIDGET_SET_FLAGS (add_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(add_btn, TRUE);
 	
 	edit_btn = gtk_button_new_from_stock ("gtk-edit");
 	gtk_widget_show (edit_btn);
 	gtk_container_add (GTK_CONTAINER (vbtn_box), edit_btn);
-	GTK_WIDGET_SET_FLAGS (edit_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(edit_btn, TRUE);
 	
 	remove_btn = gtk_button_new_from_stock ("gtk-remove");
 	gtk_widget_show (remove_btn);
 	gtk_container_add (GTK_CONTAINER (vbtn_box), remove_btn);
-	GTK_WIDGET_SET_FLAGS (remove_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(remove_btn, TRUE);
 	
 	up_btn = gtk_button_new_from_stock ("gtk-go-up");
 	gtk_widget_show (up_btn);
 	gtk_container_add (GTK_CONTAINER (vbtn_box), up_btn);
-	GTK_WIDGET_SET_FLAGS (up_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(up_btn, TRUE);
 	
 	down_btn = gtk_button_new_from_stock ("gtk-go-down");
 	gtk_widget_show (down_btn);
 	gtk_container_add (GTK_CONTAINER (vbtn_box), down_btn);
-	GTK_WIDGET_SET_FLAGS (down_btn, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(down_btn, TRUE);
 	
 	g_signal_connect ((gpointer) add_btn, "clicked",
 					G_CALLBACK (CEmoticonDlg::OnAdd),
