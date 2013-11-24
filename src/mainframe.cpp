@@ -660,8 +660,8 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 	// This is not a good method because fontsel is a private member of GtkFontSelectionDialog.
 	// But we need this functionality.
-	GtkFontSelection* fontsel = GTK_FONT_SELECTION(fsdlg->fontsel);
-	gtk_widget_set_sensitive(fontsel->face_list, false);
+	GtkWidget* fontsel = gtk_font_selection_dialog_get_font_selection(fsdlg);
+	gtk_widget_set_sensitive(gtk_font_selection_get_face_list((GtkFontSelection *)fontsel), false);
 
 	char pango_font_name[32];
 	int *font_size = NULL;
