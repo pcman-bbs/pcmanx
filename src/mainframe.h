@@ -64,6 +64,7 @@ public:
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnShortcutList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnCloseSelectCon(GtkWidget* notebook, GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
@@ -139,6 +140,7 @@ protected:
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
+	void CloseConAndPageSwitch(int idx, bool confirm UNUSED, GtkWidget *notebook, int page_idx);
 	void CloseCon(int idx, bool confirm = false);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();

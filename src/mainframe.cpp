@@ -905,6 +905,73 @@ void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* p
 		t_pView->PasteFromClipboard(true);
 }
 
+void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMainFrame* _this)
+{
+	/**
+	*   Close pages selected by middle click of tabs.
+	*
+	*   At first choose which tab is the closet tab to the click location.
+	*   Then switch to the selected page.
+	*   Finally close it, and then switch back to the original page.
+	*
+	*   TODO:
+	*   The most right hand tab will be selected
+	*   even the click location is not exactly on the tab.
+	*/
+	int window_w = 0;
+	int window_h = 0;
+	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(notebook)), &window_w, &window_h);
+
+	GtkWidget *closet_tab;
+
+	int closet_tab_x = window_w;
+	int number_of_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
+	int nth_page_number = 0;
+	int number_of_closet_tab = 0;
+	/* pick up the tab which is closet to the click location. */
+	for(nth_page_number = 0; nth_page_number < number_of_pages; nth_page_number++)
+	{
+		GtkWidget *tab_label;
+		tab_label = gtk_notebook_get_tab_label(  GTK_NOTEBOOK(notebook),
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),
+			nth_page_number));
+		int lx, ly;
+		gtk_widget_get_pointer(tab_label, &lx, &ly);
+		if(lx > 0 && lx < closet_tab_x)
+		{
+			closet_tab_x = lx;
+			closet_tab = tab_label;
+			number_of_closet_tab = nth_page_number;
+		}
+	}
+
+	/* switch to the page which is clicked. */
+	int page_idx_before_close = gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook));
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), number_of_closet_tab);
+	_this->SetCurView( _this->m_Views[number_of_closet_tab] );
+	CTelnetCon* con = _this->GetCurCon();
+	if( !con )
+		return;
+	if( AppConfig.QueryOnCloseCon && !con->IsClosed() )
+	{
+		GtkWidget* dlg = gtk_message_dialog_new(GTK_WINDOW(_this->m_Widget),
+			GTK_DIALOG_MODAL,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_OK_CANCEL,
+			_("Close Connection?"));
+		bool can_close = ( gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK );
+		gtk_widget_destroy(dlg);
+		if( !can_close )
+			return;
+	}
+
+	int page_idx_after_close = 0;
+	page_idx_before_close < number_of_closet_tab ? page_idx_after_close = page_idx_before_close : page_idx_after_close = page_idx_before_close - 1;
+	/* close the current page and then switch page back to the original one. */
+	_this->CloseConAndPageSwitch(_this->m_pNotebook->GetCurPage(), true, notebook, page_idx_after_close);
+}
+
+
 void CMainFrame::OnCloseCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	CTelnetCon* con = _this->GetCurCon();
@@ -1127,7 +1194,7 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget UNUSED,
 	_this->SetCurView( _this->m_Views[page_num] );
 }
 
-gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
+gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
                                          GdkEventButton *event,
                                          CMainFrame* _this)
 {
@@ -1187,7 +1254,7 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
 	// similar to the behavior under Firefox
 	if (AppConfig.MidClickAsClose &&
 	    event->type == GDK_BUTTON_PRESS && event->button == 2) {
-		_this->OnCloseCon(GTK_MENU_ITEM(menu_item_close), _this);
+		_this->OnCloseSelectCon(widget, GTK_MENU_ITEM(menu_item_close), _this);
 		return TRUE;
 	}
 
@@ -1201,6 +1268,14 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
 	return TRUE;
 }
 
+void CMainFrame::CloseConAndPageSwitch(int idx, bool confirm UNUSED, GtkWidget *notebook, int page_idx)
+{
+	m_pNotebook->RemovePage(idx);
+	m_Views.erase( m_Views.begin() + idx );
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), page_idx);
+	SetCurView( page_idx >= 0 ? m_Views[page_idx] : NULL );
+}
 
 void CMainFrame::CloseCon(int idx, bool confirm UNUSED)
 {
