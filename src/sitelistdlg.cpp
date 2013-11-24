@@ -251,10 +251,10 @@ void CSiteListDlg::OnClose(GtkButton* btn UNUSED, CSiteListDlg* _this)
 void CSiteListDlg::LoadSiteList()
 {
 	GtkIconSet* icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_NETWORK);
-	m_SiteIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
+	m_SiteIcon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_style(m_Tree), GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 
 	icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_DIRECTORY);
-	m_FolderIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
+	m_FolderIcon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_style(m_Tree), GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 //	g_object_unref(icon_set);	??
 
 	GtkTreeView* tree = GTK_TREE_VIEW(m_Tree);
