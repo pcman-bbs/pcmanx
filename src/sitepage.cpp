@@ -319,7 +319,7 @@ bool CSitePage::OnOK()
 {
 	m_Site.m_Name = gtk_entry_get_text(GTK_ENTRY(m_Name));
 	m_Site.m_URL = gtk_entry_get_text(GTK_ENTRY(m_Address));
-	if( GTK_WIDGET_VISIBLE(m_Name) && (m_Site.m_Name.empty() || m_Site.m_URL.empty()) )
+	if( gtk_widget_get_visible(m_Name) && (m_Site.m_Name.empty() || m_Site.m_URL.empty()) )
 		return false;	// Empty name and URL are not allowed.
 	m_Site.m_AntiIdle = atoi( gtk_entry_get_text(GTK_ENTRY(m_Idle)) );
 	m_Site.m_AntiIdleStr = gtk_entry_get_text(GTK_ENTRY(m_IdleStr));
