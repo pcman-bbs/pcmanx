@@ -48,9 +48,9 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection, int ua
 	GtkScrolledWindow *scroll = (GtkScrolledWindow*) gtk_scrolled_window_new
 		(NULL, NULL);
 	gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(m_textview));
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(m_Widget)->vbox), 
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_Widget))),
 			GTK_WIDGET(scroll));
-	gtk_widget_show_all(GTK_DIALOG(m_Widget)->vbox);
+	gtk_widget_show_all(gtk_dialog_get_content_area(GTK_DIALOG(m_Widget)));
 
 	m_btncopy = (GtkButton*) gtk_dialog_add_button(GTK_DIALOG(m_Widget),
 			GTK_STOCK_COPY, CUSTOM_RESPONSE_COPY);

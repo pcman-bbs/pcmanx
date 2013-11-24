@@ -61,8 +61,8 @@ CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* promp
 
 	GtkDialog* dlg = GTK_DIALOG(m_Widget);
 
-	gtk_box_pack_start( GTK_BOX (dlg->vbox), label, FALSE, FALSE, 4);
-	gtk_box_pack_start( GTK_BOX (dlg->vbox), (GtkWidget*)m_Entry, FALSE, FALSE, 4);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(dlg)), label, FALSE, FALSE, 4);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(dlg)), (GtkWidget*)m_Entry, FALSE, FALSE, 4);
 
 	gtk_widget_show_all(m_Widget);
 

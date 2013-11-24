@@ -49,7 +49,7 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 	GtkWidget *up_btn;
 	GtkWidget *down_btn;
 
-	vbox = GTK_DIALOG (m_Widget)->vbox;
+	vbox = gtk_dialog_get_content_area(GTK_DIALOG(m_Widget));
 	gtk_widget_show (vbox);
 	
 	hbox = gtk_hbox_new (FALSE, 0);
