@@ -68,6 +68,7 @@
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
 
+
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button UNUSED,
 	CMainFrame *_this)
@@ -77,6 +78,7 @@ void CMainFrame::OnTrayButton_Toggled(
 	gtk_toggle_action_set_active(action,
 			! gtk_toggle_action_get_active(action));
 }
+
 
 void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
 {
@@ -163,6 +165,22 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 	return false;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+//string base = "<alt>w";
+//string cc = AppConfig.keyNewConn0.substr(0, 6);
+string cc = "<alt>q";
+//const char *cc = base.c_str();
+
 CMainFrame::CMainFrame()
 {
 	char* desktop = getenv("XDG_CURRENT_DESKTOP");
@@ -206,6 +224,7 @@ CMainFrame::CMainFrame()
 			G_CALLBACK(CMainFrame::OnNotebookPopupMenu), this );
 
 	MakeUI();
+
 
 	gtk_window_set_icon((GtkWindow*)m_Widget, m_MainIcon);
 
@@ -276,7 +295,7 @@ CMainFrame::CMainFrame()
 
 	if (AppConfig.Maximized) {
 		gtk_window_maximize((GtkWindow*) m_Widget);
-	} else {
+	}else{
 		gtk_window_unmaximize((GtkWindow*) m_Widget);
 	}
 }
@@ -326,57 +345,6 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 	return pCon;
 }
-
-GtkActionEntry CMainFrame::m_ActionEntries[] =
-  {
-    {"web_search", NULL, _("_Web Search"), NULL, NULL, G_CALLBACK (CMainFrame::OnWebSearch)},
-    {"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
-    {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
-    {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
-    {"new_con_gnome_term_sty", GTK_STOCK_NETWORK, _("_New Connection"), "<Ctrl><Shift>T", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
-    {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
-    {"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), "<Ctrl>Insert", _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
-    {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
-    {"close2", GTK_STOCK_CLOSE, _("_Close Connection"), "<Ctrl>Delete", _("Close Connection"), G_CALLBACK(CMainFrame::OnCloseCon)},
-    {"next_con", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Alt>X", _("Next Page"), G_CALLBACK (CMainFrame::OnNextCon)},
-    {"next_con1", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Right", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
-    {"next_con_gnome_term_sty", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Page_Down", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
-    {"previous_con", GTK_STOCK_GO_UP, _("_Previous Page"), "<Alt>Z", _("Previous Page"), G_CALLBACK (CMainFrame::OnPrevCon)},
-    {"previous_con1", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Left", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
-    {"previous_con_gnome_term_sty", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Page_Up", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
-    {"first_con",GTK_STOCK_GO_UP, _("_First Page"),"<Ctrl>Home", _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
-    {"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), "<Ctrl>End", _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
-    {"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
-    {"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
-    {"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
-    {"copy", GTK_STOCK_COPY, _("_Copy"), "<Alt>O", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
-    {"copy_gnome_term_sty", GTK_STOCK_COPY, _("_Copy"), "<Ctrl><Shift>C", _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
-    {"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
-    {"paste", GTK_STOCK_PASTE, _("_Paste"), "<Alt>P", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
-    {"paste_gnome_term_sty", GTK_STOCK_PASTE, _("_Paste"), "<Ctrl><Shift>V", _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
-    {"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), "<Shift>Insert", NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
-    {"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
-    {"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
-    {"emoticon", NULL, _("_Emoticons"), "<Ctrl>Return", NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
-    {"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
-    {"favorites_menu", NULL, _("F_avorites"), NULL, NULL, NULL},
-    {"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
-    {"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
-    {"view_menu", NULL, _("_View"), NULL, NULL, NULL},
-    {"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
-    {"non_ascii_font", GTK_STOCK_SELECT_FONT,  _("Non-ASCII _Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
-#ifdef USE_NANCY
-    {"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
-    {"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
-#endif
-    {"help_menu", NULL, _("_Help"), NULL, NULL, NULL},
-    {"shortcut_list", GTK_STOCK_DIALOG_INFO,  _("_Shortcut List"), NULL, NULL, G_CALLBACK (CMainFrame::OnShortcutList)},
-    {"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
-    // Fullscreen Mode
-    {"fullscreen", NULL, _("F_ullscreen Mode"), "<ALT>Return", NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
-    // Simple Mode
-    {"simple", NULL, _("_Simple Mode"), "<Shift>Return", NULL, G_CALLBACK (CMainFrame::OnSimpleMode)}
-  };
 
 GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
@@ -515,7 +483,61 @@ void CMainFrame::MakeUI()
 
 	gtk_action_group_set_translation_domain(m_ActionGroup, GETTEXT_PACKAGE);
 
-	gtk_action_group_add_actions(m_ActionGroup, m_ActionEntries, G_N_ELEMENTS(m_ActionEntries), this);
+
+	//move m_ActionEntries from class member to local.
+	GtkActionEntry actionEntries[] =
+	  {
+		{"web_search", NULL, _("_Web Search"), NULL, NULL, G_CALLBACK (CMainFrame::OnWebSearch)},
+		{"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
+		{"site_list", GTK_STOCK_OPEN, _("_Site List"), AppConfig.keySiteList.data(), _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+		{"new_con", GTK_STOCK_NETWORK, _("_New Connection"), AppConfig.keyNewConn0.c_str(), _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+		{"new_con_gnome_term_sty", GTK_STOCK_NETWORK, _("_New Connection"), AppConfig.keyNewConn1.data(), _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
+		{"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), AppConfig.keyReconn0.data(), _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
+		{"reconnect1",GTK_STOCK_UNDO, _("_Reconnect"), AppConfig.keyReconn1.data(), _("Reconnect"), G_CALLBACK(CMainFrame::OnReconnect)},
+		{"close", GTK_STOCK_CLOSE, _("_Close Connection"), AppConfig.keyClose0.data(), _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
+		{"close2", GTK_STOCK_CLOSE, _("_Close Connection"), AppConfig.keyClose1.data(), _("Close Connection"), G_CALLBACK(CMainFrame::OnCloseCon)},
+		{"next_con", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), AppConfig.keyNextPage.data(), _("Next Page"), G_CALLBACK (CMainFrame::OnNextCon)},
+		{"next_con1", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Right", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
+		{"next_con_gnome_term_sty", GTK_STOCK_GO_DOWN, _("Ne_xt Page"), "<Ctrl>Page_Down", _("Next Page"), G_CALLBACK(CMainFrame::OnNextCon)},
+		{"previous_con", GTK_STOCK_GO_UP, _("_Previous Page"), AppConfig.keyPrevPage.data(), _("Previous Page"), G_CALLBACK (CMainFrame::OnPrevCon)},
+		{"previous_con1", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Left", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
+		{"previous_con_gnome_term_sty", GTK_STOCK_GO_UP, _("_Previous Page"), "<Ctrl>Page_Up", _("Previous Page"), G_CALLBACK(CMainFrame::OnPrevCon)},
+		{"first_con",GTK_STOCK_GO_UP, _("_First Page"), AppConfig.keyFirstPage.data(), _("First Page"), G_CALLBACK(CMainFrame::OnFirstCon)},
+		{"last_con", GTK_STOCK_GO_DOWN, _("_Last Page"), AppConfig.keyLastPage.data(), _("Last Page"), G_CALLBACK(CMainFrame::OnLastCon)},
+		{"jump", GTK_STOCK_JUMP_TO, _("_Jump to"), NULL, NULL, NULL},
+		{"quit", GTK_STOCK_QUIT, _("_Quit"), "", _("Quit"), G_CALLBACK (CMainFrame::OnQuit)},
+		{"edit_menu", NULL, _("_Edit"), NULL, NULL, NULL},
+		{"copy", GTK_STOCK_COPY, _("_Copy"), AppConfig.keyCopy0.data(), _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+		{"copy_gnome_term_sty", GTK_STOCK_COPY, _("_Copy"), AppConfig.keyCopy1.data(), _("Copy"), G_CALLBACK (CMainFrame::OnCopy)},
+		{"copy_with_ansi", GTK_STOCK_SELECT_COLOR, _("Copy with A_NSI Color"), NULL, _("Copy with ANSI Color"), G_CALLBACK (CMainFrame::OnCopyWithColor)},
+		{"paste", GTK_STOCK_PASTE, _("_Paste"), AppConfig.keyPaste0.data(), _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
+		{"paste_gnome_term_sty", GTK_STOCK_PASTE, _("_Paste"), AppConfig.keyPaste1.data(), _("Paste"), G_CALLBACK (CMainFrame::OnPaste)},
+		{"paste_from_clipboard", GTK_STOCK_PASTE, _("Paste from Clipboard"), AppConfig.keyPasteClipboard.data(), NULL, G_CALLBACK (CMainFrame::pasteFromClipboard)},
+		{"down_article", GTK_STOCK_SELECT_ALL, _("_Download Article"), NULL, _("Download Article"), G_CALLBACK (CMainFrame::OnDownArticle)},
+		{"select_all", NULL, _("Select A_ll"), NULL, NULL, G_CALLBACK (CMainFrame::OnSelectAll)},
+		{"emoticon", NULL, _("_Emoticons"), AppConfig.keyEmotions.data(), NULL, G_CALLBACK (CMainFrame::OnEmoticons)},
+		{"preference", GTK_STOCK_PREFERENCES, _("_Preference"), NULL, _("Preference"), G_CALLBACK (CMainFrame::OnPreference)},
+		{"favorites_menu", NULL, _("F_avorites"), NULL, NULL, NULL},
+		{"add_to_fav", GTK_STOCK_ADD, _("_Add to Favorites"), NULL, _("Add to Favorites"), G_CALLBACK (CMainFrame::OnAddToFavorites)},
+		{"edit_fav", GTK_STOCK_EDIT, _("_Edit Favorites"), NULL, NULL, G_CALLBACK (CMainFrame::OnEditFavorites)},
+		{"view_menu", NULL, _("_View"), NULL, NULL, NULL},
+		{"ascii_font", GTK_STOCK_SELECT_FONT, _("_ASCII Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+		{"non_ascii_font", GTK_STOCK_SELECT_FONT,  _("Non-ASCII _Font"), NULL, NULL, G_CALLBACK (CMainFrame::OnFont)},
+	#ifdef USE_NANCY
+		{"cur_bot_menu", GTK_STOCK_EXECUTE, _("Bot (Current Connection)"), NULL, NULL, NULL},
+		{"all_bot_menu", GTK_STOCK_EXECUTE, _("Bot (All Opened Connections)"), NULL, NULL, NULL},
+	#endif
+		{"help_menu", NULL, _("_Help"), NULL, NULL, NULL},
+		{"shortcut_list", GTK_STOCK_DIALOG_INFO,  _("_Shortcut List"), NULL, NULL, G_CALLBACK (CMainFrame::OnShortcutList)},
+		{"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
+		// Fullscreen Mode
+		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
+		// Simple Mode
+		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode)}
+	  };
+
+
+	gtk_action_group_add_actions(m_ActionGroup, actionEntries, G_N_ELEMENTS(actionEntries), this);
 
 	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
 			G_N_ELEMENTS(m_ToggleActionEntries), this);
@@ -834,6 +856,7 @@ void CMainFrame::OnShortcutList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	gtk_dialog_run((GtkDialog*) dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
 }
+
 
 void CMainFrame::OnAbout(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {

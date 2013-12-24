@@ -89,6 +89,7 @@ pcmanx_SOURCES = \
 	configfile.cpp configfile.h \
 	inputdialog.cpp inputdialog.h \
 	prefdlg.cpp prefdlg.h \
+	keysettingpage.cpp keysettingpage.h \
 	dialog.cpp dialog.h \
 	listbox.cpp listbox.h \
 	editfavdlg.cpp editfavdlg.h \
