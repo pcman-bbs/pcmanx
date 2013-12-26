@@ -2,7 +2,7 @@ localedir = $(datadir)/locale
 
 noinst_LTLIBRARIES = libpcmanx_core.la
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/view \
 	-I$(top_srcdir)/src/charset \

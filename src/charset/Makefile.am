@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libpcmanx_charset.la
 
-INCLUDES = $(GLIB_CFLAGS)
+AM_CPPFLAGS = $(GLIB_CFLAGS)
 
 libpcmanx_charset_la_LIBADD = $(GLIB_LIBS)
 libpcmanx_charset_la_SOURCES = \

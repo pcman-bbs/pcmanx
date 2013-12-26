@@ -1,13 +1,12 @@
 SUBDIRS = charset core
 
-AM_CPPFLAGS = $(LTDLINCL)
-
 localedir = $(datadir)/locale
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
 
 bin_PROGRAMS = pcmanx
 
-INCLUDES = \
+AM_CPPFLAGS = \
+	$(LTDLINCL) \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
 	-I$(top_srcdir)/src/charset \
