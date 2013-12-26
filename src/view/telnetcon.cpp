@@ -338,7 +338,11 @@ bool CTelnetCon::Connect()
 			CDNSRequest* dns_request = new CDNSRequest(this, address, m_Port);
 			m_DNSQueue.push_back( dns_request );
 			if( !m_DNSThread ) // There isn't any runnung thread.
+#if defined(GLIB_VERSION_2_32)
+				m_DNSThread = g_thread_new( _("Process DNS Queue"), (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL);
+#else
 				m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+#endif
 			g_mutex_unlock(m_DNSMutex);
 		}
 	}
@@ -782,7 +786,14 @@ void CTelnetCon::Close()
 void CTelnetCon::Init()
 {
 	if (m_DNSMutex == NULL)
+	{
+#if defined(GLIB_VERSION_2_32)
+		m_DNSMutex = g_new (GMutex, 1);
+		g_mutex_init(m_DNSMutex);
+#else
 		m_DNSMutex = g_mutex_new();
+#endif
+	}
 }
 
 void CTelnetCon::Cleanup()
@@ -792,7 +803,11 @@ void CTelnetCon::Cleanup()
 
 	if(m_DNSMutex)
 	{
+#if defined(GLIB_VERSION_2_32)
+		g_free(m_DNSMutex);
+#else
 		g_mutex_free(m_DNSMutex);
+#endif
 		m_DNSMutex = NULL;
 	}
 }
@@ -1043,7 +1058,11 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused UNUSED)
 	if( !m_DNSQueue.empty() )
 	{
 		INFO("A new thread has to be started");
+#if defined(GLIB_VERSION_2_32)
+		m_DNSThread = g_thread_new( _("Process DNS Queue"), (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL);
+#else
 		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+#endif
 		// If some DNS requests are queued just before the thread exits,
 		// we should start a new thread.
 	}

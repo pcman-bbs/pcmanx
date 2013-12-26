@@ -101,14 +101,18 @@ int main(int argc, char *argv[])
          * Here, we enforce glib to use malloc instead of original ones
          * for debugging need.
          */
+#if !defined(GLIB_VERSION_2_34)
 	if (getenv("BYPASS_GLIB_POOLS") != NULL) {
 		g_slice_set_config(G_SLICE_CONFIG_ALWAYS_MALLOC, TRUE);
 
 	}
 #endif
+#endif
 
+#if !defined(GLIB_VERSION_2_32)
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
+#endif
 	gdk_threads_init();
 
 	/*--- Initialize Gtk+ ---*/
