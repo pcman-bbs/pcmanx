@@ -24,8 +24,13 @@
 #include "appconfig.h"
 #include "keysettingpage.h"
 
-CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget(), m_Parent(parent)
+GtkWidget *CKeySettingPage::m_CurrentEntry;
+GtkWidget *CKeySettingPage::m_Parent;
+
+
+CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget()
 {
+	m_Parent = parent;
 	// create gtk table layout
 	m_Widget = gtk_table_new(10, 4, TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(m_Widget), 0);
@@ -64,7 +69,6 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget(), m_Parent(parent)
 	}
 
 	// set entries
-	// CKeySettingPage::InitEntries();
 	for (int i = 0; i < KEY_SIZE; ++i) {
 		m_Entries[i] = gtk_entry_new();
 		gtk_widget_show(m_Entries[i]);
@@ -99,8 +103,12 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget(), m_Parent(parent)
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keySimpleMode]), AppConfig.keySimpleMode.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keyShowMainWindow]), AppConfig.keyShowMainWindow.c_str());
 
+
 	// set event handler
-	g_signal_connect(G_OBJECT (m_Widget), "key_press_event", G_CALLBACK (onKeyPressProxy), NULL);
+	// connect every entries with event handler
+	for(int i = 0; i < KEY_SIZE; ++i){
+		g_signal_connect(GTK_OBJECT(m_Entries[i]), "button-press-event", G_CALLBACK(showInputDialogProxy), m_Entries[i]);
+	}
 
 	// set Reset Button event handler
 	g_signal_connect(G_OBJECT (m_BtnReset), "button_press_event", G_CALLBACK (onBtnResetPressProxy), m_Entries);
@@ -111,7 +119,7 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget(), m_Parent(parent)
  */
 void CKeySettingPage::OnOK()
 {
-	//show message dialog
+	// show message dialog
 	GtkWidget *MessageDialog = gtk_message_dialog_new(
 			GTK_WINDOW(m_Parent),
 			GTK_DIALOG_MODAL,
@@ -145,9 +153,9 @@ void CKeySettingPage::OnOK()
 	AppConfig.keyShowMainWindow = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyShowMainWindow]));
 }
 
-gboolean CKeySettingPage::onKeyPress(GtkWidget *widget, GdkEventKey *event)
+gboolean CKeySettingPage::onKeyPress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	GtkWidget *targetEntry = gtk_container_get_focus_child(GTK_CONTAINER(widget));
+	GtkWidget *inputDialog = (GtkWidget *) data;
 	string pressedKey = "";
 
 	// get modifier keys
@@ -162,70 +170,74 @@ gboolean CKeySettingPage::onKeyPress(GtkWidget *widget, GdkEventKey *event)
 	}
 
 	int keyValue = event->keyval;
+	bool isLegalKey = false;
+
 	switch (keyValue) {
+	case GDK_KEY_Escape:	//press esc key to close dialog.
+		gtk_widget_destroy(inputDialog);
+		return false;
 	case GDK_KEY_F1:
 		pressedKey += "F1";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F2:
 		pressedKey += "F2";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F3:
 		pressedKey += "F3";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F4:
 		pressedKey += "F4";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F5:
 		pressedKey += "F5";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F6:
 		pressedKey += "F6";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F7:
 		pressedKey += "F7";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F8:
 		pressedKey += "F8";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F9:
 		pressedKey += "F9";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F10:
 		pressedKey += "F10";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F11:
 		pressedKey += "F11";
+		isLegalKey = true;
 		break;
 	case GDK_KEY_F12:
 		pressedKey += "F12";
-		break;
-	case GDK_KEY_Insert:
-		pressedKey += "Insert";
-		break;
-	case GDK_KEY_Delete:
-		pressedKey += "Delete";
-		break;
-	case GDK_KEY_Home:
-		pressedKey += "Home";
-		break;
-	case GDK_KEY_End:
-		pressedKey += "End";
-		break;
-	case GDK_KEY_Page_Up:
-		pressedKey += "Page_Up";
-		break;
-	case GDK_KEY_Page_Down:
-		pressedKey += "Page_Down";
+		isLegalKey = true;
 		break;
 	default:	//other characters: 0-9, a-z, A-Z
 		if ((keyValue >= 65 && keyValue <= 90) ||
 				(keyValue >= 97 && keyValue <= 122) ||
-				(keyValue >= 48 && keyValue <= 57)) {
+				(keyValue >= 48 && keyValue <= 57))
+		{
 			pressedKey.append(1u, (char)keyValue);
+			isLegalKey = true;
 		}
 		break;
 	}
-	gtk_entry_set_text(GTK_ENTRY(targetEntry), pressedKey.c_str());
+	if(isLegalKey){
+		gtk_entry_set_text(GTK_ENTRY(m_CurrentEntry), pressedKey.c_str());	//set hot keys
+		gtk_widget_destroy(inputDialog);									//and destroy the input dialog
+	}
 
 	return FALSE;
 }
@@ -236,7 +248,7 @@ gboolean CKeySettingPage::onKeyPress(GtkWidget *widget, GdkEventKey *event)
 gboolean CKeySettingPage::onKeyPressProxy(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	CKeySettingPage *_this = static_cast<CKeySettingPage*>(data);
-	return _this->onKeyPress(widget, event);
+	return _this->onKeyPress(widget, event, data);
 }
 
 /**
@@ -246,7 +258,7 @@ gboolean CKeySettingPage::onBtnResetPress(GtkWidget *widget, GdkEvent *event, gp
 {
 	//show question dialog
 	GtkWidget *dialog = gtk_message_dialog_new(
-			NULL,
+			GTK_WINDOW(m_Parent),
 			GTK_DIALOG_MODAL,
 			GTK_MESSAGE_QUESTION,
 			GTK_BUTTONS_YES_NO,
@@ -296,4 +308,38 @@ gboolean CKeySettingPage::onBtnResetPressProxy(GtkWidget *widget, GdkEvent *even
 {
 	CKeySettingPage *_this = static_cast<CKeySettingPage*>(data);
 	return _this->onBtnResetPress(widget, event, data);
+}
+
+
+gboolean CKeySettingPage::showInputDialog(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+	// set current entry.
+	m_CurrentEntry = (GtkWidget *)data;
+
+	// create a input dialog
+	GtkWidget *inputDialog = gtk_message_dialog_new(
+			GTK_WINDOW(m_Parent),
+			GTK_DIALOG_MODAL,
+			GTK_MESSAGE_INFO,
+			GTK_BUTTONS_NONE,
+			"Please press the key combination.\n\nPress ESC to leave key setting."
+	);
+	gtk_window_set_title(GTK_WINDOW(inputDialog), "Hot key input dialog");
+	gtk_window_set_resizable(GTK_WINDOW(inputDialog), false);
+
+	//pass inputDialog to the callback function so that the callback function can destroy this dialog.
+	g_signal_connect(G_OBJECT(inputDialog), "key_press_event", G_CALLBACK (onKeyPressProxy), inputDialog);
+
+	gtk_dialog_run(GTK_DIALOG(inputDialog));
+
+	return false;
+}
+
+/**
+ * @brief proxy function for showInputDialog()
+ */
+gboolean CKeySettingPage::showInputDialogProxy(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+	CKeySettingPage *_this = static_cast<CKeySettingPage*>(data);
+	return _this->showInputDialog(widget, event, data);
 }

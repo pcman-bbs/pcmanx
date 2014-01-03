@@ -43,18 +43,24 @@ public:
 		keyPasteClipboard, keyEmotions, keyFullscreen, keySimpleMode, keyShowMainWindow
 	};
 
-	GtkWidget *m_Parent;
+	static GtkWidget *m_Parent;
 	GtkWidget *m_BtnReset;
 	GtkWidget *m_LabelInfo;
 	GtkWidget *m_Labels[KEY_SIZE];
 	GtkWidget *m_Entries[KEY_SIZE];
+	GtkWidget *m_InputDialog;
+	static GtkWidget *m_CurrentEntry;
 
 	// reset button event handler
 	gboolean onBtnResetPress(GtkWidget *widget, GdkEvent *event, gpointer data);
 	static gboolean onBtnResetPressProxy(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 
+	// show hot key input dialog
+	gboolean showInputDialog(GtkWidget *widget, GdkEvent *event, gpointer data);
+	static gboolean showInputDialogProxy(GtkWidget *widget, GdkEvent *event, gpointer data);
+
 	// hot key input event handler
-	gboolean onKeyPress(GtkWidget *widget, GdkEventKey *event);
+	gboolean onKeyPress(GtkWidget *widget, GdkEventKey *event, gpointer data);
 	static gboolean onKeyPressProxy(GtkWidget *widget, GdkEventKey *event, gpointer data);
 };
 
