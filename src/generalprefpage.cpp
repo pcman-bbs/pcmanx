@@ -72,6 +72,10 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_ShowStatusBar);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowStatusBar, FALSE, FALSE, 0);
 
+	m_ShowInSimpleMode = gtk_check_button_new_with_mnemonic (_("Start PCManX in simple mode"));
+	gtk_widget_show (m_ShowInSimpleMode);
+	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowInSimpleMode, FALSE, FALSE, 0);
+
 	m_AAFont = gtk_check_button_new_with_mnemonic (_("Use Anti-Aliasing Fonts (Take effect after restart)"));
 	gtk_widget_show (m_AAFont);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_AAFont, FALSE, FALSE, 0);
@@ -131,6 +135,7 @@ CGeneralPrefPage::CGeneralPrefPage()
 #endif
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowToolbar), AppConfig.ShowToolbar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowInSimpleMode), AppConfig.ShowInSimpleMode);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), AppConfig.PopupNotifier);
 
@@ -157,6 +162,7 @@ void CGeneralPrefPage::OnOK()
 #endif
 	AppConfig.ShowToolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowToolbar));
 	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
+	AppConfig.ShowInSimpleMode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowInSimpleMode));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
 	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_PopupTimeout));

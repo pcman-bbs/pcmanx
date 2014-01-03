@@ -99,6 +99,7 @@ public:
 #endif
 	bool ShowToolbar;
 	bool ShowStatusBar;
+	bool ShowInSimpleMode;
 	bool PopupNotifier;
 	int PopupTimeout;
 

@@ -166,21 +166,6 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 }
 
 
-
-
-
-
-
-
-
-
-
-
-//string base = "<alt>w";
-//string cc = AppConfig.keyNewConn0.substr(0, 6);
-string cc = "<alt>q";
-//const char *cc = base.c_str();
-
 CMainFrame::CMainFrame()
 {
 	char* desktop = getenv("XDG_CURRENT_DESKTOP");
@@ -297,6 +282,10 @@ CMainFrame::CMainFrame()
 		gtk_window_maximize((GtkWindow*) m_Widget);
 	}else{
 		gtk_window_unmaximize((GtkWindow*) m_Widget);
+	}
+
+	if(AppConfig.ShowInSimpleMode){
+		OnSimpleMode(NULL, this);
 	}
 }
 

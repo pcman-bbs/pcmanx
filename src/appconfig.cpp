@@ -97,6 +97,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #endif
 		CFG_BOOL( ShowToolbar )
 		CFG_BOOL( ShowStatusBar )
+		CFG_BOOL( ShowInSimpleMode )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -402,6 +403,7 @@ void CAppConfig::SetToDefault()
 #endif
 	ShowToolbar = true;
 	ShowStatusBar = true;
+	ShowInSimpleMode = false;
 
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536 * 102 / 256;
