@@ -80,8 +80,8 @@ CSite::CSite(string Name)
 	m_Startup = false;
 
 #ifdef USE_EXTERNAL
-	m_UseExternalSSH = false;
-	m_UseExternalTelnet = false;
+	m_UseExternalSSH = true;
+	m_UseExternalTelnet = true;
 #endif
 
 	m_bHorizontalCenterAlign = true;
