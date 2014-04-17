@@ -110,6 +110,22 @@ static int DrawCharWrapper( int row, int col, void *data )
 	return tv->DrawChar( row, col );
 }
 
+void EnterWrapper( CTelnetCon* Con, CTermCharAttr* Attr, int pos)
+{
+	if( Con->DetectDBChar() && Attr[pos].GetCharSet() == CTermCharAttr::CS_MBCS1 )
+		Con->SendString("\x1bOC\x1bOC");
+	else
+		Con->SendString("\x1bOC");
+}
+
+void LeaveWrapper( CTelnetCon* Con, CTermCharAttr* Attr, int pos)
+{
+	if( Con->DetectDBChar() && pos > 0 && Attr[pos-1].GetCharSet() == CTermCharAttr::CS_MBCS2 )
+		Con->SendString("\x1bOD\x1bOD");
+	else
+		Con->SendString("\x1bOD");
+}
+
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
 	INFO("CTelnetView::OnKeyDown (keyval=0x%x, state=0x%x)", evt->keyval, evt->state);
@@ -138,100 +154,106 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	{
 	case GDK_Left:
 	case GDK_KP_Left:
-		GetCon()->SendRawString("\x1bOD\x1bOD",( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
+		LeaveWrapper(GetCon(), pAttr, x);
 		break;
 	case GDK_Right:
 	case GDK_KP_Right:
-		GetCon()->SendRawString("\x1bOC\x1bOC",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
+		EnterWrapper(GetCon(), pAttr, x);
 		break;
 	case GDK_Up:
 	case GDK_KP_Up:
-		GetCon()->SendRawString("\x1bOA",3);
+		GetCon()->SendString("\x1bOA");
 		break;
 	case GDK_Down:
 	case GDK_KP_Down:
- 		GetCon()->SendRawString("\x1bOB",3);
+		GetCon()->SendString("\x1bOB");
 		break;
 	case GDK_BackSpace:
-		GetCon()->SendRawString("\b\b", ( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
+		if (GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2)
+			GetCon()->SendString("\b\b");
+		else
+			GetCon()->SendString("\b");
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
 		reconnect = GetCon()->IsClosed();
-		GetCon()->SendRawString("\r",1);
+		GetCon()->SendString("\r");
 		break;
 	case GDK_Delete:
 	case GDK_KP_Delete:
-		GetCon()->SendRawString("\x1b[3~\x1b[3~",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
+		if (GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1)
+			GetCon()->SendString("\x1b[3~\x1b[3~");
+		else
+			GetCon()->SendString("\x1b[3~");
 		break;
 	case GDK_Insert:
 	case GDK_KP_Insert:
-		GetCon()->SendRawString("\x1b[2~",4);
+		GetCon()->SendString("\x1b[2~");
 		break;
 	case GDK_Home:
 	case GDK_KP_Home:
-		GetCon()->SendRawString("\x1b[1~",4);
+		GetCon()->SendString("\x1b[1~");
 		break;
 	case GDK_End:
 	case GDK_KP_End:
-		GetCon()->SendRawString("\x1b[4~",4);
+		GetCon()->SendString("\x1b[4~");
 		break;
 //	case GDK_Prior:
 	case GDK_Page_Up:
 	case GDK_KP_Page_Up:
-		GetCon()->SendRawString("\x1b[5~",4);
+		GetCon()->SendString("\x1b[5~");
 		break;
 //	case GDK_Next:
 	case GDK_Page_Down:
 	case GDK_KP_Page_Down:
-		GetCon()->SendRawString("\x1b[6~",4);
+		GetCon()->SendString("\x1b[6~");
 		break;
 	case GDK_Tab:
-		GetCon()->SendRawString("\t", 1);
+		GetCon()->SendString("\t");
 		break;
 	case GDK_Escape:
-		GetCon()->SendRawString("\x1b", 1);
+		GetCon()->SendString("\x1b");
 		break;
 // F1-F12 keys
 	case GDK_F1:
 	case GDK_KP_F1:
-		GetCon()->SendRawString("\x1bOP", 3);
+		GetCon()->SendString("\x1bOP");
 		break;
 	case GDK_F2:
 	case GDK_KP_F2:
-		GetCon()->SendRawString("\x1bOQ", 3);
+		GetCon()->SendString("\x1bOQ");
 		break;
 	case GDK_F3:
 	case GDK_KP_F3:
-		GetCon()->SendRawString("\x1bOR", 3);
+		GetCon()->SendString("\x1bOR");
 		break;
 	case GDK_F4:
 	case GDK_KP_F4:
-		GetCon()->SendRawString("\x1bOS", 3);
+		GetCon()->SendString("\x1bOS");
 		break;
 	case GDK_F5:
-		GetCon()->SendRawString("\x1b[15~", 5);
+		GetCon()->SendString("\x1b[15~");
 		break;
 	case GDK_F6:
-		GetCon()->SendRawString("\x1b[17~", 5);
+		GetCon()->SendString("\x1b[17~");
 		break;
 	case GDK_F7:
-	    GetCon()->SendRawString("\x1b[18~", 5);
+	    GetCon()->SendString("\x1b[18~");
 		break;
 	case GDK_F8:
-		GetCon()->SendRawString("\x1b[19~", 5);
+		GetCon()->SendString("\x1b[19~");
 		break;
 	case GDK_F9:
-		GetCon()->SendRawString("\x1b[20~", 5);
+		GetCon()->SendString("\x1b[20~");
 		break;
 	case GDK_F10:
-		GetCon()->SendRawString("\x1b[21~", 5);
+		GetCon()->SendString("\x1b[21~");
 		break;
 	case GDK_F11:
-		GetCon()->SendRawString("\x1b[23~", 5);
+		GetCon()->SendString("\x1b[23~");
 		break;
 	case GDK_F12:
-		GetCon()->SendRawString("\x1b[24~", 5);
+		GetCon()->SendString("\x1b[24~");
 		break;
 	default:
 		clear = false;
@@ -415,14 +437,34 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 	if( !m_pTermData )
 		return;
 
-	if ( AppConfig.MouseSupport != true )
+	if( !m_pParentFrame->MouseEnabled() )
 		return;
 
 	GdkScrollDirection i = evt->direction;;
 	if ( i == GDK_SCROLL_UP )
-	  GetCon()->SendRawString("\x1bOA",3);
+		GetCon()->SendString("\x1bOA");
 	if ( i == GDK_SCROLL_DOWN )
-	  GetCon()->SendRawString("\x1bOB",3);
+		GetCon()->SendString("\x1bOB");
+}
+
+void CTelnetView::OnMButtonDown(GdkEventButton* evt)
+{
+	if (!m_pParentFrame->MouseEnabled())
+		return;
+	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
+			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
+	int x = m_pTermData->m_CaretPos.x;
+	LeaveWrapper(GetCon(), pAttr, x);
+}
+
+void CTelnetView::OnLButtonDown(GdkEventButton* evt)
+{
+	if (!m_pParentFrame->MouseEnabled())
+		return;
+	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
+			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
+	int x = m_pTermData->m_CaretPos.x;
+	EnterWrapper(GetCon(), pAttr, x);
 }
 
 void CTelnetView::OnLButtonUp(GdkEventButton* evt)
@@ -468,7 +510,7 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 		  if ( n>0 )
 		    while(n)
 		      {
-			GetCon()->SendRawString("\x1bOB",3);
+			GetCon()->SendString("\x1bOB");
 			n--;
 		      }
 		  if ( n<0 )
@@ -476,39 +518,39 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 		      n=-n;
 		      while(n)
 			{
-			  GetCon()->SendRawString("\x1bOA",3);
+			  GetCon()->SendString("\x1bOA");
 			  n--;
 			}
 		    }
-		  GetCon()->SendRawString("\r",1); //return key
+		  GetCon()->SendString("\r"); //return key
 		  break;
 		}
 	      case 0: // menu
 		{
 		  char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
 		  GetCon()->SendRawString( &cMenu, 1 );
-		  GetCon()->SendRawString( "\r", 1 );
+		  GetCon()->SendString("\r");
 		  break;
 		}
 	      case -1: // normal
-		GetCon()->SendRawString( "\r", 1 );
+		GetCon()->SendString("\r");
 		break;
 	      default:
 		break;
 	      }
 	  }
 	else if (cur == 1)
-	  GetCon()->SendRawString("\x1bOD",3); //exiting mode
+	  GetCon()->SendString("\x1bOD"); //exiting mode
 	else if (cur == 6)
-	  GetCon()->SendRawString("\x1b[1~",4); //home
+	  GetCon()->SendString("\x1b[1~"); //home
 	else if (cur == 5)
-	  GetCon()->SendRawString("\x1b[4~",4); //end
+	  GetCon()->SendString("\x1b[4~"); //end
 	else if (cur == 4)
-	  GetCon()->SendRawString("\x1b[5~",4); //pageup
+	  GetCon()->SendString("\x1b[5~"); //pageup
 	else if (cur == 3)
-	  GetCon()->SendRawString("\x1b[6~",4); //pagedown
+	  GetCon()->SendString("\x1b[6~"); //pagedown
 	else
-	  GetCon()->SendRawString( "\r", 1 );
+	  GetCon()->SendString("\r");
 }
 #endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 

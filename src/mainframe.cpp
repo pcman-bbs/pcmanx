@@ -175,6 +175,7 @@ CMainFrame::CMainFrame()
 	m_FavoritesMenu = NULL;
 	m_IsFlashing = false;
 	m_Mode = NORMAL_MODE;
+	m_UsingMouse = false;
 #ifdef USE_DOCKLET
 	m_TrayIcon = NULL;
 #endif
@@ -337,6 +338,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 
 GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
+    {"enable_mouse", NULL, _("enable mouse"), NULL, _("enable mouse"), G_CALLBACK (CMainFrame::OnClickMouseEnable), false},
 #ifdef USE_DOCKLET
     // Show/Hide Main Window
     {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true}
@@ -384,6 +386,7 @@ static const char *ui_info =
   "      <separator/>"
   "      <menuitem action='emoticon'/>"
   "      <menuitem action='preference'/>"
+  "      <menuitem action='enable_mouse'/>"
   "    </menu>"
   "    <menu action='favorites_menu'>"
   "      <separator/>"
@@ -751,6 +754,11 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 	else
 		gtk_widget_destroy(dlg);
+}
+
+void CMainFrame::OnClickMouseEnable(GtkMenuItem* mitem, CMainFrame* _this)
+{
+	_this->setMouse(!_this->MouseEnabled());
 }
 
 void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
