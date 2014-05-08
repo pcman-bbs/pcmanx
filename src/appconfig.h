@@ -93,6 +93,7 @@ public:
 	bool CopyTrimTail;
 #ifdef USE_MOUSE
 	bool MouseSupport;
+	bool WithMiddleButton;
 #endif
 #ifdef USE_DOCKLET
 	bool ShowTrayIcon;

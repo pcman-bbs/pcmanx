@@ -91,6 +91,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( BeepOnBell )
 #ifdef USE_MOUSE
 		CFG_BOOL( MouseSupport )
+		CFG_BOOL( WithMiddleButton )
 #endif
 #ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
@@ -374,6 +375,7 @@ void CAppConfig::SetToDefault()
 	CopyTrimTail = 1;
 #ifdef USE_MOUSE
 	MouseSupport = 0;
+	WithMiddleButton = 1;
 #endif
 	PopupNotifier = true;
 	PopupTimeout = 6;

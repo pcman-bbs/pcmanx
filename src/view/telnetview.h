@@ -62,7 +62,6 @@ protected:
 #if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)    
     void OnMouseScroll(GdkEventScroll* evt);
     void OnMButtonDown(GdkEventButton* evt);
-    void OnLButtonDown(GdkEventButton* evt);
     void OnLButtonUp(GdkEventButton* evt);
 #endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
     void OnRButtonDown(GdkEventButton* evt);

@@ -437,7 +437,7 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 	if( !m_pTermData )
 		return;
 
-	if( !m_pParentFrame->MouseEnabled() )
+	if ( AppConfig.MouseSupport != true )
 		return;
 
 	GdkScrollDirection i = evt->direction;;
@@ -449,22 +449,16 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 
 void CTelnetView::OnMButtonDown(GdkEventButton* evt)
 {
-	if (!m_pParentFrame->MouseEnabled())
+	if ( AppConfig.MouseSupport != true )
 		return;
+
+	if ( AppConfig.WithMiddleButton != true )
+		return;
+
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
 			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
 	int x = m_pTermData->m_CaretPos.x;
 	LeaveWrapper(GetCon(), pAttr, x);
-}
-
-void CTelnetView::OnLButtonDown(GdkEventButton* evt)
-{
-	if (!m_pParentFrame->MouseEnabled())
-		return;
-	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
-			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
-	int x = m_pTermData->m_CaretPos.x;
-	EnterWrapper(GetCon(), pAttr, x);
 }
 
 void CTelnetView::OnLButtonUp(GdkEventButton* evt)
@@ -497,60 +491,69 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	     || m_pTermData->m_Sel->m_Start.left != left )
 	  return;
 
-	int cur = m_CursorState;
-	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
-
-	if ( cur == 2 ) // mouse on entering mode
-	  {
-	    switch (ps)
-	      {
-	      case 1: // list
-		{
-		  int n = y - m_pTermData->m_CaretPos.y;
-		  if ( n>0 )
-		    while(n)
-		      {
-			GetCon()->SendString("\x1bOB");
-			n--;
-		      }
-		  if ( n<0 )
-		    {
-		      n=-n;
-		      while(n)
-			{
-			  GetCon()->SendString("\x1bOA");
-			  n--;
-			}
-		    }
-		  GetCon()->SendString("\r"); //return key
-		  break;
-		}
-	      case 0: // menu
-		{
-		  char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
-		  GetCon()->SendRawString( &cMenu, 1 );
-		  GetCon()->SendString("\r");
-		  break;
-		}
-	      case -1: // normal
-		GetCon()->SendString("\r");
-		break;
-	      default:
-		break;
-	      }
-	  }
-	else if (cur == 1)
-	  GetCon()->SendString("\x1bOD"); //exiting mode
-	else if (cur == 6)
-	  GetCon()->SendString("\x1b[1~"); //home
-	else if (cur == 5)
-	  GetCon()->SendString("\x1b[4~"); //end
-	else if (cur == 4)
-	  GetCon()->SendString("\x1b[5~"); //pageup
-	else if (cur == 3)
-	  GetCon()->SendString("\x1b[6~"); //pagedown
+	if ( AppConfig.WithMiddleButton == true ){
+		CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
+				m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
+		int x = m_pTermData->m_CaretPos.x;
+		EnterWrapper(GetCon(), pAttr, x);
+	}
 	else
-	  GetCon()->SendString("\r");
+	{
+	  int cur = m_CursorState;
+	  int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
+
+	  if ( cur == 2 ) // mouse on entering mode
+	  {
+		switch (ps)
+		{
+	      case 1: // list
+		  {
+		    int n = y - m_pTermData->m_CaretPos.y;
+		    if ( n>0 )
+		      while(n)
+		      {
+				GetCon()->SendString("\x1bOB");
+				n--;
+		      }
+		    if ( n<0 )
+		    {
+			  n=-n;
+		      while(n)
+			  {
+			    GetCon()->SendString("\x1bOA");
+			    n--;
+			  }
+		    }
+			GetCon()->SendString("\r"); //return key
+			break;
+		  }
+		  case 0: // menu
+		  {
+			char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
+			GetCon()->SendRawString( &cMenu, 1 );
+			GetCon()->SendString("\r");
+			break;
+		  }
+		  case -1: // normal
+			GetCon()->SendString("\r");
+		  break;
+			default:
+		  break;
+		}
+	  }
+	  else if (cur == 1)
+		GetCon()->SendString("\x1bOD"); //exiting mode
+	  else if (cur == 6)
+		GetCon()->SendString("\x1b[1~"); //home
+	  else if (cur == 5)
+		GetCon()->SendString("\x1b[4~"); //end
+	  else if (cur == 4)
+		GetCon()->SendString("\x1b[5~"); //pageup
+	  else if (cur == 3)
+		GetCon()->SendString("\x1b[6~"); //pagedown
+	  else
+		GetCon()->SendString("\r");
+	}
 }
 #endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 

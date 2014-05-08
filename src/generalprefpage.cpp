@@ -24,6 +24,24 @@
 #include "generalprefpage.h"
 #include "appconfig.h"
 
+static void cb_mouse_switch( GtkWidget *item, gpointer data )
+{
+	AppConfig.WithMiddleButton = *((bool *) data);
+}
+
+static bool withMiddleButton = TRUE;
+static GtkWidget *make_menu_item ( const char *name, GCallback callback, bool withMB)
+{
+	GtkWidget *item;
+
+	item = gtk_menu_item_new_with_label (name);
+	withMiddleButton = withMB;
+	g_signal_connect (item, "activate", callback, (gpointer) &withMiddleButton);
+	gtk_widget_show (item);
+
+	return item;
+}
+
 CGeneralPrefPage::CGeneralPrefPage()
  : CWidget()
 {
@@ -53,9 +71,25 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_CancelSelAfterCopy, FALSE, FALSE, 0);
 
 #ifdef USE_MOUSE
+	GtkWidget *hboxMouse;
+	hboxMouse = gtk_hbox_new (FALSE, 0);
+	gtk_widget_show (hboxMouse);
+	gtk_box_pack_start (GTK_BOX (m_Widget), hboxMouse, FALSE, FALSE, 0);
+
 	m_MouseSupport = gtk_check_button_new_with_mnemonic (_("Enable Mouse Support"));
 	gtk_widget_show (m_MouseSupport);
-	gtk_box_pack_start (GTK_BOX (m_Widget), m_MouseSupport, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hboxMouse), m_MouseSupport, FALSE, FALSE, 0);
+
+	GtkWidget *opt, *menu, *item;
+	opt = gtk_option_menu_new ();
+	menu = gtk_menu_new ();
+	item = make_menu_item ("with middle button", G_CALLBACK (cb_mouse_switch), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	item = make_menu_item ("without middle button", G_CALLBACK (cb_mouse_switch), FALSE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
+	gtk_widget_show (opt);
+	gtk_box_pack_start (GTK_BOX (hboxMouse), opt, FALSE, FALSE, 0);
 #endif
 
 #ifdef USE_DOCKLET

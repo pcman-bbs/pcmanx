@@ -98,8 +98,6 @@ public:
 	static gboolean OnActivated( GtkWidget* widget, GdkEventFocus* evt, CMainFrame* _this );
 
 	bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
-	bool MouseEnabled(){	return m_UsingMouse;	}
-	void setMouse(bool isSet){	m_UsingMouse = isSet;	}
 	static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
 	int GetViewIndex(CTermView* view);
 	void SwitchToCon(CTelnetCon* con);
@@ -137,7 +135,6 @@ protected:
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
-	static void OnClickMouseEnable(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
@@ -221,7 +218,6 @@ private:
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
 	bool m_Unity;
-	bool m_UsingMouse;
 };
 
 #endif
