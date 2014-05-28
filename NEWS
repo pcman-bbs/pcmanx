@@ -1,8 +1,14 @@
 Version 1.3 - ?
 
+* Feature: Add ANSI color editor
+* Feature: Enhance OpenPCMan style mouse compatibility
+* Feature: Add mouse browsing support
 * Feature: Add hotkey settings
 * Feature: Add gnome-terminal style keyboard shortcuts
+* Feature: Option to startup in simple mode
+* Feature: Close tabs selected by middle clicks
 * Bugfix:  Fix build under Fedora Linux
+* Bugfix: some combinations for key settings do not work
 
 
 Version 1.2 - February 2013
