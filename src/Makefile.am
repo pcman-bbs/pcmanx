@@ -65,7 +65,9 @@ endif
 
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h
+	view/telnetview.cpp view/telnetview.h \
+	view/editor.cpp view/editor.h \
+	view/editorview.cpp view/editorview.h
 
 if USE_IPLOOKUP
 QQWRYSEEKER_SOURCES = \

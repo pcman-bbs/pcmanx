@@ -38,6 +38,7 @@
 using namespace std;
 
 #include "telnetview.h"
+#include "editorview.h"
 #include <signal.h>
 
 /**
@@ -45,8 +46,10 @@ using namespace std;
 */
 
 class CTelnetView;
+class CEditorView;
 class CNotebook;
 class CTelnetCon;
+class CEditor;
 class CSite;
 
 class CMainFrame : public CWidget
@@ -81,6 +84,9 @@ public:
 	void SetCurView(CTelnetView* view);
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
+	//get Ansi Editor information
+	CEditorView* GetCurEditorView() {	return (m_eView);	}
+	CEditor* GetCurEditor() {	return (m_eView ? m_eView->GetEditor():NULL);	}
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
 	static gboolean OnBlinkTimer(CMainFrame* _this);
 	static gboolean OnEverySecondTimer(CMainFrame* _this);
@@ -151,6 +157,16 @@ protected:
 	void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
 
+	// Ansi Editor methods.
+	static void OnAnsiEditor(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnOpenAnsiFile(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnSaveAnsiFile(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnClearScreen(GtkMenuItem* mitem, CMainFrame* _this);
+	//static void OnDownloadToEditor(GtkMenuItem* mitem, CMainFrame* _this);	//todo
+	static void SetBlink(GtkToggleButton *togglebutton, CMainFrame* _this);
+	static void SetTextColor(GtkComboBox *widget, CMainFrame* _this);
+	static void SetBgColor(GtkComboBox *widget, CMainFrame* _this);
+
 #ifdef USE_NANCY
 	static GtkRadioActionEntry cur_bot_entries[];
 	static GtkRadioActionEntry all_bot_entries[];
@@ -180,6 +196,7 @@ protected:
 
 protected:
 	CTelnetView* m_pView;
+	CEditorView* m_eView;
 	CNotebook* m_pNotebook;
 	GtkUIManager* m_UIManager;
 	GtkActionGroup* m_ActionGroup;
@@ -188,6 +205,11 @@ protected:
 	GtkWidget* m_EditMenu;
 	GtkWidget* m_Statusbar;
 	GtkWidget* m_TrayPopup;
+
+	// Ansi editor widgets
+	GtkWidget *m_chkBlink;		//checkbox: set text blink
+	GtkWidget *m_cbTextColor;	//combobox: set text color
+	GtkWidget *m_cbBgColor;		//combobox: set background color
 
 	guint m_BlinkTimer;
 	guint m_EverySecondTimer;
@@ -218,6 +240,8 @@ private:
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
 	bool m_Unity;
+	void AppendRow(GtkTreeIter *iter, GtkListStore *store, gchar *display, gchar *color);
+	gchar* ParseColor(GdkColor *color);
 };
 
 #endif

@@ -34,6 +34,7 @@
 #include "telnetview.h"
 #include "notebook.h"
 #include "telnetcon.h"
+#include "editor.h"
 
 #include "inputdialog.h"
 #include "editfavdlg.h"
@@ -68,6 +69,7 @@
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
 
+#define COLOR_BLOCK "\u2588\u2588\u2588\u2588\u2588\u2588"
 
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button UNUSED,
@@ -170,6 +172,7 @@ CMainFrame::CMainFrame()
 {
 	char* desktop = getenv("XDG_CURRENT_DESKTOP");
 
+	m_eView = NULL;
 	m_pView = NULL;
 	m_FavoritesMenuItem = NULL;
 	m_FavoritesMenu = NULL;
@@ -301,12 +304,26 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
 
-	m_pView = new CTelnetView;
-	m_Views.push_back(m_pView);
-
 	CTelnetCon* pCon;
+	CEditor* pEditor;
 
-	pCon = new CTelnetCon( m_pView, *site );
+	/**
+	*   Since CEditor is extended from CTelnetCon and CEditorView extended from CTelnetView,
+	*   there are lots of settings can be reused below.
+	*   Therefore, the differences only lie in the new instance part.
+	*   We use the magic url "ansi_editor" to identify if the Editor instance should be created or not.
+	*/
+	if(url == "ansi_editor"){
+		m_eView = new CEditorView;
+		pEditor = new CEditor( m_eView, *site);
+		pCon = pEditor;
+		m_pView = m_eView;
+	}else{
+		m_pView = new CTelnetView;
+		pCon = new CTelnetCon( m_pView, *site );
+		pEditor = NULL;
+	}
+	m_Views.push_back(m_pView);
 
 	m_pView->m_pTermData = pCon;
 	m_pView->SetContextMenu(m_EditMenu);
@@ -330,7 +347,11 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pNotebook->SetCurPage(idx);
 	m_pView->SetFocus();
 
-	pCon->Connect();
+	if(url == "ansi_editor"){
+		pEditor->EditorActions(CEditor::Init_Ansi_Editor);
+	}else{
+		pCon->Connect();
+	}
 
 	return pCon;
 }
@@ -410,6 +431,13 @@ static const char *ui_info =
   "        <menuitem action='nancy_bot_all'/>"
   "      </menu>"
 #endif
+  "    </menu>"
+  "    <menu action='menu_ansi_editor'>"
+  "      <menuitem action='openAnsiEditor'/>"
+  "      <separator/>"
+  "      <menuitem action='openAnsiFile'/>"
+  "      <menuitem action='saveAnsiFile'/>"
+  "      <menuitem action='clearScreen'/>"
   "    </menu>"
   "    <menu action='help_menu'>"
   "      <menuitem action='shortcut_list'/>"
@@ -522,7 +550,13 @@ void CMainFrame::MakeUI()
 		// Fullscreen Mode
 		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
 		// Simple Mode
-		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode)}
+		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode)},
+		// Ansi Editor Menu
+		{"menu_ansi_editor", NULL, _("Ansi Editor"), NULL, NULL, NULL},
+		{"openAnsiEditor", NULL, _("Open Ansi Editor"), NULL, NULL, G_CALLBACK (CMainFrame::OnAnsiEditor)},
+		{"openAnsiFile", NULL, _("Open Ansi File"), NULL, NULL, G_CALLBACK (CMainFrame::OnOpenAnsiFile)},
+		{"saveAnsiFile", NULL, _("Save Ansi File"), NULL, NULL, G_CALLBACK (CMainFrame::OnSaveAnsiFile)},
+		{"clearScreen", NULL, _("Clear Screen"), NULL, NULL, G_CALLBACK (CMainFrame::OnClearScreen)}
 	  };
 
 
@@ -604,6 +638,69 @@ void CMainFrame::MakeUI()
 		m_JumpTos[i-1] = G_OBJECT(action);
 	}
 
+	// Ansi Editor widget: blink check box, click to set the text blink.
+	m_chkBlink = gtk_check_button_new_with_label("blink");
+	GtkToolItem *itemBlink = gtk_tool_item_new();
+	gtk_container_add(GTK_CONTAINER(itemBlink), m_chkBlink);
+	gtk_widget_show_all ( (GtkWidget*)itemBlink);
+	gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), itemBlink, -1);
+
+	// Ansi Editor widget: Set Text color.
+	GtkTreeModel *model;
+	model = GTK_TREE_MODEL(gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING));
+	m_cbTextColor = gtk_combo_box_new_with_model(model);
+
+	GtkCellRenderer *cell;
+	cell = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(m_cbTextColor), cell, TRUE);
+	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(m_cbTextColor), cell, "text", 0);
+	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(m_cbTextColor), cell, "foreground", 1);
+
+	GtkTreeIter iter;
+	GtkListStore *store = GTK_LIST_STORE(model);
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, 0, "Front", 1, "#000000", -1);
+
+	for (int i = 0; i < 16; i++)
+	{
+		gchar *color = ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]));
+		AppendRow(&iter, store, COLOR_BLOCK, color);
+	}
+	gtk_combo_box_set_active(GTK_COMBO_BOX(m_cbTextColor), 0);
+
+	GtkToolItem *itemTextColor = gtk_tool_item_new();
+	gtk_container_add(GTK_CONTAINER(itemTextColor), m_cbTextColor);
+	gtk_widget_show_all ( (GtkWidget*)itemTextColor);
+	gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), itemTextColor, -1);
+
+	// Ansi Editor widget: Set Background color.
+	GtkTreeModel *model_back;
+	model_back = GTK_TREE_MODEL(gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING));
+	m_cbBgColor = gtk_combo_box_new_with_model(model_back);
+
+	GtkCellRenderer *cell_back;
+	cell_back = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(m_cbBgColor), cell_back, TRUE);
+	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(m_cbBgColor), cell_back, "text", 0);
+	gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(m_cbBgColor), cell_back, "foreground", 1);
+
+	GtkTreeIter iter_back;
+	GtkListStore *store_back = GTK_LIST_STORE(model_back);
+	gtk_list_store_append(store_back, &iter_back);
+	gtk_list_store_set(store_back, &iter_back, 0, "Background", 1, "#000000", -1);
+
+	for (int i = 0; i < 8; i++)
+	{
+		gchar *color = ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]));
+		AppendRow(&iter_back, store_back, COLOR_BLOCK, color);
+	}
+	gtk_combo_box_set_active(GTK_COMBO_BOX(m_cbBgColor), 0);
+
+	GtkToolItem *itemBgColor = gtk_tool_item_new();
+	gtk_container_add(GTK_CONTAINER(itemBgColor), m_cbBgColor);
+	gtk_widget_show_all ( (GtkWidget*)itemBgColor);
+	gtk_toolbar_insert(GTK_TOOLBAR(m_Toolbar), itemBgColor, -1);
+
 	GtkWidget* sep = (GtkWidget*)gtk_separator_tool_item_new();
 	gtk_widget_show(sep);
 	gtk_container_add (GTK_CONTAINER (m_Toolbar), sep);
@@ -630,6 +727,11 @@ void CMainFrame::MakeUI()
 	g_signal_connect ((gpointer) m_URLEntry, "focus-out-event",
 			G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
 			this);
+
+	// Ansi Editor widget events
+	g_signal_connect(GTK_OBJECT(m_cbTextColor), "changed", G_CALLBACK(SetTextColor), this);
+	g_signal_connect(GTK_OBJECT(m_cbBgColor), "changed", G_CALLBACK(SetBgColor), this);
+	g_signal_connect(GTK_OBJECT(m_chkBlink), "toggled", G_CALLBACK(SetBlink), this);
 
 	CreateFavoritesMenu();
 	CreateTrayIcon();
@@ -1182,6 +1284,8 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget UNUSED,
                                          CMainFrame* _this)
 {
 	_this->SetCurView( _this->m_Views[page_num] );
+	if( _this->GetCurEditor() != NULL )
+		_this->m_eView = (CEditorView *) _this->m_Views[page_num];
 }
 
 gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
@@ -1791,3 +1895,183 @@ void CMainFrame::UpdateBotStatus()
 
 #endif	//	#ifdef USE_NANCY
 /* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */
+
+
+
+/**
+*   Open Ansi Editor. Send url string "ansi_editor" to NewCon().
+*   The NewCon() method will create CEditor object when the url is "ansi_editor".
+*/
+void CMainFrame::OnAnsiEditor(GtkMenuItem *mitem, CMainFrame *_this)
+{
+	_this->NewCon("Ansi Editor", "ansi_editor");
+}
+
+void CMainFrame::OnOpenAnsiFile(GtkMenuItem *mitem, CMainFrame *_this)
+{
+	GtkWidget *dialog = gtk_file_chooser_dialog_new (
+							"Open Ansi File",
+							NULL,
+							GTK_FILE_CHOOSER_ACTION_OPEN,
+							GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+							GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+							NULL);
+
+	GtkFileFilter *filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, "Ansi file");
+	gtk_file_filter_add_pattern(filter, "*.ans");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		string path = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+		size_t pos = path.find_last_of("/\\");
+		string filename = path.substr(pos + 1, -1);
+		string title = "AnsiEditor: ";
+		title += filename;
+		_this->NewCon(title, "ansi_editor");
+		_this->GetCurEditor()->EditorActions(CEditor::Load_Ansi_File, path);
+		_this->GetCurEditorView()->UpdateEditor();
+	}
+	gtk_widget_destroy (dialog);
+}
+
+void CMainFrame::OnSaveAnsiFile(GtkMenuItem *mitem, CMainFrame *_this)
+{
+	//do nothing if the current view is not Ansi Editor
+	if ( _this->GetCurEditor() == NULL )
+		return;
+
+	GtkWidget *dialog = gtk_file_chooser_dialog_new (
+							"Save Ansi File",
+							GTK_WINDOW(_this),
+							GTK_FILE_CHOOSER_ACTION_SAVE,
+							GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+							GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+							NULL);
+
+	GtkFileFilter *filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, "Ansi file");
+	gtk_file_filter_add_pattern(filter, "*.ans");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		string filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (dialog));
+		_this->GetCurEditor()->EditorActions(CEditor::Save_Ansi_File, filename);
+	}
+	gtk_widget_destroy (dialog);
+}
+
+void CMainFrame::OnClearScreen(GtkMenuItem *mitem, CMainFrame *_this)
+{
+	//do nothing if the current view is not Ansi Editor
+	if ( _this->GetCurEditor() == NULL )
+		return;
+
+	_this->GetCurEditor()->EditorActions(CEditor::Clear_Screen);
+	_this->GetCurEditorView()->UpdateEditor();
+}
+
+/**
+*   Set text to blink.
+*/
+void CMainFrame::SetBlink(GtkToggleButton *togglebutton, CMainFrame *_this)
+{
+	//do nothing if the current view is not Ansi Editor
+	if( _this->m_Views.empty() ||  _this->GetCurEditor() == NULL )
+		return;
+
+	bool blink = (togglebutton->active)? true: false;
+
+	_this->GetCurEditor()->ApplyAnsiColor(-1, blink, -1, -1);
+
+	_this->GetCurEditorView()->SetFocus();
+}
+
+
+void CMainFrame::SetTextColor(GtkComboBox *widget, CMainFrame* _this)
+{
+	//do nothing if the current view is not Ansi Editor
+	if( _this->GetCurEditor() == NULL )
+		return;
+
+	//do not change color if view is empty
+	if( _this->m_Views.empty() )
+	{
+		gtk_combo_box_set_active(GTK_COMBO_BOX(_this->m_cbTextColor), 0);
+		return;
+	}
+
+	int cbIndex = gtk_combo_box_get_active(GTK_COMBO_BOX(_this->m_cbTextColor));
+
+	//index 0 is just a title, not a color. Do nothing
+	if( cbIndex == 0 )
+		return;
+
+	cbIndex--;
+
+	bool bright = (int)(cbIndex / 8);
+
+	int foreground;
+	stringstream ss;
+	ss << cbIndex % 8;
+	ss >> foreground;
+
+	_this->GetCurEditor()->ApplyAnsiColor(bright, -1, foreground, -1);
+	_this->GetCurEditorView()->SetFocus();
+}
+
+
+void CMainFrame::SetBgColor(GtkComboBox *widget, CMainFrame* _this)
+{
+	//do nothing if the current view is not Ansi Editor
+	if( _this->GetCurEditor() == NULL )
+		return;
+
+	//do not change color if view is empty
+	if( _this->m_Views.empty() )
+	{
+		gtk_combo_box_set_active(GTK_COMBO_BOX(_this->m_cbBgColor), 0);
+		return;
+	}
+
+	int cbIndex = gtk_combo_box_get_active(GTK_COMBO_BOX(_this->m_cbBgColor));
+
+	//index 0 is just a title, not a bg color. Do nothing
+	if( cbIndex == 0 )
+		return;
+
+	cbIndex--;
+
+	stringstream ss;
+	ss << cbIndex % 8;
+	int bgColor;
+	ss >> bgColor;
+
+	_this->GetCurEditor()->ApplyAnsiColor(-1, -1, -1, bgColor);
+	_this->GetCurEditorView()->SetFocus();
+}
+
+void CMainFrame::AppendRow(GtkTreeIter *iter, GtkListStore *store, gchar *display, gchar *color)
+{
+	gtk_list_store_append(store, iter);
+	gtk_list_store_set(store, iter, 0, display, 1, color, -1);
+}
+
+/**
+*   parse the output format from GdkColor: #rrrrggggbbbb to the normal format: #rrggbb
+*/
+gchar* CMainFrame::ParseColor(GdkColor *color)
+{
+	string color_present = gdk_color_to_string(color);
+	gchar *result = new char[7];
+	result[0] = color_present[0];
+	result[1] = color_present[1];
+	result[2] = color_present[2];
+	result[3] = color_present[5];
+	result[4] = color_present[6];
+	result[5] = color_present[9];
+	result[6] = color_present[10];
+	return result;
+}
