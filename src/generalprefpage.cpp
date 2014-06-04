@@ -98,14 +98,6 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowTrayIcon, FALSE, FALSE, 0);
 #endif
 
-	m_ShowToolbar = gtk_check_button_new_with_mnemonic (_("Show Toolbar"));
-	gtk_widget_show (m_ShowToolbar);
-	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowToolbar, FALSE, FALSE, 0);
-
-	m_ShowStatusBar = gtk_check_button_new_with_mnemonic (_("Show Status Bar on bottom"));
-	gtk_widget_show (m_ShowStatusBar);
-	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowStatusBar, FALSE, FALSE, 0);
-
 	m_ShowInSimpleMode = gtk_check_button_new_with_mnemonic (_("Start PCManX in simple mode"));
 	gtk_widget_show (m_ShowInSimpleMode);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_ShowInSimpleMode, FALSE, FALSE, 0);
@@ -167,8 +159,6 @@ CGeneralPrefPage::CGeneralPrefPage()
 #ifdef USE_DOCKLET
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon), AppConfig.ShowTrayIcon);
 #endif
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowToolbar), AppConfig.ShowToolbar);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar), AppConfig.ShowStatusBar);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_ShowInSimpleMode), AppConfig.ShowInSimpleMode);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_AAFont), AppConfig.AntiAliasFont);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_PopupNotifier), AppConfig.PopupNotifier);
@@ -194,8 +184,6 @@ void CGeneralPrefPage::OnOK()
 #ifdef USE_DOCKLET
 	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
 #endif
-	AppConfig.ShowToolbar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowToolbar));
-	AppConfig.ShowStatusBar = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowStatusBar));
 	AppConfig.ShowInSimpleMode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowInSimpleMode));
 	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
 	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
