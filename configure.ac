@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT([pcmanx-gtk2],[1.2],[http://code.google.com/p/pcmanx-gtk2/issues/list])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules])
+AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules subdir-objects])
 
 LT_PREREQ([2.2.6])
 LT_CONFIG_LTDL_DIR([libltdl])
