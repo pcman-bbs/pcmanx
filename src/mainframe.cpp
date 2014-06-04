@@ -100,6 +100,26 @@ void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
 }
 #endif
 
+void CMainFrame::OnToggleToolBar(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	AppConfig.ShowToolbar = gtk_toggle_action_get_active(toggleaction);
+	if (AppConfig.ShowToolbar) {
+		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
+	} else {
+		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
+	}
+}
+
+void CMainFrame::OnToggleStatusBar(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	AppConfig.ShowStatusBar = gtk_toggle_action_get_active(toggleaction);
+	if (AppConfig.ShowStatusBar) {
+		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+	} else {
+		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
+	}
+}
+
 /*
 void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
 {
@@ -360,8 +380,10 @@ GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
 {
 #ifdef USE_DOCKLET
     // Show/Hide Main Window
-    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true}
+    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
 #endif
+    {"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), AppConfig.ShowToolbar},
+    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), AppConfig.ShowStatusBar}
 };
 
 #ifdef USE_NANCY
@@ -414,6 +436,9 @@ static const char *ui_info =
   "    <menu action='view_menu'>"
   "      <menuitem action='ascii_font'/>"
   "      <menuitem action='non_ascii_font'/>"
+  "      <separator/>"
+  "      <menuitem action='toolbar'/>"
+  "      <menuitem action='statusbar'/>"
   "      <separator/>"
 #ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
