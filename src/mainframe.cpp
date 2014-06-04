@@ -382,8 +382,8 @@ GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
     // Show/Hide Main Window
     {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
 #endif
-    {"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), AppConfig.ShowToolbar},
-    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), AppConfig.ShowStatusBar}
+    {"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), true},
+    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true}
 };
 
 #ifdef USE_NANCY
@@ -589,6 +589,9 @@ void CMainFrame::MakeUI()
 
 	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
 			G_N_ELEMENTS(m_ToggleActionEntries), this);
+
+  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "toolbar")), AppConfig.ShowToolbar);
+  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "statusbar")), AppConfig.ShowStatusBar);
 
 #ifdef USE_NANCY
 	gtk_action_group_add_radio_actions(m_ActionGroup,
