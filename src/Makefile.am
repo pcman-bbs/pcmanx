@@ -20,9 +20,7 @@ pcmanx_DEPENDENCIES = $(LTDLDEPS)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \
-	docklet/clipboard.c \
-	docklet/eggtrayicon.h \
-	docklet/eggtrayicon.c
+	docklet/clipboard.c
 
 OPTIONAL_NOTIFIER = \
 	notifier/api.h \
