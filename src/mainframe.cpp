@@ -65,7 +65,7 @@
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
 
-#define COLOR_BLOCK "\u2588\u2588\u2588\u2588\u2588\u2588"
+const gchar COLOR_BLOCK[] = "\u2588\u2588\u2588\u2588\u2588\u2588";
 
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button UNUSED,
@@ -2013,7 +2013,7 @@ void CMainFrame::SetBgColor(GtkComboBox *widget, CMainFrame* _this)
 	_this->GetCurEditorView()->SetFocus();
 }
 
-void CMainFrame::AppendRow(GtkTreeIter *iter, GtkListStore *store, gchar *display, gchar *color)
+void CMainFrame::AppendRow(GtkTreeIter *iter, GtkListStore *store, const gchar *display, const gchar *color)
 {
 	gtk_list_store_append(store, iter);
 	gtk_list_store_set(store, iter, 0, display, 1, color, -1);

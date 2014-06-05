@@ -231,7 +231,7 @@ private:
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
 	bool m_Unity;
-	void AppendRow(GtkTreeIter *iter, GtkListStore *store, gchar *display, gchar *color);
+	void AppendRow(GtkTreeIter *iter, GtkListStore *store, const gchar *display, const gchar *color);
 	gchar* ParseColor(GdkColor *color);
 };
 
