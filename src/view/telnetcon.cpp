@@ -777,6 +777,7 @@ void CTelnetCon::Close()
 			int kill_ret = kill( m_Pid, 1 ); // SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
+			(void) kill_ret; (void) wait_ret; // suppress warnings
 			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}

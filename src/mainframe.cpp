@@ -1002,8 +1002,6 @@ void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMain
 	int window_h = 0;
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(notebook)), &window_w, &window_h);
 
-	GtkWidget *closet_tab;
-
 	int closet_tab_x = window_w;
 	int number_of_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	int nth_page_number = 0;
@@ -1020,7 +1018,6 @@ void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMain
 		if(lx > 0 && lx < closet_tab_x)
 		{
 			closet_tab_x = lx;
-			closet_tab = tab_label;
 			number_of_closet_tab = nth_page_number;
 		}
 	}
