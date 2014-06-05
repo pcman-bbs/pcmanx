@@ -120,8 +120,8 @@ CTermCharAttr::operator==(CTermCharAttr& attr){
 // class constructor
 CTermData::CTermData(CTermView* pView) :
 	m_pView(pView),
-	m_Screen(NULL),
-	m_pCmdLine(NULL)
+	m_pCmdLine(NULL),
+	m_Screen(NULL)
 {
 	m_CaretPos.x = m_CaretPos.y = 0;
 	m_OldCaretPos = m_CaretPos;
