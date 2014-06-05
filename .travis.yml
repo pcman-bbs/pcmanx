@@ -7,5 +7,5 @@ before_install:
 
 script:
     - ./autogen.sh
-    - ./configure
+    - ./configure --disable-silent-rules
     - make
