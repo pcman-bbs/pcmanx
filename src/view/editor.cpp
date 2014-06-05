@@ -95,6 +95,8 @@ int CEditor::Send( void* buf, int length )
 	}
 
 	GetEditorView()->GetParentFrame()->GetCurEditorView()->UpdateEditor();
+
+	return 0;
 }
 
 void CEditor::DeleteText()
