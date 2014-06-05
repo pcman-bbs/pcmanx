@@ -151,7 +151,7 @@ void CEditor::DoBackspaceText()
 void CEditor::DoDeleteText(string &line, int col)
 {
 	int pos = ParseToRawPos(line, col);
-	if(pos >= line.length() || pos < 0){
+	if(pos >= static_cast<int>(line.length()) || pos < 0){
 		return;		//do nothing
 	}
 
@@ -293,7 +293,7 @@ void CEditor::MoveUp()
 
 void CEditor::MoveDown()
 {
-	if( (m_DisplayStart + m_CaretPos.y) >= m_EditorText.size() - 1){
+	if( (m_DisplayStart + m_CaretPos.y) >= static_cast<int>(m_EditorText.size()) - 1){
 		//already in the last line, do nothing
 		return;
 	}
@@ -392,7 +392,7 @@ void CEditor::MoveToNextPage()
 	SetDisplayFrame(m_RowsPerPage);
 
 	//bound check
-	if(m_DisplayStart + m_CaretPos.y >= m_EditorText.size()){
+	if(m_DisplayStart + m_CaretPos.y >= static_cast<int>(m_EditorText.size())){
 		m_CaretPos.y = m_EditorText.size() - 1;
 		if(m_CaretPos.y > m_RowsPerPage - 1)
 			m_CaretPos.y = m_RowsPerPage - 1;
@@ -419,7 +419,7 @@ void CEditor::NewLine()
 	//partition the string behind cursor to the next line
 	string str0, str1;
 	int pos = ParseToRawPos(m_EditorText[m_DisplayStart + m_CaretPos.y], m_CaretPos.x);
-	if(pos < m_EditorText[m_DisplayStart + m_CaretPos.y].size()){
+	if(pos < static_cast<int>(m_EditorText[m_DisplayStart + m_CaretPos.y].size())){
 		str0 = m_EditorText[m_DisplayStart + m_CaretPos.y].substr(0, pos);
 		str1 = m_EditorText[m_DisplayStart + m_CaretPos.y].substr(pos, -1);
 		if(str0.size() == 0)
@@ -433,7 +433,7 @@ void CEditor::NewLine()
 
 	m_EditorText[m_DisplayStart + m_CaretPos.y] = str0;
 
-	if(m_DisplayStart + m_CaretPos.y < m_EditorText.size() - 1){
+	if(m_DisplayStart + m_CaretPos.y < static_cast<int>(m_EditorText.size()) - 1){
 		vector<string>::iterator itor = m_EditorText.begin();
 		m_EditorText.insert(itor + m_DisplayStart + m_CaretPos.y + 1, str1);
 	}else{
@@ -458,7 +458,7 @@ int CEditor::GetTextCharCount(const string &str)
 {
 	int count = 0;
 	int i = 0;
-	while(i < str.length()){
+	while(i < static_cast<int>(str.length())){
 		if(str[i] == '\x1b'){
 			while(str[i] != 'm')	++i;
 			++i;
@@ -520,7 +520,7 @@ void CEditor::SaveAnsiFile(string filename)
 	ofstream fs(filename.c_str());
 	if(fs.is_open()){
 
-		for(int i = 0; i < m_EditorText.size(); ++i){
+		for(unsigned int i = 0; i < m_EditorText.size(); ++i){
 			fs << m_EditorText[i] << "\r\n";
 		}
 
@@ -538,7 +538,7 @@ void CEditor::SetSelection()
 	if(m_EditorText.size() > m_RowsPerPage){
 		//return;
 	}else{
-		if(m_SelectEndRow > m_EditorText.size() - 1){
+		if(m_SelectEndRow > static_cast<int>(m_EditorText.size()) - 1){
 			m_SelectEndRow = m_EditorText.size() - 1;
 			m_SelectEndCol = m_ColsPerPage - 1;
 		}
@@ -559,7 +559,7 @@ void CEditor::SetDisplayFrame(int offset)
 		}else{
 			m_DisplayEnd = m_DisplayStart + m_RowsPerPage - 1;
 
-			if(m_DisplayEnd > m_EditorText.size() - 1){
+			if(m_DisplayEnd > static_cast<int>(m_EditorText.size()) - 1){
 				m_DisplayEnd = m_EditorText.size() - 1;
 				m_DisplayStart = m_DisplayEnd - m_RowsPerPage + 1;
 			}
@@ -621,9 +621,9 @@ void CEditor::PasteToEditor(const string &text)
 			m_EditorText.insert(itor + m_DisplayStart + m_CaretPos.y + lineCount -1, line);
 		}
 
-		if(found != string::npos)
+		if(found != static_cast<int>(string::npos))
 			temp = temp.substr(found + 1, -1);
-	}while(found != string::npos);
+	}while(found != static_cast<int>(string::npos));
 }
 
 int CEditor::ParseToRawPos(const string &text, int col, bool checkDBCS)
@@ -632,7 +632,7 @@ int CEditor::ParseToRawPos(const string &text, int col, bool checkDBCS)
 
 	int t = 0;	//index
 	int i = 0;
-	while(i < text.length()){
+	while(i < static_cast<int>(text.length())){
 		if(text[i] == '\x1b'){
 			while(text[i] != 'm')	++i;
 			++i;
@@ -672,7 +672,7 @@ void CEditor::DoInsertText(string &text, const string &newText, int insertCol)
 	int insertPos = ParseToRawPos(text, insertCol);
 
 	stringstream ss("");
-	if(insertPos < text.length()){
+	if(insertPos < static_cast<int>(text.length())){
 		if(insertPos == -1){		//insert newText to the end of text
 			ss << text << newText;
 		}else{
@@ -752,7 +752,7 @@ void CEditor::SetColorToSelection(int bright, int blink, int fg, int bg)
 		int rawEnd = ParseToRawPos(m_EditorText[m_DisplayStart + row], textEnd, false);
 
 		// add space if rawEnd >= m_EditorText[m_DisplayStart + row].length()
-		if(rawEnd >= m_EditorText[m_DisplayStart + row].length()){
+		if(rawEnd >= static_cast<int>(m_EditorText[m_DisplayStart + row].length())){
 			int spaceCount = rawEnd - m_EditorText[m_DisplayStart + row].length() + 1;
 			for(int i = 0; i < spaceCount; ++i){
 				m_EditorText[m_DisplayStart + row] += " ";

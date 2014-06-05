@@ -154,7 +154,7 @@ void CEditorView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 	int ansiCodesLength = 0, foundColorStart = -1, foundColorEnd = -1;
 
 	//handle caret position if paste multiple line text
-	while( (foundEndl = tempText.find("\n")) != string::npos )
+	while( (foundEndl = tempText.find("\n")) != static_cast<int>(string::npos) )
 	{
 		tempText = tempText.substr(foundEndl + 1, tempText.length());
 		lineCount++;

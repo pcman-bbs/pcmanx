@@ -466,7 +466,7 @@ void CTelnetCon::ParseTelnetCommand()
 		{
 			if( 3 > (m_pCmdLine-m_CmdLine) )
 				return;
-			char ret[]={TC_IAC,TC_DONT,*m_pBuf};
+			unsigned char ret[]={TC_IAC,TC_DONT,*m_pBuf};
 			switch(*m_pBuf)
 			{
 			case TO_ECHO:
@@ -474,14 +474,14 @@ void CTelnetCon::ParseTelnetCommand()
 				ret[1] = TC_DO;
 				break;
 			}
-			SendRawString(ret, 3);
+			SendRawString(reinterpret_cast<char*>(ret), 3);
 			break;
 		}
 	case TC_DO:
 		{
 			if( 3 > (m_pCmdLine-m_CmdLine) )
 				return;
-			char ret[]={TC_IAC,TC_WILL,*m_pBuf};
+			unsigned char ret[]={TC_IAC,TC_WILL,*m_pBuf};
 			switch(*m_pBuf)
 			{
 			case TO_TERMINAL_TYPE:
@@ -490,7 +490,7 @@ void CTelnetCon::ParseTelnetCommand()
 			default:
 				ret[1] = TC_WONT;
 			}
-			SendRawString(ret,3);
+			SendRawString(reinterpret_cast<char*>(ret),3);
 			if( TO_NAWS == *m_pBuf )	// Send NAWS
 			{
 				unsigned char naws[]={TC_IAC,TC_SB,TO_NAWS,0,80,0,24,TC_IAC,TC_SE};
