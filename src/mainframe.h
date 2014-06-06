@@ -232,7 +232,7 @@ private:
 	void *m_indicator;
 	bool m_Unity;
 	void AppendRow(GtkTreeIter *iter, GtkListStore *store, const gchar *display, const gchar *color);
-	gchar* ParseColor(GdkColor *color);
+	void ParseColor(GdkColor *color, gchar *res, size_t res_len);
 };
 
 #endif

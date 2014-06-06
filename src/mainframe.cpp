@@ -96,6 +96,8 @@ void CMainFrame::OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this)
 }
 #endif
 
+#define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
+
 void CMainFrame::OnToggleToolBar(GtkToggleAction *toggleaction, CMainFrame *_this)
 {
 	AppConfig.ShowToolbar = gtk_toggle_action_get_active(toggleaction);
@@ -652,7 +654,8 @@ void CMainFrame::MakeUI()
 
 	for (int i = 0; i < 16; i++)
 	{
-		gchar *color = ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]));
+		gchar color[8];
+		ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]), color, ARRAY_SIZE(color));
 		AppendRow(&iter, store, COLOR_BLOCK, color);
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(m_cbTextColor), 0);
@@ -680,7 +683,8 @@ void CMainFrame::MakeUI()
 
 	for (int i = 0; i < 8; i++)
 	{
-		gchar *color = ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]));
+		gchar color[8];
+		ParseColor(&(CTermCharAttr::m_DefaultColorTable[i]), color, ARRAY_SIZE(color));
 		AppendRow(&iter_back, store_back, COLOR_BLOCK, color);
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(m_cbBgColor), 0);
@@ -2022,16 +2026,18 @@ void CMainFrame::AppendRow(GtkTreeIter *iter, GtkListStore *store, const gchar *
 /**
 *   parse the output format from GdkColor: #rrrrggggbbbb to the normal format: #rrggbb
 */
-gchar* CMainFrame::ParseColor(GdkColor *color)
+void CMainFrame::ParseColor(GdkColor *color, gchar *res, size_t res_len)
 {
+	g_assert(res_len >= 8);
+
 	string color_present = gdk_color_to_string(color);
-	gchar *result = new char[7];
-	result[0] = color_present[0];
-	result[1] = color_present[1];
-	result[2] = color_present[2];
-	result[3] = color_present[5];
-	result[4] = color_present[6];
-	result[5] = color_present[9];
-	result[6] = color_present[10];
-	return result;
+
+	res[0] = color_present[0];
+	res[1] = color_present[1];
+	res[2] = color_present[2];
+	res[3] = color_present[5];
+	res[4] = color_present[6];
+	res[5] = color_present[9];
+	res[6] = color_present[10];
+	res[7] = 0;
 }
