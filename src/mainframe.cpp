@@ -271,7 +271,7 @@ CMainFrame::CMainFrame()
 	}
 
 	if(AppConfig.ShowInSimpleMode){
-		OnSimpleMode(NULL, this);
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "simple")), true);
 	}
 }
 
@@ -346,7 +346,9 @@ GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
     {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
 #endif
     {"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), true},
-    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true}
+    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true},
+    {"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
+    {"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
 };
 
 #ifdef USE_NANCY
@@ -535,10 +537,6 @@ void CMainFrame::MakeUI()
 		{"help_menu", NULL, _("_Help"), NULL, NULL, NULL},
 		{"shortcut_list", GTK_STOCK_DIALOG_INFO,  _("_Shortcut List"), NULL, NULL, G_CALLBACK (CMainFrame::OnShortcutList)},
 		{"about", GTK_STOCK_ABOUT, NULL, NULL, _("About"), G_CALLBACK (CMainFrame::OnAbout)},
-		// Fullscreen Mode
-		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode)},
-		// Simple Mode
-		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode)},
 		// Ansi Editor Menu
 		{"menu_ansi_editor", NULL, _("Ansi Editor"), NULL, NULL, NULL},
 		{"openAnsiEditor", NULL, _("Open Ansi Editor"), NULL, NULL, G_CALLBACK (CMainFrame::OnAnsiEditor)},
@@ -552,9 +550,6 @@ void CMainFrame::MakeUI()
 
 	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
 			G_N_ELEMENTS(m_ToggleActionEntries), this);
-
-  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "toolbar")), AppConfig.ShowToolbar);
-  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "statusbar")), AppConfig.ShowStatusBar);
 
 #ifdef USE_NANCY
 	gtk_action_group_add_radio_actions(m_ActionGroup,
@@ -721,6 +716,9 @@ void CMainFrame::MakeUI()
 			G_CALLBACK (CMainFrame::OnURLEntryKillFocus),
 			this);
 
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "toolbar")), AppConfig.ShowToolbar);
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "statusbar")), AppConfig.ShowStatusBar);
+
 	// Ansi Editor widget events
 	g_signal_connect(GTK_OBJECT(m_cbTextColor), "changed", G_CALLBACK(SetTextColor), this);
 	g_signal_connect(GTK_OBJECT(m_cbBgColor), "changed", G_CALLBACK(SetBgColor), this);
@@ -850,6 +848,10 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
+	if(_this->m_Mode == SIMPLE_MODE) {
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "simple")), false);
+	}
+
 	if (_this->m_Mode != FULLSCREEN_MODE) {
 		_this->m_Mode = FULLSCREEN_MODE;
 		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
@@ -871,6 +873,10 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
+	if(_this->m_Mode == FULLSCREEN_MODE) {
+		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "fullscreen")), false);
+	}
+
 	if (_this->m_Mode != SIMPLE_MODE) {
 		_this->m_Mode = SIMPLE_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
