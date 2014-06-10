@@ -623,13 +623,23 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (input_menu_item), submenu);
 
 	// Show Web Search only when text selected
-	if(! m_pTermData->GetSelectedText(false).empty()) {
-		if(websearch_menu_item)
-			gtk_widget_destroy(websearch_menu_item);
-		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_("_Web Search"));
+	if(websearch_menu_item)
+		gtk_widget_destroy(websearch_menu_item);
+	string selected_text = m_pTermData->GetSelectedText(false);
+	if(! selected_text.empty()) {
+		string websearch_text("_Web Search: \"");
+		websearch_text.append(selected_text);
+		websearch_text.append("\"");
+		gsize wl = 0;
+		gchar* websearch_text_UTF8 = g_convert_with_fallback(
+					   websearch_text.c_str(), websearch_text.length(),
+					   "utf-8", m_pTermData->m_Encoding.c_str(),
+					   (gchar *) "?", NULL, &wl, NULL);
+		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_( websearch_text_UTF8 ));
 		gtk_widget_show(websearch_menu_item);
 		g_signal_connect(G_OBJECT(websearch_menu_item), "activate", G_CALLBACK(CTelnetView::OnWebSearch), this);
 		gtk_menu_shell_append(GTK_MENU_SHELL(m_ContextMenu), websearch_menu_item );
+		g_free(websearch_text_UTF8);
 	}
 
 	gtk_menu_shell_append (GTK_MENU_SHELL (m_ContextMenu), input_menu_item);
