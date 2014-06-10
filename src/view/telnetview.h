@@ -54,6 +54,7 @@ public:
 
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
 	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
+	static void OnWebSearch(GtkMenuItem* mitem, CTelnetView* _this);
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);

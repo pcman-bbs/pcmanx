@@ -66,6 +66,7 @@ string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
 
 static GtkWidget* input_menu_item = NULL;
+static GtkWidget* websearch_menu_item = NULL;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -621,6 +622,16 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 	GtkWidget* submenu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (input_menu_item), submenu);
 
+	// Show Web Search only when text selected
+	if(! m_pTermData->GetSelectedText(false).empty()) {
+		if(websearch_menu_item)
+			gtk_widget_destroy(websearch_menu_item);
+		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_("_Web Search"));
+		gtk_widget_show(websearch_menu_item);
+		g_signal_connect(G_OBJECT(websearch_menu_item), "activate", G_CALLBACK(CTelnetView::OnWebSearch), this);
+		gtk_menu_shell_append(GTK_MENU_SHELL(m_ContextMenu), websearch_menu_item );
+	}
+
 	gtk_menu_shell_append (GTK_MENU_SHELL (m_ContextMenu), input_menu_item);
 
 	gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (m_IMContext),
@@ -834,6 +845,11 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	{
 		g_print("can not run %s: %s\n", app.c_str(), err->message);
 	}
+}
+
+void CTelnetView::OnWebSearch(GtkMenuItem* mitem UNUSED, CTelnetView* _this)
+{
+	_this->OnWebSearchSelected();
 }
 
 #define  SEARCH_URL ("http://www.google.com.tw/search?&ie=UTF-8&q=")

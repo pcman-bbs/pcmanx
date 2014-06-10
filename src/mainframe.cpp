@@ -461,7 +461,6 @@ static const char *ui_info =
   "    <menuitem action='fullscreen' />"
   "    <menuitem action='simple' />"
   "    <separator/>"
-  "   <menuitem action='web_search' />"
   "  </popup>"
 #if defined(USE_DOCKLET)
   "  <popup name='tray_popup'>"
@@ -494,7 +493,6 @@ void CMainFrame::MakeUI()
 	//move m_ActionEntries from class member to local.
 	GtkActionEntry actionEntries[] =
 	  {
-		{"web_search", NULL, _("_Web Search"), NULL, NULL, G_CALLBACK (CMainFrame::OnWebSearch)},
 		{"connect_menu", NULL, _("_Connect"), NULL, NULL, NULL},
 		{"site_list", GTK_STOCK_OPEN, _("_Site List"), AppConfig.keySiteList.data(), _("Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
 		{"new_con", GTK_STOCK_NETWORK, _("_New Connection"), AppConfig.keyNewConn0.c_str(), _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
