@@ -1675,12 +1675,6 @@ void CMainFrame::OnSelectAll(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	}
 }
 
-void CMainFrame::OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this)
-{
-       CTelnetView* pCurView = _this->GetCurView();
-       pCurView->OnWebSearchSelected();
-}
-
 void CMainFrame::LoadStartupSites()
 {
 	vector<CSite>::iterator it=AppConfig.Favorites.begin();

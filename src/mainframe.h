@@ -137,7 +137,6 @@ protected:
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this);
-	static void OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
