@@ -628,20 +628,18 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 	string selected_text = m_pTermData->GetSelectedText(false);
 	if(! selected_text.empty()) {
 		gsize wl = 0;
+		gchar websearch_text[128];
 		gchar* search_content = g_convert_with_fallback(
 							selected_text.c_str(), selected_text.length(),
 							"utf-8", m_pTermData->m_Encoding.c_str(),
 							(gchar *) "?", NULL, &wl, NULL);
 		if(g_utf8_strlen(search_content, selected_text.length()) > 15) {
 			g_utf8_strncpy(search_content, search_content, 15);
-			strcat(search_content, "...");
+			strcat(search_content, _("..."));
 		}
-		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_("_Web Search: "));
-		string websearch_text(gtk_menu_item_get_label(GTK_MENU_ITEM(websearch_menu_item)));
-		websearch_text.append("\"");
-		websearch_text.append(search_content);
-		websearch_text.append("\"");
-		gtk_menu_item_set_label(GTK_MENU_ITEM(websearch_menu_item), websearch_text.c_str());
+		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_("_Web Search: \"%s\""));
+		sprintf(websearch_text, gtk_menu_item_get_label(GTK_MENU_ITEM(websearch_menu_item)), search_content);
+		gtk_menu_item_set_label(GTK_MENU_ITEM(websearch_menu_item), websearch_text);
 
 		gtk_widget_show(websearch_menu_item);
 		g_signal_connect(G_OBJECT(websearch_menu_item), "activate", G_CALLBACK(CTelnetView::OnWebSearch), this);
