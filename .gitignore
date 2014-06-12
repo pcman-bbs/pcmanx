@@ -9,6 +9,7 @@ autotools/
 config.log
 config.status
 configure
+compile
 libtool
 m4
 ChangeLog
