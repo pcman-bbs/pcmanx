@@ -339,17 +339,6 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	return pCon;
 }
 
-GtkToggleActionEntry CMainFrame::m_ToggleActionEntries[] =
-{
-#ifdef USE_DOCKLET
-    // Show/Hide Main Window
-    {"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
-#endif
-    {"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), true},
-    {"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true},
-    {"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
-    {"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
-};
 
 #ifdef USE_NANCY
 GtkRadioActionEntry CMainFrame::cur_bot_entries[] =
@@ -543,11 +532,23 @@ void CMainFrame::MakeUI()
 		{"clearScreen", NULL, _("Clear Screen"), NULL, NULL, G_CALLBACK (CMainFrame::OnClearScreen)}
 	  };
 
+		//move m_ToggleActionEntries from class member to local
+		GtkToggleActionEntry ToggleActionEntries[] =
+		{
+	#ifdef USE_DOCKLET
+		// Show/Hide Main Window
+		{"showhide", NULL, _("Show _Main Window"), "<Alt>M", NULL, G_CALLBACK(CMainFrame::OnShowHide), true},
+	#endif
+		{"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), true},
+		{"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true},
+		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
+		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
+		};
 
 	gtk_action_group_add_actions(m_ActionGroup, actionEntries, G_N_ELEMENTS(actionEntries), this);
 
-	gtk_action_group_add_toggle_actions(m_ActionGroup, m_ToggleActionEntries,
-			G_N_ELEMENTS(m_ToggleActionEntries), this);
+	gtk_action_group_add_toggle_actions(m_ActionGroup, ToggleActionEntries,
+			G_N_ELEMENTS(ToggleActionEntries), this);
 
 #ifdef USE_NANCY
 	gtk_action_group_add_radio_actions(m_ActionGroup,
