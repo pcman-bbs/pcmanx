@@ -1,7 +1,14 @@
 language:
     - c
 
-env: CFLAGS="-Wall -Werror" CXXFLAGS="-Wall -Werror"
+matrix:
+    include:
+        - env: CONFIGURE="--enable-debug"
+        - env: CONFIGURE="--disable-nancy"
+        - env: CONFIGURE="--disable-mouse"
+        - env: CONFIGURE="--disable-external"
+        - env: CONFIGURE="--enable-iplookup"
+        - env: CONFIGURE="--enable-proxy"
 
 before_install:
     - sudo apt-get update -qq
@@ -9,5 +16,5 @@ before_install:
 
 script:
     - ./autogen.sh
-    - ./configure --disable-silent-rules
-    - make
+    - ./configure --disable-silent-rules $CONFIGURE
+    - CFLAGS="-Wall -Werror" CXXFLAGS="-Wall -Werror" make
