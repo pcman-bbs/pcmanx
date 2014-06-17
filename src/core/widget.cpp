@@ -62,6 +62,15 @@ bool CWidget::PostCreate()
 	return true;
 }
 
+void widget_enable_rgba(GtkWidget* wid)
+{
+  GdkScreen* screen = gtk_widget_get_screen(wid);
+  GdkColormap* cmap = gdk_screen_get_rgba_colormap(screen);
+  if (cmap) {
+    gtk_widget_set_colormap(wid, cmap);
+  }
+}
+
 void CWidget::OnCreate()
 {
 	INFO("realize %s", gtk_widget_get_name(m_Widget));

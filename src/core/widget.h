@@ -34,6 +34,8 @@ GTK+ GtkWidget wrapper.
 @author PCMan
 */
 
+X_EXPORT void widget_enable_rgba(GtkWidget* wid);
+
 class X_EXPORT CWidget{
 public:
     CWidget();

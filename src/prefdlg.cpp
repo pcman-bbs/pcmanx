@@ -26,6 +26,7 @@
 #include "sitepage.h"
 #include "keysettingpage.h"
 #include "appconfig.h"
+#include "core/termview.h"
 
 CPrefDlg::CPrefDlg(CWidget* parent)
  : CDialog(parent, _("Preference"), true)
