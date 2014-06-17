@@ -18,4 +18,4 @@ before_install:
 script:
     - ./autogen.sh
     - ./configure --disable-silent-rules $CONFIGURE
-    - CFLAGS="-Wall -Werror" CXXFLAGS="-Wall -Werror" make
+    - make CFLAGS="-Wall -Werror" CXXFLAGS="-Wall -Werror"
