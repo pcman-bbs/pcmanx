@@ -114,6 +114,7 @@ GdkCursor* CTermView::m_PageUpCursor = NULL;
 GdkCursor* CTermView::m_EndCursor = NULL;
 GdkCursor* CTermView::m_HomeCursor = NULL;
 int CTermView::m_CursorState = 0;
+int CTermView::Opacity = 100;
 
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
@@ -121,6 +122,7 @@ CTermView::CTermView()
 	m_pTermData = NULL;
 	m_GC = NULL;
 	m_ShowBlink = false;
+	m_Opacity = 0.86;
 	for (int i = FONT_START; i != FONT_END; ++i)
 	    m_Font[i] = NULL;
 	m_XftDraw = NULL;
@@ -144,6 +146,8 @@ CTermView::CTermView()
 		 | GDK_ALL_EVENTS_MASK);
 
 	GTK_WIDGET_SET_FLAGS(m_Widget, GTK_CAN_FOCUS);
+	widget_enable_rgba(m_Widget);
+	gtk_widget_set_app_paintable(m_Widget, false);
 	gtk_widget_set_double_buffered(m_Widget, false);
 
 	g_signal_connect(G_OBJECT(m_Widget), "unrealize", G_CALLBACK(CTermView::OnBeforeDestroy), this);
@@ -197,6 +201,28 @@ CTermView::CTermView()
 
 }
 
+void CTermView::SetSource(cairo_t* cr, GdkColor* color, bool transparent)
+{
+    cairo_set_source_rgba(cr, color->red / 65535., color->green / 65535.,
+                          color->blue / 65535., transparent ? Opacity / 100. : 1.0);
+}
+
+void CTermView::Rectangle(cairo_t* cr, bool fill, int top, int left, int width, int height)
+{
+    cairo_rectangle(cr, top, left, width, height);
+    if (fill) {
+        cairo_fill(cr);
+    } else {
+        cairo_stroke(cr);
+    }
+}
+
+void CTermView::Line(cairo_t* cr, int x0, int y0, int x1, int y1)
+{
+    cairo_move_to(cr, x0, y0);
+    cairo_line_to(cr, x1, y1);
+    cairo_stroke(cr);
+}
 
 void CTermView::OnPaint(GdkEventExpose* evt)
 {
@@ -209,6 +235,13 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 		DEBUG("WARNNING! Draw on DELETED widget!");
 		return;
 	}
+
+	// Clear drawable
+	gdk_window_clear(m_Widget->window);
+	cairo_t* cr = gdk_cairo_create(dc);
+	cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+	cairo_paint(cr);
 
 	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
 
@@ -230,25 +263,23 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 				col += DrawChar( row, col );
 		}
 
-		gdk_gc_set_rgb_fg_color(m_GC, CTermCharAttr::GetDefaultColorTable(0));
+		SetSource(cr, CTermCharAttr::GetDefaultColorTable(0));
 		left = m_pTermData->m_ColsPerPage*m_CharW-2;
 
 		/* repaint some region that should be repainted */
-		gdk_draw_rectangle(dc, m_GC, true, 0, 0, m_LeftMargin, h ); // fill left margin
-		gdk_draw_rectangle(dc, m_GC, true, left + m_LeftMargin, 0, w-left, h ); // fill right marin
+		Rectangle(cr, true, 0, 0, m_LeftMargin, h); //fill left margin
+		Rectangle(cr, true, left + m_LeftMargin, 0, w - left, h); //fill right margin
 
 		top = m_pTermData->m_RowsPerPage*m_CharH;
-		gdk_draw_rectangle(dc, m_GC, true, 0, 0, w, m_TopMargin ); // fill top margin
-		gdk_draw_rectangle(dc, m_GC, true, 0, top + m_TopMargin, w, h - top ); // fill bottom margin
+		Rectangle(cr, true, 0, 0, w, m_TopMargin ); // fill top margin
+		Rectangle(cr, true, 0, top + m_TopMargin, w, h - top ); // fill bottom margin
 
 		m_Caret.Show();
+	} else {
+		SetSource(cr, CTermCharAttr::GetDefaultColorTable(0));
+		Rectangle(cr, true, 0, 0, w, h);
 	}
-	else
-	{
-		gdk_gc_set_rgb_bg_color(m_GC, CTermCharAttr::GetDefaultColorTable(0));
-		gdk_draw_rectangle(dc, m_GC, true, 0, 0, w, h );
-	}
-
+	cairo_destroy(cr);
 }
 
 void CTermView::OnSetFocus(GdkEventFocus* evt UNUSED)
@@ -378,6 +409,8 @@ int CTermView::DrawChar(int row, int col)
 		return 1;
 	}
 
+	cairo_t* cr = gdk_cairo_create(dc);
+
 	const char* pLine = m_pTermData->m_Screen[m_pTermData->m_FirstLine + row];
 	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
 	int w = 2;
@@ -446,22 +479,19 @@ int CTermView::DrawChar(int row, int col)
 
 		// set clip mask
 		GdkRectangle rect;
-		XRectangle xrect;
-		xrect.x = rect.x = left + m_CharW * i;
-		xrect.y = rect.y = top;
-		xrect.width = rect.width = m_CharW * ( w - i );
-		xrect.height = rect.height = m_CharH;
-		gdk_gc_set_clip_origin( m_GC, 0, 0 );
-		gdk_gc_set_clip_rectangle( m_GC, &rect );
-		Region xregion = XCreateRegion();
-		XUnionRectWithRegion( &xrect, xregion, xregion );
-		XftDrawSetClip( m_XftDraw, xregion );
-		XDestroyRegion( xregion );
+		rect.x = left + m_CharW * i;
+		rect.y = top;
+		rect.width = m_CharW * ( w - i );
+		rect.height = m_CharH;
 
-		gdk_gc_set_rgb_fg_color( m_GC, Bg );
-		gdk_draw_rectangle( dc, m_GC, true, left , top, bgw, m_CharH );
+		gdk_window_clear_area(m_Widget->window, left, top, bgw, m_CharH);
+		cairo_rectangle(cr, left, top, bgw, m_CharH);
+		cairo_clip(cr);
+		SetSource(cr, Bg);
+		cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+		cairo_paint(cr);
 
-		gdk_gc_set_rgb_fg_color( m_GC, Fg );
+		SetSource(cr, Fg, false);
 
 		if( !pAttr[i].IsBlink() || m_ShowBlink )	// If text should be drawn.
 		{
@@ -513,7 +543,7 @@ int CTermView::DrawChar(int row, int col)
 			if( pAttr[i].IsUnderLine() )
 			{
 				int y = top + m_CharH - 1;
-				gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
+				Line(cr, left, y, left + bgw, y);
 			}
 		}
 		// 2004.08.07 Added by PCMan: Draw the underline of hyperlinks.
@@ -524,14 +554,13 @@ int CTermView::DrawChar(int row, int col)
 //			dc.DrawLine(left, bottom, left+bgw, bottom);
 
 			if(m_pHyperLinkColor)
-	 			gdk_gc_set_rgb_fg_color( m_GC, m_pHyperLinkColor );
+				SetSource(cr, m_pHyperLinkColor, false);
 			int y = top + m_CharH - 1;
-			gdk_draw_line( dc, m_GC, left, y, left + bgw - 1, y );
+			Line(cr, left, y, left + bgw, y);
 		}
 
 	}
-	gdk_gc_set_clip_rectangle( m_GC, NULL );
-	XftDrawSetClip( m_XftDraw, NULL );
+	cairo_destroy(cr);
 
 	return is_mbcs2 ? 1 : w;
 }

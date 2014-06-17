@@ -50,6 +50,7 @@ CGeneralPrefPage::CGeneralPrefPage()
 
 	PostCreate();
 
+  GtkWidget *hbox18;
 	GtkWidget *hbox19;
 	GtkWidget *label27;
 	GtkWidget *hbox20;
@@ -127,6 +128,16 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_widget_show (m_MidClickAsClose);
 	gtk_box_pack_start (GTK_BOX (m_Widget), m_MidClickAsClose, FALSE, FALSE, 0);
 
+  hbox18 = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(m_Widget), hbox18, TRUE, TRUE, 0);
+
+  gtk_box_pack_start(GTK_BOX(hbox18), gtk_label_new(_("Opacity: ")), FALSE, TRUE, 0);
+
+  m_Opacity_adj = gtk_adjustment_new(0, 0, 100, 1, 0, 0);
+  m_Opacity = gtk_hscale_new(GTK_ADJUSTMENT(m_Opacity_adj));
+  gtk_box_pack_start(GTK_BOX(hbox18), m_Opacity, TRUE, TRUE, 0);
+  gtk_widget_show_all(hbox18);
+
 	hbox19 = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox19);
 	gtk_box_pack_start (GTK_BOX (m_Widget), hbox19, FALSE, FALSE, 0);
@@ -153,6 +164,8 @@ CGeneralPrefPage::CGeneralPrefPage()
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon), AppConfig.QueryOnCloseCon);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_QueryOnExit), AppConfig.QueryOnExit);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy), AppConfig.CancelSelAfterCopy);
+
+  gtk_adjustment_set_value(GTK_ADJUSTMENT(m_Opacity_adj), AppConfig.Opacity * 1.);
 #ifdef USE_MOUSE
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_MouseSupport), AppConfig.MouseSupport);
 #endif
@@ -178,6 +191,7 @@ void CGeneralPrefPage::OnOK()
 	AppConfig.QueryOnCloseCon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon));
 	AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
 	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
+  AppConfig.Opacity = (int) gtk_adjustment_get_value(GTK_ADJUSTMENT(m_Opacity_adj));
 #ifdef USE_MOUSE
 	AppConfig.MouseSupport = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport));
 #endif

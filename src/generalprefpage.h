@@ -37,6 +37,9 @@ public:
 	GtkWidget *m_QueryOnCloseCon;
 	GtkWidget *m_QueryOnExit;
 	GtkWidget *m_CancelSelAfterCopy;
+
+  GtkWidget *m_Opacity;
+  GtkObject *m_Opacity_adj;
 #ifdef USE_MOUSE
 	GtkWidget *m_MouseSupport;
 #endif

@@ -89,6 +89,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( CancelSelAfterCopy)
 		CFG_BOOL( CopyTrimTail)
 		CFG_BOOL( BeepOnBell )
+    CFG_INT( Opacity )
 #ifdef USE_MOUSE
 		CFG_BOOL( MouseSupport )
 		CFG_BOOL( WithMiddleButton )

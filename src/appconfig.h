@@ -91,6 +91,7 @@ public:
 	bool QueryOnCloseCon;
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
+  int Opacity;
 #ifdef USE_MOUSE
 	bool MouseSupport;
 	bool WithMiddleButton;

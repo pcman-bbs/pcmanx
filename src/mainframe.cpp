@@ -174,6 +174,8 @@ CMainFrame::CMainFrame()
 
 	m_dlhandle = lt_dlopen("libappindicator.so.1");
 
+  CTermView::Opacity = AppConfig.Opacity;
+
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "pcmanx", "PCManX");
 
@@ -188,6 +190,7 @@ CMainFrame::CMainFrame()
 
 
 	gtk_window_set_title (GTK_WINDOW (m_Widget), "PCManX "VERSION );
+  widget_enable_rgba(m_Widget);
 
 	m_pNotebook = new CNotebook();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(m_pNotebook->m_Widget), TRUE);
@@ -200,6 +203,8 @@ CMainFrame::CMainFrame()
 	gtk_window_set_icon((GtkWindow*)m_Widget, m_MainIcon);
 
 	GtkWidget* vbox = gtk_vbox_new(false, 0);
+  widget_enable_rgba(vbox);
+  widget_enable_rgba(m_pNotebook->m_Widget);
 	gtk_widget_show (vbox);
 
 	//GtkWidget* m_Statusbar = gtk_statusbar_new ();
@@ -1152,6 +1157,14 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	CPrefDlg* dlg = new CPrefDlg(_this);
 	dlg->ShowModal();
 	dlg->Destroy();
+
+  CTermView::Opacity = AppConfig.Opacity;
+
+  GtkNotebook* nb = GTK_NOTEBOOK(_this->GetNotebook()->m_Widget);
+  int idx = gtk_notebook_get_current_page(nb);
+  GtkWidget* view = gtk_notebook_get_nth_page(nb, idx);
+  if (view != NULL)
+    gtk_widget_queue_draw(view);
 
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
