@@ -374,6 +374,7 @@ void CAppConfig::SetToDefault()
 	QueryOnCloseCon = 1;
 	CancelSelAfterCopy =1;
 	CopyTrimTail = 1;
+	Opacity = 100;
 #ifdef USE_MOUSE
 	MouseSupport = 0;
 	WithMiddleButton = 1;
