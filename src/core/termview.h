@@ -96,13 +96,14 @@ protected:
     void GetCellSize( int &w, int &h );
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );
-    bool DrawSpaceFillingChar(cairo_t *cr, const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr);
+    bool DrawSpaceFillingChar(cairo_t *cr, const char* ch, int x, int y, GdkColor* clr);
     bool IsSpaceFillingChar( const char* ch, int len ) {	return bool( len >= 3 && *(guchar*)ch == 0xe2 );	}
 
 private:
     void SetSource(cairo_t* cr, GdkColor* color, bool transparent = true);
     void Rectangle(cairo_t* cr, bool fill, int top, int left, int width, int height);
     void Line(cairo_t* cr, int x0, int y0, int x1, int y1);
+    void Trapezoids(cairo_t *cr, GdkTrapezoid *trapezoids, GdkColor *color);
     
 protected:
 	CTermData* m_pTermData;
