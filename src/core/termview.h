@@ -96,7 +96,7 @@ protected:
     void GetCellSize( int &w, int &h );
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );
-    bool DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr);
+    bool DrawSpaceFillingChar(cairo_t *cr, const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr);
     bool IsSpaceFillingChar( const char* ch, int len ) {	return bool( len >= 3 && *(guchar*)ch == 0xe2 );	}
 
 private:
