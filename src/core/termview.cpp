@@ -324,7 +324,7 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
-bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip UNUSED, GdkColor* clr UNUSED)
+bool CTermView::DrawSpaceFillingChar(cairo_t *cr, const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip, GdkColor* clr)
 {
 	GdkDrawable* dc = m_Widget->window;
 	guchar* uchar = (guchar*)ch;
@@ -339,14 +339,16 @@ bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int 
 			if( uchar[2] >= 0x81 && uchar[2] <= 0x88 )
 			{
 				int h = m_CharH * (uchar[2] - 0x80) / 8;
-				gdk_draw_rectangle( dc, m_GC, true, x , y + m_CharH - h, m_CharW * 2, h );
+                SetSource(cr, clr, false);
+                Rectangle(cr, true, x , y + m_CharH - h, m_CharW * 2, h );
 			}
 			else if( uchar[2] >= 0x89 && uchar[2] <= 0x8f )
 			{
 				// FIXME: There are still some potential bugs here.
 				// See the welcome screen of telnet://ptt.cc for example
 				int w = m_CharW * 2 * (8 - (uchar[2] - 0x88)) / 8;
-				gdk_draw_rectangle( dc, m_GC, true, x, y, w, m_CharH );
+                SetSource(cr, clr, false);
+                Rectangle(cr, true, x, y, w, m_CharH );
 			}
 /*
 			else if( uchar[2] == 0xa0 )
@@ -532,7 +534,7 @@ int CTermView::DrawChar(int row, int col)
 						} else {
 							XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
 						}
-					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( utf8, wl, left, top, &rect, Fg ) ) {
+					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( cr, utf8, wl, left, top, &rect, Fg ) ) {
 						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
 					}
 
