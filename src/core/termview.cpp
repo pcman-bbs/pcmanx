@@ -324,7 +324,20 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
-bool CTermView::DrawSpaceFillingChar(cairo_t *cr, const char* ch, int len UNUSED, int x, int y, GdkRectangle* clip, GdkColor* clr)
+inline void CTermView::Trapezoids(cairo_t *cr, GdkTrapezoid *trapezoids, GdkColor *color)
+{
+	g_return_if_fail(cr != NULL || trapezoids != NULL);
+
+	cairo_move_to(cr, trapezoids->x11, trapezoids->y1);
+	cairo_line_to(cr, trapezoids->x21, trapezoids->y1);
+	cairo_line_to(cr, trapezoids->x22, trapezoids->y2);
+	cairo_line_to(cr, trapezoids->x12, trapezoids->y2);
+	cairo_line_to(cr, trapezoids->x11, trapezoids->y1);
+
+	cairo_fill(cr);
+}
+
+bool CTermView::DrawSpaceFillingChar(cairo_t *cr, const char* ch, int x, int y, GdkColor* clr)
 {
 	GdkDrawable* dc = m_Widget->window;
 	guchar* uchar = (guchar*)ch;
@@ -394,7 +407,8 @@ bool CTermView::DrawSpaceFillingChar(cairo_t *cr, const char* ch, int len UNUSED
 					return false;
 				}
 
-				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
+				SetSource(cr, clr, false);
+				Trapezoids(cr, &tz, clr);
 				return true;
 			}
 		}
@@ -534,7 +548,7 @@ int CTermView::DrawChar(int row, int col)
 						} else {
 							XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
 						}
-					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( cr, utf8, wl, left, top, &rect, Fg ) ) {
+					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( cr, utf8, left, top, Fg ) ) {
 						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
 					}
 
