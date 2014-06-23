@@ -451,7 +451,10 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 void CTelnetView::OnMButtonDown(GdkEventButton* evt)
 {
 	if ( AppConfig.MouseSupport != true )
+	{
+		PasteFromClipboard(true);
 		return;
+	}
 
 	if ( AppConfig.WithMiddleButton != true )
 		return;
