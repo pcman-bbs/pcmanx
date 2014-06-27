@@ -181,6 +181,7 @@ protected:
 
 	static void OnToggleToolBar(GtkToggleAction *toggleaction, CMainFrame *_this);
 	static void OnToggleStatusBar(GtkToggleAction *toggleaction, CMainFrame *_this);
+	static void OnToggleTabBar(GtkToggleAction *toggleaction, CMainFrame *_this);
 
 	GdkPixbuf* m_ConnIcon;
 	GdkPixbuf* m_MainIcon;

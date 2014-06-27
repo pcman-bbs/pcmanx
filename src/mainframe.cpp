@@ -118,6 +118,16 @@ void CMainFrame::OnToggleStatusBar(GtkToggleAction *toggleaction, CMainFrame *_t
 	}
 }
 
+void CMainFrame::OnToggleTabBar(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	AppConfig.ShowTabBar = gtk_toggle_action_get_active(toggleaction);
+	if (AppConfig.ShowTabBar) {
+		_this->m_pNotebook->ShowTabs();
+	} else {
+		_this->m_pNotebook->HideTabs();
+	}
+}
+
 /*
 void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
 {
@@ -403,6 +413,7 @@ static const char *ui_info =
   "      <separator/>"
   "      <menuitem action='toolbar'/>"
   "      <menuitem action='statusbar'/>"
+  "      <menuitem action='tabbar'/>"
   "      <separator/>"
 #ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
@@ -553,6 +564,7 @@ void CMainFrame::MakeUI()
 		{"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true},
 		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
 		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
+		{"tabbar", NULL, _("Show _Tab Bar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleTabBar), true},
 		};
 
 	gtk_action_group_add_actions(m_ActionGroup, actionEntries, G_N_ELEMENTS(actionEntries), this);
@@ -727,6 +739,7 @@ void CMainFrame::MakeUI()
 
 	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "toolbar")), AppConfig.ShowToolbar);
 	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "statusbar")), AppConfig.ShowStatusBar);
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "tabbar")), AppConfig.ShowTabBar);
 
 	// Ansi Editor widget events
 	g_signal_connect(GTK_OBJECT(m_cbTextColor), "changed", G_CALLBACK(SetTextColor), this);
