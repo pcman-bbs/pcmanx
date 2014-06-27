@@ -128,6 +128,15 @@ void CMainFrame::OnToggleTabBar(GtkToggleAction *toggleaction, CMainFrame *_this
 	}
 }
 
+void CMainFrame::OnToggleMenuBar(GtkToggleAction *toggleaction, CMainFrame *_this)
+{
+	AppConfig.ShowMenuBar = gtk_toggle_action_get_active(toggleaction);
+	if (AppConfig.ShowMenuBar) {
+		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
+	} else {
+		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
+	}
+}
 /*
 void CMainFrame::OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this)
 {
@@ -414,6 +423,7 @@ static const char *ui_info =
   "      <menuitem action='toolbar'/>"
   "      <menuitem action='statusbar'/>"
   "      <menuitem action='tabbar'/>"
+  "      <menuitem action='menubar'/>"
   "      <separator/>"
 #ifdef USE_DOCKLET
   "      <menuitem action='showhide'/>"
@@ -470,6 +480,7 @@ static const char *ui_info =
   "    <separator/>"
   "    <menuitem action='fullscreen' />"
   "    <menuitem action='simple' />"
+  "    <menuitem action='menubar' />"
   "    <separator/>"
   "  </popup>"
 #if defined(USE_DOCKLET)
@@ -565,6 +576,7 @@ void CMainFrame::MakeUI()
 		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
 		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
 		{"tabbar", NULL, _("Show _Tab Bar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleTabBar), true},
+		{"menubar", NULL, _("Show Menu Bar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleMenuBar), true},
 		};
 
 	gtk_action_group_add_actions(m_ActionGroup, actionEntries, G_N_ELEMENTS(actionEntries), this);
@@ -740,6 +752,7 @@ void CMainFrame::MakeUI()
 	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "toolbar")), AppConfig.ShowToolbar);
 	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "statusbar")), AppConfig.ShowStatusBar);
 	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "tabbar")), AppConfig.ShowTabBar);
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "menubar")), AppConfig.ShowMenuBar);
 
 	// Ansi Editor widget events
 	g_signal_connect(GTK_OBJECT(m_cbTextColor), "changed", G_CALLBACK(SetTextColor), this);

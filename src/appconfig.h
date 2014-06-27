@@ -102,6 +102,7 @@ public:
 	bool ShowToolbar;
 	bool ShowStatusBar;
 	bool ShowTabBar;
+	bool ShowMenuBar;
 	bool ShowInSimpleMode;
 	bool PopupNotifier;
 	int PopupTimeout;
