@@ -237,11 +237,9 @@ void CTermView::OnPaint(GdkEventExpose* evt)
 	}
 
 	// Clear drawable
-	gdk_window_clear(m_Widget->window);
 	cairo_t* cr = gdk_cairo_create(dc);
 	cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.0);
 	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-	cairo_paint(cr);
 
 	int w = m_Widget->allocation.width, h = m_Widget->allocation.height;
 
