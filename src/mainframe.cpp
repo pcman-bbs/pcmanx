@@ -888,6 +888,11 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
+  static bool prevShowMenuBar;
+  static bool prevShowToolbar;
+  static bool prevShowStatusBar;
+  static bool prevShowTabBar;
+
 	if(_this->m_Mode == SIMPLE_MODE) {
 		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "simple")), false);
 	}
@@ -895,19 +900,26 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if (_this->m_Mode != FULLSCREEN_MODE) {
 		_this->m_Mode = FULLSCREEN_MODE;
 		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
-		_this->m_pNotebook->HideTabs();
+    prevShowMenuBar = AppConfig.ShowMenuBar;
+    prevShowToolbar = AppConfig.ShowToolbar;
+    prevShowStatusBar = AppConfig.ShowStatusBar;
+    prevShowTabBar = AppConfig.ShowTabBar;
+
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "menubar")), false);
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "toolbar")), false);
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "statusbar")), false);
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "tabbar")), false);
 	} else {
 		_this->m_Mode = NORMAL_MODE;
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
-		if (AppConfig.ShowToolbar)
-			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		if (AppConfig.ShowStatusBar)
-			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
-		_this->m_pNotebook->ShowTabs();
+    if(prevShowMenuBar)
+      gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "menubar")), true);
+    if(prevShowToolbar)
+      gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "toolbar")), true);
+    if(prevShowStatusBar)
+      gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "statusbar")), true);
+    if(prevShowTabBar)
+      gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "tabbar")), true);
 	}
 }
 
