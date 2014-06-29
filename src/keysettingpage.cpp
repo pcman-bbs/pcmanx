@@ -53,7 +53,7 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget()
 		"Site List", "New Connection 0", "New Connection 1", "Reconnection 0", "Reconnection 1",
 		"Close 0", "Close 1", "Next Page", "Previous Page", "First Page",
 		"Last Page", "Copy 0", "Copy 1", "Paste 0", "Paste 1",
-		"Paste from clipboard", "Emotions", "Full screen mode", "Simple mode", "Show main window"
+		"Paste from clipboard", "Emotions", "Full screen mode", "Show main window"
 	};
 
 	for (int i = 0; i < KEY_SIZE; ++i) {
@@ -100,7 +100,6 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget()
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keyPasteClipboard]), AppConfig.keyPasteClipboard.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keyEmotions]), AppConfig.keyEmotions.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keyFullscreen]), AppConfig.keyFullscreen.c_str());
-	gtk_entry_set_text(GTK_ENTRY(m_Entries[keySimpleMode]), AppConfig.keySimpleMode.c_str());
 	gtk_entry_set_text(GTK_ENTRY(m_Entries[keyShowMainWindow]), AppConfig.keyShowMainWindow.c_str());
 
 
@@ -149,7 +148,6 @@ void CKeySettingPage::OnOK()
 	AppConfig.keyPasteClipboard = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPasteClipboard]));
 	AppConfig.keyEmotions = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyEmotions]));
 	AppConfig.keyFullscreen = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFullscreen]));
-	AppConfig.keySimpleMode = gtk_entry_get_text(GTK_ENTRY(m_Entries[keySimpleMode]));
 	AppConfig.keyShowMainWindow = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyShowMainWindow]));
 }
 
@@ -295,7 +293,6 @@ gboolean CKeySettingPage::onBtnResetPress(GtkWidget *widget, GdkEvent *event, gp
 	gtk_entry_set_text(GTK_ENTRY(entries[keyPasteClipboard]), "<Shift>Insert");
 	gtk_entry_set_text(GTK_ENTRY(entries[keyEmotions]), "<Ctrl>Return");
 	gtk_entry_set_text(GTK_ENTRY(entries[keyFullscreen]), "<ALT>Return");
-	gtk_entry_set_text(GTK_ENTRY(entries[keySimpleMode]), "<Shift>Return");
 	gtk_entry_set_text(GTK_ENTRY(entries[keyShowMainWindow]), "<Alt>M");
 
 	return FALSE;

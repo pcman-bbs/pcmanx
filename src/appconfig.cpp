@@ -101,7 +101,6 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( ShowStatusBar )
 		CFG_BOOL( ShowTabBar )
 		CFG_BOOL( ShowMenuBar )
-		CFG_BOOL( ShowInSimpleMode )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -190,7 +189,6 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_STR ( keyPasteClipboard )
 		CFG_STR ( keyEmotions )
 		CFG_STR ( keyFullscreen )
-		CFG_STR ( keySimpleMode )
 		CFG_STR ( keyShowMainWindow )
 	END_CONFIG_SECT()
 
@@ -411,7 +409,6 @@ void CAppConfig::SetToDefault()
 	ShowStatusBar = true;
 	ShowTabBar = true;
 	ShowMenuBar = true;
-	ShowInSimpleMode = false;
 
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536 * 102 / 256;
@@ -443,7 +440,6 @@ void CAppConfig::SetToDefault_Keys()
 	keyPasteClipboard = "<Shift>Insert";
 	keyEmotions = "<Ctrl>Return";
 	keyFullscreen = "<ALT>Return";
-	keySimpleMode = "<Shift>Return";
 	keyShowMainWindow = "<Alt>M";
 }
 

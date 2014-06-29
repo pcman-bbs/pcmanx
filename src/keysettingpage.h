@@ -40,7 +40,7 @@ public:
 		keySiteList, keyNewConn0, keyNewConn1, keyReconn0, keyReconn1,
 		keyClose0, keyClose1, keyNextPage, keyPrevPage, keyFirstPage,
 		keyLastPage, keyCopy0,	keyCopy1, keyPaste0, keyPaste1,
-		keyPasteClipboard, keyEmotions, keyFullscreen, keySimpleMode, keyShowMainWindow
+		keyPasteClipboard, keyEmotions, keyFullscreen, keyShowMainWindow
 	};
 
 	static GtkWidget *m_Parent;

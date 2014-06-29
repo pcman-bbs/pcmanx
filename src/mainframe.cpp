@@ -293,10 +293,6 @@ CMainFrame::CMainFrame()
 	}else{
 		gtk_window_unmaximize((GtkWindow*) m_Widget);
 	}
-
-	if(AppConfig.ShowInSimpleMode){
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(m_ActionGroup, "simple")), true);
-	}
 }
 
 
@@ -429,7 +425,6 @@ static const char *ui_info =
   "      <menuitem action='showhide'/>"
 #endif
   "      <menuitem action='fullscreen' />"
-  "      <menuitem action='simple' />"
 #ifdef USE_NANCY
   "      <separator/>"
   "      <menu action='cur_bot_menu'>"
@@ -479,7 +474,6 @@ static const char *ui_info =
   "    <menuitem action='select_all'/>"
   "    <separator/>"
   "    <menuitem action='fullscreen' />"
-  "    <menuitem action='simple' />"
   "    <menuitem action='menubar' />"
   "    <separator/>"
   "  </popup>"
@@ -574,7 +568,6 @@ void CMainFrame::MakeUI()
 		{"toolbar", NULL, _("Show Toolbar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleToolBar), true},
 		{"statusbar", NULL, _("Show Status Bar on bottom"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleStatusBar), true},
 		{"fullscreen", NULL, _("F_ullscreen Mode"), AppConfig.keyFullscreen.data(), NULL, G_CALLBACK (CMainFrame::OnFullscreenMode), false},
-		{"simple", NULL, _("_Simple Mode"), AppConfig.keySimpleMode.data(), NULL, G_CALLBACK (CMainFrame::OnSimpleMode), false},
 		{"tabbar", NULL, _("Show _Tab Bar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleTabBar), true},
 		{"menubar", NULL, _("Show Menu Bar"), NULL, NULL, G_CALLBACK (CMainFrame::OnToggleMenuBar), true},
 		};
@@ -893,10 +886,6 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
   static bool prevShowStatusBar;
   static bool prevShowTabBar;
 
-	if(_this->m_Mode == SIMPLE_MODE) {
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "simple")), false);
-	}
-
 	if (_this->m_Mode != FULLSCREEN_MODE) {
 		_this->m_Mode = FULLSCREEN_MODE;
 		gtk_window_fullscreen((GtkWindow *)_this->m_Widget);
@@ -920,35 +909,6 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
       gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "statusbar")), true);
     if(prevShowTabBar)
       gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "tabbar")), true);
-	}
-}
-
-void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
-{
-	if(_this->m_Mode == FULLSCREEN_MODE) {
-		gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(gtk_action_group_get_action(_this->m_ActionGroup, "fullscreen")), false);
-	}
-
-	if (_this->m_Mode != SIMPLE_MODE) {
-		_this->m_Mode = SIMPLE_MODE;
-		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		if (_this->m_Unity == false) {
-		    gtk_widget_hide_all((GtkWidget *)_this->m_Menubar);
-		}
-		gtk_widget_hide_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_hide_all((GtkWidget *)_this->m_Statusbar);
-		_this->m_pNotebook->HideTabs();
-	} else {
-		_this->m_Mode = NORMAL_MODE;
-		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
-		if (_this->m_Unity == false) {
-		    gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
-		}
-		if (AppConfig.ShowToolbar)
-			gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		if (AppConfig.ShowStatusBar)
-			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
-		_this->m_pNotebook->ShowTabs();
 	}
 }
 
@@ -981,7 +941,6 @@ void CMainFrame::OnShortcutList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 	char* view_shortcuts= _(
 			"Full Screen Mode	Alt+Enter\n"
-			"Simple Mode		Shift+Enter\n"
 #ifdef USE_DOCKLET
 			"Show Main Window	Alt+M"
 #endif

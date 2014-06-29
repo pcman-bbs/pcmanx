@@ -103,7 +103,6 @@ public:
 	bool ShowStatusBar;
 	bool ShowTabBar;
 	bool ShowMenuBar;
-	bool ShowInSimpleMode;
 	bool PopupNotifier;
 	int PopupTimeout;
 
@@ -157,7 +156,6 @@ public:
 	string keyPasteClipboard;
 	string keyEmotions;
 	string keyFullscreen;
-	string keySimpleMode;
 	string keyShowMainWindow;
 
 

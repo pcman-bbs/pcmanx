@@ -138,7 +138,6 @@ protected:
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
-	static void OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
@@ -230,7 +229,7 @@ protected:
 	static GtkToggleActionEntry m_ToggleActionEntries[];
 
 private:
-	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
+	enum {NORMAL_MODE, FULLSCREEN_MODE} m_Mode;
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
 	bool m_Unity;

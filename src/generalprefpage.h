@@ -48,7 +48,6 @@ public:
 #endif
 	GtkWidget *m_ShowToolbar;
 	GtkWidget *m_ShowStatusBar;
-	GtkWidget *m_ShowInSimpleMode;
 	GtkWidget *m_WebBrowser;
 	GtkWidget *m_MailClient;
 	GtkWidget *m_AAFont;
