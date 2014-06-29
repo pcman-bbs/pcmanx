@@ -339,7 +339,6 @@ inline void CTermView::Trapezoids(cairo_t *cr, GdkTrapezoid *trapezoids, GdkColo
 
 bool CTermView::DrawSpaceFillingChar(cairo_t *cr, const char* ch, int x, int y, GdkColor* clr)
 {
-	GdkDrawable* dc = m_Widget->window;
 	guchar* uchar = (guchar*)ch;
 // NOTE: Omit this check to increase performance.
 // IsSpaceFillingChar should be called prior to calling this method.
@@ -492,13 +491,6 @@ int CTermView::DrawChar(int row, int col)
 		xftclr.color.green = Fg->green;
 		xftclr.color.blue = Fg->blue;
 		xftclr.color.alpha = 0xffff;
-
-		// set clip mask
-		GdkRectangle rect;
-		rect.x = left + m_CharW * i;
-		rect.y = top;
-		rect.width = m_CharW * ( w - i );
-		rect.height = m_CharH;
 
 		gdk_window_clear_area(m_Widget->window, left, top, bgw, m_CharH);
 		cairo_rectangle(cr, left, top, bgw, m_CharH);
