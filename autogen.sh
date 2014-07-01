@@ -4,8 +4,12 @@ AC_VERSION=
 
 set -e -x
 
-if [ ! -e ChangeLog -a -e ./build/changelog.sh ]; then
-  ./build/changelog.sh > ChangeLog
+if [ ! -e ChangeLog ]; then
+  if which git >/dev/null 2>&1 && [ -e ./build/changelog.sh ]; then
+    ./build/changelog.sh > ChangeLog
+  else
+    mv ChangeLog.old ChangeLog
+  fi
 fi
 
 if [ "x${ACLOCAL_DIR}" != "x" ]; then
