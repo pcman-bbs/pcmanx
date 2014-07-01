@@ -99,6 +99,5 @@ Emotions                Ctrl+Enter
 ### View Shortcuts
 ```
 Full Screen Mode        Alt+Enter
-Simple Mode             Shift+Enter
 Show Main Window        Alt+M
 ```
