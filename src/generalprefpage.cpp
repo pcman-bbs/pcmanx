@@ -86,9 +86,9 @@ CGeneralPrefPage::CGeneralPrefPage()
 	GtkWidget *opt, *menu, *item;
 	opt = gtk_option_menu_new ();
 	menu = gtk_menu_new ();
-	item = make_menu_item ("with middle button", G_CALLBACK (cb_mouse_switch), TRUE);
+	item = make_menu_item (_("with middle button"), G_CALLBACK (cb_mouse_switch), TRUE);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	item = make_menu_item ("without middle button", G_CALLBACK (cb_mouse_switch), FALSE);
+	item = make_menu_item (_("without middle button"), G_CALLBACK (cb_mouse_switch), FALSE);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
 	gtk_widget_show (opt);
