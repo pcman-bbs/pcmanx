@@ -8,8 +8,8 @@ matrix:
     include:
         - env: CONFIGURE=""
         - env: CONFIGURE="--enable-debug"
-#        - env: CONFIGURE="--disable-nancy"
-#        - env: CONFIGURE="--disable-mouse"
+        - env: CONFIGURE="--disable-nancy"
+        - env: CONFIGURE="--disable-mouse"
         - env: CONFIGURE="--disable-external"
         - env: CONFIGURE="--enable-iplookup"
         - env: CONFIGURE="--enable-proxy"
