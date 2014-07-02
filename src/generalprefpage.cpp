@@ -24,6 +24,7 @@
 #include "generalprefpage.h"
 #include "appconfig.h"
 
+#ifdef USE_MOUSE
 static void cb_mouse_switch( GtkWidget *item, gpointer data )
 {
 	AppConfig.WithMiddleButton = *((bool *) data);
@@ -41,6 +42,7 @@ static GtkWidget *make_menu_item ( const char *name, GCallback callback, bool wi
 
 	return item;
 }
+#endif
 
 CGeneralPrefPage::CGeneralPrefPage()
  : CWidget()

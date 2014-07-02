@@ -320,7 +320,9 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 #if !defined(MOZ_PLUGIN)
   else
   {
+#ifdef USE_MOUSE
     CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+#endif
 
 #if defined(USE_IPLOOKUP)
     // Update status bar for ip address lookup.
