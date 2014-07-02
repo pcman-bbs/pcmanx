@@ -28,7 +28,7 @@
 
 using std::string;
 
-#define KEY_SIZE 20
+#define KEY_SIZE 19
 
 class CKeySettingPage: public CWidget
 {
