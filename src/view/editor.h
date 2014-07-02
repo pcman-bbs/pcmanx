@@ -32,6 +32,8 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iostream>
 using namespace std;
 
 class CEditorView;
