@@ -675,12 +675,28 @@ bool CTelnetView::PreKeyDown(GdkEventKey* evt UNUSED)
 
 void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 {
+    int lines_count = 0, last_line_count = 0;
+    string raw_str;
+
+    if( ConvStr2SiteEncoding(text, contain_ansi_color, raw_str, lines_count, last_line_count) )
+        GetCon()->SendRawString(raw_str.c_str(), raw_str.length());
+}
+
+bool CTelnetView::ConvStr2SiteEncoding(string text, bool contain_ansi_color, string & text2, int & lines_count, int & last_line_count)
+{
 	if( GetCon() )
 	{
-		string text2;
+		lines_count = 0;
+		last_line_count = 0;
+
 		if( contain_ansi_color )
 		{
+			bool is_replace_crlf = false;
+			gchar* locale_text = NULL;
+			const char* p = NULL;
+			const char* crlf = GetCon()->m_Site.GetCRLF();
 			string esc = GetCon()->m_Site.GetEscapeChar();
+
 			if( m_s_CharSet != GetCon()->m_Site.m_Encoding.c_str() )
 			{
 			  INFO("Charset Conversion from %s to %s",m_s_CharSet.c_str(),GetCon()->m_Site.m_Encoding.c_str());
@@ -688,36 +704,46 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			  gsize convl;
 			  gchar* locale_text = g_convert(text.c_str(), text.length(),GetCon()->m_Site.m_Encoding.c_str(),m_s_CharSet.c_str(), NULL, &convl, NULL);
 			  if( !locale_text )
-				return;
+				return false;
 
-			  const char* p = locale_text;
-			  while(*p)
-			  {
-				if(*p == '\x1b')
-					text2 += esc;
-				else
-					text2 += *p;
-				p++;
-			  }
-			  g_free(locale_text);
+			  p = locale_text;
 			}
 			else
 			{
 				INFO("color text: %s",text.c_str());
-				const char* p = text.c_str();
-				const char* crlf = GetCon()->m_Site.GetCRLF();
-				while(*p)
-				{
-					if(*p == '\x1b')
-						text2 += esc;
-					else if( *p == '\n' )
+				p = text.c_str();
+				is_replace_crlf = true;
+			}
+
+			bool is_ctrl_word = false;
+			while(*p)
+			{
+				if(*p == '\x1b'){
+					text2 += esc;
+					is_ctrl_word = true;
+				}
+				else if( *p == '\n' ) {
+					if(is_replace_crlf)
 						text2 += crlf;
 					else
 						text2 += *p;
-					p++;
+					lines_count++;
+					last_line_count = 0;
 				}
+				else {
+					text2 += *p;
+
+					if(!is_ctrl_word)
+						last_line_count++;
+					if(*p == 'm') // end of color control word
+						is_ctrl_word = false;
+				}
+				p++;
 			}
-			GetCon()->SendRawString(text2.c_str(),text2.length());
+
+			if(locale_text)
+				g_free(locale_text);
+
 		}
 		else
 		{
@@ -740,7 +766,7 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 					break;
 			}
 			if( !locale_text )
-				return;
+				return false;
 			// FIXME: Convert UTF-8 string to locale string.to prevent invalid UTF-8 string
 			// caused by the auto-wrapper.
 			// Just a workaround.  This needs to be modified in the future.
@@ -789,18 +815,27 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 				ptext = text.c_str();
 			}
 
-			string text2;
 			for( const char* pstr = ptext; *pstr; ++pstr )
+			{
 				if( *pstr == '\n' )
+				{
 					text2 += crlf;
+					lines_count++;
+					last_line_count = 0;
+				}
 				else
+				{
 					text2 += *pstr;
-
-			GetCon()->SendRawString(text2.c_str(), text2.length() );
+					if( *pstr < 128 )
+						last_line_count ++;
+				}
+			}
 
 			g_free( locale_text );
 		}
 	}
+
+	return true;
 }
 
 

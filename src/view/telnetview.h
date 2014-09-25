@@ -69,6 +69,7 @@ protected:
     void OnWebSearchSelected();
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
+    bool ConvStr2SiteEncoding(string text, bool contain_ansi_color, string & text2, int & lines_count, int & last_line_count);
     void OnDestroy();
 
 #if !defined(MOZ_PLUGIN)
