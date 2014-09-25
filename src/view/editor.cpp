@@ -40,7 +40,8 @@ typedef struct {
 CEditor::CEditor(CTelnetView* tView, CSite& SiteInfo)
 	: CTelnetCon(tView, SiteInfo)
 {
-	// do nothing.
+	m_Site.m_CRLF = 1;  // \n
+	m_Site.m_ESCConv = "\x1b";
 }
 
 CEditor::~CEditor()

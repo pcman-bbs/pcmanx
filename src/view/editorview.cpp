@@ -148,42 +148,20 @@ void CEditorView::OnLButtonDown(GdkEventButton* evt)
 
 void CEditorView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 {
-	int x = 0, y = 0, lineCount = 0, foundEndl = -1;
-	string tempText = text;
-	string colorStart = "\x1b[", colorEnd = "m";
-	int ansiCodesLength = 0, foundColorStart = -1, foundColorEnd = -1;
+	string locale_str;
+	int lines_count = 0, last_line_count = 0;
+	if( !ConvStr2SiteEncoding(text, contain_ansi_color, locale_str, lines_count, last_line_count) )
+		return;
 
-	//handle caret position if paste multiple line text
-	while( (foundEndl = tempText.find("\n")) != static_cast<int>(string::npos) )
-	{
-		tempText = tempText.substr(foundEndl + 1, tempText.length());
-		lineCount++;
-	}
+	int x = m_pTermData->m_CaretPos.x;
+	int y = m_pTermData->m_CaretPos.y;
 
-	x = m_pTermData->m_CaretPos.x + tempText.length();
-	y = m_pTermData->m_CaretPos.y + lineCount;
-
-	if( contain_ansi_color )
-	{
-		string temp = text;
-		if( lineCount != 0 )
-			temp = tempText; //only take care last line
-
-		//get ansi codes length
-		while ( temp.length() > 0 )
-		{
-			foundColorStart = temp.find(colorStart);
-			foundColorEnd = temp.find(colorEnd);
-			temp = temp.substr(foundColorEnd + 1, temp.length());
-			ansiCodesLength += foundColorEnd - foundColorStart + 1;
-		}
-		x -= ansiCodesLength;
-	}
-
-	GetEditor()->EditorActions(CEditor::Paste_To_Editor, text);
+	GetEditor()->EditorActions(CEditor::Paste_To_Editor, locale_str);
 	GetEditor()->EditorActions(CEditor::Load_Editor_Text);
-	m_pTermData->m_CaretPos.x = x;
-	m_pTermData->m_CaretPos.y = y;
+
+	m_pTermData->m_CaretPos.x = lines_count==0 ? x+last_line_count : last_line_count;
+	m_pTermData->m_CaretPos.y = y + lines_count;
+
 	UpdateEditor();
 }
 
