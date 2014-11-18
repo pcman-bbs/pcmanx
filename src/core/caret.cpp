@@ -108,10 +108,17 @@ void CCaret::DrawInverse()
 
 	if (m_Cairo == NULL) {
 		m_Cairo = gdk_cairo_create(m_pParent->window);
+		if (cairo_status(m_Cairo) != CAIRO_STATUS_SUCCESS) {
+			cairo_destroy(m_Cairo);
+			m_Cairo = NULL;
+		}
 	}
-	cairo_set_source_rgb(m_Cairo, 1, 1, 1);
-	cairo_set_operator(m_Cairo, CAIRO_OPERATOR_DIFFERENCE);
-	cairo_rectangle(m_Cairo, m_Pos.x, m_Pos.y, m_Width, m_Height);
-	cairo_fill(m_Cairo);
+
+	if (m_Cairo) {
+		cairo_set_source_rgb(m_Cairo, 1, 1, 1);
+		cairo_set_operator(m_Cairo, CAIRO_OPERATOR_DIFFERENCE);
+		cairo_rectangle(m_Cairo, m_Pos.x, m_Pos.y, m_Width, m_Height);
+		cairo_fill(m_Cairo);
+	}
 }
 
