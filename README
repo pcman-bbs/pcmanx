@@ -12,7 +12,7 @@ and here are the latest options:
   --enable-debug	Enable debugging support or not [Default: Disabled]
 			It will cause PCManX to dump more detail informations.
 
-  --prefix=DIR		Specify the prefix directory to DIR. Usually, we woild
+  --prefix=DIR		Specify the prefix directory to DIR. Usually, we would
 			like to use /usr as the manner defined in LSB (Linux
 			Standard Base).
   --disable-docklet	Disable the docklet / system tray support.
