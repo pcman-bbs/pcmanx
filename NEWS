@@ -16,7 +16,7 @@ Version 1.2 - February 2013
 * Feature: Use consistent naming: PCManX
 * Feature: Allow users to search selected text through Web search engine
 * Feature: Handle malformed URL properly
-* Feature: Usability enhancement for Unity desktop envionment
+* Feature: Usability enhancement for Unity desktop environment
 * Feature: Add new interface to show and hide toolbar
 * Feature: Remember maximized state
 * Feature: Improve the performance of cairo caret
@@ -41,8 +41,8 @@ Version 1.1 - January 2012
 * Feature: Update RPM spec file for Fedora 16 and openSUSE 12.1
 * Feature: Switch source code management to Git.
 * Feature: Switch release tarball to xz compression format.
-* Bugfix: Program name doesn't show on notificaiton bar of GNOME Shell
-* Bugfix: The notificaition lack of program name in GNOME Shell
+* Bugfix: Program name doesn't show on notification bar of GNOME Shell
+* Bugfix: The notification lack of program name in GNOME Shell
 * Bugfix: Weird display name and tooltip covered under notification area in GNOME Shell
 * Bugfix: Remove forkpty for OpenSolaris because of license incompatible issue.
 * Bugfix: Supporting GNOME3 Startup Notification.
