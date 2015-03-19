@@ -86,7 +86,13 @@
 #if defined(USING_FREEBSD) || defined(CSRG_BASED)
 #include <sys/ioctl.h>
 #include <termios.h>
+
+#ifdef __APPLE__ && __MACH__
+#include <util.h>
+#else
 #include <libutil.h>
+#endif
+
 #endif
 
 #ifdef USE_PROXY
