@@ -1,0 +1,41 @@
+From 88f37682492afe51e4875c3aacffedbc4cb2c472 Mon Sep 17 00:00:00 2001
+From: kunhuahuang <kunhuahuang@hotmail.com>
+Date: Mon, 30 Mar 2015 05:42:47 +0800
+Subject: [PATCH] fix gtk_pixbuf bug
+
+---
+ src/mainframe.cpp | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/src/mainframe.cpp b/src/mainframe.cpp
+index bebcf64..1479b09 100644
+--- a/src/mainframe.cpp
++++ b/src/mainframe.cpp
+@@ -767,12 +767,18 @@ static void inverse_pixbuf(GdkPixbuf* pixbuf)
+ 
+ void CMainFrame::LoadIcons()
+ {
+-	GtkImage* image = GTK_IMAGE(gtk_image_new_from_file(DATADIR "/pixmaps/pcmanx.svg"));
+-	GdkPixbuf* icon = gtk_image_get_pixbuf(image);
+-	m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
+-	m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
+-	inverse_pixbuf(m_InverseMainIcon);
+-	g_object_unref(icon);
++	GError* gerror = NULL;
++        GdkPixbuf* icon = gdk_pixbuf_new_from_file(DATADIR"/pixmaps/pcmanx.svg", &gerror);
++        if(icon){
++	    m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
++	    m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
++	    inverse_pixbuf(m_InverseMainIcon);
++	    g_object_unref(icon);
++        }
++        else{
++            m_MainIcon = NULL;
++            m_InverseMainIcon = NULL;
++        }
+ }
+ 
+ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
+-- 
+1.9.1
+

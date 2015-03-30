@@ -774,7 +774,7 @@ void CMainFrame::LoadIcons()
 	    m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
 	    inverse_pixbuf(m_InverseMainIcon);
 	    g_object_unref(icon);
-        }
+        } 
         else{
             m_MainIcon = NULL;
             m_InverseMainIcon = NULL;
