@@ -87,7 +87,7 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 
-#ifdef __APPLE__ && __MACH__
+#if (defined(__APPLE__)) && (defined(__MACH__))
 #include <util.h>
 #else
 #include <libutil.h>
