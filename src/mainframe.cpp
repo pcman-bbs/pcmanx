@@ -44,6 +44,7 @@
 #include "sitelistdlg.h"
 #include "emoticondlg.h"
 #include "downarticledlg.h"
+#include "stringutil.h"
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -732,10 +733,30 @@ void CMainFrame::OnNewCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	CInputDialog* dlg = new CInputDialog( _this, _("Connect"), _("Host IP Address:\nAppend port number to IP with a separating colon if it's not 23."), NULL, true );
 	if( dlg->ShowModal() == GTK_RESPONSE_OK && !dlg->GetText().empty() )
 	{
-		_this->NewCon( dlg->GetText(), dlg->GetText() );
+		const char* url = dlg->GetText().c_str();
+		const char* ip_exp = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$";
+		const char* correct_ip_exp = "^(([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\\.){3}([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])$";
+		if (IsMatch(url, ip_exp) && !IsMatch(url, correct_ip_exp)) {
+			// incorrect ip address
+			// show error dialog
+			GtkWidget *MessageDialog = gtk_message_dialog_new(
+					NULL,
+					GTK_DIALOG_MODAL,
+					GTK_MESSAGE_INFO,
+					GTK_BUTTONS_OK,
+					"IP Address error!"
+					);
+			gtk_window_set_title(GTK_WINDOW(MessageDialog), "Caution");
+			gtk_dialog_run(GTK_DIALOG(MessageDialog));
+			gtk_widget_destroy(MessageDialog);
+		} else {
+			// not ip address
+			_this->NewCon( dlg->GetText(), dlg->GetText() );
+        }
 	}
 	dlg->Destroy();
 }
+
 
 void CMainFrame::OnQuit(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
