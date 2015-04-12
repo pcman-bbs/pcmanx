@@ -236,10 +236,24 @@ void CSiteListDlg::OnConnect(GtkButton* btn UNUSED, CSiteListDlg* _this)
 			*url = '\0';
 			url += (sizeof(ITEM_SEP)-1);
 			_this->m_pParent->NewCon(text, url, &AppConfig.m_DefaultSite);
+			gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
+		}
+		else if(strlen(text) != 0)
+		{
+			GtkTreeSelection* _selection = gtk_tree_view_get_selection(tree_view);
+			gtk_tree_selection_select_iter(_selection, &it);
+			GtkTreePath* path = gtk_tree_model_get_path(model, &it);
+			if( !gtk_tree_view_row_expanded(tree_view, path) )
+			{
+				gtk_tree_view_expand_to_path(tree_view, path);
+			}
+			else
+			{
+				gtk_tree_view_collapse_row(tree_view, path);
+			}
 		}
 		g_free(text);
 	}
-	gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
 }
 
 void CSiteListDlg::OnClose(GtkButton* btn UNUSED, CSiteListDlg* _this)
