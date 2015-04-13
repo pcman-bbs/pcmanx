@@ -776,7 +776,7 @@ void CMainFrame::LoadIcons()
 	        g_object_unref(icon);
         } 
         else {
-	        m_MainIcon = (GdkPixbuf *) NULL;
+                m_MainIcon = (GdkPixbuf *) NULL;
                 m_InverseMainIcon = NULL;
                 g_print("Warning: %s\\n", gerror->message);
         }
