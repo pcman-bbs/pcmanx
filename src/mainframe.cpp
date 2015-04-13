@@ -768,7 +768,7 @@ static void inverse_pixbuf(GdkPixbuf* pixbuf)
 void CMainFrame::LoadIcons()
 {
 	GError* gerror = NULL;
-        GdkPixbuf* icon = gdk_pixbuf_new_from_file(DATADIR"/pixmaps/pcmanx.svg", &gerror);
+        GdkPixbuf* icon = gdk_pixbuf_new_from_file(DATADIR "/pixmaps/pcmanx.svg", &gerror);
         if(icon){
 	    m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
 	    m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
@@ -776,7 +776,7 @@ void CMainFrame::LoadIcons()
 	    g_object_unref(icon);
         } 
         else{
-            m_MainIcon = NULL;
+            g_print("Error: %s\\n", gerror->message);
             m_InverseMainIcon = NULL;
         }
 }
