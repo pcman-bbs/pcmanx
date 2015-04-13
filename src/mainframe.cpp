@@ -769,15 +769,16 @@ void CMainFrame::LoadIcons()
 {
 	GError* gerror = NULL;
         GdkPixbuf* icon = gdk_pixbuf_new_from_file(DATADIR "/pixmaps/pcmanx.svg", &gerror);
-        if(icon){
+        if(gerror == NULL){
 	    m_MainIcon = gdk_pixbuf_scale_simple(icon, 32, 32, GDK_INTERP_BILINEAR);
 	    m_InverseMainIcon = gdk_pixbuf_copy(m_MainIcon);
 	    inverse_pixbuf(m_InverseMainIcon);
 	    g_object_unref(icon);
         } 
         else{
-            g_print("Error: %s\\n", gerror->message);
+	    m_MainIcon = (GdkPixbuf *) NULL;
             m_InverseMainIcon = NULL;
+            g_print("Warning: %s\\n", gerror->message);
         }
 }
 
