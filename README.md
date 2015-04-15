@@ -1,4 +1,4 @@
-How to Build
+How to Build [![Build Status](https://travis-ci.org/pcman-bbs/pcmanx.svg?branch=master)](https://travis-ci.org/pcman-bbs/pcmanx)
 ============
 
 PCManX-gtk2 uses autotools (Automake / Autoconf / libtool) to construct
