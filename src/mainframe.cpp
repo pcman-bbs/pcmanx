@@ -1378,7 +1378,6 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
         }
 
         // switch to the page which is clicked.
-        int page_idx_before_close = gtk_notebook_get_current_page(GTK_NOTEBOOK(widget));
         gtk_notebook_set_current_page(GTK_NOTEBOOK(widget), number_of_closet_tab);
         _this->SetCurView( _this->m_Views[number_of_closet_tab] );
     }
