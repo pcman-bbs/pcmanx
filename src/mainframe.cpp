@@ -283,10 +283,9 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	size_t last = url.find_last_not_of(" \t");
 	if (last >= first)
 		url = url.substr(first, last - first + 1);
-
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
-
+    //title = "hahah";
 	CTelnetCon* pCon;
 	CEditor* pEditor;
 
@@ -1378,7 +1377,6 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
         }
 
         // switch to the page which is clicked.
-        int page_idx_before_close = gtk_notebook_get_current_page(GTK_NOTEBOOK(widget));
         gtk_notebook_set_current_page(GTK_NOTEBOOK(widget), number_of_closet_tab);
         _this->SetCurView( _this->m_Views[number_of_closet_tab] );
     }
