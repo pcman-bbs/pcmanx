@@ -318,7 +318,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
-	// issue #39
+	// if title and url include string "telnet://", remove it.       
         if ( !title.compare( 0, strlen("telnet://"), "telnet://" ) ) {
                 title = title.substr( strlen("telnet://") );
         }
@@ -1733,7 +1733,7 @@ void CMainFrame::OnReconnect(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	if( !con )
 		return;
 
-	// issue #33
+	// reconnect at same tab
 	con->Reconnect();
 }
 
