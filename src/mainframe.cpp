@@ -1724,10 +1724,9 @@ void CMainFrame::OnReconnect(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	CTelnetCon* con = _this->GetCurCon();
 	if( !con )
 		return;
-	if( con->IsClosed() )
-		con->Reconnect();
-	else
-		_this->NewCon( con->m_Site.m_Name, con->m_Site.m_URL, &con->m_Site);
+
+	/* Reconnect without opening a new tab */
+	con->Reconnect();
 }
 
 void CMainFrame::FlashWindow( bool flash )
