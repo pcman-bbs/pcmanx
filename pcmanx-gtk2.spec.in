@@ -65,7 +65,7 @@ make %{?_smp_mflags} V=1
 
 %files -f pcmanx.lang
 %defattr(-,root,root)
-%doc AUTHORS COPYING NEWS README TODO
+%doc AUTHORS COPYING NEWS README.md TODO
 %dir %{_datadir}/pcmanx/
 %dir %{_datadir}/pcmanx/nancy_bot/
 %{_bindir}/pcmanx
