@@ -283,10 +283,9 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	size_t last = url.find_last_not_of(" \t");
 	if (last >= first)
 		url = url.substr(first, last - first + 1);
-
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
-
+    //title = "hahah";
 	CTelnetCon* pCon;
 	CEditor* pEditor;
 
@@ -1350,6 +1349,37 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
 	// if not right check the mouse
 	if (event->type != GDK_BUTTON_PRESS || event->button != 3)
 	        return FALSE;
+
+    // if right click, switch to the tab first
+    if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
+        int window_w = 0;
+        int window_h = 0;
+        gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(widget)), &window_w, &window_h);
+
+        int closet_tab_x = window_w;
+        int number_of_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
+        int nth_page_number = 0;
+        int number_of_closet_tab = 0;
+        // pick up the tab which is closet to the click location.
+        for(nth_page_number = 0; nth_page_number < number_of_pages; nth_page_number++)
+        {
+            GtkWidget *tab_label;
+            tab_label = gtk_notebook_get_tab_label(  GTK_NOTEBOOK(widget),
+                gtk_notebook_get_nth_page(GTK_NOTEBOOK(widget),
+                nth_page_number));
+            int lx, ly;
+            gtk_widget_get_pointer(tab_label, &lx, &ly);
+            if(lx > 0 && lx < closet_tab_x)
+            {
+                closet_tab_x = lx;
+                number_of_closet_tab = nth_page_number;
+            }
+        }
+
+        // switch to the page which is clicked.
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(widget), number_of_closet_tab);
+        _this->SetCurView( _this->m_Views[number_of_closet_tab] );
+    }
 
 	// popup
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
