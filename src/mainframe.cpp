@@ -991,7 +991,7 @@ void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* p
 {
 	CTelnetView* t_pView = pMainFrame->GetCurView();
 	if (t_pView != NULL)
-		t_pView->PasteFromClipboard(true);
+		t_pView->PasteFromClipboard(false);
 }
 
 void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMainFrame* _this)
@@ -1126,7 +1126,7 @@ void CMainFrame::OnLastCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 void CMainFrame::OnPaste(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
 	if(_this->GetCurView())
-		_this->GetCurView()->PasteFromClipboard(false);
+		_this->GetCurView()->PasteFromClipboard(true);
 }
 
 void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
