@@ -994,6 +994,25 @@ void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem UNUSED, CMainFrame* p
 		t_pView->PasteFromClipboard(false);
 }
 
+void CMainFrame::OnPopupMenuSelectCon(GtkWidget* widget,
+                                      GtkWidget* menu,
+                                      GdkEventButton* event,
+                                      CMainFrame* _this)
+{
+    /**
+    *   Popup menu on correct tab.
+    *   Switch to the tab closest to the cursor first and then popup menu
+    */
+    int number_of_closet_tab;
+    number_of_closet_tab = _this->GetNearestTab(widget, event);
+
+    // switch to the page which is clicked.
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(widget), number_of_closet_tab);
+    _this->SetCurView( _this->m_Views[number_of_closet_tab] );
+
+    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
+}
+
 void CMainFrame::OnCloseSelectCon(GtkWidget *notebook, GtkMenuItem* mitem, CMainFrame* _this)
 {
 	/**
@@ -1339,53 +1358,26 @@ gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget,
 		                _this);
 	}
 
-	// Feature: let mouse middle click be able to close tab
-	// similar to the behavior under Firefox
-	if (AppConfig.MidClickAsClose &&
-	    event->type == GDK_BUTTON_PRESS && event->button == 2) {
-		_this->OnCloseSelectCon(widget, GTK_MENU_ITEM(menu_item_close), _this);
-		return TRUE;
-	}
 
-    // if right click, switch to the tab first
-    if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
-        int window_w = 0;
-        int window_h = 0;
-        gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(widget)), &window_w, &window_h);
+    if (event->button == 1) {
+        // Left-click
+        return FALSE;
 
-        int closet_tab_x = window_w;
-        int number_of_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
-        int nth_page_number = 0;
-        int number_of_closet_tab = 0;
-        // pick up the tab which is closet to the click location.
-        for(nth_page_number = 0; nth_page_number < number_of_pages; nth_page_number++)
-        {
-            GtkWidget *tab_label;
-            tab_label = gtk_notebook_get_tab_label(  GTK_NOTEBOOK(widget),
-                gtk_notebook_get_nth_page(GTK_NOTEBOOK(widget),
-                nth_page_number));
-            int lx, ly;
-            gtk_widget_get_pointer(tab_label, &lx, &ly);
-            if(lx > 0 && lx < closet_tab_x)
-            {
-                closet_tab_x = lx;
-                number_of_closet_tab = nth_page_number;
-            }
-        }
+    } else if (event->button == 2 && AppConfig.MidClickAsClose) {
+        // Feature: let mouse middle click be able to close tab
+        // similar to the behavior under Firefox
+        _this->OnCloseSelectCon(widget, GTK_MENU_ITEM(menu_item_close), _this);
+        return TRUE;
 
-        // switch to the page which is clicked.
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(widget), number_of_closet_tab);
-        _this->SetCurView( _this->m_Views[number_of_closet_tab] );
+    } else if (event->button == 3) {
+        // Let right-click be able to popup menu on the right tab
+        _this->OnPopupMenuSelectCon(widget, menu, event, _this);
+        return TRUE;
+
     } else {
-        // if not right chick the mouse
         return FALSE;
     }
-    
 
-	// popup
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
-		event->button, event->time);
-	return TRUE;
 }
 
 void CMainFrame::CloseConAndPageSwitch(int idx, bool confirm UNUSED, GtkWidget *notebook, int page_idx)
@@ -1824,6 +1816,36 @@ int CMainFrame::GetViewIndex(CTermView* view)
 	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
 }
 
+int CMainFrame::GetNearestTab(GtkWidget *widget, GdkEventButton *event )
+{
+    /**
+    *   Return the closest tab's number to the cursor
+    */
+    int window_w = 0;
+    int window_h = 0;
+    gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(widget)), &window_w, &window_h);
+
+    int closet_tab_x = window_w;
+    int number_of_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
+    int nth_page_number = 0;
+    int number_of_closet_tab = 0;
+    // pick up the tab which is closest to the click location.
+    for(nth_page_number = 0; nth_page_number < number_of_pages; nth_page_number++)
+    {
+        GtkWidget *tab_label;
+        tab_label = gtk_notebook_get_tab_label(  GTK_NOTEBOOK(widget),
+        gtk_notebook_get_nth_page(GTK_NOTEBOOK(widget), nth_page_number));
+        int lx, ly;
+        gtk_widget_get_pointer(tab_label, &lx, &ly);
+        if(lx > 0 && lx < closet_tab_x)
+        {
+            closet_tab_x = lx;
+            number_of_closet_tab = nth_page_number;
+        }
+    }
+
+    return number_of_closet_tab;
+}
 
 void CMainFrame::SwitchToCon(CTelnetCon* con)
 {

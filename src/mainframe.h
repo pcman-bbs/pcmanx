@@ -68,6 +68,7 @@ public:
 	static void OnShortcutList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseSelectCon(GtkWidget* notebook, GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnPopupMenuSelectCon(GtkWidget *widget, GtkWidget* menu, GdkEventButton* event, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
@@ -106,6 +107,7 @@ public:
 	bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
 	static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
 	int GetViewIndex(CTermView* view);
+	int GetNearestTab(GtkWidget *widget, GdkEventButton *event);
 	void SwitchToCon(CTelnetCon* con);
 
 	vector<CTelnetView*> m_Views;
