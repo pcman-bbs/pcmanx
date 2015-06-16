@@ -319,7 +319,7 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
 	/**
-	*	Strip title if its length larger than 20 characters
+	*	Shrink title if its length is longer than 20 characters
 	*/
 	if(title.length() > 20){
         string temp(title, 0, 16);
