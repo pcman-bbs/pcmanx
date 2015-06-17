@@ -88,7 +88,7 @@ CSite::CSite(string Name)
 	m_bVerticalCenterAlign = true;
 
     // UAO support
-    m_UAO = 0; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
+    m_UAO = 2; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
 
 	m_MenuItem = NULL;
 
