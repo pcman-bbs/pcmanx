@@ -169,14 +169,15 @@ void CSiteListDlg::OnSearch(GtkButton* btn UNUSED, CSiteListDlg* _this)
 	}
 	else	// Get next iter
 	{
+		GtkTreeIter child_it;
+		GtkTreeIter next_it;
+		next_it = it;
 get_next_iter:
-		if( gtk_tree_model_iter_has_child( model, &it ) ) // Has children?
+		if( gtk_tree_model_iter_children( model, &child_it, &it ) ) // Has children?
 		{
-			GtkTreeIter child_it;
-			while( gtk_tree_model_iter_children(model, &child_it, &it) )
-				it = child_it;
+			next_it = child_it;
 		}
-		else if( !gtk_tree_model_iter_next( model, &it) ) // Has sibling?
+		else if( !gtk_tree_model_iter_next( model, &next_it ) ) // Has sibling?
 		{
 		get_parent_iter:
 			// No sibling. Has Parent?
@@ -185,13 +186,14 @@ get_next_iter:
 				goto keyword_not_found;	// No parent, stop!
 
 			// Does parent has next sibling?
-			if( !gtk_tree_model_iter_next( model, &parent_it)  )
+			next_it = parent_it;
+			if( !gtk_tree_model_iter_next( model, &next_it ) )
 			{
 				it = parent_it;
 				goto get_parent_iter;
 			}
-			it = parent_it;
 		}
+		it = next_it;
 	}
 
 	gtk_tree_model_get(model, &it, COL_TEXT, &text, -1);
