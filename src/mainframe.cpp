@@ -1557,8 +1557,12 @@ void CMainFrame::CreateFavoritesMenu()
 	for( it = AppConfig.Favorites.begin(); it != AppConfig.Favorites.end(); ++it )
 	{
 		CSite& site = *it;
-
-		GtkWidget* fav_item = gtk_image_menu_item_new_with_label( site.m_Name.c_str() );
+		GtkWidget* fav_item;
+		const int fav_string_len = 20;
+		fav_item = gtk_image_menu_item_new_with_label(
+			site.m_Name.length() <= fav_string_len ?
+			site.m_Name.c_str() :
+			(site.m_Name.substr(0, fav_string_len) + " ...").c_str());
 		gtk_widget_show (fav_item);
 		gtk_container_add (GTK_CONTAINER (favorites_menu), fav_item);
 

@@ -127,7 +127,11 @@ CEditFavDlg::CEditFavDlg(CWidget* parent, vector<CSite>& sites) : m_Sites(sites)
 	{
 		CSite& site = *it;
 		++i;
-		m_List->Append(site.m_Name);
+		/* remove tailing characters of favorite site name */
+		const int fav_string_len = 20;
+		m_List->Append(site.m_Name.length() <= fav_string_len ?
+				site.m_Name :
+				site.m_Name.substr(0, fav_string_len) + " ...");
 	}
 
 }
@@ -143,7 +147,11 @@ void CEditFavDlg::OnAdd(GtkWidget* btn UNUSED, CEditFavDlg* _this)
 	if( dlg->ShowModal() == GTK_RESPONSE_OK )
 	{
 		_this->m_Sites.insert( _this->m_Sites.begin()+i, dlg->m_Site );
-		_this->m_List->Insert( i, dlg->m_Site.m_Name );
+		/* remove tailing characters of favorite site name */
+		const int fav_string_len = 20;
+		_this->m_List->Insert( i, dlg->m_Site.m_Name.length() <= fav_string_len ?
+				dlg->m_Site.m_Name :
+				dlg->m_Site.m_Name.substr(0, fav_string_len) + " ..."  );
 		_this->m_List->SetCurSel( i );
 	}
 	dlg->Destroy();
