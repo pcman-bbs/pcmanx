@@ -21,7 +21,6 @@
 #include "stringutil.h"
 #include <cctype>
 #include <cstdio>
-#include <regex.h>
 
 // Note by PCMan:
 // EscapeStr() & UnEscapeStr() :
