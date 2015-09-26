@@ -4,6 +4,10 @@ AC_VERSION=
 
 set -x
 
+if [ ! -e ChangeLog -a -e ./build/changelog.sh ]; then
+  ./build/changelog.sh > ChangeLog
+fi
+
 if [ "x${ACLOCAL_DIR}" != "x" ]; then
   ACLOCAL_ARG=-I ${ACLOCAL_DIR}
 fi

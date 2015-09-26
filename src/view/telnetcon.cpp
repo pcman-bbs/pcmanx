@@ -93,12 +93,6 @@
 #include "proxy.h"
 #endif
 
-#ifndef HAVE_FORKPTY 
-extern "C" {
-#include "forkpty.h" 
-}
-#endif
-
 #define RECV_BUF_SIZE (4097)
 
 #if !defined(MOZ_PLUGIN)
@@ -902,7 +896,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 	  notify_notification_new(
 				  summary,
 				  body,
-#if !NOTIFY_CHECK_VERSION(0,7,0)
+#if !defined(NOTIFY_CHECK_VERSION)
 				  NULL,
 #endif
 				  NULL);

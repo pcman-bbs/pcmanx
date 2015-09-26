@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
@@ -24,12 +25,15 @@
 #include "termview.h"
 #include "termdata.h"
 #include "termsel.h"
+#include "uao241.h"
+#include "uao250.h"
 
 #include <string>
 
 #include <gdk/gdkx.h>
 #include <pango/pangoxft.h>
 #include "font.h"
+#include "cfontconfig.h"
 
 using namespace std;
 
@@ -126,6 +130,7 @@ CTermView::CTermView()
 	m_TopMargin = 0;
 	m_bHorizontalCenterAlign = false;
 	m_bVerticalCenterAlign = false;
+	m_UAO = 0;
 
 	m_CancelSel = false;
 
@@ -520,20 +525,47 @@ int CTermView::DrawChar(int row, int col)
 		{
 			if( ' ' != *pLine && '\0' != *pLine )
 			{
-				gsize wl;
-				gchar *utf8_ch = g_convert( pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
-				if( utf8_ch )
-				{
-					XftFont* font;
-					if (isascii (utf8_ch[0])) {
+				gsize wl = 0;
+				gchar* utf8 = NULL;
+
+				/* UAO display support */
+				switch (m_UAO) {
+					case 2:
+						utf8 = uao250_b2u(pLine, w, &wl);
+						break;
+					case 1:
+						utf8 = uao241_b2u(pLine, w, &wl);
+						break;
+					default:
+						utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
+						break;
+				}
+
+				if (utf8 != NULL) {
+					gunichar* ucs4 = NULL;
+					XftFont* font = NULL;
+
+					if (isascii (utf8[0])) {
 						font = m_Font[FONT_EN]->GetXftFont();
 					} else {
 						font = m_Font[FONT_DEFAULT]->GetXftFont();
 					}
 
-					if( !IsSpaceFillingChar(utf8_ch, wl) || !DrawSpaceFillingChar( utf8_ch, wl, left, top, &rect, Fg ) )
-						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
-					g_free(utf8_ch);
+					ucs4 = g_utf8_to_ucs4_fast(utf8, -1, NULL);
+
+					if (ucs4 != NULL && XftCharExists(gdk_x11_get_default_xdisplay(), font, (FcChar32) *ucs4) == FcFalse) {
+						XftFont* fallback = CFontConfig::Instance()->SearchFontFor((FcChar32) *ucs4);
+						if (fallback != NULL) {
+							XftDrawStringUtf8( m_XftDraw, &xftclr, fallback, left, top + fallback->ascent, (FcChar8*)utf8, wl );
+						} else {
+							XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
+						}
+					} else if ( !IsSpaceFillingChar(utf8, wl) || !DrawSpaceFillingChar( utf8, wl, left, top, &rect, Fg ) ) {
+						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8, wl );
+					}
+
+					g_free(ucs4);
+					g_free(utf8);
 				}
 			}
 			if( pAttr[i].IsUnderLine() )
@@ -617,9 +649,8 @@ void CTermView::OnSize(GdkEventConfigure* evt UNUSED)
 
 	for (int i = FONT_START; i != FONT_END; ++i) {
 	    m_Font[i]->SetFont( m_Font[i]->GetName(), w, h, m_Font[i]->GetCompact(), m_Font[i]->GetAntiAlias());
-	    RecalcCharDimension(i);
 	}
-
+	RecalcCharDimension();
 }
 
 static int DrawCharWrapper( int row, int col, void *data )
@@ -866,10 +897,22 @@ void CTermView::CopyToClipboard(bool primary, bool with_color, bool trim)
 	else {
 		text = m_pTermData->GetSelectedText(trim);
 		gsize wl = 0;
-		const gchar* utext = g_convert_with_fallback(
-				text.c_str(), text.length(),
-				"utf-8", m_pTermData->m_Encoding.c_str(),
-				(gchar *) "?", NULL, &wl, NULL);
+		const gchar* utext = NULL;
+		/* UAO copy support */
+		switch (m_UAO) {
+			case 2:
+				utext = uao250_b2u(text.c_str(), text.length(), &wl);
+				break;
+			case 1:
+				utext = uao241_b2u(text.c_str(), text.length(), &wl);
+				break;
+			default:
+				utext = g_convert_with_fallback(
+						text.c_str(), text.length(),
+						"utf-8", m_pTermData->m_Encoding.c_str(),
+						(gchar *) "?", NULL, &wl, NULL);
+				break;
+		}
 		if(!utext)
 			return;
 
@@ -897,6 +940,7 @@ void CTermView::GetCellSize( int &w, int &h )
 void CTermView::SetFont( CFont* font, int font_type )
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_DEFAULT);
+
 	if( !font || m_AutoFontSize)
 		return;
 
@@ -913,12 +957,13 @@ void CTermView::SetFont( CFont* font, int font_type )
 	else
 		m_Font[font_type] = font;
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias, int font_type)
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_START);
+
 	if( m_Font[font_type] )
 		delete m_Font[font_type];
 
@@ -931,12 +976,13 @@ void CTermView::SetFont( string name, int pt_size, bool compact, bool anti_alias
 	else
 		m_Font[font_type] = new CFont( name, pt_size, compact, anti_alias );
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetFontFamily( string name, int font_type )
 {
 	g_assert(font_type < FONT_END && font_type >= FONT_START);
+
 	if( m_AutoFontSize )
 	{
 		int w, h;
@@ -946,7 +992,7 @@ void CTermView::SetFontFamily( string name, int font_type )
 	else
 		m_Font[font_type]->SetFontFamily( name );
 
-	RecalcCharDimension(font_type);
+	RecalcCharDimension();
 }
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
@@ -977,6 +1023,15 @@ void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 	if( IsVisible() )
 		Refresh();
 	UpdateCaretPos();
+}
+
+void CTermView::SetUAO( gint idx )
+{
+	const char* encoding = m_pTermData->m_Encoding.c_str();
+	if (strncasecmp (encoding, "BIG5", 4) == 0 ||
+		strncasecmp (encoding, "BIG-5", 5) == 0) {
+		m_UAO = idx;
+	}
 }
 
 void CTermView::UpdateCaretPos()
@@ -1034,10 +1089,10 @@ void CTermView::OnDestroy()
 	CView::OnDestroy();	// Remember to destruct parent
 }
 
-void CTermView::RecalcCharDimension(int font_type)
+void CTermView::RecalcCharDimension()
 {
-	m_CharW = m_Font[font_type]->GetWidth() + m_CharPaddingX;
-	m_CharH = m_Font[font_type]->GetHeight() + m_CharPaddingY;
+	m_CharW = m_Font[FONT_DEFAULT]->GetWidth() + m_CharPaddingX;
+	m_CharH = m_Font[FONT_DEFAULT]->GetHeight() + m_CharPaddingY;
 
 	if( m_bHorizontalCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
@@ -1058,4 +1113,4 @@ void CTermView::OnHyperlinkClicked(string url UNUSED)	// Overriden in derived cl
 {
 
 }
-
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

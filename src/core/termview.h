@@ -76,6 +76,7 @@ public:
     CFont* GetFont(int font_type){	return m_Font[font_type];	}
     void SetHorizontalCenterAlign( bool is_hcenter );
     void SetVerticalCenterAlign( bool is_vcenter );
+    void SetUAO( gint idx );
     void SetTermData(CTermData* data){	m_pTermData = data;	}
 
 protected:
@@ -88,7 +89,7 @@ protected:
     void UpdateCaretPos();
     bool HyperLinkHitTest(int x, int y, int* start, int* end);
     void OnDestroy();
-    void RecalcCharDimension(int font_type);
+    void RecalcCharDimension();
     void GetCellSize( int &w, int &h );
     void ClearSelection();
     void ExtendSelection( int row, int col, bool left );
@@ -106,6 +107,7 @@ protected:
 	int m_TopMargin;
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
+    gint m_UAO;
 
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;
@@ -117,7 +119,7 @@ protected:
 	GdkColor* m_pHyperLinkColor;
     GdkGC* m_GC;
     bool m_AutoFontSize;
-    
+
     bool m_CancelSel;	// If selection is canceled in OnLButtonDown, this flag is set to true.
 
     static string m_s_ANSIColorStr;

@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2008 Jason Xia <jasonxh@gmail.com>
  *
@@ -17,6 +18,9 @@
  */
 
 #include "downarticledlg.h"
+#include "uao241.h"
+#include "uao250.h"
+
 #include <fstream>
 #include <cerrno>
 #ifndef _GNU_SOURCE
@@ -32,9 +36,9 @@
 #define CUTOFF_COLUMN 40  // Progress indicator should come before this column
 
 
-CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
+CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection, int uao)
 	: CDialog(parent, _("Download Article"), false)
-	  , m_connection(connection), m_thread(NULL), m_stop(false)
+	  , m_connection(connection), m_thread(NULL), m_stop(false), m_UAO(uao)
 {
 	// Build the dialog
 	m_textbuf = gtk_text_buffer_new(NULL);
@@ -62,11 +66,23 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(m_Widget), TRUE);
 }
 
-static inline string& AppendLine(const char *line, const char *enc, string &str)
+static inline string& AppendLine(const char *line, const char *enc, string &str, int uao)
 {
 	gsize len;
-	char *buf = g_convert_with_fallback(line, -1, "UTF-8", enc, (gchar *) "?", 
-			NULL, &len, NULL);
+	char *buf = NULL;
+	/* UAO download support */
+	switch (uao) {
+		case 2:
+			buf = uao250_b2u(line, -1, &len);
+			break;
+		case 1:
+			buf = uao241_b2u(line, -1, &len);
+			break;
+		default:
+			buf = g_convert_with_fallback(line, -1, "UTF-8", enc, (gchar *) "?",
+					NULL, &len, NULL);
+			break;
+	}
 	if (buf)
 	{
 		// Trim trailing spaces
@@ -86,9 +102,10 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 	string str;
 
 	// Save the current screen
-	for (int i = 0; i < con->m_RowsPerPage - 1; i++)
+	for (int i = 0; i < con->m_RowsPerPage - 1; i++) {
 		AppendLine(con->m_Screen[con->m_FirstLine + i], 
-				con->m_Site.m_Encoding.c_str(), str);
+				con->m_Site.m_Encoding.c_str(), str, _this->m_UAO);
+	}
 
 	// Check if we are at the end
 	char *p;
@@ -104,13 +121,14 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 				|| con->m_CaretPos.y < con->m_FirstLine + con->m_RowsPerPage - 1 
 				|| con->m_CaretPos.x < CUTOFF_COLUMN)
 		{
-			if (_this->m_stop)  // We've been called off
+			if (_this->m_stop) { // We've been called off
 				goto _exit;
+			}
 			usleep(DOWN_ARTICLE_POLL_DELAY);
 		}
 
 		AppendLine(con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 2], 
-				con->m_Site.m_Encoding.c_str(), str);
+				con->m_Site.m_Encoding.c_str(), str, _this->m_UAO);
 	}
 
 _exit:
@@ -234,3 +252,4 @@ bool CDownArticleDlg::SaveAs()
 
 	return ret;
 }
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

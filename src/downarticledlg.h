@@ -1,3 +1,4 @@
+/* -*- coding: utf-8; indent-tabs-mode: t; tab-width: 4; c-basic-offset: 4; -*- */
 /**
  * Copyright (c) 2008 Jason Xia <jasonxh@gmail.com>
  *
@@ -26,7 +27,7 @@
 class CDownArticleDlg : public CDialog
 {
 public:
-	CDownArticleDlg(CWidget *parent, CTelnetCon *connection);
+	CDownArticleDlg(CWidget *parent, CTelnetCon *connection, int uao);
 	
 	int ShowModal();
 
@@ -46,6 +47,8 @@ private:
 	CTelnetCon		*m_connection;
 	GThread			*m_thread;
 	bool			m_stop;
+	int				m_UAO;
 };
 
 #endif // DOWNARTICLEDLG_H
+/* vim: set fileencodings=utf-8 tabstop=4 noexpandtab shiftwidth=4 softtabstop=4: */

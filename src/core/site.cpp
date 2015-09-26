@@ -25,6 +25,7 @@
 
 #include "site.h"
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 //	#include "appconfig.h"
@@ -48,7 +49,11 @@ CSite::CSite(string Name)
 	m_AntiIdle = 180;	// 0 means disabled
 
 	// Site Encoding
-	m_Encoding = "Big5";
+	if (strncmp("zh_CN", getenv("LANG"), 5) == 0) {
+		m_Encoding = "GB2312";
+	} else {
+		m_Encoding = "BIG5";
+	}
 
 	// Terminal settings
 	// Rows per page
@@ -79,6 +84,9 @@ CSite::CSite(string Name)
 
 	m_bHorizontalCenterAlign = true;
 	m_bVerticalCenterAlign = true;
+
+    // UAO support
+    m_UAO = 0; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
 
 	m_MenuItem = NULL;
 
@@ -119,6 +127,7 @@ void CSite::SaveToFile(FILE *fo)
 #endif
 	fprintf( fo, "HorizontalCenterAlign=%d\n", m_bHorizontalCenterAlign );
 	fprintf( fo, "VerticalCenterAlign=%d\n", m_bVerticalCenterAlign );
+	fprintf( fo, "UAO=%d\n", m_UAO );
 
 	fprintf( fo, "PreLoginPrompt=%s\n", m_PreLoginPrompt.c_str() );
 	fprintf( fo, "PreLogin=%s\n", m_PreLogin.c_str() );

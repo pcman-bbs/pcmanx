@@ -46,16 +46,19 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libpcmanx_core_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+libpcmanx_core_la_DEPENDENCIES =  \
+	$(top_builddir)/src/charset/libpcmanx_charset.la \
+	$(am__DEPENDENCIES_1)
 am__libpcmanx_core_la_SOURCES_DIST = proxy.c proxy.h pcmanx_utils.h \
 	caret.cpp caret.h site.cpp site.h termdata.cpp termdata.h \
-	view.cpp view.h font.cpp font.h stringutil.cpp stringutil.h \
-	widget.cpp widget.h termview.cpp termview.h termsel.cpp \
-	termsel.h fileutil.c fileutil.h pkgver.c
+	view.cpp view.h font.cpp font.h cfontconfig.cpp cfontconfig.h \
+	stringutil.cpp stringutil.h widget.cpp widget.h termview.cpp \
+	termview.h termsel.cpp termsel.h fileutil.c fileutil.h \
+	pkgver.c
 @USE_PROXY_TRUE@am__objects_1 = proxy.lo
 am_libpcmanx_core_la_OBJECTS = $(am__objects_1) caret.lo site.lo \
-	termdata.lo view.lo font.lo stringutil.lo widget.lo \
-	termview.lo termsel.lo fileutil.lo pkgver.lo
+	termdata.lo view.lo font.lo cfontconfig.lo stringutil.lo \
+	widget.lo termview.lo termsel.lo fileutil.lo pkgver.lo
 libpcmanx_core_la_OBJECTS = $(am_libpcmanx_core_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -112,6 +115,7 @@ ALL_LINGUAS = @ALL_LINGUAS@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
+ARGZ_H = @ARGZ_H@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -119,9 +123,6 @@ AWK = @AWK@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
-CCAS = @CCAS@
-CCASDEPMODE = @CCASDEPMODE@
-CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
@@ -134,6 +135,7 @@ CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -158,6 +160,7 @@ GTK_CFLAGS = @GTK_CFLAGS@
 GTK_LIBS = @GTK_LIBS@
 GUI_CFLAGS = @GUI_CFLAGS@
 GUI_LIBS = @GUI_LIBS@
+INCLTDL = @INCLTDL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -171,6 +174,11 @@ INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBADD_DL = @LIBADD_DL@
+LIBADD_DLD_LINK = @LIBADD_DLD_LINK@
+LIBADD_DLOPEN = @LIBADD_DLOPEN@
+LIBADD_SHL_LOAD = @LIBADD_SHL_LOAD@
+LIBLTDL = @LIBLTDL@
 LIBNOTIFY_CFLAGS = @LIBNOTIFY_CFLAGS@
 LIBNOTIFY_LIBS = @LIBNOTIFY_LIBS@
 LIBOBJS = @LIBOBJS@
@@ -184,9 +192,16 @@ LIBXFT_CFLAGS = @LIBXFT_CFLAGS@
 LIBXFT_LIBS = @LIBXFT_LIBS@
 LIPO = @LIPO@
 LN_S = @LN_S@
+LTDLDEPS = @LTDLDEPS@
+LTDLINCL = @LTDLINCL@
+LTDLOPEN = @LTDLOPEN@
 LTLIBOBJS = @LTLIBOBJS@
+LT_CONFIG_H = @LT_CONFIG_H@
+LT_DLLOADERS = @LT_DLLOADERS@
+LT_DLPREOPEN = @LT_DLPREOPEN@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MSGFMT = @MSGFMT@
@@ -207,6 +222,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -226,14 +243,13 @@ USE_NLS = @USE_NLS@
 USE_NOTIFIER = @USE_NOTIFIER@
 USE_PROXY = @USE_PROXY@
 USE_SCRIPT = @USE_SCRIPT@
-USE_WGET = @USE_WGET@
 VERSION = @VERSION@
 XGETTEXT = @XGETTEXT@
-XMKMF = @XMKMF@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
@@ -267,7 +283,8 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = $(datadir)/locale
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
+ltdl_LIBOBJS = @ltdl_LIBOBJS@
+ltdl_LTLIBOBJS = @ltdl_LTLIBOBJS@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -278,6 +295,8 @@ psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
+subdirs = @subdirs@
+sys_symbol_underscore = @sys_symbol_underscore@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
@@ -288,6 +307,7 @@ noinst_LTLIBRARIES = libpcmanx_core.la
 INCLUDES = \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/charset \
 	$(GUI_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
@@ -295,7 +315,10 @@ INCLUDES = \
 @USE_PROXY_TRUE@PROXY_SOURCES = \
 @USE_PROXY_TRUE@	proxy.c proxy.h
 
-libpcmanx_core_la_LIBADD = $(GUI_LIBS)
+libpcmanx_core_la_LIBADD = \
+	$(top_builddir)/src/charset/libpcmanx_charset.la \
+	$(GUI_LIBS)
+
 libpcmanx_core_la_SOURCES = \
 	$(PROXY_SOURCES) \
 	pcmanx_utils.h \
@@ -304,6 +327,7 @@ libpcmanx_core_la_SOURCES = \
 	termdata.cpp termdata.h \
 	view.cpp view.h \
 	font.cpp font.h \
+	cfontconfig.cpp cfontconfig.h \
 	stringutil.cpp stringutil.h \
 	widget.cpp widget.h \
 	termview.cpp termview.h \
@@ -364,6 +388,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caret.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cfontconfig.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileutil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkgver.Plo@am__quote@

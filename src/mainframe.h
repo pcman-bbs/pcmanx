@@ -33,6 +33,7 @@
 
 #include <string>
 #include <vector>
+#include <ltdl.h>
 
 using namespace std;
 
@@ -61,10 +62,6 @@ public:
 	void OnTelnetConRecv(CTelnetView* con);
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
-#ifdef USE_WGET
-	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
-	static void updateBBSListHandler(int nSignalNumber);
-#endif
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
@@ -105,8 +102,8 @@ public:
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
 #if GTK_CHECK_VERSION(2,10,0)
-	void ShowTrayIcon() { gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
-	void HideTrayIcon() { gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
+	void ShowTrayIcon() { if (m_TrayIcon) gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
+	void HideTrayIcon() { if (m_TrayIcon) gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
 #else
 	void ShowTrayIcon(){ gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) ); };
 	void HideTrayIcon(){ gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) ); };
@@ -142,6 +139,7 @@ protected:
 	void CloseCon(int idx, bool confirm = false);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
+	void CreateTrayIcon();
 	static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 	void FlashWindow( bool flash );
@@ -211,6 +209,9 @@ protected:
 
 private:
 	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
+	bool m_Unity;
+	lt_dlhandle m_dlhandle;
+	void *m_indicator;
 };
 
 #endif

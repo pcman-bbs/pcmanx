@@ -16,13 +16,14 @@ EXTRA_DIST = \
 	intltool-merge.in \
 	intltool-update.in \
 	ChangeLog \
+	ChangeLog.old \
 	Doxygen.in \
 	pcmanx.desktop.in \
 	pcmanx-gtk2.spec.in
 
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
-SUBDIRS = src po data
+SUBDIRS = libltdl src po data
 
 ## @start 1
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
@@ -34,5 +35,5 @@ DISTCLEANFILES = intltool-extract intltool-merge intltool-update
 desktopdir = $(datadir)/applications
 desktop_DATA = pcmanx.desktop
 
-icondir = $(datadir)/pixmaps
-icon_DATA = data/pcmanx.png
+icondir = $(datadir)/pixmaps/
+icon_DATA = data/pcmanx.svg

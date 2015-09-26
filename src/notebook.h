@@ -38,7 +38,7 @@ public:
 
     ~CNotebook();
 //    void InsertPage(int pos, CWidget* page, string title);
-    int AddPage( CWidget* page, string title, GdkPixbuf* icon = NULL);
+    int AddPage( CWidget* page, string title, bool icon = false);
     void RemovePage( int pos ){	gtk_notebook_remove_page(GTK_NOTEBOOK(m_Widget), pos);	}
 
     void SetCurPage(int i)

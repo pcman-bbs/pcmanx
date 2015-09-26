@@ -54,16 +54,16 @@ am__pcmanx_SOURCES_DIST = docklet/api.h docklet/clipboard.c \
 	nancy_bot/api.h nancy_bot/nancybot.cpp nancy_bot/msgdata.cpp \
 	nancy_bot/msgdata.h nancy_bot/botutil.h view/telnetcon.cpp \
 	view/telnetcon.h view/telnetview.cpp view/telnetview.h \
-	view/forkpty.c view/forkpty.h qqwryseeker/qqwryseeker.c \
-	qqwryseeker/qqwryseeker.h appconfig.cpp appconfig.h \
-	notebook.cpp notebook.h sitelistdlg.cpp sitelistdlg.h \
-	generalprefpage.cpp generalprefpage.h pcmanx_gtk2.cpp \
-	sitepage.cpp sitepage.h configfile.cpp configfile.h \
-	inputdialog.cpp inputdialog.h prefdlg.cpp prefdlg.h dialog.cpp \
-	dialog.h listbox.cpp listbox.h editfavdlg.cpp editfavdlg.h \
-	mainframe.cpp mainframe.h sitedlg.cpp sitedlg.h \
-	emoticondlg.cpp emoticondlg.h autologinpage.cpp \
-	autologinpage.h downarticledlg.cpp downarticledlg.h
+	qqwryseeker/qqwryseeker.c qqwryseeker/qqwryseeker.h \
+	appconfig.cpp appconfig.h notebook.cpp notebook.h \
+	sitelistdlg.cpp sitelistdlg.h generalprefpage.cpp \
+	generalprefpage.h pcmanx_gtk2.cpp sitepage.cpp sitepage.h \
+	configfile.cpp configfile.h inputdialog.cpp inputdialog.h \
+	prefdlg.cpp prefdlg.h dialog.cpp dialog.h listbox.cpp \
+	listbox.h editfavdlg.cpp editfavdlg.h mainframe.cpp \
+	mainframe.h sitedlg.cpp sitedlg.h emoticondlg.cpp \
+	emoticondlg.h autologinpage.cpp autologinpage.h \
+	downarticledlg.cpp downarticledlg.h
 am__objects_1 = clipboard.$(OBJEXT) eggtrayicon.$(OBJEXT)
 @USE_DOCKLET_TRUE@am__objects_2 = $(am__objects_1)
 am__objects_3 = notifier-impl.$(OBJEXT) working_area.$(OBJEXT)
@@ -72,8 +72,7 @@ am__objects_5 = script.$(OBJEXT)
 @USE_SCRIPT_TRUE@am__objects_6 = $(am__objects_5)
 am__objects_7 = nancybot.$(OBJEXT) msgdata.$(OBJEXT)
 @USE_NANCY_TRUE@am__objects_8 = $(am__objects_7)
-am__objects_9 = telnetcon.$(OBJEXT) telnetview.$(OBJEXT) \
-	forkpty.$(OBJEXT)
+am__objects_9 = telnetcon.$(OBJEXT) telnetview.$(OBJEXT)
 @USE_IPLOOKUP_TRUE@am__objects_10 = qqwryseeker.$(OBJEXT)
 am_pcmanx_OBJECTS = $(am__objects_2) $(am__objects_4) $(am__objects_6) \
 	$(am__objects_8) $(am__objects_9) $(am__objects_10) \
@@ -86,8 +85,6 @@ am_pcmanx_OBJECTS = $(am__objects_2) $(am__objects_4) $(am__objects_6) \
 	downarticledlg.$(OBJEXT)
 pcmanx_OBJECTS = $(am_pcmanx_OBJECTS)
 am__DEPENDENCIES_1 =
-pcmanx_DEPENDENCIES = $(am__DEPENDENCIES_1) $(LIBPCMANX_CORE) \
-	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -181,6 +178,7 @@ ALL_LINGUAS = @ALL_LINGUAS@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
+ARGZ_H = @ARGZ_H@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -188,9 +186,6 @@ AWK = @AWK@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
-CCAS = @CCAS@
-CCASDEPMODE = @CCASDEPMODE@
-CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
@@ -203,6 +198,7 @@ CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -227,6 +223,7 @@ GTK_CFLAGS = @GTK_CFLAGS@
 GTK_LIBS = @GTK_LIBS@
 GUI_CFLAGS = @GUI_CFLAGS@
 GUI_LIBS = @GUI_LIBS@
+INCLTDL = @INCLTDL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -240,6 +237,11 @@ INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBADD_DL = @LIBADD_DL@
+LIBADD_DLD_LINK = @LIBADD_DLD_LINK@
+LIBADD_DLOPEN = @LIBADD_DLOPEN@
+LIBADD_SHL_LOAD = @LIBADD_SHL_LOAD@
+LIBLTDL = @LIBLTDL@
 LIBNOTIFY_CFLAGS = @LIBNOTIFY_CFLAGS@
 LIBNOTIFY_LIBS = @LIBNOTIFY_LIBS@
 LIBOBJS = @LIBOBJS@
@@ -253,9 +255,16 @@ LIBXFT_CFLAGS = @LIBXFT_CFLAGS@
 LIBXFT_LIBS = @LIBXFT_LIBS@
 LIPO = @LIPO@
 LN_S = @LN_S@
+LTDLDEPS = @LTDLDEPS@
+LTDLINCL = @LTDLINCL@
+LTDLOPEN = @LTDLOPEN@
 LTLIBOBJS = @LTLIBOBJS@
+LT_CONFIG_H = @LT_CONFIG_H@
+LT_DLLOADERS = @LT_DLLOADERS@
+LT_DLPREOPEN = @LT_DLPREOPEN@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
+MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MSGFMT = @MSGFMT@
@@ -276,6 +285,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -295,14 +306,13 @@ USE_NLS = @USE_NLS@
 USE_NOTIFIER = @USE_NOTIFIER@
 USE_PROXY = @USE_PROXY@
 USE_SCRIPT = @USE_SCRIPT@
-USE_WGET = @USE_WGET@
 VERSION = @VERSION@
 XGETTEXT = @XGETTEXT@
-XMKMF = @XMKMF@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
@@ -336,7 +346,8 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = $(datadir)/locale
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
+ltdl_LIBOBJS = @ltdl_LIBOBJS@
+ltdl_LTLIBOBJS = @ltdl_LTLIBOBJS@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -347,23 +358,28 @@ psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
+subdirs = @subdirs@
+sys_symbol_underscore = @sys_symbol_underscore@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 unamepath = @unamepath@
-SUBDIRS = core
+SUBDIRS = charset core
+AM_CPPFLAGS = $(LTDLINCL)
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
 INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/charset \
 	$(GUI_CFLAGS) \
 	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL)
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL) $(LIBLTDL)
+pcmanx_DEPENDENCIES = $(LTDLDEPS)
 OPTIONAL_DOCKLET = \
 	docklet/api.h \
 	docklet/clipboard.c \
@@ -388,9 +404,6 @@ OPTIONAL_NANCY = \
 	nancy_bot/botutil.h
 
 EXTRA_DIST = \
-	conn_xpm.xpm \
-	pcmanx_xpm.xpm \
-	pcmanx_inverse_xpm.xpm \
 	$(OPTIONAL_DOCKLET) \
 	$(OPTIONAL_NOTIFIER) \
 	$(OPTIONAL_SCRIPT) \
@@ -402,8 +415,7 @@ EXTRA_DIST = \
 @USE_NANCY_TRUE@NANCY_SOURCES = $(OPTIONAL_NANCY)
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h \
-	view/forkpty.c view/forkpty.h
+	view/telnetview.cpp view/telnetview.h
 
 @USE_IPLOOKUP_TRUE@QQWRYSEEKER_SOURCES = \
 @USE_IPLOOKUP_TRUE@	qqwryseeker/qqwryseeker.c qqwryseeker/qqwryseeker.h
@@ -529,7 +541,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/editfavdlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eggtrayicon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emoticondlg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/forkpty.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/generalprefpage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inputdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/listbox.Po@am__quote@
@@ -636,22 +647,6 @@ working_area.obj: notifier/working_area.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='notifier/working_area.c' object='working_area.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o working_area.obj `if test -f 'notifier/working_area.c'; then $(CYGPATH_W) 'notifier/working_area.c'; else $(CYGPATH_W) '$(srcdir)/notifier/working_area.c'; fi`
-
-forkpty.o: view/forkpty.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT forkpty.o -MD -MP -MF $(DEPDIR)/forkpty.Tpo -c -o forkpty.o `test -f 'view/forkpty.c' || echo '$(srcdir)/'`view/forkpty.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/forkpty.Tpo $(DEPDIR)/forkpty.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='view/forkpty.c' object='forkpty.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o forkpty.o `test -f 'view/forkpty.c' || echo '$(srcdir)/'`view/forkpty.c
-
-forkpty.obj: view/forkpty.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT forkpty.obj -MD -MP -MF $(DEPDIR)/forkpty.Tpo -c -o forkpty.obj `if test -f 'view/forkpty.c'; then $(CYGPATH_W) 'view/forkpty.c'; else $(CYGPATH_W) '$(srcdir)/view/forkpty.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/forkpty.Tpo $(DEPDIR)/forkpty.Po
-@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='view/forkpty.c' object='forkpty.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o forkpty.obj `if test -f 'view/forkpty.c'; then $(CYGPATH_W) 'view/forkpty.c'; else $(CYGPATH_W) '$(srcdir)/view/forkpty.c'; fi`
 
 qqwryseeker.o: qqwryseeker/qqwryseeker.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT qqwryseeker.o -MD -MP -MF $(DEPDIR)/qqwryseeker.Tpo -c -o qqwryseeker.o `test -f 'qqwryseeker/qqwryseeker.c' || echo '$(srcdir)/'`qqwryseeker/qqwryseeker.c
