@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
+ *                    Chia I Wu <b90201047@ntu.edu.tw>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +17,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
  
-/*
- 2005-07-26  Chia I Wu  <b90201047@ntu.edu.tw>
-
-	Use FC_PIXEL_SIZE when opening font by pixel height.
-	Use XftFontOpenPattern so that we don't have to match the pattern
-	every time.
-	s/XFT_/FC_/ and s/XftType/FcType/ where suitable.
-*/
-
 #ifdef __GNUG__
   #pragma implementation "font.h"
 #endif

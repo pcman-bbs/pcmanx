@@ -36,6 +36,22 @@
 /* Define if the GNU gettext() function is already present or preinstalled. */
 #undef HAVE_GETTEXT
 
+/* Define if function attributes a la GCC 2.5 and higher are available. */
+#undef HAVE_GNUC25_ATTRIB
+
+/* Define if constant functions a la GCC 2.5 and higher are available. */
+#undef HAVE_GNUC25_CONST
+
+/* Define if nonreturning functions a la GCC 2.5 and higher are available. */
+#undef HAVE_GNUC25_NORETURN
+
+/* Define if packing of struct members a la GCC 2.5 and higher is available.
+   */
+#undef HAVE_GNUC25_PACKED
+
+/* Define if unused variables la GCC 2.5 and higher are available. */
+#undef HAVE_GNUC25_UNUSED
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -208,6 +224,9 @@
 /* Enable external SSH/Telnet support */
 #undef USE_EXTERNAL
 
+/* Enable IP location lookup */
+#undef USE_IPLOOKUP
+
 #undef USE_IPV6
 
 /* Enable libnotify notifier support */
@@ -225,6 +244,9 @@
 #undef USE_NOTIFIER
 
 #undef USE_PLUGIN
+
+/* Enable proxy support */
+#undef USE_PROXY
 
 #undef USE_SCRIPT
 
@@ -262,3 +284,60 @@
 
 /* Define as `fork' if `vfork' does not work. */
 #undef vfork
+
+/* GNU C attributes. */
+#ifndef FUNCATTR
+#ifdef HAVE_GNUC25_ATTRIB
+#define FUNCATTR(x) __attribute__(x)
+#else
+#define FUNCATTR(x)
+#endif
+#endif
+
+/* GNU C constant functions, or null. */
+#ifndef ATTRCONST
+#ifdef HAVE_GNUC25_CONST
+#define ATTRCONST const
+#else
+#define ATTRCONST
+#endif
+#endif
+#ifndef CONSTANT
+#define CONSTANT FUNCATTR((ATTRCONST))
+#endif
+
+/* GNU C nonreturning functions, or null. */
+#ifndef ATTRNORETURN
+#ifdef HAVE_GNUC25_NORETURN
+#define ATTRNORETURN noreturn
+#else /* ! HAVE_GNUC25_NORETURN */
+#define ATTRNORETURN
+#endif /* HAVE_GNUC25_NORETURN */
+#endif /* ATTRNORETURN */
+#ifndef NONRETURNING
+#define NONRETURNING FUNCATTR((ATTRNORETURN))
+#endif /* NONRETURNING */
+
+/* GNU C constant functions, or null. */
+#ifndef ATTRPACKED
+#ifdef HAVE_GNUC25_PACKED
+#define ATTRPACKED packed
+#else
+#define ATTRPACKED
+#endif
+#endif
+#ifndef PACKED
+#define PACKED FUNCATTR((ATTRPACKED))
+#endif
+
+/* GNU C unused functions, or null. */
+#ifndef ATTRUNUSED
+#ifdef HAVE_GNUC25_UNUSED
+#define ATTRUNUSED unused
+#else
+#define ATTRUNUSED
+#endif
+#endif
+#ifndef UNUSED
+#define UNUSED FUNCATTR((ATTRUNUSED))
+#endif

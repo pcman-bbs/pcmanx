@@ -82,7 +82,7 @@ bool CDialog::OnCancel()
 }
 
 
-void CDialog::OnCommand(int id)
+void CDialog::OnCommand(int id UNUSED)
 {
 
 }

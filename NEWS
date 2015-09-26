@@ -1,3 +1,43 @@
+Version 0.3.8 - August 2008
+
+* Feature: Download BBS article.
+* Feature: Firefox 3 (xulrunner 1.9) plugin support.
+* Feature; Switch among normal/fullscreen/simple modes.
+* Feature: Add a menu item to show/hide main window and
+               a popup menu for tray icon.
+* Feature: Add hotkeys for first/last connections.
+* Feature: Implement a simple proxy client for SOCKSv4 and SOCKSv5.
+* Feature: Auto-login support for external SSH connections.
+* Feature: Use GtkStatusIcon instead of deprecated and external EggTrayIcon
+           if gtk+ version >= 2.10.
+* Feature: Several GNU toolchain tweaks: increasing efficiency layout,
+           reducing relocations in the libraries, ld's "--as-needed" + "-Wl,-O1".
+* Bugfix: Unusable JumpToPage hotkeys in full-screen mode.
+* Bugfix: Some ASCII art renders incorrectly.
+* Bugfix: Unusable hotkey for "Copy".
+* Bugfix: Missing the last character of each line when copying multi-line contents.
+* Bugfix: SegFault while processing telnet escape sequence "*[1K".
+* Bugfix: Nonpersistent "DetectDBChar" preference.
+* Bugfix: gcc 4.3 and conditional configurations (docklet, mouse, nancy)
+          build failures.
+
+Version 0.3.7 - January 2008
+
+* Feature: Let Firefox plugin use font config under ~/pcmanx/pcmanx
+* Feature: IP location lookup (need qqwry.dat and mouse support), which is
+           mainly for Simpified Chinese users.
+* Bugfix: Blank BBS list if updating BBS list fails.
+* Bugfix: Firefox plugin cannot run.
+* Bugfix: Strip the leading nd trailing space of URL detection.
+
+
+Version 0.3.6 - August 2007
+
+* Feature: Improve ASCII art with programming support.
+* Feature: Support libnotify for popup BBS incoming messages.
+* Bugfix: Screen center alignment.
+
+
 Version 0.3.5 - August 2006
 
 * Can change input method by right click.
@@ -7,6 +47,7 @@ Version 0.3.5 - August 2006
 * Support setting seprated English/ASCII font.
 * Swap OK and Cancel button to be compatible with GNOME.
 * Display hand cursor on hyperlinks when no mouse support.
+
 
 Version 0.3.4 - March 2006
 

@@ -1,13 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        telnetcon.cpp
-// Purpose:     Class dealing with telnet connections, parsing telnet commands.
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      pcman.tw@gmail.com
-// Created:     2004.7.16
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by:
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * telnetcon.cpp - Class dealing with telnet connections,
+ *                 parsing telnet commands.
+ *
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #ifdef __GNUG__
   #pragma implementation "telnetcon.h"
@@ -72,6 +82,10 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <libutil.h>
+#endif
+
+#ifdef USE_PROXY
+#include "proxy.h"
 #endif
 
 #define RECV_BUF_SIZE (4097)
@@ -172,7 +186,7 @@ CTelnetCon::~CTelnetCon()
 #endif /* !defined(MOZ_PLUGIN) */
 
 	Close();
-	INFO("CTelnetCon::~CTelnetCon\n");
+	INFO("CTelnetCon::~CTelnetCon");
 	list<CDNSRequest*>::iterator it;
 	if(m_DNSMutex)
 		g_mutex_lock(m_DNSMutex);
@@ -187,7 +201,7 @@ CTelnetCon::~CTelnetCon()
 			{
 				delete thread;
 				m_DNSQueue.erase(it);
-				INFO("thread obj deleted in CTelnet::~CTelnet()\n");
+				INFO("thread obj deleted in CTelnet::~CTelnet()");
 			}
 			break;
 		}
@@ -215,7 +229,7 @@ char CTelnetCon::GetMenuChar(int y)
 }
 #endif
 
-gboolean CTelnetCon::OnSocket(GIOChannel *channel, GIOCondition type, CTelnetCon* _this)
+gboolean CTelnetCon::OnSocket(GIOChannel *channel UNUSED, GIOCondition type, CTelnetCon* _this)
 {
 	bool ret = false;
 	if( type & G_IO_IN )
@@ -240,9 +254,11 @@ bool CTelnetCon::Connect()
 	// If this site has auto-login settings, activate auto-login
 	// and set it to stage 1, waiting for prelogin prompt or stage 2,
 	// waiting for login prompt.
-	INFO("login = %s\n", m_Site.GetLogin().c_str());
+	INFO("login = %s", m_Site.GetLogin().c_str());
 	if( !m_Site.GetLogin().empty() /*&& AppConfig.IsLoggedIn()*/ )
 		m_AutoLoginStage = m_Site.GetPreLogin().empty() ? ALS_LOGIN : ALS_PRELOGIN ;
+	else if ( !m_Site.GetPasswd().empty() ) /* in case we only need password (ssh) */
+		m_AutoLoginStage = ALS_PASSWD;
 	else
 		m_AutoLoginStage = ALS_OFF;
 
@@ -531,7 +547,7 @@ void CTelnetCon::OnTimer()
 	if( m_Site.m_AntiIdle == m_IdleTime )
 	{
 		//	2004.8.5 Added by PCMan.	Convert non-printable control characters.
-		INFO("AntiIdle: %s\n", m_Site.m_AntiIdleStr.c_str() );
+		INFO("AntiIdle: %s", m_Site.m_AntiIdleStr.c_str() );
 		string aistr = UnEscapeStr( m_Site.m_AntiIdleStr.c_str() );
 		SendRawString( aistr.c_str(), aistr.length() );
 	}
@@ -555,7 +571,7 @@ void CTelnetCon::Bell()
 
 bool CTelnetCon::OnBellTimeout( CTelnetCon* _this )
 {
-	INFO("on bell timer\n");
+	INFO("on bell timer");
 	if( _this->m_IsLastLineModified )
 	{
 		char* line = _this->m_Screen[ _this->m_RowsPerPage-1 ];
@@ -582,7 +598,7 @@ void CTelnetCon::CheckAutoLogin(int row)
 {
 	if( m_AutoLoginStage > ALS_PASSWD )	// This shouldn't happen, but just in case.
 		return;
-	INFO("check auto login: %d\n", row);
+	INFO("check auto login: %d", row);
 
 	const char* prompts[] = {
 		NULL,	//	Just used to increase array indices by one.
@@ -725,10 +741,10 @@ void CTelnetCon::Close()
 		{
 			/* FIXME: unnecessary again, since child has already
 			 * received SIGHUP when m_SockFD was closed. */
-			int kill_ret = kill( m_Pid, 1 );	// SIG_HUP Is this correct?
+			/*int kill_ret = */ kill( m_Pid, 1 );	// SIG_HUP Is this correct?
 			int status = 0;
-			pid_t wait_ret = waitpid(m_Pid, &status, 0);
-			DEBUG("pid=%d, kill=%d, wait=%d\n", m_Pid, kill_ret, wait_ret);
+			/*pid_t wait_ret = */ waitpid(m_Pid, &status, 0);
+			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
 	}
@@ -764,7 +780,7 @@ void CTelnetCon::OnLineModified(int row)
     /// @todo implement me
 	if( m_AutoLoginStage > ALS_OFF )
 		CheckAutoLogin(row);
-	INFO("line %d is modified\n", row);
+	INFO("line %d is modified", row);
 	if( row == (m_RowsPerPage-1) )	// If last line is modified
 		m_IsLastLineModified = true;
 }
@@ -775,7 +791,7 @@ void CTelnetCon::OnLineModified(int row)
 
 void popup_win_clicked(GtkWidget* widget, CTelnetCon* con)
 {
-	INFO("popup clicked\n");
+	INFO("popup clicked");
 	CMainFrame* mainfrm = con->GetView()->GetParentFrame();
 	mainfrm->SwitchToCon(con);
 	gtk_widget_destroy( gtk_widget_get_parent(widget) );
@@ -878,7 +894,7 @@ void CTelnetCon::OnNewIncomingMessage(const char* line)	// line is already a UTF
 
 gboolean CTelnetCon::OnDNSLookupEnd(CTelnetCon* _this)
 {
-	INFO("CTelnetCon::OnDNSLookupEnd\n");
+	INFO("CTelnetCon::OnDNSLookupEnd");
 	g_mutex_lock(m_DNSMutex);
 	if( _this->m_InAddr.s_addr != INADDR_NONE )
 		_this->ConnectAsync();
@@ -899,25 +915,47 @@ gboolean CTelnetCon::OnConnectCB(GIOChannel *channel, GIOCondition type, CTelnet
 
 void CTelnetCon::ConnectAsync()
 {
+	int err;
 	sockaddr_in sock_addr;
 	sock_addr.sin_addr = m_InAddr;
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(m_Port);
 
-	m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
-	int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
-	fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
-	/* Disable the Nagle (TCP No Delay) algorithm
-	 * 
-	 * Nagle algorithm works well to minimize small packets by
-	 * concatenating them into larger ones. However, for telnet
-	 * application, the experience would be less than desirable
-	 * if the user were required to fill a segment with typed
-	 * characters before the packet was sent.
-	 */
-	setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
-	int err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
-	fcntl(m_SockFD, F_SETFL, sock_flags );
+#ifdef USE_PROXY
+	if ( m_Site.m_ProxyType == PROXY_NONE ) // don't use proxy server
+	{
+#endif
+		m_SockFD = socket(PF_INET, SOCK_STREAM, 0);
+		int sock_flags = fcntl(m_SockFD, F_GETFL, 0);
+		fcntl(m_SockFD, F_SETFL, sock_flags | O_NONBLOCK);
+		/* Disable the Nagle (TCP No Delay) algorithm
+		 * 
+		 * Nagle algorithm works well to minimize small packets by
+		 * concatenating them into larger ones. However, for telnet
+		 * application, the experience would be less than desirable
+		 * if the user were required to fill a segment with typed
+		 * characters before the packet was sent.
+		 */
+		setsockopt(m_SockFD, IPPROTO_TCP, TCP_NODELAY, (char *)&sock_flags, sizeof(sock_flags));
+		err = connect( m_SockFD, (sockaddr*)&sock_addr, sizeof(sockaddr_in) );
+		fcntl(m_SockFD, F_SETFL, sock_flags );
+#ifdef USE_PROXY
+	}
+	else // use proxy server
+	{
+		sockaddr_in proxy_addr;
+		proxy_addr.sin_addr.s_addr = inet_addr( m_Site.m_ProxyAddr.c_str() );
+		proxy_addr.sin_family = AF_INET;
+		proxy_addr.sin_port = htons( m_Site.m_ProxyPort );
+
+		m_SockFD = proxy_connect( &sock_addr
+				, m_Site.m_ProxyType
+				, &proxy_addr
+				, m_Site.m_ProxyUser.c_str()
+				, m_Site.m_ProxyPass.c_str() );
+		err = m_SockFD == -1 ? -1:0;
+	}
+#endif
 
 	if( err == 0 )
 		OnConnect( 0 );
@@ -931,9 +969,9 @@ void CTelnetCon::ConnectAsync()
 		OnConnect(-1);
 }
 
-void CTelnetCon::ProcessDNSQueue(gpointer unused)
+void CTelnetCon::ProcessDNSQueue(gpointer unused UNUSED)
 {
-	INFO("begin run dns threads\n");
+	INFO("begin run dns threads");
 	g_mutex_lock(m_DNSMutex);
 	list<CDNSRequest*>::iterator it = m_DNSQueue.begin(), prev_it;
 	while( it != m_DNSQueue.end() )
@@ -951,14 +989,14 @@ void CTelnetCon::ProcessDNSQueue(gpointer unused)
 		++it;
 		m_DNSQueue.erase(prev_it);
 		delete *prev_it;
-		INFO("thread obj deleted in CTelnetCon::ProcessDNSQueue()\n");
+		INFO("thread obj deleted in CTelnetCon::ProcessDNSQueue()");
 	}
 	g_idle_add((GSourceFunc)&CTelnetCon::OnProcessDNSQueueExit, NULL);
 	g_mutex_unlock(m_DNSMutex);
-	INFO("CTelnetCon::ProcessDNSQueue() returns\n");
+	INFO("CTelnetCon::ProcessDNSQueue() returns");
 }
 
-bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
+bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused UNUSED)
 {
 	g_mutex_lock(m_DNSMutex);
 	g_thread_join( m_DNSThread );
@@ -966,13 +1004,13 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused)
 	m_DNSThread = NULL;
 	if( !m_DNSQueue.empty() )
 	{
-		INFO("A new thread has to be started\n");
+		INFO("A new thread has to be started");
 		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
 		// If some DNS requests are queued just before the thread exits, 
 		// we should start a new thread.
 	}
 	g_mutex_unlock(m_DNSMutex);
-	INFO("all threads end\n");
+	INFO("all threads end");
 	return false;
 }
 

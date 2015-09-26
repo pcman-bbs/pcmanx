@@ -44,12 +44,12 @@ CWidget::~CWidget()
 	// Otherwise, parent class won't be destructed.
 }
 
-static void on_create(GtkWidget* widget, CWidget* _this)
+static void on_create(GtkWidget* widget UNUSED, CWidget* _this)
 {
 	_this->OnCreate();
 }
 
-static void on_destroy(GtkWidget *widget, CWidget* _this)
+static void on_destroy(GtkWidget *widget UNUSED, CWidget* _this)
 {
 	_this->OnDestroy();
 }

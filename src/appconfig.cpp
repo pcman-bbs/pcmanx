@@ -92,7 +92,9 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #ifdef USE_MOUSE
 		CFG_BOOL( MouseSupport )
 #endif
+#ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
+#endif
 		CFG_BOOL( ShowStatusBar )
 #ifdef USE_WGET
 		CFG_BOOL( UseWgetFiles )
@@ -146,6 +148,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+		_CFG_INT ( "DetectDBChar", m_DefaultSite.m_DetectDBChar )
 #ifdef USE_EXTERNAL
 		_CFG_BOOL ( "UseExternalSSH",
 			m_DefaultSite.m_UseExternalSSH )
@@ -153,6 +156,13 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 			m_DefaultSite.m_UseExternalTelnet )
 #endif
 		CFG_INT  ( SocketTimeout )
+#ifdef USE_PROXY
+		_CFG_INT ( "ProxyType", m_DefaultSite.m_ProxyType )
+		_CFG_STR ( "ProxyAddr", m_DefaultSite.m_ProxyAddr )
+		_CFG_INT ( "ProxyPort", m_DefaultSite.m_ProxyPort )
+		_CFG_STR ( "ProxyUser", m_DefaultSite.m_ProxyUser )
+		_CFG_STR ( "ProxyPass", m_DefaultSite.m_ProxyPass )
+#endif
 	END_CONFIG_SECT()
 
 	BEGIN_CONFIG_FILE( ConfigFile )
@@ -280,6 +290,18 @@ void CAppConfig::LoadFavorites()
 				else
 					pSite->SetPasswd( pval );
 */			}
+#ifdef USE_PROXY
+			else if ( 0 == strcmp( pname, "ProxyType" ) )
+				pSite->m_ProxyType = atoi(pval);
+			else if ( 0 == strcmp( pname, "ProxyAddr" ) )
+				pSite->m_ProxyAddr = pval;
+			else if ( 0 == strcmp( pname, "ProxyPort" ) )
+				pSite->m_ProxyPort = atoi(pval);
+			else if ( 0 == strcmp( pname, "ProxyUser" ) )
+				pSite->m_ProxyUser = pval;
+			else if ( 0 == strcmp( pname, "ProxyPass" ) )
+				pSite->m_ProxyPass = pval;
+#endif
 		}
 //		ReleaseBlowfish();
 		fclose(fi);
@@ -347,7 +369,9 @@ void CAppConfig::SetToDefault()
 	VerticalCenterAlign = false;
 
 	MailClient = WebBrowser = "firefox %s";
+#ifdef USE_DOCKLET
 	ShowTrayIcon = true;
+#endif
 	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;

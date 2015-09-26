@@ -1,13 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        stringutil.h
-// Purpose:     Some string related utilities
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      pcman.tw@gmail.com
-// Created:     2004.7.24
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by:
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * stringutil.h - Some string related utilities
+ *
+ * Copyright (c) 2004 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #ifndef	__STRINGUTIL_H__
 #define	__STRINGUTIL_H__
@@ -15,6 +24,7 @@
 #include "pcmanx_utils.h"
 
 #include <string>
+#include <strings.h>
 using namespace std;
 
 X_EXPORT
@@ -30,5 +40,5 @@ string ConvertFromCRLF(const char* pstr);
 string ConvertToCRLF(const char* pstr);
 inline void ConvertFromCRLF(string& str){ str = ConvertFromCRLF(str.c_str()); }
 inline void ConvertToCRLF(string& str){ str = ConvertToCRLF(str.c_str()); }
-X_EXPORT int strncmpi(const char* str1, const char* str2, size_t len);
+#define strncmpi(str1,str2,len)  strncasecmp(str1,str2,len)
 #endif

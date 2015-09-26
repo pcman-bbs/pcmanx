@@ -83,11 +83,14 @@ NPError NS_PluginInitialize()
 {
   AppConfig.SetToDefault();
   AppConfig.Load();
+  CTelnetCon::Init();
+
   return NPERR_NO_ERROR;
 }
 
 void NS_PluginShutdown()
 {
+  CTelnetCon::Cleanup();
 }
 
 // get values per plugin
@@ -179,8 +182,6 @@ NPBool nsPluginInstance::init(NPWindow* aWindow)
 {
   if(aWindow == NULL)
     return FALSE;
-
-  CTelnetCon::Init();
 
   if (SetWindow(aWindow))
     mInitialized = TRUE;
@@ -300,7 +301,6 @@ void nsPluginInstance::shut()
   g_source_remove( m_BlinkTimer );
   g_source_remove( m_EverySecondTimer );
 
-  CTelnetCon::Cleanup();
   mInitialized = FALSE;
 }
 

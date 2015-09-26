@@ -1,14 +1,23 @@
-// site.cpp: implementation of the CSite class.
-//////////////////////////////////////////////////////////////////////
-// Name:        site.cpp
-// Purpose:     Site Settings
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      pcman.tw@gmail.com
-// Created:     2004.07.15
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by:
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * site.cpp - implementation of the CSite class.
+ *            Site Settings
+ *
+ * Copyright (c) 2004-2005 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #ifdef __GNUG__
   #pragma implementation "site.h"
@@ -75,6 +84,12 @@ CSite::CSite(string Name)
 
 	// Detect double-byte characters by default
 	m_DetectDBChar = true;
+
+#ifdef USE_PROXY
+	// Disable proxy by default
+	m_ProxyType = 0;
+	m_ProxyPort = 0;
+#endif
 }
 
 CSite::~CSite()
@@ -137,6 +152,14 @@ void CSite::SaveToFile(FILE *fo)
 */
 		fprintf( fo, "Passwd=%s\n", m_Passwd.c_str() );
 	}
+
+#ifdef USE_PROXY
+	fprintf( fo, "ProxyType=%d\n", m_ProxyType );
+	fprintf( fo, "ProxyAddr=%s\n", m_ProxyAddr.c_str() );
+	fprintf( fo, "ProxyPort=%d\n", m_ProxyPort );
+	fprintf( fo, "ProxyUser=%s\n", m_ProxyUser.c_str() );
+	fprintf( fo, "ProxyPass=%s\n", m_ProxyPass.c_str() );
+#endif
 }
 
 

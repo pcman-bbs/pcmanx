@@ -1,3 +1,5 @@
+EXTRA_DIST = pcmanx_interface.idl
+
 if USE_PLUGIN
 
 #####################################
@@ -23,9 +25,6 @@ MOSTLYCLEANFILES = \
 	pcmanx_interface.xpt \
 	pcmanx_interface.h
 	
-EXTRA_DIST = \
-	pcmanx_interface.idl \
-	$(SOURCES_mozilla)
 BUILT_SOURCES = $(BUILT_SOURCES_mozilla)
 
 SOURCES_view = \

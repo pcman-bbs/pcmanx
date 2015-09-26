@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
+ * Copyright (c) 2008 Jason Xia <jasonxh@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,41 +16,36 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef GENERALPREFPAGE_H
-#define GENERALPREFPAGE_H
+#ifndef DOWNARTICLEDLG_H
+#define DOWNARTICLEDLG_H
 
-#ifdef __GNUG__
-  #pragma interface "generalprefpage.h"
-#endif
+#include "dialog.h"
+#include "telnetcon.h"
 
-#include <widget.h>
 
-/**
-@author PCMan
-*/
-class CGeneralPrefPage : public CWidget
+class CDownArticleDlg : public CDialog
 {
 public:
-    CGeneralPrefPage();
-    void OnOK();
-public:
-	GtkWidget *m_QueryOnCloseCon;
-	GtkWidget *m_QueryOnExit;
-	GtkWidget *m_CancelSelAfterCopy;
-#ifdef USE_MOUSE
-	GtkWidget *m_MouseSupport;
-#endif
-#ifdef USE_DOCKLET
-	GtkWidget *m_ShowTrayIcon;
-#endif
-	GtkWidget *m_ShowStatusBar;
-	GtkWidget *m_WebBrowser;
-	GtkWidget *m_MailClient;
-	GtkWidget *m_AAFont;
-	GtkWidget *m_PopupNotifier;
-	GtkWidget *m_PopupTimeout;
-	GtkWidget *m_pWgetFiles;
+	CDownArticleDlg(CWidget *parent, CTelnetCon *connection);
+	
+	int ShowModal();
 
+private:
+	void OnCommand(int id);
+	void OnDestroy();
+	bool CopyToClipboard();
+	bool SaveAs();
+	static void DownArticleFunc(CDownArticleDlg *_this);
+
+	GtkTextBuffer	*m_textbuf;
+	GtkTextView		*m_textview;
+	GtkButton		*m_btncopy;
+	GtkButton		*m_btnsave;
+	GtkButton		*m_btncancel;
+
+	CTelnetCon		*m_connection;
+	GThread			*m_thread;
+	bool			m_stop;
 };
 
-#endif
+#endif // DOWNARTICLEDLG_H

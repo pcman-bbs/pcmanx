@@ -1,13 +1,12 @@
+EXTRA_DIST = \
+             TelnetProtocol.js \
+             pcmanx.html \
+             pcmanx.png
+
 if USE_PLUGIN
 
-pcmanx_plugin_DATA = \
-	$(top_builddir)/plugin/data/TelnetProtocol.js \
-	pcmanx.html \
-	pcmanx.png
+pcmanx_plugin_DATA = $(EXTRA_DIST)
 
 pcmanx_plugindir = $(MOZILLA_LIB_DIR_SEARCH)/components
-
-EXTRA_DIST = \
-	$(pcmanx_plugin_DATA)
 
 endif
