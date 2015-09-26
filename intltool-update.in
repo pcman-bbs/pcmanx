@@ -30,7 +30,7 @@
 
 ## Release information
 my $PROGRAM = "intltool-update";
-my $VERSION = "0.34.2";
+my $VERSION = "0.35.0";
 my $PACKAGE = "intltool";
 
 ## Loaded modules
@@ -125,7 +125,7 @@ my $arg_count = ($DIST_ARG > 0)
 &Console_Write_IntltoolHelp if $arg_count > 1;
 
 # --version and --help don't require a module name
-my $MODULE = $GETTEXT_PACKAGE || &FindPackageName;
+my $MODULE = $GETTEXT_PACKAGE || &FindPackageName || "unknown";
 
 if ($POT_ARG)
 {
@@ -722,6 +722,8 @@ sub GeneratePOTemplate
 			   "--files-from\=\.\/POTFILES\.in\.temp");
     my $XGETTEXT_KEYWORDS = &FindPOTKeywords;
     push @xgettext_argument, $XGETTEXT_KEYWORDS;
+    my $MSGID_BUGS_ADDRESS = &FindMakevarsBugAddress;
+    push @xgettext_argument, "--msgid-bugs-address\=$MSGID_BUGS_ADDRESS" if $MSGID_BUGS_ADDRESS;
     push @xgettext_argument, "--from-code\=$encoding" if ($gettext_support_nonascii);
     push @xgettext_argument, $XGETTEXT_ARGS if $XGETTEXT_ARGS;
     my $xgettext_command = join ' ', @xgettext_argument;
@@ -874,8 +876,10 @@ sub SubstituteVariable
     {
 	my $rest = $3;
 	my $untouched = $1;
-	my $sub = $varhash{$2};
-	
+	my $sub = "";
+        # Ignore recursive definitions of variables
+        $sub = $varhash{$2} if defined $varhash{$2} and $varhash{$2} !~ /\${?$2}?/;
+
 	return SubstituteVariable ("$untouched$sub$rest");
     }
     
@@ -992,10 +996,10 @@ sub FindPackageName
 	($name, $version) = ($1, $2);
 	$name    =~ s/[\[\]\s]//g;
 	$version =~ s/[\[\]\s]//g;
-	$varhash{"PACKAGE_NAME"} = $name;
-	$varhash{"PACKAGE"} = $name;
-	$varhash{"PACKAGE_VERSION"} = $version;
-	$varhash{"VERSION"} = $version;
+	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
+	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
+	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
+	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
     }
     
     if ($conf_source =~ /^AC_INIT\(([^,\)]+),([^,\)]+)/m) 
@@ -1003,10 +1007,10 @@ sub FindPackageName
 	($name, $version) = ($1, $2);
 	$name    =~ s/[\[\]\s]//g;
 	$version =~ s/[\[\]\s]//g;
-	$varhash{"PACKAGE_NAME"} = $name;
-	$varhash{"PACKAGE"} = $name;
-	$varhash{"PACKAGE_VERSION"} = $version;
-	$varhash{"VERSION"} = $version;
+	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
+	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
+	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
+	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
     }
 
     # \s makes this not work, why?
@@ -1062,4 +1066,24 @@ sub FindMakevarsDomain
     $domain =~ s/\s+$//;
     
     return $domain;
+}
+
+sub FindMakevarsBugAddress
+{
+
+    my $address = "";
+    my $makevars_source; { 
+	local (*IN);
+	open (IN, "<Makevars") || return undef;
+	seek (IN, 0, 0);
+	local $/; # slurp mode
+	$makevars_source = <IN>;
+	close IN;
+    }
+
+    $address = $1 if $makevars_source =~ /^MSGID_BUGS_ADDRESS[ ]*=\[?([^\n\]\$]+)/m;
+    $address =~ s/^\s+//;
+    $address =~ s/\s+$//;
+    
+    return $address;
 }

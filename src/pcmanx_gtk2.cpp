@@ -32,6 +32,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <glib/goption.h>
 #include <string.h>
 
 #include "mainframe.h"
@@ -52,6 +53,16 @@
 #include "script/api.h"
 #endif
 
+static int multiple_instance = 0;
+
+static GOptionEntry entries[] = {
+	{ (const gchar *) "multiple-instance", (gchar) 'm', 0, 
+	  G_OPTION_ARG_NONE, &multiple_instance, 
+	  (gchar *) "Allow multiple instances",
+	  (gchar *) "N" },
+	{ NULL }
+};
+
 int main(int argc, char *argv[])
 {
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -61,25 +72,38 @@ int main(int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 
-	int fake_argc = 1;
-	char **fake_argv;
-
-	/* GTK requires a program's argc and argv variables, and 
-	 * requires that they be valid. Set it up. */
-	char *_fake_argv[] = {"", NULL};
-	fake_argv = _fake_argv;
-	
-	gtk_init (&fake_argc, &fake_argv);
-
-#ifdef USE_DOCKLET
-	/* if we are already running, silently exit */
-	if (! detect_get_clipboard())
+	/*--- Initialize Gtk+ ---*/
 	{
-#ifndef USE_DEBUG
-		return 1;
-#endif
+		/* GTK requires a program's argc and argv variables, and
+		 * requires that they be valid. Set it up. */
+		int fake_argc = 1;
+		char *_fake_argv[] = { "", NULL };
+		char **fake_argv = _fake_argv;
+
+		gtk_init (&fake_argc, &fake_argv);
 	}
-#endif
+
+	/*--- Initialize Runtime options ---*/
+	{
+		GError *error = NULL;
+		GOptionContext *context;
+		context = g_option_context_new ("Runtime options");
+		g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+		g_option_context_parse (context, &argc, &argv, &error);
+	}
+
+	/*--- Check if multiple-instance is allowed. ---*/
+	if (!multiple_instance) {
+#ifdef USE_DOCKLET
+		/* if we are already running, silently exit */
+		if (! detect_get_clipboard())
+		{
+#ifndef USE_DEBUG
+			return 1;
+#endif	/* USE_DEBUG */
+		}
+#endif	/* USE_DOCKLET */
+	}
 
 	AppConfig.SetToDefault();
 	AppConfig.Load();

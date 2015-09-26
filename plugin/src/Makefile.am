@@ -63,7 +63,7 @@ $(LIBRARIES_mozilla): $(libplugin_a_OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBUTIL) \
 	  -o $(LIBRARIES_mozilla) $(libplugin_a_OBJECTS) \
 	  -shared \
-	$(MOZILLA_LIBS) $(GUI_LIBS) \
+	$(GUI_LIBS) \
 	-L$(top_builddir)/src/core/.libs -lpcmanx_core
 
 pcmanx_interface_xpt_DATA = pcmanx_interface.xpt

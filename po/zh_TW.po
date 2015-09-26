@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_TW\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-12 22:12+0800\n"
+"Report-Msgid-Bugs-To: http://groups.google.com.tw/group/PCManX\n"
+"POT-Creation-Date: 2006-07-16 01:53+0800\n"
 "PO-Revision-Date: 2006-03-11 21:14+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <zh@li.org>\n"
@@ -459,11 +459,11 @@ msgstr "網頁瀏覽器："
 msgid "Mail Client: "
 msgstr "郵件程式："
 
-#: ../src/view/telnetview.cpp:380
+#: ../src/view/telnetview.cpp:403
 msgid "_Copy URL to Clipboard"
 msgstr "複製網址到剪貼簿 (_C)"
 
-#: ../src/view/telnetview.cpp:420
+#: ../src/view/telnetview.cpp:443
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
