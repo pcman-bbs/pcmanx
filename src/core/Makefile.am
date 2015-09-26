@@ -1,6 +1,6 @@
 localedir = $(datadir)/locale
 
-lib_LTLIBRARIES = libpcmanx_core.la
+noinst_LTLIBRARIES = libpcmanx_core.la
 
 INCLUDES = \
 	-I$(top_srcdir)/src \
@@ -15,11 +15,6 @@ PROXY_SOURCES = \
 endif
 
 libpcmanx_core_la_LIBADD = $(GUI_LIBS)
-libpcmanx_core_la_LDFLAGS = \
-	-version-info @LIBTOOL_VERSION_INFO@ \
-	-export-dynamic \
-	@LIBTOOL_EXPORT_OPTIONS@ \
-	-rpath $(libdir)
 libpcmanx_core_la_SOURCES = \
 	$(PROXY_SOURCES) \
 	pcmanx_utils.h \

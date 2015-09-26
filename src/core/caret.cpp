@@ -35,6 +35,7 @@ CCaret::CCaret()
 	m_Pos.x = m_Pos.y = 0;
 	m_Width = m_Height = 0;
 	m_IsVisible = m_IsShow = false;
+	m_GC = (GdkGC *)NULL;
 }
 
 CCaret::~CCaret()

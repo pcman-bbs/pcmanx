@@ -19,15 +19,15 @@ EXTRA_DIST = \
 	Doxygen.in \
 	pcmanx.desktop.in \
 	pcmanx-gtk2.spec.in
-	
+
 ## @end 1
 AUTOMAKE_OPTIONS = gnu
-SUBDIRS = src po data plugin
+SUBDIRS = src po data
 
 ## @start 1
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in $(AUX_DIST)
 
-CLEANFILES = *.bak src/*.bak 
+CLEANFILES = *.bak src/*.bak
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
 

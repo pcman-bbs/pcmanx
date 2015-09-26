@@ -33,7 +33,7 @@ extern "C" {
 #define PROXY_SOCKS4 1
 #define PROXY_SOCKS5 2
 
-X_EXPORT int proxy_connect(const struct sockaddr_in *serv_addr
+X_EXPORT int proxy_connect(const struct sockaddr_storage *serv_addr
 		, int proxy_type, const struct sockaddr_in *proxy_addr
 		, const char *user, const char *pass);
 

@@ -1,8 +1,257 @@
+2011-04-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac,
+	TODO: Remove firefox plugin option.
+	* NEWS,
+	configure.ac: Bump to 1.0
+
+2011-04-13  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/mainframe.cpp (OnShowHide): Now Alt+M only iconify the main
+	window when tray icon is disabled.
+
+2011-04-12  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp (OnNewIncomingMessage): Fix libnotify
+	0.7.0 API compatibility.
+
+2011-04-12  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/site.h: Fix compilation error of CStie. (Fixes issue 26 by
+	chingpang)
+
+2011-04-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac: Enable silent rules by default.
+
+2011-03-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac: Disable dist-gzip, enable silent-rules and
+	maintainer mode.
+
+2011-03-20  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* debian/watch: Add debian/watch.
+
+2011-02-28  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* configure.ac,
+	po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp: Update project information.
+
+2011-02-23  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/snapshot-deb.sh,
+	debian/pcmanx-gtk2.install: Polish test script for deb and remove
+	unneeded file.
+	* data/Makefile.am,
+	data/pcmanx.1: Add man page for pcmanx.
+	* debian/control,
+	debian/copyright,
+	debian/rules: Add Vcs info.
+	* pcmanx_gtk2.cpp: There is no need to check sanity of libpcmanx.
+	* pcmanx_gtk2.cpp: Prevent from program crash (Fixes issue 28).
+	* src/appconfig.cpp,
+	src/core/termview.cpp: Change default font family to 'WenQuanYi Micro Hei
+	Mono'.
+
+2011-02-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* Makefile.am,
+	build/make-new-release.sh,
+	configure.ac,
+	debian/control,
+	debian/libpcmanx-core0.install,
+	debian/mozilla-plugin-pcmanx.install,
+	debian/mozilla-plugin-pcmanx.links,
+	debian/rules,
+	plugin/Makefile.am,
+	plugin/data/Makefile.am,
+	plugin/data/TelnetProtocol.js.in,
+	plugin/data/pcmanx.html,
+	plugin/data/pcmanx.png,
+	plugin/src/Makefile.am,
+	plugin/src/np_entry.cpp,
+	plugin/src/npn_gate.cpp,
+	plugin/src/npp_gate.cpp,
+	plugin/src/npplat.h,
+	plugin/src/npupp.h,
+	plugin/src/nsScriptablePeer.cpp,
+	plugin/src/nsScriptablePeer.h,
+	plugin/src/pcmanx_interface.idl,
+	plugin/src/plugin.cpp,
+	plugin/src/plugin.h,
+	plugin/src/pluginbase.h,
+	src/core/Makefile.am: Remove deprecated firefox plugin, and not install
+	libpcmanx.
+
+2011-01-19  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp (CTelnetCon): m_Port is a string now.
+	(Connect): ditto. Always uses getaddrinfo to resolve addresses.
+	(PreConnect): ditto.
+	(DoDNSLookup): Simplify DNS lookup.
+
+	* src/view/telnetcon.h (CTermData): m_Port is a string now.
+	(CDNSRequest): ditto.
+
+	* src/view/telnetcon.cpp (DoDNSLookup): Only lookup IPv4 addresses
+	when using proxy.
+	(ConnectAsync): Use getaddrinfo to lookup IP addresses.
+
+	* src/core/proxy.c, src/core/proxy.h: serv_addr is now a
+	sockaddr_storage wrapped sockaddr_in.
+
+	* src/appconfig.cpp, src/core/site.cpp, src/core/site.h: Change
+	ProxyPort to string type.
+
+2011-01-10  Kan-Ru Chen  <kanru@kanru.info>
+
+	* src/view/telnetcon.cpp, src/view/telnetcon.h: Add IPv6
+	support. Use getaddrinfo to resolve both AF_INET and AF_INET6
+	addresses. Also support IPv6 address literal specified in RFC 3986
+	section 3.2.2.
+	* configure.ac: Add new checks.
+	* NEWS: Document new features.
+
+2010-10-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h,
+	src/core/termview.cpp: Using AttrType (short) to cast CTernCharAttr will
+	cause a problem in copy-text-with-color with DBCS words.
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=20 by hrs113355
+	* src/view/telnetview.cpp: Check crlf in pasting lines with color.
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=21 by hrs113355
+	* debian/compat,
+	debian/control,
+	debian/copyright,
+	debian/docs,
+	debian/libpcmanx-core0.install,
+	debian/mozilla-plugin-pcmanx.install,
+	debian/mozilla-plugin-pcmanx.links,
+	debian/pcmanx-gtk2.install,
+	debian/rules: Add a rough debian folder.
+	* build/snapshot-deb.sh: Polish deb packaging script.
+
+2010-06-15  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh: Polish script.
+	* build/snapshot-deb.sh: Fix some dependency problem.
+
+2010-06-14  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/snapshot-deb.sh: Update Debian packaging script.
+
+2010-05-12  Youchen Lee  <copyleft@utcr.org>
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Set the focus chain 
+	for quick switching keyboard focus to the URL entry by Tab key.
+
+2010-04-15  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.h, src/downarticledlg.cpp: Fix article download
+	issue with bdwm.net. Also change the 'Cancel' button into a 'Stop'
+	button so that if download gets stuck again, one can click 'Stop' to
+	abort waiting while still being able save what has been downloaded.
+	Previous 'Cancel' behavior can be achieved by pressing Esc or closing
+	the download window.
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=11
+
+2010-03-13  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh: Adjust the script for release test.
+	* plugin/src/np_entry.cpp,
+	plugin/src/npn_gate.cpp,
+	plugin/src/npplat.h,
+	plugin/src/npupp.h: Fix the compilation error of '--enable-plugin'.
+	* build/snapshot-deb.sh: Add '--enable-plugin' to build Debian package.
+	* plugin/src/Makefile.am: Fix the missing header file of automake.
+	* AUTHORS,
+	configure.ac: xpidl not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=2
+	* src/core/pcmanx_utils.h,
+	src/notebook.cpp: <bits/wordsize.h> not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=3
+	* configure.ac,
+	plugin/src/Makefile.am,
+	src/Makefile.am: -lutil not available on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=4
+	* src/notifier/notifier-impl.c: array initlization cause build error with suncc
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=5
+	* configure.ac,
+	src/Makefile.am,
+	src/view/forkpty.c,
+	src/view/forkpty.h,
+	src/view/telnetcon.cpp: forkpty() not found on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=6
+	* configure.ac,
+	src/core/Makefile.am: ld error on OpenSolaris
+	Reported by Halton Huo <halton.huo@sun.com>
+	http://code.google.com/p/pcmanx-gtk2/issues/detail?id=7
+	* developers: Remove empty folder.
+	* build/snapshot-deb.sh: Fix the problem to fetch revision.
+
+2010-03-05  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* autogen.sh: Change to automake 1.11
+	* build/snapshot-deb.sh: popd/pushd is built-in function of bash.
+	* src/appconfig.cpp: Fix compilation error.
+	* src/mainframe.cpp: Clean some warnings.
+
+2010-03-04  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* src/appconfig.cpp: Use 'xdg-email' as mail client and 'xdg-open' as web
+	browser.
+
+2010-02-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/snapshot-deb.sh: Adjust the script for debian package.
+	* configure.ac: Add pkg-config for libx11-dev.
+
+2010-02-08  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* build/make-new-release.sh,
+	build/snapshot-deb.sh: Add a script to rapidly generate debian package.
+	* configure.ac,
+	plugin/src/Makefile.am,
+	src/view/telnetcon.cpp: Fix the compilation error when enable plugin.
+
+2010-02-07  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* developers/make-new-release.sh: Move to another folder and adjust the
+	way to get version number.
+	* configure.ac: Fix the warnings caused by AC_CACHE_VAL of Autoconf Macro,
+	and change bug report to http://code.google.com/p/pcmanx-gtk2/issues/list.
+	* plugin/src/plugin.cpp: Fix the compilation error and strip warnings.
+
+2010-01-13  Youchen Lee  <copyleft@utcr.org>
+
+	* src/nancy_bot/msg_data.cpp: 
+	Ignore "File not found" messages of NancyBot.
+
+2009-08-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	* data/nancy_bot/default_msg.data,
+	pcmanx-gtk2.spec.in,
+	po/zh_CN.po,
+	po/zh_TW.po,
+	src/core/termdata.cpp,
+	src/mainframe.cpp,
+	src/pcmanx_gtk2.cpp: Change official website url of pcmanx-gtk2.
+
 2009-08-03  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* configure.ac: Bump to 0.3.9
 	* developers/make-new-release.sh: Add more build test case.
 	* NEWS: Adjust 0.3.9 to August 2009.
+	* developers/make-new-release.sh: Log during build test case.
 
 2009-08-03  Jim Huang  <jserv@0xlab.org>
 

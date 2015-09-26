@@ -1,5 +1,7 @@
 /**
- * Copyright (c) 2008 Jason Xia <jasonxh@gmail.com>
+ * forkpty.h - copied from rootsh project from sourceforge.net
+ *
+ * Copyright (c) 2009 Halton.Huo@Sun.COM
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,36 +18,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef DOWNARTICLEDLG_H
-#define DOWNARTICLEDLG_H
+#ifndef FORKPTY_H
+#define FORKPTY_H
 
-#include "dialog.h"
-#include "telnetcon.h"
+#ifndef HAVE_FORKPTY
+pid_t forkpty(int *, char *, struct termios *, struct winsize *);
+#endif
 
-
-class CDownArticleDlg : public CDialog
-{
-public:
-	CDownArticleDlg(CWidget *parent, CTelnetCon *connection);
-	
-	int ShowModal();
-
-private:
-	void OnCommand(int id);
-	void OnDestroy();
-	bool CopyToClipboard();
-	bool SaveAs();
-	static void DownArticleFunc(CDownArticleDlg *_this);
-
-	GtkTextBuffer	*m_textbuf;
-	GtkTextView		*m_textview;
-	GtkButton		*m_btncopy;
-	GtkButton		*m_btnsave;
-	GtkButton		*m_btnstop;
-
-	CTelnetCon		*m_connection;
-	GThread			*m_thread;
-	bool			m_stop;
-};
-
-#endif // DOWNARTICLEDLG_H
+#endif

@@ -8,8 +8,8 @@ Summary:   user-friendly telnet client designed for BBS browsing.
 
 Group:     Applications/Internet
 License:   GPL
-Url:       http://pcmanx.csie.net
-Source:    http://pcmanx.csie.net/release/%{name}-%{version}.tar.gz
+Url:       http://code.google.com/p/pcmanx-gtk2/
+Source:    http://pcmanx-gtk2.googlecode.com/svn/website/release/%{name}-%{version}.tar.gz
 Vendor:    PCMan X GTK+ 2 project
 Packager:  PCMan X <PCManX@googlegroups.com>
 

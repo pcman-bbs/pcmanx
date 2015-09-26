@@ -1,4 +1,4 @@
-/**                                                                             
+/**
  * termdata.cpp - Store terminal screen data and parse
  *                ANSI escape sequence.
  *
@@ -27,8 +27,12 @@
 #include "termdata.h" // class's header file
 #include "termview.h" // class's header file
 #include "termsel.h" // class's header file
-#include <string.h>
+#include <cstring>
 #include <stdint.h>
+
+#include <algorithm>
+
+using std::swap;
 
 /////////////////////////////////////////////////////////////////////////////
 //The functions section of CTermAttr class.
@@ -37,7 +41,7 @@
 
 //GdkColor = (red, green, blue)
 
-GdkColor 
+GdkColor
 CTermCharAttr::m_DefaultColorTable[SIZE_OF_COLOR_TABLE] = {
 	//Darker color
 	{0,0,0,0}, 		//0;30m		Black
@@ -63,7 +67,7 @@ CTermCharAttr::m_DefaultColorTable[SIZE_OF_COLOR_TABLE] = {
 //e.g., when [flags] = STA_FG | STA_BRIGHT, the old attribute updates
 //attributes Foreground and Bright only.
 //After updating, set Need Update flag as true.
-void 
+void
 CTermCharAttr::SetTextAttr( CTermCharAttr attr, int flags )
 {
 	if( flags & STA_FG )
@@ -83,34 +87,28 @@ CTermCharAttr::SetTextAttr( CTermCharAttr attr, int flags )
 	m_NeedUpdate = 1;
 }
 
-// I don't know whether assign an 'short' to this 'object' directly will cause 
+// I don't know whether assign an 'short' to this 'object' directly will cause
 // problems or not hence preventing using it.  Otherwise I can return 7 directly;
-short 
+CTermCharAttr::AttrType
 CTermCharAttr::GetDefVal(){
 	CTermCharAttr attr;
-	*(short*)&attr=0;
+	*(AttrType*)&attr=0;
 	attr.m_Fg = 7;
-	return *(short*)&attr;
+	return *(AttrType*)&attr;
 }
 
 
-void 
-CTermCharAttr::SetToDefault(){ *(short*)this = 0;	m_Fg=7;}
-// We cannot use == to compare two CTermCharAttr directly because of some special flags,
-//so us use this function to compare.
-bool 
-CTermCharAttr::IsSameAttr(short val2)
-{
-		CTermCharAttr* pAttr = (CTermCharAttr*)&val2;
-		pAttr->m_CharSet = m_CharSet;
-		pAttr->m_NeedUpdate = m_NeedUpdate;
-		return val2 == this->AsShort();
-}
+void
+CTermCharAttr::SetToDefault(){ *(AttrType*)this = 0;	m_Fg=7;}
 bool
 CTermCharAttr::operator==(CTermCharAttr& attr){
-	if(IsSameAttr(attr.AsShort()))
-		return true;
-	return false;
+	return ((m_Fg == attr.m_Fg) &&
+			(m_Bg == attr.m_Bg) &&
+			(m_Bright == attr.m_Bright) &&
+			(m_Blink == attr.m_Blink) &&
+			(m_UnderLine == attr.m_UnderLine) &&
+			(m_Inverse == attr.m_Inverse) &&
+			(m_Invisible == attr.m_Invisible));
 }
 
 
@@ -120,7 +118,10 @@ CTermCharAttr::operator==(CTermCharAttr& attr){
 /////////////////////////////////////////////////////////////////////////////
 
 // class constructor
-CTermData::CTermData(CTermView* pView) : m_pView(pView), m_Screen(NULL)
+CTermData::CTermData(CTermView* pView) :
+	m_pView(pView),
+	m_Screen(NULL),
+	m_pCmdLine(NULL)
 {
 	m_CaretPos.x = m_CaretPos.y = 0;
 	m_OldCaretPos = m_CaretPos;
@@ -176,7 +177,7 @@ void CTermData::SetScreenSize( int RowCount, unsigned short RowsPerPage,
             unsigned short Cols = (ColsPerPage < m_ColsPerPage)?ColsPerPage:m_ColsPerPage;
             //Copy context of old into new one.
             memcpy(NewLine, m_Screen[i], Cols);
-            memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(short)*Cols);
+            memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(CTermCharAttr::AttrType)*Cols);
             delete []m_Screen[i];
             m_Screen[i] = NewLine;
         }
@@ -206,7 +207,7 @@ void CTermData::SetRowCount(int RowCount)
     }
     delete []m_Screen;
     m_Screen = NewScreen;
-    m_RowCount = RowCount;       
+    m_RowCount = RowCount;
 }
 
 // Allocate screen buffer.
@@ -229,7 +230,7 @@ void CTermData::InitNewLine(char* NewLine, const int ColsPerPage){
 		memset( NewLine, ' ', ColsPerPage);
 		NewLine[ColsPerPage] = '\0';
 		CTermCharAttr DefAttr;	DefAttr.SetToDefault();	DefAttr.SetNeedUpdate(true);
-		memset16( GetLineAttr(NewLine, ColsPerPage), DefAttr.AsShort(), ColsPerPage);
+		memset16( GetLineAttr(NewLine, ColsPerPage), DefAttr.AsType(), ColsPerPage);
 }
 
 // LF handler
@@ -328,7 +329,7 @@ void CTermData::PutChar(unsigned char ch)
 	{
 		switch( m_CmdLine[0] )
 		{
-		// m_CmdLine[0] == '\0' means "not in control sequence," and *m_pBuf 
+		// m_CmdLine[0] == '\0' means "not in control sequence," and *m_pBuf
 		// is normal text, write to screen buffer directly.
 		case '\0':
 			{
@@ -404,11 +405,6 @@ void CTermData::InsertNewLine(int y, int count)
 	m_ScrollRegionTop = tmp;
 }
 
-/*
-inline void swap(char*& x, char*& y)
-{	char* t=x;	x=y;	y=t;	}
-*/
-
 void CTermData::ScrollUp(int n /*=1*/)
 {
 	int maxn = m_ScrollRegionBottom - m_ScrollRegionTop +1;
@@ -421,15 +417,13 @@ void CTermData::ScrollUp(int n /*=1*/)
 	for( i = start; i <= end; i++ )
 	{
 		// Swap two lines to prevent memmory reallocation.
-		char* tmp = m_Screen[i];
-		m_Screen[i] = m_Screen[i+n];
-		m_Screen[i+n] = tmp;
+		swap(m_Screen[i], m_Screen[i + n]);
 		SetWholeLineUpdate(m_Screen[i]);
 	}
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end+i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );	
+		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end+i]);
 	}
 }
@@ -446,15 +440,13 @@ void CTermData::ScrollDown(int n /*=1*/)
 	for( i = start; i >= end; i-- )
 	{
 		// Swap two lines to prevent memmory reallocation.
-		char* tmp = m_Screen[i];
-		m_Screen[i] = m_Screen[i-n];
-		m_Screen[i-n] = tmp;
+		swap(m_Screen[i], m_Screen[i - n]);
 		SetWholeLineUpdate(m_Screen[i]);
 	}
 	for( i = 1; i <= n; i++ )
 	{
 		memset( m_Screen[end-i], ' ', m_ColsPerPage-1 );
-		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsShort(), m_ColsPerPage-1 );	
+		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
 		SetWholeLineUpdate(m_Screen[end-i]);
 	}
 }
@@ -611,10 +603,8 @@ void CTermData::ClearScreen(int p)
 	char* tmp;
 	for( i = 0; i < bottom; i++ )
 	{
-		tmp = m_Screen[i];
 		int src = i+m_RowsPerPage;
-		m_Screen[i] = m_Screen[src];
-		m_Screen[src] = tmp;
+		swap(m_Screen[i], m_Screen[src]);
 	}
 	for( i = bottom; i< m_RowCount; i++ )
 		InitNewLine( m_Screen[i], m_ColsPerPage);
@@ -627,7 +617,7 @@ void CTermData::ClearScreen(int p)
 		tmp = m_Screen[m_CaretPos.y];
 		if( m_CaretPos.x < m_ColsPerPage && m_CaretPos.y > m_RowsPerPage )
 		{
-			memcpy( &tmp[m_CaretPos.x], 
+			memcpy( &tmp[m_CaretPos.x],
 				&m_Screen[m_CaretPos.y-m_RowsPerPage][m_CaretPos.x],
 				m_ColsPerPage-m_CaretPos.x);
 			memcpy( &GetLineAttr(tmp)[m_CaretPos.x],
@@ -828,8 +818,10 @@ void CTermData::DetectCharSets()
 		{
 			if( ((unsigned char)line[col]) > 128 && (col+1)< m_ColsPerPage)
 			{
-				if( attr[col].IsNeedUpdate() != attr[col+1].IsNeedUpdate() )
-					attr[col].SetNeedUpdate(attr[col+1].SetNeedUpdate(true));
+				if( attr[col].IsNeedUpdate() != attr[col+1].IsNeedUpdate() ) {
+					attr[col].SetNeedUpdate(true);
+					attr[col+1].SetNeedUpdate(true);
+				}
 
 				attr[col].SetCharSet(CTermCharAttr::CS_MBCS1);
 				col++;
@@ -848,7 +840,7 @@ void CTermData::DetectCharSets()
 inline bool isurl(int ch)
 {	return isalnum(ch) || strchr("!$&'*+,-./:;=?@_|~%#", ch);	}
 // Though '(' ,')', '<', and '>' are legal characters in URLs, I ignore them because
-// they are frequently used to enclose URLs. ex: (http://pcmanx.csie.net/)
+// they are frequently used to enclose URLs. ex: (http://code.google.com/p/pcmanx-gtk2/)
 inline bool isurlscheme(int ch)
 {	return isalnum(ch) || strchr("+-.", ch);	}
 
@@ -1075,7 +1067,7 @@ static void read_line_with_color( int row, int col1, int col2, void* data )
 		string line;
 		for ( int i = col1; i < col2; i++ )
 		{
-			if( !attr.IsSameAttr( pAttr[i].AsShort() ) )
+			if( !(attr == pAttr[i]) )
 			{
 				// Here we've got a characters with different attributes.
 				line += GetChangedAttrStr( attr, pAttr[i] );
@@ -1198,7 +1190,7 @@ string CTermData::GetSelectedTextWithColor(bool trim)
 }
 
 // 2004/08/03  Modified by PCMan
-// If line[col] is a character in a hyperlink, return the start index of whole hyperlink, 
+// If line[col] is a character in a hyperlink, return the start index of whole hyperlink,
 // and store its length in 'len' which is optional and can be NULL.
 // If there is no hyperlink found at specified index 'col', the return value will be -1.
 int CTermData::HyperLinkHitTest(const char *line, int col, int *len/*= NULL*/ )
@@ -1340,7 +1332,9 @@ void CTermData::SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkP
 {
 	if( block || start.y == end.y )
 	{
-		if( end.x < start.x ){int tmp=end.y; end.y=end.x; end.x=tmp;	}
+		if( end.x < start.x )
+		    swap(end.y, end.x);
+
 		for( int iline = start.y; iline <= end.y; iline++ )
 		{
 			CTermCharAttr* pattr = GetLineAttr( m_Screen[iline]);
@@ -1357,20 +1351,20 @@ void CTermData::SetTextAttr( CTermCharAttr attr, int flags, GdkPoint start, GdkP
 		{
 			pattr = GetLineAttr( m_Screen[iline]);
 			for( int col = 0; col < m_ColsPerPage; col++ )
-				pattr[col].SetTextAttr(attr, flags);	
+				pattr[col].SetTextAttr(attr, flags);
 		}
 		if( start.y != end.y )
 		{
 			pattr = GetLineAttr( m_Screen[end.y]);
 			for( int col = 0; col < end.x; col++ )
-				pattr[col].SetTextAttr(attr, flags);			
+				pattr[col].SetTextAttr(attr, flags);
 		}
 	}
 }
 
 
-//If the specified line on screen has a non space and 
-//a non '\0' character or its background is not color 0 
+//If the specified line on screen has a non space and
+//a non '\0' character or its background is not color 0
 //(usually black), return false.
 //Question: how about selected block which color is inversed?
 bool CTermData::IsLineEmpty(int iLine)
@@ -1384,7 +1378,7 @@ bool CTermData::IsLineEmpty(int iLine)
 }
 
 // This is a callback function called from CTermData::DoUpdateDisplay().
-// When new characters are written to a line in the screen buffer, 
+// When new characters are written to a line in the screen buffer,
 // this function will be called with the line number passed in 'row'.
 void CTermData::OnLineModified(int row UNUSED)
 {

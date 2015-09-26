@@ -21,17 +21,20 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
+/* Define to 1 if you have the `dup2' function. */
+#undef HAVE_DUP2
+
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
+/* Define to 1 if you have the `forkpty' function. */
+#undef HAVE_FORKPTY
+
 /* Define to 1 if you have the `getaddrinfo' function. */
 #undef HAVE_GETADDRINFO
-
-/* Define to 1 if you have the `gethostbyname' function. */
-#undef HAVE_GETHOSTBYNAME
 
 /* Define if the GNU gettext() function is already present or preinstalled. */
 #undef HAVE_GETTEXT
@@ -106,6 +109,9 @@
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
+
+/* Define to 1 if you have the `regcomp' function. */
+#undef HAVE_REGCOMP
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV
@@ -197,6 +203,9 @@
    */
 #undef LT_OBJDIR
 
+/* lets see what happens */
+#undef MASTERPTYDEV
+
 /* Name of package */
 #undef PACKAGE
 
@@ -212,10 +221,19 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
 #undef PREFIX
+
+/* "Project Forum" */
+#undef PROJECT_FORUM
+
+/* "Project Site" */
+#undef PROJECT_SITE
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
@@ -236,8 +254,6 @@
 /* Enable libnotify notifier support */
 #undef USE_LIBNOTIFY
 
-#undef USE_MMX
-
 /* Enable mouse click and wheel support */
 #undef USE_MOUSE
 
@@ -246,8 +262,6 @@
 
 /* Enable popup notifier support */
 #undef USE_NOTIFIER
-
-#undef USE_PLUGIN
 
 /* Enable proxy support */
 #undef USE_PROXY

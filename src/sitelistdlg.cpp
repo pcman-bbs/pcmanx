@@ -23,8 +23,8 @@
 #include "sitelistdlg.h"
 #include "appconfig.h"
 #include "mainframe.h"
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <string>
 
 using namespace std;

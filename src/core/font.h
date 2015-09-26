@@ -42,8 +42,8 @@ public:
     void SetFont( string name, int pt_size, bool compact = false, bool anti_alias = true );
     void SetFont( string name, int width, int height, bool compact = false, bool anti_alias = true );
     void SetFontFamily( string name );
-    inline int GetHeight(){	return m_XftFont->ascent + m_XftFont->descent;	};
-    inline int GetWidth(){	return m_XftFont->max_advance_width / 2;	};
+    int GetHeight(){	return m_XftFont->ascent + m_XftFont->descent;	};
+    int GetWidth(){	return m_XftFont->max_advance_width / 2;	};
     XftFont* GetXftFont(){	return m_XftFont;	}
     string GetName(){		return m_Name;		}
     bool GetAntiAlias(){	return m_AntiAlias;	}

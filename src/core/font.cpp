@@ -46,6 +46,8 @@ CFont::CFont( string name, int pt_size, bool compact, bool anti_alias )
 	m_XftFont = NULL;
 	m_Name = name;
    	m_PointSize = pt_size;
+	m_MaxWidth = 0;
+	m_MaxHeight = 0;
 	m_Compact = compact;
 	m_AntiAlias = anti_alias;
 

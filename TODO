@@ -1,10 +1,6 @@
 TODO List
 ========
 
-jserv
------
-4. Enhance the interaction for plugin via XPCOM / XPConnect.
-
 kanru
 -----
 1. Check each gtk_entry_get_text ()

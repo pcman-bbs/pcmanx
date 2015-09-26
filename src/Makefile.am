@@ -13,11 +13,7 @@ INCLUDES = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DDATADIR=\"$(datadir)\"
 
-pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS)
-
-if CSRG_BASED
-pcmanx_LDADD += -lutil
-endif
+pcmanx_LDADD = $(GUI_LIBS) $(LIBPCMANX_CORE) $(SCRIPT_LIBS) $(LIBUTIL)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \
@@ -69,7 +65,8 @@ endif
 
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h
+	view/telnetview.cpp view/telnetview.h \
+	view/forkpty.c view/forkpty.h
 
 if USE_IPLOOKUP
 QQWRYSEEKER_SOURCES = \
