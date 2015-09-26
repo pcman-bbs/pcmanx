@@ -42,7 +42,7 @@ int copyfile(const char* src, const char* dest, int overwrite)
 					 fmode) ) )
 		{
 			while( (rlen = read( fdsrc, buf, sizeof(buf) )) )
-				write( fddest, buf, rlen );
+				rlen = write( fddest, buf, rlen );
 			close(fddest);
 			close(fdsrc);
 

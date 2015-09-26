@@ -46,6 +46,10 @@
 #include <unistd.h>
 #include <signal.h>
 
+#if ! GTK_CHECK_VERSION (2, 10, 0)
+#define GTK_STOCK_SELECT_ALL "gtk-index"
+#endif
+
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -160,6 +164,8 @@ CMainFrame::CMainFrame()
 	m_Mode = NORMAL_MODE;
 
 	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "PCManX", "pcmanx");
+
 	PostCreate();
 
 #if defined(USE_DOCKLET) || defined(USE_NOTIFIER)
@@ -665,7 +671,8 @@ void CMainFrame::OnFont(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
 		AppConfig.FontFamily = family;
-		AppConfig.FontSize = pango_font_description_get_size(desc);
+		AppConfig.FontSize =
+			pango_font_description_get_size(desc) / PANGO_SCALE;
 		pango_font_description_free(desc);
 
 		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
@@ -717,7 +724,8 @@ void CMainFrame::OnFontEn(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		g_free( name );
 		const char* family = pango_font_description_get_family(desc);
 		AppConfig.FontFamilyEn = family;
-		AppConfig.FontSizeEn = pango_font_description_get_size(desc);
+		AppConfig.FontSizeEn =
+			pango_font_description_get_size(desc) / PANGO_SCALE;
 		pango_font_description_free(desc);
 
 		if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(apply_to_all) ) )
@@ -753,7 +761,8 @@ void CMainFrame::OnFullscreenMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
 	}
 }
@@ -772,7 +781,8 @@ void CMainFrame::OnSimpleMode(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 		gtk_window_unfullscreen((GtkWindow *)_this->m_Widget);
 		gtk_widget_show_all((GtkWidget *)_this->m_Menubar);
 		gtk_widget_show_all((GtkWidget *)_this->m_Toolbar);
-		gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
+		if (AppConfig.ShowStatusBar)
+			gtk_widget_show_all((GtkWidget *)_this->m_Statusbar);
 		_this->m_pNotebook->ShowTabs();
 	}
 }
@@ -902,8 +912,7 @@ void CMainFrame::OnCloseCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 			return;
 	}
 
-	GtkNotebook* nb = GTK_NOTEBOOK(_this->m_pNotebook->m_Widget);
-	_this->CloseCon(gtk_notebook_get_current_page(nb), true);
+	_this->CloseCon(_this->m_pNotebook->GetCurPage(), true);
 }
 
 
@@ -973,7 +982,9 @@ void CMainFrame::OnDownArticle(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 {
-//	bool show_tray_icon = AppConfig.ShowTrayIcon;
+#ifdef USE_DOCKLET
+	bool show_tray_icon = AppConfig.ShowTrayIcon;
+#endif
 	CPrefDlg* dlg = new CPrefDlg(_this);
 	dlg->ShowModal();
 	dlg->Destroy();
@@ -987,13 +998,20 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 #if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
 #endif
-//	FIXME: Currently we cannot freely hide or show tray icon.
-/*	if( AppConfig.ShowTrayIcon != show_tray_icon )
-		if(AppConfig.ShowTrayIcon)
+
+#ifdef USE_DOCKLET
+	if (AppConfig.ShowTrayIcon != show_tray_icon) {
+		if (AppConfig.ShowTrayIcon)
 			_this->ShowTrayIcon();
 		else
 			_this->HideTrayIcon();
-*/
+	}
+#endif
+
+	if (AppConfig.ShowStatusBar)
+		gtk_widget_show_all(_this->m_Statusbar);
+	else
+		gtk_widget_hide_all(_this->m_Statusbar);
 }
 
 
@@ -1015,7 +1033,8 @@ void CMainFrame::OnSiteList(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 
 void CMainFrame::OnJumpToPage(GObject* obj, CMainFrame* _this)
 {
-	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x", obj, _this->m_JumpTos[0]);
+	INFO("On jump to, obj=%x, _this->m_JumpTos[0]=%x",
+	     (word_t) obj, (word_t) _this->m_JumpTos[0]);
 	for( int i = 0; i < 10; ++i )
 		if( obj == _this->m_JumpTos[i] )
 		{
@@ -1083,56 +1102,76 @@ void CMainFrame::OnNotebookChangeCurPage(GtkNotebook* widget UNUSED,
 
 gboolean CMainFrame::OnNotebookPopupMenu(GtkWidget *widget UNUSED,
                                          GdkEventButton *event,
-                                         gpointer p_mainframe)
+                                         CMainFrame* _this)
 {
-       static GtkWidget *menu = NULL;
+	/* initialized once */
+	static GtkWidget *menu = NULL;
+	static GtkWidget *menu_item_close = NULL;
 
-       // set menu items
-       GtkWidget *menu_item_close = gtk_image_menu_item_new_with_label( _("Close") );
-       GtkWidget *menu_item_reconnect = gtk_image_menu_item_new_with_label( _("Reconnect") );
-       GtkWidget *menu_item_add2fav = gtk_image_menu_item_new_with_label( _("Add to Favorites") );
-       // set images
-       GtkWidget *image_close = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-       GtkWidget *image_reconnect = gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
-       GtkWidget *image_add2fav = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_close, image_close);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_reconnect, image_reconnect);
-       gtk_image_menu_item_set_image ( (GtkImageMenuItem *)menu_item_add2fav, image_add2fav);
+	if (menu == NULL) {
+		// set menu items
+		GtkWidget *menu_item_close =
+			gtk_image_menu_item_new_with_label( _("Close") );
+		GtkWidget *menu_item_reconnect =
+			gtk_image_menu_item_new_with_label( _("Reconnect") );
+		GtkWidget *menu_item_add2fav =
+			gtk_image_menu_item_new_with_label( _("Add to Favorites") );
 
-       // if not right check the mouse
-       if (event->type != GDK_BUTTON_PRESS || event->button != 3)
-               return FALSE;
+		// set images
+		GtkWidget *image_close =
+			gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+		GtkWidget *image_reconnect =
+			gtk_image_new_from_stock ("gtk-undo", GTK_ICON_SIZE_MENU);
+		GtkWidget *image_add2fav =
+			gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
 
-       // if menu exists
-       if (menu != NULL)
-               gtk_widget_destroy(menu);
-       menu = gtk_menu_new();
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_close, image_close);
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_reconnect, image_reconnect);
+		gtk_image_menu_item_set_image (
+			(GtkImageMenuItem *) menu_item_add2fav, image_add2fav);
 
-       // widgets show
-       gtk_widget_show (menu_item_reconnect);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_reconnect);
+		menu = gtk_menu_new();
 
-       gtk_widget_show (menu_item_close);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_close);
+		// widgets show
+		gtk_widget_show (menu_item_reconnect);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_reconnect);
 
-       gtk_widget_show (menu_item_add2fav);
-       gtk_container_add (GTK_CONTAINER (menu), menu_item_add2fav);
+		gtk_widget_show (menu_item_close);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_close);
 
-       // signals
-       g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
-                       G_CALLBACK (CMainFrame::OnReconnect),
-                       p_mainframe);
-       g_signal_connect ( G_OBJECT(menu_item_close), "activate",
-                       G_CALLBACK (CMainFrame::OnCloseCon),
-                       p_mainframe);
-       g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
-                       G_CALLBACK (CMainFrame::OnAddToFavorites),
-                       p_mainframe);
+		gtk_widget_show (menu_item_add2fav);
+		gtk_container_add (GTK_CONTAINER (menu), menu_item_add2fav);
 
-       // popup
-       gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
-       return TRUE;
+		// signals
+		g_signal_connect ( G_OBJECT(menu_item_reconnect), "activate",
+		                G_CALLBACK (CMainFrame::OnReconnect),
+		                _this);
+		g_signal_connect ( G_OBJECT(menu_item_close), "activate",
+		                G_CALLBACK (CMainFrame::OnCloseCon),
+		                _this);
+		g_signal_connect ( G_OBJECT(menu_item_add2fav), "activate",
+		                G_CALLBACK (CMainFrame::OnAddToFavorites),
+		                _this);
+	}
 
+	// Feature: let mouse middle click be able to close tab
+	// similar to the behavior under Firefox
+	if (AppConfig.MidClickAsClose &&
+	    event->type == GDK_BUTTON_PRESS && event->button == 2) {
+		_this->OnCloseCon(GTK_MENU_ITEM(menu_item_close), _this);
+		return TRUE;
+	}
+
+	// if not right check the mouse
+	if (event->type != GDK_BUTTON_PRESS || event->button != 3)
+	        return FALSE;
+
+	// popup
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
+		event->button, event->time);
+	return TRUE;
 }
 
 
@@ -1474,6 +1513,7 @@ gboolean CMainFrame::OnURLEntryKeyDown(GtkWidget *widget, GdkEventKey *evt, CMai
 	switch(evt->keyval)
 	{
 	case GDK_Return:
+	case GDK_KP_Enter:
 	{
 		string url = gtk_entry_get_text( GTK_ENTRY(widget) );
 		if( !url.empty() )
@@ -1508,7 +1548,7 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry,
 
 int CMainFrame::GetViewIndex(CTermView* view)
 {
-	DEBUG( "get view index, view = %x", (unsigned int) view );
+	DEBUG( "get view index, view = %x", (word_t) view );
 	if( !view )
 		return -1;
 	DEBUG( "view->m_Widget = %x", (unsigned int) view->m_Widget );

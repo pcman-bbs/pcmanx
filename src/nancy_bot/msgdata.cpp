@@ -20,6 +20,7 @@
 
 #include <cstdlib>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "nancy_bot/msgdata.h"
 #include "nancy_bot/botutil.h"

@@ -1,9 +1,242 @@
-2008-08-10  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2009-08-03  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac: Bump to 0.3.9
+	* developers/make-new-release.sh: Add more build test case.
+	* NEWS: Adjust 0.3.9 to August 2009.
+
+2009-08-03  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp (CMainFrame::OnFont) (CMainFrame::OnFontEn):
+	Fix mistaken font size got from font dialog.
+	Merged from http://code.google.com/p/gemanx/source/detail?r=26 .
+
+2009-08-03  Chih-Min Chao  <cmchao@gmail.com>
+	    Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.h (OnNotebookPopupMenu)
+	src/mainframe.cpp (CMainFrame::OnNotebookPopupMenu): Introduced new
+	feature: let mouse middle click be able to close tab.  It is similar
+	to the behavior under Firefox.
+
+	* src/appconfig.h (MidClickAsClose)
+	src/generalprefpage.h (m_MidClickAsClose)
+	src/appconfig.cpp (CAppConfig::DoDataExchange)
+	(CAppConfig::SetToDefault)
+	src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage)
+	(CGeneralPrefPage::OnOK): Required modifications to configure this
+	feature.
+
+2009-08-03  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/pcmanx_utils.h: Introduced typedef word_t for 32-bit/64-bit
+	representation.
+
+	* src/mainframe.cpp (CMainFrame::OnJumpToPage)
+	(CMainFrame::GetViewIndex)
+	src/notebook.cpp (CNotebook::AddPage): Make use of word_t in INFO.
+	Reported by Kovich Ian <kovich.ian@gmail.com>.
+
+2009-07-26  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/termdata.cpp (CTermData::memset16): Rewritten.  Use C99
+	uint16_t instead of "short int".  It should prevent compilers from
+	being over-optimizing with -ftree-vectorize.
+	Note: the usage of memset16 is somehow ambiguous for sake of the last
+	function parameter (size_t n), which is regarded as divided by 2 in
+	advance.
+
+2009-05-29  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/pcmanx_gtk2.cpp: Add an introduction mainpage of Doxygen.
+
+2009-05-29  Jim Huang  <jserv@0xlab.org>
+
+	* src/view/telnetview.cpp (CTelnetView::OnHyperlinkClicked): Fix gcc
+	4.4 compilation error.
+	Reported by: devilreg <devilreg@gmail.com>.
+
+2009-05-29  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/generalprefpage.cpp,
+	src/sitepage.cpp: Fix the deprecated GtkAdjustment of GtkSpinButton.
+
+2009-05-28  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/core/site.cpp: Let vertical and horizontal align center properly
+	set by default.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/core/widget.cpp (CWidget::Refresh): Do not call
+	gdk_window_invalidate_rect on a non-realized GtkWidget.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnPreference): Fix dangling else.
+	(CMainFrame::OnJumpToPage): Proper casting for INFO.
+
+	* src/notebook.cpp (CNotebook::AddPage): Ditto.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp (CMainFrame::OnCloseCon): Use CNotebook wrapper
+	interface rather than explicitly casting.
+	Patched by Chih-Min Chao <cmchao@gmail.com>.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/nancy_bot/msgdata.cpp: Fix inclusion to make g++ 4.4 happy.
+
+2009-05-16  Jim Huang  <jserv@0xlab.org>
+
+	* src/mainframe.cpp (CMainFrame::OnNotebookPopupMenu): Avoid memory
+	leak when event is not mouse right-click and  unnecessary resource
+	re-allocation.
+	Patched by Chih-Min Chao <cmchao@gmail.com>.
+
+2009-02-18  Jason Xia  <jasonxh@gmail.com>
+
+	* po/POTFILES.in, po/zh_CN.po, po/zh_TW.po: Update po files. Fix
+	Simplified Chinese translation of "Line" and "Col".
+
+2009-02-07  Youchen Lee  <copyleft@utcr.org>
+
+	* src/mainframe.cpp: For availability to build under (gtk+ < 2.10),
+	defined GTK_STOCK_SELECT_ALL as "gtk-index".
+
+2009-01-25  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/docklet/eggtrayicon.h,
+	src/docklet/eggtrayicon.c,
+	src/pcmanx_gtk2.cpp: GNOME Goal - Clean up GLib and GTK+ includes.
+	GTK+ is moving toward a model where it is only allowed to include the
+	'toplevel' headers. Only <glib.h>, <gdk/gdk.h>,
+	<gdk-pixbuf/gdk-pixbuf.h> and <gtk/gtk.h> can be directly included.
+	The goal is to make all GNOME modules comply with this. 
+	Ref: http://live.gnome.org/GnomeGoals/CleanupGTKIncludes
+
+2009-01-19  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/termview.h (CTermView::m_s_CharSet): New data member to
+	indicate the character set in CTermView.
+
+	* src/core/termview.cpp (CTermView::PasteFromClipboard),
+	src/view/telnetview.cpp (CTelnetView::DoPasteFromClipboard): Properly
+	handle the character set convertion during copy and paste from X
+	clipboard.
+	Patched by Darren Hoo <darren.hoo@gmail.com> .
+
+2009-01-16  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/pcmanx_gtk2.cpp (main): Prevent GTK+ from catching F10.
+
+	* src/view/telnetview.cpp (CTelnetView::OnKeyDown): Handle F1-F12
+	keys.
+	Patched by Darren Hoo <darren.hoo@gmail.com> .
+
+2009-01-04  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/pkgver.c: New file.  Keep version information in
+	libpcmanx-core.
+
+	* src/core/Makefile.am: Ditto.
+
+	* src/pcmanx_gtk2.cpp (main): Perform insanity checks for libpcmanx.
+	If version mismatch between pcmanx-gtk2 and libpcmanx, alter window
+	will show up and soon close.
+
+2009-01-03  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/core/fileutil.c,
+	src/view/telnetview.cpp: Remove some warnings.
+
+2009-01-01  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): PCManx main window
+	doesn't provide WM_CLASS property, or to be more precise, provides
+	the same as the main window. Therefore, it is not possible to
+	distinguish windows (important for new-kind window managers like
+	ion / ion-devel / pwm / larswm).  This is a quick fix.
+	Reported by Roy Zuo <roylzuo@gmail.com>.
+
+2008-12-15  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/view/telnetcon.cpp (CTelnetCon::Close): Fix build with
+	debugging.
+
+2008-10-01  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/view/telnetview.cpp: Fix compilation errors with gcc 4.3.
+	Reported by Lyman Li <lymanrb@gmail.com>.
+
+2008-09-25  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnFullscreenMode)
+	(CMainFrame::OnSimpleMode) (CMainFrame::OnPreference): Respect user
+	preference about show/hide status bar.
+
+2008-09-13  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/notebook.cpp (CNotebook::SetPageTitle): Ignore the change of
+	title if tab/CNotebook is not connected.  Avoid SegFault when closing
+	a disconnected tab.
+	
+2008-09-02  Jason Xia  <jasonxh@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnURLEntryKeyDown): Enable [KP_Enter]
+	key in URL entry box.
+
+2008-09-01  Jason Xia  <jasonxh@gmail.com>
+
+	* src/downarticledlg.cpp (CDownArticleDlg::DownArticleFunc)
+	(AppendLine): Trim trailing spaces of each line when downloading
+	articles.
+
+2008-08-12  Jim Huang  <jserv.tw@gmail.com>
+
+	* developers/make-new-release.sh: New file.  A simple and neat script
+	for developers to prepare new release more carefully.
+
+2008-08-12  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/downarticledlg.cpp: Fix missing <string.h> inclusion with
+	older system headers.
+
+2008-08-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/POTFILES.in,
+	po/POTFILES.skip: Translating the messages in source file
+	src/docklet/eggtrayicon.c is useless.  Ignored.
+
+	* po/zh_TW.po, po/zh_CN.po: Re-generated.
+
+2008-08-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnPreference): It should be able to
+	work while hiding or showing tray icon immediately.
+
+	* src/generalprefpage.cpp (CGeneralPrefPage::CGeneralPrefPage):
+	Correct the brief description about tray icon switching.
+
+	* po/zh_TW.po, po/zh_CN.po: Likewise.
+
+2008-08-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/pcmanx_gtk2.cpp (main): Correctly hide tray icon according to
+	the settings.
+
+2008-08-10  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* Makefile.am: Fix the release problem of `./configure --enable-plugin`
 	after `make dist-bzip2`.
+	* Makefile.am,
+	plugin/Makefile.am,
+	plugin/data/Makefile.am,
+	plugin/src/Makefile.am: Fix the release problem of `./configure
+	--enable-plugin` after `make dist-bzip2`.
 
-2008-08-09  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+2008-08-09  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* configure.ac: Bump to 0.3.8
 	* NEWS: Adjust 0.3.8 to August.

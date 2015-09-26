@@ -19,6 +19,10 @@
 #include "downarticledlg.h"
 #include <fstream>
 #include <cerrno>
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#include <string.h>
 
 #define CUSTOM_RESPONSE_COPY 1
 #define CUSTOM_RESPONSE_SAVE 2
@@ -56,6 +60,24 @@ CDownArticleDlg::CDownArticleDlg(CWidget *parent, CTelnetCon *connection)
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(m_Widget), TRUE);
 }
 
+static inline string& AppendLine(const char *line, const char *enc, string &str)
+{
+	gsize len;
+	char *buf = g_convert_with_fallback(line, -1, "UTF-8", enc, (gchar *) "?", 
+			NULL, &len, NULL);
+	if (buf)
+	{
+		// Trim trailing spaces
+		while (len > 0 && buf[len - 1] == ' ')
+			len--;
+		str.append(buf, len);
+		g_free(buf);
+	}
+	str.push_back('\n');
+
+	return str;
+}
+
 void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 {
 	CTelnetCon *con = _this->m_connection;
@@ -63,19 +85,8 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 
 	// Save the current screen
 	for (int i = 0; i < con->m_RowsPerPage - 1; i++)
-	{
-		char *buf = g_convert_with_fallback(
-				con->m_Screen[con->m_FirstLine + i], -1,
-				"UTF-8", con->m_Site.m_Encoding.c_str(),
-				(gchar *) "?", NULL, NULL, NULL
-				);
-		if (buf)
-		{
-			str.append(buf);
-			g_free(buf);
-		}
-		str.push_back('\n');
-	}
+		AppendLine(con->m_Screen[con->m_FirstLine + i], 
+				con->m_Site.m_Encoding.c_str(), str);
 
 	// Check if we are at the end
 	char *p;
@@ -96,17 +107,8 @@ void CDownArticleDlg::DownArticleFunc(CDownArticleDlg *_this)
 			usleep(DOWN_ARTICLE_POLL_DELAY);
 		}
 
-		char *buf = g_convert_with_fallback(
-				con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 2], -1,
-				"UTF-8", con->m_Site.m_Encoding.c_str(), 
-				(gchar *) "?", NULL, NULL, NULL
-				);
-		if (buf)
-		{
-			str.append(buf);
-			g_free(buf);
-		}
-		str.push_back('\n');
+		AppendLine(con->m_Screen[con->m_FirstLine + con->m_RowsPerPage - 2], 
+				con->m_Site.m_Encoding.c_str(), str);
 	}
 
 	gdk_threads_enter();

@@ -741,9 +741,9 @@ void CTelnetCon::Close()
 		{
 			/* FIXME: unnecessary again, since child has already
 			 * received SIGHUP when m_SockFD was closed. */
-			/*int kill_ret = */ kill( m_Pid, 1 );	// SIG_HUP Is this correct?
+			int kill_ret = kill( m_Pid, 1 ); // SIG_HUP Is this correct?
 			int status = 0;
-			/*pid_t wait_ret = */ waitpid(m_Pid, &status, 0);
+			pid_t wait_ret = waitpid(m_Pid, &status, 0);
 			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}

@@ -5,6 +5,13 @@
 #include <config.h>
 #endif
 
+#include <bits/wordsize.h>
+#if __WORDSIZE == 64
+typedef unsigned long int word_t;
+#else
+typedef unsigned int word_t;
+#endif
+
 #ifdef USE_DEBUG
 #define DEBUG(format...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format)
 #define INFO(format...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, format)

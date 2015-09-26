@@ -79,7 +79,7 @@ public:
 	static void OnPrevCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSiteList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnNotebookChangeCurPage(GtkNotebook* widget, GtkNotebookPage* page,  gint page_num, CMainFrame* _this);
-	static gboolean OnNotebookPopupMenu(GtkWidget *widget, GdkEventButton *event, gpointer p_mainframe);
+	static gboolean OnNotebookPopupMenu(GtkWidget* widget, GdkEventButton* event, CMainFrame* _this);
 	void SetCurView(CTelnetView* view);
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}

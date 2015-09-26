@@ -30,7 +30,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
-#include <glib/goption.h>
+#include <glib.h>
 #include <string.h>
 
 #include "mainframe.h"
@@ -53,16 +53,43 @@
 #include "script/api.h"
 #endif
 
+#if !GTK_CHECK_VERSION(2,14,0)
+#  define gtk_dialog_get_content_area(x) ((x)->vbox)
+#endif
+
 static int multiple_instance = 0;
 
 static GOptionEntry entries[] = {
-	{ (const gchar *) "multiple-instance", (gchar) 'm', 0, 
-	  G_OPTION_ARG_NONE, &multiple_instance, 
+	{ (const gchar *) "multiple-instance", (gchar) 'm', 0,
+	  G_OPTION_ARG_NONE, &multiple_instance,
 	  (gchar *) "Allow multiple instances",
 	  (gchar *) "N" },
 	{ NULL, NULL, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 };
 
+static char pkgver[] = PACKAGE_VERSION;
+extern "C" char pkgver_in_libpcmanx[];	/* exported from libpcmanx,
+					   used for insanity checks */
+
+/**
+ * @mainpage PCManX GTK+ Documentation
+ *
+ * @section intro_sec Introduction
+ *
+ * PCMan X is a newly developed GPL'd version of PCMan, a full-featured famous BBS client.
+ * It aimed to be an easy-to-use yet full-featured telnet client facilitating BBS browsing with the ability to process double-byte characters.
+ * Some handy functions like tabbed-browsing, auto-login and a built-in ANSI editor enabling colored text editing are also provided.
+ *
+ * - Website
+ *   - http://pcmanx.csie.net
+ * - Mailing List &amp; Forum
+ *   - http://groups.google.com/group/PCManX
+ * - WebSVN
+ *   - http://svn.csie.net/listing.php?repname=pcmanx
+ * - Repository
+ *   - https://svn.csie.net/pcmanx/
+ *
+ */
 int main(int argc, char *argv[])
 {
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -112,6 +139,11 @@ int main(int argc, char *argv[])
 		g_option_context_parse (context, &argc, &argv, &error);
 	}
 
+	/*--- prevent GTK+ from catching F10  ---*/
+	GtkSettings *gtk_settings;
+	gtk_settings = gtk_settings_get_for_screen(gdk_screen_get_default());
+	g_object_set(gtk_settings, "gtk-menu-bar-accel", NULL, NULL);
+
 	/*--- Check if multiple-instance is allowed. ---*/
 	if (!multiple_instance) {
 #ifdef USE_DOCKLET
@@ -125,13 +157,42 @@ int main(int argc, char *argv[])
 #endif	/* USE_DOCKLET */
 	}
 
+	/*--- Insanity checks for libpcmanx. ---*/
+	if (strcmp(pkgver_in_libpcmanx, pkgver) != 0) {
+		GtkWidget *w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+		GtkWidget *dialog, *label, *content_area;
+		/* Create the widgets */
+		dialog = gtk_dialog_new_with_buttons (
+				"PCManX Version " PACKAGE_VERSION,
+				GTK_WINDOW(w),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_OK,
+				GTK_RESPONSE_NONE,
+				NULL);
+		content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+		label = gtk_label_new (
+			_("Version mismatch between pcmanx and libpcmanx-core.\n\n"
+			  "Please check your installation."));
+		/* Ensure that the dialog box is destroyed when the user responds. */
+		g_signal_connect_swapped (dialog,
+				"response",
+				G_CALLBACK (gtk_main_quit),
+				dialog);
+		/* Add the label, and show everything we've added to the dialog. */
+		gtk_container_add (GTK_CONTAINER (content_area), label);
+		gtk_widget_show_all (dialog);
+
+		gtk_main();
+		return -1;
+	}
+
 	AppConfig.SetToDefault();
 	AppConfig.Load();
 	AppConfig.LoadFavorites();
-	if(AppConfig.RowsPerPage < 24)
-		AppConfig.RowsPerPage=24;
-	if(AppConfig.ColsPerPage<80)
-		AppConfig.ColsPerPage=80;
+	if (AppConfig.RowsPerPage < 24)
+		AppConfig.RowsPerPage = 24;
+	if (AppConfig.ColsPerPage < 80)
+		AppConfig.ColsPerPage = 80;
 
 	CTelnetCon::Init();
 	CTelnetCon::SetSocketTimeout( AppConfig.SocketTimeout );
@@ -143,13 +204,14 @@ int main(int argc, char *argv[])
 #ifdef USE_DOCKLET
 	if( AppConfig.ShowTrayIcon )
 		main_frm->ShowTrayIcon();
+	else
+		main_frm->HideTrayIcon();
 #endif
 
 #ifdef USE_NOTIFIER
 #ifdef USE_LIBNOTIFY
-	if (!notify_is_initted())
-	{
-	  notify_init("pcmanx-gtk2");
+	if (!notify_is_initted()) {
+		notify_init("pcmanx-gtk2");
 	}
 #else
 	popup_notifier_init(main_frm->GetMainIcon());
@@ -167,7 +229,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_LIBNOTIFY
 	notify_uninit();
-#endif	
+#endif
 	CTelnetCon::Cleanup();
 
 	AppConfig.SaveFavorites();

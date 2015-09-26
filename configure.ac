@@ -1,10 +1,10 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[0.3.8],[http://groups.google.com/group/PCManX])
+AC_INIT([pcmanx-gtk2],[0.3.9],[http://groups.google.com/group/PCManX])
 
 AC_CONFIG_HEADERS([config.h])
 #AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([dist-bzip2])
 #AM_MAINTAINER_MODE
 AC_C_CONST
 AC_C_INLINE
