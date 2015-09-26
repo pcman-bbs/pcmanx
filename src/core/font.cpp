@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,6 @@
 #include "font.h"
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
-
-#include "debug.h"
 
 CFont::CFont()
 {

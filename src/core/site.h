@@ -3,7 +3,7 @@
 // Name:        site.h
 // Purpose:     Site Settings
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.07.15
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -18,9 +18,7 @@
   #pragma interface "site.h"
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "pcmanx_utils.h"
 
 #include <gtk/gtk.h>
 
@@ -35,7 +33,7 @@ class CSite
 {
 public:
 	bool m_Startup;
-	void SaveToFile(FILE* fo);
+	X_EXPORT void SaveToFile(FILE* fo);
 	// Name of site
 	string m_Name;
 
@@ -91,8 +89,8 @@ public:
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
 
-	CSite(string Name = "");
-	~CSite();
+	X_EXPORT CSite(string Name = "");
+	X_EXPORT ~CSite();
 
     string& GetPasswd(){	return m_Passwd;	}
     void SetPasswd( string passwd ){	m_Passwd = passwd;	}

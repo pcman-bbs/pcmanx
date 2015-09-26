@@ -4,7 +4,7 @@
 // Name:        config.cpp
 // Purpose:     Application configuration class, deal with configuration automatically
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.7.22
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -37,8 +37,6 @@
 #include <glib.h>
 
 #include "stringutil.h"
-
-#include "debug.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -239,7 +237,7 @@ string CConfigFile::GetDataPath( string FileName )
 	string path = GetConfigPath(FileName);
 //	if( ::wxFileExists( path ) )	// Find the same file in users' home dir first.
 	FILE *fp;
-	if( fp = fopen(path.c_str(), "r") )
+	if( (fp = fopen(path.c_str(), "r")) )
 	{
 		fclose(fp);
 		return path;

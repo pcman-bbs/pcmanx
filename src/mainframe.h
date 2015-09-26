@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,7 @@
   #pragma interface "mainframe.h"
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "pcmanx_utils.h"
 
 #include "widget.h"
 
@@ -68,8 +66,10 @@ public:
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFontEn(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
+#ifdef USE_WGET
 	static void updateBBSList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void updateBBSListHandler(int nSignalNumber);
+#endif
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
@@ -114,6 +114,19 @@ public:
 #ifdef USE_NOTIFIER
 	GdkPixbuf *GetMainIcon() { return m_MainIcon; };
 #endif
+
+	// Statusbar control.
+	inline unsigned PushStatus(const char *context_desc, const char *text)
+	{
+	  unsigned context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(m_Statusbar), context_desc);
+	  return gtk_statusbar_push(GTK_STATUSBAR(m_Statusbar), context_id, text);
+	}
+
+	inline void PopStatus(const char *context_desc)
+	{
+	  unsigned context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(m_Statusbar), context_desc);
+	  return gtk_statusbar_pop(GTK_STATUSBAR(m_Statusbar), context_id);
+	}
 
 protected:
 	void MakeUI();

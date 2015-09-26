@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,15 +40,17 @@
 #include "sitelistdlg.h"
 #include "emoticondlg.h"
 
-#include "debug.h"
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
 
 #ifdef USE_NOTIFIER
+#ifdef USE_LIBNOTIFY
+#include <libnotify/notify.h>
+#else
 #include "notifier/api.h"
+#endif
 #endif
 
 #ifdef USE_SCRIPT
@@ -115,8 +117,10 @@ void CMainFrame::set_tray_icon()
 }
 #endif
 
+#ifdef USE_WGET
 bool CMainFrame::g_bIsUpateHandlerExisted = false;
 bool CMainFrame::g_bUpdateingBBSList = false;
+#endif
 CMainFrame* CMainFrame::g_pMyself = NULL;
 
 gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this )
@@ -195,7 +199,7 @@ CMainFrame::CMainFrame()
 	gtk_widget_set_size_request(m_pNotebook->m_Widget, 300, 200);
 	gtk_box_pack_start (GTK_BOX (vbox), m_Statusbar, FALSE, FALSE, 0);
 
-	gtk_widget_grab_focus(m_pNotebook->m_Widget);
+//	gtk_widget_grab_focus(m_pNotebook->m_Widget);
 
 //	GTK_WIDGET_UNSET_FLAGS(m_pNotebook->m_Widget, GTK_CAN_FOCUS);
 
@@ -228,12 +232,20 @@ CMainFrame::CMainFrame()
 	CTelnetView::SetParentFrame(this);
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+#ifdef USE_WGET
 	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
+#endif
 }
 
 
 CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 {
+	/* Remove leading and trailing spaces from url. */
+	size_t first = url.find_first_not_of(" \t");
+	size_t last = url.find_last_not_of(" \t");
+	if (last >= first)
+		url = url.substr(first, last - first + 1);
+
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
 
@@ -273,7 +285,9 @@ GtkActionEntry CMainFrame::entries[] =
   {
     {"connect_menu", NULL, _("_Connect")},
     {"site_list", GTK_STOCK_OPEN, _("_Site List"), "<Alt>S", _("_Site List"), G_CALLBACK (CMainFrame::OnSiteList)},
+#ifdef USE_WGET
     {"update_bbs_list", GTK_STOCK_REFRESH, _("Update BBS List"), NULL, _("Update BBS List"), G_CALLBACK (CMainFrame::updateBBSList)},
+#endif
     {"new_con", GTK_STOCK_NETWORK, _("_New Connection"), "<Alt>Q", _("New Connection"), G_CALLBACK (CMainFrame::OnNewCon)},
     {"reconnect", GTK_STOCK_UNDO, _("_Reconnect"), "<Alt>R", _("Reconnect"), G_CALLBACK (CMainFrame::OnReconnect)},
     {"close", GTK_STOCK_CLOSE, _("_Close Connection"), "<Alt>W", _("Close Connection"), G_CALLBACK (CMainFrame::OnCloseCon)},
@@ -327,7 +341,9 @@ static const char *ui_info =
   "  <menubar>"
   "    <menu action='connect_menu'>"
   "      <menuitem action='site_list'/>"
+#ifdef USE_WGET
   "      <menuitem action='update_bbs_list'/>"
+#endif
   "      <menuitem action='new_con'/>"
   "      <menuitem action='reconnect'/>"
   "      <menuitem action='close'/>"
@@ -674,11 +690,11 @@ void CMainFrame::OnFullscreenMode(GtkToggleAction* action, CMainFrame* _this)
 void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 {
 	char* authors = _(
-			"Hong Jen Yee (Main developer) <hzysoft@sina.com.tw>\n"
-			"Jim Huang (Developer) <jserv@kaffe.org>\n"
+			"Hong Jen Yee (Main developer) <pcman.tw@gmail.com>\n"
+			"Jim Huang (Developer) <jserv.tw@gmail.com>\n"
 			"Kanru Chen (Developer) <koster@debian.org.tw>\n"
 			"Chia I Wu (Developer) <b90201047@ntu.edu.tw>\n"
-			"Shih-yuan Lee (Developer) <fourdollars@gmail.com>\n"
+			"Shih-Yuan Lee (Developer) <fourdollars@gmail.com>\n"
 			"Youchen Lee (Developer) <copyleft@utcr.org>\n"
 			"Emfox Zhou (Developer) <emfoxzhou@gmail.com>"
 			);
@@ -687,12 +703,13 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 	GtkWidget* dlg = gtk_message_dialog_new_with_markup( (GtkWindow*)_this->m_Widget,
 						GTK_DIALOG_DESTROY_WITH_PARENT,
 						GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-						_("<big>PCMan X  %s\nA free BBS client developed with GTK+ 2.x</big>\n\n"
-						"Copyright (C) 2005\n"
+						_("<b>PCMan X %s</b>\nA free BBS client developed with GTK+ 2.x\n\n"
+						"Copyright (c) 2005-2008\n"
 						"License: GNU Genral Public License\n"
-						"Project Homepage: http://pcmanx.csie.net/\n\n"
-						"Authors:\n%s\n\n"
-						"Translators:\n%s\n\n"), VERSION, authors, translators );
+						"Project Homepage: http://pcmanx.csie.net\n"
+						"Bug Report: %s\n\n"
+						"<b>Authors</b>:\n%s\n\n"
+						"<b>Translators</b>:\n%s\n\n"), PACKAGE_VERSION, PACKAGE_BUGREPORT, authors, translators );
 
 // GTK+ supports this API since ver 2.6.
 /*	gtk_message_dialog_format_secondary_text((GtkMessageDialog*)dlg,
@@ -703,11 +720,12 @@ void CMainFrame::OnAbout(GtkMenuItem* mitem, CMainFrame* _this)
 						, authors	);
 */
 	gtk_image_set_from_pixbuf((GtkImage*)((GtkMessageDialog*)dlg)->image, _this->m_MainIcon);
-	gtk_dialog_run((GtkDialog*)dlg) == GTK_RESPONSE_OK;
+	gtk_dialog_run((GtkDialog*)dlg); // == GTK_RESPONSE_OK
 	gtk_widget_destroy(dlg);
 
 }
 
+#ifdef USE_WGET
 void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 {
 	if (g_bIsUpateHandlerExisted == false) {
@@ -726,16 +744,25 @@ void CMainFrame::updateBBSList(GtkMenuItem* pMenuItem, CMainFrame* pThis)
 		g_bUpdateingBBSList = true;
 
 		child_pid = fork();
-		if (child_pid == 0)
-		{
-			int t_nRet = system("wget -O ~/.pcmanx/sitelist http://free.ym.edu.tw/pcman/site_list.utf8");
+		if (child_pid == 0) {
+			int t_nRet = system("wget -O ~/.pcmanx/sitelist.tmp "
+				"http://free.ym.edu.tw/pcman/site_list.utf8 && "
+				"mv -f ~/.pcmanx/sitelist.tmp ~/.pcmanx/sitelist");
 			if (t_nRet == 0)
 				kill(parent_pid, SIGUSR1);
 			else
 				kill(parent_pid, SIGUSR2);
 			exit(0);
+		} else {
+			int stat_val = 0;
+			pid_t stat_pid = 0;
+			sleep(1);
+			stat_pid = wait(&stat_val);
+#ifdef USE_DEBUG
+			if (child_pid != stat_pid)
+				DEBUG("child_pid=%d stat_pid=%d stat_val=%d\n", child_pid, stat_pid, stat_val);
+#endif
 		}
-		wait(NULL);
 	}
 }
 
@@ -753,14 +780,15 @@ void CMainFrame::updateBBSListHandler(int nSignalNumber)
 			t_pcMessage = t_pcFault;
 
 		GtkWidget* t_pDialog = gtk_message_dialog_new_with_markup(
-			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s"), t_pcMessage);
+			(GtkWindow*) g_pMyself->m_Widget, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", t_pcMessage);
 
 		gtk_image_set_from_pixbuf((GtkImage*) ((GtkMessageDialog*) t_pDialog)->image, g_pMyself->m_MainIcon);
-		gtk_dialog_run((GtkDialog*) t_pDialog) == GTK_RESPONSE_OK;
+		gtk_dialog_run((GtkDialog*) t_pDialog); // == GTK_RESPONSE_OK)
 		gtk_widget_destroy(t_pDialog);
 		g_bUpdateingBBSList = false;
 	}
 }
+#endif
 
 void CMainFrame::pasteFromClipboard(GtkMenuItem* pMenuItem, CMainFrame* pMainFrame)
 {
@@ -840,9 +868,11 @@ void CMainFrame::OnPreference(GtkMenuItem* mitem, CMainFrame* _this)
 
 	CTelnetView::SetWebBrowser(AppConfig.WebBrowser);
 	CTelnetView::SetMailClient(AppConfig.MailClient);
+#ifdef USE_WGET
 	CTelnetView::setWgetFiles(AppConfig.UseWgetFiles);
+#endif
 
-#ifdef USE_NOTIFIER
+#if defined(USE_NOTIFIER) && !defined(USE_LIBNOTIFY)
 	popup_notifier_set_timeout( AppConfig.PopupTimeout );
 #endif
 //	FIXME: Currently we cannot freely hide or show tray icon.
@@ -1346,10 +1376,10 @@ gboolean CMainFrame::OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, C
 
 int CMainFrame::GetViewIndex(CTermView* view)
 {
-	DEBUG( "get view index, view = %x", view );
+	DEBUG( "get view index, view = %x", (unsigned int) view );
 	if( !view )
 		return -1;
-	DEBUG( "view->m_Widget = %x", view->m_Widget );
+	DEBUG( "view->m_Widget = %x", (unsigned int) view->m_Widget );
 	return gtk_notebook_page_num( GTK_NOTEBOOK(m_pNotebook->m_Widget), view->m_Widget );
 }
 

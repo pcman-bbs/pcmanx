@@ -8,6 +8,7 @@ bin_PROGRAMS = pcmanx
 INCLUDES = \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
+	-I$(top_srcdir)/src/qqwryseeker \
 	$(GUI_CFLAGS) \
 	$(SCRIPT_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
@@ -71,6 +72,8 @@ VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
 	view/telnetview.cpp view/telnetview.h
 
+QQWRYSEEKER_SOURCES = \
+	qqwryseeker/qqwryseeker.c qqwryseeker/qqwryseeker.h
 
 pcmanx_SOURCES = \
 	$(DOCKLET_SOURCES) \
@@ -78,6 +81,7 @@ pcmanx_SOURCES = \
 	$(SCRIPT_SOURCES) \
 	$(NANCY_SOURCES) \
 	$(VIEW_IMPLEMENTATION_SOURCES) \
+	$(QQWRYSEEKER_SOURCES) \
 	appconfig.cpp appconfig.h \
 	notebook.cpp notebook.h \
 	sitelistdlg.cpp sitelistdlg.h \

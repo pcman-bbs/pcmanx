@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
-#include "debug.h"
-
+#if 0
 static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _this)
 {
 	switch(evt->keyval)
@@ -42,7 +41,7 @@ static gboolean on_key_press(GtkWidget* wnd, GdkEventKey *evt, CInputDialog* _th
 	}
 	return false;
 }
-
+#endif
 
 CInputDialog::CInputDialog(CWidget* parent, const char* title, const char* prompt, const char* text, bool can_be_empty)
         : CDialog(parent, title, true), m_CanBeEmpty(can_be_empty)

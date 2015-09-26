@@ -4,15 +4,13 @@
 // Description: 
 //
 //
-// Author: Hong Jen Yee (PCMan) <hzysoft@sina.com.tw>, (C) 2005
+// Author: Hong Jen Yee (PCMan) <pcman.tw@gmail.com>, (C) 2005
 //
 // Copyright: See COPYING file that comes with this distribution
 //
 //
 #include "autologinpage.h"
 #include "site.h"
-
-#include "debug.h"
 
 CAutoLoginPage::CAutoLoginPage(CSite& site) : m_Site(site)
 {

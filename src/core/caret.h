@@ -4,7 +4,7 @@
 // Name:        caret.h
 // Purpose:     Show a cursor on the black terminal screen
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:		2004.7.17
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -20,6 +20,8 @@
   #pragma interface "caret.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
@@ -33,7 +35,7 @@ class CCaret
 public:
 	//Constructor/Destructor
 	CCaret();
-	~CCaret();
+	X_EXPORT ~CCaret();
 	//Getter by neversay Jan/18/2005
 	inline bool IsShow(){return m_IsShow;}
 	inline bool IsVisible(){return m_IsVisible;}
@@ -62,9 +64,9 @@ public:
 	//Blink this caret	
 	void Blink();
 	//Hide this caret
-	void Hide();
+	X_EXPORT void Hide();
 	//Unhide the caret.
-	void Show(bool bImmediately = true);
+	X_EXPORT void Show(bool bImmediately = true);
 
 private:
 	//Flag if the caret is show up.

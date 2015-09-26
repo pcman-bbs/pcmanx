@@ -32,6 +32,9 @@
 
 #ifndef __INCLUDE_NANCYBOT_H__
 #define __INCLUDE_NANCYBOT_H__
+
+#include "pcmanx_utils.h"
+
 #include <cstring>
 #include <cstdlib>
 #include <iostream>

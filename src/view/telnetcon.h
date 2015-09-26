@@ -2,7 +2,7 @@
 // Name:        telnetcon.h
 // Purpose:     Class dealing with telnet connections, parsing telnet commands.
 // Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
+// E-mail:      pcman.tw@gmail.com
 // Created:     2004.7.16
 // Copyright:   (C) 2004 PCMan
 // Licence:     GPL : http://www.gnu.org/licenses/gpl.html
@@ -16,6 +16,8 @@
 #ifdef __GNUG__
   #pragma interface "telnetcon.h"
 #endif
+
+#include "pcmanx_utils.h"
 
 #include <gtk/gtk.h>
 

@@ -1,15 +1,30 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(src)
+AC_INIT(pcmanx-gtk2, 0.3.7, http://groups.google.com/group/PCManX)
+
 AM_CONFIG_HEADER(config.h)
-AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(pcmanx-gtk2, 0.3.5, http://groups.google.com.tw/group/PCManX)
+#AC_PREFIX_DEFAULT(/usr)
+AM_INIT_AUTOMAKE
 #AM_MAINTAINER_MODE
+AC_C_CONST
+AC_C_INLINE
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_STAT
+AC_CHECK_FUNCS([gethostbyname isascii memset mkdir setenv socket strchr strrchr strstr])
+AC_HEADER_STDBOOL
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h locale.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h utmp.h])
+AC_PATH_X
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
 AC_PROG_CC
 AC_PROG_CPP
 AM_PROG_AS
 AC_PROG_CXX
 AM_DISABLE_STATIC
+AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 AC_PROG_INTLTOOL(, [no-xml])
 AC_PROG_INSTALL
@@ -35,7 +50,7 @@ AC_CSRG_BASED
 
 # Init gettext
 ALL_LINGUAS="zh_TW zh_CN"
-AM_GNU_GETTEXT([external])
+#AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.14.1)
 GETTEXT_PACKAGE=pcmanx
 AC_SUBST(GETTEXT_PACKAGE)
@@ -49,11 +64,13 @@ AH_VERBATIM([USE_IPV6],[#undef USE_IPV6])
 AH_VERBATIM([USE_MMX],[#undef USE_MMX])
 AH_VERBATIM([USE_DOCKLET],[#undef USE_DOCKLET])
 AH_VERBATIM([USE_NOTIFIER],[#undef USE_NOTIFIER])
+AH_VERBATIM([USE_LIBNOTIFY],[#undef USE_LIBNOTIFY])
 AH_VERBATIM([USE_SCRIPT],[#undef USE_SCRIPT])
 AH_VERBATIM([USE_PLUGIN],[#undef USE_PLUGIN])
 AH_VERBATIM([USE_NANCY],[#undef USE_NANCY])
 AH_VERBATIM([USE_MOUSE],[#undef USE_MOUSE])
 AH_VERBATIM([USE_EXTERNAL], [#undef USE_EXTERNAL])
+AH_VERBATIM([USE_WGET], [#undef USE_WGET])
 AH_VERBATIM([USE_SIGACTION],[#undef USE_SIGACTION])
 AH_VERBATIM([USING_FREEBSD],[#undef USING_FREEBSD])
 AH_VERBATIM([USING_LINUX],[#undef USING_LINUX])
@@ -100,6 +117,11 @@ AC_ARG_ENABLE([notifier],
 		[disable popup notifier support (default: yes)]),
 	notifier=$enableval, notifier="yes")
 
+AC_ARG_ENABLE([libnotify],
+	AS_HELP_STRING([--enable-libnotify],
+		[enable popup notifier support by libnotify (default: no)]),
+	libnotify=$enableval, libnotify="no")
+
 dnl AC_ARG_ENABLE([script],
 dnl 	AS_HELP_STRING([--enable-script],
 dnl		[enable script support (default: no)]),
@@ -124,6 +146,11 @@ AC_ARG_ENABLE([plugin],
 	AS_HELP_STRING([--enable-plugin],
 		[enable Mozilla/Firefox plugin support (default: no)]),
 	plugin=$enableval, plugin="no")
+
+AC_ARG_ENABLE([wget],
+	AS_HELP_STRING([--enable-wget],
+		[enable wget support (default: no)]),
+	wget=$enableval, wget="no")
 
 dnl *********************************************************************
 dnl ** DEBUG ************************************************************
@@ -209,7 +236,7 @@ dnl we don't need mmx on *this* machine, just i386, because
 dnl it's checked at runtime.
 if test "$mmx" = "yes"; then
 	case $host_cpu in
-    i386|i486|i586|i686|i786|k6|k7)
+    i386|i486|i586|i686|i786|k6|k7|c3|c3_2|x86_64)
     mmx=yes
         ;;
      *)
@@ -250,6 +277,20 @@ fi
 
 AM_CONDITIONAL(USE_NOTIFIER, test "$notifier" = "yes")
 AC_SUBST(USE_NOTIFIER)
+
+if test "$notifier" = "yes"; then
+	if test "$libnotify" = "yes"; then
+		AC_DEFINE_UNQUOTED(USE_LIBNOTIFY, [1], [Enable libnotify notifier support])
+		PKG_CHECK_MODULES(LIBNOTIFY, libnotify) 
+		CFLAGS="$CFLAGS $LIBNOTIFY_CFLAGS"
+		LIBS="$LIBS $LIBNOTIFY_LIBS"
+	fi
+else
+	AC_MSG_WARN(popup notifier support is not enabled, so this option is invalid.)
+fi
+
+AM_CONDITIONAL(USE_LIBNOTIFY, test "$libnotify" = "yes")
+AC_SUBST(USE_LIBNOTIFY)
 
 dnl *********************************************************************
 dnl ** Script support ***************************************************
@@ -313,6 +354,17 @@ AM_CONDITIONAL(USE_EXTERNAL, test "$external" = "yes")
 AC_SUBST(USE_EXTERNAL)
 
 dnl *********************************************************************
+dnl ** wget support ***********************************
+dnl *********************************************************************
+
+if test "$wget" = "yes"; then
+    AC_DEFINE_UNQUOTED(USE_WGET, [1], [Enable wget support])
+fi
+
+AM_CONDITIONAL(USE_WGET, test "$wget" = "yes")
+AC_SUBST(USE_WGET)
+
+dnl *********************************************************************
 dnl ** Mozilla/Firefox Plugin support ***********************************
 dnl *********************************************************************
 
@@ -350,6 +402,13 @@ if test "$plugin" = "yes"; then
 	enable_mozilla=yes, enable_mozilla=no)
   fi
 
+  # Check Firefox-plugin
+  if test "x$enable_mozilla" = "xno"; then
+    gecko_provider=firefox-plugin
+    PKG_CHECK_MODULES(MOZILLA, $gecko_provider-plugin,
+	enable_mozilla=yes, enable_mozilla=no)
+  fi
+
   # Check XULRunner
   if test "x$enable_mozilla" = "xno"; then
     gecko_provider=xulrunner
@@ -365,7 +424,7 @@ if test "$plugin" = "yes"; then
     dnl to Mozilla, but not the XPCOM headers we also need.
     MOZILLA_INCLUDE_ROOT=`$PKG_CONFIG --cflags-only-I $gecko_provider-plugin | awk '{print $1}' | sed "s/^-I//"`
     MOZILLA_INCLUDE_ROOT=`dirname $MOZILLA_INCLUDE_ROOT`
-    MOZILLA_LIB_ROOT=`$PKG_CONFIG --libs-only-L $gecko_provider-plugin | awk '{print $1}' |  cut -c 3-`
+    MOZILLA_LIB_ROOT=`$PKG_CONFIG --variable=libdir $gecko_provider-plugin`
     MOZILLA_LIB_DIR_SEARCH="$MOZILLA_LIB_ROOT"
   else
     dnl Don't depend on pkg-config
@@ -507,9 +566,34 @@ dnl Reduce C++ overhead
 CXXFLAGS="$CXXFLAGS -fno-exceptions -fno-rtti"
 LDFLAGS="$LDFLAGS $PACKAGE_LIBS" #-nodefaultlibs -lgcc -lc -lm"
 
+dnl Adds -fvisibility=hidden to CFLAGS if running with gcc 4 or greater.
+AC_MSG_CHECKING([whether the compiler supports the visibility arg])
+dnl Check for gcc4 or greater
+AC_TRY_COMPILE([
+void
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+foo () {};                                                                                         
+#endif
+], [], [
+  if test "$debug" = yes; then
+dnl It's important for collecting runtime information
+    has_visibility=no
+  else
+    has_visibility=yes
+    CFLAGS="$CFLAGS -fvisibility=hidden"
+    CXXFLAGS="$CXXFLAGS -fvisibility=hidden -fvisibility-inlines-hidden"
+  fi
+], [
+  has_visibility=no
+]
+)
+AC_MSG_RESULT($has_visibility)
+
 dnl make these visible to all Makefiles
 AC_SUBST(GUI_LIBS)
 AC_SUBST(GUI_CFLAGS)
+LIBTOOL_VERSION_INFO=`echo $PACKAGE_VERSION | awk -F. '{ printf "%d:%d:%d", $1+$2, $3, $2 }'`
+AC_SUBST(LIBTOOL_VERSION_INFO)
 LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 AC_CONFIG_FILES([
@@ -541,6 +625,7 @@ echo Debug support ................... : $debug
 echo MMX optimization ................ : $mmx
 echo Docklet / system tray support ... : $docklet
 echo Popup notifier support........... : $notifier
+echo Libnotify support................ : $libnotify
 echo Nancy bot support ............... : $nancy
 echo Mouse click and wheel support ... : $mouse
 dnl if test "x$script" = "xyes"; then
@@ -554,6 +639,7 @@ if test "x$enable_mozilla" = "xyes"; then
 else
   echo "Mozilla/Firefox plugin support... : $plugin"
 fi
+echo wget support..................... : $wget
 echo
 echo The binary will be installed in $prefix/bin
 echo

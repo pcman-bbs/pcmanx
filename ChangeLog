@@ -1,3 +1,363 @@
+2008-01-02  Shih-Yuan Lee  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp,
+	po/zh_TW.po,
+	po/zh_CN.po: Update copyright to 2008.
+
+	* configure.ac: Bump to 0.3.7
+
+2008-01-02  Jim Huang  <jserv@openmoko.org>
+
+	* plugin/src/plugin.cpp (NS_PluginInitialize)
+	(nsPluginInstance::nsPluginInstance): Properly initialize the
+	AppConfig instance in the plugin.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* AUTHORS: mentioning Jason Xia.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* plugin/data/pcmanx.html (function autoConnect): No more fixed font
+	family by the means of appconfig.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* plugin/src/plugin.cpp (nsPluginInstance::nsPluginInstance)
+	(nsPluginInstance::NewCon),
+	plugin/src/plugin.h (nsPluginInstance::m_FontFaceEn):
+	Add "load default options from config file" support for
+	pcmanx-plugin. It shares the same config file and options with pcmanx
+	$HOME/.pcmanx/pcmanx. Also fix the not working FontFace parameter in
+	<embed> tags, and add FontFaceEn parameter support in <embed> tags.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* plugin/src/Makefile.am: Link appconfig as well.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* plugin/src/np_entry.cpp (NP_Shutdown) (NP_Initialize)
+	(NP_GetMIMEDescription) (NP_GetValue) (main): Fix the unusable plugin,
+	caused by 'visibility' of interfaces.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* src/qqwryseeker/qqwryseeker.c,
+	src/qqwryseeker/qqwryseeker.h: New files.
+	Helper functions to lookup IP location information contributed by
+	Jason Xia <jasonxh@gmail.com>.
+
+	* src/Makefile.am: Build src/qqwryseeker/*.[ch]
+
+	* src/mainframe.h (PushStatus) (PopStatus): New functions for
+	Statusbar controlling.
+
+	* src/core/termdata.cpp (CTermData::CTermData) (CTermData::~CTermData)
+	(CTermData::UpdateDisplay) (DetectIpPatterns)
+	(CTermData::DetectIpAddrs),
+	src/view/telnetview.cpp (CTelnetView::CTelnetView)
+	(CTelnetView::~CTelnetView) (ipstr2int) (CTelnetView::OnMouseMove):
+	Add IP location lookup functionality (on mouse hovering over),
+	using the publicly available qqwry.dat database. Not everyone may need
+	this feature since qqwry.dat is an IP location database file in
+	Simplified Chinese and it is most accurate in areas in mainland Chin.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+	* src/core/termdata.h,
+	src/view/telnetview.h: Likewise.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* src/view/telnetcon.cpp (CTelnetCon::Connect) (CTelnetCon::Close):
+	Adjust the semantics of UseExternalTelnet and UseExternalSSH
+	to be more reasonable. Also fix a program hanging bug when opening
+	multiple external ssh connections and then closing the one which is
+	not the last connection.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* src/appconfig.cpp (CAppConfig::DoDataExchange): Respect
+	UseExternalSSH and UseExternalTelnet options.
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2008-01-01  Jim Huang  <jserv@openmoko.org>
+
+	* src/mainframe.cpp (CMainFrame::NewCon): Remove leading and trailing
+	spaces from URL when making connections. This fixes the bug of being
+	unable to connect to some sites from site browser, e.g. newsmth.net)
+	Patched by Jason Xia <jasonxh@gmail.com>.
+
+2007-12-26  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/core/Makefile.am,
+	configure.ac: Add -version-info to libtool.
+
+2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* po/zh_CN.po: Fix a translation mistake.
+
+2007-12-23  Shih-Yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac: Polish for better usage and release 0.3.6.1
+
+	* pcmanx.desktop.in: Add more description.
+
+	* plugin/src/Makefile.am: Fix the problem of Mozilla/Firefox plugin.
+
+	* po/zh_CN.po,
+	po/zh_TW.po,
+	src/mainframe.cpp: Add bug report link to about dialog, and polish
+	sitelist update mechanism.
+
+2007-08-29  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Modify the packager info.
+
+	* configure.ac, autogen.sh: Use automake 1.10.
+
+2007-07-30  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp (CTermView::DrawSpaceFillingChar),
+	src/core/termview.h: Fix bug in rendering ASCII characters.
+	
+	* configure.ac: Bump version number to 0.3.6 .
+
+2007-07-28  Jim Huang  <jserv@openmoko.org>
+
+	* src/pcmanx_gtk2.cpp (main): Disable glib's own malloc/free wrapper
+	while --enable-debug.
+	glib introduces its own memory management mechanism, which confuses
+	memory debuggers such as valgrind and disable their own wrapper
+	against the applications.
+
+	* plugin/src/plugin.cpp,
+	plugin/src/plugin.h: Remove <X11/Intrinsic.h> and <X11/cursorfont.h>
+	because recently xlib package has changed the headers.
+
+	* configure.ac: Added c3|c3_2|x86_64 to MMX supported arch.
+	Added warning to libnotify when popup notifier support is not enabled.
+
+2007-07-27  Kanru Chen  <koster@debian.org.tw>
+
+	* src/core/termview.cpp:
+	Draw characters that are not handled in CTermView::DrawSpaceFillingChar.
+
+2007-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp:
+	Fix bugs in CTermView::DrawSpaceFillingChar and use some workarounds to
+	overcome the serious bugs in gtk+ itself.
+
+2007-07-26  PCMan (Hong Jen Yee)  <pcman.tw@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/termview.h:
+	Dramatically optimize the displaying of space-filling characters used to
+	draw ASCII arts.
+
+2007-06-10  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Disable GCC Visibility when --enable-debug.
+	It's important to help resolving problems. Applied CXXFLAGS +=
+	"-fvisibility-inlines-hidden" for better visibility tweaks.
+
+2007-06-08  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/caret.h (CCaret::~CCaret) (CCaret::Hide) (CCaret::Show),
+	src/core/termdata.h (CTermCharAttr::m_DefaultColorTable),
+	src/core/site.h (CSite::SaveToFile) (CSite::CSite) (CSite::~CSite),
+	src/core/termsel.h (CTermSelection::NewStart)
+	(CTermSelection::ChangeEnd) (CTermSelection::SelectPage)
+	(CTermSelection::Empty),
+	src/core/fileutil.h (copyfile): Aggressive GCC Visibility tweaks.
+	Now, symbol number in libpcmanx_core.so down to 144.
+
+2007-06-07  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/core/debug.h,
+	src/core/pcmanx_utils.h: Rename from the former to the later.
+	Added new macro "X_EXPORT" making use of GCC Visibility.
+
+	* configure.ac: Initial support of GCC Visibility. Added
+	"-fvisibility=hidden" to compiler flags, which makes symbol
+	number in libpcmanx_core.so reduced from 248 to 221.
+	# nm -D /usr/lib/libpcmanx_core.so.0.0.0 | egrep "[BTW]" | wc -l
+
+	* src/notifier/api.h,
+	src/autologinpage.cpp,
+	src/sitepage.cpp,
+	src/docklet/api.h,
+	src/mainframe.h,
+	src/emoticondlg.cpp,
+	src/configfile.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termview.cpp,
+	src/core/caret.h,
+	src/core/site.cpp,
+	src/core/font.cpp,
+	src/core/termdata.h,
+	src/core/termview.h,
+	src/core/site.h,
+	src/core/stringutil.h,
+	src/core/view.cpp,
+	src/core/font.h,
+	src/core/termsel.cpp,
+	src/core/view.h,
+	src/core/termsel.h,
+	src/core/fileutil.h,
+	src/core/widget.cpp,
+	src/core/widget.h,
+	src/core/Makefile.am,
+	src/editfavdlg.cpp,
+	src/pcmanx_gtk2.cpp,
+	src/prefdlg.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetview.cpp,
+	src/view/telnetcon.cpp,
+	src/view/telnetview.h,
+	src/sitedlg.cpp,
+	src/dialog.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/script/api.h,
+	src/listbox.cpp,
+	src/generalprefpage.cpp,
+	src/sitelistdlg.cpp,
+	src/nancy_bot/api.h: Mark X_EXPORT for libpcmanx_core.so .
+	TODO: Better splitting classes and member functions could deeply
+	reduce ELF symbols.
+
+	* AUTHORS: Mentioned Neversay as contributor.
+
+2007-06-02  Jim Huang  <jserv.tw@gmail.com>
+
+	* po/zh_TW.po,
+	po/zh_CN.po: Update translations.
+
+2007-05-19  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::OnAbout),
+	AUTHORS: Update contact information and copyright date.
+
+	* src/appconfig.cpp (CAppConfig::SetToDefault): Change default web
+	browser to firefox.
+
+2007-05-19  Jim Huang  <jserv.tw@gmail.com>
+
+	* configure.ac: Added firefox-plugin detection for Firefox version
+	2.x.
+
+2007-03-03  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac,
+	po/zh_TW.po,
+	po/Makevars,
+	po/zh_CN.po: update the address of forum.
+
+2007-02-26  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp: add a workaround to prevent zombie process after
+	updating BBS list.
+
+2007-02-21  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/appconfig.cpp: fix the bug of center align.
+
+2007-02-08  Kanru Chen  <koster@debian.org.tw>
+
+	* configure.ac,
+	src/mainframe.cpp,
+	src/pcmanx_gtk2.cpp,
+	src/view/telnetcon.cpp:
+	Added libnotify notifier support, use --enable-libnotify to switch.
+
+2007-01-21  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* configure.ac,
+	src/appconfig.cpp,
+	src/appconfig.h,
+	src/generalprefpage.cpp,
+	src/mainframe.cpp,
+	src/mainframe.h,
+	src/view/telnetview.cpp,
+	src/view/telnetview.h: disable the buggy "BBS List Update" and
+	wget download by default.
+
+2007-01-18  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/docklet/eggtrayicon.c (egg_tray_icon_class_init)
+	(egg_tray_icon_manager_window_destroyed) (egg_tray_icon_realize)
+	(egg_tray_icon_send_message): Sync with GNOME cvs repository.
+	Updated: transparent icons, sending of messages, and fix 1 pixel.
+	(egg_tray_icon_add) (transparent_expose_event)
+	(make_transparent_again) (make_transparent): New helper functions.
+
+2007-01-18  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/mainframe.cpp (CMainFrame::CMainFrame): Remove the call of
+	gtk_widget_grab_focus to avoid SIGSEGV caused by gtk+-2.10.7 .
+	Reported by Leo <sdl.web@gmail.com>.
+
+2006-10-11  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/emoticondlg.cpp (CEmoticonDlg::CEmoticonDlg),
+	src/editfavdlg.cpp (CEditFavDlg::CEditFavDlg),
+	src/core/termview.cpp (CTermView::PasteFromClipboard),
+	src/appconfig.cpp (CAppConfig::SaveFavorites): Remove redundant
+	variables.
+
+	* src/view/telnetcon.cpp (CTelnetCon::OnConnect)
+	(CTelnetCon::OnNewIncomingMessage),
+	src/nancy_bot/msgdata.cpp (MsgData::writeToMsgData)
+	(MsgData::getCommonMsg),
+	src/nancy_bot/botutil.h (replaceString),
+	src/nancy_bot/nancybot.cpp (NancyBot::askNancy): Eliminate casting
+	warnings.
+
+	* src/view/telnetcon.cpp (CTelnetCon::OnConnect): Use DEBUG macro
+	instead of INFO.
+
+	* src/mainframe.cpp (CMainFrame::OnAbout)
+	(CMainFrame::updateBBSListHandler): Eliminate compilation warnings.
+
+	* NEWS: Fix typo.
+
+2006-10-10  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* src/notifier/notifier-impl.c,
+	src/notifier/working_area.c: Clean some warning messages during
+	compilation.
+
+2006-10-10  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Add debuginfo rpm for debug.
+
+2006-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: Polish the spec for redhat/fedora.
+
+	* pcmanx.desktop.in: Remove the duplicated item.
+
+2006-09-12  Jim Huang  <jserv.tw@gmail.com>
+
+	* src/appconfig.cpp (CAppConfig::LoadFavorites): Fixlet to AntiIdleStr
+	typo. Anti idle string should be working now.
+
+2006-09-08  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: remove tag for Fedora Core 5, add dependency term.
+
+2006-08-29  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
+
+	* pcmanx-gtk2.spec.in: add tag for Fedora Core 5
+
+	* TODO: task add
+
 2006-08-20  Kanru Chen  <koster@debian.org.tw>
 
 	* configure.ac: Bump version number to 0.3.5, let's make a good release.
@@ -23,11 +383,11 @@
 2006-07-28  Kanru Chen  <koster@debian.org.tw>
 
 	* src/appconfig.cpp,
-	  src/appconfig.h,
-	  src/core/termview.cpp,
-	  src/core/termview.h,
-	  src/mainframe.cpp,
-	  src/mainframe.h: Support setting seprated english/ascii font.
+	src/appconfig.h,
+	src/core/termview.cpp,
+	src/core/termview.h,
+	src/mainframe.cpp,
+	src/mainframe.h: Support setting separated English/ASCII font.
 
 2006-07-26  Jim Huang  <jserv.tw@gmail.com>
 
@@ -36,7 +396,7 @@
 	(main): Initialize Runtime options and check if multiple-instance is
 	allowed. This enables "pcmanx --help" to dump options.
 
-2006-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-gtk2.spec.in: Modify the spec for fedora rpm package build.
 
@@ -57,7 +417,7 @@
 	available.
 	Fallbacks used: "xulrunner-plugin". 
 
-2006-04-22  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-04-22  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/debug.h,
@@ -82,20 +442,20 @@
 
 	* po/pcmanx.pot: deleted, now not necessary.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/appconfig.h,
 	src/mainframe.cpp,
 	src/appconfig.cpp: Polish center alignment mechanism.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po: Update the po files.
 
-2006-03-12  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-03-12  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/core/termview.cpp,
@@ -224,7 +584,7 @@
 	TODO: we shall be able to toggle and show/hide the status bar
 	immediately.
 
-2006-02-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2006-02-19  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
@@ -348,20 +708,20 @@
 	po/zh_TW.po,
 	po/zh_CN.po: updated related po files.
 
-2005-12-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-12-04  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/pcmanx.pot,
 	po/zh_TW.po,
 	po/zh_CN.po : revise po files.
 
-2005-11-15  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-11-15  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/sitepage.cpp,
 	src/sitepage.h,
 	src/generalprefpage.cpp,
 	src/generalprefpage.h : move align checkbox to sitepage.cpp
 
-2005-11-13  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-11-13  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/generalprefpage.h,
 	src/generalprefpage.cpp,
@@ -401,11 +761,11 @@
 	Enforce plugin shared library to be compiled with the -fPIC option.
 	Reported by: Emfox Zhou <emfoxzhou@gmail.com>.
 
-2005-10-18  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-18  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/zh_CN.po: Translated by emfox.
 
-2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-09  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* configure.ac: Bump release version to 0.3.3
 
@@ -415,7 +775,7 @@
 
 	* po/zh_TW.po: Update.
 
-2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-10-01  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/appconfig.h
 	src/view/telnetview.cpp
@@ -428,7 +788,7 @@
 	* po/pcmanx.pot,
 	po/zh_TW.po: Messages updated.
 
-2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-25  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h
 	src/mainframe.cpp
@@ -436,29 +796,29 @@
 	po/zh_TW.po:
 	Add menu item "Paste from Clipboard".
 
-2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-25  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.cpp: Make the ugly command shorter.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* po/zh_TW.po: Updated the Traditional Chinese Messages for BBS 
 	list update
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h,
 	src/view/telnetcon.cpp,
 	src/mainframe.cpp:
 	Modify BBS list update mechanism not to block the user interaction.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/view/telnetcon.h,
 	src/view/telnetcon.cpp:
 	Remove g_mutex_new inline for code-reading friendly.
 
-2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-24  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/mainframe.h,
 	src/view/telnetview.cpp,
@@ -471,7 +831,7 @@
 
 	* configure.ac: Clean up redundant GTK+ checking.
 
-2005-09-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-09-19  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* pcmanx-pure-gtk2.spec.in: Modify string from "Copyright" to "License".
 
@@ -874,7 +1234,7 @@
 	Fixlet to module query.
 	Clarify headers including.
 
-2005-08-05  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-08-05  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/core/termview.cpp,
 	src/core/termview.h,
@@ -1518,7 +1878,7 @@
 	* src/mainframe.cpp (CMainFrame::NewCon):
 	Call CTermView::SetHorizontalCenterAlign with proper parameter.
 
-2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/termview.cpp:
 	Fix bug of selected region.
@@ -1569,7 +1929,7 @@
 	src/termview.cpp (CTermView::OnSize):
 	Anti-alias font can be turned off now.
 
-2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-16  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/termdata.cpp:
 	* src/termview.cpp:
@@ -1941,7 +2301,7 @@
 	* src/font.h (CFont::GetMaxWidth):
 	Ensure that max width can be devided by 2.
 
-2005-07-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+2005-07-04  Shih-yuan Lee (FourDollars)  <fourdollars@gmail.com>
 
 	* src/widget.cpp
 	(delete_CWidget): Check object existence before releasing.

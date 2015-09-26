@@ -1,6 +1,8 @@
 #ifndef NOTIFIER_API_H
 #define NOTIFIER_API_H
 
+#include "pcmanx_utils.h"
+
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

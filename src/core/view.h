@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +23,14 @@
   #pragma interface "view.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include "widget.h"
 
 /**
 @author PCMan
 */
-class CView : public CWidget
+class X_EXPORT CView : public CWidget
 {
 public:
     CView();

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@
 #include "termview.h"
 #include "termdata.h"
 #include "termsel.h"
-
-#include "debug.h"
 
 #include <string>
 
@@ -289,6 +287,139 @@ void CTermView::OnCreate()
 	m_Caret.Show();
 }
 
+// gtk+ 2.8.0 to 2.10.13 all have serious bug in gdk_draw_trapezoids()
+// So version check is needed here.
+#if GTK_CHECK_VERSION( 2, 10, 13 ) ||  ! GTK_CHECK_VERSION( 2, 8, 0 )
+#else
+#define	HAVE_GDK_DRAW_TRAPEZOIDS_BUG
+
+// This is the correct implementation of gdk_draw_trapezoids taken from gtk+ 2.10.14
+static void fixed_gdk_draw_trapezoids (GdkDrawable *drawable, 
+						GdkGC *gc, GdkTrapezoid   *trapezoids,
+						gint n_trapezoids, GdkColor* color, GdkRectangle* clip_rect )
+{
+  cairo_t *cr;
+  int i;
+
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (GDK_IS_GC (gc));
+  g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
+
+  cr = gdk_cairo_create (drawable);
+
+  // color
+  gdk_cairo_set_source_color (cr, color);
+
+  //clip
+  cairo_reset_clip (cr);
+  if (clip_rect)
+    {
+      cairo_save (cr);
+
+      cairo_identity_matrix (cr);
+      cairo_translate (cr, gc->clip_x_origin, gc->clip_y_origin);
+
+      cairo_new_path (cr);
+      gdk_cairo_rectangle (cr, clip_rect);
+
+      cairo_restore (cr);
+
+      cairo_clip (cr);
+    }
+ 
+  for (i = 0; i < n_trapezoids; i++)
+    {
+      cairo_move_to (cr, trapezoids[i].x11, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x21, trapezoids[i].y1);
+      cairo_line_to (cr, trapezoids[i].x22, trapezoids[i].y2);
+      cairo_line_to (cr, trapezoids[i].x12, trapezoids[i].y2);
+      cairo_close_path (cr);
+    }
+  cairo_fill (cr);
+  cairo_destroy (cr);
+}
+#endif
+
+bool CTermView::DrawSpaceFillingChar(const char* ch, int len, int x, int y, GdkRectangle* clip, GdkColor* clr)
+{
+	GdkDrawable* dc = m_Widget->window;
+	guchar* uchar = (guchar*)ch;
+// NOTE: Omit this check to increase performance.
+// IsSpaceFillingChar should be called prior to calling this method.
+//	if( len >= 3 && (int)uchar[0] == 0xe2 )
+	{
+//		gdk_gc_set_rgb_fg_color( m_GC, clr );
+		switch( uchar[1] )
+		{
+		case 0x96:
+			if( uchar[2] >= 0x81 && uchar[2] <= 0x88 )
+			{
+				int h = m_CharH * (uchar[2] - 0x80) / 8;
+				gdk_draw_rectangle( dc, m_GC, true, x , y + m_CharH - h, m_CharW * 2, h );
+			}
+			else if( uchar[2] >= 0x89 && uchar[2] <= 0x8f )
+			{
+				// FIXME: There are still some potential bugs here.
+				// See the welcome screen of telnet://ptt.cc for example
+				int w = m_CharW * 2 * (8 - (uchar[2] - 0x88)) / 8;
+				gdk_draw_rectangle( dc, m_GC, true, x, y, w, m_CharH );
+			}
+/*
+			else if( uchar[2] == 0xa0 )
+			{
+				gdk_draw_rectangle( dc, m_GC, true, rc->x, rc->y, m_CharW * 2, m_CharH );
+			}
+			else if( uchar[2] == 0xa1 )
+			{
+				int w = m_CharW * 2 * (uchar[2] - 0x88) / 8;
+				gdk_draw_rectangle( dc, m_GC, false, rc->x, rc->y, w, m_CharH );
+			}
+*/			else
+				return false;
+			return true;
+		case 0x95:
+			return false;
+		case 0x94:
+			return false;
+		case 0x97:
+			{
+				GdkTrapezoid tz;
+
+				tz.y1 = y;
+				tz.y2 = y + m_CharH;
+				tz.x11 = tz.x12 = x;
+				tz.x21 =	tz.x22 = x + m_CharW * 2;
+
+				switch( uchar[2] )
+				{
+				case 0xa2:
+					tz.x11 = tz.x21;
+					break;
+				case 0xa3:
+					tz.x21 = tz.x11;
+					break;
+				case 0xa4:
+					tz.x22 = tz.x12;
+					break;
+				case 0xa5:
+					tz.x12 = tz.x22;
+					break;
+				default:
+					return false;
+				}
+
+// workarounds for serious bug in gtk+ 2.8.0 to 2.10.12
+#ifdef HAVE_GDK_DRAW_TRAPEZOIDS_BUG
+				fixed_gdk_draw_trapezoids( dc, m_GC, &tz, 1, clr, clip );
+#else
+				gdk_draw_trapezoids( dc, m_GC, &tz, 1 );
+#endif
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 int CTermView::DrawChar(int row, int col)
 {
@@ -390,7 +521,9 @@ int CTermView::DrawChar(int row, int col)
 					} else {
 						font = m_Font->GetXftFont();
 					}
-					XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
+
+					if( !IsSpaceFillingChar(utf8_ch, wl) || !DrawSpaceFillingChar( utf8_ch, wl, left, top, &rect, Fg ) )
+						XftDrawStringUtf8( m_XftDraw, &xftclr, font, left, top + font->ascent, (FcChar8*)utf8_ch, wl );
 					g_free(utf8_ch);
 				}
 			}
@@ -694,7 +827,6 @@ void CTermView::PasteFromClipboard(bool primary)
 		if( !utext )
 			return;
 		INFO("%s", utext);
-		gsize wl;
 
 		DoPasteFromClipboard( string(utext), false);
 		g_free(utext);

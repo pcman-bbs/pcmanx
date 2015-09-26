@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005 PCMan <hzysoft@sina.com.tw>
+ * Copyright (c) 2005 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,13 @@
   #pragma interface "telnetview.h"
 #endif
 
+#include "pcmanx_utils.h"
+
 #include "termview.h"
+
+#ifndef MOZ_PLUGIN
+#include "qqwryseeker.h"
+#endif
 
 /**
 @author PCMan
@@ -35,6 +41,7 @@ class CTelnetView : public CTermView
 friend class CMainFrame;
 public:
     CTelnetView();
+    ~CTelnetView();
 
     void OnTextInput(const gchar* text);
     void OnHyperlinkClicked(string url);
@@ -47,7 +54,9 @@ public:
 
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
 	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
+#ifdef USE_WGET
 	static void setWgetFiles(const bool bBool){ m_bWgetFiles = bBool; }
+#endif
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -65,10 +74,13 @@ protected:
 #if !defined(MOZ_PLUGIN)
 protected:
     static CMainFrame* m_pParentFrame;
+    QQWrySeeker *m_pIpSeeker;
 #endif /* !defined(MOZ_PLUGIN) */
     static string m_WebBrowser;
     static string m_MailClient;
+#ifdef USE_WGET
 	static bool m_bWgetFiles;
+#endif
 };
 
 #endif

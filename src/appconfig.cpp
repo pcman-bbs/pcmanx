@@ -1,14 +1,22 @@
-// AppConfig.cpp: implementation of the CAppConfig class.
-/////////////////////////////////////////////////////////////////////////////
-// Name:        appconfig.cpp
-// Purpose:     Application configuration class, deal with configuration
-// Author:      PCMan (HZY)   http://pcman.ptt.cc/
-// E-mail:      hzysoft@sina.com.tw
-// Created:     2004.7.20
-// Copyright:   (C) 2004 PCMan
-// Licence:     GPL : http://www.gnu.org/licenses/gpl.html
-// Modified by: 
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * appconfig.cpp: implementation of the CAppConfig class.
+ *
+ * Copyright (c) 2004 PCMan <pcman.tw@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #ifdef __GNUG__
   #pragma implementation "appconfig.h"
@@ -24,8 +32,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#include "debug.h"
 
 CAppConfig AppConfig;
 //////////////////////////////////////////////////////////////////////
@@ -88,7 +94,9 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #endif
 		CFG_BOOL( ShowTrayIcon )
 		CFG_BOOL( ShowStatusBar )
+#ifdef USE_WGET
 		CFG_BOOL( UseWgetFiles )
+#endif
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -102,8 +110,8 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSizeEn )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
-		CFG_BOOL( HorizontalCenterAlign )
-		CFG_BOOL( VerticalCenterAlign )
+		_CFG_BOOL ( "HorizontalCenterAlign", m_DefaultSite.m_bHorizontalCenterAlign )
+		_CFG_BOOL ( "VerticalCenterAlign", m_DefaultSite.m_bVerticalCenterAlign )
 		CFG_INT ( CharPaddingX)
 		CFG_INT ( CharPaddingY)
 	END_CONFIG_SECT()
@@ -138,6 +146,12 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		_CFG_STR ( "Encoding", m_DefaultSite.m_Encoding )
 		_CFG_INT ( "CRLF", m_DefaultSite.m_CRLF )
 		_CFG_STR ( "ESCConv", m_DefaultSite.m_ESCConv )
+#ifdef USE_EXTERNAL
+		_CFG_BOOL ( "UseExternalSSH",
+			m_DefaultSite.m_UseExternalSSH )
+		_CFG_BOOL ( "UseExternalTelnet",
+			m_DefaultSite.m_UseExternalTelnet )
+#endif
 		CFG_INT  ( SocketTimeout )
 	END_CONFIG_SECT()
 
@@ -192,7 +206,7 @@ void CAppConfig::LoadFavorites()
 				pSite->m_AutoReconnect = atoi(pval);
 			else if( 0 == strcmp( pname, "AntiIdle" ) )
 				pSite->m_AntiIdle = atoi(pval);
-			else if( 0 == strcmp( pname, "Antiidlestr" ) )
+			else if( 0 == strcmp( pname, "AntiIdleStr" ) )
 				pSite->m_AntiIdleStr = pval;
 			else if( 0 == strcmp( pname, "Encoding" ) )
 				pSite->m_Encoding = pval;
@@ -278,7 +292,7 @@ void CAppConfig::SaveFavorites()
 	FILE* fo = fopen( fpath.c_str() , "w" );
 	if( fo )
 	{
-		bool has_sensitive_data = false;
+		// bool has_sensitive_data = false;
 		vector<CSite>::iterator it;
 		for( it = Favorites.begin(); it != Favorites.end(); ++it )
 		{
@@ -313,7 +327,9 @@ void CAppConfig::SetToDefault()
 #endif
 	PopupNotifier = true;
 	PopupTimeout = 6;
+#ifdef USE_WGET
 	UseWgetFiles = false;
+#endif
 
 	CharPaddingX = 0;
 	CharPaddingY = 0;
@@ -330,7 +346,7 @@ void CAppConfig::SetToDefault()
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
 
-	MailClient = WebBrowser = "mozilla %s";
+	MailClient = WebBrowser = "firefox %s";
 	ShowTrayIcon = true;
 	ShowStatusBar = true;
 

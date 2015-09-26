@@ -4,7 +4,7 @@
 // Description: 
 //
 //
-// Author: Hong Jen Yee (PCMan) <hzysoft@sina.com.tw>, (C) 2005
+// Author: Hong Jen Yee (PCMan) <pcman.tw@gmail.com>, (C) 2005
 //
 // Copyright: See COPYING file that comes with this distribution
 //
@@ -17,8 +17,6 @@
 #include "emoticondlg.h"
 #include "inputdialog.h"
 #include "appconfig.h"
-
-#include "debug.h"
 
 static const char emoticon_file_name[] = "emoticons";
 
@@ -45,7 +43,6 @@ CEmoticonDlg::CEmoticonDlg(CWidget* parent) : m_IsModified(false)
 	GtkWidget *remove_btn;
 	GtkWidget *up_btn;
 	GtkWidget *down_btn;
-	GtkWidget *dialog_action_area;
 
 	vbox = GTK_DIALOG (m_Widget)->vbox;
 	gtk_widget_show (vbox);
