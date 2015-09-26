@@ -64,6 +64,7 @@ protected:
     void OnLButtonUp(GdkEventButton* evt);
 #endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
     void OnRButtonDown(GdkEventButton* evt);
+    void OnWebSearchSelected();
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
     void OnDestroy();

@@ -82,6 +82,7 @@ public:
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
 	static gboolean OnBlinkTimer(CMainFrame* _this);
 	static gboolean OnEverySecondTimer(CMainFrame* _this);
+	static gboolean OnWindowStateEvent(GtkWindow* window, GdkEventWindowState* event, CMainFrame* _this);
 	static gboolean OnClose( GtkWidget* widget, GdkEvent* evt, CMainFrame* _this );
 	static gboolean OnSize( GtkWidget* widget, GdkEventConfigure* evt, CMainFrame* _this );
 	GObject* m_JumpTos[10];
@@ -133,6 +134,7 @@ protected:
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
@@ -209,9 +211,9 @@ protected:
 
 private:
 	enum {NORMAL_MODE, FULLSCREEN_MODE, SIMPLE_MODE} m_Mode;
-	bool m_Unity;
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
+	bool m_Unity;
 };
 
 #endif

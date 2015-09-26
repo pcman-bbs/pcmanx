@@ -845,6 +845,29 @@ inline bool isurlscheme(int ch)
 {	return isalnum(ch) || strchr("+-.", ch);	}
 
 
+#define ARRAY_SIZE(arr) \
+	(sizeof(arr) / sizeof(arr[0]))
+static const char *valid_protocol[] = {
+	"http",
+	"telnet",
+	"https",
+	"ftp",
+};
+static inline bool isValidURLScheme(const char *line, int schemeStart, int schemeEnd)
+{
+	char protocol_buffer[16];
+	int strLen = schemeEnd - schemeStart + 1; // index starts from 0
+
+	for (int i = 0; i < ARRAY_SIZE(valid_protocol); i++) {
+		strcpy(protocol_buffer, valid_protocol[i]);
+		if (!strncmp(line + schemeStart,
+		             strcat(protocol_buffer, "://"), strLen)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // 2004/08/06 modified by PCMan
 // This function is used to detect E-mails and called from UpdateDisplay().
 inline void DetectEMails( const char *line, CTermCharAttr *attr, int len )
@@ -906,8 +929,10 @@ inline void DetectCommonURLs( const char *line, CTermCharAttr *attr, int len )
 			}
 			break;
 		case 1:	// "://" is found.
-			if( 0 == strncmp( line+col, "://", 3 ) && isurl( line[col+3] ) )
-			{
+			if (((col + 3) <= len) &&
+			    (0 == strncmp(line + col, "://", 3)) &&
+			    isurl(line[col + 3]) &&
+			    (isValidURLScheme(line, ilink, col + 2))) {
 				stage = 2;
 				col += 3;
 			}

@@ -95,6 +95,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
 #endif
+		CFG_BOOL( ShowToolbar )
 		CFG_BOOL( ShowStatusBar )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
@@ -110,6 +111,7 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_INT ( FontSizeEn )
 		CFG_BOOL( AntiAliasFont )
 		CFG_BOOL( CompactLayout )
+		CFG_BOOL( Maximized )
 		_CFG_BOOL ( "HorizontalCenterAlign", m_DefaultSite.m_bHorizontalCenterAlign )
 		_CFG_BOOL ( "VerticalCenterAlign", m_DefaultSite.m_bVerticalCenterAlign )
 		_CFG_INT ( "UAO", m_DefaultSite.m_UAO )
@@ -364,15 +366,17 @@ void CAppConfig::SetToDefault()
 	FontFamilyEn = "WenQuanYi Micro Hei Mono";
 	AntiAliasFont = true;
 	CompactLayout = false;
+        Maximized = false;
 	HorizontalCenterAlign = false;
 	VerticalCenterAlign = false;
     UAO = 0;
 
-	MailClient = "xdg-email %s";
-	WebBrowser = "xdg-open %s";
+	MailClient = "xdg-email";
+	WebBrowser = "xdg-open";
 #ifdef USE_DOCKLET
 	ShowTrayIcon = true;
 #endif
+	ShowToolbar = true;
 	ShowStatusBar = true;
 
 	HyperLinkColor.red = 65535;
@@ -385,11 +389,6 @@ void CAppConfig::SetToDefault()
 
 void CAppConfig::AfterLoad()
 {
-	if(	!WebBrowser.empty() && !strstr( WebBrowser.c_str(), " %s") )
-		WebBrowser += " %s";
-	if(	!MailClient.empty() && !strstr( MailClient.c_str(), " %s") )
-		MailClient += " %s";
-
 /*	if( 0 == Shadow.length() )
 		return;
 

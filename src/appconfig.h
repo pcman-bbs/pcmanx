@@ -96,6 +96,7 @@ public:
 #ifdef USE_DOCKLET
 	bool ShowTrayIcon;
 #endif
+        bool ShowToolbar;
 	bool ShowStatusBar;
 	bool PopupNotifier;
 	int PopupTimeout;
@@ -110,6 +111,7 @@ public:
 //	Display Settings
 	bool AntiAliasFont;
 	bool CompactLayout;
+        bool Maximized;
 	int CharPaddingX;
 	int CharPaddingY;
 	bool HorizontalCenterAlign;

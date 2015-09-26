@@ -138,6 +138,9 @@
    */
 #undef LT_OBJDIR
 
+/* Define to the shared library suffix, say, ".dylib". */
+#undef LT_SHARED_EXT
+
 /* Define if dlsym() requires a leading underscore in symbol names. */
 #undef NEED_USCORE
 
