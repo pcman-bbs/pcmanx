@@ -1,0 +1,1741 @@
+2005-10-09  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* configure.ac: release 0.3.3
+
+2005-10-09  Kanru Chen  <koster@debian.org.tw>
+
+	* ChangeLog: Reformating.
+
+	* po/zh_TW.po: Update.
+
+2005-10-01  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/appconfig.h,
+	src/view/telnetview.cpp,
+	src/view/telnetview.h,
+	src/generalprefpage.h,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/generalprefpage.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Use wget compressed files.
+
+2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/mainframe.h,
+	src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Add menu item "Paste from Clipboard".
+
+2005-09-25  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/mainframe.cpp: Make the ugly command shorter.
+
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* po/zh_TW.po: Update the Traditional Chinese Message for BBS list update.
+
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/mainframe.h,
+	src/view/telnetcon.cpp,
+	src/mainframe.cpp:
+	Modify BBS list update mechanism. (not to block the user interaction)
+
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/view/telnetcon.h,
+	src/view/telnetcon.cpp:
+	Remove g_mutex_new inline for code-reading friendly.
+
+2005-09-24  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/mainframe.h,
+	src/view/telnetview.cpp,
+	src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po:
+	Add BBS list update mechanism.
+
+2005-09-22  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac: Clean up redundant GTK+ checking.
+
+2005-09-19  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* pcmanx-pure-gtk2.spec.in : Modify string from "Copyright" to "License".
+
+2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termdata.cpp:
+	(CTermData::PutChar): Fix incorrect parsing of ANSI control characters.
+
+2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termdata.cpp:
+	(CTermData::ScrollUp): Fix a problem with screen scrolling.
+	(CTermData::ParseAnsiEscapeSequence): Implement ESC 7 and ESC 8.
+
+2005-08-28  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/nancy_bot/msgdata.cpp:
+	(MsgData::getCommonMsg): Temporary workaround to fix the SIGFPE caused
+	by division by zero.
+
+2005-08-27  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.cpp (CFont::RecalculateMetrics):
+	Recalculate metrics only when face is scalable. Reported by
+	wilkins@ptt.
+
+2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: Little fix.
+
+2005-08-25  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/mainframe.cpp,
+	po/pcmanx.pot,
+	po/zh_TW.po,
+	po/zh_CN.po: Added zh_CN translator Optical-dlz.
+
+2005-08-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* configure.ac:
+	Temporarily disable --enable-script option in the configure script.
+	Bump release version to 0.3.2.
+
+2005-08-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/script/script.cpp:
+	Change char* parameters to const char* since these strings are not 
+	modified in these functions.
+
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
+	
+	* src/nancy_bot/nancybot.cpp: Fixed an unexpected semicolon in
+	NancyBot::askNancy().
+
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/Makefile.am,
+	data/Makefile.am,
+	src/nancy_bot/botutil.h,
+	data/nancy_bot/default_usages.data,
+	data/nancy_bot/example_usages.data: Divided utils for Nancy:
+	replaceString() and trim(). Added data files for
+	USE_USER_DEFINED_USAGES .
+
+	* src/nancy_bot/api.h,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/nancybot.cpp: Added two functions
+	MsgData::initUserDefinedUsages() and MsgData::getUserDefinedUsages().
+	Replaced char with unsigned char. Several bugs fixed.
+
+
+2005-08-23  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/msgdata.h,
+	src/nancy_bot/api.h:
+	Fixed that bot add all replies to unknow messages.
+	Add "xxx = yyy" teaching. (#define TEACH_BOT).
+
+2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/msgdata.h: Fixed an auto-learning mistake.
+
+2005-08-22  Kanru Chen  <koster@debian.org.tw>
+
+	* src/view/telnetview.cpp
+	(CTelnetView::OnHyperlinkClicked):
+	Disable parsing telnet:// in firefox plugin.
+
+	* configure.ac:
+	Bump release version to 0.3.1.
+
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetview.cpp:
+	Convert all '\n' characters to correct CR/LF before pasting text
+	from the clipboard.
+	This is just a workaround and should be fixed in the future.
+
+2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
+
+	* data/nancy_bot/default_msg.data,
+	data/nancy_bot/default.conf: Added more comments for user.
+
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetview.cpp:
+	Convert UTF-8 encoded text from clipboad to site-specific encoding.
+	This can prevent the broken UTF-8 string caused by auto-wrap.
+	This is just a workaround and should be fixed in the future.
+
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/nancy_bot/msgdata.cpp:
+	Remove MsgData::my_copy(), use copyfile() instead.
+
+2005-08-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/fileutil.c:
+	Add copyfile() to copy file since it's not provided by the system.
+
+	* src/nancy_bot/msgdata.cpp:
+	Remove MsgData::my_copy(), use copyfile() instead.
+
+	* src/nancy_bot/nancybot.cpp:
+	Change default learning level:
+	LEVEL__ASK_UNKNOW_MSG = 10
+	LEVEL__RE_LEARNING = 5
+
+2005-08-22  Youchen Lee  <youchen.lee@gmail.com>
+
+	* configure.ac: Added zh_CN.po ( Edited by Optical-dlz ).
+	
+	* src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/msgdata.h: Added mkdir of ~/.pcmanx/nancy_bot/.
+	Added function my_copy(), but cause ld error.
+
+	* src/view/telnetcon.cpp: Changed nancy CONFIG_PATH to
+	~/.pcmanx/nancy_bot/ .
+
+2005-08-21  Youchen Lee  <youchen.lee@gmail.com>
+
+	* configure.ac,
+	README: Set --enable-nancy as default.
+	* TODO: Added severial todos.
+
+2005-08-21  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp:
+	Add a simple control menu to swich Nancy Bot on and off.
+	Add a pane to status bar to indicate whether NancyBot is enabled.
+	Add a pane to status bar displaying elapsed time.
+
+2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/view/telnetcon.cpp,
+	src/view/telnetcon.h: Fixed grep waterballs in ptts.
+	Added static functions and vars to control with_nancy_support.
+	Added functions to control use_nancy in run time.
+
+2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/api.h: Now NancyBot::replaceString() could replace
+	more than one strings.
+	Added "NancyBot Settings HOWTO" in api.h.
+
+	* src/nancy_bot/msgdata.h: Comment fixed.
+
+2005-08-20  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/api.h,
+	src/nancy_bot/msgdata.h: Fixed unclear variable and function names about
+	"Bot Level".
+
+	* data/nancy_bot/default_msg.data,
+	data/nancy_bot/default.conf: Convert from big5 to utf-8.
+
+	* src/view/telnetcon.cpp: Use SendString() to send utf-8 strings.
+
+2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetcon.cpp: CTelnetCon::OnNewIncomingMessage now receives
+	UTF-8 encoded strings as parameter.
+
+2005-08-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termview.cpp,
+	src/view/telnetview.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/generalprefpage.cpp:
+	Greatly enhance hyperlink handling of the terminal screen.
+	Now, E-mail addresses can be opened by mail client programs, 
+	and telnet:// URLs can be opened directly in pcmanx by one click.
+	(CTermView::OnHyperlinkClicked): Added and overriden by CTelnetView to 
+	handle hyprelinks.
+
+2005-08-15  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/core/termview.cpp: Fixed a common bug, when URL includes "&", the
+	command to open URL in browser will be seen as background execution.
+
+2005-08-14  Youchen Lee  <youchen.lee@gmail.com>
+
+	* confiure.ac: Added a line to show if support NancyBot or not after
+	running ./configure.
+	
+	* src/configfile.cpp: Appending slash fixed.
+	
+	* src/view/telnetcon.cpp: Replace SendString() with SendRawString() to
+	send big5 strings.
+
+	* src/nancy_bot/nancybot.cpp,
+	src/nancy_bot/standalone.cpp: Changed the initial value of msg_out.
+	
+2005-08-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/notifier/notifier-impl.c
+	(_strreplace): Removed since it's not used in newly written code.
+	All invalid markup characters passed to GtkLabel should be escaped
+	by g_markup_escape_text() function provided by glib, not our own
+	helper function like _strreplace.
+
+2005-08-12  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am: Fixlet to newly-added src/docklet/api.h .
+
+2005-08-11  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am,
+	src/Makefile-byhand: Remove Makefile-byhand since pcmanx_pure_gtk2
+	is getting more and more complex.
+	
+	* src/docklet/api.h: New file. API to docklet supported functions.
+
+	* src/mainframe.h,
+	src/mainframe.cpp,
+	src/pcmanx_pure_gtk2.cpp (main):
+	Use docklet/api.h instead of eggtrayicon header.
+
+2005-08-11  Youchen Lee  <youchen.lee@gmail.com>
+
+	* src/nancy_bot/msg_data.cpp,
+	src/nancy_bot/nancy_bot.cpp:
+	Copy DATAPATH/pcmanx/nancy_bot/{default.conf,default_msg.data} to
+	CONFIG_PATH when use "default" as but name. ( when default.conf and
+	default_msg.data don't exist in ~/.pcmanx/ ).
+
+	* src/view/telnetcon.cpp: Set PATH to $HOME/.pcmanx.
+
+	* po/zh_TW.po: Added my Chinese name (zh_TW).
+
+2005-08-11  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h
+	(CTermView::ExtendSelection): Extend selection continuously so that
+	characters having the same class as the cell specified does are
+	selected.
+	(CTermView::OnLButtonDown): Extend selection on double-click.
+	Select whole line on triple-click.
+
+	* src/core/termdata.cpp,
+	src/core/termdata.h
+	(CTermData::GetCharClass): New function to determine the class of a
+	character. It's quite naive now.
+
+2005-08-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/notifier-impl.c
+	(_strreplace): New helper function to perform string replacement.
+	(notify_new): Beautify the popup window, and replace '<' and '>'
+	with '�� and '�� to avoid invalid input since context_text will
+	be passed to GtkLabel, which accepts Rich text representations.
+	It's a workaround, and we should introduce a smarter way to fix.
+
+2005-08-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/view/telnetcon.h:
+	Wrap USE_NANCY macro with MOZ_PLUGIN for the sake of plugin.
+
+	* src/view/telnetcon.cpp (CTelnetCon::CTelnetCon):
+	Assign DATADIR"/pcmanx/nancy_bot/" as the path for Nancy bot.
+
+	* src/mainframe.cpp (CMainFrame::OnAbout):
+	Add Youchen Lee <youchen.lee@gmail.com> in author list, and
+	clean up redundant code snip.
+
+	* src/nancy_bot/nancybot.h,
+	src/nancy_bot/api.h:
+	Rename from the former to the later for consistency.
+
+	* src/nancy_bot/main.cpp,
+	src/nancy_bot/standalone.cpp:
+	Rename from the former to the later for consistency.
+
+	* src/Makefile.am,
+	src/nancy_bot/msgdata.cpp,
+	src/nancy_bot/nancybot.cpp: Likewise.
+
+	* data/:
+	Adjust directory layout.
+	Put example.conf, example_msg.data, default.conf, and default_msg.data
+	to $(datadir)/pcmanx/nancy_bot.
+	Put orz.py, eliza.py, and PCManXlib.py to $(datadir)/pcmanx/script.
+
+	* po/pcmanx.pot,
+	po/zh_TW.po: Updated.
+
+2005-08-07  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/termsel.h (PageBound, Bound): Removed qualifier in
+	declaration.
+
+	* src/appconfig.cpp,
+	src/appconfig.h,
+	src/mainframe.cpp: 
+	New config option `CompactLayout'.
+
+2005-08-06  Youchen Lee	 <youchen.lee@gmail.com>
+
+	* src/Makefile.am: 
+	Added NancyBot files.
+	
+	* src/nancy_bot/nancybot.h
+	src/nancy_bot/nancybot.cpp
+	src/nancy_bot/msgdata.h
+	src/nancy_bot/msgdata.cpp
+	src/nancy_bot/main.cpp:
+	New files. NancyBot implementations.
+	
+	* configure.ac: Added nancy support.
+	* README: Added helps for --enable-nancy.
+
+	* data/default.conf,
+	data/default_msg.data:
+	Default messages data for NancyBot.
+
+	* data/example.conf,
+	data/example_msg.data:
+	Sample nancy configuration files. Perhaps install into
+	/usr/share/doc/pcmanx_pure_gtk2/nancy_bot .
+
+	* src/view/telnetcon.cpp,
+	src/view/telnetcon.h:
+	Use NancyBot object in TelnetCon between USE_NANCY. Grep water balls
+	in CTelnetCon::OnNewIncomingMessage(char* line) and cut out UserID and
+	additional spaces. Then reply water balls simply use '^R'.
+	Flag use_nancy may used to control if user wanna use Nancy for 
+	auto-reply in dynamic time.
+	FIXME: The NancyBot constructor (PATH) in telnetcon.cpp.
+
+2005-08-05  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/Makefile.am: Added termsel.h and termsel.cpp.
+
+	* src/core/termsel.h,
+	src/core/termsel.cpp:
+	New files which implement CTermSelection. CTermSelection is used to
+	ease the pain of working on the selected region.
+
+	* src/core/termview.h,
+	src/core/termview.cpp:
+	Some formatting.
+	Added m_pTermData->m_FirstLine in various places (untested).
+	Updated to reflect the changes listed below.
+	(DrawChar): `top' is now derived from `row' automatically.
+	Always set clip box before drawing.
+	(PointToLineCol): Take a third parameter so that the caller can know
+	the point is on the left or right half of the cell.
+	Always return the coordinates of the first byte if there is a
+	multi-byte character on that point.
+	(OnLButtonDown): Don't redraw the whole term.
+	(CopyToClipboard): Always set m_s_ANSIColorStr to "" before copying.
+	(IsPosInSel, CorrectSelPos, RedrawSel, PrepareDC): Removed.
+	
+	* src/view/telnetcon.cpp: Updated to reflect the changes of CTermView.
+
+	* src/core/termdata.h,
+	src/core/termdata.cpp:
+	Updated to use CTermSelection.
+	Added m_FirstLine in various places (untested).
+
+	* src/mainframe.cpp:
+	Updated to use CTermSelection.
+
+2005-08-05  Jim Huang  <jserv@kaffe.org>
+
+	* src/script/script.cpp (FinalizeScriptInterface):
+	Fixlet to module query.
+	Clarify headers including.
+
+2005-08-05  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/core/termview.cpp,
+	src/core/termview.h,
+	src/appconfig.h,
+	src/mainframe.cpp,
+	src/appconfig.cpp:
+	Add vertical align center.
+
+2005-07-28  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.h, src/core/font.cpp: Code cleanup.
+	GetWidth() returns single width.
+	Remember the width/height used to open a font so that we can avoid
+	unnecessary CreateXftFont(). Also, this helps SetFontFamily() work
+	right.
+	(CFont::RecalculateMetrics): Calculate font metrics ourselves. This
+	enables us to draw characters in a compact way.
+
+	* src/core/termview.cpp: Reflect changes made to CFont.
+	Make font selecting respect m_AutoFontSize.
+	(CTermView::GetCellSize): New member function to calculate cell
+	width/height in a uniform way.
+
+	* src/mainframe.cpp: Use CTermView::SetFont instead of
+	CFont::SetFont.
+
+2005-07-28  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Workaround to strange Gentoo Mozilla/Firefox package layout.
+
+	* src/debug.h,
+	src/core/debug.h:
+	Move the former to the later.
+
+	* src/core/Makefile.am: Likewise.
+
+2005-07-28  Kanru Chen  <koster@debian.org.tw>
+
+	* src/autologinpage.cpp,
+	src/sitepage.cpp,
+	src/emoticondlg.cpp,
+	src/configfile.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termview.cpp,
+	src/core/site.cpp,
+	src/core/font.cpp,
+	src/core/termview.h,
+	src/core/view.cpp,
+	src/core/widget.cpp,
+	src/editfavdlg.cpp,
+	src/prefdlg.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetview.cpp,
+	src/view/telnetcon.cpp,
+	src/debug.h,
+	src/sitedlg.cpp,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/listbox.cpp,
+	src/generalprefpage.cpp,
+	src/sitelistdlg.cpp:
+	Add debug routine. Use INFO(..) to info message,
+	INFO_ON(..) really enable info, DEBUG(..) for debug message.
+
+	* src/script/script.cpp,
+	src/view/telnetcon.h,
+	src/view/telnetcon.cpp,
+	data/orz.py:
+	New function SendUnEscapedString().
+
+	* src/view/telnetcon.cpp,
+	src/core/termview.cpp:
+	Only convert encoding when really output.
+
+2005-07-27  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.h (CFont::RecalculateMetrics), src/core/font.cpp
+	(CFont::RecalculateMetrics): New private member function for
+	re-calculating font metrics.
+
+2005-07-27  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/notifier-impl.c
+	(slow_show_win) (notify_new):
+	Apply gcc-2.95 compilation fix by pav@FreeBSD.org.
+
+2005-07-26  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Enhance Python development headers detection.
+	Rename PYTHON_{CFLAGS,LIBS} to SCRIPT_{CFLAGS,LIBS}.
+
+	* src/Makefile.am: Likewise.
+
+2005-07-26  Kanru Chen  <koster@debian.org.tw>
+	
+	* configure.ac:
+	Add python version and header files auto-detect.
+
+2005-07-26  Jim Huang  <jserv@kaffe.org>
+
+	* src/view/telnetcon.cpp,
+	src/Makefile.am,
+	plugin/src/Makefile.am,
+	configure.ac:
+	Define a new autoconf test, AC_CSRG_BASED, which will define
+	CSRG_BASED for BSD systems in config.h.
+
+	* configure.ac,
+	README:
+	Add new option --with-mozilla=DIR to specify Mozilla root
+	directory.
+
+2005-07-26  Kanru Chen  <koster@debian.org.tw>
+
+	* src/script/api.h,
+	src/script/script.cpp,
+	src/view/telnetcon.cpp,
+	src/mainframe.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/Makefile.am,
+	data/orz.py,
+	data/PCManXlib.py,
+	data/Makefile.am,
+	configure.ac:
+	Initial Python script support. Example please refer to orz.py.
+
+2005-07-26  Chia I Wu  <b90201047@ntu.edu.tw>
+
+	* src/core/font.cpp: Use FC_PIXEL_SIZE when opening font by pixel
+	height.
+	Use XftFontOpenPattern so that we don't have to match the pattern
+	every time.
+	s/XFT_/FC_/ and s/XftType/FcType/ where suitable.
+
+2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetview.cpp:
+	Temporarily enable the popup menu of hyperlinks.
+
+	* plugin/src/plugin.cpp:
+	Add timers to enable cursor blinking and anti-idle.
+
+2005-07-26  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/sitepage.cpp:
+	Adjust the user interface and add a checkbox for double-byte detection.
+
+	* src/appconfig.cpp:
+	Check default cols and rows of terminal screen and set them to proper 
+	value if needed.  These values cannot be zero or they will cause the 
+	arithmetic error - "divided by zero".
+
+2005-07-25  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/nsScriptablePeer.cpp (nsScriptablePeer::QueryOnExit):
+	Implemented.
+
+	* plugin/src/Makefile.am: Put $(LDFLAGS) with pcmanx-plugin.so
+	generation.
+
+	* data/sitelist: Updated.
+
+2005-07-25  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/view/telnetcon.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/mainframe.cpp:
+	Completely rewrite the multi-threading DNS lookup.
+	Remove all implementation based on GThreadPool.
+	No more deadlock or strange blocking.
+	Use IO channel to monitor socket connection instead of blocking calls.
+	Due to better handling of multi-threading, the performance is improved.
+
+	* src/sitepage.cpp:
+	Prevent the user from accidentally creating a new favorite item without 
+	name or URL.
+
+	* src/appconfig.cpp:
+	Fix the problem which previously disable the usage of space character in 
+	the names of sites.
+
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/core/termdata.cpp:
+	Correctly process Esc[A, Esc[B, Esc[C, Esc[D ANSI escape sequence.
+
+	* src/view/telnetview.cpp,
+	src/core/site.cpp,
+	src/view/telnetcon.cpp:
+	Add m_DetectDBChar to let users turn off double-byte detection.
+
+	* src/appconfig.cpp:
+	Set file permission of ~/.pcmanx/favorites to 0666 to prevent
+	other users from access it.
+
+	* plugin/src/plugin.cpp,
+	plugin/src/plugin.h,
+	plugin/src/pcmanx_interface.idl:
+	Add some experimental code to test xpcom, but the test was failed.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* src/autologinpage.cpp (CAutoLoginPage::CAutoLoginPage): Fix typo.
+
+	* po/pcmanx.pot,
+	po/POTFILES.in,
+	po/zh_TW.po: Updated.
+
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/appconfig.h,
+	src/appconfig.cpp:
+	Comment out some unnecessary code.
+
+2005-07-24  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/autologinpage.cpp,
+	src/autologinpage.h:
+	New files. Add auto-login functionality.
+
+	* src/core/site.cpp,
+	src/view/telnetcon.cpp,
+	src/sitedlg.cpp: 
+	Likewise.
+	(CTelnetCon::ConnectThread) : Use select() in place of other blocking
+	socket API without timeout.  This cause problems sometimes.
+
+	* src/generalprefpage.cpp,
+	src/view/telnetview.cpp,
+	src/dialog.cpp:
+	Little fix to accept NULL parent window.
+
+	* src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp:
+	Add socket timeout settings.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Improve the IDL path detection for xpidl, and set default prefix
+	to /usr.
+
+	* plugin/src/Makefile.am: Likewise.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/notifier-impl.c (destroy_win):
+	Adjust window object release sequence and perform code indent with
+	more comments.
+
+2005-07-24  Jim Huang  <jserv@kaffe.org>
+
+	* plugin/src/plugin.cpp: Rename "pcman" to "pcmanx" in registry.
+
+	* plugin/data/pcmanx.html: Eliminate suffix "/" in url parsing.
+
+2005-07-23  Jim Huang  <jserv@kaffe.org>
+
+	* README: Add "How to Build" section.
+
+	* TODO: Updated.
+
+2005-07-23  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/termview.h
+	(SetTermData): New public method to set terminal data information,
+	which is useful to the plugin implementation.
+
+	* src/Makefile.am,
+	src/core/Makefile.am,
+	src/view/termview.cpp,
+	src/view/termview.h:
+	Move CTermView from $(top_srcdir)/src/view to (top_srcdir)/src/core,
+	so that we could use the same codebase for both the standalone program
+	and the Mozilla/Firefox plugin.
+
+	* src/view/telnetview.cpp,
+	src/view/telnetview.h,
+	src/view/telnetcon.cpp (CTelnetCon::OnConnect) (CTelnetCon::OnClose)
+	(CTelnetCon::OnTimer) (CTelnetCon::OnNewIncomingMessage):
+	Indicate the conditional compilations with MOZ_PLUGIN macro.
+
+	* plugin/src/pluginbase.h,
+	plugin/src/npplat.h,
+	plugin/src/plugin.cpp,
+	plugin/src/Makefile.am,
+	plugin/src/npp_gate.cpp,
+	plugin/src/np_entry.cpp,
+	plugin/src/pcmanx_interface.idl,
+	plugin/src/nsScriptablePeer.cpp,
+	plugin/src/nsScriptablePeer.h,
+	plugin/src/npn_gate.cpp,
+	plugin/src/plugin.h,
+	plugin/data/TelnetProtocol.js.in,
+	plugin/data/pcmanx.html,
+	plugin/data/Makefile.am,
+	plugin/data/pcmanx.png,
+	plugin/Makefile.am:
+	New files. Merge Mozilla/Firefox plugin implementation based on the 
+	excellent work of PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+	NOTE: The IDL detection is not done yet. And pure-static build for
+	plugin is disabled at the moment.
+
+	* configure.ac:
+	Major enhancements for Mozilla/Firefox plugin/XPCOM detection, and add
+	new option --enable-plugin to build plugin, which means that we can
+	use the shared codebase between the standalone program and the plugin.
+
+	* Makefile.am: Add plugin in SUBDIRS.
+	
+2005-07-23  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnDeactivated): Removed
+
+	* src/termview.cpp:
+	Fix a typo.
+
+	* src/notifier/notifier-impl.c:
+	Little bug fix.
+
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* po/POTFILES.in:
+	Correct wrong file paths.
+
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/notifier/notifier-impl.c:
+	Take height of taskbar into consideration and prevent taskbar from being
+	covered by the popup notifier.
+
+	* src/notifier/working_area.c:
+	New file. This piece of code is taken from Guification, a plug-in for Gaim.
+
+	* src/view/termview.cpp:
+	Rewrite the code used to launch web browser.
+	Remove unnecessary dependency on class CAppConfig.
+
+	* src/view/telnetcon.cpp:
+	Disable popup notifier if the user don't want to use it.
+
+	* src/mainframe.cpp:
+	Set web browser for CTermView according to user settings.
+
+	* src/generalprefpage.cpp,
+	src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp:
+	Add some preference options for popup notifier.
+
+2005-07-22  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/notifier/notifier-impl.c, 
+	src/view/telnetcon.cpp:
+	+ Automatically hide msg popup disappear on timeout.
+	+ Click on the popup window can raise the main frame window and switch 
+	  to the connection which received this message.
+	  Timeout can be disabled on mouse over.
+
+	* src/view/termview.cpp (CTermView::ReclacCharDemension):
+	Recelculate m_CharW & m_CharH after fonts changed.
+
+	* src/mainframe.cpp:
+	Add "Apply to opened pages" option in font selection dialog..
+
+2005-07-22  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/Makefile.am: Add missing file.
+
+2005-07-22  Jim Huang  <jserv@kaffe.org>
+
+	* src/core/widget.cpp,
+	src/core/font.cpp,
+	src/core/site.cpp,
+	src/core/caret.cpp,
+	src/core/termdata.cpp,
+	src/core/termdata.h,
+	src/core/font.h,
+	src/core/widget.h,
+	src/core/stringutil.cpp,
+	src/core/site.h,
+	src/core/view.h,
+	src/core/caret.h,
+	src/core/stringutil.h,
+	src/core/view.cpp:
+	Move core implementation from $(top_srcdir)/src to 
+	$(top_srcdir)/src/core, so that both standalone program and plugin
+	could use the shared library.
+
+	* src/view/termview.cpp,
+	src/view/telnetview.cpp,
+	src/view/termview.h,
+	src/view/telnetcon.h,
+	src/view/telnetview.h,
+	src/view/telnetcon.cpp:
+	Move term/telnet view part from $(top_srcdir)/src to
+	$(top_srcdir)/src/view. The consideration why we don't put them to
+	$(top_srcdir)/src/core is because we might enforce different
+	conditional compilation on these implementations.
+
+	* src/Makefile.am,
+	configure.ac: Likewise.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/api.h (popup_notifier_init):
+	Add parameter (GdkPixbuf *icon) to indicate popup icon.
+
+	* src/notifier/notifier-impl.c (notify_new) (popup_notifier_init):
+	No longer to duplicate icon pixmap.
+
+	* src/mainframe.h (GetMainIcon):
+	New public method to obtain main icon pixbuf.
+
+	* src/appconfig.h,
+	src/appconfig.cpp: Remove redundant comments.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Assign icon to notifier.
+
+	* src/telnetcon.cpp (CTelnetCon::OnNewIncomingMessage):
+	Simplify popup caption.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/impl.c,
+	src/notifier/notifier-impl.c:
+	Rename impl.c to notifier-impl.c for better maintenance.
+
+	* src/Makefile.am: Likewise.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Add new option, --disable-external, to disable external SSH/Telnet
+	support. Default: yes
+
+	* src/site.cpp (CSite::CSite) (CSite::SaveToFile),
+	src/appconfig.cpp (CAppConfig::LoadFavorites),
+	src/site.h (class CSite),
+	src/telnetcon.cpp (CTelnetCon::Connect):
+	Add conditional compilation for --disable-external option.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* src/telnetcon.cpp:
+	Adapt conditional compilation with USING_LINUX/USING_FREEBSD macro
+	detected in autotools.
+
+2005-07-21  Jim Huang  <jserv@kaffe.org>
+
+	* src/notifier/api.h,
+	src/notifier/impl.c:
+	New files. Primitive lightweight popup notifier implementation.
+	NOTE: The length of message body and window size have to be adjusted.
+
+	* src/pcmanx_pure_gtk2.cpp (main),
+	src/telnetcon.cpp (CTelnetCon::OnNewIncomingMessage),
+	src/Makefile.am,
+	configure.ac:
+	Add popup notification support.
+
+	* TODO: Updated.
+	
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp,
+	src/telnetcon.h,
+	src/stringutil.cpp,
+	src/telnetview.cpp:
+	Apply some patch files from pav@FreeBSD.org.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetview.cpp (CTelnetView::DoPasteFromClipboard):
+	Add "Auto Wrap" on paste.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp (CTelnetCon::OnMainIdle):
+	Little bug fix.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp (CMainFrame::OnURLEntryKillFocus):
+	Little bug fix. We should reutrn FALSE in this handler.
+
+2005-07-20  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/view.cpp,
+	src/prefdlg.cpp,
+	src/sitedlg.cpp,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/inputdialog.cpp,
+	src/widget.cpp,
+	src/listbox.cpp,
+	src/telnetview.cpp,
+	src/sitelistdlg.cpp,
+	src/generalprefpage.cpp:
+	Remove all C++ destructors in CWidget derived classes.
+	All destruction of these classes should be done in OnDestroy() instead.
+
+	* src/telnetcon.cpp:
+	Improve multi-threading handling.
+
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::~CTermView):
+	Fix the bug in destructor.
+	GdkCursor can be ref and unref correctly now.
+
+	* src/mainframe.cpp (CMainFrame::NewCon):
+	Rearrange the order of some operations to fix a serious bug which 
+	causes frequent segmentation fault.
+
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp:
+	Exclude characters '(' and ')' from URL detection.
+
+	* src/site.cpp,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/mainframe.cpp,
+	src/inputdialog.cpp,
+	src/notebook.cpp,
+	src/listbox.cpp:
+	Replace some char* pointers with std::string to increase reliability.
+
+	* src/telnetcon.cpp:
+	Replace the dynamic-allocated buffer with a shared static one.
+
+2005-07-19  Kanru Chen  <koster@debian.org.tw>
+	
+	* src/telnetcon.cpp:
+	Remove io_channel correctly.
+
+	* src/mainframe.cpp
+	(OnURLEntryKeyDown):
+	Use strdup on gtk_entry_get_text according to API reference to prevent
+	reentrance issue.
+	Note: must be freed after notetab being killed.
+	(OnURLEntryKillFocus):
+	Should return gboolean
+
+	* src/telnetcon.cpp:
+	Should not assign local variable to member object.
+
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp:
+	Little bug fix.
+
+2005-07-19  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp:
+	Add (CTermView::HyperLinkHitTest)
+
+	* src/mainframe.cpp:
+	Add a "Reconnect" toolbar button and a "URL bar".
+	Fix the ineffective CharPaddingX & CharPaddingY.
+
+	* src/pcmanx_pure_gtk2.cpp
+	* src/telnetview.cpp (CTelnetView::OnRButtonDown):
+	Add "Copy URL" popup menu.
+	
+	* src/generalprefpage.cpp:
+	Add "AntiAlias" option.
+
+	* src/telnetcon.cpp 
+	(CTelnetCon::Connect), 
+	(CTelnetCon::ConnectThread), 
+	(CTelnetCon::OnConnect), 
+	(CTelnetCon::Cleanup):
+	Better handling of multi-threading that prevent some crashes caused by 
+	thread-unsafe libraries on some platforms.
+	Limit the number of concurrent running threads to prevent explosive 
+	increase on socket operation which often leads to connection failure.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp:
+	Apply patch file provided by chinsan.
+	Make some modification to enable compilation on FreeBSD.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp, 
+	src/termview.cpp:
+	(CTermView::UpdateCaretPos) : Added
+	(CTermData::UpdateCaret) : Removed
+	Update position of IM cursor correctly.
+
+	* src/editfavdlg.cpp:
+	Enable editing of site settings by double clicking on the list.
+
+	* src/pcmanx_inverse_xpm.xpm, 
+	src/Makefile.am, 
+	src/mainframe.cpp,
+	src/mainframe.h:
+	(CMainFrame::FlashWindow): Flash window icon to notify the user there's 
+	new incomming message.
+	(CMainFrame::IsActivated): Function to determine whether the main window
+	is activated or not.
+
+	* src/sitelistdlg.cpp:
+	Enable searching by hitting 'Enter' key.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/site.cpp (CSite::SaveToFile):
+	Minor bug fix for UseExternalTelnet.
+
+	* src/telnetcon.cpp (CTelnetCon::OnSocket), (CTelnetCon::OnRecv):
+	Fix a serious bug and prevent invalid io channel operation.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::UpdateCaret):
+	Calculate caret position corectly.
+
+	* src/termview.cpp:
+	Add CTelnetCon::SetHorizontalCenterAlign().
+	Terminal screen can be centered horizontally.
+	Fix some problems with position calculation.
+
+	* src/appconfig.h, src/appconfig.cpp:
+	Add HCenterAlign data member.
+
+	* src/mainframe.cpp (CMainFrame::NewCon):
+	Call CTermView::SetHorizontalCenterAlign with proper parameter.
+
+2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/termview.cpp:
+	Fix bug of selected region.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/sitedlg.h,
+	src/sitepage.cpp,
+	src/termview.cpp,
+	src/dialog.h,
+	src/mainframe.h,
+	src/emoticondlg.cpp,
+	src/editfavdlg.cpp,
+	src/view.cpp,
+	src/appconfig.h,
+	src/font.h,
+	src/prefdlg.cpp,
+	src/inputdialog.h,
+	src/notebook.h,
+	src/widget.h,
+	src/listbox.h,
+	src/telnetview.h,
+	src/sitedlg.cpp,
+	src/generalprefpage.h,
+	src/sitelistdlg.h,
+	src/mainframe.cpp,
+	src/dialog.cpp,
+	src/appconfig.cpp,
+	src/sitepage.h,
+	src/font.cpp,
+	src/termview.h,
+	src/site.h,
+	src/emoticondlg.h,
+	src/editfavdlg.h,
+	src/inputdialog.cpp,
+	src/view.h,
+	src/notebook.cpp,
+	src/widget.cpp,
+	src/listbox.cpp,
+	src/telnetview.cpp,
+	src/sitelistdlg.cpp,
+	src/generalprefpage.cpp,
+	src/prefdlg.h,
+	src/telnetcon.cpp:
+	Add gcc specific #pragma to accelerate compilation.
+
+	* src/mainframe.cpp (CMainFrame::NewCon), (CMainFrame::OnFont), 
+	src/termview.cpp (CTermView::OnSize):
+	Anti-alias font can be turned off now.
+
+2005-07-16  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/termdata.cpp:
+	* src/termview.cpp:
+	Add horizontal align center.
+
+2005-07-16  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp:
+	Fix wrong color settings in default color table.
+
+	* src/termview.cpp:
+	Re-enable usage of m_CharPaddingX in character width calculation.
+	Draw underlines of hyperlnks in different color.
+
+	* src/site.cpp:
+	* src/site.h:
+	Add m_UseExternalTelnet and m_UseExternalSSH.
+
+	* src/mainframe.cpp:
+	Set proper hyperlink color on CTelnetView creation.
+
+	* src/appconfig.cpp:
+	Add hyperlink color settings.
+
+	* src/telnetview.cpp (CTelnetView::OnKeyDown):
+	Fix malfunction of keyboard input.
+
+	* src/telnetcon.cpp (CTelnetCon::Connect), 
+	(CTelnetCon::Close), (CTelnetCon::OnSocket):
+	Add forkpty support and some bug fix.
+
+	* configure.ac:
+	Add -lutil to $LIBS.
+
+2005-07-13  Jim Huang  <jserv@kaffe.org>
+
+	* pcmanx-pure-gtk2.spec.in,
+	configure.ac,
+	Makefile.am:
+	Generate package information with autotools.
+
+2005-07-13  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::OnLineModified),
+	src/telnetcon.cpp (CTelnetCon::OnLineModified), (CTelnetCon::OnBellTimer)
+	(CTelnetCon::OnNewIncomingMessage):
+	Add support to new incoming message detection.
+	This interface can be used for adding automation in the future.
+	All automation can be done in CTelnetCon::OnLineModified and
+	CTelnetCon::OnNewIncomingMessage.
+
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::OnPaint), (CTermView::DrawChar):
+	Greatly improve drawing performance by update invalid area only.
+	No more flicker will be seen when popup menus showed.
+
+	* src/mainframe.cpp:
+	Add "Reconnect" menu item and its handler.
+	Make text colors of tabs indicate the state of connections.
+	Fix the bug of "Confirm before closing connected connections".
+
+	* src/telnetcon.cpp (CTelnetCon::Reconnect), 
+	(CTelnetCon::OnConnect), (CTelnetCon::OnClose):
+	Update tab title of connection when state chages.
+	Minor bug fix.
+
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/emoticondlg.cpp (CEmoticonDlg::SaveEmoticons):
+	Minor bug fix.
+
+2005-07-12  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/dialog.cpp (CDialog::OnResponse):
+	Manually connect "response" signal to this handler can enable default 
+	processing by CDialog.
+
+	* src/emoticondlg.cpp, 
+	src/emoticondlg.h, 
+	data/emoticons:
+	New File. Add some built-in emoticons frequently used on BBS sites.
+
+	* src/inputdialog.cpp:
+	Add a parameter to constructor to initialize the text in GtkEntry.
+
+	* src/listboc.cpp (CListBox::GetItemText):
+	Add this function to obtain text of specified row from the list box.
+
+	* src/mainframe.cpp (CMainFrame::CreateMenu), (CMainFrame::OnEmoticons):
+	Add emoticon menu item and its signal handler.
+
+	* src/telnetview.cpp (CTelnetView::OnTextInput):
+	Add support GDK_KP_* keysyms to enable input from keypad.
+
+	* src/termview.cpp (CTermView::OnTextInput):
+	Change the parameter to const.
+
+2005-07-10  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp (CMainFrame::OnEverySecondTimer) (CMainFrame::OnSize), 
+	src/pcmanx_pure_gtk2.cpp (main) :
+	Add a timer to calculate idle time for all connections.
+	Anti-Idle can function properly now.
+	Save window size and position and restore it on startup.
+
+	* src/termdata.cpp (CTermView::UpdateDisplay):
+	Re-enable delayed sceen update to enhance drawing performance 
+	and avoid some unnecessary flicker.
+
+	* src/generalprefpage.cpp:
+	Fix duplicated prefernce option.
+
+	* src/telnetcon.cpp:
+	Add idle time calculation.
+	Yield another connection thread when retrying to connect. (In vain?)
+
+2005-07-08  Jim Huang  <jserv@kaffe.org>
+
+	* COPYING,
+	src/*:
+	Update the address of the FSF in the GPL, and all over the place.
+
+2005-07-08  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.h:
+	Fixlet when --disable-docklet.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp (CMainFrame::OnAbout):
+	Use a GTK+ 2.4x compatible About Dialog.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp,
+	src/site.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/pcmanx_pure_gtk2.cpp,
+	src/telnetview.cpp,
+	src/sitelistdlg.cpp,
+	src/telnetcon.cpp:
+	Add missing header inclusion.
+
+2005-07-08  Jim Huang  <jserv@kaffe.org>
+
+	* configure.ac:
+	Bump version to 0.1.1 .
+	Add AM_CONDITIONAL of ENABLE_DEBUG.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/listbox.cpp (CListBox::GetCurSel):
+	Minor bug fix.
+
+2005-07-08  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::PasteFromClipboard):
+	Some cleanup.
+
+2005-07-07  Kanru Chen  <koster@debian.org.tw>
+
+	* src/termview.cpp
+	(CTermView::PasteFromClipboard) (CTermView::CopyToClipboard):
+	Use user's encoding setting to convert clipboard strings.
+
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::OnMouseMove):
+	Display hand cursor when hyperlinks are hovered.
+
+	* src/mainframe.cpp (CMainFrame::set_tray_icon):
+	Fix abnormal size of tray icon.
+
+	* src/appconfig.cpp:
+	AppConfig.WebBrowser can be stored now.
+
+	* src/telnetview.cpp:
+	Add <ctype.h> include to avoid potential compilation errors.
+	Reported by Anton  <anton.tw@gmail.com>.
+
+2005-07-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/pcmanx_pure_gtk2.cpp:
+	Add missing libintl / locale includes.
+
+	* src/stringutil.cpp:
+	Add <ctype.h> include to avoid potential compilation errors.
+	Reported by Anton  <anton.tw@gmail.com>.
+
+	* src/site.h: Perform some cleanup for naming.
+
+	* autogen.sh:
+	Quick fix against the strange intltool behavior.
+
+	* TODO:
+	For developers, please file your todo list here.
+
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/pcmanx_pure_gtk2.cpp:
+	Add "bindtextdomain" to correctly locate message catalog file.
+
+2005-07-07  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp (CTelnetCon::SendString):
+	Replace all "\n" in string with correct CRLF before sent.
+	
+	* src/telnetview.cpp (CTelnetView::DoPasteFromClipboard):
+	Bug fix.
+
+2005-07-07  Jim Huang  <jserv@kaffe.org>
+
+	* pcmanx.desktop.in:
+	New file. Taken from pcmanx.desktop .
+
+	* Makefile.am,
+	configure.ac:
+	Add entries for pcmanx.desktop generation.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* data/Makefile.am:
+	Add install-hook.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/Makefile.am:
+	Add all necessary headers to Makefile.am.
+
+2005-07-06  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am:
+	Fixlet to previous changes.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermData::UpdateDisplay),
+	src/termview.cpp,
+	src/widget.h,
+	src/telnetview.cpp (CTelnetView::~CTelnetView),
+	src/telnetcon.cpp:
+	Minor bug fix.
+	Temporarily disable dalayed screen update to prevent some problems.
+	
+	* src/mainframe.cpp (CMainFrame::SetCurView):
+	Include the name of current connection in window title.
+
+2005-07-07  Jim Huang  <jserv@kaffe.org>
+
+	* src/Makefile.am,
+	Makefile.am:
+	Fixlet to missing EXTRA_DIST.
+	Reported by PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp: Minor bug Fix.
+
+	* src/sitelistdlg.cpp:
+	(CSiteListDlg::OnSearch): Minor bug fix.
+
+	* data/sitelist:
+	Replace the site list with the latest one.
+
+2005-07-06  Jim Huang  <jserv@kaffe.org>
+
+	* src/configfile.cpp (CConfigFile::CConfigFile):
+	Use DATADIR (%prefix%/share) as data dir instead of /etc.
+	
+	* src/Makefile.am: Likewise.
+
+	* data/Makefile.am,
+	Makefile.am,
+	configure.ac:
+	Add rules for site list file.
+
+	* AUTHORS: Updated.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/telnetcon.cpp
+	(CTelnetCon::OnClose): Add "auto reconnect" support.
+	Fix lots of thread-related bugs.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnFont): Disable "style" in font selection dialog.
+
+	* src/appconfig.cpp, src/pcmanx_pure_gtk2.cpp:
+	Add "Show tray icon" preference.
+
+	* src/generalprefpage.cpp:
+	Add "Show tray icon" and "Web browser" preference.
+
+	* src/Makefile.am:
+	Add all-local to strip the compiled executable file.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp:
+	Some bug fix.
+	
+	* src/caret.cpp:
+	Some minor bug fix.
+	
+	* src/mainframe.cpp
+	(CMainFrame::LoadStartupSites):
+	Automatically connect to some sites on startup.
+	
+	* src/telnetcon.cpp:
+	Fix some problems related to multi-threading.
+	
+	* src/sitepage.cpp:
+	Add "Connect on startup" check box.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp
+	(CTermView::OnDestroy): Removed.
+	(CTermView::OnBeforeDestroy): Destroy XftDraw correctly.
+	Destructor of CTermView can be called properly now.
+
+	* src/mainframe.cpp (CMainFrame::CloseCon):
+	Use wrapper function provided by CNotebook instead of raw gtk+ API.
+
+2005-07-06  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termdata.cpp (CTermView::UpdateDisplay)
+	src/termdata.h:
+	Delay some sceen update when needed. Enhance drawing performance 
+	and avoid some unnecessary flicker.
+
+2005-07-03  Kanru Chen  <koster@debian.org.tw>
+
+	* src/sitepage.cpp,
+	src/sitepage.h,
+	src/termview.cpp,
+	src/site.cpp,
+	src/mainframe.cpp,
+	src/appconfig.cpp,
+	src/termdata.h,
+	src/site.h,
+	src/telnetview.cpp:
+	Add encoding preference.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::DrawChar):
+	Enable drawing one double-byte character with two different colors.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/termview.cpp (CTermView::SetFontFamily):
+	Recalculate font size when font family is changed.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/widget.cpp (CWidget::Refresh):
+	Fix a typo.
+
+2005-07-05  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/font.cpp (CFont::CreateXftFont):
+	Fix some problems in font size calculation.
+
+	* src/font.h (CFont::GetMaxWidth):
+	Ensure that max width can be devided by 2.
+
+2005-07-04  FourDollars (Shih-yuan Lee)  <fourdollars@gmail.com>
+
+	* src/widget.cpp
+	(delete_CWidget): Check object existence before releasing.
+	(CWidget::Refresh): Rename rect to t_Rect.
+	(CWidget::CWidget): Use naming rules.
+
+	* Doxygen.in:
+	Add more information.
+
+2005-07-04  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.cpp (CMainFrame::set_tray_icon):
+	Create new pixbuf according to the allocated width of m_TrayIcon.
+	NOTE: PCMan reported a strange behavior of tray icons padding
+	under KDE 3.3 .
+
+2005-07-04  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Remove redundant CWidget::Init.
+
+	* src/widget.h
+	(CWidget::OnIdleCleanup) (CWidget::Init)
+	(CWidget::m_WidgetsToBeDeleted): Removed.
+	
+	* src/widget.cpp
+	(CWidget::OnDestroy) (CWidget::OnIdleCleanup): Implementation removed.
+	(delete_CWidget): New helper function.
+	(CWidget::OnIdleCleanup): Invoke delete_CWidget while idle via
+	g_idle_add_full.
+	Fix the most serious bug which cause extremely high system load.
+
+2005-07-04  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.h:
+	Rename m_Tray_icon to m_TrayIcon_Instance.
+	(CMainFrame::set_tray_icon): New helper function splitted from
+	constructor to handle tray icon routines.
+	(CMainFrame::m_TrayButton) (CMainFrame::m_TrayIcon): New member
+	data. Likewise.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Adjust m_Tray_icon naming change.
+
+	* src/mainframe.cpp
+	(CMainFrame::CMainFrame): Use new helper function, set_tray_icon,
+	and make sure m_MainIcon is null at startup.
+	(CMainFrame::OnTrayButton_Changed): Implemented via invoking 
+	set_tray_icon.
+
+2005-07-03  Kanru Chen  <koster@debian.org.tw>
+	
+	* src/mainframe.cpp
+	(CMainFrame::CloseCon):
+	Remove correct note page and move to next page.
+
+	* src/termview.cpp
+	(CTermView::OnDestroy) (CTermView::~CTermView):
+	Move XftDrawDestroy(m_XftDraw) to destructor to avoid X error,
+	however, actually this destructor never be called because strange
+	CWidget behavior. Need to FIX. Warn: memory leak.
+
+	* src/caret.cpp,
+	src/termview.cpp,
+	src/widget.cpp:
+	Some debug message.
+
+2005-07-03  Jim Huang  <jserv@kaffe.org>
+
+	* sitelistdlg.cpp (CSiteListDlg::LoadSiteList):
+	Workaround of new GTK_STOCK_DIRECTORY macro introduced in GTK+ 2.6 .
+	Reported by Chung-Yen Chang  <candyz@cle.linux.org.tw>.
+	NOTE: Still some incompatibility to be fixed later.
+	
+	* po/pcmanx.pot:
+	New file. Missing translation template.
+
+	* autogen.sh:
+	Add workaround of some cases that mkinstalldirs was not correctly
+	installed.
+
+2005-07-03  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.cpp
+	(CMainFrame::OnTrayButton_Toggled):
+	Temporal workaround of G_GNUC_UNUSED attribute.
+	Reported by Kanru Chen  <koster@debian.org.tw>.
+
+2005-07-03  Jim Huang  <jserv@kaffe.org>
+
+	* src/docklet/clipboard.c:
+	New file. X clipboard hack to detect if daemon is running.
+
+	* src/docklet/eggtrayicon.c,
+	src/docklet/eggtrayicon.h:
+	New files. Famous EggTrayIcon written by Anders Carlsson
+	<andersca@gnu.org>.
+
+	* configure.ac,
+	src/Makefile.am:
+	Add docklet / system tray support option. Default: enabled.
+
+	* src/mainframe.h
+	(CMainFrame::OnTrayButton_Toggled) (CMainFrame::OnTrayButton_Changed):
+	New protected methods act as the callback functions for Tray button
+	toggled and size-changed.
+	(EggTrayIcon *m_Tray_icon):
+	New public member data for holding tray icon.
+
+	* src/mainframe.cpp
+	(CMainFrame::OnTrayButton_Toggled) (CMainFrame::OnTrayButton_Changed):
+	Likewise.
+	(CMainFrame::CMainFrame):
+	Add primitive tray icon and event handling for docklet / system tray.
+	NOTE: we might need a customized tray icon due to size limitation.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Make sure that there is only single instance, and show docklet.
+	NOTE: we might create higher level method for this task.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/pcmanx_pure_gtk2.cpp:
+	Use GETTEXT_PACKAGE instead of hard-coded names.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/termview.cpp (CTermView::RedrawSel):
+	Minor tweaking for MAX3 and MIN3 macro for better readability.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/mainframe.cpp 
+	(CMainFrame::CreateMenu): Remove puzzling comments which confuse
+	intltool.
+	(CMainFrame::OnAbout): Update homepage information.
+
+	* src/pcmanx_pure_gtk2.cpp (main):
+	Adjust the sequence of gtk_init and g_thread_init, and use fake
+	argc/agrv to avoid redundant parsing.
+
+	* po/zh_TW.po: Regenerated.
+
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+	
+	* configure.ac:
+	Change AC_DEFINE(VERSION,...) to AC_DEFINE_UNQUOTED ensure really
+	defined this variable.
+	
+	* ABOUT-NLS:
+	New file. need by automake-1.9.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* src/termview.cpp (CTermView::OnLButtonDown),
+	src/configfile.cpp (CConfigFile::DoLoad) (CConfigFile::DoSave),
+	src/appconfig.cpp (CAppConfig::LoadFavorites),
+	src/sitelistdlg.cpp (CSiteListDlg::OnSearch):
+	Remove misleading \!\! expression.
+
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+
+	* src/font.cpp 
+	(CFont::CreateXftFont(string, int, int, bool)):
+	Adjust font size policy to prevent infinite loop.
+
+	* src/widget.cpp,
+	src/telnetcon.cpp:
+	Add usleep(100) between each idle call to prevent cpu load
+	too high.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* po/POTFILES.in:
+	New file. Put the source filenames to be translated here.
+
+	* configure.ac:
+	Enhance GNU Gettext support.
+
+	* src/Makefile.am:
+	Include *.xpm in EXTRA_DIST.
+
+	* po/zh_TW.po:
+	Updated according to new layout.
+
+2005-07-02  Jim Huang  <jserv@kaffe.org>
+
+	* autogen.sh,
+	configure.ac,
+	Doxygen.in,
+	Makefile.am,
+	src/Makefile.am:
+	New files. Autotools support.
+
+	* po/zh_TW.po:
+	Adjust translated messages path.
+
+2005-07-02  Kanru Chen  <koster@debian.org.tw>
+
+	* src/Makefile-byhand:
+	Cleanup pkgconfig rules.
+
+2005-07-01  PCMan (Hong Jen Yee)  <hzysoft@sina.com.tw>
+
+	* Initial import of pcmanx_pure_gtk2.
