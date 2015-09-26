@@ -91,6 +91,12 @@ static gboolean on_mouse_move(GtkWidget* widget, GdkEventMotion* evt, CTermView*
 	return true;
 }
 
+static gboolean on_mouse_scroll(GtkWidget* widget, GdkEventScroll* evt, CTermView* _this)
+{
+	_this->OnMouseScroll(evt);
+	return true;
+}
+
 void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 {
 	XftDrawDestroy( _this->m_XftDraw);
@@ -99,6 +105,13 @@ void CTermView::OnBeforeDestroy( GtkWidget* widget, CTermView* _this)
 }
 
 GdkCursor* CTermView::m_HandCursor = NULL;
+GdkCursor* CTermView::m_ExitCursor = NULL;
+GdkCursor* CTermView::m_BullsEyeCursor = NULL;
+GdkCursor* CTermView::m_PageDownCursor = NULL;
+GdkCursor* CTermView::m_PageUpCursor = NULL;
+GdkCursor* CTermView::m_EndCursor = NULL;
+GdkCursor* CTermView::m_HomeCursor = NULL;
+int CTermView::m_CursorState = 0;
 
 CTermView::CTermView()
         : CView(), m_pColorTable(CTermCharAttr::GetDefaultColorTable())
@@ -112,8 +125,10 @@ CTermView::CTermView()
 	m_CharH = 18;
 	m_LeftMargin = 0;
 	m_TopMargin = 0;
-	m_IsHCenterAlign = false;
-	m_IsVCenterAlign = false;
+	m_bHorizontalCenterAlign = false;
+	m_bVerticalCenterAlign = false;
+	
+	m_CancelSel = false;
 
 	gtk_widget_add_events(m_Widget, GDK_EXPOSURE_MASK
 		 | GDK_KEY_PRESS_MASK
@@ -137,6 +152,8 @@ CTermView::CTermView()
 
 	g_signal_connect(G_OBJECT(m_Widget), "motion_notify_event", G_CALLBACK(on_mouse_move), this);
 
+	g_signal_connect(G_OBJECT(m_Widget), "scroll_event", G_CALLBACK(on_mouse_scroll), this);
+
 	m_CharPaddingX = m_CharPaddingY = 0;
 	m_AutoFontSize = true;
 	m_pHyperLinkColor = NULL;
@@ -149,6 +166,31 @@ CTermView::CTermView()
 		gdk_cursor_ref(m_HandCursor);
 	else
 		m_HandCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_HAND2);
+	if( m_ExitCursor )
+	  gdk_cursor_ref(m_ExitCursor);
+	else
+	  m_ExitCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_LEFT_ARROW);
+	if( m_BullsEyeCursor )
+	  gdk_cursor_ref(m_BullsEyeCursor);
+	else
+	  m_BullsEyeCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_RIGHT_ARROW);
+	if( m_PageUpCursor )
+	  gdk_cursor_ref(m_PageUpCursor);
+	else
+	  m_PageUpCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_UP_ARROW);
+	if( m_PageDownCursor )
+	  gdk_cursor_ref(m_PageDownCursor);
+	else
+	  m_PageDownCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_SB_DOWN_ARROW);
+	if( m_EndCursor )
+	  gdk_cursor_ref(m_EndCursor);
+	else
+	  m_EndCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_BOTTOM_SIDE);
+	if( m_HomeCursor )
+	  gdk_cursor_ref(m_HomeCursor);
+	else
+	  m_HomeCursor = gdk_cursor_new_for_display(gdk_display_get_default(), GDK_TOP_SIDE);
+
 }
 
 
@@ -497,6 +539,7 @@ void CTermView::ExtendSelection( int row, int col, bool left )
 void CTermView::OnLButtonDown(GdkEventButton* evt)
 {
 	SetFocus();
+	m_CancelSel = false;
 
 	if( !m_pTermData )
 		return;
@@ -520,6 +563,8 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 		// clear the old selection
 		if( !m_pTermData->m_Sel->Empty() )
 		{
+			m_CancelSel = true;
+
 			m_Caret.Hide();
 			m_pTermData->m_Sel->Unselect( DrawCharWrapper, this );
 			m_Caret.Show( false );
@@ -534,6 +579,17 @@ void CTermView::OnLButtonDown(GdkEventButton* evt)
 	}
 }
 
+
+void CTermView::OnMouseMove(GdkEventMotion* evt)
+{
+
+}
+
+
+void CTermView::OnMouseScroll(GdkEventScroll* evt)
+{
+
+}
 
 void CTermView::OnRButtonDown(GdkEventButton* evt)
 {
@@ -573,47 +629,6 @@ void CTermView::OnLButtonUp(GdkEventButton* evt)
 void CTermView::OnRButtonUp(GdkEventButton* evt)
 {
 }
-
-
-void CTermView::OnMouseMove(GdkEventMotion* evt)
-{
-	if( !m_pTermData )
-		return;
-
-	int x = (int)evt->x;
-	int y = (int)evt->y;
-	bool left;
-
-	INFO("x=%d, y=%d, grab=%d", x, y, HasCapture());
-
-	this->PointToLineCol( &x, &y, &left );
-	if( HasCapture() )	//	Selecting text.
-	{
-		if ( m_pTermData->m_Sel->m_End.row != y
-		  || m_pTermData->m_Sel->m_End.col != x
-		  || m_pTermData->m_Sel->m_End.left != left )
-		{
-			// Always remember to hide the caret before drawing.
-			m_Caret.Hide();
-
-			m_pTermData->m_Sel->ChangeEnd( y, x, left, DrawCharWrapper, this );
-
-			// Show the caret again but only set its visibility without
-			// display it immediatly.
-			m_Caret.Show( false );
-		}
-	}
-	else	//	Consider hyperlink detection.
-	{
-		/* Todo: hyperlink detection. */
-		CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
-		if( x > 0 && x < m_pTermData->m_ColsPerPage && pattr[x].IsHyperLink() )
-			gdk_window_set_cursor(m_Widget->window, m_HandCursor);
-		else
-			gdk_window_set_cursor(m_Widget->window, NULL);
-	}
-}
-
 
 void CTermView::OnKillFocus(GdkEventFocus *evt)
 {
@@ -779,10 +794,10 @@ void CTermView::SetFontFamily( string name )
 
 void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 {
-	if( m_IsHCenterAlign == is_hcenter || !m_pTermData )
+	if( m_bHorizontalCenterAlign == is_hcenter || !m_pTermData )
 		return;
 
-	if( (m_IsHCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bHorizontalCenterAlign = is_hcenter) && GTK_WIDGET_REALIZED(m_Widget) )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2 ;
 	else
 		m_LeftMargin = 0;
@@ -794,10 +809,10 @@ void CTermView::SetHorizontalCenterAlign( bool is_hcenter )
 
 void CTermView::SetVerticalCenterAlign( bool is_vcenter )
 {
-	if( m_IsVCenterAlign == is_vcenter || !m_pTermData )
+	if( m_bVerticalCenterAlign == is_vcenter || !m_pTermData )
 		return;
 
-	if( (m_IsVCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
+	if( (m_bVerticalCenterAlign = is_vcenter) && GTK_WIDGET_REALIZED(m_Widget) )
 		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2 ;
 	else
 		m_TopMargin = 0;
@@ -862,12 +877,12 @@ void CTermView::RecalcCharDimension()
 	m_CharW = m_Font->GetWidth() + m_CharPaddingX;
 	m_CharH = m_Font->GetHeight() + m_CharPaddingY;
 
-	if( m_IsHCenterAlign )
+	if( m_bHorizontalCenterAlign )
 		m_LeftMargin = (m_Widget->allocation.width - m_CharW * m_pTermData->m_ColsPerPage ) / 2;
 	else
 		m_LeftMargin = 0;
 
-	if( m_IsVCenterAlign )
+	if( m_bVerticalCenterAlign )
 		m_TopMargin = (m_Widget->allocation.height - m_CharH * m_pTermData->m_RowsPerPage ) / 2;
 	else
 		m_TopMargin = 0;

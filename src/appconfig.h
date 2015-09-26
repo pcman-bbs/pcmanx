@@ -90,7 +90,11 @@ public:
 	bool QueryOnCloseCon;
 	bool CancelSelAfterCopy;
 	bool CopyTrimTail;
+#ifdef USE_MOUSE
+	bool MouseSupport;
+#endif
 	bool ShowTrayIcon;
+	bool ShowStatusBar;
 	bool PopupNotifier;
 	bool UseWgetFiles;
 	int PopupTimeout;
@@ -105,8 +109,8 @@ public:
 	bool CompactLayout;
 	int CharPaddingX;
 	int CharPaddingY;
-	bool HCenterAlign;
-	bool VCenterAlign;
+	bool HorizontalCenterAlign;
+	bool VerticalCenterAlign;
 
 //	bool TwoDiffFonts;
     int FontSize;

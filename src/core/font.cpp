@@ -127,6 +127,9 @@ void CFont::RecalculateMetrics( XftFont* font )
 {
 	FT_Face face = XftLockFace( font );
 
+	if( !face )
+		return;
+
 	if( face->face_flags & FT_FACE_FLAG_SCALABLE )
 	{
 		FT_Fixed x_scale = face->size->metrics.x_scale;

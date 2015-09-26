@@ -62,6 +62,7 @@ public:
     virtual void OnLButtonUp(GdkEventButton* evt);
     virtual void OnRButtonUp(GdkEventButton* evt);
     virtual void OnMouseMove(GdkEventMotion* evt);
+    virtual void OnMouseScroll(GdkEventScroll* evt);
     virtual void OnHyperlinkClicked(string url);
     void OnBlinkTimer();
     virtual void OnMButtonDown(GdkEventButton* evt);
@@ -100,8 +101,8 @@ protected:
 	int m_CharH;
 	int m_LeftMargin;
 	int m_TopMargin;
-	bool m_IsHCenterAlign;
-	bool m_IsVCenterAlign;
+	bool m_bHorizontalCenterAlign;
+	bool m_bVerticalCenterAlign;
 
 	CCaret m_Caret;
 	CHyperLink* m_pHyperLink;
@@ -113,13 +114,24 @@ protected:
 	GdkColor* m_pHyperLinkColor;
     GdkGC* m_GC;
     bool m_AutoFontSize;
+    
+    bool m_CancelSel;	// If selection is canceled in OnLButtonDown, this flag is set to true.
 
     static string m_s_ANSIColorStr;
     int m_FontSize;
     string m_FontFamily;
 
-	static GdkCursor* m_HandCursor;
+    static GdkCursor* m_HandCursor;
+    static GdkCursor* m_ExitCursor;
+    static GdkCursor* m_BullsEyeCursor;
+    static GdkCursor* m_PageDownCursor;
+    static GdkCursor* m_PageUpCursor;
+    static GdkCursor* m_EndCursor;
+    static GdkCursor* m_HomeCursor;
 
+    // Mouse Cursor State for Click Behaviour
+    // Hand=-1, Normal=0, Exit=1, BullsEye=2, PageDown=3, PageUp=4, End=5, Home=6
+    static int m_CursorState;
 };
 
 #endif

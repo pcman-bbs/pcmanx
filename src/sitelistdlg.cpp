@@ -280,21 +280,23 @@ void CSiteListDlg::LoadSiteList()
 //		wxMessageBox( _("Unable to open site list file!"), _("Error"), wxICON_STOP, m_pMainFrame );
 	}
 
+	GtkTreeViewColumn *col = gtk_tree_view_column_new ();
 	GtkCellRenderer *renderer = GTK_CELL_RENDERER (gtk_cell_renderer_pixbuf_new ());
-	GtkTreeViewColumn *col = gtk_tree_view_column_new_with_attributes
-		("", renderer,
+        gtk_tree_view_column_pack_start (col, renderer, FALSE);
+
+	gtk_tree_view_column_set_attributes
+		(col, renderer,
 		 "pixbuf", COL_ICON,
-//		 "pixbuf-expander-open", COL_ICON,
-//		 "pixbuf-expander-closed", COL_ICON,
+		 "pixbuf-expander-open", COL_ICON,
+		 "pixbuf-expander-closed", COL_ICON,
 		 NULL);	
 
-	gtk_tree_view_append_column( tree, col );
-	gtk_tree_view_column_pack_start (col, renderer, FALSE);
+	renderer = GTK_CELL_RENDERER ( gtk_cell_renderer_text_new() );
+        gtk_tree_view_column_pack_start (col, renderer, TRUE);
 
-	renderer = gtk_cell_renderer_text_new();
-	col = gtk_tree_view_column_new_with_attributes("", renderer, "text", COL_TEXT, NULL);
+	gtk_tree_view_column_set_attributes( col, renderer, "text", COL_TEXT, NULL);
+
 	gtk_tree_view_append_column( tree, col );
-	gtk_tree_view_column_pack_start (col, renderer, TRUE);
 
 	gtk_tree_view_set_model(tree, GTK_TREE_MODEL(m_Store));
 	g_object_unref(m_Store);
