@@ -62,10 +62,10 @@
 #include "script/api.h"
 #endif
 
+const gchar COLOR_BLOCK[] = "\u2588\u2588\u2588\u2588\u2588\u2588";
+
 #ifdef USE_DOCKLET
 #include "docklet/api.h"
-
-const gchar COLOR_BLOCK[] = "\u2588\u2588\u2588\u2588\u2588\u2588";
 
 void CMainFrame::OnTrayButton_Toggled(
 	GtkToggleButton *button UNUSED,
