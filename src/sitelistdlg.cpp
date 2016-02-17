@@ -169,14 +169,15 @@ void CSiteListDlg::OnSearch(GtkButton* btn UNUSED, CSiteListDlg* _this)
 	}
 	else	// Get next iter
 	{
+		GtkTreeIter child_it;
+		GtkTreeIter next_it;
+		next_it = it;
 get_next_iter:
-		if( gtk_tree_model_iter_has_child( model, &it ) ) // Has children?
+		if( gtk_tree_model_iter_children( model, &child_it, &it ) ) // Has children?
 		{
-			GtkTreeIter child_it;
-			while( gtk_tree_model_iter_children(model, &child_it, &it) )
-				it = child_it;
+			next_it = child_it;
 		}
-		else if( !gtk_tree_model_iter_next( model, &it) ) // Has sibling?
+		else if( !gtk_tree_model_iter_next( model, &next_it ) ) // Has sibling?
 		{
 		get_parent_iter:
 			// No sibling. Has Parent?
@@ -185,13 +186,14 @@ get_next_iter:
 				goto keyword_not_found;	// No parent, stop!
 
 			// Does parent has next sibling?
-			if( !gtk_tree_model_iter_next( model, &parent_it)  )
+			next_it = parent_it;
+			if( !gtk_tree_model_iter_next( model, &next_it ) )
 			{
 				it = parent_it;
 				goto get_parent_iter;
 			}
-			it = parent_it;
 		}
+		it = next_it;
 	}
 
 	gtk_tree_model_get(model, &it, COL_TEXT, &text, -1);
@@ -236,10 +238,24 @@ void CSiteListDlg::OnConnect(GtkButton* btn UNUSED, CSiteListDlg* _this)
 			*url = '\0';
 			url += (sizeof(ITEM_SEP)-1);
 			_this->m_pParent->NewCon(text, url, &AppConfig.m_DefaultSite);
+			gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
+		}
+		else if(strlen(text) != 0)
+		{
+			GtkTreeSelection* _selection = gtk_tree_view_get_selection(tree_view);
+			gtk_tree_selection_select_iter(_selection, &it);
+			GtkTreePath* path = gtk_tree_model_get_path(model, &it);
+			if( !gtk_tree_view_row_expanded(tree_view, path) )
+			{
+				gtk_tree_view_expand_to_path(tree_view, path);
+			}
+			else
+			{
+				gtk_tree_view_collapse_row(tree_view, path);
+			}
 		}
 		g_free(text);
 	}
-	gtk_dialog_response( GTK_DIALOG(_this->m_Widget), GTK_RESPONSE_OK );
 }
 
 void CSiteListDlg::OnClose(GtkButton* btn UNUSED, CSiteListDlg* _this)
@@ -252,10 +268,6 @@ void CSiteListDlg::LoadSiteList()
 	GtkIconSet* icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_NETWORK);
 	m_SiteIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 
-	/* Workaround of new GTK_STOCK_DIRECTORY macro introduced in GTK+ 2.6 */
-	#if !GTK_CHECK_VERSION(2,6,0)
-	#define GTK_STOCK_DIRECTORY "gtk-directory"
-	#endif
 	icon_set = gtk_icon_factory_lookup_default(GTK_STOCK_DIRECTORY);
 	m_FolderIcon = gtk_icon_set_render_icon(icon_set, m_Tree->style, GTK_TEXT_DIR_NONE, GTK_STATE_NORMAL, GTK_ICON_SIZE_MENU, NULL, NULL);
 //	g_object_unref(icon_set);	??

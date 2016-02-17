@@ -120,8 +120,8 @@ CTermCharAttr::operator==(CTermCharAttr& attr){
 // class constructor
 CTermData::CTermData(CTermView* pView) :
 	m_pView(pView),
-	m_Screen(NULL),
-	m_pCmdLine(NULL)
+	m_pCmdLine(NULL),
+	m_Screen(NULL)
 {
 	m_CaretPos.x = m_CaretPos.y = 0;
 	m_OldCaretPos = m_CaretPos;
@@ -858,7 +858,7 @@ static inline bool isValidURLScheme(const char *line, int schemeStart, int schem
 	char protocol_buffer[16];
 	int strLen = schemeEnd - schemeStart + 1; // index starts from 0
 
-	for (int i = 0; i < ARRAY_SIZE(valid_protocol); i++) {
+	for (unsigned int i = 0; i < ARRAY_SIZE(valid_protocol); i++) {
 		strcpy(protocol_buffer, valid_protocol[i]);
 		if (!strncmp(line + schemeStart,
 		             strcat(protocol_buffer, "://"), strLen)) {
@@ -1054,12 +1054,12 @@ string GetChangedAttrStr(CTermCharAttr oldattr, CTermCharAttr newattr)
 		text += "7;";
 	if( reset || newattr.GetBackground() != oldattr.GetBackground())	// If reset or color changed.
 	{
-		char color[] = {'4', ('0'+ newattr.GetBackground()), ';', '\0' };
+		char color[] = {'4', static_cast<char>('0'+ newattr.GetBackground()), ';', '\0' };
 		text += color;
 	}
 	if( reset || newattr.GetForeground() != oldattr.GetForeground() )
 	{
-		char color[] = {'3', ('0' + newattr.GetForeground()), ';', '\0' };
+		char color[] = {'3', static_cast<char>('0' + newattr.GetForeground()), ';', '\0' };
 		text += color;
 	}
 	if( ';' == text[ text.length()-1 ] )	// Don't worry about access violation because text.Len() always > 1.

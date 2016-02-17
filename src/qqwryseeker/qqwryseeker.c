@@ -18,9 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <glib.h>
 #include <stdlib.h>
 #include "qqwryseeker.h"
-
 
 /* initialize a seeker */
 QQWrySeeker* seeker_new(const char *file)
@@ -31,8 +31,12 @@ QQWrySeeker* seeker_new(const char *file)
 
 	QQWrySeeker *seeker = (QQWrySeeker*) malloc(sizeof(QQWrySeeker));
 	seeker->fp = fp;
-	fread(&seeker->idx_beg, 4, 1, fp);
-	fread(&seeker->idx_end, 4, 1, fp);
+
+	if (fread(&seeker->idx_beg, 4, 1, fp) != 1)
+		g_warning("Could not read 4 bytes");
+
+	if (fread(&seeker->idx_end, 4, 1, fp) != 1)
+		g_warning("Could not read 4 bytes");
 
 	return seeker;
 }
@@ -75,7 +79,8 @@ static inline int read_str(FILE *fp, char buf[], int buf_size, char exaust)
 static inline int read_int3(FILE *fp)
 {
 	int buf = 0;
-	fread(&buf, 3, 1, fp);
+	if (fread(&buf, 3, 1, fp) != 1)
+		g_warning("Could not read 3 bytes");
 	return buf;
 }
 
@@ -83,7 +88,8 @@ static inline int read_int3(FILE *fp)
 static inline int read_int4(FILE *fp)
 {
 	int buf;
-	fread(&buf, 4, 1, fp);
+	if (fread(&buf, 4, 1, fp) != 1)
+		g_warning("Could not read 4 bytes");
 	return buf;
 }
 

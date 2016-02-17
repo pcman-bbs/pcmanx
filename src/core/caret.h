@@ -53,16 +53,8 @@ public:
 	void SetVisible(bool flag){m_IsVisible = flag;}
 	void Move( int x, int y );
 	void SetSize( int Width, int Height );
-	void Create(CWidget* pParent, GdkGC* gc)
-	{
-		m_pParent = pParent->m_Widget;
-		m_GC = gc;
-	}
-	void Create(GtkWidget* pParent, GdkGC* gc)
-	{
-		m_pParent = pParent;
-		m_GC = gc;
-	}
+	void Create(CWidget* pParent) { m_pParent = pParent->m_Widget;}
+	void Create(GtkWidget* pParent) { m_pParent = pParent;}
 
 	//Draw a the same shape caret with invsersed color at the same position.
 	void DrawInverse();
@@ -86,10 +78,7 @@ private:
 	int m_Height;
 	//The parent widget compoment.
 	GtkWidget* m_pParent;
-#if GTK_CHECK_VERSION(2,22,0)
 	cairo_t* m_Cairo;
-#endif
-	GdkGC* m_GC;
 };
 
 #endif // !defined(PCMANX_CARET_H)

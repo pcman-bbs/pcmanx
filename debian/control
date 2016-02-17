@@ -3,10 +3,10 @@ Section: x11
 Priority: extra
 Maintainer: Emfox Zhou <emfox@debian.org>
 Build-Depends: debhelper (>= 9), dh-autoreconf, intltool, libgtk2.0-dev, libnotify-dev, libx11-dev, libltdl-dev
-Standards-Version: 3.9.4
-Homepage: http://code.google.com/p/pcmanx-gtk2/
-Vcs-Browser: http://code.google.com/p/pcmanx-gtk2/source/browse/
-Vcs-Git: http://code.google.com/p/pcmanx-gtk2/
+Standards-Version: 3.9.7
+Homepage: https://github.com/pcman-bbs/pcmanx/
+Vcs-Browser: https://github.com/pcman-bbs/pcmanx/
+Vcs-Git: https://github.com/pcman-bbs/pcmanx/
 
 Package: pcmanx-gtk2
 Architecture: any

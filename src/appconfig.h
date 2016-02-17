@@ -37,6 +37,7 @@ class CAppConfig : public CConfigFile
 public:
 //	enum	{ SHADOWER_L = 0xf30a439c, SHADOWER_R = 0x204be7a1 };
 	void SetToDefault();
+	void SetToDefault_Keys();
 	CSite m_DefaultSite;
 	void SaveFavorites();
 	void LoadFavorites();
@@ -92,12 +93,14 @@ public:
 	bool CopyTrimTail;
 #ifdef USE_MOUSE
 	bool MouseSupport;
+	bool WithMiddleButton;
 #endif
 #ifdef USE_DOCKLET
 	bool ShowTrayIcon;
 #endif
-        bool ShowToolbar;
+	bool ShowToolbar;
 	bool ShowStatusBar;
+	bool ShowInSimpleMode;
 	bool PopupNotifier;
 	int PopupTimeout;
 
@@ -111,7 +114,7 @@ public:
 //	Display Settings
 	bool AntiAliasFont;
 	bool CompactLayout;
-        bool Maximized;
+	bool Maximized;
 	int CharPaddingX;
 	int CharPaddingY;
 	bool HorizontalCenterAlign;
@@ -132,6 +135,29 @@ public:
 	string MailClient;
     int SocketTimeout;
 
+//	Hot key settings
+	string keySiteList;
+	string keyNewConn0;
+	string keyNewConn1;
+	string keyReconn0;
+	string keyReconn1;
+	string keyClose0;
+	string keyClose1;
+	string keyNextPage;
+	string keyPrevPage;
+	string keyFirstPage;
+	string keyLastPage;
+	string keyCopy0;
+	string keyCopy1;
+	string keyPaste0;
+	string keyPaste1;
+	string keyPasteClipboard;
+	string keyEmotions;
+	string keyFullscreen;
+	string keySimpleMode;
+	string keyShowMainWindow;
+
+
 // protected:
 //    string m_UserPasswd;
 //    BLOWFISH_CTX* m_Blowfish;
@@ -146,3 +172,5 @@ protected:
 extern CAppConfig AppConfig;
 
 #endif // !defined(AFX_APPCONFIG_H__B5A0D4F8_2425_4EDE_88DA_C720587B86DE__INCLUDED_)
+
+

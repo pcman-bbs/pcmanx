@@ -5,7 +5,7 @@ PCManX can now dectect which location of an IP address is from, by
 using generally available IP database 'qqwry.dat'.
 You should download and put qqwry.dat to your ~/.pcmanx, then restart
 PCManX, and put your mouse pointer over any IP address, the status
-bar will display the infomation.
+bar will display the information.
 
  -- Emfox Zhou <emfox@debian.org>  Fri, 11 Jan 2008 11:17:17 +0800
 

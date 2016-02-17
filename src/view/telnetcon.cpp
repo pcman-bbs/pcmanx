@@ -86,7 +86,13 @@
 #if defined(USING_FREEBSD) || defined(CSRG_BASED)
 #include <sys/ioctl.h>
 #include <termios.h>
+
+#if (defined(__APPLE__)) && (defined(__MACH__))
+#include <util.h>
+#else
 #include <libutil.h>
+#endif
+
 #endif
 
 #ifdef USE_PROXY
@@ -338,7 +344,11 @@ bool CTelnetCon::Connect()
 			CDNSRequest* dns_request = new CDNSRequest(this, address, m_Port);
 			m_DNSQueue.push_back( dns_request );
 			if( !m_DNSThread ) // There isn't any runnung thread.
+#if defined(GLIB_VERSION_2_32)
+				m_DNSThread = g_thread_new( _("Process DNS Queue"), (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL);
+#else
 				m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+#endif
 			g_mutex_unlock(m_DNSMutex);
 		}
 	}
@@ -462,7 +472,7 @@ void CTelnetCon::ParseTelnetCommand()
 		{
 			if( 3 > (m_pCmdLine-m_CmdLine) )
 				return;
-			char ret[]={TC_IAC,TC_DONT,*m_pBuf};
+			unsigned char ret[]={TC_IAC,TC_DONT,*m_pBuf};
 			switch(*m_pBuf)
 			{
 			case TO_ECHO:
@@ -470,14 +480,14 @@ void CTelnetCon::ParseTelnetCommand()
 				ret[1] = TC_DO;
 				break;
 			}
-			SendRawString(ret, 3);
+			SendRawString(reinterpret_cast<char*>(ret), 3);
 			break;
 		}
 	case TC_DO:
 		{
 			if( 3 > (m_pCmdLine-m_CmdLine) )
 				return;
-			char ret[]={TC_IAC,TC_WILL,*m_pBuf};
+			unsigned char ret[]={TC_IAC,TC_WILL,*m_pBuf};
 			switch(*m_pBuf)
 			{
 			case TO_TERMINAL_TYPE:
@@ -486,7 +496,7 @@ void CTelnetCon::ParseTelnetCommand()
 			default:
 				ret[1] = TC_WONT;
 			}
-			SendRawString(ret,3);
+			SendRawString(reinterpret_cast<char*>(ret),3);
 			if( TO_NAWS == *m_pBuf )	// Send NAWS
 			{
 				unsigned char naws[]={TC_IAC,TC_SB,TO_NAWS,0,80,0,24,TC_IAC,TC_SE};
@@ -773,6 +783,7 @@ void CTelnetCon::Close()
 			int kill_ret = kill( m_Pid, 1 ); // SIG_HUP Is this correct?
 			int status = 0;
 			pid_t wait_ret = waitpid(m_Pid, &status, 0);
+			(void) kill_ret; (void) wait_ret; // suppress warnings
 			DEBUG("pid=%d, kill=%d, wait=%d", m_Pid, kill_ret, wait_ret);
 			m_Pid = 0;
 		}
@@ -782,7 +793,14 @@ void CTelnetCon::Close()
 void CTelnetCon::Init()
 {
 	if (m_DNSMutex == NULL)
+	{
+#if defined(GLIB_VERSION_2_32)
+		m_DNSMutex = g_new (GMutex, 1);
+		g_mutex_init(m_DNSMutex);
+#else
 		m_DNSMutex = g_mutex_new();
+#endif
+	}
 }
 
 void CTelnetCon::Cleanup()
@@ -792,7 +810,11 @@ void CTelnetCon::Cleanup()
 
 	if(m_DNSMutex)
 	{
+#if defined(GLIB_VERSION_2_32)
+		g_free(m_DNSMutex);
+#else
 		g_mutex_free(m_DNSMutex);
+#endif
 		m_DNSMutex = NULL;
 	}
 }
@@ -1043,7 +1065,11 @@ bool CTelnetCon::OnProcessDNSQueueExit(gpointer unused UNUSED)
 	if( !m_DNSQueue.empty() )
 	{
 		INFO("A new thread has to be started");
+#if defined(GLIB_VERSION_2_32)
+		m_DNSThread = g_thread_new( _("Process DNS Queue"), (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL);
+#else
 		m_DNSThread = g_thread_create( (GThreadFunc)&CTelnetCon::ProcessDNSQueue, NULL, true, NULL);
+#endif
 		// If some DNS requests are queued just before the thread exits,
 		// we should start a new thread.
 	}

@@ -72,10 +72,11 @@ string UnEscapeStr(const char* pstr)
 				_str += '^';
 				break;
 			default:	//	\x?? means a hexadecimal integer. ex: \x0d = '\r' and \x0a = '\n'
-				char hex[4];
+				char hex[4] = {pstr[2], pstr[3], '\0', '\0'};
 				int val;
 				sscanf(hex, "%2x", &val);
 				_str += (char)val;
+				pstr += 3;
 				continue;
 			}
 		}
@@ -89,7 +90,10 @@ string UnEscapeStr(const char* pstr)
 				continue;
 			}
 		}
-		_str += *pstr;
+		else
+		{
+			_str += *pstr;
+		}
 	}
 	return _str;
 }

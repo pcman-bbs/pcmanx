@@ -1,8 +1,22 @@
+Version 1.3 - February 2016
+
+* Feature: Add ANSI color editor
+* Feature: Enhance OpenPCMan style mouse compatibility
+* Feature: Add mouse browsing support
+* Feature: Add hotkey settings
+* Feature: Add gnome-terminal style keyboard shortcuts
+* Feature: Option to startup in simple mode
+* Feature: Close tabs selected by middle clicks
+* Bugfix:  Fix build under Fedora Linux
+* Bugfix:  Some combinations for key settings do not work
+
+
 Version 1.2 - February 2013
+
 * Feature: Use consistent naming: PCManX
 * Feature: Allow users to search selected text through Web search engine
 * Feature: Handle malformed URL properly
-* Feature: Usability enhancement for Unity desktop envionment
+* Feature: Usability enhancement for Unity desktop environment
 * Feature: Add new interface to show and hide toolbar
 * Feature: Remember maximized state
 * Feature: Improve the performance of cairo caret
@@ -27,8 +41,8 @@ Version 1.1 - January 2012
 * Feature: Update RPM spec file for Fedora 16 and openSUSE 12.1
 * Feature: Switch source code management to Git.
 * Feature: Switch release tarball to xz compression format.
-* Bugfix: Program name doesn't show on notificaiton bar of GNOME Shell
-* Bugfix: The notificaition lack of program name in GNOME Shell
+* Bugfix: Program name doesn't show on notification bar of GNOME Shell
+* Bugfix: The notification lack of program name in GNOME Shell
 * Bugfix: Weird display name and tooltip covered under notification area in GNOME Shell
 * Bugfix: Remove forkpty for OpenSolaris because of license incompatible issue.
 * Bugfix: Supporting GNOME3 Startup Notification.
@@ -60,7 +74,7 @@ Version 0.3.9 - August 2009
 * Bugfix: Avoid memory leak when event is not mouse right-click and
           unnecessary resource re-allocation.
 * Bugfix: Fix Simplified Chinese translation of "Line" and "Col".
-* Bugfix: Properly handle the character set convertion during copy and paste
+* Bugfix: Properly handle the character set conversion during copy and paste
           from X clipboard.
 * Bugfix: Prevent GTK+ from catching F10 and Handle F1-F12 keys.
 * Bugfix: Provide WM_CLASS property for several X window managers.
@@ -97,7 +111,7 @@ Version 0.3.7 - January 2008
 
 * Feature: Let Firefox plugin use font config under ~/pcmanx/pcmanx
 * Feature: IP location lookup (need qqwry.dat and mouse support), which is
-           mainly for Simpified Chinese users.
+           mainly for Simplified Chinese users.
 * Bugfix: Blank BBS list if updating BBS list fails.
 * Bugfix: Firefox plugin cannot run.
 * Bugfix: Strip the leading nd trailing space of URL detection.
@@ -116,7 +130,7 @@ Version 0.3.5 - August 2006
 * Some support of horizontal and vertical center align. (almost broken)
 * Cancel the selected region when key event triggered.
 * Support build with xulrunner.
-* Support setting seprated English/ASCII font.
+* Support setting separated English/ASCII font.
 * Swap OK and Cancel button to be compatible with GNOME.
 * Display hand cursor on hyperlinks when no mouse support.
 

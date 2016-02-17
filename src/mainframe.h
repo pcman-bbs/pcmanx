@@ -38,6 +38,7 @@
 using namespace std;
 
 #include "telnetview.h"
+#include "editorview.h"
 #include <signal.h>
 
 /**
@@ -45,8 +46,10 @@ using namespace std;
 */
 
 class CTelnetView;
+class CEditorView;
 class CNotebook;
 class CTelnetCon;
+class CEditor;
 class CSite;
 
 class CMainFrame : public CWidget
@@ -62,7 +65,10 @@ public:
 	void OnTelnetConRecv(CTelnetView* con);
 	static void OnFont(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnAbout(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnShortcutList(GtkMenuItem* mitem, CMainFrame* _this);
 	static void pasteFromClipboard(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnCloseSelectCon(GtkWidget* notebook, GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnPopupMenuSelectCon(GtkWidget *widget, GtkWidget* menu, GdkEventButton* event, CMainFrame* _this);
 	static void OnCloseCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopy(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnCopyWithColor(GtkMenuItem* mitem, CMainFrame* _this);
@@ -79,6 +85,9 @@ public:
 	void SetCurView(CTelnetView* view);
 	CTelnetView* GetCurView(){	return (m_pView);	}
 	CTelnetCon* GetCurCon() {	return (m_pView ? m_pView->GetCon():NULL);	}
+	//get Ansi Editor information
+	CEditorView* GetCurEditorView() {	return (m_eView);	}
+	CEditor* GetCurEditor() {	return (m_eView ? m_eView->GetEditor():NULL);	}
 //	CTelnetView* LookupView(GtkWidget* view){	return (CTelnetView*) g_hash_table_lookup(m_TelnetViewHash, view);	}
 	static gboolean OnBlinkTimer(CMainFrame* _this);
 	static gboolean OnEverySecondTimer(CMainFrame* _this);
@@ -98,17 +107,13 @@ public:
 	bool IsActivated(){	return gtk_window_is_active(GTK_WINDOW(m_Widget));	}
 	static gboolean OnURLEntryKeyDown(GtkWidget *widget,GdkEventKey *evt, CMainFrame* _this);
 	int GetViewIndex(CTermView* view);
+	int GetNearestTab(GtkWidget *widget, GdkEventButton *event);
 	void SwitchToCon(CTelnetCon* con);
 
 	vector<CTelnetView*> m_Views;
 #ifdef USE_DOCKLET
-#if GTK_CHECK_VERSION(2,10,0)
 	void ShowTrayIcon() { if (m_TrayIcon) gtk_status_icon_set_visible(m_TrayIcon, TRUE); };
 	void HideTrayIcon() { if (m_TrayIcon) gtk_status_icon_set_visible(m_TrayIcon, FALSE); };
-#else
-	void ShowTrayIcon(){ gtk_widget_show (GTK_WIDGET (m_TrayIcon_Instance) ); };
-	void HideTrayIcon(){ gtk_widget_hide (GTK_WIDGET (m_TrayIcon_Instance) ); };
-#endif
 #endif
 
 #ifdef USE_NOTIFIER
@@ -134,11 +139,12 @@ protected:
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnSimpleMode(GtkMenuItem* mitem, CMainFrame* _this);
-	static void OnWebSearch(GtkMenuItem* mitem, CMainFrame* _this);
 	void LoadIcons();
 	void LoadStartupSites();
 	static void OnJumpToPage(GObject* obj, CMainFrame* _this);
+	void CloseConAndPageSwitch(int idx, bool confirm UNUSED, GtkWidget *notebook, int page_idx);
 	void CloseCon(int idx, bool confirm = false);
+	static bool QueryOnCloseCon(CMainFrame* _this);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
 	void CreateTrayIcon();
@@ -146,6 +152,16 @@ protected:
 	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 	void FlashWindow( bool flash );
 	static gboolean OnURLEntryKillFocus(GtkWidget* entry, GdkEventFocus* evt, CMainFrame* _this);
+
+	// Ansi Editor methods.
+	static void OnAnsiEditor(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnOpenAnsiFile(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnSaveAnsiFile(GtkMenuItem* mitem, CMainFrame* _this);
+	static void OnClearScreen(GtkMenuItem* mitem, CMainFrame* _this);
+	//static void OnDownloadToEditor(GtkMenuItem* mitem, CMainFrame* _this);	//todo
+	static void SetBlink(GtkToggleButton *togglebutton, CMainFrame* _this);
+	static void SetTextColor(GtkComboBox *widget, CMainFrame* _this);
+	static void SetBgColor(GtkComboBox *widget, CMainFrame* _this);
 
 #ifdef USE_NANCY
 	static GtkRadioActionEntry cur_bot_entries[];
@@ -159,16 +175,12 @@ protected:
 	static void OnTrayButton_Toggled(GtkToggleButton *button, CMainFrame* _this);
 	static void OnShowHide(GtkToggleAction *toggleaction, CMainFrame *_this);
 //	static void OnTrayButton_Changed(GtkWidget* widget, GtkAllocation *allocation, CMainFrame* _this);
-#if GTK_CHECK_VERSION(2,10,0)
 	static void OnTray_Popup(GtkStatusIcon *status_icon, guint button, guint activate_time, CMainFrame *_this);
 	GtkStatusIcon *m_TrayIcon;
-#else
-	void set_tray_icon();
-	GtkWidget *m_TrayButton;
-	GtkWidget *m_TrayIcon;
-	EggTrayIcon *m_TrayIcon_Instance;
 #endif
-#endif
+
+	static void OnToggleToolBar(GtkToggleAction *toggleaction, CMainFrame *_this);
+	static void OnToggleStatusBar(GtkToggleAction *toggleaction, CMainFrame *_this);
 
 	GdkPixbuf* m_ConnIcon;
 	GdkPixbuf* m_MainIcon;
@@ -176,6 +188,7 @@ protected:
 
 protected:
 	CTelnetView* m_pView;
+	CEditorView* m_eView;
 	CNotebook* m_pNotebook;
 	GtkUIManager* m_UIManager;
 	GtkActionGroup* m_ActionGroup;
@@ -184,6 +197,11 @@ protected:
 	GtkWidget* m_EditMenu;
 	GtkWidget* m_Statusbar;
 	GtkWidget* m_TrayPopup;
+
+	// Ansi editor widgets
+	GtkWidget *m_chkBlink;		//checkbox: set text blink
+	GtkWidget *m_cbTextColor;	//combobox: set text color
+	GtkWidget *m_cbBgColor;		//combobox: set background color
 
 	guint m_BlinkTimer;
 	guint m_EverySecondTimer;
@@ -214,6 +232,8 @@ private:
 	lt_dlhandle m_dlhandle;
 	void *m_indicator;
 	bool m_Unity;
+	void AppendRow(GtkTreeIter *iter, GtkListStore *store, const gchar *display, const gchar *color);
+	void ParseColor(GdkColor *color, gchar *res, size_t res_len);
 };
 
 #endif

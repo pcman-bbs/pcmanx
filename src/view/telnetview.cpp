@@ -66,6 +66,7 @@ string CTelnetView::m_WebBrowser;
 string CTelnetView::m_MailClient;
 
 static GtkWidget* input_menu_item = NULL;
+static GtkWidget* websearch_menu_item = NULL;
 
 void CTelnetView::OnTextInput(const gchar* text)
 {
@@ -110,6 +111,22 @@ static int DrawCharWrapper( int row, int col, void *data )
 	return tv->DrawChar( row, col );
 }
 
+void EnterWrapper( CTelnetCon* Con, CTermCharAttr* Attr, int pos)
+{
+	if( Con->DetectDBChar() && Attr[pos].GetCharSet() == CTermCharAttr::CS_MBCS1 )
+		Con->SendString("\x1bOC\x1bOC");
+	else
+		Con->SendString("\x1bOC");
+}
+
+void LeaveWrapper( CTelnetCon* Con, CTermCharAttr* Attr, int pos)
+{
+	if( Con->DetectDBChar() && pos > 0 && Attr[pos-1].GetCharSet() == CTermCharAttr::CS_MBCS2 )
+		Con->SendString("\x1bOD\x1bOD");
+	else
+		Con->SendString("\x1bOD");
+}
+
 bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 {
 	INFO("CTelnetView::OnKeyDown (keyval=0x%x, state=0x%x)", evt->keyval, evt->state);
@@ -138,100 +155,106 @@ bool CTelnetView::OnKeyDown(GdkEventKey* evt)
 	{
 	case GDK_Left:
 	case GDK_KP_Left:
-		GetCon()->SendRawString("\x1bOD\x1bOD",( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 6 : 3);
+		LeaveWrapper(GetCon(), pAttr, x);
 		break;
 	case GDK_Right:
 	case GDK_KP_Right:
-		GetCon()->SendRawString("\x1bOC\x1bOC",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 6 : 3);
+		EnterWrapper(GetCon(), pAttr, x);
 		break;
 	case GDK_Up:
 	case GDK_KP_Up:
-		GetCon()->SendRawString("\x1bOA",3);
+		GetCon()->SendString("\x1bOA");
 		break;
 	case GDK_Down:
 	case GDK_KP_Down:
- 		GetCon()->SendRawString("\x1bOB",3);
+		GetCon()->SendString("\x1bOB");
 		break;
 	case GDK_BackSpace:
-		GetCon()->SendRawString("\b\b", ( GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2 ) ? 2 : 1);
+		if (GetCon()->DetectDBChar() && x > 0 && pAttr[x-1].GetCharSet() == CTermCharAttr::CS_MBCS2)
+			GetCon()->SendString("\b\b");
+		else
+			GetCon()->SendString("\b");
 		break;
 	case GDK_Return:
 	case GDK_KP_Enter:
 		reconnect = GetCon()->IsClosed();
-		GetCon()->SendRawString("\r",1);
+		GetCon()->SendString("\r");
 		break;
 	case GDK_Delete:
 	case GDK_KP_Delete:
-		GetCon()->SendRawString("\x1b[3~\x1b[3~",( GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1 ) ? 8 : 4);
+		if (GetCon()->DetectDBChar() && pAttr[x].GetCharSet() == CTermCharAttr::CS_MBCS1)
+			GetCon()->SendString("\x1b[3~\x1b[3~");
+		else
+			GetCon()->SendString("\x1b[3~");
 		break;
 	case GDK_Insert:
 	case GDK_KP_Insert:
-		GetCon()->SendRawString("\x1b[2~",4);
+		GetCon()->SendString("\x1b[2~");
 		break;
 	case GDK_Home:
 	case GDK_KP_Home:
-		GetCon()->SendRawString("\x1b[1~",4);
+		GetCon()->SendString("\x1b[1~");
 		break;
 	case GDK_End:
 	case GDK_KP_End:
-		GetCon()->SendRawString("\x1b[4~",4);
+		GetCon()->SendString("\x1b[4~");
 		break;
 //	case GDK_Prior:
 	case GDK_Page_Up:
 	case GDK_KP_Page_Up:
-		GetCon()->SendRawString("\x1b[5~",4);
+		GetCon()->SendString("\x1b[5~");
 		break;
 //	case GDK_Next:
 	case GDK_Page_Down:
 	case GDK_KP_Page_Down:
-		GetCon()->SendRawString("\x1b[6~",4);
+		GetCon()->SendString("\x1b[6~");
 		break;
 	case GDK_Tab:
-		GetCon()->SendRawString("\t", 1);
+		GetCon()->SendString("\t");
 		break;
 	case GDK_Escape:
-		GetCon()->SendRawString("\x1b", 1);
+		GetCon()->SendString("\x1b");
 		break;
 // F1-F12 keys
 	case GDK_F1:
 	case GDK_KP_F1:
-		GetCon()->SendRawString("\x1bOP", 3);
+		GetCon()->SendString("\x1bOP");
 		break;
 	case GDK_F2:
 	case GDK_KP_F2:
-		GetCon()->SendRawString("\x1bOQ", 3);
+		GetCon()->SendString("\x1bOQ");
 		break;
 	case GDK_F3:
 	case GDK_KP_F3:
-		GetCon()->SendRawString("\x1bOR", 3);
+		GetCon()->SendString("\x1bOR");
 		break;
 	case GDK_F4:
 	case GDK_KP_F4:
-		GetCon()->SendRawString("\x1bOS", 3);
+		GetCon()->SendString("\x1bOS");
 		break;
 	case GDK_F5:
-		GetCon()->SendRawString("\x1b[15~", 5);
+		GetCon()->SendString("\x1b[15~");
 		break;
 	case GDK_F6:
-		GetCon()->SendRawString("\x1b[17~", 5);
+		GetCon()->SendString("\x1b[17~");
 		break;
 	case GDK_F7:
-	    GetCon()->SendRawString("\x1b[18~", 5);
+	    GetCon()->SendString("\x1b[18~");
 		break;
 	case GDK_F8:
-		GetCon()->SendRawString("\x1b[19~", 5);
+		GetCon()->SendString("\x1b[19~");
 		break;
 	case GDK_F9:
-		GetCon()->SendRawString("\x1b[20~", 5);
+		GetCon()->SendString("\x1b[20~");
 		break;
 	case GDK_F10:
-		GetCon()->SendRawString("\x1b[21~", 5);
+		GetCon()->SendString("\x1b[21~");
 		break;
 	case GDK_F11:
-		GetCon()->SendRawString("\x1b[23~", 5);
+		GetCon()->SendString("\x1b[23~");
 		break;
 	case GDK_F12:
-		GetCon()->SendRawString("\x1b[24~", 5);
+		GetCon()->SendString("\x1b[24~");
 		break;
 	default:
 		clear = false;
@@ -297,7 +320,9 @@ void CTelnetView::OnMouseMove(GdkEventMotion* evt)
 #if !defined(MOZ_PLUGIN)
   else
   {
+#ifdef USE_MOUSE
     CTermCharAttr* pattr = m_pTermData->GetLineAttr(m_pTermData->m_Screen[ y ]);
+#endif
 
 #if defined(USE_IPLOOKUP)
     // Update status bar for ip address lookup.
@@ -420,9 +445,26 @@ void CTelnetView::OnMouseScroll(GdkEventScroll* evt)
 
 	GdkScrollDirection i = evt->direction;;
 	if ( i == GDK_SCROLL_UP )
-	  GetCon()->SendRawString("\x1bOA",3);
+		GetCon()->SendString("\x1bOA");
 	if ( i == GDK_SCROLL_DOWN )
-	  GetCon()->SendRawString("\x1bOB",3);
+		GetCon()->SendString("\x1bOB");
+}
+
+void CTelnetView::OnMButtonDown(GdkEventButton* evt)
+{
+	if ( AppConfig.MouseSupport != true )
+	{
+		PasteFromClipboard(true);
+		return;
+	}
+
+	if ( AppConfig.WithMiddleButton != true )
+		return;
+
+	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
+			m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
+	int x = m_pTermData->m_CaretPos.x;
+	LeaveWrapper(GetCon(), pAttr, x);
 }
 
 void CTelnetView::OnLButtonUp(GdkEventButton* evt)
@@ -455,60 +497,69 @@ void CTelnetView::OnLButtonUp(GdkEventButton* evt)
 	     || m_pTermData->m_Sel->m_Start.left != left )
 	  return;
 
-	int cur = m_CursorState;
-	int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
-
-	if ( cur == 2 ) // mouse on entering mode
-	  {
-	    switch (ps)
-	      {
-	      case 1: // list
-		{
-		  int n = y - m_pTermData->m_CaretPos.y;
-		  if ( n>0 )
-		    while(n)
-		      {
-			GetCon()->SendRawString("\x1bOB",3);
-			n--;
-		      }
-		  if ( n<0 )
-		    {
-		      n=-n;
-		      while(n)
-			{
-			  GetCon()->SendRawString("\x1bOA",3);
-			  n--;
-			}
-		    }
-		  GetCon()->SendRawString("\r",1); //return key
-		  break;
-		}
-	      case 0: // menu
-		{
-		  char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
-		  GetCon()->SendRawString( &cMenu, 1 );
-		  GetCon()->SendRawString( "\r", 1 );
-		  break;
-		}
-	      case -1: // normal
-		GetCon()->SendRawString( "\r", 1 );
-		break;
-	      default:
-		break;
-	      }
-	  }
-	else if (cur == 1)
-	  GetCon()->SendRawString("\x1bOD",3); //exiting mode
-	else if (cur == 6)
-	  GetCon()->SendRawString("\x1b[1~",4); //home
-	else if (cur == 5)
-	  GetCon()->SendRawString("\x1b[4~",4); //end
-	else if (cur == 4)
-	  GetCon()->SendRawString("\x1b[5~",4); //pageup
-	else if (cur == 3)
-	  GetCon()->SendRawString("\x1b[6~",4); //pagedown
+	if ( AppConfig.WithMiddleButton == true ){
+		CTermCharAttr* pAttr = m_pTermData->GetLineAttr(
+				m_pTermData->m_Screen[m_pTermData->m_CaretPos.y] );
+		int x = m_pTermData->m_CaretPos.x;
+		EnterWrapper(GetCon(), pAttr, x);
+	}
 	else
-	  GetCon()->SendRawString( "\r", 1 );
+	{
+	  int cur = m_CursorState;
+	  int ps = ((CTelnetCon*)m_pTermData)->GetPageState();
+
+	  if ( cur == 2 ) // mouse on entering mode
+	  {
+		switch (ps)
+		{
+	      case 1: // list
+		  {
+		    int n = y - m_pTermData->m_CaretPos.y;
+		    if ( n>0 )
+		      while(n)
+		      {
+				GetCon()->SendString("\x1bOB");
+				n--;
+		      }
+		    if ( n<0 )
+		    {
+			  n=-n;
+		      while(n)
+			  {
+			    GetCon()->SendString("\x1bOA");
+			    n--;
+			  }
+		    }
+			GetCon()->SendString("\r"); //return key
+			break;
+		  }
+		  case 0: // menu
+		  {
+			char cMenu = ((CTelnetCon*)m_pTermData)->GetMenuChar(y);
+			GetCon()->SendRawString( &cMenu, 1 );
+			GetCon()->SendString("\r");
+			break;
+		  }
+		  case -1: // normal
+			GetCon()->SendString("\r");
+		  break;
+			default:
+		  break;
+		}
+	  }
+	  else if (cur == 1)
+		GetCon()->SendString("\x1bOD"); //exiting mode
+	  else if (cur == 6)
+		GetCon()->SendString("\x1b[1~"); //home
+	  else if (cur == 5)
+		GetCon()->SendString("\x1b[4~"); //end
+	  else if (cur == 4)
+		GetCon()->SendString("\x1b[5~"); //pageup
+	  else if (cur == 3)
+		GetCon()->SendString("\x1b[6~"); //pagedown
+	  else
+		GetCon()->SendString("\r");
+	}
 }
 #endif  // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
 
@@ -576,6 +627,31 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 	GtkWidget* submenu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (input_menu_item), submenu);
 
+	// Show Web Search only when text selected
+	if(websearch_menu_item)
+		gtk_widget_destroy(websearch_menu_item);
+	string selected_text = m_pTermData->GetSelectedText(false);
+	if(! selected_text.empty()) {
+		gsize wl = 0;
+		gchar websearch_text[128];
+		gchar* search_content = g_convert_with_fallback(
+							selected_text.c_str(), selected_text.length(),
+							"utf-8", m_pTermData->m_Encoding.c_str(),
+							(gchar *) "?", NULL, &wl, NULL);
+		if(g_utf8_strlen(search_content, selected_text.length()) > 15) {
+			g_utf8_strncpy(search_content, search_content, 15);
+			strcat(search_content, _("..."));
+		}
+		websearch_menu_item = gtk_menu_item_new_with_mnemonic(_("_Web Search: \"%s\""));
+		sprintf(websearch_text, gtk_menu_item_get_label(GTK_MENU_ITEM(websearch_menu_item)), search_content);
+		gtk_menu_item_set_label(GTK_MENU_ITEM(websearch_menu_item), websearch_text);
+
+		gtk_widget_show(websearch_menu_item);
+		g_signal_connect(G_OBJECT(websearch_menu_item), "activate", G_CALLBACK(CTelnetView::OnWebSearch), this);
+		gtk_menu_shell_append(GTK_MENU_SHELL(m_ContextMenu), websearch_menu_item );
+		g_free(search_content);
+	}
+
 	gtk_menu_shell_append (GTK_MENU_SHELL (m_ContextMenu), input_menu_item);
 
 	gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (m_IMContext),
@@ -601,12 +677,28 @@ bool CTelnetView::PreKeyDown(GdkEventKey* evt UNUSED)
 
 void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 {
+    int lines_count = 0, last_line_count = 0;
+    string raw_str;
+
+    if( ConvStr2SiteEncoding(text, contain_ansi_color, raw_str, lines_count, last_line_count) )
+        GetCon()->SendRawString(raw_str.c_str(), raw_str.length());
+}
+
+bool CTelnetView::ConvStr2SiteEncoding(string text, bool contain_ansi_color, string & text2, int & lines_count, int & last_line_count)
+{
 	if( GetCon() )
 	{
-		string text2;
+		lines_count = 0;
+		last_line_count = 0;
+
 		if( contain_ansi_color )
 		{
+			bool is_replace_crlf = false;
+			gchar* locale_text = NULL;
+			const char* p = NULL;
+			const char* crlf = GetCon()->m_Site.GetCRLF();
 			string esc = GetCon()->m_Site.GetEscapeChar();
+
 			if( m_s_CharSet != GetCon()->m_Site.m_Encoding.c_str() )
 			{
 			  INFO("Charset Conversion from %s to %s",m_s_CharSet.c_str(),GetCon()->m_Site.m_Encoding.c_str());
@@ -614,36 +706,46 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 			  gsize convl;
 			  gchar* locale_text = g_convert(text.c_str(), text.length(),GetCon()->m_Site.m_Encoding.c_str(),m_s_CharSet.c_str(), NULL, &convl, NULL);
 			  if( !locale_text )
-				return;
+				return false;
 
-			  const char* p = locale_text;
-			  while(*p)
-			  {
-				if(*p == '\x1b')
-					text2 += esc;
-				else
-					text2 += *p;
-				p++;
-			  }
-			  g_free(locale_text);
+			  p = locale_text;
 			}
 			else
 			{
 				INFO("color text: %s",text.c_str());
-				const char* p = text.c_str();
-				const char* crlf = GetCon()->m_Site.GetCRLF();
-				while(*p)
-				{
-					if(*p == '\x1b')
-						text2 += esc;
-					else if( *p == '\n' )
+				p = text.c_str();
+				is_replace_crlf = true;
+			}
+
+			bool is_ctrl_word = false;
+			while(*p)
+			{
+				if(*p == '\x1b'){
+					text2 += esc;
+					is_ctrl_word = true;
+				}
+				else if( *p == '\n' ) {
+					if(is_replace_crlf)
 						text2 += crlf;
 					else
 						text2 += *p;
-					p++;
+					lines_count++;
+					last_line_count = 0;
 				}
+				else {
+					text2 += *p;
+
+					if(!is_ctrl_word)
+						last_line_count++;
+					if(*p == 'm') // end of color control word
+						is_ctrl_word = false;
+				}
+				p++;
 			}
-			GetCon()->SendRawString(text2.c_str(),text2.length());
+
+			if(locale_text)
+				g_free(locale_text);
+
 		}
 		else
 		{
@@ -666,7 +768,7 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 					break;
 			}
 			if( !locale_text )
-				return;
+				return false;
 			// FIXME: Convert UTF-8 string to locale string.to prevent invalid UTF-8 string
 			// caused by the auto-wrapper.
 			// Just a workaround.  This needs to be modified in the future.
@@ -715,18 +817,27 @@ void CTelnetView::DoPasteFromClipboard(string text, bool contain_ansi_color)
 				ptext = text.c_str();
 			}
 
-			string text2;
 			for( const char* pstr = ptext; *pstr; ++pstr )
+			{
 				if( *pstr == '\n' )
+				{
 					text2 += crlf;
+					lines_count++;
+					last_line_count = 0;
+				}
 				else
+				{
 					text2 += *pstr;
-
-			GetCon()->SendRawString(text2.c_str(), text2.length() );
+					if( *pstr < 128 )
+						last_line_count ++;
+				}
+			}
 
 			g_free( locale_text );
 		}
 	}
+
+	return true;
 }
 
 
@@ -789,6 +900,11 @@ void CTelnetView::OnHyperlinkClicked(string sURL)
 	{
 		g_print("can not run %s: %s\n", app.c_str(), err->message);
 	}
+}
+
+void CTelnetView::OnWebSearch(GtkMenuItem* mitem UNUSED, CTelnetView* _this)
+{
+	_this->OnWebSearchSelected();
 }
 
 #define  SEARCH_URL ("http://www.google.com.tw/search?&ie=UTF-8&q=")

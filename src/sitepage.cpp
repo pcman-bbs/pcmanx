@@ -250,11 +250,11 @@ CSitePage::CSitePage(CSite& site)
     GtkTreeStore* store = gtk_tree_store_new (1, G_TYPE_STRING);
 	GtkTreeIter iter;
 	gtk_tree_store_append (store, &iter, NULL);
+        gtk_tree_store_set (store, &iter, 0, _("2.50"), -1);
+	gtk_tree_store_append (store, &iter, NULL);
+        gtk_tree_store_set (store, &iter, 0, _("2.41"), -1);
+	gtk_tree_store_append (store, &iter, NULL);
 	gtk_tree_store_set (store, &iter, 0, _("Disable"), -1);
-	gtk_tree_store_append (store, &iter, NULL);
-	gtk_tree_store_set (store, &iter, 0, _("2.41"), -1);
-	gtk_tree_store_append (store, &iter, NULL);
-	gtk_tree_store_set (store, &iter, 0, _("2.50"), -1);
 	m_UAOModel = GTK_TREE_MODEL(store);
 	m_UAOBox = gtk_combo_box_new_with_model (m_UAOModel);
 	gtk_box_pack_start(GTK_BOX(uao_box), m_UAOBox, FALSE, FALSE, 0);

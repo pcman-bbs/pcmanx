@@ -1,4 +1,679 @@
 
+2016-02-16  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Bump to 1.3 release.
+
+2014-07-02  Yushin Huang <hyslion@gmail.com>
+
+	fix configure option '--disable-nancy' (#16)
+
+2014-07-02  Yushin Huang <hyslion@gmail.com>
+
+	fix configure option '--disable-mouse' (#17)
+
+2015-12-11  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #65 from HMKRL/master
+	
+	fix build failure when docklet is disabled
+
+2015-12-11  Yu-Cheng Liang <a135246a135246@gmail.com>
+
+	fix build failure when docklet is disabled
+
+2015-09-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Use .gitattributes for experimental tarball release.
+
+2015-09-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Update contributor list.
+
+2015-09-29  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Update PACKAGE_BUGREPORT.
+
+2015-09-29  Shih-Yuan Lee <fourdollars@gmail.com>
+
+	Merge pull request #37 from TakeshiTseng/fix_string_util
+	
+	fix error while escaping hex code
+
+2015-09-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Abandon dist-debian folder and use debian branch instead.
+
+2015-09-03  Yi Tseng <a86487817@gmail.com>
+
+	Remove unused include
+
+2015-07-01  Jim Huang <jserv.tw@gmail.com>
+
+	mainframe: fix comparison between signed and unsigned integer
+
+2015-07-01  Jim Huang <jserv.tw@gmail.com>
+
+	editfavdlg: fix comparison between signed and unsigned integer
+
+2015-06-20  Jim Huang <jserv.tw@gmail.com>
+
+	Always display shorter favorite site name for UI consistency
+	
+	Reported and fixed by noguchi167
+
+2015-06-20  Jim Huang <jserv.tw@gmail.com>
+
+	Fix the incorrect site list after traversing first leaf directory
+	
+	Fixes #32
+	
+	When a user tries to search a BBS site, it was incorrect to stop
+	at the last site of the first leaf directory. Thus, it would return
+	to parent directory and continue the search.
+	
+	Detail of the problem:
+	If the item has no next, it is set to be invalid by
+	gtk_tree_model_iter_next( model, &it), then
+	gtk_tree_model_iter_next( model, &parent_it) would be wrong.
+	
+	Reported and fixed by b88923509
+
+2015-06-20  Jim Huang <jserv.tw@gmail.com>
+
+	Avoid constructing non-existing images for mainwindow icon
+	
+	Reported and fixed by Kun-Hua Huang <kunhuahuang@hotmail.com>
+
+2015-06-17  Jim Huang <jserv.tw@gmail.com>
+
+	changelog: exclude GIT merge info
+
+2015-06-17  Jim Huang <jserv.tw@gmail.com>
+
+	update contributor list
+
+2015-06-17  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #21 from Falldog/fix_post_unicode_ansieditor
+	
+	Fix incorrect Unicode string in ANSI editor
+
+2015-06-17  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #61 from leo820209/master
+	
+	Enable UAO 2.50 by default
+
+2015-06-15  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #62 from LeaYeh/patch-1
+	
+	Fix the unexpected behavior of double click on sitelist
+
+2015-06-15  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #54 from hwangcc23/fix-39
+	
+	Support the resource schema "telnet://url"
+
+2015-06-15  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #60 from fltermare/right_click_bug_on_tab
+	
+	Fix right-click popup menu behavior to allow working on current tab
+
+2015-04-12  LeaYeh <smile2140@gmail.com>
+
+	Fix bug of the behavior of double click on sitelist folder
+
+2015-06-14  Albert Su <fltermare@gmail.com>
+
+	Avoid redundant checks in OnNotebookPopupMenu()
+	
+	Let OnNotebookPopupMenu be the function checking mouse's button and
+	initialing menu.
+	
+	Add another function (OnPopupMenuSelectCon) to handle right-click event.
+	GetNearestTab, the function used in OnPopupMenuSelectCon, finds the
+	nearest tab's number when mouse click happens.
+
+2015-06-10  Albert Su <fltermare@gmail.com>
+
+	Right-click popup menu only works on current tab
+	
+	fix the issue #44, right-click on the tab and the popup menu may
+	behaves(close, reconnect, addtofavorite) on the wrong tab.
+	
+	If users right-click on the tab, pcmanx would swtiches to the tab
+	first and pops up the menu.
+	It behaves like CMainFrame::OnCloseSelectCon (mouse middle click).
+	
+	However, it wouldn't switch back to the original tab when user
+	selects "close" in the popup menu. Because we can't ensure which
+	one would be chosen.
+
+2015-05-12  hwangcc <hwangcc@csie.nctu.edu.tw>
+
+	Support "telnet://url"
+	
+	Before creating a new connection, remove "telenet://" from the given url.
+	This allows the user to input an url like "telnet://ptt.cc".
+
+2015-06-08  Jim Huang <jserv.tw@gmail.com>
+
+	Merge pull request #57 from sifmelcara/master
+	
+	fix reversed selection when pasting text
+
+2015-06-08  leo820209 <leo820209@gmail.com>
+
+	Enable UAO 2.50 by default
+	
+	Enable UAO 2.50 by default to make some Simplified Chinese
+	characters, Traditional Chinese characters, and Japanese
+	characters display normally.
+
+2015-06-06  sifmelcara <rbdn@9mm.davy.tw>
+
+	fix reversed selection when pasting
+	
+	let the "Paste" button in context menu paste PRIMARY selection,
+	and "Paste from Clipboard" button paste CLIPBOARD selection.
+
+2015-05-20  Jim Huang <jserv.tw@gmail.com>
+
+	pcmanx-gtk2.spec.in: follow README transition
+
+2015-05-12  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #51 from dimotsai/markdown-readme
+	
+	Rewrite and cleanup README.md
+
+2015-04-12  Dimo <a968574123@hotmail.com>
+
+	Rewirte and cleanup README.md
+	
+	Since README has already adapted Markdown as the format, I rewrite README.md to make sure it is readable both on GitHub and terminals.
+
+2015-04-15  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #50 from PeterDaveHello/patch-1
+	
+	add travis CI build status badge
+
+2015-04-12  Peter Dave Hello <PeterDaveHello@users.noreply.github.com>
+
+	add travis CI build status badge
+
+2015-04-12  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Merge pull request #49 from PeterDaveHello/patch-1
+	
+	Rename README to README.md
+
+2015-04-11  Peter Dave Hello <hsu@peterdavehello.org>
+
+	add symbolic link for README
+
+2015-04-11  Peter Dave Hello <PeterDaveHello@users.noreply.github.com>
+
+	Rename README to README.md
+	
+	So GitHub will parse the syntax like https://github.com/pcman-bbs/pcmanx/blob/master/README#L2, and we could put something more, like travis-ci badge to know the build status easily.
+
+2015-04-08  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #46 from kindersung/master
+	
+	Fix typos
+
+2015-04-06  Kinder Sung <st0912@gmail.com>
+
+	Fix typos
+
+2015-04-04  Takeshi <a86487817@gmail.com>
+
+	fix error while escaping hex code
+
+2015-04-04  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #31 from cychiang/pcmanx_mac_support
+	
+	little change to prevent potential syntax problem
+
+2015-04-03  Casper CY Chiang <cychiang0823@gmail.com>
+
+	little change to prevent potential syntax problem
+
+2015-03-19  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Merge pull request #24 from cychiang/pcmanx_mac_support
+	
+	Add checking function on autogen.sh and view/telnetcon.cpp to support mac os.
+
+2015-03-19  Casper CY Chiang <cychiang0823@gmail.com>
+
+	add check mac os system support on autogen.sh and view/telnetcon.cpp
+
+2015-03-16  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #23 from wdv4758h/master
+	
+	fix typo
+
+2015-03-16  dv <wdv4758h@gmail.com>
+
+	fix typo
+
+2015-03-15  Chen-Heng Chang <wandererm@gmail.com>
+
+	Merge pull request #22 from M157q/fix_readme
+	
+	fix typo (woild => would)
+
+2015-03-14  m157q <m157q.tw@gmail.com>
+
+	fix typo (woild => would)
+
+2014-11-18  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Fix invisible cairo caret issue.
+	
+	Do more check of Cairo context before using it.
+	
+	https://code.google.com/p/pcmanx-gtk2/issues/detail?id=68
+
+2014-09-25  Falldog <falldog7@gmail.com>
+
+	refine CEditorView process logic about past text from clipboard
+	
+	refine CEditorView::DoPasteFromClipboard() to use ConvStr2SiteEncoding()
+	simplify the logic about convert encoding and calculate the lines count and words count of last line
+
+2014-09-25  Falldog <falldog7@gmail.com>
+
+	add CTelnetView::ConvStr2SiteEncoding() for convert string and get last line word count
+	
+	add the API for general inherit usage, convert string encoding and calculate last line word count
+	the word cound should skip the control char(wrap by '\x1b' and 'm')
+
+2014-09-11  Jim Huang <jserv@0xlab.org>
+
+	Merge pull request #20 from PeterDaveHello/patch-1
+	
+	make CI build faster
+
+2014-08-13  Peter Dave Hello <hsu@peterdavehello.org>
+
+	make CI build faster
+
+2014-07-01  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Check git before running build/changelog.sh.
+
+2014-06-25  Yushin Huang <hyslion@gmail.com>
+
+	Merge pull request #18 from zzz0072/master
+	
+	Bring back mouse middle key paste when mouse browsing is disabled
+
+2014-06-23  Wen.Liao <zzz00072@gmail.com>
+
+	Bring back mouse middle key paste when mouse browsing is disabled
+
+2014-06-19  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Move debian to dist-debian
+	
+	debian directory in repository causes merging fail in PPA, so we need to
+	rename it.
+
+2014-06-17  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Fix CFLAGS and CXXFLAGS in travis-ci
+
+2014-06-17  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Disable broken configure in travis-ci
+
+2014-06-17  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Add default configure in travis-ci
+
+2014-06-17  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Test different configure in travis-ci
+	
+	Closed #4
+
+2014-06-15  Jim Huang <jserv@0xlab.org>
+
+	debian: set VCS to GitHub repository
+
+2014-06-12  Yushin Huang <hyslion@gmail.com>
+
+	fix hotkey handling regression
+	
+	close #11
+
+2014-06-12  Jim Huang <jserv@0xlab.org>
+
+	update .gitignore
+
+2014-06-11  Yushin Huang <hyslion@gmail.com>
+
+	Remove unused method
+
+2014-06-11  Yushin Huang <hyslion@gmail.com>
+
+	Use a better way for i18n
+
+2014-06-11  Yushin Huang <hyslion@gmail.com>
+
+	Cut long web search string
+
+2014-06-11  Yushin Huang <hyslion@gmail.com>
+
+	Append selected text to "Web Search"
+
+2014-06-11  Yushin Huang <hyslion@gmail.com>
+
+	Show 'Web Search' only when text selection
+
+2014-06-08  Yushin Huang <hyslion@gmail.com>
+
+	Indicate screen mode in right click menu, close #9
+
+2014-06-07  Jim Huang <jserv@0xlab.org>
+
+	update developer/contributor list
+
+2014-06-06  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Fix CMainFrame::ParseColor memory leak
+	
+	Closed #3
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	warning: const-correctness
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	warning: unused variables
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	warning: missing return
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	warning: signed / unsigned comparison
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	warning: initialization order
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Use -Wall -Werror in travis-ci
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Use --disable-silent-rules in travis-ci
+
+2014-06-05  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Merge remote-tracking branch 'pcman-bbs/no2.22'
+	
+	* pcman-bbs/no2.22:
+	  to_gtk2.22 : check gtk >= 2.22 in configure time
+	  to_gtk2.22 : remove gtk < 2.22 check and support
+	  to_gtk2.22 : remove gtk < 2.14 check and support
+	  to_gtk2.22 : remove eggtrayiron used in gtk < 2.10
+	  to_gtk2.22 : remove gtk < 2.10 check and support
+	  to_gtk2.22 : remove gtk < 2.6 check and support
+
+2014-06-05  Yushin Huang <hyslion@gmail.com>
+
+	fix the state of `show status` and `show toolbar`
+
+2014-06-04  WM Chang <wandererm@gmail.com>
+
+	move show toolbar and show statusbar from preference to view menu
+
+2014-06-04  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Add .travis.yml for travis-ci
+
+2014-06-04  ChangZhuo Chen (陳昌倬) <czchen@gmail.com>
+
+	Use subdir-objects to avoid autotools warning
+
+2014-05-28  Jim Huang <jserv@0xlab.org>
+
+	update NEWS
+
+2014-05-28  James Chuang <chuangchihchiang@gmail.com>
+
+	Add ANSI color editor
+	
+	This patch implements ANSI editor feature as OpenPCMan does,
+	which can load/save .ans file.
+	
+	Correspondingly, it added new classes "CEditor" & "CEditorView".
+	CEditor is inherited from CTelnetCon and deals with editor data,
+	set text color attributes, save and load .ans files.
+	CEditorView is inherited from CTelnetView which registers callback
+	functions of user manipulation, and then calls CEditor to update
+	editor data.
+	
+	In addition, it modified CMainFrame for awareness of ANSI Editor.
+	1. Add a CEditorView type pointer: m_eView.
+	2. Add GetCurEditor() & GetCurEditorView to retrieve the
+	   editor data in CMainFrame.
+	3. Modify NewCon() to identify the instance to be created should be
+	   CTelnetCon or CEditor.
+	4. Add OnAnsiEditor(), OnOpenAnsiFile(), OnSaveAnsiFile() methods
+	   to deal with editor's creating, saving and loading.
+	5. Add OnClearScreen() method to handle the "clean screen" action.
+	6. Add SetBlink(), SetTextColor(), SetBgColor() methods to set
+	   text attributes.
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2014-02-18  Keng-Yu Lin <kengyu@lexical.tw>
+
+	Use the external ssh/telnet when configured with the support
+	
+	When ./configure with the external ssh/telnet support
+	(USE_EXTERNAL macro is defined), pcmanx should use the external ssh/telnet.
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2014-05-08  Noner Kao <s101062801@m101.nthu.edu.tw>
+
+	UI tweaks for mouse support
+	
+	Merge windows-pcman-style mouse support function into preference
+	config, and user now can choose which kind of mouse support to
+	use.
+	
+	Since the most significant difference between the original
+	and windows-pcman style is the use of middle button, so
+	the naming in Appconfig class is "WithMiddleButton".
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2014-04-17  Noner Kao <s101062801@m101.nthu.edu.tw>
+
+	Add mouse browsing support
+	
+	New mouse actions associated:
+	 - L-button to enter
+	 - M-button to leave
+	 - scroll to up and down
+	
+	Since the functions are the same as original keyboard bindings,
+	instead of calling SendRawString(), new helper functions are
+	created for both keyboard and mouse.
+	
+	In addition, most of the hardcoded SendRawString() calls in
+	view/telnetview.cpp are fixed.  The rest are single characters,
+	which can not be applied to SendString() call.
+	
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2014-04-08  Jim Huang <jserv@0xlab.org>
+
+	update contributor list
+
+2013-11-24  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : check gtk >= 2.22 in configure time
+
+2013-11-24  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : remove gtk < 2.22 check and support
+
+2013-11-24  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : remove gtk < 2.14 check and support
+
+2013-11-24  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : remove eggtrayiron used in gtk < 2.10
+
+2013-11-24  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : remove gtk < 2.10 check and support
+
+2013-11-16  Chih-Min Chao <cmchao@gmail.com>
+
+	to_gtk2.22 : remove gtk < 2.6 check and support
+
+2014-01-03  Roy Lu <roymercadian@gmail.com>
+
+	Add option: start PCManX in simple mode
+	
+	Signed-off-by: Roy Lu <roymercadian@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2014-01-02  Roy Lu <roymercadian@gmail.com>
+
+	Bug fix: some combinations for key settings do not work.
+	
+	For example: <ctrl>c
+	
+	Signed-off-by: Roy Lu <roymercadian@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-12-27  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Update po files.
+
+2013-12-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Fix some warnings and deprecated functions of glib.
+
+2013-12-26  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Replace INCLUDES by AM_CPPFLAGS in Makefile.am
+
+2013-12-24  Jim Huang <jserv@0xlab.org>
+
+	proxy: Missing header files on FreeBSD
+	
+	When built on FreeBSD, compiler complains:
+	socket(),PF_INET, SOCK_STREAM, in src/core/proxy.c undeclared.
+	
+	Close #69
+	
+	Patched by <pptpb.tw@gmail.com>
+
+2013-11-25  Taihsiang Ho (tai271828) <taihsiangho@gmail.com>
+
+	Modulize query dialogue on closing connection
+	
+	Both of the function "OnCloseSelectCon" and "OnCloseCon"
+	will be called when users intend to to close a connected window.
+	And both of them, "OnCloseSelectCon" and "OnCloseCon",
+	will ask users to confirm their window closing action.
+	
+	Modulize the same confirmation query called by
+	"OnCloseSelectCon" and "OnCloseCon"
+	
+	Signed-off-by: Taihsiang Ho (tai271828) <taihsiangho@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-11-24  Taihsiang Ho (tai271828) <taihsiangho@gmail.com>
+
+	Close tabs selected by middle clicks
+	
+	The original feature to perform middle clicking on tabs
+	will close the current tab but not close exactly
+	the tabs which middle click is applied on.
+	
+	Add functions to detect the tab clicked by middle button,
+	and then close it to replace the original feature mentioned
+	above.
+	
+	Issue ID: 67
+	
+	Signed-off-by: Taihsiang Ho (tai271828) <taihsiangho@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-12-24  Roy Lu <roymercadian@gmail.com>
+
+	Add hotkey settings
+	
+	Signed-off-by: Roy Lu <roymercadian@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-10-11  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Remove the hardcoded 1.11 and mkinstalldirs.
+
+2013-09-15  Jim Huang <jserv@0xlab.org>
+
+	post release-1.2 development
+
+2013-09-15  Wen Liao <wen.cf83@gmail.com>
+
+	List all shortcuts in help menu and in README file
+	
+	Signed-off-by: Wen Liao <wen.cf83@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-09-05  Wen Liao <wen.cf83@gmail.com>
+
+	Add gnome-terminal style shortcuts
+	
+	The supported keyboard shortcuts:
+	1. Copy: Ctrl+Shift+C
+	2. Paste: Ctrl+Shift+V
+	3. New connection: Ctrl+Shift+T
+	4. Previous tab: Ctrl+PgUp
+	5. Next tab: Ctrl+PgDown
+	
+	Signed-off-by: Wen Liao <wen.cf83@gmail.com>
+	Signed-off-by: Jim Huang <jserv@0xlab.org>
+
+2013-03-16  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Fix the compilation issue on Fedora.
+
+2013-02-25  Jim Huang <jserv@0xlab.org>
+
+	Correct my email address. The one @kaffe.org is no longer used.
+
+2013-02-22  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
+
+	Revert "Try to workaround the cairo caret invisible issue."
+	
+	This reverts commit 15b51eb0a4f113eeabb5ed9ce118968fe8d2c3e3.
+
 2013-02-21  Shih-Yuan Lee (FourDollars) <fourdollars@gmail.com>
 
 	Bump to 1.2 release.

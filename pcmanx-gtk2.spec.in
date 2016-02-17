@@ -12,9 +12,9 @@ Url:       http://code.google.com/p/pcmanx-gtk2/
 Source:    %{name}-%{version}.tar.xz
 
 BuildRoot:        %{_tmppath}/%{name}-%{version}-root
-BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool
+BuildRequires:    gtk2-devel, libnotify-devel, libtool-ltdl-devel, intltool, gcc-c++
 %if 0%{?suse_version}
-BuildRequires:    xz, gcc-c++, update-desktop-files
+BuildRequires:    xz, update-desktop-files
 Requires:         libltdl7
 %else
 Requires:         libtool-ltdl
@@ -65,7 +65,7 @@ make %{?_smp_mflags} V=1
 
 %files -f pcmanx.lang
 %defattr(-,root,root)
-%doc AUTHORS COPYING NEWS README TODO
+%doc AUTHORS COPYING NEWS README.md TODO
 %dir %{_datadir}/pcmanx/
 %dir %{_datadir}/pcmanx/nancy_bot/
 %{_bindir}/pcmanx

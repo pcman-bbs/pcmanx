@@ -54,6 +54,7 @@ public:
 
 	static void SetWebBrowser(string browser){	m_WebBrowser = browser;	}
 	static void SetMailClient(string mailclient){	m_MailClient = mailclient;	}
+	static void OnWebSearch(GtkMenuItem* mitem, CTelnetView* _this);
 
 protected:
     bool OnKeyDown(GdkEventKey* evt);
@@ -61,12 +62,14 @@ protected:
     void OnMouseMove(GdkEventMotion* evt);
 #if defined(USE_MOUSE) && !defined(MOZ_PLUGIN)    
     void OnMouseScroll(GdkEventScroll* evt);
+    void OnMButtonDown(GdkEventButton* evt);
     void OnLButtonUp(GdkEventButton* evt);
 #endif // defined(USE_MOUSE) && !defined(MOZ_PLUGIN)
     void OnRButtonDown(GdkEventButton* evt);
     void OnWebSearchSelected();
     bool PreKeyDown(GdkEventKey* evt);
     virtual void DoPasteFromClipboard(string text, bool contain_ansi_color);
+    bool ConvStr2SiteEncoding(string text, bool contain_ansi_color, string & text2, int & lines_count, int & last_line_count);
     void OnDestroy();
 
 #if !defined(MOZ_PLUGIN)

@@ -91,12 +91,14 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 		CFG_BOOL( BeepOnBell )
 #ifdef USE_MOUSE
 		CFG_BOOL( MouseSupport )
+		CFG_BOOL( WithMiddleButton )
 #endif
 #ifdef USE_DOCKLET
 		CFG_BOOL( ShowTrayIcon )
 #endif
 		CFG_BOOL( ShowToolbar )
 		CFG_BOOL( ShowStatusBar )
+		CFG_BOOL( ShowInSimpleMode )
 		CFG_STR ( WebBrowser )
 		CFG_STR ( MailClient )
 		CFG_BOOL( PopupNotifier )
@@ -166,12 +168,36 @@ bool CAppConfig::DoDataExchange(bool bLoad)
 #endif
 	END_CONFIG_SECT()
 
+	BEGIN_CONFIG_SECT(Key)
+		CFG_STR ( keySiteList )
+		CFG_STR ( keyNewConn0 )
+		CFG_STR ( keyNewConn1 )
+		CFG_STR ( keyReconn0 )
+		CFG_STR ( keyReconn1 )
+		CFG_STR ( keyClose0 )
+		CFG_STR ( keyClose1 )
+		CFG_STR ( keyNextPage )
+		CFG_STR ( keyPrevPage )
+		CFG_STR ( keyFirstPage )
+		CFG_STR ( keyLastPage )
+		CFG_STR ( keyCopy0 )
+		CFG_STR ( keyCopy1 )
+		CFG_STR ( keyPaste0 )
+		CFG_STR ( keyPaste1 )
+		CFG_STR ( keyPasteClipboard )
+		CFG_STR ( keyEmotions )
+		CFG_STR ( keyFullscreen )
+		CFG_STR ( keySimpleMode )
+		CFG_STR ( keyShowMainWindow )
+	END_CONFIG_SECT()
+
 	BEGIN_CONFIG_FILE( ConfigFile )
 		CFG_SECT( Window )
 		CFG_SECT( General )
 		CFG_SECT( Display )
 		CFG_SECT( Color )
 		CFG_SECT( Site )
+		CFG_SECT( Key )
 	END_CONFIG_FILE()
 
 	SetRoot(ConfigFile);
@@ -349,6 +375,7 @@ void CAppConfig::SetToDefault()
 	CopyTrimTail = 1;
 #ifdef USE_MOUSE
 	MouseSupport = 0;
+	WithMiddleButton = 1;
 #endif
 	PopupNotifier = true;
 	PopupTimeout = 6;
@@ -378,14 +405,41 @@ void CAppConfig::SetToDefault()
 #endif
 	ShowToolbar = true;
 	ShowStatusBar = true;
+	ShowInSimpleMode = false;
 
 	HyperLinkColor.red = 65535;
 	HyperLinkColor.green = 65536 * 102 / 256;
 	HyperLinkColor.blue = 0;
 
 	SocketTimeout = 30;
+
+	SetToDefault_Keys();
 }
 
+void CAppConfig::SetToDefault_Keys()
+{
+	// hot key settings
+	keySiteList = "<Alt>S";
+	keyNewConn0 = "<Alt>Q";
+	keyNewConn1 = "<Ctrl><Shift>T";
+	keyReconn0 = "<Alt>R";
+	keyReconn1 = "<Ctrl>Insert";
+	keyClose0 = "<Alt>W";
+	keyClose1 = "<Ctrl>Delete";
+	keyNextPage = "<Alt>X";
+	keyPrevPage = "<Alt>Z";
+	keyFirstPage = "<Ctrl>Home";
+	keyLastPage = "<Ctrl>End";
+	keyCopy0 = "<Alt>O";
+	keyCopy1 = "<Ctrl><Shift>C";
+	keyPaste0 = "<Alt>P";
+	keyPaste1 = "<Ctrl><Shift>V";
+	keyPasteClipboard = "<Shift>Insert";
+	keyEmotions = "<Ctrl>Return";
+	keyFullscreen = "<ALT>Return";
+	keySimpleMode = "<Shift>Return";
+	keyShowMainWindow = "<Alt>M";
+}
 
 void CAppConfig::AfterLoad()
 {
