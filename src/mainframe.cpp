@@ -285,9 +285,9 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 		url = url.substr(first, last - first + 1);
 
 	/* Remove telnet:// from url */
-	first = url.find_first_not_of("telnet://");
-	if (first != string::npos)
-		url.erase(0, first);
+	const string telnetPrefix = "telnet://";
+	if(url.substr(0, telnetPrefix.size()) == telnetPrefix)
+		url.erase(0, telnetPrefix.size());
 
 	if ( site == NULL )
 		site = &AppConfig.m_DefaultSite;
