@@ -3,8 +3,6 @@
 
 #include "pcmanx_utils.h"
 
-#include "eggtrayicon.h"
-
 G_BEGIN_DECLS
 
 /* clipboard gives the hint if PCManX already runs. */

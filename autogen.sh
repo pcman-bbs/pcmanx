@@ -1,11 +1,15 @@
 #! /bin/sh
-AM_VERSION=-1.11
+AM_VERSION=
 AC_VERSION=
 
 set -e -x
 
-if [ ! -e ChangeLog -a -e ./build/changelog.sh ]; then
-  ./build/changelog.sh > ChangeLog
+if [ ! -e ChangeLog ]; then
+  if which git >/dev/null 2>&1 && [ -e ./build/changelog.sh ]; then
+    ./build/changelog.sh > ChangeLog
+  else
+    mv ChangeLog.old ChangeLog
+  fi
 fi
 
 if [ "x${ACLOCAL_DIR}" != "x" ]; then
@@ -14,12 +18,13 @@ fi
 
 ${ACLOCAL:-aclocal$AM_VERSION} ${ACLOCAL_ARG}
 ${AUTOHEADER:-autoheader$AC_VERSION}
-AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake
+if [ "`uname`" = "Darwin" ]; then
+    AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} glibtoolize -c --automake --force
+else
+    AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake
+fi
 AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} intltoolize -c --automake --force
 ${AUTOMAKE:-automake$AM_VERSION} --add-missing --copy --include-deps
 ${AUTOCONF:-autoconf$AC_VERSION}
-
-# mkinstalldirs was not correctly installed in some cases.
-cp -f /usr/share/automake${AM_VERSION}/mkinstalldirs .
 
 rm -rf autom4te.cache

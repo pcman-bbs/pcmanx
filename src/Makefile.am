@@ -1,13 +1,12 @@
 SUBDIRS = charset core
 
-AM_CPPFLAGS = $(LTDLINCL)
-
 localedir = $(datadir)/locale
 LIBPCMANX_CORE = $(top_builddir)/src/core/libpcmanx_core.la
 
 bin_PROGRAMS = pcmanx
 
-INCLUDES = \
+AM_CPPFLAGS = \
+	$(LTDLINCL) \
 	-I$(top_srcdir)/src/core \
 	-I$(top_srcdir)/src/view \
 	-I$(top_srcdir)/src/charset \
@@ -21,9 +20,7 @@ pcmanx_DEPENDENCIES = $(LTDLDEPS)
 
 OPTIONAL_DOCKLET = \
 	docklet/api.h \
-	docklet/clipboard.c \
-	docklet/eggtrayicon.h \
-	docklet/eggtrayicon.c
+	docklet/clipboard.c
 
 OPTIONAL_NOTIFIER = \
 	notifier/api.h \
@@ -66,7 +63,9 @@ endif
 
 VIEW_IMPLEMENTATION_SOURCES = \
 	view/telnetcon.cpp view/telnetcon.h \
-	view/telnetview.cpp view/telnetview.h
+	view/telnetview.cpp view/telnetview.h \
+	view/editor.cpp view/editor.h \
+	view/editorview.cpp view/editorview.h
 
 if USE_IPLOOKUP
 QQWRYSEEKER_SOURCES = \
@@ -89,6 +88,7 @@ pcmanx_SOURCES = \
 	configfile.cpp configfile.h \
 	inputdialog.cpp inputdialog.h \
 	prefdlg.cpp prefdlg.h \
+	keysettingpage.cpp keysettingpage.h \
 	dialog.cpp dialog.h \
 	listbox.cpp listbox.h \
 	editfavdlg.cpp editfavdlg.h \

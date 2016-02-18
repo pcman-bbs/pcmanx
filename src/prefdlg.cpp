@@ -24,6 +24,7 @@
 #include "notebook.h"
 #include "generalprefpage.h"
 #include "sitepage.h"
+#include "keysettingpage.h"
 #include "appconfig.h"
 
 CPrefDlg::CPrefDlg(CWidget* parent)
@@ -35,9 +36,11 @@ CPrefDlg::CPrefDlg(CWidget* parent)
 	m_pNotebook = new CNotebook();
 	m_pGeneralPrefPage = new CGeneralPrefPage();
 	m_pSitePage = new CSitePage( AppConfig.m_DefaultSite );
+	m_pKeySettingPage = new CKeySettingPage(m_Widget);
 
 	m_pNotebook->AddPage( m_pGeneralPrefPage, _("General") );
 	m_pNotebook->AddPage( m_pSitePage, _("Site Settings") );
+	m_pNotebook->AddPage( m_pKeySettingPage, _("Hot Key Settings") );
 
 	gtk_box_pack_start( GTK_BOX (dlg->vbox), m_pNotebook->m_Widget, FALSE, FALSE, 4);
 
@@ -51,6 +54,7 @@ bool CPrefDlg::OnOK()
 	{
 		AppConfig.m_DefaultSite = m_pSitePage->m_Site;
 		m_pGeneralPrefPage->OnOK();
+		m_pKeySettingPage->OnOK();
 		AppConfig.Save();
 	}
 	return true;

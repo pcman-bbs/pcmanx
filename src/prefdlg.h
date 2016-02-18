@@ -31,6 +31,7 @@
 class CNotebook;
 class CSitePage;
 class CGeneralPrefPage;
+class CKeySettingPage;
 
 class CPrefDlg : public CDialog
 {
@@ -42,6 +43,7 @@ public:
     CSitePage* m_pSitePage;
     CNotebook* m_pNotebook;
 	CGeneralPrefPage* m_pGeneralPrefPage;
+	CKeySettingPage *m_pKeySettingPage;
 };
 
 #endif

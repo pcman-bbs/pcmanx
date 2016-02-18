@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([pcmanx-gtk2],[1.2],[http://code.google.com/p/pcmanx-gtk2/issues/list])
+AC_INIT([pcmanx-gtk2],[1.3],[https://github.com/pcman-bbs/pcmanx/issues])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules])
+AM_INIT_AUTOMAKE([dist-xz no-dist-gzip silent-rules subdir-objects])
 
 LT_PREREQ([2.2.6])
 LT_CONFIG_LTDL_DIR([libltdl])
@@ -171,10 +171,10 @@ dnl *********************************************************************
 dnl ** GTK **************************************************************
 dnl *********************************************************************
 
-AM_PATH_GTK_2_0([2.4.0], [
+AM_PATH_GTK_2_0([2.22.0], [
                  GUI_CFLAGS="$GUI_CFLAGS $GTK_CFLAGS"
                  GUI_LIBS="$GUI_LIBS $GTK_LIBS"
-                 ], [AC_MSG_ERROR([Cannot find GTK+/X11 2.4 (or above version)!])])
+                 ], [AC_MSG_ERROR([Cannot find GTK+/X11 2.22 (or above version)!])])
 
 dnl *********************************************************************
 dnl ** Freetype2 ********************************************************

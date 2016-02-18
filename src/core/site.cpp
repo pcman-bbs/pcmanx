@@ -80,15 +80,15 @@ CSite::CSite(string Name)
 	m_Startup = false;
 
 #ifdef USE_EXTERNAL
-	m_UseExternalSSH = false;
-	m_UseExternalTelnet = false;
+	m_UseExternalSSH = true;
+	m_UseExternalTelnet = true;
 #endif
 
 	m_bHorizontalCenterAlign = true;
 	m_bVerticalCenterAlign = true;
 
     // UAO support
-    m_UAO = 0; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
+    m_UAO = 2; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
 
 	m_MenuItem = NULL;
 

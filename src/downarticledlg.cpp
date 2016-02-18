@@ -146,8 +146,11 @@ _exit:
 int CDownArticleDlg::ShowModal()
 {
 	//Create the download thread
-	m_thread = g_thread_create((GThreadFunc)DownArticleFunc, this, true, 
-			NULL);
+#if defined(GLIB_VERSION_2_32)
+	m_thread = g_thread_new(_("Download Article"), (GThreadFunc)DownArticleFunc, this);
+#else
+	m_thread = g_thread_create((GThreadFunc)DownArticleFunc, this, true, NULL);
+#endif
 
 	return CDialog::ShowModal();
 }
