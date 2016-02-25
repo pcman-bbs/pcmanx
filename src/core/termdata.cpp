@@ -853,15 +853,21 @@ static const char *valid_protocol[] = {
 	"https",
 	"ftp",
 };
-static inline bool isValidURLScheme(const char *line, int schemeStart, int schemeEnd)
+
+static inline bool isValidURLScheme(const char *line, int *schemeStart, int schemeEnd)
 {
 	char protocol_buffer[16];
-	int strLen = schemeEnd - schemeStart + 1; // index starts from 0
+	const char *real_scheme = 0;
 
 	for (unsigned int i = 0; i < ARRAY_SIZE(valid_protocol); i++) {
 		strcpy(protocol_buffer, valid_protocol[i]);
-		if (!strncmp(line + schemeStart,
-		             strcat(protocol_buffer, "://"), strLen)) {
+
+		// Consider cases such as "1.http://", "a.http://"
+		strcat(protocol_buffer, "://");
+		real_scheme = strstr(line + *schemeStart, protocol_buffer);
+		if (real_scheme) {
+			// Let start string from "1.http://" to "http://"
+			*schemeStart = (int)(real_scheme - line);
 			return true;
 		}
 	}
@@ -913,33 +919,42 @@ inline void DetectEMails( const char *line, CTermCharAttr *attr, int len )
 
 // 2004/08/06 added by PCMan
 // This function is used to detect URLs other than E-mails and called from UpdateDisplay().
+#define STAGE_GET_URL_START_CHAR  (0) // Start from any valid scheme character
+#define STAGE_CHECK_SEPERATER     (1) // Check if we have ://
+#define STAGE_HIGHLIGHT_HYPERLINK (2) // Start highlight
 inline void DetectCommonURLs( const char *line, CTermCharAttr *attr, int len )
 {
 	int ilink = 0, stage = 0;
+
+	// Return if there is no :// in line
+	if (strstr(line, "://") == 0) {
+		return;
+	}
+
 	for( int col = 0; col < len; col += (CTermCharAttr::CS_ASCII==attr[col].GetCharSet()?1:2) )
 	{
 		unsigned char ch = line[col];
 		switch( stage )
 		{
-		case 0:	// a URL scheme character is found, beginning of URL.
+		case STAGE_GET_URL_START_CHAR:	// a URL scheme character is found, beginning of URL.
 			if( isurlscheme(ch) )
 			{
 				stage = 1;
 				ilink = col;
 			}
 			break;
-		case 1:	// "://" is found.
+		case STAGE_CHECK_SEPERATER:	// "://" is found.
 			if (((col + 3) <= len) &&
 			    (0 == strncmp(line + col, "://", 3)) &&
 			    isurl(line[col + 3]) &&
-			    (isValidURLScheme(line, ilink, col + 2))) {
+			    (isValidURLScheme(line, &ilink, col + 2))) {
 				stage = 2;
 				col += 3;
 			}
 			else if( !isurlscheme(ch) )
 				stage = 0;
 			break;
-		case 2:	// This is a valid URL.
+		case STAGE_HIGHLIGHT_HYPERLINK:	// This is a valid URL.
 			if( !isurl(ch) )
 			{
 				for( ; ilink < col; ilink++ )
