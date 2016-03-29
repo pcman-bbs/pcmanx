@@ -955,7 +955,7 @@ inline void DetectCommonURLs( const char *line, CTermCharAttr *attr, int len )
 				stage = 0;
 			break;
 		case STAGE_HIGHLIGHT_HYPERLINK:	// This is a valid URL.
-			if( !isurl(ch) )
+			if( isspace(ch) )
 			{
 				for( ; ilink < col; ilink++ )
 				{
