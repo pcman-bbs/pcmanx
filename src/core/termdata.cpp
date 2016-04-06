@@ -324,7 +324,7 @@ void CTermData::PutChar(unsigned char ch)
 			Tab();
 			break;
 		}
-    }
+	}
 	else	// not C0 control characters, check if we're in control sequence.
 	{
 		switch( m_CmdLine[0] )
@@ -367,7 +367,7 @@ void CTermData::PutChar(unsigned char ch)
 				m_CaretPos.x++;
 			break;
 			}
-		// m_CmdLine[0] == '\0' means we're currently in ANSI control sequence.
+		// m_CmdLine[0] != '\0' means we're currently in ANSI control sequence.
 		// Store ch to CmdLine, and parse ANSI escape sequence when ready.
 		case '\x1b':        // ESC, in ANSI escape mode
 			if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
@@ -389,7 +389,7 @@ void CTermData::PutChar(unsigned char ch)
 
 			if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
 				*m_pCmdLine = '\0';
-			// Current ANSI escape type is stored in *m_pBuf.
+			// Current ANSI escape type is stored in *m_CmdLine.
 			ParseAnsiEscapeSequence( (const char*)m_CmdLine, ch);
 			m_CmdLine[0] = '\0';
 			m_pCmdLine = m_CmdLine;
