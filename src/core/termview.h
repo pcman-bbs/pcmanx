@@ -27,6 +27,7 @@
 
 #include "view.h"
 #include "caret.h"
+#include "termdata.h"
 
 #include <string>
 
@@ -52,6 +53,7 @@ public:
     virtual bool PreKeyDown(GdkEventKey *evt);
     virtual bool OnKeyDown(GdkEventKey* evt);
     virtual void OnTextInput(const gchar* string);
+    int DoDrawChar(int row, int col, const char *str, CTermCharAttr *pAttr);
     int DrawChar(int row, int col);
     void PointToLineCol(int *x, int *y, bool *left = NULL);
 

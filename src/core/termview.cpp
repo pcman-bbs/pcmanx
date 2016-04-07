@@ -369,7 +369,7 @@ bool CTermView::DrawSpaceFillingChar(const char* ch, int len UNUSED, int x, int 
 	return false;
 }
 
-int CTermView::DrawChar(int row, int col)
+int CTermView::DoDrawChar(int row, int col, const char *str, CTermCharAttr *pAttr)
 {
 	GdkDrawable* dc = m_Widget->window;
 	if(!GDK_IS_DRAWABLE(dc) && m_XftDraw == NULL)
@@ -378,11 +378,9 @@ int CTermView::DrawChar(int row, int col)
 		return 1;
 	}
 
-	const char* pLine = m_pTermData->m_Screen[m_pTermData->m_FirstLine + row];
-	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
 	int w = 2;
 	bool is_mbcs2 = false;
-	switch( pAttr[col].GetCharSet() )
+	switch( pAttr->GetCharSet() )
 	{
 	case CTermCharAttr::CS_MBCS1:
 		break;
@@ -397,8 +395,6 @@ int CTermView::DrawChar(int row, int col)
 //	case CTermCharAttr::CS_ASCII:
 		w = 1;
 	}
-	pLine += col;
-	pAttr += col;
 
 	int loop_times = w;
 	bool bSel[2];
@@ -465,7 +461,7 @@ int CTermView::DrawChar(int row, int col)
 
 		if( !pAttr[i].IsBlink() || m_ShowBlink )	// If text should be drawn.
 		{
-			if( ' ' != *pLine && '\0' != *pLine )
+			if( ' ' != *str && '\0' != *str )
 			{
 				gsize wl = 0;
 				gchar* utf8 = NULL;
@@ -473,13 +469,13 @@ int CTermView::DrawChar(int row, int col)
 				/* UAO display support */
 				switch (m_UAO) {
 					case 2:
-						utf8 = uao250_b2u(pLine, w, &wl);
+						utf8 = uao250_b2u(str, w, &wl);
 						break;
 					case 1:
-						utf8 = uao241_b2u(pLine, w, &wl);
+						utf8 = uao241_b2u(str, w, &wl);
 						break;
 					default:
-						utf8 = g_convert(pLine, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
+						utf8 = g_convert(str, w, "UTF-8", m_pTermData->m_Encoding.c_str(), NULL, &wl, NULL);
 						break;
 				}
 
@@ -534,6 +530,55 @@ int CTermView::DrawChar(int row, int col)
 	XftDrawSetClip( m_XftDraw, NULL );
 
 	return is_mbcs2 ? 1 : w;
+}
+
+int CTermView::DrawChar(int row, int col)
+{
+	const char* pLine = m_pTermData->m_Screen[m_pTermData->m_FirstLine + row];
+	CTermCharAttr* pAttr = m_pTermData->GetLineAttr(pLine);
+	int number, n;
+	char num_buff[16];
+
+	n = 0;
+	pLine += col;
+	pAttr += col;
+
+	if( m_pTermData->PostPushTest(m_pTermData->m_FirstLine + row) )
+	{
+		number = *(m_pTermData->GetPostPushNum(m_pTermData->m_Screen[m_pTermData->m_FirstLine + row]));
+		if( number == 0 )
+			n = 0;
+		else
+			n = snprintf( num_buff, 16, "%dF ", number );
+	}
+
+	if( n != 0 && col >= 3 )
+	{
+		if( col == 3 )
+		{
+			// Draw PostPushNum
+			CTermCharAttr DefAttr;
+			DefAttr.SetToDefault();
+			DefAttr.SetNeedUpdate(true);
+			for( int i = 0; i < n; i++ )
+			{
+				DoDrawChar(row, col + i, num_buff + i, &DefAttr);
+			}
+		}
+		col += n;
+	}
+
+	if( col < m_pTermData->m_ColsPerPage)
+	{
+		return DoDrawChar(row, col, pLine, pAttr);
+	}
+	else
+	{
+		if( pAttr->GetCharSet() == CTermCharAttr::CS_MBCS1)
+			return 2;
+		else
+			return 1;
+	}
 }
 
 void CTermView::PointToLineCol(int *x, int *y, bool *left)
