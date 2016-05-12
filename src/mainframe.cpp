@@ -1934,13 +1934,13 @@ void CMainFrame::UpdateBotStatus()
 */
 void CMainFrame::OnAnsiEditor(GtkMenuItem *mitem, CMainFrame *_this)
 {
-	_this->NewCon("Ansi Editor", "ansi_editor");
+	_this->NewCon(_("Ansi Editor"), "ansi_editor");
 }
 
 void CMainFrame::OnOpenAnsiFile(GtkMenuItem *mitem, CMainFrame *_this)
 {
 	GtkWidget *dialog = gtk_file_chooser_dialog_new (
-							"Open Ansi File",
+							_("Open Ansi File"),
 							NULL,
 							GTK_FILE_CHOOSER_ACTION_OPEN,
 							GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1973,7 +1973,7 @@ void CMainFrame::OnSaveAnsiFile(GtkMenuItem *mitem, CMainFrame *_this)
 		return;
 
 	GtkWidget *dialog = gtk_file_chooser_dialog_new (
-							"Save Ansi File",
+							_("Save Ansi File"),
 							GTK_WINDOW(_this),
 							GTK_FILE_CHOOSER_ACTION_SAVE,
 							GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
