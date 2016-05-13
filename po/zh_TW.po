@@ -685,3 +685,23 @@ msgstr "另存新檔"
 #, c-format
 msgid "Error saving file '%s': %s"
 msgstr "當儲存為「%s」時發生錯誤： %s"
+
+#: ../src/mainframe.cpp:533 ../src/mainframe.cpp:1937
+msgid "Ansi Editor"
+msgstr "Ansi 編輯器"
+
+#: ../src/mainframe.cpp:534
+msgid "Open Ansi Editor"
+msgstr "開啟 Ansi 編輯器"
+
+#: ../src/mainframe.cpp:535 ../src/mainframe.cpp:1943
+msgid "Open Ansi File"
+msgstr "開啟 Ansi 檔案"
+
+#: ../src/mainframe.cpp:536 ../src/mainframe.cpp:1976
+msgid "Save Ansi File"
+msgstr "儲存 Ansi 檔案"
+
+#: ../src/mainframe.cpp:537
+msgid "Clear Screen"
+msgstr "清除頁面"
