@@ -167,23 +167,24 @@ CTermData::~CTermData()
 void CTermData::SetScreenSize( int RowCount, unsigned short RowsPerPage,
      unsigned short ColsPerPage)
 {
-    m_RowsPerPage = RowsPerPage;
-    // if cols per page change, reallocate all existing rows.
-    if( m_ColsPerPage != ColsPerPage )
-    {
-        for(int i=0; i < m_RowCount; i++)
-        {
-            char* NewLine = AllocNewLine(ColsPerPage);
-            unsigned short Cols = (ColsPerPage < m_ColsPerPage)?ColsPerPage:m_ColsPerPage;
-            //Copy context of old into new one.
-            memcpy(NewLine, m_Screen[i], Cols);
-            memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(CTermCharAttr::AttrType)*Cols);
-            delete []m_Screen[i];
-            m_Screen[i] = NewLine;
-        }
-        m_ColsPerPage = ColsPerPage;
-    }
-    SetRowCount(RowCount);
+	m_RowsPerPage = RowsPerPage;
+	// if cols per page change, reallocate all existing rows.
+	if( m_ColsPerPage != ColsPerPage )
+	{
+		for(int i=0; i < m_RowCount; i++)
+		{
+			char* NewLine = AllocNewLine(ColsPerPage);
+			unsigned short Cols = (ColsPerPage < m_ColsPerPage)?ColsPerPage:m_ColsPerPage;
+			//Copy context of old into new one.
+			memcpy(NewLine, m_Screen[i], Cols);
+			memcpy(GetLineAttr(NewLine, ColsPerPage), GetLineAttr(m_Screen[i]), sizeof(CTermCharAttr::AttrType)*Cols);
+			*GetPostPushNum(NewLine) = *GetPostPushNum(m_Screen[i]);
+			delete []m_Screen[i];
+			m_Screen[i] = NewLine;
+		}
+		m_ColsPerPage = ColsPerPage;
+	}
+	SetRowCount(RowCount);
 }
 
 // Change row count of screen buffer
@@ -226,11 +227,19 @@ void CTermData::AllocScreenBuf(int RowCount, unsigned short RowsPerPage,unsigned
 }
 
 // Initialize new lines
-void CTermData::InitNewLine(char* NewLine, const int ColsPerPage){
+void CTermData::InitNewLine(char* NewLine, const int ColsPerPage)
+{
 		memset( NewLine, ' ', ColsPerPage);
+
 		NewLine[ColsPerPage] = '\0';
-		CTermCharAttr DefAttr;	DefAttr.SetToDefault();	DefAttr.SetNeedUpdate(true);
+
+		CTermCharAttr DefAttr;
+		DefAttr.SetToDefault();
+		DefAttr.SetNeedUpdate(true);
 		memset16( GetLineAttr(NewLine, ColsPerPage), DefAttr.AsType(), ColsPerPage);
+
+		unsigned char *num = GetPostPushNum(NewLine);
+		*num = 0;
 }
 
 // LF handler
@@ -324,7 +333,7 @@ void CTermData::PutChar(unsigned char ch)
 			Tab();
 			break;
 		}
-    }
+	}
 	else	// not C0 control characters, check if we're in control sequence.
 	{
 		switch( m_CmdLine[0] )
@@ -341,6 +350,8 @@ void CTermData::PutChar(unsigned char ch)
 				}
 
 				m_Screen[m_CaretPos.y][m_CaretPos.x] = ch;
+
+				NumberingPostPush( m_CaretPos.y );
 
 				CTermCharAttr* pAttr = GetLineAttr( m_Screen[m_CaretPos.y] );
 
@@ -367,7 +378,7 @@ void CTermData::PutChar(unsigned char ch)
 				m_CaretPos.x++;
 			break;
 			}
-		// m_CmdLine[0] == '\0' means we're currently in ANSI control sequence.
+		// m_CmdLine[0] != '\0' means we're currently in ANSI control sequence.
 		// Store ch to CmdLine, and parse ANSI escape sequence when ready.
 		case '\x1b':        // ESC, in ANSI escape mode
 			if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
@@ -389,7 +400,7 @@ void CTermData::PutChar(unsigned char ch)
 
 			if( m_pCmdLine < (m_CmdLine +sizeof(m_CmdLine)) )
 				*m_pCmdLine = '\0';
-			// Current ANSI escape type is stored in *m_pBuf.
+			// Current ANSI escape type is stored in *m_CmdLine.
 			ParseAnsiEscapeSequence( (const char*)m_CmdLine, ch);
 			m_CmdLine[0] = '\0';
 			m_pCmdLine = m_CmdLine;
@@ -424,6 +435,7 @@ void CTermData::ScrollUp(int n /*=1*/)
 	{
 		memset( m_Screen[end+i], ' ', m_ColsPerPage-1 );
 		memset16( GetLineAttr(m_Screen[end+i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
+		*GetPostPushNum(m_Screen[end+i]) = 0;
 		SetWholeLineUpdate(m_Screen[end+i]);
 	}
 }
@@ -447,6 +459,7 @@ void CTermData::ScrollDown(int n /*=1*/)
 	{
 		memset( m_Screen[end-i], ' ', m_ColsPerPage-1 );
 		memset16( GetLineAttr(m_Screen[end-i]), m_CurAttr.AsType(), m_ColsPerPage-1 );
+		*GetPostPushNum(m_Screen[end-i]) = 0;
 		SetWholeLineUpdate(m_Screen[end-i]);
 	}
 }
@@ -630,7 +643,9 @@ void CTermData::ClearScreen(int p)
 			if( i < m_RowsPerPage)
 				break;
 			memcpy( tmp, m_Screen[i-m_RowsPerPage],m_ColsPerPage);
-			memcpy( GetLineAttr(tmp),GetLineAttr(m_Screen[i-m_RowsPerPage]),m_ColsPerPage);		}
+			memcpy( GetLineAttr(tmp),GetLineAttr(m_Screen[i-m_RowsPerPage]),m_ColsPerPage);
+			*GetPostPushNum(tmp) = *GetPostPushNum(m_Screen[i-m_RowsPerPage]);
+		}
 		break;
 	case 0:	// Erase from current position to end (inclusive)
 	default:
@@ -647,7 +662,9 @@ void CTermData::ClearScreen(int p)
 			if( i < m_RowsPerPage)
 				break;
 			memcpy( tmp, m_Screen[i-m_RowsPerPage],m_ColsPerPage);
-			memcpy( GetLineAttr(tmp),GetLineAttr(m_Screen[i-m_RowsPerPage]),m_ColsPerPage);		}
+			memcpy( GetLineAttr(tmp),GetLineAttr(m_Screen[i-m_RowsPerPage]),m_ColsPerPage);
+			*GetPostPushNum(tmp) = *GetPostPushNum(m_Screen[i-m_RowsPerPage]);
+		}
 		break;
 	}
 }
@@ -1288,7 +1305,7 @@ void CTermData::InsertChar( int line, int col, int n )
 	CTermCharAttr* pattr = GetLineAttr( pline );
 
 	int coln = col + n;
-	for( int end = m_ColsPerPage; end >= coln; end-- )
+	for( int end = m_ColsPerPage - 1; end >= coln; end-- )
 	{
 		pline[ end ] = pline[ end - n ];
 		pattr[ end ] = pattr[ end - n ];
@@ -1425,3 +1442,95 @@ void CTermData::OnLineModified(int row UNUSED)
     // This function can be overriden in derived class.
 }
 
+bool CTermData::PostPushHeaderTest(int iLine)
+{
+	char *line = m_Screen[iLine];
+	int col;
+
+	// FIXME: Hack to detect PostPushHeader on PTT. Have a general method?
+	if( line[0] == '-' && line[1] == '-' )
+	{
+		for( col = 2; col < m_ColsPerPage; col++ )
+		{
+			if( line[col] != ' ' )
+				return false;
+		}
+		return true;
+	}
+
+	return false;
+}
+
+bool CTermData::PostPushTest(int iLine)
+{
+	char *line = m_Screen[iLine];
+
+	// FIXME: Hack to detect PostPush on PTT. Have a general method?
+	if( line[0] == '\xb1' && line[1] == '\xc0' && line[2] == ' ' )	// like
+		return true;
+	if( line[0] == '\xbc' && line[1] == '\x4e' && line[2] == ' ' )	// dislike
+		return true;
+	if( line[0] == '\xa1' && line[1] == '\xf7' && line[2] == ' ' )	// line continuation
+		return true;
+
+	return false;
+}
+
+void CTermData::NumberingPostPush(int iLine)
+{
+	unsigned char num = 0;
+	int row;
+
+	*GetPostPushNum(m_Screen[iLine]) = 0;
+
+	if( !PostPushTest(iLine) )
+	{
+		return ;
+	}
+
+	for( row = iLine - 1; row >= m_FirstLine; row-- )
+	{
+		if( PostPushHeaderTest(row) )
+		{
+			num = 1;
+			goto Numbering;
+		}
+
+		if( PostPushTest(row) )
+		{
+			num = *GetPostPushNum( m_Screen[row] );
+			if( num )
+			{
+				//num += iLine - row;
+				num++;
+				goto Numbering;
+			}
+		}
+	}
+
+	for( row = iLine + 1; row < m_RowsPerPage; row++ )
+	{
+		if( PostPushHeaderTest(row) )
+		{
+			goto Numbering;
+		}
+
+		if( PostPushTest(row) )
+		{
+			num = *GetPostPushNum( m_Screen[row] );
+			if( num )
+			{
+				//num -= iLine + row;
+				num--;
+				goto Numbering;
+			}
+		}
+	}
+
+Numbering:
+	if( num > 0 )
+	{
+		*GetPostPushNum( m_Screen[iLine] ) = num;
+
+	}
+}

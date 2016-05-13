@@ -202,6 +202,11 @@ public:
 		return ( CTermCharAttr* ) ( pLine + m_ColsPerPage + 1 );
 	}
 
+	unsigned char* GetPostPushNum( const char* pLine )
+	{
+		return ( unsigned char* ) ( pLine + m_ColsPerPage + 1 + m_ColsPerPage * sizeof( CTermCharAttr::AttrType ) );
+	}
+
 	//Get all text from (0,0) to (maxX, maxY), if trim is true, it return text
 	//without tail black spaces.
 	string GetAllText( bool trim = true )
@@ -227,6 +232,7 @@ public:
 #endif
 	void UpdateDisplay();
 	void DoUpdateDisplay();
+	void NumberingPostPush();
 	static void memset16( void* dest, short val, size_t n );
 	void ParseAnsiColor( const char* pParam );
 	void EraseLine( int p );
@@ -277,11 +283,11 @@ public:
 	// Allocate new lines
 	char* AllocNewLine( const int ColsPerPage )
 	{
-		// struct{ char[ColsPerPage], char='\0', CTermCharAttr[ColsPerPage]}
+		// struct{ char[ColsPerPage], char='\0', CTermCharAttr[ColsPerPage, char=0]}
 		// Neversay:The structure is show below:
-		// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr ]
-		// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr)
-		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( CTermCharAttr::AttrType ) ) ];
+		// [ ColsPerPage*char + '\0' + ColsPerPage*CTermCharAttr + PostPushNum ]
+		// so size is: ColsPerPage*1 + 1 + ColsPerPage*sizeof(CTermCharAttr) + 1
+		char * NewLine = new char[ 1 + ColsPerPage * ( 1 + sizeof( CTermCharAttr::AttrType ) ) + 1 ];
 
 		InitNewLine( NewLine, ColsPerPage );
 		return NewLine;
@@ -292,6 +298,9 @@ public:
 	void AllocScreenBuf( int RowCount, unsigned short RowsPerPage, unsigned short ColsPerPage );
 	virtual void OnLineModified( int row );
 
+	bool PostPushHeaderTest(int iLine);
+	bool PostPushTest(int iLine);
+	void NumberingPostPush(int iLine);
 
 	///////////////////////////////////////////////////////////////////
 	//Data Field Section
