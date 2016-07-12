@@ -21,7 +21,7 @@ ${AUTOHEADER:-autoheader$AC_VERSION}
 if [ "`uname`" = "Darwin" ]; then
     AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} glibtoolize -c --automake --force
 else
-    AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake
+    AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} libtoolize -c --automake --force
 fi
 AUTOMAKE=${AUTOMAKE:-automake$AM_VERSION} intltoolize -c --automake --force
 ${AUTOMAKE:-automake$AM_VERSION} --add-missing --copy --include-deps
