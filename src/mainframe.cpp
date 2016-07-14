@@ -169,6 +169,135 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 	return false;
 }
 
+static const char *ui_info =
+  "<interface>"
+  "<object class='GtkUIManager' id='uimanager'>"
+  "<child />"
+  "<ui>"
+  "  <menubar name='menubar'>"
+  "    <menu action='connect_menu'>"
+  "      <menuitem action='site_list'/>"
+  "      <menuitem action='new_con'/>"
+  "      <menuitem action='reconnect'/>"
+  "      <menuitem action='close'/>"
+  "      <separator/>"
+  "      <menuitem action='next_con'/>"
+  "      <menuitem action='previous_con'/>"
+  "      <menuitem action='first_con'/>"
+  "      <menuitem action='last_con'/>"
+  "      <menuitem action='jump'/>"
+  "      <separator/>"
+  "      <menuitem action='quit'/>"
+  "    </menu>"
+  "    <menu action='edit_menu'>"
+  "      <menuitem action='copy'/>"
+  "      <menuitem action='copy_with_ansi'/>"
+  "      <menuitem action='paste'/>"
+  "      <menuitem action='paste_from_clipboard'/>"
+  "      <menuitem action='select_all'/>"
+  "      <menuitem action='down_article'/>"
+  "      <separator/>"
+  "      <menuitem action='emoticon'/>"
+  "      <menuitem action='preference'/>"
+  "    </menu>"
+  "    <menu action='favorites_menu'>"
+  "      <separator/>"
+  "      <menuitem action='add_to_fav'/>"
+  "      <menuitem action='edit_fav'/>"
+  "    </menu>"
+  "    <menu action='view_menu'>"
+  "      <menuitem action='ascii_font'/>"
+  "      <menuitem action='non_ascii_font'/>"
+  "      <separator/>"
+  "      <menuitem action='toolbar'/>"
+  "      <menuitem action='statusbar'/>"
+  "      <menuitem action='tabbar'/>"
+  "      <menuitem action='menubar'/>"
+  "      <separator/>"
+#ifdef USE_DOCKLET
+  "      <menuitem action='showhide'/>"
+#endif
+  "      <menuitem action='fullscreen' />"
+#ifdef USE_NANCY
+  "      <separator/>"
+  "      <menu action='cur_bot_menu'>"
+  "        <menuitem action='disable_cur_bot'/>"
+  "        <menuitem action='nancy_bot_current'/>"
+  "      </menu>"
+  "      <menu action='all_bot_menu'>"
+  "        <menuitem action='disable_all_bot'/>"
+  "        <menuitem action='nancy_bot_all'/>"
+  "      </menu>"
+#endif
+  "    </menu>"
+  "    <menu action='menu_ansi_editor'>"
+  "      <menuitem action='openAnsiEditor'/>"
+  "      <separator/>"
+  "      <menuitem action='openAnsiFile'/>"
+  "      <menuitem action='saveAnsiFile'/>"
+  "      <menuitem action='clearScreen'/>"
+  "    </menu>"
+  "    <menu action='help_menu'>"
+  "      <menuitem action='shortcut_list'/>"
+  "      <menuitem action='about'/>"
+  "    </menu>"
+  "  </menubar>"
+  "  <toolbar>"
+  "    <separator/>"
+  "    <toolitem action='site_list'/>"
+  "    <toolitem action='new_con'/>"
+  "    <toolitem action='reconnect'/>"
+  "    <toolitem action='close'/>"
+  "    <separator/>"
+  "    <toolitem action='copy'/>"
+  "    <toolitem action='copy_with_ansi'/>"
+  "    <toolitem action='paste'/>"
+  "    <toolitem action='down_article'/>"
+  "    <separator/>"
+  "    <toolitem action='add_to_fav'/>"
+  "    <toolitem action='preference'/>"
+  "    <toolitem action='about'/>"
+  "    <separator/>"
+  "  </toolbar>"
+  "  <popup name='edit_popup'>"
+  "    <menuitem action='copy'/>"
+  "    <menuitem action='copy_with_ansi'/>"
+  "    <menuitem action='paste'/>"
+  "    <menuitem action='paste_from_clipboard'/>"
+  "    <menuitem action='select_all'/>"
+  "    <separator/>"
+  "    <menuitem action='fullscreen' />"
+  "    <menuitem action='menubar' />"
+  "    <separator/>"
+  "  </popup>"
+#if defined(USE_DOCKLET)
+  "  <popup name='tray_popup'>"
+  "    <menuitem action='showhide' />"
+  "    <separator />"
+  "    <menuitem action='quit'/>"
+  "  </popup>"
+  " <accelerator action='showhide' />"
+#endif
+
+  // alternative accelerators
+  " <accelerator action='close2'/>"
+  " <accelerator action='reconnect1'/>"
+  " <accelerator action='next_con1'/>"
+  " <accelerator action='previous_con1'/>"
+  " <accelerator action='new_con_gnome_term_sty'/>"
+  " <accelerator action='next_con_gnome_term_sty'/>"
+  " <accelerator action='previous_con_gnome_term_sty'/>"
+  " <accelerator action='copy_gnome_term_sty'/>"
+  " <accelerator action='paste_gnome_term_sty'/>"
+  "</ui>"
+  "</object>"
+  "  <object class=\"GtkWindow\" id=\"window\">"
+  "    <child>"
+  "      <object class=\"GtkMenuBar\" id=\"menubar\" constructor=\"uimanager\"/>"
+  "      <object class=\"GtkVBox\" id=\"vbox\"/>"
+  "    </child>"
+  "  </object>"
+  "</interface>";
 
 CMainFrame::CMainFrame()
 {
@@ -195,7 +324,15 @@ CMainFrame::CMainFrame()
 
   CTermView::Opacity = AppConfig.Opacity;
 
-	m_Widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	GError * error = NULL;
+	GtkBuilder* builder = gtk_builder_new ();
+	if (!gtk_builder_add_from_string(builder, ui_info, strlen(ui_info), & error))
+	{
+		g_message("Building UI failed : %s", error->message);
+		g_error_free(error); exit(EXIT_FAILURE);
+	}
+
+	m_Widget = GTK_WIDGET(gtk_builder_get_object (builder, "window"));
 	gtk_window_set_wmclass(GTK_WINDOW(m_Widget), "pcmanx", "PCManX");
 
 	PostCreate();
@@ -216,12 +353,12 @@ CMainFrame::CMainFrame()
 	g_signal_connect( G_OBJECT(m_pNotebook->m_Widget), "button_press_event",
 			G_CALLBACK(CMainFrame::OnNotebookPopupMenu), this );
 
-	MakeUI();
+	MakeUI(builder);
 
 
 	gtk_window_set_icon((GtkWindow*)m_Widget, m_MainIcon);
 
-	GtkWidget* vbox = gtk_vbox_new(false, 0);
+	GtkWidget* vbox = GTK_WIDGET(gtk_builder_get_object (builder, "vbox"));
   widget_enable_rgba(vbox);
   widget_enable_rgba(m_pNotebook->m_Widget);
 	gtk_widget_show (vbox);
@@ -379,126 +516,7 @@ GtkRadioActionEntry CMainFrame::all_bot_entries[] =
   };
 #endif
 
-static const char *ui_info =
-  "<ui>"
-  "  <menubar>"
-  "    <menu action='connect_menu'>"
-  "      <menuitem action='site_list'/>"
-  "      <menuitem action='new_con'/>"
-  "      <menuitem action='reconnect'/>"
-  "      <menuitem action='close'/>"
-  "      <separator/>"
-  "      <menuitem action='next_con'/>"
-  "      <menuitem action='previous_con'/>"
-  " <menuitem action='first_con'/>"
-  " <menuitem action='last_con'/>"
-  "      <menuitem action='jump'/>"
-  "      <separator/>"
-  "      <menuitem action='quit'/>"
-  "    </menu>"
-  "    <menu action='edit_menu'>"
-  "      <menuitem action='copy'/>"
-  "      <menuitem action='copy_with_ansi'/>"
-  "      <menuitem action='paste'/>"
-  "      <menuitem action='paste_from_clipboard'/>"
-  "      <menuitem action='select_all'/>"
-  "      <menuitem action='down_article'/>"
-  "      <separator/>"
-  "      <menuitem action='emoticon'/>"
-  "      <menuitem action='preference'/>"
-  "    </menu>"
-  "    <menu action='favorites_menu'>"
-  "      <separator/>"
-  "      <menuitem action='add_to_fav'/>"
-  "      <menuitem action='edit_fav'/>"
-  "    </menu>"
-  "    <menu action='view_menu'>"
-  "      <menuitem action='ascii_font'/>"
-  "      <menuitem action='non_ascii_font'/>"
-  "      <separator/>"
-  "      <menuitem action='toolbar'/>"
-  "      <menuitem action='statusbar'/>"
-  "      <menuitem action='tabbar'/>"
-  "      <menuitem action='menubar'/>"
-  "      <separator/>"
-#ifdef USE_DOCKLET
-  "      <menuitem action='showhide'/>"
-#endif
-  "      <menuitem action='fullscreen' />"
-#ifdef USE_NANCY
-  "      <separator/>"
-  "      <menu action='cur_bot_menu'>"
-  "        <menuitem action='disable_cur_bot'/>"
-  "        <menuitem action='nancy_bot_current'/>"
-  "      </menu>"
-  "      <menu action='all_bot_menu'>"
-  "        <menuitem action='disable_all_bot'/>"
-  "        <menuitem action='nancy_bot_all'/>"
-  "      </menu>"
-#endif
-  "    </menu>"
-  "    <menu action='menu_ansi_editor'>"
-  "      <menuitem action='openAnsiEditor'/>"
-  "      <separator/>"
-  "      <menuitem action='openAnsiFile'/>"
-  "      <menuitem action='saveAnsiFile'/>"
-  "      <menuitem action='clearScreen'/>"
-  "    </menu>"
-  "    <menu action='help_menu'>"
-  "      <menuitem action='shortcut_list'/>"
-  "      <menuitem action='about'/>"
-  "    </menu>"
-  "  </menubar>"
-  "  <toolbar>"
-  "    <separator/>"
-  "    <toolitem action='site_list'/>"
-  "    <toolitem action='new_con'/>"
-  "    <toolitem action='reconnect'/>"
-  "    <toolitem action='close'/>"
-  "    <separator/>"
-  "    <toolitem action='copy'/>"
-  "    <toolitem action='copy_with_ansi'/>"
-  "    <toolitem action='paste'/>"
-  "    <toolitem action='down_article'/>"
-  "    <separator/>"
-  "    <toolitem action='add_to_fav'/>"
-  "    <toolitem action='preference'/>"
-  "    <toolitem action='about'/>"
-  "    <separator/>"
-  "  </toolbar>"
-  "  <popup name='edit_popup'>"
-  "    <menuitem action='copy'/>"
-  "    <menuitem action='copy_with_ansi'/>"
-  "    <menuitem action='paste'/>"
-  "    <menuitem action='paste_from_clipboard'/>"
-  "    <menuitem action='select_all'/>"
-  "    <separator/>"
-  "    <menuitem action='fullscreen' />"
-  "    <menuitem action='menubar' />"
-  "    <separator/>"
-  "  </popup>"
-#if defined(USE_DOCKLET)
-  "  <popup name='tray_popup'>"
-  "    <menuitem action='showhide' />"
-  "    <separator />"
-  "    <menuitem action='quit'/>"
-  "  </popup>"
-  " <accelerator action='showhide' />"
-#endif
-
-  // alternative accelerators
-  " <accelerator action='close2'/>"
-  " <accelerator action='reconnect1'/>"
-  " <accelerator action='next_con1'/>"
-  " <accelerator action='previous_con1'/>"
-  " <accelerator action='new_con_gnome_term_sty'/>"
-  " <accelerator action='next_con_gnome_term_sty'/>"
-  " <accelerator action='previous_con_gnome_term_sty'/>"
-  " <accelerator action='copy_gnome_term_sty'/>"
-  " <accelerator action='paste_gnome_term_sty'/>"
-  "</ui>";
-
-void CMainFrame::MakeUI()
+void CMainFrame::MakeUI(GtkBuilder* builder)
 {
 	m_ActionGroup = gtk_action_group_new("GlobalActions");
 
@@ -592,20 +610,13 @@ void CMainFrame::MakeUI()
 			this);
 #endif
 
-	m_UIManager = gtk_ui_manager_new();
+	m_UIManager = GTK_UI_MANAGER(gtk_builder_get_object (builder, "uimanager"));
 	gtk_ui_manager_insert_action_group(m_UIManager, m_ActionGroup, 0);
 
 	GtkAccelGroup* accel_group = gtk_ui_manager_get_accel_group ( m_UIManager );
 	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
 
-	GError * error = NULL;
-	if (!gtk_ui_manager_add_ui_from_string(m_UIManager, ui_info, -1, & error))
-	{
-		g_message("Building menu failed : %s", error->message);
-		g_error_free(error); exit(EXIT_FAILURE);
-	}
-
-	m_Menubar = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar");
+	m_Menubar = GTK_WIDGET( gtk_builder_get_object (builder, "menubar") );
 	m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
 	gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 

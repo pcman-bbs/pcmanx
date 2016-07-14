@@ -134,7 +134,7 @@ public:
 	}
 
 protected:
-	void MakeUI();
+	void MakeUI(GtkBuilder* builder);
 	static void OnNewCon(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnQuit(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnFullscreenMode(GtkMenuItem* mitem, CMainFrame* _this);
