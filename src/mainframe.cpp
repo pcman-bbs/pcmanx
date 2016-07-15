@@ -172,7 +172,6 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 static const char *ui_info =
   "<interface>"
   "<object class='GtkUIManager' id='uimanager'>"
-  "<child />"
   "<ui>"
   "  <menubar name='menubar'>"
   "    <menu action='connect_menu'>"
@@ -242,7 +241,7 @@ static const char *ui_info =
   "      <menuitem action='about'/>"
   "    </menu>"
   "  </menubar>"
-  "  <toolbar>"
+  "  <toolbar name='toolbar'>"
   "    <separator/>"
   "    <toolitem action='site_list'/>"
   "    <toolitem action='new_con'/>"
@@ -294,6 +293,9 @@ static const char *ui_info =
   "  <object class=\"GtkWindow\" id=\"window\">"
   "    <child>"
   "      <object class=\"GtkMenuBar\" id=\"menubar\" constructor=\"uimanager\"/>"
+  "      <object class=\"GtkToolbar\" id=\"toolbar\" constructor=\"uimanager\"/>"
+  "      <object class=\"GtkMenu\" id=\"edit_popup\" constructor=\"uimanager\"/>"
+  "      <object class=\"GtkMenu\" id=\"tray_popup\" constructor=\"uimanager\"/>"
   "      <object class=\"GtkVBox\" id=\"vbox\"/>"
   "    </child>"
   "  </object>"
@@ -617,29 +619,25 @@ void CMainFrame::MakeUI(GtkBuilder* builder)
 	gtk_window_add_accel_group (GTK_WINDOW (m_Widget), accel_group);
 
 	m_Menubar = GTK_WIDGET( gtk_builder_get_object (builder, "menubar") );
-	m_Toolbar = gtk_ui_manager_get_widget (m_UIManager, "/ui/toolbar");
+	m_Toolbar = GTK_WIDGET( gtk_builder_get_object (builder, "toolbar") );
 	gtk_toolbar_set_style( (GtkToolbar*)m_Toolbar, GTK_TOOLBAR_ICONS );
 
-	m_EditMenu = gtk_ui_manager_get_widget (m_UIManager, "/ui/edit_popup");
+	m_EditMenu = GTK_WIDGET( gtk_builder_get_object (builder, "edit_popup") );
 
-	m_FavoritesMenuItem = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/favorites_menu");
+	m_FavoritesMenuItem = GTK_WIDGET( gtk_builder_get_object (builder, "menubar/favorites_menu") );
 
 #ifdef USE_NANCY
 
-	m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-			"/ui/menubar/view_menu/cur_bot_menu/disable_cur_bot");
-	m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-			"/ui/menubar/view_menu/cur_bot_menu/nancy_bot_current");
+	m_DisableCurBotRadio = (GtkRadioMenuItem*) gtk_builder_get_object (builder, "menubar/view_menu/cur_bot_menu/disable_cur_bot");
+	m_CurBotNancyRadio = (GtkRadioMenuItem*) gtk_builder_get_object (builder, "menubar/view_menu/cur_bot_menu/nancy_bot_current");
 
-	m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_ui_manager_get_widget (m_UIManager,
-			"/ui/menubar/view_menu/all_bot_menu/disable_all_bot");
-	m_AllBotNancyRadio = (GtkRadioMenuItem*) (gtk_ui_manager_get_widget (m_UIManager,
-				"/ui/menubar/view_menu/all_bot_menu/nancy_bot_all"));
+	m_DisableAllBotRadio = (GtkRadioMenuItem*) gtk_builder_get_object (builder, "menubar/view_menu/all_bot_menu/disable_all_bot");
+	m_AllBotNancyRadio = (GtkRadioMenuItem*) gtk_builder_get_object (builder, "menubar/view_menu/all_bot_menu/nancy_bot_all");
 
 #endif
 
-	GtkWidget* jump = gtk_ui_manager_get_widget (m_UIManager, "/ui/menubar/connect_menu/jump");
-
+	GtkWidget* jump = GTK_WIDGET( gtk_builder_get_object (builder, "menubar/connect_menu/jump") );
+	// FIXME
 	GtkWidget* jump_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (jump), jump_menu);
 
@@ -764,7 +762,7 @@ void CMainFrame::MakeUI(GtkBuilder* builder)
 	g_signal_connect(GTK_OBJECT(m_chkBlink), "toggled", G_CALLBACK(SetBlink), this);
 
 	CreateFavoritesMenu();
-	CreateTrayIcon();
+	CreateTrayIcon(builder);
 }
 
 void CMainFrame::OnNewCon(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
@@ -1632,11 +1630,11 @@ void CMainFrame::CreateFavoritesMenu()
 	gtk_menu_item_set_submenu( GTK_MENU_ITEM(m_FavoritesMenuItem), favorites_menu);
 }
 
-void CMainFrame::CreateTrayIcon()
+void CMainFrame::CreateTrayIcon(GtkBuilder* builder)
 {
 #ifdef USE_DOCKLET
 	// Setup popup menu
-	m_TrayPopup = gtk_ui_manager_get_widget(m_UIManager, "/ui/tray_popup");
+	m_TrayPopup = GTK_WIDGET( gtk_builder_get_object (builder, "tray_popup") );
 	if (m_dlhandle != NULL) {
 		void*(*app_indicator_new)(const gchar*, const gchar*, gint) =
 			(void*(*)(const gchar*, const gchar*, gint)) lt_dlsym(m_dlhandle, "app_indicator_new");

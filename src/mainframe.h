@@ -146,7 +146,7 @@ protected:
 	static bool QueryOnCloseCon(CMainFrame* _this);
 	static void OnAddToFavorites(GtkMenuItem* widget, CMainFrame* _this);
 	void CreateFavoritesMenu();
-	void CreateTrayIcon();
+	void CreateTrayIcon(GtkBuilder* builder);
 	static void OnSelectAll(GtkMenuItem* mitem, CMainFrame* _this);
 	static void OnReconnect(GtkMenuItem* mitem, CMainFrame* _this);
 	void FlashWindow( bool flash );
