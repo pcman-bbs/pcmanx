@@ -343,6 +343,13 @@ CTelnetCon* CMainFrame::NewCon(string title, string url, CSite* site )
 	m_pView->m_CharPaddingX = AppConfig.CharPaddingX;
 	m_pView->m_CharPaddingY = AppConfig.CharPaddingY;
 
+	/* if title/url include string "telnet://", remove it. */
+        if ( !title.compare( 0, strlen("telnet://"), "telnet://" ) ) {
+                title = title.substr( strlen("telnet://") );
+        }
+        if ( !url.compare( 0, strlen("telnet://"), "telnet://" ) ) {
+                url = url.substr( strlen("telnet://") );
+        }
 	pCon->m_Site.m_Name = title;
 	pCon->m_Site.m_URL = url;
 	pCon->m_Encoding = pCon->m_Site.m_Encoding;
@@ -1771,10 +1778,9 @@ void CMainFrame::OnReconnect(GtkMenuItem* mitem UNUSED, CMainFrame* _this)
 	CTelnetCon* con = _this->GetCurCon();
 	if( !con )
 		return;
-	if( con->IsClosed() )
-		con->Reconnect();
-	else
-		_this->NewCon( con->m_Site.m_Name, con->m_Site.m_URL, &con->m_Site);
+
+	/* Reconnect without opening a new tab */
+	con->Reconnect();
 }
 
 void CMainFrame::FlashWindow( bool flash )
