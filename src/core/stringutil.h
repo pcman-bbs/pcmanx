@@ -38,6 +38,8 @@ inline void UnEscapeStr(string& str){ str = UnEscapeStr(str.c_str()); }
 
 string ConvertFromCRLF(const char* pstr);
 string ConvertToCRLF(const char* pstr);
+bool IsMatch(const char* str, const char* regex_str);
+
 inline void ConvertFromCRLF(string& str){ str = ConvertFromCRLF(str.c_str()); }
 inline void ConvertToCRLF(string& str){ str = ConvertToCRLF(str.c_str()); }
 #define strncmpi(str1,str2,len)  strncasecmp(str1,str2,len)
