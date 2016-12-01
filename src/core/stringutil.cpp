@@ -1,6 +1,6 @@
 /**
  * stringutil.cpp - Some string related utilities
- *                                                           
+ *
  * Copyright (c) 2004 PCMan <pcman.tw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include "stringutil.h"
 #include <cctype>
 #include <cstdio>
+#include <regex.h>
 
 // Note by PCMan:
 // EscapeStr() & UnEscapeStr() :
@@ -134,3 +135,21 @@ string ConvertToCRLF(const char* pstr)
 	return ret;
 }
 
+bool IsMatch(const char* str, const char* regex_str)
+{
+	regex_t regex;
+	int res;
+	const int nmatch = 1;
+	regmatch_t pmatch[nmatch];
+	if(regcomp(&regex, regex_str, REG_EXTENDED) != 0) {
+		regfree(&regex);
+		return false;
+	}
+	res = regexec(&regex, str, nmatch, pmatch, 0);
+	regfree(&regex);
+	if(res == REG_NOMATCH){
+		return false;
+	} else {
+		return true;
+	}
+}
