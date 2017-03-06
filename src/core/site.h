@@ -79,7 +79,7 @@ public:
 	string m_TermType;
 
 	int m_CRLF;
-    GtkWidget*  m_MenuItem;
+	GtkWidget*  m_MenuItem;
 	// Send CR, LF, or CRLF when Enter is pressed
 	const char* GetCRLF()
 	{
@@ -96,7 +96,7 @@ public:
 	bool m_bHorizontalCenterAlign;
 	bool m_bVerticalCenterAlign;
 
-    int m_UAO;
+	int m_UAO;
 
 #ifdef USE_PROXY
 	// Proxy settings
@@ -131,13 +131,17 @@ public:
 	X_EXPORT string& GetPostLogin(){	return m_PostLogin;	}
 	X_EXPORT void SetPostLogin(string postlogin){	m_PostLogin = postlogin;	}
 
+	X_EXPORT bool compare_to(const CSite &rhs);
+	friend bool operator==(const CSite &lhs, const CSite &rhs);
+	friend bool operator!=(const CSite &lhs, const CSite &rhs);
+
 protected:
-    string m_Passwd;
-    string m_Login;
-    string m_LoginPrompt;
-    string m_PasswdPrompt;
-    string m_PreLogin;
-    string m_PreLoginPrompt;
+	string m_Passwd;
+	string m_Login;
+	string m_LoginPrompt;
+	string m_PasswdPrompt;
+	string m_PreLogin;
+	string m_PreLoginPrompt;
 	string m_PostLogin;
 };
 

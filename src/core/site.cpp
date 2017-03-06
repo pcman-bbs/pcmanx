@@ -87,8 +87,8 @@ CSite::CSite(string Name)
 	m_bHorizontalCenterAlign = true;
 	m_bVerticalCenterAlign = true;
 
-    // UAO support
-    m_UAO = 2; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
+	// UAO support
+	m_UAO = 2; // 0 = disable, 1 = UAO 2.41, 2 = UAO 2.50
 
 	m_MenuItem = NULL;
 
@@ -105,7 +105,6 @@ CSite::CSite(string Name)
 CSite::~CSite()
 {
 }
-
 
 void CSite::SaveToFile(FILE *fo)
 {
@@ -173,4 +172,85 @@ void CSite::SaveToFile(FILE *fo)
 #endif
 }
 
+bool CSite::compare_to(const CSite &rhs)
+{
+	if( m_Name != rhs.m_Name ) {
+		return false;
+	}
+	if( m_URL != rhs.m_URL )
+		return false;
+	if( m_AutoReconnect != rhs.m_AutoReconnect )
+		return false;
+	if( m_AntiIdle != rhs.m_AntiIdle )
+		return false;
+	if( m_AntiIdleStr != rhs.m_AntiIdleStr )
+		return false;
+	if( m_Encoding != rhs.m_Encoding )
+		return false;
+	if( m_DetectDBChar != rhs.m_DetectDBChar )
+		return false;
+	if( m_RowsPerPage != rhs.m_RowsPerPage )
+		return false;
+	if( m_ColsPerPage != rhs.m_ColsPerPage )
+		return false;
+	if( m_TermType != rhs.m_TermType )
+		return false;
+	if( m_ESCConv != rhs.m_ESCConv )
+		return false;
+	if( m_CRLF != rhs.m_CRLF )
+		return false;
+	if( m_Startup != rhs.m_Startup )
+		return false;
+#ifdef USE_EXTERNAL
+	if( m_UseExternalSSH != rhs.m_UseExternalSSH )
+		return false;
+	if( m_UseExternalTelnet != rhs.m_UseExternalTelnet )
+		return false;
+#endif
+	if( m_bHorizontalCenterAlign != rhs.m_bHorizontalCenterAlign )
+		return false;
+	if( m_bVerticalCenterAlign != rhs.m_bVerticalCenterAlign )
+		return false;
+	if( m_UAO != rhs.m_UAO )
+		return false;
+	if( m_PreLoginPrompt != rhs.m_PreLoginPrompt )
+		return false;
+	if( m_PreLogin != rhs.m_PreLogin )
+		return false;
+	if( m_PostLogin != rhs.m_PostLogin )
+		return false;
+	if( m_LoginPrompt != rhs.m_LoginPrompt )
+		return false;
+	if( m_Login != rhs.m_Login )
+		return false;
+	if( m_PasswdPrompt != rhs.m_PasswdPrompt )
+		return false;
+	if( m_Passwd != rhs.m_Passwd )
+		return false;
+#ifdef USE_PROXY
+	if( m_ProxyType != rhs.m_ProxyType )
+		return false;
+	if( m_ProxyAddr != rhs.m_ProxyAddr )
+		return false;
+	if( m_ProxyPort != rhs.m_ProxyPort )
+		return false;
+	if( m_ProxyUser != rhs.m_ProxyUser )
+		return false;
+	if( m_ProxyPass != rhs.m_ProxyPass )
+		return false;
+#endif
 
+	return true;
+}
+
+bool operator==(const CSite &lhs, const CSite &rhs)
+{
+	CSite site(lhs);
+	return site.compare_to(rhs)? true: false;
+}
+
+bool operator!=(const CSite &lhs, const CSite &rhs)
+{
+	CSite site(lhs);
+	return site.compare_to(rhs)? false: true;
+}

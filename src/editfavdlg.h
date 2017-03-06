@@ -36,18 +36,18 @@ class CListBox;
 class CEditFavDlg : public CDialog
 {
 public:
-    CEditFavDlg(CWidget* parent, vector<CSite>& sites);
+	CEditFavDlg(CWidget* parent, vector<CSite>& sites);
 
-    static void OnAdd(GtkWidget* btn, CEditFavDlg* _this);
-    static void OnEdit(GtkWidget* btn, CEditFavDlg* _this);
-    static void OnRemove(GtkWidget* btn, CEditFavDlg* _this);
-    static void OnUp(GtkWidget* btn, CEditFavDlg* _this);
-    static void OnDown(GtkWidget* btn, CEditFavDlg* _this);
-    static void OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,  
+	static void OnAdd(GtkWidget* btn, CEditFavDlg* _this);
+	static void OnEdit(GtkWidget* btn, CEditFavDlg* _this);
+	static void OnRemove(GtkWidget* btn, CEditFavDlg* _this);
+	static void OnUp(GtkWidget* btn, CEditFavDlg* _this);
+	static void OnDown(GtkWidget* btn, CEditFavDlg* _this);
+	static void OnRowActivated(GtkTreeView *tree_view, GtkTreePath* path,
 	GtkTreeViewColumn* col, CEditFavDlg* _this);
 
-	vector<CSite>& m_Sites;
-    CListBox* m_List;
+	vector<CSite> m_Sites;
+	CListBox* m_List;
 	GtkWidget* m_EditBtn;
 protected:
 };
