@@ -36,12 +36,12 @@ class CKeySettingPage;
 class CPrefDlg : public CDialog
 {
 public:
-    CPrefDlg(CWidget* parent);
-    bool OnOK();
+	CPrefDlg(CWidget* parent);
+	bool OnOK();
 
 public:
-    CSitePage* m_pSitePage;
-    CNotebook* m_pNotebook;
+	CSitePage* m_pSitePage;
+	CNotebook* m_pNotebook;
 	CGeneralPrefPage* m_pGeneralPrefPage;
 	CKeySettingPage *m_pKeySettingPage;
 };

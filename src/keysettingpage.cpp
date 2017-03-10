@@ -116,8 +116,10 @@ CKeySettingPage::CKeySettingPage(GtkWidget *parent): CWidget()
 /**
  * Get value from gtk entries and save them into AppConfig
  */
-void CKeySettingPage::OnOK()
+bool CKeySettingPage::OnOK()
 {
+	bool setting_updated = false;
+
 	// show message dialog
 	GtkWidget *MessageDialog = gtk_message_dialog_new(
 			GTK_WINDOW(m_Parent),
@@ -130,25 +132,84 @@ void CKeySettingPage::OnOK()
 	gtk_dialog_run(GTK_DIALOG(MessageDialog));
 	gtk_widget_destroy(MessageDialog);
 
-	AppConfig.keySiteList = gtk_entry_get_text(GTK_ENTRY(m_Entries[keySiteList]));
-	AppConfig.keyNewConn0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn0]));
-	AppConfig.keyNewConn1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn1]));
-	AppConfig.keyReconn0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn0]));
-	AppConfig.keyReconn1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn1]));
-	AppConfig.keyClose0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose0]));
-	AppConfig.keyClose1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose1]));
-	AppConfig.keyNextPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNextPage]));
-	AppConfig.keyPrevPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPrevPage]));
-	AppConfig.keyFirstPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFirstPage]));
-	AppConfig.keyLastPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyLastPage]));
-	AppConfig.keyCopy0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy0]));
-	AppConfig.keyCopy1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy1]));
-	AppConfig.keyPaste0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste0]));
-	AppConfig.keyPaste1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste1]));
-	AppConfig.keyPasteClipboard = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPasteClipboard]));
-	AppConfig.keyEmotions = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyEmotions]));
-	AppConfig.keyFullscreen = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFullscreen]));
-	AppConfig.keyShowMainWindow = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyShowMainWindow]));
+	if( AppConfig.keySiteList != gtk_entry_get_text(GTK_ENTRY(m_Entries[keySiteList])) ) {
+		setting_updated = true;
+		AppConfig.keySiteList = gtk_entry_get_text(GTK_ENTRY(m_Entries[keySiteList]));
+	}
+	if( AppConfig.keyNewConn0 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn0])) ) {
+		setting_updated = true;
+		AppConfig.keyNewConn0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn0]));
+	}
+	if( AppConfig.keyNewConn1 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn1])) ) {
+		setting_updated = true;
+		AppConfig.keyNewConn1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNewConn1]));
+	}
+	if( AppConfig.keyReconn0 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn0])) ) {
+		setting_updated = true;
+		AppConfig.keyReconn0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn0]));
+	}
+	if( AppConfig.keyReconn1 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn1])) ) {
+		setting_updated = true;
+		AppConfig.keyReconn1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyReconn1]));
+	}
+	if( AppConfig.keyClose0 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose0])) ) {
+		setting_updated = true;
+		AppConfig.keyClose0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose0]));
+	}
+	if( AppConfig.keyClose1 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose1])) ) {
+		setting_updated = true;
+		AppConfig.keyClose1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyClose1]));
+	}
+	if( AppConfig.keyNextPage != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNextPage])) ) {
+		setting_updated = true;
+		AppConfig.keyNextPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyNextPage]));
+	}
+	if( AppConfig.keyPrevPage != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPrevPage])) ) {
+		setting_updated = true;
+		AppConfig.keyPrevPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPrevPage]));
+	}
+	if( AppConfig.keyFirstPage != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFirstPage])) ) {
+		setting_updated = true;
+		AppConfig.keyFirstPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFirstPage]));
+	}
+	if( AppConfig.keyLastPage != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyLastPage])) ) {
+		setting_updated = true;
+		AppConfig.keyLastPage = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyLastPage]));
+	}
+	if( AppConfig.keyCopy0 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy0])) ) {
+		setting_updated = true;
+		AppConfig.keyCopy0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy0]));
+	}
+	if( AppConfig.keyCopy1 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy1])) ) {
+		setting_updated = true;
+		AppConfig.keyCopy1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyCopy1]));
+	}
+	if( AppConfig.keyPaste0 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste0])) ) {
+		setting_updated = true;
+		AppConfig.keyPaste0 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste0]));
+	}
+	if( AppConfig.keyPaste1 != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste1])) ) {
+		setting_updated = true;
+		AppConfig.keyPaste1 = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPaste1]));
+	}
+	if( AppConfig.keyPasteClipboard != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPasteClipboard])) ) {
+		setting_updated = true;
+		AppConfig.keyPasteClipboard = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyPasteClipboard]));
+	}
+	if( AppConfig.keyEmotions != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyEmotions])) ) {
+		setting_updated = true;
+		AppConfig.keyEmotions = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyEmotions]));
+	}
+	if( AppConfig.keyFullscreen != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFullscreen])) ) {
+		setting_updated = true;
+		AppConfig.keyFullscreen = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyFullscreen]));
+	}
+	if( AppConfig.keyShowMainWindow != gtk_entry_get_text(GTK_ENTRY(m_Entries[keyShowMainWindow])) ) {
+		setting_updated = true;
+		AppConfig.keyShowMainWindow = gtk_entry_get_text(GTK_ENTRY(m_Entries[keyShowMainWindow]));
+	}
+
+	return setting_updated;
 }
 
 gboolean CKeySettingPage::onKeyPress(GtkWidget *widget, GdkEventKey *event, gpointer data)

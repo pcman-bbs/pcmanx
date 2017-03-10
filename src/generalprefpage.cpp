@@ -183,23 +183,62 @@ CGeneralPrefPage::CGeneralPrefPage()
 }
 
 
-void CGeneralPrefPage::OnOK()
+bool CGeneralPrefPage::OnOK()
 {
-	AppConfig.QueryOnCloseCon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon));
-	AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
-	AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
-  AppConfig.Opacity = (int) gtk_adjustment_get_value(GTK_ADJUSTMENT(m_Opacity_adj));
+	bool pref_updated = false;
+
+	if( AppConfig.QueryOnCloseCon != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon)) ) {
+		pref_updated = true;
+		AppConfig.QueryOnCloseCon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnCloseCon));
+	}
+	if( AppConfig.QueryOnExit != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit)) ) {
+		pref_updated = true;
+		AppConfig.QueryOnExit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_QueryOnExit));
+	}
+	if( AppConfig.CancelSelAfterCopy != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy)) ) {
+		pref_updated = true;
+		AppConfig.CancelSelAfterCopy = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_CancelSelAfterCopy));
+	}
+	if( AppConfig.Opacity != (int) gtk_adjustment_get_value(GTK_ADJUSTMENT(m_Opacity_adj)) ) {
+		pref_updated = true;
+		AppConfig.Opacity = (int) gtk_adjustment_get_value(GTK_ADJUSTMENT(m_Opacity_adj));
+	}
 #ifdef USE_MOUSE
-	AppConfig.MouseSupport = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport));
+	if( AppConfig.MouseSupport != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport)) ) {
+		pref_updated = true;
+		AppConfig.MouseSupport = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MouseSupport));
+	}
 #endif
 #ifdef USE_DOCKLET
-	AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
+	if( AppConfig.ShowTrayIcon != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon)) ) {
+		pref_updated = true;
+		AppConfig.ShowTrayIcon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_ShowTrayIcon));
+	}
 #endif
-	AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
-	AppConfig.PopupNotifier =  gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(m_PopupNotifier));
-	AppConfig.PopupTimeout = (int)gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_PopupTimeout));
-	AppConfig.MidClickAsClose = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(m_MidClickAsClose));
-	AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
-	AppConfig.MailClient = gtk_entry_get_text(GTK_ENTRY(m_MailClient));
+	if( AppConfig.AntiAliasFont != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont)) ) {
+		pref_updated = true;
+		AppConfig.AntiAliasFont = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_AAFont));
+	}
+	if( AppConfig.PopupNotifier != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_PopupNotifier)) ) {
+		pref_updated = true;
+		AppConfig.PopupNotifier = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_PopupNotifier));
+	}
+	if( AppConfig.PopupTimeout != (int)gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_PopupTimeout)) ) {
+		pref_updated = true;
+		AppConfig.PopupTimeout = (int)gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_PopupTimeout));
+	}
+	if( AppConfig.MidClickAsClose != gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MidClickAsClose)) ) {
+		pref_updated = true;
+		AppConfig.MidClickAsClose = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_MidClickAsClose));
+	}
+	if( AppConfig.WebBrowser != gtk_entry_get_text(GTK_ENTRY(m_WebBrowser)) ) {
+		pref_updated = true;
+		AppConfig.WebBrowser = gtk_entry_get_text(GTK_ENTRY(m_WebBrowser));
+	}
+	if( AppConfig.MailClient != gtk_entry_get_text(GTK_ENTRY(m_MailClient)) ) {
+		pref_updated = true;
+		AppConfig.MailClient = gtk_entry_get_text(GTK_ENTRY(m_MailClient));
+	}
+
+	return pref_updated;
 }

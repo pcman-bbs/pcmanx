@@ -53,10 +53,22 @@ bool CPrefDlg::OnOK()
 {
 	if( m_pSitePage->OnOK() )
 	{
-		AppConfig.m_DefaultSite = m_pSitePage->m_Site;
-		m_pGeneralPrefPage->OnOK();
-		m_pKeySettingPage->OnOK();
-		AppConfig.Save();
+		bool pref_updated = false;
+
+		if( AppConfig.m_DefaultSite != m_pSitePage->m_Site ) {
+			pref_updated = true;
+			AppConfig.m_DefaultSite = m_pSitePage->m_Site;
+		}
+		if( m_pGeneralPrefPage->OnOK() ) {
+			pref_updated = true;
+		}
+		if( m_pKeySettingPage->OnOK() ) {
+			pref_updated = true;
+		}
+
+		if( pref_updated ) {
+			AppConfig.Save();
+		}
 	}
 	return true;
 }

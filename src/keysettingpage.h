@@ -34,7 +34,7 @@ class CKeySettingPage: public CWidget
 {
 public:
 	CKeySettingPage(GtkWidget *parent);
-	void OnOK();
+	bool OnOK();
 public:
 	enum KeyNames {
 		keySiteList, keyNewConn0, keyNewConn1, keyReconn0, keyReconn1,

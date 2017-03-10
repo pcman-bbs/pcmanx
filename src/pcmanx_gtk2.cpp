@@ -195,8 +195,6 @@ int main(int argc, char *argv[])
 #endif
 	CTelnetCon::Cleanup();
 
-	AppConfig.Save();
-
 	lt_dlexit();
 
 	return 0;
