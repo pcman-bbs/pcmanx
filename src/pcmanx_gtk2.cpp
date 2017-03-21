@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 	{
 		GError *error = NULL;
 		GOptionContext *context;
-		context = g_option_context_new ("Runtime options");
+		context = g_option_context_new ("[url]");
 		g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 		g_option_context_parse (context, &argc, &argv, &error);
 	}
@@ -160,7 +160,11 @@ int main(int argc, char *argv[])
 	CTelnetCon::Init();
 	CTelnetCon::SetSocketTimeout( AppConfig.SocketTimeout );
 
-	CMainFrame* main_frm = new CMainFrame;
+	string cmdline_url;
+	if( argc >= 2) {
+		cmdline_url = argv[1];
+	}
+	CMainFrame* main_frm = new CMainFrame( cmdline_url );
 	gtk_window_move(GTK_WINDOW(main_frm->m_Widget), AppConfig.MainWndX, AppConfig.MainWndY);
 	gtk_window_resize(GTK_WINDOW(main_frm->m_Widget), AppConfig.MainWndW, AppConfig.MainWndH);
 	main_frm->Show();

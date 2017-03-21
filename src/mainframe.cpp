@@ -170,7 +170,7 @@ gboolean CMainFrame::OnSize( GtkWidget* widget, GdkEventConfigure* evt,
 }
 
 
-CMainFrame::CMainFrame()
+CMainFrame::CMainFrame(string url)
 {
 	char* desktop = getenv("XDG_CURRENT_DESKTOP");
 
@@ -292,6 +292,10 @@ CMainFrame::CMainFrame()
 		gtk_window_maximize((GtkWindow*) m_Widget);
 	}else{
 		gtk_window_unmaximize((GtkWindow*) m_Widget);
+	}
+
+	if( !url.empty() ) {
+		NewCon( url, url );
 	}
 }
 
