@@ -628,8 +628,10 @@ void CTelnetView::OnRButtonDown(GdkEventButton* evt)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (input_menu_item), submenu);
 
 	// Show Web Search only when text selected
-	if(websearch_menu_item)
+	if(websearch_menu_item) {
 		gtk_widget_destroy(websearch_menu_item);
+		websearch_menu_item = NULL;
+	}
 	string selected_text = m_pTermData->GetSelectedText(false);
 	if(! selected_text.empty()) {
 		gsize wl = 0;
