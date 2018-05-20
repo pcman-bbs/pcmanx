@@ -320,7 +320,7 @@ bool CTelnetCon::Connect()
 		{
 			// Child Process;
 			close(m_SockFD);
-			execlp ( prog, prog, address.c_str(), NULL ) ;
+			execlp ( prog, prog, "-o StrictHostKeyChecking=no", address.c_str(), NULL ) ;
 			exit(EXIT_FAILURE);
 		}
 		else
