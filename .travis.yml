@@ -13,6 +13,21 @@ matrix:
         - env: CONFIGURE="--disable-external"
         - env: CONFIGURE="--enable-iplookup"
         - env: CONFIGURE="--enable-proxy"
+#Added power jobs
+        - env: CONFIGURE=""
+          arch: ppc64le
+        - env: CONFIGURE="--enable-debug"
+          arch: ppc64le
+        - env: CONFIGURE="--disable-nancy"
+          arch: ppc64le
+        - env: CONFIGURE="--disable-mouse"
+          arch: ppc64le
+        - env: CONFIGURE="--disable-external"
+          arch: ppc64le
+        - env: CONFIGURE="--enable-iplookup"
+          arch: ppc64le
+        - env: CONFIGURE="--enable-proxy"
+          arch: ppc64le
 
 before_install:
     - sudo apt-get update -qq
